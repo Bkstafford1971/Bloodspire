@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Bloodspire</title>
+    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            color: #d1d1d1;
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+        }
+
+        /* 40/60 Split Layout */
+        .sidebar {
+            flex: 0 0 40%;
+            background-color: #050505;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .main-content {
+            flex: 0 0 60%;
+            padding: 40px 60px;
+            background-color: #000;
+            box-sizing: border-box;
+        }
+
+        .sidebar-logo {
+            width: 100%;
+            max-width: 550px;
+            position: sticky;
+            top: 40px;
+        }
+
+        /* Navigation Style */
+        nav.top-nav {
+            text-align: center;
+            padding-bottom: 50px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        nav.top-nav a {
+            color: #d4af37; 
+            text-decoration: none;
+            padding: 0 12px;
+            text-transform: uppercase;
+        }
+
+        nav.top-nav a:hover { color: #fff2cc; }
+
+        /* Chiseled Header */
+        .arena-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .arena-header h1 {
+            font-family: 'Metal Mania', cursive;
+            font-size: 64px;
+            margin: 0;
+            background: linear-gradient(to bottom, #3a0000 0%, #8b1a1a 40%, #a31616 60%, #2a0000 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.8));
+        }
+
+        /* About Page Specific Content */
+        h3 {
+            font-family: 'Cinzel', serif;
+            color: #d4af37; /* Matches the 'What is Blood Pit?' yellow header style */
+            text-transform: uppercase;
+            font-size: 1.6rem;
+            margin-top: 45px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 8px;
+        }
+
+        p {
+            line-height: 1.8;
+            margin-bottom: 22px;
+            font-size: 1.1rem;
+        }
+
+        /* Boxed sections for emphasis */
+        .philosophy-container {
+            background: #0a0a0a;
+            border: 1px solid #222;
+            padding: 30px;
+            margin: 40px 0;
+            border-left: 4px solid #8b1a1a;
+        }
+
+        .philosophy-item {
+            margin-bottom: 20px;
+        }
+
+        .philosophy-item strong {
+            color: #a31616;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Closing tagline style */
+        .manifesto {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            color: #8b1a1a;
+            font-size: 1.3rem;
+            margin-top: 60px;
+            font-style: italic;
+            border-top: 1px solid #222;
+            padding-top: 30px;
+        }
+
+        @media (max-width: 1100px) {
+            .page-wrapper { flex-direction: column; }
+            .sidebar, .main-content { flex: 0 0 100%; width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <img src="Logo.png" alt="Bloodspire Logo" class="sidebar-logo">
+        </aside>
+
+        <main class="main-content">
+            <nav class="top-nav">
+                <a href="index.html">Home</a> | 
+                <a href="about.html" style="color: #fff2cc;">About</a> | 
+                <a href="download.html">Download</a> | 
+                <a href="contact.html">Contact</a> | 
+                <a href="#help">Help</a>
+            </nav>
+
+            <section class="arena-header">
+                <h1>BLOODSPIRE</h1>
+            </section>
+
+            <section id="about-content">
+                <h3>About Bloodspire</h3>
+                <p>Bloodspire is a turn-based, text-driven gladiatorial strategy game set in a brutal fantasy arena. In this world, reflexes and hand-eye coordination mean nothing. Only intellect, preparation, and tactical mastery determine who lives and who dies.</p>
+                <p>Unlike modern arena games that reward fast clicking and perfect aim, Bloodspire removes all twitch elements. Every outcome is decided by the strategies you create, the gear you choose, the training you invest in, and how well you understand your opponents.</p>
+
+                <h3>The Arena</h3>
+                <p>Deep beneath the crumbling city lies the Bloodspire, an ancient and blood-soaked pit where gladiators are forged and broken. As a manager, you do not fight yourself. Instead, you command a team of five warriors. You shape them from raw recruits into legendary champions through careful training and equipment selection.</p>
+
+                <div class="philosophy-container">
+                    <h3>Core Philosophy</h3>
+                    <div class="philosophy-item">
+                        <strong>Pure Strategy</strong>
+                        No twitch reflexes. No random luck of the draw. Only your mind against theirs.
+                    </div>
+                    <div class="philosophy-item">
+                        <strong>Deep Progression</strong>
+                        Warriors improve through training. Attributes, weapon skills, and combat techniques all matter.
+                    </div>
+                    <div class="philosophy-item">
+                        <strong>Permanent Consequences</strong>
+                        Injuries linger. Warriors can die. Replacements must be found and trained.
+                    </div>
+                    <div class="philosophy-item">
+                        <strong>Meaningful Choices</strong>
+                        Every piece of armor, weapon, and strategy has trade-offs. There is no single "best" build.
+                    </div>
+                    <div class="philosophy-item">
+                        <strong>Old-School Spirit</strong>
+                        Inspired by classic strategy games, Bloodspire rewards patience and clever counterplay.
+                    </div>
+                </div>
+
+                <h3>The Arena Never Sleeps</h3>
+                <p>The Bloodspire is always hungry. New warriors rise. Old legends fall. Managers scheme, blood challenges are issued, and the crowd roars for more. Some warriors become crowd favorites; others become footnotes, their names carved into the stone walls as a warning.</p>
+                
+                <p>Will you build a team of disciplined technicians who parry and counter their way to victory? Will you unleash raging berserkers who overwhelm opponents through sheer brutality? Or will you craft a cunning stable of elusive fighters strike from the shadows?</p>
+
+                <div class="manifesto">
+                    ONLY THE CLEVER SURVIVE.<br>
+                    ONLY THE CLEVER THRIVE.
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>
