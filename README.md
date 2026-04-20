@@ -39,4 +39,3 @@ There are **8 playable races** in Bloodspire. Each has distinct strengths, weakn
 
 ---
 
-Would you like me to continue and add the next sections (such as **How to Get Started**, **Basic Combat**, **Strategies & Training**, or **League Play**)? I can keep expanding it step-by-step.
