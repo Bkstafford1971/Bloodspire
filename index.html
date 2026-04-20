@@ -4,15 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bloodspire | A Game of Gladiatorial Combat</title>
-    <link href="https://fonts.googleapis.com/css2?family=Eater&family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        /* If you have the BlackCastleMF font file, you would add this:
-           @font-face {
-               font-family: 'BlackCastleMF';
-               src: url('BlackCastleMF.ttf');
-           }
-        */
-
         body {
             background-color: #000;
             color: #d1d1d1;
@@ -22,6 +15,7 @@
             min-height: 100vh;
         }
 
+        /* 50/50 Split Layout */
         .sidebar {
             flex: 1;
             background-color: #050505;
@@ -38,50 +32,66 @@
             background-color: #000;
         }
 
-        .sidebar-logo, .sidebar-combat-img {
+        /* Sidebar Images (.png) */
+        .sidebar-logo {
             width: 100%;
             max-width: 600px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
-        /* Gold Navigation Links */
+        .sidebar-combat-img {
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid #222;
+        }
+
+        /* Gold Navigation Links - Increased Size */
         nav.top-nav {
             text-align: center;
             padding-bottom: 50px;
             font-family: 'Cinzel', serif;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
         }
 
         nav.top-nav a {
-            color: #d4af37; 
+            color: #d4af37; /* Gold */
             text-decoration: none;
-            padding: 0 12px;
+            padding: 0 15px;
             text-transform: uppercase;
+            transition: color 0.3s;
         }
 
-        nav.top-nav a:hover { color: #fff2cc; }
+        nav.top-nav a:hover { 
+            color: #fff2cc; 
+        }
 
-        /* BLOOD RED GRADIENT TITLE */
+        /* CHISELED BLOOD RED TITLE */
         .arena-header {
             text-align: center;
             margin-bottom: 60px;
         }
 
         .arena-header h1 {
-            /* Replace 'Eater' with 'BlackCastleMF' if you host the font locally */
-            font-family: 'BlackCastleMF', 'Eater', cursive; 
+            font-family: 'Metal Mania', cursive;
             font-size: 64px;
             margin: 0;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             text-transform: uppercase;
             
-            /* Gradient Magic */
-            background: linear-gradient(to bottom, #4a0000 20%, #a31616 50%, #ff0000 90%);
+            /* Gradient for the Chiseled Stony Look */
+            background: linear-gradient(to bottom, 
+                #8a0000 0%,   /* Deep Blood top */
+                #ff0000 45%,  /* Bright Red middle */
+                #4a0000 50%,  /* Dark shadow line */
+                #2a0000 100%  /* Blackened red bottom */
+            );
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            
+            /* Bevel effect shadow */
+            filter: drop-shadow(2px 2px 0px #000) drop-shadow(-1px -1px 0px #444);
             display: inline-block;
-            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.8));
         }
 
         .arena-header h2 {
@@ -89,23 +99,24 @@
             font-size: 1.3rem;
             color: #e0e0e0;
             margin: 10px 0;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
 
         .status-yellow {
             color: #ffcc00;
             font-style: italic;
             font-size: 1.2rem;
-            margin-top: 25px;
+            margin-top: 30px;
         }
 
+        /* Content Area (No Dividers) */
         h3 {
             font-family: 'Cinzel', serif;
             color: #a31616;
             text-transform: uppercase;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             margin-top: 40px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .content-box {
@@ -122,12 +133,16 @@
             font-family: 'Cinzel', serif;
             font-weight: bold;
             margin: 20px 0;
-            border-radius: 3px;
+            border-radius: 2px;
         }
 
+        .download-btn:hover { background: #ce1b1b; }
+
+        /* Responsive stack for tablets/phones */
         @media (max-width: 1100px) {
             body { flex-direction: column; }
             .sidebar, .main-content { width: 100%; flex: none; padding: 20px; }
+            .arena-header h1 { font-size: 48px; }
         }
     </style>
 </head>
@@ -154,21 +169,22 @@
             <h1>BLOODSPIRE</h1>
             <h2>A Game of Gladiatorial Combat</h2>
             <p class="status-yellow">The Arena currently runs every weekend</p>
-            <p><small>Submit your orders by Friday at 9:00 PM to ensure your teams will fight</small></p>
+            <p><small>Submit your orders by Friday at 9:00 PM to ensure your teams fight</small></p>
         </section>
 
         <section id="updates">
             <h3>Announcements from The Keeper</h3>
             <div class="content-box">
-                <p><strong>Turn 1348 Re-run:</strong> Turn 1348 has been re-processed. Managers must re-download the client and check warrior status before the next deadline.</p>
+                <p><strong>Turn 1348 Re-run:</strong> Turn 1348 has been re-processed. Managers must re-download the client and check warrior status before the next deadline. All managers should re-download from the server, re-enter any orders, and create any replacement warriors for next turn.</p>
             </div>
         </section>
 
         <section id="download">
             <h3>Download Section</h3>
             <div class="content-box">
+                <p>Version 1.0.4 - Release Build</p>
                 <a href="https://raw.githubusercontent.com/bkstafford1971/Bloodspire/main/Bloodspire_Installer.exe" class="download-btn">Download Installer (.exe)</a>
-                <p><strong>Requirements:</strong> Windows 10/11, High-speed internet.</p>
+                <p><strong>System Requirements:</strong> Windows 10/11, Internet connection required for turn synchronization.</p>
             </div>
         </section>
 
