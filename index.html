@@ -45,7 +45,7 @@
             border: 1px solid #222;
         }
 
-        /* Gold Navigation Links - Increased Size */
+        /* Gold Navigation Links */
         nav.top-nav {
             text-align: center;
             padding-bottom: 50px;
@@ -55,12 +55,141 @@
         }
 
         nav.top-nav a {
-            color: #d4af37; /* Gold */
+            color: #c5a059; /* Muted Gold for better visibility */
             text-decoration: none;
             padding: 0 15px;
             text-transform: uppercase;
             transition: color 0.3s;
         }
+
+        nav.top-nav a:hover { 
+            color: #fff2cc; 
+        }
+
+        /* MUTED CHISELED BLOOD RED TITLE */
+        .arena-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .arena-header h1 {
+            font-family: 'Metal Mania', cursive;
+            font-size: 64px;
+            margin: 0;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            
+            /* Subtle, muted gradient without the hard center line */
+            background: linear-gradient(to bottom, 
+                #3a0000 0%,   /* Very dark muted shadow */
+                #8b1a1a 40%,  /* Muted blood red */
+                #a31616 60%,  /* Deep blood red */
+                #2a0000 100%  /* Dark base shadow */
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            
+            /* Subtle drop shadow for depth rather than a harsh bevel */
+            filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.9));
+            display: inline-block;
+        }
+
+        .arena-header h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            color: #b0b0b0; /* Slightly muted white */
+            margin: 10px 0;
+            letter-spacing: 2px;
+        }
+
+        .status-yellow {
+            color: #d4af37; /* Muted gold instead of bright yellow */
+            font-style: italic;
+            font-size: 1.2rem;
+            margin-top: 30px;
+        }
+
+        h3 {
+            font-family: 'Cinzel', serif;
+            color: #8b1a1a; /* Muted Red for headers */
+            text-transform: uppercase;
+            font-size: 1.5rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .content-box {
+            background: #080808;
+            margin-bottom: 40px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: #8b1a1a; /* Muted Red button */
+            color: #fff;
+            padding: 14px 28px;
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            margin: 20px 0;
+            border-radius: 2px;
+        }
+
+        .download-btn:hover { background: #a31616; }
+
+        @media (max-width: 1100px) {
+            body { flex-direction: column; }
+            .sidebar, .main-content { width: 100%; flex: none; padding: 20px; }
+            .arena-header h1 { font-size: 48px; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <img src="Logo.png" alt="Bloodspire Logo" class="sidebar-logo">
+        <img src="websiteCombatImage.png" alt="Gladiatorial Combat" class="sidebar-combat-img">
+    </aside>
+
+    <main class="main-content">
+        
+        <nav class="top-nav">
+            <a href="#about">About</a> | 
+            <a href="#join">Join</a> | 
+            <a href="#players">Players Connection</a> | 
+            <a href="#download">Download</a> | 
+            <a href="#guide">User Guide</a> | 
+            <a href="#contact">Contact</a> | 
+            <a href="#help">Help</a>
+        </nav>
+
+        <section class="arena-header">
+            <h1>BLOODSPIRE</h1>
+            <h2>A Game of Gladiatorial Combat</h2>
+            <p class="status-yellow">The Arena currently runs every weekend</p>
+            <p><small>Submit your orders by Friday at 9:00 PM to ensure your teams fight</small></p>
+        </section>
+
+        <section id="updates">
+            <h3>Announcements from The Keeper</h3>
+            <div class="content-box">
+                <p><strong>Turn 1348 Re-run:</strong> Turn 1348 has been re-processed due to gladiator trigger issues. Managers must re-download the client and check warrior status before the next deadline.</p>
+            </div>
+        </section>
+
+        <section id="download">
+            <h3>Download Section</h3>
+            <div class="content-box">
+                <p>Version 1.0.4 - Release Build</p>
+                <a href="https://raw.githubusercontent.com/bkstafford1971/Bloodspire/main/Bloodspire_Installer.exe" class="download-btn">Download Installer (.exe)</a>
+                <p><strong>System Requirements:</strong> Windows 10/11, Internet connection required for turn synchronization.</p>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>        }
 
         nav.top-nav a:hover { 
             color: #fff2cc; 
