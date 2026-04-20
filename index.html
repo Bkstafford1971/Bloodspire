@@ -6,246 +6,185 @@
     <title>Bloodspire | Enter the Arena</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        /* CSS INLINE FOR CONVENIENCE - You can move this to style.css later */
         body {
-            background-color: #0a0a0a;
+            background-color: #000;
             color: #d1d1d1;
             font-family: 'Open Sans', sans-serif;
             margin: 0;
-            line-height: 1.6;
-        }
-
-        /* Side-by-Side Header Layout */
-        .site-header {
-            background-color: #000;
-            padding: 30px 20px;
-            border-bottom: 2px solid #333;
-        }
-
-        .header-container {
             display: flex;
-            max-width: 1200px;
-            margin: 0 auto;
+            justify-content: center;
+        }
+
+        /* The Main 2-Column Container */
+        .site-container {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            min-height: 100vh;
+        }
+
+        /* LEFT COLUMN: Branding & Artwork */
+        .left-column {
+            flex: 0 0 450px; /* Fixed width for the art side */
+            background-color: #050505;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 40px;
+            border-right: 2px solid #222;
         }
 
-        .header-logo img {
-            width: 300px; /* Adjust this to change logo size */
-            height: auto;
-            display: block;
+        /* This is the Bloodspire.png acting as the logo/header on the left */
+        .side-logo {
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 20px;
         }
 
-        .header-content {
+        /* Placeholder for your main arena artwork if different from logo */
+        .arena-art {
+            width: 100%;
+            border: 1px solid #333;
+            box-shadow: 0 0 20px rgba(163, 22, 22, 0.2);
+        }
+
+        /* RIGHT COLUMN: Navigation and Content */
+        .right-column {
             flex: 1;
-            text-align: center;
+            padding: 20px 40px;
+            background-color: #000;
         }
 
-        /* Top Navigation Links */
-        .top-nav {
-            margin-bottom: 25px;
-            font-size: 0.85rem;
+        /* Navigation at the top right */
+        nav.top-nav {
+            text-align: right;
+            padding-bottom: 30px;
             font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
         }
 
-        .top-nav a {
+        nav.top-nav a {
             color: #a31616;
             text-decoration: none;
-            padding: 0 8px;
-            transition: color 0.3s;
+            padding: 0 10px;
         }
 
-        .top-nav a:hover {
-            color: #ff0000;
+        nav.top-nav a:hover { color: #ff0000; }
+
+        /* Arena Info Section */
+        .arena-header {
+            text-align: center;
+            margin-bottom: 40px;
         }
 
-        /* Title and Subtitle */
-        h1 {
+        .arena-header h1 {
             font-family: 'Cinzel', serif;
-            font-size: 2.8rem;
+            font-size: 3rem;
             color: #a31616;
             margin: 0;
-            letter-spacing: 5px;
+            letter-spacing: 4px;
         }
 
-        .subtitle {
+        .arena-header h2 {
             font-family: 'Cinzel', serif;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #e0e0e0;
             margin: 5px 0;
         }
 
-        .header-divider {
-            width: 70%;
+        .divider {
             border: 0;
             border-top: 1px solid #444;
-            margin: 15px auto;
+            margin: 20px auto;
+            width: 80%;
         }
 
-        .status-msg {
+        .status-text {
             color: #ffcc00;
             font-style: italic;
-            font-size: 0.95rem;
-            margin-top: 10px;
+            font-size: 1rem;
         }
 
-        /* Main Content Grid */
-        .content-wrapper {
-            display: flex;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            gap: 50px;
-        }
-
-        .left-col {
-            flex: 2;
-        }
-
-        .right-col {
-            flex: 1;
-            border-left: 1px solid #222;
-            padding-left: 30px;
-        }
-
-        h2, h3 {
+        /* Content Styles */
+        h3 {
             font-family: 'Cinzel', serif;
             color: #a31616;
-            border-bottom: 1px solid #333;
-            padding-bottom: 8px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 10px;
         }
 
-        /* Download Section Styling */
-        .download-box {
-            background: #151515;
-            padding: 25px;
-            border: 1px solid #222;
-            margin-top: 30px;
+        .announcement-box {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            padding: 20px;
+            margin-top: 20px;
         }
+
+        .date { color: #888; font-size: 0.8rem; }
 
         .download-btn {
             display: inline-block;
             background: #a31616;
-            color: #fff;
+            color: white;
             padding: 12px 24px;
             text-decoration: none;
             font-family: 'Cinzel', serif;
-            font-weight: bold;
-            border-radius: 2px;
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
 
-        .download-btn:hover {
-            background: #cc0000;
-        }
-
-        /* News/Announcements */
-        .news-item {
-            margin-bottom: 30px;
-        }
-
-        .news-date {
-            font-size: 0.75rem;
-            color: #888;
-            text-transform: uppercase;
-        }
-
-        footer {
-            text-align: center;
-            padding: 50px;
-            font-size: 0.8rem;
-            color: #555;
-            border-top: 1px solid #111;
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 850px) {
-            .header-container, .content-wrapper {
-                flex-direction: column;
-                text-align: center;
-            }
-            .right-col {
-                border-left: none;
-                padding-left: 0;
-                border-top: 1px solid #222;
-                padding-top: 20px;
-            }
+        /* Mobile Layout Adjustment */
+        @media (max-width: 900px) {
+            .site-container { flex-direction: column; }
+            .left-column { flex: none; width: 100%; border-right: none; border-bottom: 2px solid #222; }
         }
     </style>
 </head>
 <body>
 
-    <header class="site-header">
-        <div class="header-container">
-            <div class="header-logo">
-                <img src="Bloodspire.png" alt="Bloodspire Logo">
-            </div>
-
-            <div class="header-content">
-                <nav class="top-nav">
-                    <a href="#about">About</a> | 
-                    <a href="#join">Join</a> | 
-                    <a href="#players">Players Connection</a> | 
-                    <a href="#download">Download</a> | 
-                    <a href="#guide">User Guide</a> | 
-                    <a href="#contact">Contact</a> | 
-                    <a href="#help">Help</a>
-                </nav>
-                
-                <h1>BLOODSPIRE</h1>
-                <p class="subtitle">The Game of Gladiatorial Combat</p>
-                <hr class="header-divider">
-                <p class="status-msg">The Arena currently runs every weekend</p>
-            </div>
-        </div>
-    </header>
-
-    <main class="content-wrapper">
-        <section class="left-col">
-            <article id="about">
-                <h2>The Arena Awaits</h2>
-                <p>Welcome to Bloodspire, a text-based gladiatorial simulation where every decision could be your last. Manage your stable of warriors, train them in the dark arts of combat, and send them into the pit to win glory—or die trying.</p>
-            </article>
-
-            <article id="download" style="margin-top: 50px;">
-                <h2>Download & Installation</h2>
-                <div class="download-box">
-                    <a href="https://raw.githubusercontent.com/bkstafford1971/Bloodspire/main/Bloodspire_Installer.exe" class="download-btn">Download Bloodspire v1.0 (.exe)</a>
-                    
-                    <h3>Installation Instructions</h3>
-                    <p>1. Download the installer above.<br>
-                    2. Run the executable and follow the on-screen prompts.<br>
-                    3. Launch the game and connect to the server to register your manager account.</p>
-
-                    <h3>Generic Requirements</h3>
-                    <ul>
-                        <li>OS: Windows 10/11</li>
-                        <li>Processor: 1.0 GHz or faster</li>
-                        <li>Memory: 512 MB RAM</li>
-                        <li>Network: Broadband Internet connection</li>
-                    </ul>
-                </div>
-            </article>
-        </section>
-
-        <aside class="right-col">
-            <h3>Announcements</h3>
-            
-            <div class="news-item">
-                <p class="news-date">April 20, 2026</p>
-                <p><strong>System Online:</strong> The GitHub Pages portal is now active. All managers should download the latest client to ensure synchronization with the arena server.</p>
-            </div>
-
-            <div class="news-item">
-                <p class="news-date">April 14, 2026</p>
-                <p><strong>Combat Tuning:</strong> Orc and Dwarf racial modifiers have been adjusted for better balance in the pits. Check the User Guide for details.</p>
-            </div>
+    <div class="site-container">
+        
+        <aside class="left-column">
+            <img src="Bloodspire.png" alt="Bloodspire Logo" class="side-logo">
+            <img src="Bloodspire.png" alt="Arena Combat" class="arena-art">
         </aside>
-    </main>
 
-    <footer>
-        <p>&copy; 2026 Bloodspire Development Team. All rights reserved.</p>
-    </footer>
+        <main class="right-column">
+            
+            <nav class="top-nav">
+                <a href="#about">About</a> | 
+                <a href="#join">Join</a> | 
+                <a href="#players">Players Connection</a> | 
+                <a href="#download">Download</a> | 
+                <a href="#guide">User Guide</a> | 
+                <a href="#contact">Contact</a> | 
+                <a href="#help">Help</a>
+            </nav>
+
+            <section class="arena-header">
+                <h1>Bloodspire</h1>
+                <h2>The Game of Gladiatorial Combat</h2>
+                <hr class="divider">
+                <p class="status-text">The Arena currently runs every weekend</p>
+                <p><small>Submit your orders by Friday at 9:00 PM to ensure your teams will fight</small></p>
+            </section>
+
+            <section id="announcements">
+                <h3>Announcements from The Keeper:</h3>
+                <div class="announcement-box">
+                    <p class="date">March 14, 2026</p>
+                    <p><strong>Turn 1348 Re-run:</strong> Due to a glitch in the gladiator triggers, turn 1348 has been re-processed. Please re-download the client and check your warrior status.</p>
+                </div>
+
+                <div class="announcement-box" id="download">
+                    <h3>Download Section</h3>
+                    <p>Current Version: 1.0.4</p>
+                    <a href="https://raw.githubusercontent.com/bkstafford1971/Bloodspire/main/Bloodspire_Installer.exe" class="download-btn">Download Installer (.exe)</a>
+                    <p><br><strong>System Requirements:</strong> Windows 10/11, Internet connection required for turn synchronization.</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
 
 </body>
 </html>
