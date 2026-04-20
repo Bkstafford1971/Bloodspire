@@ -1,9 +1,5 @@
 To play download the installer and follow the prompts
 
-<div style="text-align: center; margin: 40px 0;">
-  <h2>Ready to Enter the Arena?</h2>
-  <p>Download the latest version for Windows</p>
- 
 <p style="text-align: center; margin: 30px 0;">
   <a href="Bloodspire_Installer.exe" 
      download 
@@ -11,11 +7,6 @@ To play download the installer and follow the prompts
             font-size: 18px; text-decoration: none; border-radius: 8px;">
     📥 Download Bloodspire Now
   </a>
- 
-  <p style="margin-top: 20px; color: #888; font-size: 14px;">
-    Includes everything you need — just run the installer and play!
-  </p>
-</div>
 
 Do Not change the default install directory
 
