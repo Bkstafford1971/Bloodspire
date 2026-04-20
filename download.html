@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download | Bloodspire</title>
+    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            color: #d1d1d1;
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+        }
+
+        /* 40/60 Split Layout */
+        .sidebar {
+            flex: 0 0 40%;
+            background-color: #050505;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .main-content {
+            flex: 0 0 60%;
+            padding: 40px 60px;
+            background-color: #000;
+            box-sizing: border-box;
+        }
+
+        .sidebar-logo {
+            width: 100%;
+            max-width: 550px;
+            margin-bottom: 25px;
+        }
+
+        /* Navigation Style */
+        nav.top-nav {
+            text-align: center;
+            padding-bottom: 50px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        nav.top-nav a {
+            color: #d4af37; 
+            text-decoration: none;
+            padding: 0 12px;
+            text-transform: uppercase;
+        }
+
+        nav.top-nav a:hover { color: #fff2cc; }
+
+        /* Muted Chiseled Title Styling */
+        .arena-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .arena-header h1 {
+            font-family: 'Metal Mania', cursive;
+            font-size: 64px;
+            margin: 0;
+            text-transform: uppercase;
+            background: linear-gradient(to bottom, #3a0000 0%, #8b1a1a 40%, #a31616 60%, #2a0000 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.8));
+        }
+
+        /* Download Section Styling */
+        #download-action {
+            text-align: center;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background-color: #8b1a1a;
+            color: #ffffff;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-decoration: none;
+            padding: 18px 40px;
+            border: 2px solid #a31616;
+            transition: all 0.3s ease;
+            margin: 30px 0;
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+        }
+
+        .download-btn:hover {
+            background-color: #a31616;
+            border-color: #d4af37;
+            transform: translateY(-2px);
+        }
+
+        /* Chiseled Instructions Box */
+        .install-guide {
+            text-align: left;
+            max-width: 90%;
+            margin: 40px auto;
+            background: #0a0a0a;
+            padding: 30px;
+            border-left: 4px solid #8b1a1a;
+        }
+
+        .install-guide h3 {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            margin-top: 0;
+            text-transform: uppercase;
+        }
+
+        .install-guide ol {
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        .install-guide li {
+            margin-bottom: 15px;
+        }
+
+        .warning-note {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 25px;
+            font-style: italic;
+            border-top: 1px solid #222;
+            padding-top: 15px;
+        }
+
+        @media (max-width: 1100px) {
+            .page-wrapper { flex-direction: column; }
+            .sidebar, .main-content { flex: 0 0 100%; width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <img src="Logo.png" alt="Bloodspire Logo" class="sidebar-logo">
+        </aside>
+
+        <main class="main-content">
+            <nav class="top-nav">
+                <a href="index.html">Home</a> | 
+                <a href="download.html" style="color: #fff2cc;">Download</a> | 
+                <a href="#guide">User Guide</a> | 
+                <a href="#help">Help</a>
+            </nav>
+
+            <section class="arena-header">
+                <h1>BLOODSPIRE</h1>
+                <h2>Arena Client Download</h2>
+            </section>
+
+            <section id="download-action">
+                <p>Version 1.0.4 - Windows Build</p>
+                
+                <a href="https://github.com/bkstafford1971/Bloodspire/raw/main/Bloodspire_Installer.exe" class="download-btn">
+                    DOWNLOAD INSTALLER (.EXE)
+                </a>
+
+                <div class="install-guide">
+                    <h3>Installation Instructions</h3>
+                    <ol>
+                        <li><strong>Download:</strong> Click the button above to download <code>Bloodspire_Installer.exe</code>.</li>
+                        <li><strong>Security:</strong> If Windows SmartScreen warns you, select <em>"More Info"</em> and then <strong>"Run Anyway"</strong>.</li>
+                        <li><strong>Setup:</strong> Run the installer and follow the prompts to choose your destination folder.</li>
+                        <li><strong>Connect:</strong> Ensure you have an active internet connection for turn synchronization.</li>
+                        <li><strong>Battle:</strong> Launch the game and prepare your gladiators for the next weekend run.</li>
+                    </ol>
+                    <div class="warning-note">
+                        Orders must be submitted by Friday at 9:00 PM to ensure your teams fight in the weekend arena.
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>
