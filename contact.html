@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | Bloodspire</title>
+    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            color: #d1d1d1;
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+        }
+
+        .sidebar {
+            flex: 0 0 40%;
+            background-color: #050505;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .main-content {
+            flex: 0 0 60%;
+            padding: 40px 60px;
+            background-color: #000;
+            box-sizing: border-box;
+        }
+
+        .sidebar-logo {
+            width: 100%;
+            max-width: 550px;
+        }
+
+        nav.top-nav {
+            text-align: center;
+            padding-bottom: 50px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        nav.top-nav a {
+            color: #d4af37; 
+            text-decoration: none;
+            padding: 0 12px;
+            text-transform: uppercase;
+        }
+
+        nav.top-nav a:hover { color: #fff2cc; }
+
+        .arena-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .arena-header h1 {
+            font-family: 'Metal Mania', cursive;
+            font-size: 64px;
+            margin: 0;
+            background: linear-gradient(to bottom, #3a0000 0%, #8b1a1a 40%, #a31616 60%, #2a0000 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.8));
+        }
+
+        .contact-container {
+            text-align: center;
+            max-width: 80%;
+            margin: 40px auto;
+            background: #0a0a0a;
+            padding: 50px;
+            border: 1px solid #222;
+            border-top: 3px solid #8b1a1a;
+        }
+
+        .contact-btn {
+            display: inline-block;
+            background-color: #8b1a1a;
+            color: #ffffff;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-decoration: none;
+            padding: 18px 40px;
+            border: 2px solid #a31616;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            border-radius: 4px;
+        }
+
+        .contact-btn:hover {
+            background-color: #a31616;
+            border-color: #d4af37;
+            transform: translateY(-2px);
+        }
+
+        .contact-instruction {
+            font-style: italic;
+            color: #888;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 1100px) {
+            .page-wrapper { flex-direction: column; }
+            .sidebar, .main-content { flex: 0 0 100%; width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <img src="Logo.png" alt="Bloodspire Logo" class="sidebar-logo">
+        </aside>
+
+        <main class="main-content">
+            <nav class="top-nav">
+                <a href="index.html">Home</a> | 
+                <a href="download.html">Download</a> | 
+                <a href="contact.html" style="color: #fff2cc;">Contact</a> | 
+                <a href="#help">Help</a>
+            </nav>
+
+            <section class="arena-header">
+                <h1>BLOODSPIRE</h1>
+                <h2>Summon The Keeper</h2>
+            </section>
+
+            <section class="contact-container">
+                <p>Have questions regarding turn results, gladiator triggers, or arena registration?</p>
+                
+                <a href="mailto:keeper@bloodspire.com?subject=Bloodspire%20Arena%20Inquiry" class="contact-btn">
+                    SEND AN EMAIL
+                </a>
+
+                <p class="contact-instruction">
+                    Clicking the button above will open your system's default mail application.
+                </p>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>
