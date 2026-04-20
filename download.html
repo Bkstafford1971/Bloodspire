@@ -31,6 +31,7 @@
             flex-direction: column;
             align-items: center;
             box-sizing: border-box;
+            border-right: 1px solid #1a1a1a;
         }
 
         .main-content {
@@ -64,7 +65,7 @@
 
         nav.top-nav a:hover { color: #fff2cc; }
 
-        /* Muted Chiseled Title Styling */
+        /* Chiseled Header Styling */
         .arena-header {
             text-align: center;
             margin-bottom: 50px;
@@ -74,7 +75,6 @@
             font-family: 'Metal Mania', cursive;
             font-size: 64px;
             margin: 0;
-            text-transform: uppercase;
             background: linear-gradient(to bottom, #3a0000 0%, #8b1a1a 40%, #a31616 60%, #2a0000 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -82,9 +82,22 @@
             filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.8));
         }
 
-        /* Download Section Styling */
-        #download-action {
+        /* Section Styling */
+        h2, h3 {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            text-transform: uppercase;
+        }
+
+        h2 { border-bottom: 1px solid #333; padding-bottom: 10px; margin-top: 40px; }
+
+        .download-action {
             text-align: center;
+            padding: 40px;
+            background: #0a0a0a;
+            border: 1px solid #222;
+            border-top: 3px solid #8b1a1a;
+            margin-bottom: 40px;
         }
 
         .download-btn {
@@ -98,9 +111,8 @@
             padding: 18px 40px;
             border: 2px solid #a31616;
             transition: all 0.3s ease;
-            margin: 30px 0;
+            margin: 20px 0;
             border-radius: 4px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.7);
         }
 
         .download-btn:hover {
@@ -109,39 +121,29 @@
             transform: translateY(-2px);
         }
 
-        /* Chiseled Instructions Box */
-        .install-guide {
-            text-align: left;
-            max-width: 90%;
-            margin: 40px auto;
-            background: #0a0a0a;
-            padding: 30px;
-            border-left: 4px solid #8b1a1a;
-        }
-
-        .install-guide h3 {
-            font-family: 'Cinzel', serif;
-            color: #d4af37;
-            margin-top: 0;
-            text-transform: uppercase;
-        }
-
-        .install-guide ol {
-            padding-left: 20px;
+        .guide-section {
             line-height: 1.8;
+            margin-bottom: 30px;
         }
 
-        .install-guide li {
-            margin-bottom: 15px;
+        .guide-section ul, .guide-section ol {
+            padding-left: 20px;
         }
 
-        .warning-note {
-            font-size: 0.9rem;
-            color: #888;
-            margin-top: 25px;
+        .important-note {
+            background: rgba(139, 26, 26, 0.1);
+            border-left: 4px solid #8b1a1a;
+            padding: 20px;
+            margin: 20px 0;
             font-style: italic;
-            border-top: 1px solid #222;
-            padding-top: 15px;
+        }
+
+        code {
+            background: #1a1a1a;
+            color: #fff2cc;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
         }
 
         @media (max-width: 1100px) {
@@ -160,35 +162,72 @@
         <main class="main-content">
             <nav class="top-nav">
                 <a href="index.html">Home</a> | 
+                <a href="about.html">About</a> | 
                 <a href="download.html" style="color: #fff2cc;">Download</a> | 
-                <a href="#guide">User Guide</a> | 
+                <a href="contact.html">Contact</a> | 
                 <a href="#help">Help</a>
             </nav>
 
             <section class="arena-header">
                 <h1>BLOODSPIRE</h1>
-                <h2>Arena Client Download</h2>
             </section>
 
-            <section id="download-action">
+            <section class="download-action">
                 <p>Version 1.0.4 - Windows Build</p>
-                
                 <a href="https://github.com/bkstafford1971/Bloodspire/raw/main/Bloodspire_Installer.exe" class="download-btn">
                     DOWNLOAD INSTALLER (.EXE)
                 </a>
+                <p><small>Secure installer for official league play.</small></p>
+            </section>
 
-                <div class="install-guide">
-                    <h3>Installation Instructions</h3>
-                    <ol>
-                        <li><strong>Download:</strong> Click the button above to download <code>Bloodspire_Installer.exe</code>.</li>
-                        <li><strong>Security:</strong> If Windows SmartScreen warns you, select <em>"More Info"</em> and then <strong>"Run Anyway"</strong>.</li>
-                        <li><strong>Setup:</strong> Run the installer and follow the prompts to choose your destination folder.</li>
-                        <li><strong>Connect:</strong> Ensure you have an active internet connection for turn synchronization.</li>
-                        <li><strong>Battle:</strong> Launch the game and prepare your gladiators for the next weekend run.</li>
-                    </ol>
-                    <div class="warning-note">
-                        Orders must be submitted by Friday at 9:00 PM to ensure your teams fight in the weekend arena.
-                    </div>
+            <section class="guide-section">
+                <h2>Installation & First Launch</h2>
+                <p>Getting started with BLOODSPIRE is now simpler than ever thanks to the official installer.</p>
+
+                <h3>What the Installer Does</h3>
+                <ul>
+                    <li>Automatically place all game files into the <code>C:\Bloodspire</code> directory.</li>
+                    <li>Install a <strong>portable version of Python</strong> (no manual Python installation required).</li>
+                    <li>Install a <strong>client version of Tailscale</strong> (the secure VPN tunneling software needed for league play).</li>
+                    <li>Create a convenient <strong>Bloodspire shortcut on your Desktop</strong>.</li>
+                </ul>
+
+                <h3>Step-by-Step Installation</h3>
+                <ol>
+                    <li><strong>Download and run the installer</strong> from the button above. Follow the on-screen prompts; the process is fully automatic.</li>
+                    <li><strong>After installation</strong>, double-click the <strong>Bloodspire</strong> shortcut on your Desktop. This launches the game client.</li>
+                    <li>A command window will open in the background (do not close it while playing), and your default web browser should automatically open the game at <code>http://localhost:8765</code>.</li>
+                    <li>If the browser does not open automatically, manually navigate to: <strong>http://localhost:8765</strong></li>
+                </ol>
+                <div class="important-note">
+                    <strong>Note:</strong> Always launch the game using the Desktop shortcut. The command window must remain open during play.
+                </div>
+
+                <h2>Tailscale Setup (Required for League Play)</h2>
+                <p>BLOODSPIRE league play uses Tailscale to create a secure private network between you and the Arena Master’s server.</p>
+                <ol>
+                    <li><strong>Create a free Tailscale account:</strong> Go to <a href="https://tailscale.com/download" style="color:#d4af37;">tailscale.com/download</a> and sign up for a free account.</li>
+                    <li><strong>Contact the Arena Master:</strong> Email <strong>bkstafford1971@gmail.com</strong> with your <strong>Manager Name</strong> and the <strong>email address</strong> used for Tailscale.</li>
+                    <li><strong>Join the League Network:</strong> The Arena Master will send a secure invitation link. Click it while Tailscale is running and accept to join the private league network.</li>
+                </ol>
+
+                <h2>Connecting to the League Server</h2>
+                <p>Once Tailscale shows your device is "Connected" to the league network:</p>
+                <ol>
+                    <li>In the BLOODSPIRE client, go to <strong>Action → League Settings…</strong></li>
+                    <li>The <strong>League Server URL</strong> field should be automatically filled in as:<br>
+                        <strong>http://100.114.138.61:8766</strong></li>
+                    <li>If it is not, manually enter that exact URL.</li>
+                    <li>Enter the league password provided by the Arena Master and click <strong>Register & Save</strong>.</li>
+                </ol>
+
+                <div class="important-note">
+                    <strong>Important Progress Notes:</strong>
+                    <ul>
+                        <li>Your progress saves automatically in the <code>saves</code> folder inside <code>C:\Bloodspire</code>.</li>
+                        <li>You must be connected via Tailscale to participate in official matches.</li>
+                        <li>Upload your teams before each deadline using <strong>Action → Upload</strong>.</li>
+                    </ul>
                 </div>
             </section>
         </main>
