@@ -29,8 +29,12 @@ nav a:hover {
 .main-logo {
     display: block;
     margin: 40px auto;
-    max-width: 80%;
-    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    /* Adjust 'max-width' to control the size. 
+       500px is usually a good 'hero' size, or use 30% for a smaller look. */
+    max-width: 500px; 
+    width: 90%; /* This ensures it shrinks on small phone screens */
+    height: auto;
+    filter: drop-shadow(0 0 15px rgba(0,0,0,0.8));
 }
 
 .content-wrapper {
