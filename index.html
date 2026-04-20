@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bloodspire | A Game of Gladiatorial Combat</title>
-    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Eater&family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #000;
@@ -12,31 +12,45 @@
             font-family: 'Open Sans', sans-serif;
             margin: 0;
             display: flex;
+            justify-content: center; /* Centers the entire layout */
             min-height: 100vh;
         }
 
+        /* Container to keep the sections from drifting too far apart on wide screens */
+        .page-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1600px; /* Limits spread on ultrawide monitors */
+        }
+
+        /* 40/60 Split Layout */
         .sidebar {
-            flex: 1;
+            flex: 0 0 40%; /* Exactly 40% width */
             background-color: #050505;
             padding: 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
+            box-sizing: border-box;
         }
 
         .main-content {
-            flex: 1;
-            padding: 40px;
+            flex: 0 0 60%; /* Exactly 60% width */
+            padding: 40px 60px; /* Extra horizontal padding for readability */
             background-color: #000;
+            box-sizing: border-box;
         }
 
+        /* Sidebar Images */
         .sidebar-logo, .sidebar-combat-img {
             width: 100%;
-            max-width: 600px;
+            max-width: 550px;
             margin-bottom: 25px;
+            height: auto;
         }
 
+        /* Gold Navigation Links */
         nav.top-nav {
             text-align: center;
             padding-bottom: 50px;
@@ -50,17 +64,19 @@
             text-decoration: none;
             padding: 0 12px;
             text-transform: uppercase;
+            white-space: nowrap; /* Prevents links from breaking weirdly */
         }
 
         nav.top-nav a:hover { color: #fff2cc; }
 
+        /* Muted Chiseled Title */
         .arena-header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 50px;
         }
 
         .arena-header h1 {
-            font-family: 'Metal Mania', cursive; 
+            font-family: 'Metal Mania', cursive;
             font-size: 64px;
             margin: 0;
             letter-spacing: 3px;
@@ -87,28 +103,28 @@
             margin-top: 25px;
         }
 
-        /* --- STYLED INTRODUCTION SECTION --- */
+        /* Centered & Italicized Intro */
         #introduction {
             text-align: center;
-            margin: 0 auto 60px auto;
-            max-width: 85%; /* Narrower width for better line breaks */
+            margin-bottom: 60px;
         }
 
         .intro-text {
             font-style: italic;
-            line-height: 1.5; /* Better spacing between lines */
+            line-height: 1.5;
             font-size: 1.0rem;
             color: #b0b0b0;
-            padding: 0 20px;
+            max-width: 90%;
+            margin: 0 auto;
         }
 
-        /* Large "Drop Cap" for a fantasy feel */
-        .intro-text::first-letter {
+        /* Large Drop Cap */
+        .intro-text p:first-of-type::first-letter {
             font-family: 'Cinzel', serif;
-            font-size: 3rem;
+            font-size: 3.5rem;
             float: left;
-            margin-right: 8px;
-            line-height: 1;
+            margin-right: 10px;
+            line-height: 0.8;
             color: #a31616;
             font-weight: bold;
         }
@@ -119,69 +135,71 @@
             text-transform: uppercase;
             font-size: 1.3rem;
             margin-top: 40px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-align: center;
         }
 
         .content-box {
             background: #080808;
             margin-bottom: 40px;
-            padding: 20px;
+            padding: 10px 0;
         }
 
         @media (max-width: 1100px) {
-            body { flex-direction: column; }
-            .sidebar, .main-content { width: 100%; flex: none; padding: 20px; }
+            .page-wrapper { flex-direction: column; }
+            .sidebar, .main-content { flex: 0 0 100%; width: 100%; padding: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <aside class="sidebar">
-        <img src="Logo.png" alt="Bloodspire Logo" class="sidebar-logo">
-        <img src="websiteCombatImage.png" alt="Gladiatorial Combat" class="sidebar-combat-img">
-    </aside>
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <img src="Logo.png" alt="Bloodspire Logo" class="sidebar-logo">
+            <img src="websiteCombatImage.png" alt="Gladiatorial Combat" class="sidebar-combat-img">
+        </aside>
 
-    <main class="main-content">
-        
-        <nav class="top-nav">
-            <a href="#about">About</a> | 
-            <a href="#join">Join</a> | 
-            <a href="#players">Players Connection</a> | 
-            <a href="#download">Download</a> | 
-            <a href="#guide">User Guide</a> | 
-            <a href="#contact">Contact</a> | 
-            <a href="#help">Help</a>
-        </nav>
+        <main class="main-content">
+            
+            <nav class="top-nav">
+                <a href="#about">About</a> | 
+                <a href="#join">Join</a> | 
+                <a href="#players">Players Connection</a> | 
+                <a href="#download">Download</a> | 
+                <a href="#guide">User Guide</a> | 
+                <a href="#contact">Contact</a> | 
+                <a href="#help">Help</a>
+            </nav>
 
-        <section class="arena-header">
-            <h1>BLOODSPIRE</h1>
-            <h2>A Game of Gladiatorial Combat</h2>
-            <p class="status-yellow">The Arena currently runs every weekend</p>
-            <p><small>Submit your orders by Friday at 9:00 PM to ensure your teams will fight</small></p>
-        </section>
+            <section class="arena-header">
+                <h1>BLOODSPIRE</h1>
+                <h2>A Game of Gladiatorial Combat</h2>
+                <p class="status-yellow">The Arena currently runs every weekend</p>
+                <p><small>Submit your orders by Friday at 9:00 PM to ensure your teams fight</small></p>
+            </section>
 
-        <section id="introduction">
-            <h3>Welcome to Bloodspire</h3>
-            <div class="intro-text">
-                <p>A bloodthirsty crowd roars as the gladiators enter the arena. Nervous but hardheaded team managers watch from their battle crested pavilions. Will months of training and patiently rehearsed strategy pay off with an arena victory? Or will all be lost on the jagged blade of an opponent's sword?</p>
-                
-                <p>Apart, on the throne of honor, the arena Champion looks on, a body of knotted muscles and scars, a testimony to his own brutal rise. His visage is impassive but his thoughts boil. How long before some young warrior's sword finds his heart, perhaps one of those he now watches? He shakes himself, casting aside dark thoughts.</p>
-                
-                <p>For the moment, he is the Champion, the best of the arena. His smoldering eyes scan the bloodstained sand where the warriors assume their fighting stances. He raises his clenched fist.</p>
-                
-                <p>The gladiators leap forward. Victory, disgrace, or death awaits on the open sand.</p>
-            </div>
-        </section>
-        
-        <section id="updates">
-            <h3>Announcements</h3>
-            <div class="content-box">
-                <p><strong>Turn 1348 Re-run:</strong> Turn 1348 has been re-processed due to gladiator trigger issues. Managers must re-download the client and check warrior status before the next deadline.</p>
-            </div>
-        </section>
-        
-    </main>
+            <section id="introduction">
+                <h3>Welcome to Bloodspire</h3>
+                <div class="intro-text">
+                    <p>A bloodthirsty crowd roars as the gladiators enter the arena. Nervous but hardheaded team managers watch from their battle crested pavilions. Will months of training and patiently rehearsed strategy pay off with an arena victory? Or will all be lost on the jagged blade of an opponent's sword?</p>
+                    
+                    <p>Apart, on the throne of honor, the arena Champion looks on, a body of knotted muscles and scars, a testimony to his own brutal rise. His visage is impassive but his thoughts boil. How long before some young warrior's sword finds his heart, perhaps one of those he now watches? He shakes himself, casting aside dark thoughts.</p>
+                    
+                    <p>For the moment, he is the Champion, the best of the arena. His smoldering eyes scan the bloodstained sand where the warriors assume their fighting stances. He raises his clenched fist.</p>
+                    
+                    <p>The gladiators leap forward. Victory, disgrace, or death awaits on the open sand.</p>
+                </div>
+            </section>
+            
+            <section id="updates">
+                <h3>Announcements</h3>
+                <div class="content-box">
+                    <p><strong>Turn 1348 Re-run:</strong> Due to a glitch in the gladiator triggers, turn 1348 has been re-processed. Please re-download the client and check your warrior status.</p>
+                </div>
+            </section>
+            
+        </main>
+    </div>
 
 </body>
 </html>
