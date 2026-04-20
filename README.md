@@ -1,5 +1,3 @@
-Here is a **basic user guide** for **Bloodspire**, written in clear, engaging language suitable for new players.
-
 ---
 
 ### **Bloodspire User Guide**
@@ -57,4 +55,3 @@ Success comes from understanding your warriors’ **racial strengths**, choosing
 
 ---
 
-Would you like me to expand any section (for example, add more detail on how strategies work, or include a section on basic combat mechanics)? I can also add sections about equipment, training, or the league system if needed.
