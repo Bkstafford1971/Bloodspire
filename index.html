@@ -4,15 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bloodspire | A Game of Gladiatorial Combat</title>
-    <link href="https://fonts.googleapis.com/css2?family=Eater&family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Eater&family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        /* If you have the BlackCastleMF font file, you would add this:
-           @font-face {
-               font-family: 'BlackCastleMF';
-               src: url('BlackCastleMF.ttf');
-           }
-        */
-
         body {
             background-color: #000;
             color: #d1d1d1;
@@ -44,7 +37,6 @@
             margin-bottom: 25px;
         }
 
-        /* Gold Navigation Links */
         nav.top-nav {
             text-align: center;
             padding-bottom: 50px;
@@ -62,22 +54,18 @@
 
         nav.top-nav a:hover { color: #fff2cc; }
 
-        /* BLOOD RED GRADIENT TITLE */
         .arena-header {
             text-align: center;
             margin-bottom: 60px;
         }
 
         .arena-header h1 {
-            /* Replace 'Eater' with 'BlackCastleMF' if you host the font locally */
-            font-family: 'BlackCastleMF', 'Eater', cursive; 
+            font-family: 'Metal Mania', cursive; 
             font-size: 64px;
             margin: 0;
             letter-spacing: 3px;
             text-transform: uppercase;
-            
-            /* Gradient Magic */
-            background: linear-gradient(to bottom, #8B3A3A 20%, #AA1C1C 50%, #A34D4D 90%);
+            background: linear-gradient(to bottom, #3a0000 0%, #8b1a1a 40%, #a31616 60%, #2a0000 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             display: inline-block;
@@ -99,6 +87,32 @@
             margin-top: 25px;
         }
 
+        /* --- STYLED INTRODUCTION SECTION --- */
+        #introduction {
+            text-align: center;
+            margin: 0 auto 60px auto;
+            max-width: 85%; /* Narrower width for better line breaks */
+        }
+
+        .intro-text {
+            font-style: italic;
+            line-height: 1.8; /* Better spacing between lines */
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            padding: 0 20px;
+        }
+
+        /* Large "Drop Cap" for a fantasy feel */
+        .intro-text::first-letter {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            float: left;
+            margin-right: 8px;
+            line-height: 1;
+            color: #a31616;
+            font-weight: bold;
+        }
+
         h3 {
             font-family: 'Cinzel', serif;
             color: #a31616;
@@ -106,23 +120,13 @@
             font-size: 1.4rem;
             margin-top: 40px;
             margin-bottom: 15px;
+            text-align: center;
         }
 
         .content-box {
             background: #080808;
             margin-bottom: 40px;
-        }
-
-        .download-btn {
-            display: inline-block;
-            background: #a31616;
-            color: #fff;
-            padding: 14px 28px;
-            text-decoration: none;
-            font-family: 'Cinzel', serif;
-            font-weight: bold;
-            margin: 20px 0;
-            border-radius: 3px;
+            padding: 20px;
         }
 
         @media (max-width: 1100px) {
@@ -159,20 +163,23 @@
 
         <section id="introduction">
             <h3>Welcome to Bloodspire</h3>
-            <div class="content-box">
-                <p>A bloodthirsty crowd roars as the gladiators enter the arena. Nervous but hardheaded team managers watch from their battle crested pavilions. Will months of training and patiently rehearsed strategy pay off with an arena victory? Or will all be lost on the jagged blade of an opponent's sword?
-Apart, on the throne of honor, the arena Champion looks on, a body of knotted muscles and scars, a testimony to his own brutal rise. His visage is impassive but his thoughts boil. How long before some young warrior's sword finds his heart, perhaps one of those he now watches? He shakes himself, casting aside dark thoughts. For the moment, he is the Champion, the best of the arena. His smoldering eyes scan the bloodstained sand where the warriors assume their fighting stances. He raises his clenched fist.
-The gladiators leap forward.  Victory, disgrace, or death awaits on the open sand.</p>
+            <div class="intro-text">
+                <p>A bloodthirsty crowd roars as the gladiators enter the arena. Nervous but hardheaded team managers watch from their battle crested pavilions. Will months of training and patiently rehearsed strategy pay off with an arena victory? Or will all be lost on the jagged blade of an opponent's sword?</p>
+                
+                <p>Apart, on the throne of honor, the arena Champion looks on, a body of knotted muscles and scars, a testimony to his own brutal rise. His visage is impassive but his thoughts boil. How long before some young warrior's sword finds his heart, perhaps one of those he now watches? He shakes himself, casting aside dark thoughts.</p>
+                
+                <p>For the moment, he is the Champion, the best of the arena. His smoldering eyes scan the bloodstained sand where the warriors assume their fighting stances. He raises his clenched fist.</p>
+                
+                <p>The gladiators leap forward. Victory, disgrace, or death awaits on the open sand.</p>
             </div>
         </section>
         
         <section id="updates">
             <h3>Announcements</h3>
             <div class="content-box">
-                <p><strong>Welcome to Bloodspire:</strong> Turn 1348 has been re-processed. Managers must re-download the client and check warrior status before the next deadline.</p>
+                <p><strong>Turn 1348 Re-run:</strong> Turn 1348 has been re-processed due to gladiator trigger issues. Managers must re-download the client and check warrior status before the next deadline.</p>
             </div>
         </section>
-
         
     </main>
 
