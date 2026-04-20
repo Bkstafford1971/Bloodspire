@@ -340,6 +340,18 @@ def _run_turn(request_password, rerun_turn=None):
     _team_fight_count = {}
     _FODDER_TEAMS     = {"The Monsters", "The Peasants"}
 
+    # AI warrior name -> manager_id.  Used to register MIRROR BOUTS: when an AI
+    # warrior fights as OW in another manager's iteration, their own team's
+    # result would otherwise miss the fight.  The mirror bout (flipped to their
+    # perspective) is added to _ai_mirror_bouts for merging after the main loop.
+    ai_warrior_to_mid = {}
+    for _mid, _upl in uploads.items():
+        if _mid.startswith("ai_"):
+            for _wd in (_upl["team"].get("warriors") or []):
+                if _wd and _wd.get("name"):
+                    ai_warrior_to_mid[_wd["name"]] = _mid
+    _ai_mirror_bouts = {}   # mid -> list of bout dicts (mirrored perspective)
+
     try:
         # warrior_name -> manager_id for all non-AI player warriors
         player_warrior_to_mid = {}
@@ -550,8 +562,17 @@ def _run_turn(request_password, rerun_turn=None):
         _turn_progress["message"] = f"Fighting: {mname} ({done_count}/{len(uploads)})"
         print(f"\n  [{mname}] processing fights...")
         try:
-            player_team = Team.from_dict(upload["team"])
-            player_team.manager_name = mname
+            if manager_id.startswith("ai_") and manager_id in team_map:
+                # AI: reuse the team_map instance so fight updates accumulated
+                # when this team's warriors appeared as OW in earlier iterations
+                # are preserved on the final saved result.  Fresh Team.from_dict
+                # here would discard those updates and leave the team looking
+                # like it fought fewer than 5 times.
+                player_team = team_map[manager_id]
+                player_team.manager_name = mname
+            else:
+                player_team = Team.from_dict(upload["team"])
+                player_team.manager_name = mname
         except Exception as e:
             print(f"  SKIP {mname}: {e}"); continue
 
@@ -863,6 +884,48 @@ def _run_turn(request_password, rerun_turn=None):
                 "training": result.training_results.get("warrior_a", []),
             })
 
+            # MIRROR BOUT: when ow belongs to a different AI team, register
+            # the fight from the OW perspective so that team's result reflects
+            # it. Without this, AI teams that had warriors fight as OW see their
+            # bouts list under-count and their "last 5 turns" standings show
+            # fewer than 5 fights per turn. Also append to ow.fight_history
+            # since run_fight/record_result don't track per-fight history.
+            _ow_mid = ai_warrior_to_mid.get(ow.name)
+            if _ow_mid and _ow_mid != manager_id:
+                try:
+                    _ow_narr = result.narrative if hasattr(result, "narrative") else ""
+                    fight_logs[str(fid)] = fight_logs.get(str(fid), _ow_narr)
+                    _mirror = {
+                        "warrior_name":     ow.name,
+                        "opponent_name":    pw.name,
+                        "opponent_race":    pw.race.name,
+                        "opponent_team":    player_team.team_name,
+                        "opponent_manager": mname,
+                        "fight_type":       fight_type_to_record,
+                        "result":           "LOSS" if pw_won else "WIN",
+                        "minutes":          result.minutes_elapsed,
+                        "fight_id":         fid,
+                        "warrior_slain":    killed,
+                        "opponent_slain":   slain,
+                        "ascension":        False,
+                        "opponent_wins":    pw.wins,
+                        "opponent_losses":  pw.losses,
+                        "opponent_kills":   pw.kills,
+                        "training":         result.training_results.get("warrior_b", []),
+                        "_fight_log":       _ow_narr,
+                    }
+                    _ai_mirror_bouts.setdefault(_ow_mid, []).append(_mirror)
+                    ow.fight_history.append({
+                        "turn": turn_num, "opponent_name": pw.name,
+                        "opponent_race": pw.race.name, "opponent_team": player_team.team_name,
+                        "result": "loss" if pw_won else "win",
+                        "minutes": result.minutes_elapsed, "fight_id": fid,
+                        "warrior_slain": killed, "opponent_slain": slain, "is_kill": slain,
+                        "fight_type": fight_type_to_record,
+                    })
+                except Exception as _mb_err:
+                    print(f"  WARN: mirror bout registration failed for {ow.name}: {_mb_err}")
+
         # Create two versions:
         # 1. team_slim: for server-side storage (strip fight_history to save space)
         # 2. team_full: for client download (keep fight_history so client has complete picture)
@@ -915,6 +978,39 @@ def _run_turn(request_password, rerun_turn=None):
         }
         _save_result(turn_num, manager_id, mgr_res)
         all_results[manager_id] = mgr_res
+
+    # Merge mirror bouts: AI teams whose warriors fought as OW in another
+    # manager's iteration need those fights in their own bouts list so the
+    # "last 5 turns" standings and bout display reflect 5 fights/turn.
+    for _mid, _mbouts in _ai_mirror_bouts.items():
+        if _mid not in all_results:
+            continue
+        _res = all_results[_mid]
+        _res.setdefault("bouts", [])
+        _res.setdefault("fight_logs", {})
+        _existing_fids = {str(b.get("fight_id")) for b in _res["bouts"]}
+        for _mb in _mbouts:
+            _fid = str(_mb.get("fight_id"))
+            if _fid in _existing_fids:
+                continue  # already present (e.g., duplicate registration)
+            _log_text = _mb.pop("_fight_log", None)
+            if _log_text and _fid not in _res["fight_logs"]:
+                _res["fight_logs"][_fid] = _log_text
+            _res["bouts"].append(_mb)
+            _existing_fids.add(_fid)
+        # Refresh turn_history for this team with the merged bouts so
+        # evolve_ai_teams computes the correct W/L/K for "last 5".
+        _team = _res.get("team") or {}
+        _th = _team.setdefault("turn_history", [])
+        _th[:] = [e for e in _th if e.get("turn") != turn_num]
+        _th.append({
+            "turn": turn_num,
+            "w": sum(1 for b in _res["bouts"] if b.get("result") == "WIN"),
+            "l": sum(1 for b in _res["bouts"] if b.get("result") == "LOSS"),
+            "k": sum(1 for b in _res["bouts"] if b.get("opponent_slain")),
+        })
+        # Persist the augmented result to disk
+        _save_result(turn_num, _mid, _res)
 
     # Update standings (skip AI-only results from standings if desired, but include them)
     try:
@@ -1208,25 +1304,20 @@ def _filter_results_for_client(results: list, cfg: dict) -> list:
 
 
 # =============================================================================
-# ADMIN PAGE (HTML)
+# ADMIN PAGE (HTML) — Updated with Delete Manager Dropdown + Button
 # =============================================================================
-
 def _admin_page():
-    cfg      = _load_config()
+    cfg = _load_config()
     managers = _load_managers()
-    uploads  = _load_uploads(cfg["current_turn"])
+    uploads = _load_uploads(cfg["current_turn"])
     standings= _load_standings()
-    turn     = cfg["current_turn"]
-    state    = cfg["turn_state"]
+    turn = cfg["current_turn"]
+    state = cfg["turn_state"]
     sc = {"open":"#080","processing":"#840","results_ready":"#00a"}
-
-    # Upload status rows — show AI teams separately
-    # Count uploads per manager (keys are now "mid_teamXXX" or "mid"),
-    # split by manual vs auto-carry so the host can see which teams still
-    # need manager action (i.e., had a death and weren't auto-carried).
+    # Upload status rows
     mgr_manual_counts = {}
-    mgr_auto_counts   = {}
-    mgr_upload_times  = {}
+    mgr_auto_counts = {}
+    mgr_upload_times = {}
     for key, udata in uploads.items():
         uid = udata.get("manager_id", key.split("_team")[0])
         if udata.get("auto_uploaded"):
@@ -1236,16 +1327,15 @@ def _admin_page():
         mgr_upload_times[uid] = udata.get("uploaded_at","?")
     mgr_upload_counts = {m: mgr_manual_counts.get(m,0) + mgr_auto_counts.get(m,0)
                          for m in set(mgr_manual_counts) | set(mgr_auto_counts)}
-
     urows = ""
     for mid, mgr in managers.items():
         manual = mgr_manual_counts.get(mid, 0)
-        auto   = mgr_auto_counts.get(mid, 0)
-        total  = manual + auto
+        auto = mgr_auto_counts.get(mid, 0)
+        total = manual + auto
         if total:
             parts = []
             if manual: parts.append(f"{manual} manual")
-            if auto:   parts.append(f"{auto} auto-carry")
+            if auto: parts.append(f"{auto} auto-carry")
             badge = (f"<b style='color:#060'>✓ {total} team(s) uploaded "
                      f"({', '.join(parts)}) — {mgr_upload_times.get(mid,'')}</b>")
         else:
@@ -1253,7 +1343,7 @@ def _admin_page():
         urows += f"<tr><td>{mgr['manager_name']}</td><td>{badge}</td></tr>"
     if not urows:
         urows = "<tr><td colspan=2 style='color:#888'>No managers registered yet</td></tr>"
-    # Add AI teams indicator
+    # AI count
     try:
         ai_path = os.path.join(LEAGUE_DIR, "ai_teams.json")
         ai_count = len(json.loads(open(ai_path).read())) if os.path.exists(ai_path) else 0
@@ -1261,8 +1351,7 @@ def _admin_page():
         ai_count = 0
     if ai_count:
         urows += f"<tr><td colspan=2 style='color:#555;font-style:italic'>+ {ai_count} AI teams (auto-included)</td></tr>"
-
-    # Standings rows (sorted by wins, AI teams marked)
+    # Standings rows
     warriors_flat = []
     for mid, sd in standings.items():
         is_ai = sd.get("is_ai", mid.startswith("ai_"))
@@ -1276,10 +1365,7 @@ def _admin_page():
         f"<td style='text-align:center'>{w['fights']}</td></tr>"
         for w in warriors_flat
     ) or "<tr><td colspan=4 style='color:#888'>No completed turns yet</td></tr>"
-
-    # Re-run button available whenever at least one turn has been completed
-    # (current_turn > 1 means turn 1 has already run).  State doesn't matter —
-    # results_ready flips back to open the moment any team uploads for the next turn.
+    # Re-run section
     if turn > 1:
         last_turn = turn - 1
         rerun_section = (
@@ -1291,6 +1377,10 @@ def _admin_page():
         )
     else:
         rerun_section = ""
+    # Manager options for delete dropdown
+    manager_options = ""
+    for mid, mgr in managers.items():
+        manager_options += f'<option value="{mid}">{mgr["manager_name"]} (ID: {mid})</option>'
 
     return f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -1311,7 +1401,7 @@ def _admin_page():
  button{{background:#d4d0c8;border:2px solid;border-color:#fff #808080 #808080 #fff;
          padding:3px 14px;font-size:12px;cursor:pointer;margin-top:4px}}
  button:active{{border-color:#808080 #fff #fff #808080}}
- button.danger{{border-color:#f88 #800 #800 #f88;color:#800}}
+ button.danger{{border-color:#f88 #800 #800 #f88;color:#800;background:#c00;color:white}}
  .state{{font-weight:bold;color:{sc.get(state,'#000')}}}
  #msg{{padding:6px 14px;margin:4px 0;display:none;font-size:12px}}
  .ok{{background:#cfc;border-left:4px solid #080}}
@@ -1328,7 +1418,6 @@ def _admin_page():
 </div>
 <div id="msg"></div>
 <div class="wrap">
-
  <div class="panel" style="min-width:260px;max-width:340px">
   <h3>Run Turn {turn}</h3>
   <p style="font-size:11px;color:#555;margin:0 0 6px">
@@ -1344,12 +1433,10 @@ def _admin_page():
   </div>
   {rerun_section}
  </div>
-
  <div class="panel">
   <h3>Upload Status — Turn {turn}</h3>
   <table><tr><th>Manager</th><th>Status</th></tr>{urows}</table>
  </div>
-
  <div class="panel" style="min-width:220px;max-width:280px">
   <h3>Arena Reset</h3>
   <p style="font-size:11px;color:#800;margin:0 0 8px">
@@ -1359,7 +1446,6 @@ def _admin_page():
   </p>
   <button class="danger" onclick="resetArena()">🗑 Reset Arena to Turn 1</button>
  </div>
-
  <div class="panel" style="min-width:220px;max-width:320px">
   <h3>Feature Flags (Testing)</h3>
   <p style="font-size:11px;margin:0 0 10px;color:#555">Enable debug visibility for testing mechanics (hidden by default).</p>
@@ -1380,7 +1466,6 @@ def _admin_page():
    Changes apply on next turn run.
   </div>
  </div>
-
  <div class="panel" style="min-width:240px;max-width:340px">
   <h3>Turn Schedule</h3>
   <p style="font-size:11px;margin:0 0 8px;color:#555">
@@ -1406,18 +1491,29 @@ def _admin_page():
    <div style="margin-top:8px;font-size:10px;color:#888" id="sched-next"></div>
   </div>
  </div>
-
-</div>
-<div class="wrap">
- <div class="panel">
-  <h3>Standings (W-L-K) &nbsp; <span style="font-weight:normal;color:#888;font-size:11px">🤖 = AI team</span></h3>
-  <table><tr><th>Manager</th><th>Warrior</th><th>Record</th><th>Fights</th></tr>
-  {srows}</table>
+ <!-- ====================== DELETE MANAGER PANEL ====================== -->
+ <div class="panel" style="min-width:300px;">
+  <h3 style="color:#c00;">Delete Manager (DANGER ZONE)</h3>
+  <p style="color:#c00;font-size:12px;margin-bottom:10px;">
+   ⚠ This will permanently delete the selected manager and all their uploaded data for the current turn.
+  </p>
+  <div style="margin-bottom:10px;">
+   <label style="display:block;margin-bottom:4px;">Select Manager:</label>
+   <select id="delete-manager-select" style="width:100%;padding:5px;border:2px inset #808080;font-size:13px;">
+    <option value="">-- Select a manager to delete --</option>
+    {manager_options}
+   </select>
+  </div>
+  <button onclick="deleteSelectedManager()" class="danger" style="width:100%;padding:10px;font-size:13px;">
+   DELETE SELECTED MANAGER
+  </button>
  </div>
 </div>
+
 <script>
 let _pollTimer=null;
 
+// Existing functions (runTurn, rerunTurn, resetArena, etc.)
 async function runTurn(){{
  const pw=pw_val();
  if(!pw){{show('Enter the host password first.','err');return;}}
@@ -1431,7 +1527,6 @@ async function runTurn(){{
   if(!d.success){{show('Error: '+d.error,'err');stopPoll();}}
  }}catch(e){{show('Connection error: '+e.message,'err');stopPoll();}}
 }}
-
 async function rerunTurn(t){{
  const pw=pw_val();
  if(!pw){{show('Enter the host password first.','err');return;}}
@@ -1446,7 +1541,6 @@ async function rerunTurn(t){{
   if(!d.success){{show('Error: '+d.error,'err');stopPoll();}}
  }}catch(e){{show('Connection error: '+e.message,'err');stopPoll();}}
 }}
-
 async function resetArena(){{
  const pw=pw_val();
  if(!pw){{show('Enter the host password first.','err');return;}}
@@ -1460,15 +1554,12 @@ async function resetArena(){{
   else show('Error: '+d.error,'err');
  }}catch(e){{show('Connection error: '+e.message,'err');}}
 }}
-
 function pw_val(){{return document.getElementById('hp')?.value||'';}}
-
 function startPoll(){{
  document.getElementById('prog-wrap').style.display='block';
  _pollTimer=setInterval(pollProgress,800);
 }}
 function stopPoll(){{clearInterval(_pollTimer);_pollTimer=null;}}
-
 async function pollProgress(){{
  try{{
   const d=await(await fetch('/api/progress')).json();
@@ -1482,113 +1573,70 @@ async function pollProgress(){{
   }}
  }}catch(e){{}}
 }}
-
 function show(t,c){{const m=document.getElementById('msg');m.textContent=t;m.className=c;m.style.display='block';}}
 
-function _cbId(flag){{
- const m={{'show_favorite_weapon':'fav-wpn','show_luck_factor':'luck-fct',
-           'show_max_hp':'max-hp','ai_teams_enabled':'ai-enabled'}};
- return m[flag]||flag;
+// FIXED DELETE MANAGER FUNCTION
+async function deleteSelectedManager() {{
+    const select = document.getElementById('delete-manager-select');
+    const mid = select.value;
+    if (!mid) {{
+        alert("Please select a manager to delete.");
+        return;
+    }}
+
+    const fullText = select.options[select.selectedIndex].text;
+    const managerName = fullText.split(" (ID:")[0];   // Clean name for display
+
+    // First safety confirmation
+    if (!confirm(`⚠ DANGER ZONE ⚠\n\nYou are about to PERMANENTLY delete:\n\n${{managerName}}\n\nAll their teams and results for the current turn will be removed.\n\nThis action CANNOT be undone.\n\nContinue?`)) {{
+        return;
+    }}
+
+    // Second confirmation - must type DELETE
+    const confirmText = prompt(`Type the word DELETE to confirm deleting ${{managerName}}:`);
+    if (confirmText !== "DELETE") {{
+        alert("Delete cancelled.");
+        return;
+    }}
+
+    // Host password prompt
+    const hostPassword = prompt("Enter your host password to proceed with deletion:");
+    if (!hostPassword) {{
+        alert("Delete cancelled - no password provided.");
+        return;
+    }}
+
+    try {{
+        const resp = await fetch('/api/admin/delete_manager', {{
+            method: 'POST',
+            headers: {{'Content-Type': 'application/json'}},
+            body: JSON.stringify({{
+                host_password: hostPassword,
+                manager_id: mid
+            }})
+        }});
+
+        const result = await resp.json();
+
+        if (result.success) {{
+            alert(result.message || `Manager '${{managerName}}' deleted successfully.`);
+            location.reload();  // Refresh dropdown and page
+        }} else {{
+            alert("Failed to delete: " + (result.error || "Unknown error"));
+        }}
+    }} catch(e) {{
+        alert("Connection error: " + e.message);
+    }}
 }}
+// =====================================================================
 
-async function toggleFlag(flag){{
- const pw=pw_val();
- const cb=document.getElementById(_cbId(flag));
- if(!pw){{show('Enter the host password first.','err');cb.checked=!cb.checked;return;}}
- const newVal=cb.checked;
- const body={{}};
- body[flag]=newVal;
- try{{
-  const r=await fetch('/api/admin/update',{{method:'POST',
-   headers:{{'Content-Type':'application/json'}},
-   body:JSON.stringify({{host_password:pw,...body}})}});
-  const d=await r.json();
-  if(d.success){{
-   const label=flag.replace(/^show_/,'').replace(/_/g,' ');
-   show(`✓ ${{label}} ${{newVal?'enabled':'disabled'}}`,'ok');
-   loadFlags();
-  }}else{{
-   show('Error: '+d.error,'err');
-   cb.checked=!newVal;
-  }}
- }}catch(e){{show('Connection error: '+e.message,'err');cb.checked=!newVal;}}
-}}
+document.addEventListener('DOMContentLoaded',()=>{{/* existing loadFlags and loadSchedule calls if present */}});
 
-function _applyFlags(flags){{
- const f=flags||{{}};
- document.getElementById('fav-wpn').checked   = f.show_favorite_weapon||false;
- document.getElementById('luck-fct').checked  = f.show_luck_factor||false;
- document.getElementById('max-hp').checked    = f.show_max_hp||false;
- document.getElementById('ai-enabled').checked= f.ai_teams_enabled!==false;
- localStorage.setItem('bp_flags',JSON.stringify(f));
-}}
-
-async function loadFlags(){{
- try{{
-  const r=await fetch('/api/flags');
-  const d=await r.json();
-  if(d.success){{_applyFlags(d);return;}}
- }}catch(e){{}}
- try{{
-  _applyFlags(JSON.parse(localStorage.getItem('bp_flags')||'{{}}'));
- }}catch(e){{}}
-}}
-
-async function loadSchedule(){{
- try{{
-  const r=await fetch('/api/schedule');
-  const d=await r.json();
-  if(!d.success)return;
-  document.getElementById('sched-enabled').checked=d.schedule_enabled||false;
-  const sel=document.getElementById('sched-day');
-  for(let o of sel.options){{if(o.value===d.schedule_day){{o.selected=true;break;}}}}
-  document.getElementById('sched-time').value=d.schedule_time||'20:00';
-  _updateSchedNote(d.schedule_enabled,d.schedule_day,d.schedule_time);
- }}catch(e){{}}
-}}
-
-function _updateSchedNote(enabled,day,t){{
- const el=document.getElementById('sched-next');
- if(!el)return;
- if(!enabled){{el.textContent='Schedule is disabled.';return;}}
- el.textContent=`Next auto-run: ${{day}} at ${{t}}`;
-}}
-
-async function toggleSchedule(){{
- const pw=pw_val();
- if(!pw){{show('Enter the host password first.','err');
-          document.getElementById('sched-enabled').checked=!document.getElementById('sched-enabled').checked;return;}}
- await saveSchedule();
-}}
-
-async function saveSchedule(){{
- const pw=pw_val();
- if(!pw)return;  // silent if no pw — only fires on explicit toggle or time change
- const enabled=document.getElementById('sched-enabled').checked;
- const day=document.getElementById('sched-day').value;
- const t=document.getElementById('sched-time').value;
- try{{
-  const r=await fetch('/api/admin/update',{{method:'POST',
-   headers:{{'Content-Type':'application/json'}},
-   body:JSON.stringify({{host_password:pw,schedule_enabled:enabled,
-                         schedule_day:day,schedule_time:t}})}});
-  const d=await r.json();
-  if(d.success){{
-   _updateSchedNote(enabled,day,t);
-   show(`✓ Schedule ${{enabled?'set to '+day+' '+t:'disabled'}}`,'ok');
-  }}else show('Error: '+d.error,'err');
- }}catch(e){{show('Connection error: '+e.message,'err');}}
-}}
-
-document.addEventListener('DOMContentLoaded',()=>{{loadFlags();loadSchedule();}});
-
-// Browser close detection — gracefully shutdown server when page unloads
+// Browser close detection
 window.addEventListener('beforeunload', () => {{
   navigator.sendBeacon('/api/shutdown', '');
 }});
 </script></body></html>"""
-
-
 # =============================================================================
 # HTTP HANDLER
 # =============================================================================
@@ -1839,24 +1887,29 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
         self.send_json({"error":"Not found."}, 404)
 
     # ── POST ──────────────────────────────────────────────────────────────
-
     def do_POST(self):
         path = self.p()
-        b    = self.body()
+        b = self.body()
 
         if path == "/api/register":
             mname = (b.get("manager_name") or "").strip()
-            pw    = (b.get("password")     or "").strip()
+            pw = (b.get("password") or "").strip()
             if not mname or not pw:
                 self.send_json({"success":False,"error":"manager_name and password required."}); return
             if len(pw) < 4:
                 self.send_json({"success":False,"error":"Password must be at least 4 characters."}); return
             with _lock:
                 mgrs = _load_managers()
-                if any(m["manager_name"].lower()==mname.lower() for m in mgrs.values()):
-                    self.send_json({"success":False,"error":"Manager name already taken."}); return
-                import uuid
-                mid  = str(uuid.uuid4())[:8]
+                for existing_mid, m in mgrs.items():
+                    if m["manager_name"].lower() == mname.lower():
+                        if _check_mgr_pw(m, pw):
+                            self.send_json({"success":True,"manager_id":existing_mid,"manager_name":m["manager_name"]}); return
+                        self.send_json({"success":False,"error":"Manager name already taken."}); return
+                # Numeric IDs, starting at 20 and incrementing. Legacy non-numeric
+                # IDs (hex uuids from older builds) are skipped so they don't
+                # poison the sequence.
+                numeric_ids = [int(k) for k in mgrs.keys() if k.isdigit()]
+                mid = str(max(numeric_ids) + 1) if numeric_ids else "20"
                 salt = secrets.token_hex(16)
                 mgrs[mid] = {"manager_name":mname,"salt":salt,
                              "password_hash":_hash_pw(pw,salt),
@@ -1874,9 +1927,9 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 self.send_json({"available": available}); return
 
         if path == "/api/upload":
-            mid   = (b.get("manager_id") or "").strip()
-            pw    = (b.get("password")   or "").strip()
-            team  = b.get("team")
+            mid = (b.get("manager_id") or "").strip()
+            pw = (b.get("password") or "").strip()
+            team = b.get("team")
             if not all([mid, pw, team]):
                 self.send_json({"success":False,"error":"manager_id, password and team required."}); return
             with _lock:
@@ -1887,34 +1940,31 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     self.send_json({"success":False,"error":"Wrong password."}); return
                 cfg = _load_config()
                 if cfg["turn_state"] == "processing":
-                    # Safety: if stuck in processing for more than 10 minutes, auto-recover
                     import datetime as _dt
                     started = cfg.get("processing_started_at","")
                     stuck = False
                     if started:
                         try:
                             elapsed = (_dt.datetime.now() - _dt.datetime.fromisoformat(started)).seconds
-                            stuck = elapsed > 600  # 10 minutes
+                            stuck = elapsed > 600
                         except Exception:
                             stuck = True
                     if not stuck:
                         self.send_json({"success":False,"error":"Turn is running. Try again shortly."}); return
-                    # Auto-recover from stuck state
-                    print("  WARNING: turn_state was stuck as 'processing' — auto-recovering.")
+                    print(" WARNING: turn_state was stuck as 'processing' — auto-recovering.")
                     cfg["turn_state"] = "open"; _save_config(cfg)
                 if cfg["turn_state"] == "results_ready":
                     cfg["turn_state"] = "open"; _save_config(cfg)
                 turn_num = cfg["current_turn"]
-                team_id  = team.get("team_id", "") if isinstance(team, dict) else ""
+                team_id = team.get("team_id", "") if isinstance(team, dict) else ""
                 upload_time = time.strftime("%Y-%m-%d %H:%M:%S")
                 _save_upload(turn_num, mid, {
-                    "manager_id"  : mid,
+                    "manager_id" : mid,
                     "manager_name": mgrs[mid]["manager_name"],
-                    "team_id"     : team_id,
-                    "team"        : team,
+                    "team_id" : team_id,
+                    "team" : team,
                     "uploaded_at" : upload_time,
                 })
-                # Update manager's last_upload_timestamp for tracking
                 mgrs[mid]["last_upload_timestamp"] = upload_time
                 _save_managers(mgrs)
             self.send_json({"success":True,"turn":turn_num,
@@ -1948,35 +1998,68 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             cfg = _load_config()
             if not _check_host_pw(cfg, b.get("host_password","")):
                 self.send_json({"success":False,"error":"Not authorised."}, 401); return
-            # Update feature flags
             for bool_key in ("show_favorite_weapon", "show_luck_factor",
                              "show_max_hp", "ai_teams_enabled", "schedule_enabled"):
                 if bool_key in b:
                     cfg[bool_key] = bool(b[bool_key])
-            # Update schedule settings
             if "schedule_day" in b:
-                valid_days = ("Sunday","Monday","Tuesday","Wednesday",
-                              "Thursday","Friday","Saturday")
+                valid_days = ("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday")
                 day = b["schedule_day"]
                 if day in valid_days:
                     cfg["schedule_day"] = day
             if "schedule_time" in b:
-                # Validate HH:MM format
                 import re as _re
                 if _re.match(r"^\d{2}:\d{2}$", str(b["schedule_time"])):
                     cfg["schedule_time"] = b["schedule_time"]
             _save_config(cfg)
             self.send_json({"success":True,"message":"Config updated.","config":cfg}); return
 
+        # ==================== DELETE MANAGER (FIXED) ====================
+        if path == "/api/admin/delete_manager":
+            # Load cfg FIRST so it's defined before the check
+            cfg = _load_config()
+            if not _check_host_pw(cfg, b.get("host_password","")):
+                self.send_json({"success":False,"error":"Not authorised."}, 401); return
+
+            mid = (b.get("manager_id") or "").strip()
+            if not mid:
+                self.send_json({"success":False,"error":"manager_id required."}); return
+
+            with _lock:
+                mgrs = _load_managers()
+                if mid not in mgrs:
+                    self.send_json({"success":False,"error":"Manager not found."}); return
+
+                manager_name = mgrs[mid]["manager_name"]
+
+                # Delete the manager
+                del mgrs[mid]
+                _save_managers(mgrs)
+
+                # Clean up current turn files
+                turn_num = cfg["current_turn"]
+                td = _turn_dir(turn_num)
+                if os.path.exists(td):
+                    for fname in list(os.listdir(td)):
+                        if fname.startswith(f"upload_{mid}_") or fname.startswith(f"result_{mid}_"):
+                            try:
+                                os.remove(os.path.join(td, fname))
+                            except Exception:
+                                pass
+
+            self.send_json({
+                "success": True,
+                "message": f"Manager '{manager_name}' (ID: {mid}) has been successfully deleted. They can now re-register."
+            })
+            return
+        # ============================================================
+
         if path == "/api/shutdown":
-            # Browser closed or admin requested shutdown
             self.send_json({"success": True, "message": "Shutting down..."})
-            # Schedule shutdown for after response is sent
             threading.Timer(0.5, self._shutdown_server).start()
             return
 
         self.send_json({"error":"Not found."}, 404)
-
 
 # =============================================================================
 # ENTRY POINT

@@ -142,15 +142,37 @@ def create_account(manager_name: str, email: str, password: str) -> dict:
     server_mid = server_result["manager_id"]
 
     data = _load()
-    for acc in data["accounts"]:
-        if acc["manager_name"].lower() == manager_name.strip().lower():
-            return {"success": False, "error": "That manager name is already taken locally."}
-        if acc["id"] == server_mid:
-            return {"success": False,
-                    "error": "Server assigned an id that already exists locally. "
-                             "Try again or contact the league admin."}
-
     pw_hash, salt = _hash_password(password)
+
+    # Server already validated name+password, so a local record with the same
+    # name is a re-link, not a conflict: update its id and refresh credentials
+    # while keeping team_ids and any other state intact.
+    existing = next(
+        (a for a in data["accounts"]
+         if a["manager_name"].lower() == manager_name.strip().lower()),
+        None,
+    )
+    if existing:
+        existing["id"]           = server_mid
+        existing["manager_name"] = manager_name.strip().upper()
+        existing["email"]        = email.strip() or existing.get("email", "")
+        existing["pw_hash"]      = pw_hash
+        existing["salt"]         = salt
+        _save(data)
+        return {
+            "success"      : True,
+            "id"           : server_mid,
+            "manager_name" : existing["manager_name"],
+            "team_ids"     : existing.get("team_ids", []),
+        }
+
+    # No local record by name — check for id collision against a different
+    # account before creating a new one.
+    if any(acc["id"] == server_mid for acc in data["accounts"]):
+        return {"success": False,
+                "error": "Server assigned an id that already exists locally. "
+                         "Try again or contact the league admin."}
+
     new_acc = {
         "id"          : server_mid,
         "manager_name": manager_name.strip().upper(),
