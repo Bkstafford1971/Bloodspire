@@ -32,6 +32,10 @@
             align-items: center;
             box-sizing: border-box;
             border-right: 1px solid #1a1a1a;
+            position: sticky;
+            top: 0;
+            height: 100vh; 
+            overflow-y: auto;
         }
 
         .main-content {
@@ -45,6 +49,7 @@
             width: 100%;
             max-width: 550px;
             margin-bottom: 25px;
+            height: auto;
         }
 
         /* Navigation Style */
@@ -56,6 +61,14 @@
             font-weight: bold;
         }
 
+        .sidebar-invite-img {
+            width: 72%; 
+            max-width: 396px; /* 72% of the logo's 550px max-width */
+            height: auto;
+            margin-top: 10px;
+            display: block;
+        }
+        
         nav.top-nav a {
             color: #d4af37; 
             text-decoration: none;
@@ -157,6 +170,8 @@
     <div class="page-wrapper">
         <aside class="sidebar">
             <img src="Logo.png" alt="Bloodspire Logo" class="sidebar-logo">
+
+            <img src="invitation.png" alt="League Invitation" class="sidebar-invite-img">
         </aside>
 
         <main class="main-content">
