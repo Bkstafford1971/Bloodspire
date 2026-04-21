@@ -74,7 +74,7 @@
 
         summary {
             font-size: 1.4rem;
-            list-style: none; /* Removes default arrow */
+            list-style: none; 
             text-transform: uppercase;
             border-bottom: 1px solid #222;
             padding-bottom: 5px;
@@ -83,7 +83,6 @@
 
         summary:hover { color: #fff2cc; }
 
-        /* Custom Arrow for Tree View */
         summary::before {
             content: "▶ ";
             font-size: 0.9rem;
@@ -115,10 +114,10 @@
             padding-left: 5px;
         }
 
-        /* Main Section Header */
+        /* Data Section Styling */
         .data-header {
             font-family: 'Metal Mania', cursive;
-            font-size: 3rem;
+            font-size: 3.5rem;
             background: linear-gradient(to bottom, #3a0000 0%, #8b1a1a 40%, #a31616 60%, #2a0000 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -126,12 +125,63 @@
             filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.8));
         }
 
+        .race-section {
+            padding-top: 60px;
+            margin-bottom: 80px;
+            border-bottom: 1px solid #1a1a1a;
+            scroll-margin-top: 50px; /* Ensures scrolling doesn't cut off headers */
+        }
+
+        .race-title {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+
+        .tagline {
+            font-style: italic;
+            color: #8b1a1a;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
         .info-box {
             background: #0a0a0a;
             border: 1px solid #222;
-            padding: 30px;
+            padding: 25px;
             border-left: 4px solid #8b1a1a;
+            margin: 20px 0;
         }
+
+        .info-box h3 {
+            color: #a31616;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            margin-top: 0;
+        }
+
+        .practice-box {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px 20px;
+            border-left: 3px solid #d4af37;
+            margin: 20px 0;
+        }
+
+        .stats-grid p {
+            font-size: 1rem;
+            margin: 8px 0;
+        }
+
+        .stats-grid strong {
+            color: #d4af37;
+            font-family: 'Cinzel', serif;
+        }
+
+        ul { line-height: 1.6; }
+        li { margin-bottom: 8px; }
 
         @media (max-width: 1100px) {
             .page-wrapper { flex-direction: column; }
@@ -145,7 +195,7 @@
         <aside class="sidebar">
             <div class="tree-view">
                 <details open>
-                    <summary>Races</summary>
+                    <summary><a href="#races-intro" style="color: inherit; text-decoration: none;">Races</a></summary>
                     <div class="tree-links">
                         <a href="#human">Human</a>
                         <a href="#half-orc">Half-Orc</a>
@@ -223,18 +273,246 @@
                 <a href="contact.html">Contact</a>
             </nav>
 
-            <div id="content-display">
-                <h1 class="data-header">Players Connection</h1>
+            <h1 class="data-header">Players Connection</h1>
+
+            <section id="races-intro" class="race-section" style="border-bottom: 2px solid #8b1a1a; padding-bottom: 40px;">
+                <h2 class="race-title">Races & Their Modifiers</h2>
+                <p>Choosing a race is one of the most important decisions you make when creating a warrior. BLOODSPIRE features <strong>10 playable races</strong>, each with unique strengths, weaknesses, and preferred ways of fighting. No race is strictly better than the others; they are balanced around different playstyles.</p>
+                <p>Racial modifiers influence combat performance, training speed, injury resistance, and how well a warrior uses certain weapons or armor. These effects are applied automatically; you do not add or subtract numbers manually from the stats you see during creation.</p>
+
                 <div class="info-box">
-                    <h3>Codex Selection</h3>
-                    <p>Select a category from the archives on the left to view detailed data regarding the warriors and threats of the Bloodspire Arena.</p>
+                    <h3>Choosing a Race – Quick Advice</h3>
+                    <ul style="list-style-type: none; padding-left: 0;">
+                        <li><strong style="color: #d4af37;">New to the game?</strong> Start with <strong>Human</strong> or <strong>Half-Elf</strong>.</li>
+                        <li><strong style="color: #d4af37;">Want raw power?</strong> Go <strong>Half-Orc</strong> or <strong>Lizardfolk</strong>.</li>
+                        <li><strong style="color: #d4af37;">Love defense?</strong> Pick <strong>Dwarf</strong> or <strong>Gnome</strong>.</li>
+                        <li><strong style="color: #d4af37;">Prefer speed and evasion?</strong> Choose <strong>Halfling</strong>, <strong>Elf</strong>, or <strong>Tabaxi</strong>.</li>
+                        <li><strong style="color: #d4af37;">Enjoy trickery?</strong> Try <strong>Goblin</strong>.</li>
+                    </ul>
                 </div>
 
-                <div id="human" style="margin-top: 100px;">
-                    <h2 style="color: #d4af37; font-family: 'Cinzel';">Human</h2>
-                    <p>Humans are the most versatile of the arena combatants. Their ability to adapt to any fighting style and master various weapon types makes them unpredictable and dangerous managers.</p>
+                <div class="practice-box" style="border-left-color: #8b1a1a; background: rgba(139, 26, 26, 0.1);">
+                    <p><strong>Pro Tip:</strong> Match your warrior’s race to their skills, equipment, and fighting style for maximum synergy. A Half-Orc with Cleave skill and a Great Axe feels far more powerful than one trying to dodge and feint.</p>
                 </div>
-            </div>
+            </section>
+
+            <section id="human" class="race-section">
+                <h2 class="race-title">Human</h2>
+                <p class="tagline">The adaptable everyman.</p>
+                <p>Humans are the most flexible race in the arena. They lack extreme strengths or glaring weaknesses, making them excellent for new managers or players who want reliable, well-rounded warriors.</p>
+                <div class="info-box">
+                    <h3>Key Traits</h3>
+                    <ul>
+                        <li>Train attributes faster than most other races</li>
+                        <li>Suffer fewer permanent injuries over time</li>
+                        <li>Perform solidly with almost any weapon, armor, or fighting style</li>
+                    </ul>
+                </div>
+                <div class="practice-box">
+                    <p><strong>In Practice:</strong> A Human warrior improves more reliably through training and tends to stay competitive longer. They adapt well to changing strategies as the season progresses.</p>
+                </div>
+                <div class="stats-grid">
+                    <p><strong>Recommended For:</strong> New players, Balanced teams, Long-term roster building</p>
+                    <p><strong>Best Synergies:</strong> Balanced skills like Strike, Initiative, Dodge, or Parry.</p>
+                    <p><strong>Team Role:</strong> Versatile backbone / “glue” warrior.</p>
+                </div>
+            </section>
+
+            <section id="half-orc" class="race-section">
+                <h2 class="race-title">Half-Orc</h2>
+                <p class="tagline">Pure brute force personified.</p>
+                <p>Half-Orcs are the heaviest hitters in the Bloodspire. They deliver devastating damage and can absorb tremendous punishment.</p>
+                <div class="info-box">
+                    <h3>Key Traits</h3>
+                    <ul>
+                        <li>Exceptional damage output and durability</li>
+                        <li>Slower attack speed and reduced ability to dodge or parry</li>
+                    </ul>
+                </div>
+                <div class="practice-box">
+                    <p><strong>In Practice:</strong> Half-Orcs excel with heavy two-handed weapons like Great Axes or Mauls. They overwhelm armored opponents but struggle against fast, evasive fighters.</p>
+                </div>
+                <div class="stats-grid">
+                    <p><strong>Recommended For:</strong> Players who enjoy aggressive, high-damage playstyles.</p>
+                    <p><strong>Best Synergies:</strong> Cleave, Bash, Strike, and Brawl skills.</p>
+                    <p><strong>Team Role:</strong> Primary damage dealer / “The Hammer.”</p>
+                </div>
+            </section>
+
+            <section id="halfling" class="race-section">
+                <h2 class="race-title">Halfling</h2>
+                <p class="tagline">Infuriatingly hard to hit, but extremely fragile.</p>
+                <p>Halflings are small, quick, and slippery — masters of hit-and-run tactics.</p>
+                <div class="info-box">
+                    <h3>Key Traits</h3>
+                    <ul>
+                        <li>Outstanding dodge and attack speed</li>
+                        <li>Very low durability and damage output</li>
+                    </ul>
+                </div>
+                <div class="practice-box">
+                    <p><strong>In Practice:</strong> Halflings frustrate opponents by avoiding most attacks. A single solid hit from a heavy weapon can end their fight, so they rely on mobility.</p>
+                </div>
+                <div class="stats-grid">
+                    <p><strong>Recommended For:</strong> Mobile, precision-based playstyles.</p>
+                    <p><strong>Best Synergies:</strong> Dodge, Acrobatics, Initiative, Feint, and light weapons.</p>
+                    <p><strong>Team Role:</strong> Evasive skirmisher / annoyance factor.</p>
+                </div>
+            </section>
+
+            <section id="dwarf" class="race-section">
+                <h2 class="race-title">Dwarf</h2>
+                <p class="tagline">The ultimate tank.</p>
+                <p>Dwarves are incredibly tough and excel at standing their ground.</p>
+                <div class="info-box">
+                    <h3>Key Traits</h3>
+                    <ul>
+                        <li>Highest durability and strong parrying ability</li>
+                        <li>Can wear heavier armor than their Strength would normally allow</li>
+                        <li>Reduced dodging capability</li>
+                    </ul>
+                </div>
+                <div class="practice-box">
+                    <p><strong>In Practice:</strong> Dwarves shine in defensive setups, absorbing blows that would fell other races. They pair especially well with shields and heavy armor.</p>
+                </div>
+                <div class="stats-grid">
+                    <p><strong>Recommended For:</strong> Defensive, attrition-based strategies.</p>
+                    <p><strong>Best Synergies:</strong> Parry, Riposte, Bash, and Wall of Steel style.</p>
+                    <p><strong>Team Role:</strong> Tank / anchor who outlasts opponents.</p>
+                </div>
+            </section>
+
+            <section id="half-elf" class="race-section">
+                <h2 class="race-title">Half-Elf</h2>
+                <p class="tagline">Versatile and capable all-rounder.</p>
+                <p>Half-Elves combine the best traits of their mixed heritage into a flexible fighter.</p>
+                <div class="info-box">
+                    <h3>Key Traits</h3>
+                    <ul>
+                        <li>Useful bonuses to attack rate, dodge, and weapon handling</li>
+                        <li>Can use slightly heavier weapons than their Strength suggests</li>
+                        <li>No major weaknesses</li>
+                    </ul>
+                </div>
+                <div class="practice-box">
+                    <p><strong>In Practice:</strong> Half-Elves adapt to many situations and equipment choices. They are reliable performers in almost any team composition.</p>
+                </div>
+                <div class="stats-grid">
+                    <p><strong>Recommended For:</strong> Flexible or utility-focused builds.</p>
+                    <p><strong>Best Synergies:</strong> Strike, Lunge, Initiative, and Dodge.</p>
+                    <p><strong>Team Role:</strong> Versatile utility / reliable all-rounder.</p>
+                </div>
+            </section>
+
+            <section id="elf" class="race-section">
+                <h2 class="race-title">Elf</h2>
+                <p class="tagline">Speed and grace.</p>
+                <p>Elves are elegant, fast duelists who strike with deadly precision.</p>
+                <div class="info-box">
+                    <h3>Key Traits</h3>
+                    <ul>
+                        <li>Excellent speed, dodge, and attack rate</li>
+                        <li>Strong affinity for dual-wielding and light blades</li>
+                        <li>Very fragile — they cannot take much punishment</li>
+                    </ul>
+                </div>
+                <div class="practice-box">
+                    <p><strong>In Practice:</strong> Elves thrive in fast styles, landing multiple strikes while avoiding retaliation. Heavy hits from slower opponents are especially dangerous.</p>
+                </div>
+                <div class="stats-grid">
+                    <p><strong>Recommended For:</strong> Speed and precision players.</p>
+                    <p><strong>Best Synergies:</strong> Dodge, Initiative, Feint, Slash, and light blades.</p>
+                    <p><strong>Team Role:</strong> Precision striker / flanker.</p>
+                </div>
+            </section>
+
+            <section id="goblin" class="race-section">
+                <h2 class="race-title">Goblin</h2>
+                <p class="tagline">Tiny, dirty, and fast.</p>
+                <p>Goblins are chaotic opportunists who rely on speed and trickery.</p>
+                <div class="info-box">
+                    <h3>Key Traits</h3>
+                    <ul>
+                        <li>High initiative and attack speed</li>
+                        <li>Mastery with thrown weapons and scavenging gear</li>
+                        <li>Physically weak and very fragile</li>
+                    </ul>
+                </div>
+                <div class="practice-box">
+                    <p><strong>In Practice:</strong> Goblins create chaos with throws and disarms. They excel at exploiting openings but die quickly if cornered.</p>
+                </div>
+                <div class="stats-grid">
+                    <p><strong>Recommended For:</strong> Tricky, disruptive playstyles.</p>
+                    <p><strong>Best Synergies:</strong> Initiative, Feint, Disarm, Sweep, and thrown weapons.</p>
+                    <p><strong>Team Role:</strong> Disruptor / trickster.</p>
+                </div>
+            </section>
+
+            <section id="gnome" class="race-section">
+                <h2 class="race-title">Gnome</h2>
+                <p class="tagline">Small but surprisingly tough tacticians.</p>
+                <p>Gnomes are deceptively durable and excel at punishing over-aggression.</p>
+                <div class="info-box">
+                    <h3>Key Traits</h3>
+                    <ul>
+                        <li>Good durability for their size</li>
+                        <li>Strong counter-attacking and parrying ability</li>
+                        <li>Tactical edge against reckless opponents</li>
+                    </ul>
+                </div>
+                <div class="practice-box">
+                    <p><strong>In Practice:</strong> Gnomes wait for opponents to overcommit, then deliver punishing counters. They perform best against aggressive styles.</p>
+                </div>
+                <div class="stats-grid">
+                    <p><strong>Recommended For:</strong> Reactive, counter-punching strategies.</p>
+                    <p><strong>Best Synergies:</strong> Parry, Riposte, Feint, and Counterstrike styles.</p>
+                    <p><strong>Team Role:</strong> Tactical counter-puncher.</p>
+                </div>
+            </section>
+
+            <section id="lizardfolk" class="race-section">
+                <h2 class="race-title">Lizardfolk</h2>
+                <p class="tagline">Savage reptilian predators.</p>
+                <p>Lizardfolk are primal fighters with natural advantages in close combat.</p>
+                <div class="info-box">
+                    <h3>Key Traits</h3>
+                    <ul>
+                        <li>High durability and natural scale armor</li>
+                        <li>Powerful natural weapons (claws, tail)</li>
+                        <li>Armor layers effectively on top of scales</li>
+                    </ul>
+                </div>
+                <div class="practice-box">
+                    <p><strong>In Practice:</strong> Lizardfolk are brutal in close quarters. Their natural armor keeps them durable even in lighter gear, and their natural attacks hit hard.</p>
+                </div>
+                <div class="stats-grid">
+                    <p><strong>Recommended For:</strong> Aggressive close-range brawlers.</p>
+                    <p><strong>Best Synergies:</strong> Brawl, Cleave, Bash, Strike, and Martial Combat.</p>
+                    <p><strong>Team Role:</strong> Brutal close-range brawler.</p>
+                </div>
+            </section>
+
+            <section id="tabaxi" class="race-section">
+                <h2 class="race-title">Tabaxi</h2>
+                <p class="tagline">Lightning-quick acrobatic felines.</p>
+                <p>Tabaxi are the most mobile and burst-oriented race in the arena.</p>
+                <div class="info-box">
+                    <h3>Key Traits</h3>
+                    <ul>
+                        <li>Exceptional dodge and initiative</li>
+                        <li>Acrobatic prowess (hard to knock down)</li>
+                        <li>One powerful Frenzy burst per fight</li>
+                    </ul>
+                </div>
+                <div class="practice-box">
+                    <p><strong>In Practice:</strong> Tabaxi land quick strikes before exploding into a frenzy. They excel at hit-and-run tactics but cannot endure prolonged slugfests.</p>
+                </div>
+                <div class="stats-grid">
+                    <p><strong>Recommended For:</strong> High-mobility, burst-damage playstyles.</p>
+                    <p><strong>Best Synergies:</strong> Dodge, Acrobatics, Initiative, Feint, Lunge.</p>
+                    <p><strong>Team Role:</strong> Flanker / harasser.</p>
+                </div>
+            </section>
         </main>
     </div>
 
