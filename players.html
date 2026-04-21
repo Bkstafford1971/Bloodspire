@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Players Connection | Bloodspire</title>
+    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            color: #d1d1d1;
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+        }
+
+        /* Fixed Sidebar for Tree View */
+        .sidebar {
+            flex: 0 0 40%;
+            background-color: #050505;
+            padding: 40px;
+            box-sizing: border-box;
+            border-right: 1px solid #1a1a1a;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        /* Main Content Scroll Area */
+        .main-content {
+            flex: 0 0 60%;
+            padding: 40px 60px;
+            background-color: #000;
+            box-sizing: border-box;
+        }
+
+        /* Navigation Style */
+        nav.top-nav {
+            text-align: center;
+            padding-bottom: 50px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        nav.top-nav a {
+            color: #d4af37; 
+            text-decoration: none;
+            padding: 0 12px;
+            text-transform: uppercase;
+        }
+
+        nav.top-nav a:hover { color: #fff2cc; }
+
+        /* Tree View Styling */
+        .tree-view {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+        }
+
+        details {
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        summary {
+            font-size: 1.4rem;
+            list-style: none; /* Removes default arrow */
+            text-transform: uppercase;
+            border-bottom: 1px solid #222;
+            padding-bottom: 5px;
+            transition: color 0.3s;
+        }
+
+        summary:hover { color: #fff2cc; }
+
+        /* Custom Arrow for Tree View */
+        summary::before {
+            content: "▶ ";
+            font-size: 0.9rem;
+            color: #8b1a1a;
+        }
+
+        details[open] summary::before {
+            content: "▼ ";
+        }
+
+        .tree-links {
+            display: flex;
+            flex-direction: column;
+            padding-left: 25px;
+            padding-top: 10px;
+        }
+
+        .tree-links a {
+            color: #d1d1d1;
+            text-decoration: none;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            transition: color 0.2s;
+        }
+
+        .tree-links a:hover {
+            color: #8b1a1a;
+            padding-left: 5px;
+        }
+
+        /* Main Section Header */
+        .data-header {
+            font-family: 'Metal Mania', cursive;
+            font-size: 3rem;
+            background: linear-gradient(to bottom, #3a0000 0%, #8b1a1a 40%, #a31616 60%, #2a0000 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.8));
+        }
+
+        .info-box {
+            background: #0a0a0a;
+            border: 1px solid #222;
+            padding: 30px;
+            border-left: 4px solid #8b1a1a;
+        }
+
+        @media (max-width: 1100px) {
+            .page-wrapper { flex-direction: column; }
+            .sidebar, .main-content { flex: 0 0 100%; width: 100%; height: auto; position: relative; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <div class="tree-view">
+                <details open>
+                    <summary>Races</summary>
+                    <div class="tree-links">
+                        <a href="#human">Human</a>
+                        <a href="#half-orc">Half-Orc</a>
+                        <a href="#halfling">Halfling</a>
+                        <a href="#dwarf">Dwarf</a>
+                        <a href="#half-elf">Half-Elf</a>
+                        <a href="#elf">Elf</a>
+                        <a href="#goblin">Goblin</a>
+                        <a href="#gnome">Gnome</a>
+                        <a href="#lizardfolk">Lizardfolk</a>
+                        <a href="#tabaxi">Tabaxi</a>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>Weapons</summary>
+                    <div class="tree-links">
+                        <a href="#axes">Axes</a>
+                        <a href="#swords">Swords</a>
+                        <a href="#polearms">Polearms</a>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>Armor/Helms</summary>
+                    <div class="tree-links">
+                        <a href="#light">Light Armor</a>
+                        <a href="#heavy">Heavy Armor</a>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>Skills</summary>
+                    <div class="tree-links">
+                        <a href="#combat-skills">Combat Skills</a>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>Triggers</summary>
+                    <div class="tree-links">
+                        <a href="#trigger-list">Available Triggers</a>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>Fighting Styles</summary>
+                    <div class="tree-links">
+                        <a href="#styles">Martial Styles</a>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>Permanent Injuries</summary>
+                    <div class="tree-links">
+                        <a href="#scars">Scars & Wounds</a>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>Monsters/Peasants</summary>
+                    <div class="tree-links">
+                        <a href="#monster-list">Arena Threats</a>
+                    </div>
+                </details>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <nav class="top-nav">
+                <a href="index.html">Home</a> | 
+                <a href="about.html">About</a> | 
+                <a href="players.html" style="color: #fff2cc;">Players Connection</a> | 
+                <a href="download.html">Download</a> | 
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <div id="content-display">
+                <h1 class="data-header">Players Connection</h1>
+                <div class="info-box">
+                    <h3>Codex Selection</h3>
+                    <p>Select a category from the archives on the left to view detailed data regarding the warriors and threats of the Bloodspire Arena.</p>
+                </div>
+
+                <div id="human" style="margin-top: 100px;">
+                    <h2 style="color: #d4af37; font-family: 'Cinzel';">Human</h2>
+                    <p>Humans are the most versatile of the arena combatants. Their ability to adapt to any fighting style and master various weapon types makes them unpredictable and dangerous managers.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
