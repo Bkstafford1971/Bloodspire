@@ -22,11 +22,11 @@
             max-width: 1600px;
         }
 
-        /* Fixed Sidebar for Tree View */
+        /* Sidebar */
         .sidebar {
-            flex: 0 0 40%;
+            flex: 0 0 30%;
             background-color: #050505;
-            padding: 25px;
+            padding: 40px;
             box-sizing: border-box;
             border-right: 1px solid #1a1a1a;
             position: sticky;
@@ -35,45 +35,44 @@
             overflow-y: auto;
         }
 
-        /* Main Content Scroll Area */
         .main-content {
-            flex: 0 0 60%;
-            padding: 25px 40px;
+            flex: 0 0 70%;
+            padding: 40px 60px;
             background-color: #000;
             box-sizing: border-box;
         }
 
-        /* Navigation Style */
+        /* Navigation */
         nav.top-nav {
             text-align: center;
-            padding-bottom: 25px;
+            padding-bottom: 50px;
             font-family: 'Cinzel', serif;
-            font-size: .9rem;
+            font-size: 1.1rem;
             font-weight: bold;
         }
 
         nav.top-nav a {
             color: #d4af37; 
             text-decoration: none;
-            padding: 0 9px;
+            padding: 0 12px;
             text-transform: uppercase;
         }
 
         nav.top-nav a:hover { color: #fff2cc; }
 
-        /* Tree View Styling */
+        /* Tree View Sidebar */
         .tree-view {
             font-family: 'Cinzel', serif;
             color: #d4af37;
         }
 
         details {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             cursor: pointer;
         }
 
         summary {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             list-style: none; 
             text-transform: uppercase;
             border-bottom: 1px solid #222;
@@ -82,106 +81,121 @@
         }
 
         summary:hover { color: #fff2cc; }
-
-        summary::before {
-            content: "▶ ";
-            font-size: 0.9rem;
-            color: #8b1a1a;
-        }
-
-        details[open] summary::before {
-            content: "▼ ";
-        }
+        summary::before { content: "▶ "; font-size: 0.8rem; color: #8b1a1a; }
+        details[open] summary::before { content: "▼ "; }
 
         .tree-links {
             display: flex;
             flex-direction: column;
-            padding-left: 15px;
-            padding-top: 7px;
+            padding-left: 20px;
+            padding-top: 10px;
         }
 
         .tree-links a {
             color: #d1d1d1;
             text-decoration: none;
             font-family: 'Open Sans', sans-serif;
-            font-size: .9rem;
+            font-size: 1rem;
             margin-bottom: 6px;
             transition: color 0.2s;
         }
 
-        .tree-links a:hover {
-            color: #8b1a1a;
-            padding-left: 3.5px;
-        }
+        .tree-links a:hover { color: #8b1a1a; padding-left: 5px; }
 
-        /* Data Section Styling */
+        /* Content Headers */
         .data-header {
             font-family: 'Metal Mania', cursive;
-            font-size: 3.0rem;
+            font-size: 3.5rem;
             background: linear-gradient(to bottom, #3a0000 0%, #8b1a1a 40%, #a31616 60%, #2a0000 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.8));
         }
 
-        .race-section {
-            padding-top: 40px;
-            margin-bottom: 50px;
+        .section-block {
+            padding-top: 60px;
+            margin-bottom: 80px;
             border-bottom: 1px solid #1a1a1a;
-            scroll-margin-top: 50px; /* Ensures scrolling doesn't cut off headers */
+            scroll-margin-top: 50px;
         }
 
-        .race-title {
+        .section-title {
             font-family: 'Cinzel', serif;
             color: #d4af37;
-            font-size: 2.0rem;
-            margin-bottom: 5px;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
         }
 
-        .tagline {
-            font-style: italic;
-            color: #8b1a1a;
-            font-size: 1.0rem;
-            margin-bottom: 10px;
-            font-weight: bold;
+        .sub-title {
+            font-family: 'Cinzel', serif;
+            color: #a31616;
+            font-size: 1.6rem;
+            margin: 35px 0 15px 0;
+            border-left: 4px solid #8b1a1a;
+            padding-left: 15px;
         }
 
         .info-box {
             background: #0a0a0a;
             border: 1px solid #222;
-            padding: 15px;
-            border-left: 2.5px solid #8b1a1a;
-            margin: 10px 0;
+            padding: 25px;
+            border-left: 4px solid #8b1a1a;
+            margin: 20px 0;
         }
 
         .info-box h3 {
-            color: #a31616;
+            color: #d4af37;
             font-family: 'Cinzel', serif;
-            font-size: .9rem;
+            font-size: 1.1rem;
             text-transform: uppercase;
             margin-top: 0;
         }
 
         .practice-box {
             background: rgba(255, 255, 255, 0.03);
-            padding: 10px 15px;
+            padding: 15px 20px;
             border-left: 3px solid #d4af37;
-            margin: 10px 0;
+            margin: 20px 0;
         }
 
-        .stats-grid p {
-            font-size: .9rem;
-            margin: 6px 0;
+        /* Tables */
+        .data-table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin: 30px 0;
         }
 
-        .stats-grid strong {
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            background: #050505;
+        }
+
+        th {
+            background: #1a0000;
             color: #d4af37;
             font-family: 'Cinzel', serif;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #8b1a1a;
         }
 
-        ul { line-height: 1.2; }
-        li { margin-bottom: 6px; }
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        tr:hover { background: #0a0a0a; }
+
+        .tagline {
+            font-style: italic;
+            color: #8b1a1a;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
 
         @media (max-width: 1100px) {
             .page-wrapper { flex-direction: column; }
@@ -195,8 +209,9 @@
         <aside class="sidebar">
             <div class="tree-view">
                 <details open>
-                    <summary><a href="#races-intro" style="color: inherit; text-decoration: none;">Races</a></summary>
+                    <summary>Races</summary>
                     <div class="tree-links">
+                        <a href="#races-intro">Overview</a>
                         <a href="#human">Human</a>
                         <a href="#half-orc">Half-Orc</a>
                         <a href="#halfling">Halfling</a>
@@ -210,55 +225,15 @@
                     </div>
                 </details>
 
-                <details>
-                    <summary>Weapons</summary>
+                <details open>
+                    <summary>Equipment</summary>
                     <div class="tree-links">
-                        <a href="#axes">Axes</a>
-                        <a href="#swords">Swords</a>
-                        <a href="#polearms">Polearms</a>
-                    </div>
-                </details>
-
-                <details>
-                    <summary>Armor/Helms</summary>
-                    <div class="tree-links">
-                        <a href="#light">Light Armor</a>
-                        <a href="#heavy">Heavy Armor</a>
-                    </div>
-                </details>
-
-                <details>
-                    <summary>Skills</summary>
-                    <div class="tree-links">
-                        <a href="#combat-skills">Combat Skills</a>
-                    </div>
-                </details>
-
-                <details>
-                    <summary>Triggers</summary>
-                    <div class="tree-links">
-                        <a href="#trigger-list">Available Triggers</a>
-                    </div>
-                </details>
-
-                <details>
-                    <summary>Fighting Styles</summary>
-                    <div class="tree-links">
-                        <a href="#styles">Martial Styles</a>
-                    </div>
-                </details>
-
-                <details>
-                    <summary>Permanent Injuries</summary>
-                    <div class="tree-links">
-                        <a href="#scars">Scars & Wounds</a>
-                    </div>
-                </details>
-
-                <details>
-                    <summary>Monsters/Peasants</summary>
-                    <div class="tree-links">
-                        <a href="#monster-list">Arena Threats</a>
+                        <a href="#equipment-intro">Overview</a>
+                        <a href="#strength-capacity">Carry Capacity</a>
+                        <a href="#armor-types">Armor & Helms</a>
+                        <a href="#weapons-system">Weapon Categories</a>
+                        <a href="#weapons-table">Complete Weapons Table</a>
+                        <a href="#racial-weapon-recs">Racial Synergies</a>
                     </div>
                 </details>
             </div>
@@ -275,246 +250,289 @@
 
             <h1 class="data-header">Players Connection</h1>
 
-            <section id="races-intro" class="race-section" style="border-bottom: 2px solid #8b1a1a; padding-bottom: 20px;">
-                <h2 class="race-title">Races & Their Modifiers</h2>
-                <p>Choosing a race is one of the most important decisions you make when creating a warrior. BLOODSPIRE features <strong>10 playable races</strong>, each with unique strengths, weaknesses, and preferred ways of fighting. No race is strictly better than the others; they are balanced around different playstyles.</p>
-                <p>Racial modifiers influence combat performance, training speed, injury resistance, and how well a warrior uses certain weapons or armor. These effects are applied automatically; you do not add or subtract numbers manually from the stats you see during creation.</p>
+            <section id="races-intro" class="section-block">
+                <h2 class="section-title">6. Races & Their Modifiers</h2>
+                <p>Choosing a race is one of the most important decisions you make when creating a warrior. BLOODSPIRE features <strong>10 playable races</strong>, each with unique strengths, weaknesses, and preferred ways of fighting. No race is strictly better than the others — they are balanced around different playstyles. A race that excels in one area usually has meaningful trade-offs elsewhere.</p>
+                <p>Racial modifiers influence combat performance, training speed, injury resistance, and how well a warrior uses certain weapons or armor. These effects are applied automatically in fights and training — you don’t add or subtract numbers manually from the stats you see during creation.</p>
 
-                <div class="info-box">
-                    <h3>Choosing a Race – Quick Advice</h3>
-                    <ul style="list-style-type: none; padding-left: 0;">
-                        <li><strong style="color: #d4af37;">New to the game?</strong> Start with <strong>Human</strong> or <strong>Half-Elf</strong>.</li>
-                        <li><strong style="color: #d4af37;">Want raw power?</strong> Go <strong>Half-Orc</strong> or <strong>Lizardfolk</strong>.</li>
-                        <li><strong style="color: #d4af37;">Love defense?</strong> Pick <strong>Dwarf</strong> or <strong>Gnome</strong>.</li>
-                        <li><strong style="color: #d4af37;">Prefer speed and evasion?</strong> Choose <strong>Halfling</strong>, <strong>Elf</strong>, or <strong>Tabaxi</strong>.</li>
-                        <li><strong style="color: #d4af37;">Enjoy trickery?</strong> Try <strong>Goblin</strong>.</li>
-                    </ul>
+                <div id="human">
+                    <h3 class="sub-title">Human</h3>
+                    <p class="tagline">The adaptable everyman.</p>
+                    <p>Humans are the most flexible race in the arena. They lack extreme strengths or glaring weaknesses, making them excellent for new managers or players who want reliable, well-rounded warriors.</p>
+                    <div class="info-box">
+                        <h3>Key Traits</h3>
+                        <ul>
+                            <li>Train attributes faster than most other races</li>
+                            <li>Suffer fewer permanent injuries over time</li>
+                            <li>Perform solidly with almost any weapon, armor, or fighting style</li>
+                        </ul>
+                    </div>
+                    <p><strong>In Practice:</strong> A Human warrior improves more reliably through training and tends to stay competitive longer because injuries accumulate more slowly.</p>
                 </div>
 
-                <div class="practice-box" style="border-left-color: #8b1a1a; background: rgba(139, 26, 26, 0.1);">
-                    <p><strong>Pro Tip:</strong> Match your warrior’s race to their skills, equipment, and fighting style for maximum synergy. A Half-Orc with Cleave skill and a Great Axe feels far more powerful than one trying to dodge and feint.</p>
+                <div id="half-orc">
+                    <h3 class="sub-title">Half-Orc</h3>
+                    <p class="tagline">Pure brute force personified.</p>
+                    <p>Half-Orcs are the heaviest hitters in the Bloodspire. They deliver devastating damage and can absorb tremendous punishment.</p>
+                    <div class="info-box">
+                        <h3>Key Traits</h3>
+                        <ul>
+                            <li>Exceptional damage output and durability</li>
+                            <li>Slower attack speed and reduced ability to dodge or parry</li>
+                        </ul>
+                    </div>
+                    <p><strong>In Practice:</strong> Half-Orcs excel when wielding heavy two-handed weapons (Great Axe, Maul, War Hammer).</p>
+                </div>
+
+                <div id="halfling">
+                    <h3 class="sub-title">Halfling</h3>
+                    <p class="tagline">Infuriatingly hard to hit, but extremely fragile.</p>
+                    <p>Halflings are small, quick, and slippery — masters of hit-and-run tactics.</p>
+                    <div class="info-box">
+                        <h3>Key Traits</h3>
+                        <ul>
+                            <li>Outstanding dodge and attack speed</li>
+                            <li>Very low durability and damage output</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="dwarf">
+                    <h3 class="sub-title">Dwarf</h3>
+                    <p class="tagline">The ultimate tank.</p>
+                    <div class="info-box">
+                        <h3>Key Traits</h3>
+                        <ul>
+                            <li>Highest durability and strong parrying ability</li>
+                            <li>Can wear heavier armor than Strength allows</li>
+                            <li>Reduced dodging capability</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="half-elf">
+                    <h3 class="sub-title">Half-Elf</h3>
+                    <p class="tagline">Versatile and capable all-rounder.</p>
+                    <div class="info-box">
+                        <h3>Key Traits</h3>
+                        <ul>
+                            <li>Small useful bonuses to rate, dodge, and damage</li>
+                            <li>Can use slightly heavier weapons than Strength suggests</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="elf">
+                    <h3 class="sub-title">Elf</h3>
+                    <p class="tagline">Speed and grace.</p>
+                    <div class="info-box">
+                        <h3>Key Traits</h3>
+                        <ul>
+                            <li>Excellent speed, dodge, and attack rate</li>
+                            <li>Strong affinity for dual-wielding and light blades</li>
+                            <li>Very fragile</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="goblin">
+                    <h3 class="sub-title">Goblin</h3>
+                    <p class="tagline">Tiny, dirty, and fast.</p>
+                    <div class="info-box">
+                        <h3>Key Traits</h3>
+                        <ul>
+                            <li>High initiative and attack speed</li>
+                            <li>Mastery with thrown weapons and scavenging gear</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="gnome">
+                    <h3 class="sub-title">Gnome</h3>
+                    <p class="tagline">Small but surprisingly tough tacticians.</p>
+                    <div class="info-box">
+                        <h3>Key Traits</h3>
+                        <ul>
+                            <li>Good durability for their size</li>
+                            <li>Strong counter-attacking and parrying ability</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="lizardfolk">
+                    <h3 class="sub-title">Lizardfolk</h3>
+                    <p class="tagline">Savage reptilian predators.</p>
+                    <div class="info-box">
+                        <h3>Key Traits</h3>
+                        <ul>
+                            <li>High durability and natural scale armor</li>
+                            <li>Powerful natural weapons (claws, tail)</li>
+                            <li>Lighter armor layers effectively over scales</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="tabaxi">
+                    <h3 class="sub-title">Tabaxi</h3>
+                    <p class="tagline">Lightning-quick acrobatic felines.</p>
+                    <div class="info-box">
+                        <h3>Key Traits</h3>
+                        <ul>
+                            <li>Exceptional dodge and initiative</li>
+                            <li>Acrobatic prowess (hard to knock down)</li>
+                            <li>One powerful Frenzy burst per fight</li>
+                        </ul>
+                    </div>
                 </div>
             </section>
 
-            <section id="human" class="race-section">
-                <h2 class="race-title">Human</h2>
-                <p class="tagline">The adaptable everyman.</p>
-                <p>Humans are the most flexible race in the arena. They lack extreme strengths or glaring weaknesses, making them excellent for new managers or players who want reliable, well-rounded warriors.</p>
-                <div class="info-box">
-                    <h3>Key Traits</h3>
-                    <ul>
-                        <li>Train attributes faster than most other races</li>
-                        <li>Suffer fewer permanent injuries over time</li>
-                        <li>Perform solidly with almost any weapon, armor, or fighting style</li>
-                    </ul>
-                </div>
+            <section id="equipment-intro" class="section-block">
+                <h2 class="section-title">7. Equipment – Weapons, Armor & Helms</h2>
+                
+                <h3 id="strength-capacity" class="sub-title">Strength Carry Capacity</h3>
+                <p>Every warrior has a limit to how much weight they can carry effectively, based on their Strength. Heavy gear requires high Strength, otherwise speed and power are reduced.</p>
                 <div class="practice-box">
-                    <p><strong>In Practice:</strong> A Human warrior improves more reliably through training and tends to stay competitive longer. They adapt well to changing strategies as the season progresses.</p>
+                    <p><strong>Dwarves:</strong> Wear one armor tier heavier than Strength normally allows.</p>
+                    <p><strong>Lizardfolk:</strong> Lighter armor layers on top of natural scales with less speed penalty.</p>
                 </div>
-                <div class="stats-grid">
-                    <p><strong>Recommended For:</strong> New players, Balanced teams, Long-term roster building</p>
-                    <p><strong>Best Synergies:</strong> Balanced skills like Strike, Initiative, Dodge, or Parry.</p>
-                    <p><strong>Team Role:</strong> Versatile backbone / “glue” warrior.</p>
-                </div>
-            </section>
 
-            <section id="half-orc" class="race-section">
-                <h2 class="race-title">Half-Orc</h2>
-                <p class="tagline">Pure brute force personified.</p>
-                <p>Half-Orcs are the heaviest hitters in the Bloodspire. They deliver devastating damage and can absorb tremendous punishment.</p>
-                <div class="info-box">
-                    <h3>Key Traits</h3>
-                    <ul>
-                        <li>Exceptional damage output and durability</li>
-                        <li>Slower attack speed and reduced ability to dodge or parry</li>
-                    </ul>
-                </div>
-                <div class="practice-box">
-                    <p><strong>In Practice:</strong> Half-Orcs excel with heavy two-handed weapons like Great Axes or Mauls. They overwhelm armored opponents but struggle against fast, evasive fighters.</p>
-                </div>
-                <div class="stats-grid">
-                    <p><strong>Recommended For:</strong> Players who enjoy aggressive, high-damage playstyles.</p>
-                    <p><strong>Best Synergies:</strong> Cleave, Bash, Strike, and Brawl skills.</p>
-                    <p><strong>Team Role:</strong> Primary damage dealer / “The Hammer.”</p>
-                </div>
-            </section>
+                <h3 id="armor-types" class="sub-title">Armor Types (Lightest to Heaviest)</h3>
+                <ul>
+                    <li><strong>Cloth</strong> — Minimal protection, no speed penalty.</li>
+                    <li><strong>Leather</strong> — Light and flexible modest protection.</li>
+                    <li><strong>Cuir Boulli</strong> — Hardened leather, balanced mid-tier.</li>
+                    <li><strong>Brigandine</strong> — Riveted metal plates over leather.</li>
+                    <li><strong>Scale</strong> — Solid protection, starts to slow warrior.</li>
+                    <li><strong>Chain</strong> — Classic mail, good all-around protection.</li>
+                    <li><strong>Half-Plate</strong> — Excellent protection, significant speed cost.</li>
+                    <li><strong>Full Plate</strong> — Ultimate protection, extremely heavy.</li>
+                </ul>
 
-            <section id="halfling" class="race-section">
-                <h2 class="race-title">Halfling</h2>
-                <p class="tagline">Infuriatingly hard to hit, but extremely fragile.</p>
-                <p>Halflings are small, quick, and slippery — masters of hit-and-run tactics.</p>
-                <div class="info-box">
-                    <h3>Key Traits</h3>
-                    <ul>
-                        <li>Outstanding dodge and attack speed</li>
-                        <li>Very low durability and damage output</li>
-                    </ul>
-                </div>
-                <div class="practice-box">
-                    <p><strong>In Practice:</strong> Halflings frustrate opponents by avoiding most attacks. A single solid hit from a heavy weapon can end their fight, so they rely on mobility.</p>
-                </div>
-                <div class="stats-grid">
-                    <p><strong>Recommended For:</strong> Mobile, precision-based playstyles.</p>
-                    <p><strong>Best Synergies:</strong> Dodge, Acrobatics, Initiative, Feint, and light weapons.</p>
-                    <p><strong>Team Role:</strong> Evasive skirmisher / annoyance factor.</p>
-                </div>
-            </section>
+                <h3 class="sub-title">Helm Types</h3>
+                <ul>
+                    <li><strong>Leather Cap</strong> — No speed penalty.</li>
+                    <li><strong>Steel Cap</strong> — Decent protection, almost no penalty.</li>
+                    <li><strong>Helm</strong> — Standard metal helmet.</li>
+                    <li><strong>Camail</strong> — Chain protection for neck and shoulders.</li>
+                    <li><strong>Full Helm</strong> — Maximum protection, highest speed penalty.</li>
+                </ul>
 
-            <section id="dwarf" class="race-section">
-                <h2 class="race-title">Dwarf</h2>
-                <p class="tagline">The ultimate tank.</p>
-                <p>Dwarves are incredibly tough and excel at standing their ground.</p>
-                <div class="info-box">
-                    <h3>Key Traits</h3>
-                    <ul>
-                        <li>Highest durability and strong parrying ability</li>
-                        <li>Can wear heavier armor than their Strength would normally allow</li>
-                        <li>Reduced dodging capability</li>
-                    </ul>
-                </div>
-                <div class="practice-box">
-                    <p><strong>In Practice:</strong> Dwarves shine in defensive setups, absorbing blows that would fell other races. They pair especially well with shields and heavy armor.</p>
-                </div>
-                <div class="stats-grid">
-                    <p><strong>Recommended For:</strong> Defensive, attrition-based strategies.</p>
-                    <p><strong>Best Synergies:</strong> Parry, Riposte, Bash, and Wall of Steel style.</p>
-                    <p><strong>Team Role:</strong> Tank / anchor who outlasts opponents.</p>
-                </div>
-            </section>
+                <h3 id="weapons-system" class="sub-title">Weapons System – All 44 Weapons</h3>
+                
+                <h4>Sword / Knife Category</h4>
+                <p>Stiletto, Knife, Dagger, Short Sword, Epee, Scimitar, Long Sword, Broad Sword, Bastard Sword, Great Sword.</p>
+                
+                <h4>Axe / Pick Category</h4>
+                <p>Hatchet, Francisca, Battle Axe, Great Axe, Small Pick, Military Pick, Pick Axe.</p>
 
-            <section id="half-elf" class="race-section">
-                <h2 class="race-title">Half-Elf</h2>
-                <p class="tagline">Versatile and capable all-rounder.</p>
-                <p>Half-Elves combine the best traits of their mixed heritage into a flexible fighter.</p>
-                <div class="info-box">
-                    <h3>Key Traits</h3>
-                    <ul>
-                        <li>Useful bonuses to attack rate, dodge, and weapon handling</li>
-                        <li>Can use slightly heavier weapons than their Strength suggests</li>
-                        <li>No major weaknesses</li>
-                    </ul>
-                </div>
-                <div class="practice-box">
-                    <p><strong>In Practice:</strong> Half-Elves adapt to many situations and equipment choices. They are reliable performers in almost any team composition.</p>
-                </div>
-                <div class="stats-grid">
-                    <p><strong>Recommended For:</strong> Flexible or utility-focused builds.</p>
-                    <p><strong>Best Synergies:</strong> Strike, Lunge, Initiative, and Dodge.</p>
-                    <p><strong>Team Role:</strong> Versatile utility / reliable all-rounder.</p>
-                </div>
-            </section>
+                <h4>Hammer / Mace Category</h4>
+                <p>Hammer, Mace, Morningstar, War Hammer, Maul, Club.</p>
 
-            <section id="elf" class="race-section">
-                <h2 class="race-title">Elf</h2>
-                <p class="tagline">Speed and grace.</p>
-                <p>Elves are elegant, fast duelists who strike with deadly precision.</p>
-                <div class="info-box">
-                    <h3>Key Traits</h3>
-                    <ul>
-                        <li>Excellent speed, dodge, and attack rate</li>
-                        <li>Strong affinity for dual-wielding and light blades</li>
-                        <li>Very fragile — they cannot take much punishment</li>
-                    </ul>
-                </div>
-                <div class="practice-box">
-                    <p><strong>In Practice:</strong> Elves thrive in fast styles, landing multiple strikes while avoiding retaliation. Heavy hits from slower opponents are especially dangerous.</p>
-                </div>
-                <div class="stats-grid">
-                    <p><strong>Recommended For:</strong> Speed and precision players.</p>
-                    <p><strong>Best Synergies:</strong> Dodge, Initiative, Feint, Slash, and light blades.</p>
-                    <p><strong>Team Role:</strong> Precision striker / flanker.</p>
-                </div>
-            </section>
+                <h4>Polearm / Spear Category</h4>
+                <p>Short Spear, Boar Spear, Long Spear, Pole Axe, Halberd.</p>
 
-            <section id="goblin" class="race-section">
-                <h2 class="race-title">Goblin</h2>
-                <p class="tagline">Tiny, dirty, and fast.</p>
-                <p>Goblins are chaotic opportunists who rely on speed and trickery.</p>
-                <div class="info-box">
-                    <h3>Key Traits</h3>
-                    <ul>
-                        <li>High initiative and attack speed</li>
-                        <li>Mastery with thrown weapons and scavenging gear</li>
-                        <li>Physically weak and very fragile</li>
-                    </ul>
-                </div>
-                <div class="practice-box">
-                    <p><strong>In Practice:</strong> Goblins create chaos with throws and disarms. They excel at exploiting openings but die quickly if cornered.</p>
-                </div>
-                <div class="stats-grid">
-                    <p><strong>Recommended For:</strong> Tricky, disruptive playstyles.</p>
-                    <p><strong>Best Synergies:</strong> Initiative, Feint, Disarm, Sweep, and thrown weapons.</p>
-                    <p><strong>Team Role:</strong> Disruptor / trickster.</p>
-                </div>
-            </section>
+                <h4>Flail Category</h4>
+                <p>Flail, Bladed Flail, War Flail, Battle Flail.</p>
 
-            <section id="gnome" class="race-section">
-                <h2 class="race-title">Gnome</h2>
-                <p class="tagline">Small but surprisingly tough tacticians.</p>
-                <p>Gnomes are deceptively durable and excel at punishing over-aggression.</p>
-                <div class="info-box">
-                    <h3>Key Traits</h3>
-                    <ul>
-                        <li>Good durability for their size</li>
-                        <li>Strong counter-attacking and parrying ability</li>
-                        <li>Tactical edge against reckless opponents</li>
-                    </ul>
-                </div>
-                <div class="practice-box">
-                    <p><strong>In Practice:</strong> Gnomes wait for opponents to overcommit, then deliver punishing counters. They perform best against aggressive styles.</p>
-                </div>
-                <div class="stats-grid">
-                    <p><strong>Recommended For:</strong> Reactive, counter-punching strategies.</p>
-                    <p><strong>Best Synergies:</strong> Parry, Riposte, Feint, and Counterstrike styles.</p>
-                    <p><strong>Team Role:</strong> Tactical counter-puncher.</p>
-                </div>
-            </section>
+                <h4>Stave Category</h4>
+                <p>Quarterstaff, Great Staff.</p>
 
-            <section id="lizardfolk" class="race-section">
-                <h2 class="race-title">Lizardfolk</h2>
-                <p class="tagline">Savage reptilian predators.</p>
-                <p>Lizardfolk are primal fighters with natural advantages in close combat.</p>
-                <div class="info-box">
-                    <h3>Key Traits</h3>
-                    <ul>
-                        <li>High durability and natural scale armor</li>
-                        <li>Powerful natural weapons (claws, tail)</li>
-                        <li>Armor layers effectively on top of scales</li>
-                    </ul>
-                </div>
-                <div class="practice-box">
-                    <p><strong>In Practice:</strong> Lizardfolk are brutal in close quarters. Their natural armor keeps them durable even in lighter gear, and their natural attacks hit hard.</p>
-                </div>
-                <div class="stats-grid">
-                    <p><strong>Recommended For:</strong> Aggressive close-range brawlers.</p>
-                    <p><strong>Best Synergies:</strong> Brawl, Cleave, Bash, Strike, and Martial Combat.</p>
-                    <p><strong>Team Role:</strong> Brutal close-range brawler.</p>
-                </div>
-            </section>
+                <h4>Shield Category</h4>
+                <p>Buckler, Target Shield, Tower Shield.</p>
 
-            <section id="tabaxi" class="race-section">
-                <h2 class="race-title">Tabaxi</h2>
-                <p class="tagline">Lightning-quick acrobatic felines.</p>
-                <p>Tabaxi are the most mobile and burst-oriented race in the arena.</p>
-                <div class="info-box">
-                    <h3>Key Traits</h3>
-                    <ul>
-                        <li>Exceptional dodge and initiative</li>
-                        <li>Acrobatic prowess (hard to knock down)</li>
-                        <li>One powerful Frenzy burst per fight</li>
-                    </ul>
+                <h4>Oddball / Specialty Weapons</h4>
+                <p>Cestus, Trident, Net, Scythe, Great Pick, Javelin, Ball & Chain, Swordbreaker, Bola, Heavy Barbed Whip, Open Hand.</p>
+
+                <h2 id="weapons-table" class="section-title">Complete Weapons Table</h2>
+                <div class="data-table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Weapon</th>
+                                <th>Weight</th>
+                                <th>Strength Needed</th>
+                                <th>Category</th>
+                                <th>Special Traits</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Stiletto</td><td>1.0</td><td>Low (4)</td><td>Sword/Knife</td><td>Armor Piercing, MC Compatible</td></tr>
+                            <tr><td>Knife</td><td>1.5</td><td>Low (4)</td><td>Sword/Knife</td><td>MC Compatible</td></tr>
+                            <tr><td>Dagger</td><td>2.0</td><td>Low (4)</td><td>Sword/Knife</td><td>MC Compatible, High rate</td></tr>
+                            <tr><td>Short Sword</td><td>3.0</td><td>Medium (7)</td><td>Sword/Knife</td><td>All-rounder</td></tr>
+                            <tr><td>Epee</td><td>3.0</td><td>Medium (7)</td><td>Sword/Knife</td><td>Can Disarm</td></tr>
+                            <tr><td>Scimitar</td><td>3.5</td><td>Medium (7)</td><td>Sword/Knife</td><td>Slashing</td></tr>
+                            <tr><td>Long Sword</td><td>3.2</td><td>Medium (7)</td><td>Sword/Knife</td><td>Balanced</td></tr>
+                            <tr><td>Broad Sword</td><td>3.8</td><td>Medium (7)</td><td>Sword/Knife</td><td>Reliable</td></tr>
+                            <tr><td>Bastard Sword</td><td>4.8</td><td>Medium (9)</td><td>Sword/Knife</td><td>Two-Hand capable</td></tr>
+                            <tr><td>Great Sword</td><td>6.8</td><td>High (14)</td><td>Sword/Knife</td><td>Two-Hand only</td></tr>
+                            <tr><td>Hatchet</td><td>1.8</td><td>Low (4)</td><td>Axe/Pick</td><td>Throwable</td></tr>
+                            <tr><td>Francisca</td><td>2.5</td><td>Medium (7)</td><td>Axe/Pick</td><td>Throwable</td></tr>
+                            <tr><td>Battle Axe</td><td>4.5</td><td>Medium (9)</td><td>Axe/Pick</td><td>None</td></tr>
+                            <tr><td>Great Axe</td><td>6.0</td><td>High (14)</td><td>Axe/Pick</td><td>Two-Hand only</td></tr>
+                            <tr><td>Small Pick</td><td>2.8</td><td>Medium (7)</td><td>Axe/Pick</td><td>Armor Piercing</td></tr>
+                            <tr><td>Military Pick</td><td>3.5</td><td>Medium (7)</td><td>Axe/Pick</td><td>Armor Piercing</td></tr>
+                            <tr><td>Pick Axe</td><td>4.8</td><td>Medium (9)</td><td>Axe/Pick</td><td>Armor Piercing, Two-Hand</td></tr>
+                            <tr><td>Hammer</td><td>2.0</td><td>Low (4)</td><td>Hammer/Mace</td><td>Throwable</td></tr>
+                            <tr><td>Mace</td><td>3.0</td><td>Medium (7)</td><td>Hammer/Mace</td><td>None</td></tr>
+                            <tr><td>Morningstar</td><td>4.0</td><td>Medium (9)</td><td>Hammer/Mace</td><td>None</td></tr>
+                            <tr><td>War Hammer</td><td>4.5</td><td>Medium (9)</td><td>Hammer/Mace</td><td>None</td></tr>
+                            <tr><td>Maul</td><td>7.5</td><td>Very High (17)</td><td>Hammer/Mace</td><td>Two-Hand only</td></tr>
+                            <tr><td>Club</td><td>2.7</td><td>Medium (7)</td><td>Hammer/Mace</td><td>None</td></tr>
+                            <tr><td>Short Spear</td><td>3.0</td><td>Medium (7)</td><td>Polearm/Spear</td><td>Throwable, Charge Attack</td></tr>
+                            <tr><td>Boar Spear</td><td>3.8</td><td>Medium (7)</td><td>Polearm/Spear</td><td>Throwable, Charge Attack</td></tr>
+                            <tr><td>Long Spear</td><td>4.2</td><td>Medium (9)</td><td>Polearm/Spear</td><td>Two-Hand, Charge Attack</td></tr>
+                            <tr><td>Pole Axe</td><td>5.5</td><td>High (12)</td><td>Polearm/Spear</td><td>Two-Hand, Charge Attack</td></tr>
+                            <tr><td>Halberd</td><td>7.5</td><td>Very High (17)</td><td>Polearm/Spear</td><td>Two-Hand, Charge Attack</td></tr>
+                            <tr><td>Flail</td><td>4.0</td><td>Medium (9)</td><td>Flail</td><td>Flail Bypass</td></tr>
+                            <tr><td>Bladed Flail</td><td>4.5</td><td>Medium (9)</td><td>Flail</td><td>Flail Bypass</td></tr>
+                            <tr><td>War Flail</td><td>5.5</td><td>High (12)</td><td>Flail</td><td>Flail Bypass</td></tr>
+                            <tr><td>Battle Flail</td><td>6.0</td><td>High (14)</td><td>Flail</td><td>Flail Bypass</td></tr>
+                            <tr><td>Quarterstaff</td><td>3.0</td><td>Medium (7)</td><td>Stave</td><td>MC Compatible</td></tr>
+                            <tr><td>Great Staff</td><td>5.0</td><td>High (12)</td><td>Stave</td><td>MC Compatible, Two-Hand</td></tr>
+                            <tr><td>Buckler</td><td>2.0</td><td>Low (4)</td><td>Shield</td><td>Shield</td></tr>
+                            <tr><td>Target Shield</td><td>4.0</td><td>Medium (9)</td><td>Shield</td><td>Shield</td></tr>
+                            <tr><td>Tower Shield</td><td>8.0</td><td>Very High (17)</td><td>Shield</td><td>Shield</td></tr>
+                            <tr><td>Cestus</td><td>1.5</td><td>Low (4)</td><td>Oddball</td><td>MC Compatible</td></tr>
+                            <tr><td>Trident</td><td>4.0</td><td>Medium (9)</td><td>Oddball</td><td>Charge Attack</td></tr>
+                            <tr><td>Net</td><td>2.0</td><td>Low (4)</td><td>Oddball</td><td>Can Disarm, Can Sweep</td></tr>
+                            <tr><td>Scythe</td><td>5.0</td><td>High (12)</td><td>Oddball</td><td>Armor Piercing, Can Disarm</td></tr>
+                            <tr><td>Great Pick</td><td>6.5</td><td>High (14)</td><td>Oddball</td><td>Armor Piercing, Two-Hand</td></tr>
+                            <tr><td>Javelin</td><td>2.5</td><td>Medium (7)</td><td>Oddball</td><td>Throwable</td></tr>
+                            <tr><td>Ball & Chain</td><td>5.5</td><td>High (12)</td><td>Oddball</td><td>Can Disarm, Can Sweep</td></tr>
+                            <tr><td>Swordbreaker</td><td>2.5</td><td>Medium (7)</td><td>Oddball</td><td>Can Disarm</td></tr>
+                            <tr><td>Bola</td><td>2.0</td><td>Low (4)</td><td>Oddball</td><td>Throwable</td></tr>
+                            <tr><td>Heavy Barbed Whip</td><td>3.5</td><td>Medium (7)</td><td>Oddball</td><td>Reach</td></tr>
+                            <tr><td>Open Hand</td><td>0.0</td><td>Very Low (3)</td><td>Oddball</td><td>MC Compatible</td></tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="practice-box">
-                    <p><strong>In Practice:</strong> Tabaxi land quick strikes before exploding into a frenzy. They excel at hit-and-run tactics but cannot endure prolonged slugfests.</p>
-                </div>
-                <div class="stats-grid">
-                    <p><strong>Recommended For:</strong> High-mobility, burst-damage playstyles.</p>
-                    <p><strong>Best Synergies:</strong> Dodge, Acrobatics, Initiative, Feint, Lunge.</p>
-                    <p><strong>Team Role:</strong> Flanker / harasser.</p>
+
+                <h3 id="racial-weapon-recs" class="sub-title">Recommended Weapons by Race</h3>
+                <div class="data-table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Race</th>
+                                <th>Recommended Weapons</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Human</td><td>Short Sword, Morningstar, Boar Spear, Bastard Sword</td></tr>
+                            <tr><td>Half-Orc</td><td>Great Axe, War Hammer, Maul, Morningstar</td></tr>
+                            <tr><td>Halfling</td><td>Dagger, Short Sword, Epee, Buckler</td></tr>
+                            <tr><td>Dwarf</td><td>Battle Axe, War Hammer, Target Shield, Morningstar</td></tr>
+                            <tr><td>Half-Elf</td><td>Pole Axe, Bastard Sword, Long Sword, Boar Spear</td></tr>
+                            <tr><td>Elf</td><td>Scimitar, Dagger, Short Sword, Epee</td></tr>
+                            <tr><td>Goblin</td><td>Hatchet, Javelin, Bola, Swordbreaker</td></tr>
+                            <tr><td>Gnome</td><td>Morningstar, Quarterstaff, Target Shield</td></tr>
+                            <tr><td>Lizardfolk</td><td>Cestus, Open Hand, Battle Axe, Great Pick</td></tr>
+                            <tr><td>Tabaxi</td><td>Dagger, Short Sword, Epee, Buckler</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </section>
         </main>
     </div>
-
 </body>
 </html>
