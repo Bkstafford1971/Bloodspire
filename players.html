@@ -163,6 +163,43 @@
             padding-bottom: 5px;
             text-transform: uppercase;
         }
+
+        /* Weapon Category Headers Styling */
+        .section-block h4 {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            font-size: 1.3rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 5px;
+            text-transform: uppercase;
+        }
+        
+        /* Two-Column Weapon List */
+        .weapon-list {
+            column-count: 2;
+            column-gap: 40px;
+            list-style-type: none;
+            padding: 0;
+            margin: 0 0 30px 0;
+        }
+        
+        .weapon-list li {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1rem;
+            color: #d1d1d1;
+            padding: 4px 0;
+            /* This ensures items don't break across columns awkwardly */
+            break-inside: avoid; 
+        }
+        
+        /* Optional: Add a small red bullet or dash */
+        .weapon-list li::before {
+            content: "— ";
+            color: #8b1a1a;
+            font-weight: bold;
+        }
         
         .practice-box {
             background: rgba(255, 255, 255, 0.03);
@@ -432,28 +469,84 @@
                 <h3 id="weapons-system" class="sub-title">Weapons System – All 44 Weapons</h3>
                 
                 <h4>Sword / Knife Category</h4>
-                <p>Stiletto, Knife, Dagger, Short Sword, Epee, Scimitar, Long Sword, Broad Sword, Bastard Sword, Great Sword.</p>
+                <ul class="weapon-list">
+                    <li>Stiletto</li>
+                    <li>Knife</li>
+                    <li>Dagger</li>
+                    <li>Short Sword</li>
+                    <li>Epee</li>
+                    <li>Scimitar</li>
+                    <li>Long Sword</li>
+                    <li>Broad Sword</li>
+                    <li>Bastard Sword</li>
+                    <li>Great Sword</li>
+                </ul>
                 
                 <h4>Axe / Pick Category</h4>
-                <p>Hatchet, Francisca, Battle Axe, Great Axe, Small Pick, Military Pick, Pick Axe.</p>
-
+                <ul class="weapon-list">
+                    <li>Hatchet</li>
+                    <li>Francisca</li>
+                    <li>Battle Axe</li>
+                    <li>Great Axe</li>
+                    <li>Small Pick</li>
+                    <li>Military Pick</li>
+                    <li>Pick Axe</li>
+                </ul>
+                
                 <h4>Hammer / Mace Category</h4>
-                <p>Hammer, Mace, Morningstar, War Hammer, Maul, Club.</p>
-
+                <ul class="weapon-list">
+                    <li>Hammer</li>
+                    <li>Mace</li>
+                    <li>Morningstar</li>
+                    <li>War Hammer</li>
+                    <li>Maul</li>
+                    <li>Club</li>
+                </ul>
+                
                 <h4>Polearm / Spear Category</h4>
-                <p>Short Spear, Boar Spear, Long Spear, Pole Axe, Halberd.</p>
-
+                <ul class="weapon-list">
+                    <li>Short Spear</li>
+                    <li>Boar Spear</li>
+                    <li>Long Spear</li>
+                    <li>Pole Axe</li>
+                    <li>Halberd</li>
+                </ul>
+                
                 <h4>Flail Category</h4>
-                <p>Flail, Bladed Flail, War Flail, Battle Flail.</p>
-
+                <ul class="weapon-list">
+                    <li>Flail</li>
+                    <li>Bladed Flail</li>
+                    <li>War Flail</li>
+                    <li>Battle Flail</li>
+                </ul>
+                
                 <h4>Stave Category</h4>
-                <p>Quarterstaff, Great Staff.</p>
-
+                <ul class="weapon-list">
+                    <li>Quarterstaff</li>
+                    <li>Great Staff</li>
+                </ul>
+                
                 <h4>Shield Category</h4>
-                <p>Buckler, Target Shield, Tower Shield.</p>
-
+                <ul class="weapon-list">
+                    <li>Buckler</li>
+                    <li>Target Shield</li>
+                    <li>Tower Shield</li>
+                </ul>
+                
                 <h4>Oddball / Specialty Weapons</h4>
-                <p>Cestus, Trident, Net, Scythe, Great Pick, Javelin, Ball & Chain, Swordbreaker, Bola, Heavy Barbed Whip, Open Hand.</p>
+                <ul class="weapon-list">
+                    <li>Cestus</li>
+                    <li>Trident</li>
+                    <li>Net</li>
+                    <li>Scythe</li>
+                    <li>Great Pick</li>
+                    <li>Javelin</li>
+                    <li>Ball & Chain</li>
+                    <li>Swordbreaker</li>
+                    <li>Bola</li>
+                    <li>Heavy Barbed Whip</li>
+                    <li>Open Hand</li>
+                </ul>
 
                 <h2 id="weapons-table" class="section-title">Complete Weapons Table</h2>
                 <div class="data-table-container">
