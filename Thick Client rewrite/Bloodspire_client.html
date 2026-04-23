@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -2726,14 +2726,19 @@ async function doLogin() {
       if (r.run_next_turn) {
         for (const [k, v] of Object.entries(r.run_next_turn)) S.runNextTurn[Number(k)] = v;
       }
+      if (r.rolls) S.account.rolls = r.rolls;
+
       S.savedRememberMe = remember;
+      S.league.managerId = String(r.id);
+      S.league.managerName = r.manager_name;
+      S.league.password = pass;
+
       if (remember) localStorage.setItem('BS_LEAGUE_PASS', pass);
       else localStorage.removeItem('BS_LEAGUE_PASS');
       
       S.view = 'main'; S.msg = '';
-      await loadTeams();
-      await loadLeagueSettings();
       saveLocalState();
+      await doLeagueDownloadAll();
       render();
     } else {
       setMsg(r.error, 'err'); render();
@@ -2761,13 +2766,13 @@ async function doCreateAccount() {
       S.account = { id: r.id, manager_name: r.manager_name, email,
                    team_ids: [...new Set(r.team_ids)] };
       S.view = 'main'; 
-      saveLocalState();
       if (r.warning) {
         S.msg = 'Account created successfully, but: ' + r.warning;
         S.msgType = 'warn';
       } else {
         S.msg = '';
       }
+      await doLeagueDownloadAll();
       render();
     } else {
       setMsg(r.error || 'Account creation failed.', 'err'); render();
@@ -2786,45 +2791,61 @@ async function doSaveWarrior() {
   const src = _pendingWarrior || S.sel;
   const {teamId, wIdx} = src;
   if (teamId == null || wIdx == null) return;
-  const team = S.teams[teamId];
-  if (!team) return;
-  const w = team.warriors[wIdx];
-  if (!w) return;
+  // Only read from DOM if we're still viewing this warrior
+  const isCurrentView = (S.sel.type === 'warrior'
+                         && S.sel.teamId === teamId
+                         && S.sel.wIdx   === wIdx);
+  if (!isCurrentView && !el('sel-armor')) return;  // DOM belongs to different warrior
 
-  const isCurrentView = (S.sel.type === 'warrior' && S.sel.teamId === teamId && S.sel.wIdx === wIdx);
-  if (!isCurrentView && !el('sel-armor')) return;
-
+  // Collect strategies — numbered rows only saved if trigger is set
   const strats = [];
   for (let i = 0; i < 5; i++) {
     const trigger = getSelectVal(`#strat-body select[data-si="${i}"][data-sf="trigger"]`);
     if (!trigger || trigger === 'None') continue;
-    strats.push({
-      trigger,
-      style: getSelectVal(`#strat-body select[data-si="${i}"][data-sf="style"]`) || 'Strike',
-      activity: parseInt(getInputVal(`#strat-body input[data-si="${i}"][data-sf="activity"]`) || '5'),
-      aim_point: getSelectVal(`#strat-body select[data-si="${i}"][data-sf="aim_point"]`) || 'None',
-      defense_point: getSelectVal(`#strat-body select[data-si="${i}"][data-sf="defense_point"]`) || 'None'
-    });
+    const style    = getSelectVal(`#strat-body select[data-si="${i}"][data-sf="style"]`)    || 'Strike';
+    const actRaw   = getInputVal(`#strat-body input[data-si="${i}"][data-sf="activity"]`);
+    const activity = (actRaw !== '' && actRaw !== null) ? parseInt(actRaw) : 5;
+    const aim      = getSelectVal(`#strat-body select[data-si="${i}"][data-sf="aim_point"]`)    || 'None';
+    const def      = getSelectVal(`#strat-body select[data-si="${i}"][data-sf="defense_point"]`) || 'None';
+    strats.push({trigger, style, activity, aim_point:aim, defense_point:def});
   }
-  strats.push({
-    trigger: 'Always (Default Loop)',
-    style: getSelectVal('#strat-body select[data-si="D"][data-sf="style"]') || 'Strike',
-    activity: parseInt(getInputVal('#strat-body input[data-si="D"][data-sf="activity"]') || '5'),
-    aim_point: getSelectVal('#strat-body select[data-si="D"][data-sf="aim_point"]') || 'None',
-    defense_point: getSelectVal('#strat-body select[data-si="D"][data-sf="defense_point"]') || 'None'
-  });
+  // D row — trigger is always "Always (Default Loop)" regardless of DOM
+  const dStyle    = getSelectVal('#strat-body select[data-si="D"][data-sf="style"]')    || 'Strike';
+  const dActRaw   = getInputVal('#strat-body input[data-si="D"][data-sf="activity"]');
+  const dActivity = (dActRaw !== '' && dActRaw !== null) ? parseInt(dActRaw) : 5;
+  const dAim      = getSelectVal('#strat-body select[data-si="D"][data-sf="aim_point"]')    || 'None';
+  const dDef      = getSelectVal('#strat-body select[data-si="D"][data-sf="defense_point"]') || 'None';
+  strats.push({trigger:'Always (Default Loop)', style:dStyle, activity:dActivity, aim_point:dAim, defense_point:dDef});
 
-  w.armor = el('sel-armor')?.value || 'None';
-  w.helm = el('sel-helm')?.value || 'None';
-  w.primary_weapon = el('sel-prim')?.value || 'Open Hand';
-  w.secondary_weapon = el('sel-sec')?.value || 'Open Hand';
-  w.backup_weapon = el('sel-bkp')?.value || 'None';
-  w.trains = [getSelectVal('#sel-t1'), getSelectVal('#sel-t2'), getSelectVal('#sel-t3')]
-             .filter(t => t && t !== '—').map(t => t.toLowerCase().replace(" ", "_"));
-  w.strategies = strats;
+  // Training
+  const trains = [
+    getSelectVal('#sel-t1'), getSelectVal('#sel-t2'), getSelectVal('#sel-t3')
+  ].filter(t => t && t !== '—');
 
-  _pendingWarrior = null;
-  saveLocalState(); refreshContent();
+  const body = {
+    team_id     : teamId,
+    warrior_idx : wIdx,
+    armor       : el('sel-armor')?.value||'None',
+    helm        : el('sel-helm')?.value||'None',
+    primary_weapon   : el('sel-prim')?.value||'Open Hand',
+    secondary_weapon : el('sel-sec')?.value||'Open Hand',
+    backup_weapon    : el('sel-bkp')?.value||'None',
+    trains,
+    strategies  : strats,
+  };
+
+  try {
+    const r = await API.put('/api/warrior', body);
+    if (r.success) {
+      _pendingWarrior = null;  // clear after successful save
+      await reloadTeam(teamId);
+      refreshContent();
+    } else {
+      alert('Save failed: ' + r.error);
+    }
+  } catch (err) {
+    alert('Connection error: ' + err.message);
+  }
 }
 
 function getSelectVal(selector) { const e = document.querySelector(selector); return e ? e.value : null; }
@@ -2869,15 +2890,25 @@ async function flushSave() {
 async function initCreateTeam() {
   // Load game data if needed
   if (!S.gd) { const r = await API.get('/api/game_data'); S.gd = r; }
-  // Only fetch fresh rollups if we don't already have a pending creation session.
-  // This prevents players from cancelling out and re-rolling for better stats.
+  
   if (!S.ct) {
-    const r = await API.get('/api/rollup');
+    let rolls = S.account?.rolls;
+    
+    // Fallback if no static rolls are in memory (e.g. server hasn't run a turn yet)
+    if (!rolls) {
+      try {
+        const r = await API.get('/api/get_rollup');
+        rolls = r.rolls;
+      } catch(e) {
+        alert("Could not fetch rollup from server."); return;
+      }
+    }
+
     S.ct = {
       teamName : '',
       sel      : 0,
-      warriors : r.rolls.map(base => ({ base, name:'', race:'Human', gender:'Male' })),
-      adds     : r.rolls.map(() => ({ strength:0, dexterity:0, constitution:0, intelligence:0, presence:0, size:0 })),
+      warriors : rolls.map(base => ({ base, name:'', race:'Human', gender:'Male' })),
+      adds     : rolls.map(() => ({ strength:0, dexterity:0, constitution:0, intelligence:0, presence:0, size:0 })),
       saved    : [false, false, false, false, false],
     };
   }
@@ -2971,39 +3002,45 @@ async function doSaveTeam() {
     };
   });
 
-  // Local Team Creation
-  const tempId = Date.now();
-  const newTeam = {
-    team_id: tempId,
-    team_name: tName.toUpperCase(),
-    manager_name: S.account.manager_name,
-    warriors: warriors.map(w => ({
-      ...w,
-      strategies: [{trigger:'Always (Default Loop)', style:'Strike', activity:5, aim_point:'None', defense_point:'Chest'}],
-      trains: [], wins: 0, losses: 0, kills: 0, total_fights: 0, is_dead: false,
-    })),
-    is_draft: true,
-    archived_warriors: [],
-    turn_history: [],
-    challenges: {},
-    blood_challenges: [],
-    avoid_managers: [],
-  };
-
-  if (S.replacingTeam) {
-    const idx = S.account.team_ids.indexOf(S.replacingTeam.old_team_id);
-    if (idx !== -1) S.account.team_ids[idx] = tempId;
-    delete S.teams[S.replacingTeam.old_team_id];
-    S.replacingTeam = null;
-  } else {
-    if (!S.account.team_ids.includes(tempId)) S.account.team_ids.push(tempId);
+  try {
+    const r = await API.post('/api/team/create', {
+      manager_id  : S.account.id,
+      manager_name: S.account.manager_name,
+      team_name   : tName,
+      warriors,
+    });
+    if (r.success) {
+      if (S.replacingTeam) {
+        // Swap old team for new team in account
+        const rt = S.replacingTeam;
+        const swapR = await API.post('/api/account/swap_team', {
+          manager_id: rt.manager_id,
+          old_team_id: rt.old_team_id,
+          new_team_id: r.team_id,
+        });
+        if (swapR.success) {
+          // Replace in local state
+          const idx = S.account.team_ids.indexOf(rt.old_team_id);
+          if (idx !== -1) S.account.team_ids[idx] = r.team_id;
+          delete S.teams[rt.old_team_id];
+        }
+        S.replacingTeam = null;
+      } else {
+        if (!S.account.team_ids.includes(r.team_id)) S.account.team_ids.push(r.team_id);
+      }
+      S.teams[r.team_id] = r.team;
+      S.expanded[r.team_id] = true;
+      S.sel = { type:'team', teamId: r.team_id };
+      S.view = 'main';
+      S.ct = null;
+      S.msg = '';
+      render();
+    } else {
+      setMsg(r.error || 'Could not create team.', 'err'); render();
+    }
+  } catch (err) {
+    setMsg('Connection error: ' + err.message, 'err'); render();
   }
-
-  S.teams[tempId] = newTeam;
-  S.expanded[tempId] = true;
-  S.sel = { type:'team', teamId: tempId };
-  S.view = 'main'; S.ct = null; S.msg = 'Team created locally. Use Action > Upload when ready.';
-  saveLocalState(); render();
 }
 
 /* ============================================================
@@ -3943,15 +3980,12 @@ async function doLeagueDownloadAll() {
         continue;
       }
 
-      const app = await API.post('/api/apply_league_results', {
-        team_id: localTid, result,
-      });
-      if (app.success) {
-        S.teams[localTid] = app.team;
+      if (result.team) {
+        S.teams[localTid] = result.team;
         applied.push({ team_id: localTid, team_name: result.team_name || '?',
-                       bouts: app.bouts, team: app.team });
+                       bouts: result.bouts, team: result.team });
       } else {
-        missed.push(`${result.team_name || '?'}: ${app.error || '?'}`);
+        missed.push(`${result.team_name || '?'}: Missing team data`);
       }
     }
 
@@ -4181,11 +4215,11 @@ async function uploadAllTeams() {
     const tid = ids[i];
     let r;
     try {
-      r = await API.post('/api/league/upload_one', {
-        team_id          : tid,
-        league_url       : lg.url,
-        league_manager_id: lg.managerId,
-        password         : pw,
+      const tData = S.teams[tid];
+      r = await API.post('/api/upload', {
+        manager_id : lg.managerId,
+        password   : pw,
+        team       : tData
       });
     } catch(e) {
       r = { success: false, team_id: tid, error: e.message };
@@ -4253,7 +4287,6 @@ async function uploadAllTeams() {
    ============================================================ */
 async function init() {
   // 1. Load League Server URL and Local Data from Browser Storage
-  // Default to the current window location if hosted on the server
   const defaultUrl = window.location.origin.includes('http') ? window.location.origin : 'http://100.114.138.61:8766';
   S.league.url = localStorage.getItem('BS_LEAGUE_URL') || defaultUrl;
   
@@ -4285,10 +4318,10 @@ async function init() {
         if (r.run_next_turn) {
           for (const [k, v] of Object.entries(r.run_next_turn)) S.runNextTurn[Number(k)] = v;
         }
+        if (r.rolls) S.account.rolls = r.rolls;
         S.savedRememberMe = true;
         S.view = 'main';
-        await loadTeams();
-        await loadLeagueSettings();
+        await doLeagueDownloadAll();
         render();
         return; 
       }
