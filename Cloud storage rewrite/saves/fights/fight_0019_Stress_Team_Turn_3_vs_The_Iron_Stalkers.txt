@@ -1,0 +1,93 @@
+Fight #19
+Stress Team Turn 3  vs  The Iron Stalkers
+============================================================================
+
+============================================================================
+HYBRID_2 (0-0-0)   vs   BRAN SEVENFINGER (1-1-1)
+STRESS TEAM TURN 3 (STRESS TESTER)   vs   THE IRON STALKERS (DARK FIST)
+Human Male   vs   Half-Orc Female
+============================================================================
+
+HYBRID_2 is 5'7"
+HYBRID_2 weighs 165 lbs.
+HYBRID_2 Known To The Crowd.
+HYBRID_2 enters the arena unarmored and wears no helm.
+HYBRID_2 fights using a LONG SWORD.
+
+BRAN SEVENFINGER is 5'9"
+BRAN SEVENFINGER weighs 216 lbs.
+BRAN SEVENFINGER Known To The Crowd.
+BRAN SEVENFINGER enters the arena in CLOTH and will wear a LEATHER CAP.
+BRAN SEVENFINGER fights using a WAR FLAIL.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+A hush falls over the arena
+BRAN SEVENFINGER whips at HYBRID_2's rib cage with her war flail
+BRAN SEVENFINGER's war flail whips into HYBRID_2's torso!
+   That one will leave a mark!
+HYBRID_2 slices at BRAN SEVENFINGER's body with his long sword
+HYBRID_2's long sword cuts into BRAN SEVENFINGER's body!
+   The blow lands without full force
+BRAN SEVENFINGER savagely attacks HYBRID_2's breast with her war flail
+BRAN SEVENFINGER's war flail wraps around and cracks into HYBRID_2's chest armor!
+   A minor hit!
+BRAN SEVENFINGER hacks away at HYBRID_2's sternum with her war flail
+BRAN SEVENFINGER gets past HYBRID_2's guard!
+BRAN SEVENFINGER's war flail lashes into HYBRID_2's torso!
+   The blow lands without full force
+HYBRID_2 goes crashing to the ground!
+The pit bell rings early — it must be a mistake
+BRAN SEVENFINGER charges forward in a wild frenzy
+BRAN SEVENFINGER savagely attacks HYBRID_2's chest with her war flail
+BRAN SEVENFINGER gets past HYBRID_2's guard!
+BRAN SEVENFINGER's war flail whips into HYBRID_2's chest armor!
+   The wound delivers terrible agony!
+HYBRID_2 appeals to the Blood Master for mercy!
+The crowd screams for blood — mercy is denied!
+BRAN SEVENFINGER flails at HYBRID_2's rib cage with her war flail
+HYBRID_2 makes an extraordinary effort, and parries the strike!
+HYBRID_2 drives a blow toward BRAN SEVENFINGER's midsection with his long sword
+HYBRID_2's blow barely grazes BRAN SEVENFINGER!
+HYBRID_2 directs an attack toward BRAN SEVENFINGER
+HYBRID_2 thrusts at BRAN SEVENFINGER's midsection with his long sword
+HYBRID_2 gets past BRAN SEVENFINGER's guard!
+HYBRID_2's long sword slices into BRAN SEVENFINGER's armor!
+   The armor does its job admirably
+HYBRID_2 slices at BRAN SEVENFINGER's body with his long sword
+HYBRID_2's accuracy is rewarded!
+HYBRID_2's long sword cuts into BRAN SEVENFINGER's armor!
+   The blow glances harmlessly off!
+
+MINUTE 2
+The crowd responds as BRAN SEVENFINGER takes command of the fight.
+
+The drummer loses control and tosses a drumstick away
+BRAN SEVENFINGER hacks away at HYBRID_2's sternum with her war flail
+BRAN SEVENFINGER's war flail wraps around and cracks into HYBRID_2's breastplate!
+   The resulting crunch echoes through the BLOODSPIRE!
+HYBRID_2 can fight no more and begs for mercy!
+The Blood Master shows no mercy today!
+HYBRID_2 hacks at BRAN SEVENFINGER's torso with his long sword
+HYBRID_2's long sword bites into BRAN SEVENFINGER's body!
+   The armor does its job admirably
+BRAN SEVENFINGER tries to demolish HYBRID_2's chest with her war flail
+HYBRID_2 barely gets the parry off!
+BRAN SEVENFINGER drives suddenly forward, war flail whistling through the air
+BRAN SEVENFINGER whips at HYBRID_2's torso with her war flail
+The war flail finds its mark!
+BRAN SEVENFINGER's war flail wraps around and cracks into HYBRID_2's ribs!
+   A solid blow has been struck!
+HYBRID_2 calls out for quarter!
+HYBRID_2 is spared by the grace of the Blood Master!
+
+BRAN SEVENFINGER has won this affair of honor!
+
+BRAN SEVENFINGER has trained in nothing

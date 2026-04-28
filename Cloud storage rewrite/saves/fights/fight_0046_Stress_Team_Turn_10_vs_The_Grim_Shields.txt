@@ -1,0 +1,112 @@
+Fight #46
+Stress Team Turn 10  vs  The Grim Shields
+============================================================================
+
+============================================================================
+CLEAVER_2 (2-1-1)   vs   BRUL THE BLOODY (2-0-1)
+STRESS TEAM TURN 10 (STRESS TESTER)   vs   THE GRIM SHIELDS (GRIM EYE)
+Dwarf Female   vs   Tabaxi Male
+============================================================================
+
+CLEAVER_2 is 3'10"
+CLEAVER_2 weighs 151 lbs.
+CLEAVER_2 Popular With The Kids.
+CLEAVER_2 enters the arena unarmored and wears no helm.
+CLEAVER_2 fights using a GREAT AXE.
+
+BRUL THE BLOODY is 5'7"
+BRUL THE BLOODY weighs 165 lbs.
+BRUL THE BLOODY Known To The Crowd.
+BRUL THE BLOODY enters the arena in CUIR BOULLI and will wear a HELM.
+BRUL THE BLOODY fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The Blood Master raises his fist — the fight begins!
+CLEAVER_2 sizes up BRUL THE BLOODY carefully
+CLEAVER_2 hacks at BRUL THE BLOODY's torso with her great axe
+CLEAVER_2's accuracy is rewarded!
+CLEAVER_2's great axe chops into BRUL THE BLOODY's body!
+   An absolutely monstrous blow!
+BRUL THE BLOODY slashes at CLEAVER_2's body with his short sword
+CLEAVER_2 just manages to deflect the blow!
+BRUL THE BLOODY slashes at CLEAVER_2's body with his short sword
+The short sword finds its mark!
+BRUL THE BLOODY's short sword bites into CLEAVER_2's armor!
+   The resulting crunch echoes through the BLOODSPIRE!
+CLEAVER_2 crashes to the arena floor!
+*** CLEAVER_2 has been permanently injured in the secondary leg!!! ***
+CLEAVER_2's leg is bleeding!
+CLEAVER_2's rear leg buckles violently!!
+CLEAVER_2 steps threateningly close to the mighty BRUL THE BLOODY
+CLEAVER_2 hacks at BRUL THE BLOODY's body with her great axe
+BRUL THE BLOODY makes an extraordinary effort, and parries the strike!
+BRUL THE BLOODY hacks at CLEAVER_2's midsection with his short sword
+The short sword finds its mark!
+BRUL THE BLOODY's short sword bites into CLEAVER_2's torso!
+   The blow lands with bone-breaking force!
+*** CLEAVER_2 has been permanently injured in the chest!!! ***
+CLEAVER_2 clutches at her chest!
+CLEAVER_2 gasps for air, ribs grinding painfully!!
+Children in the stands look away, then look back
+BRUL THE BLOODY hacks at CLEAVER_2's midsection with his short sword
+BRUL THE BLOODY's blow barely grazes CLEAVER_2!
+BRUL THE BLOODY steps threateningly close to the fearsome CLEAVER_2
+BRUL THE BLOODY cuts at CLEAVER_2's midsection with his short sword
+CLEAVER_2 barely gets the parry off!
+CLEAVER_2 swings at BRUL THE BLOODY's body with her great axe
+CLEAVER_2's great axe bites into BRUL THE BLOODY's body!
+   The resulting crunch echoes through the BLOODSPIRE!
+
+MINUTE 2
+The fight has begun to tilt decisively in CLEAVER_2's favor.
+
+ * BRUL THE BLOODY switches to strategy 1
+BRUL THE BLOODY directs an attack toward CLEAVER_2
+BRUL THE BLOODY hacks at CLEAVER_2's head with his short sword
+BRUL THE BLOODY's short sword slices into CLEAVER_2's temple!
+   The blow has real authority behind it!
+BRUL THE BLOODY directs an attack toward CLEAVER_2
+BRUL THE BLOODY slices at CLEAVER_2's head with his short sword
+BRUL THE BLOODY gets past CLEAVER_2's guard!
+BRUL THE BLOODY's short sword finds CLEAVER_2's skull!
+   The resulting crunch echoes through the BLOODSPIRE!
+CLEAVER_2 appeals to the Blood Master for mercy!
+CLEAVER_2 must fight on, or die trying!
+CLEAVER_2 swings at BRUL THE BLOODY's body with her great axe
+CLEAVER_2 gets past BRUL THE BLOODY's guard!
+CLEAVER_2's great axe bites into BRUL THE BLOODY's armor!
+   The wound delivers terrible agony!
+BRUL THE BLOODY stumbles and falls heavily!
+*** BRUL THE BLOODY's sword arm is badly damaged!!! ***
+BRUL THE BLOODY's arm trembles with pain!
+BRUL THE BLOODY's weapon arm spasms in agony!!
+BRUL THE BLOODY appeals to the Blood Master for mercy!
+The Blood Master shows no mercy today!
+BRUL THE BLOODY directs an attack toward CLEAVER_2
+BRUL THE BLOODY hacks at CLEAVER_2's skull with his short sword
+BRUL THE BLOODY's short sword bites into CLEAVER_2's helm!
+   Some damage is done
+CLEAVER_2 raises a hand in surrender!
+CLEAVER_2 must fight on, or die trying!
+BRUL THE BLOODY appeals to the Blood Master for mercy!
+The crowd screams for blood — mercy is denied!
+A vendor drops his tray with a tremendous crash
+BRUL THE BLOODY sizes up CLEAVER_2 carefully
+BRUL THE BLOODY slices at CLEAVER_2's throat with his short sword
+BRUL THE BLOODY's accuracy is rewarded!
+BRUL THE BLOODY's short sword cuts into CLEAVER_2's headgear!
+   Barely a scratch!
+CLEAVER_2 raises a hand in surrender!
+CLEAVER_2 is spared by the grace of the Blood Master!
+
+BRUL THE BLOODY has won this affair of honor!
+
+BRUL THE BLOODY has trained in Skill

@@ -1,0 +1,201 @@
+Fight #50
+Test Warriors  vs  The Dread Wolves
+============================================================================
+
+============================================================================
+CLEAVER (0-0-0)   vs   HELA THE FEARSOME (0-0-0)
+TEST WARRIORS (TEST MANAGER)   vs   THE DREAD WOLVES (IRON WARLORD)
+Dwarf Male   vs   Elf Female
+============================================================================
+
+CLEAVER is 4'0"
+CLEAVER weighs 179 lbs.
+CLEAVER Known To The Crowd.
+CLEAVER enters the arena unarmored and wears no helm.
+CLEAVER fights using a BATTLE AXE.
+
+HELA THE FEARSOME is 4'10"
+HELA THE FEARSOME weighs 104 lbs.
+HELA THE FEARSOME Known To The Crowd.
+HELA THE FEARSOME enters the arena in CLOTH and will wear a LEATHER CAP.
+HELA THE FEARSOME fights using a DAGGER.
+
+
+TRIGGER                                   FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+--------------------------------------------------------------------------------------------------
+D: Always                                 Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The crowd roars its bloodthirsty approval
+CLEAVER tries to hit the mighty HELA THE FEARSOME
+CLEAVER swings at HELA THE FEARSOME's torso with his battle axe
+CLEAVER's blow barely grazes HELA THE FEARSOME!
+CLEAVER steps threateningly close to the relentless HELA THE FEARSOME
+CLEAVER hacks at HELA THE FEARSOME's torso with his battle axe
+HELA THE FEARSOME shifts weight, preparing to parry!
+CLEAVER's battle axe punches into HELA THE FEARSOME's torso!
+   The blow skims across and leaves a shallow chop!
+CLEAVER chops at HELA THE FEARSOME's midsection with his battle axe
+HELA THE FEARSOME shifts weight, preparing to parry!
+CLEAVER's battle axe chops into HELA THE FEARSOME's body!
+   The attack skims across and draws a thin line!
+CLEAVER steps threateningly close to the relentless HELA THE FEARSOME
+CLEAVER cleaves at HELA THE FEARSOME's body with his battle axe
+HELA THE FEARSOME shifts weight, preparing to parry!
+HELA THE FEARSOME makes a desperate last-moment parry!
+HELA THE FEARSOME hammers away with machine-like persistence
+HELA THE FEARSOME slices at CLEAVER's midsection with her dagger
+CLEAVER is ready for the strike, and deftly parries it!
+HELA THE FEARSOME creates a whirling wall of steel
+HELA THE FEARSOME cuts at CLEAVER's midsection with her dagger
+CLEAVER reads the attack and reacts!
+CLEAVER makes a desperate last-moment parry!
+HELA THE FEARSOME hammers away with machine-like persistence
+HELA THE FEARSOME attacks relentlessly at CLEAVER's midsection with her dagger
+CLEAVER shifts weight, preparing to parry!
+HELA THE FEARSOME's dagger bites into CLEAVER's torso!
+   The edge scrapes across the skin!
+HELA THE FEARSOME attacks relentlessly at CLEAVER's torso with her dagger
+CLEAVER is eagerly defending!
+HELA THE FEARSOME's dagger bites into CLEAVER's armor!
+   The strike glances off, leaving a minor score!
+Half the crowd rises to their feet in anticipation!
+HELA THE FEARSOME relentlessly presses forward with her dagger
+HELA THE FEARSOME drives a blow toward CLEAVER's torso with her dagger
+CLEAVER sets his feet and prepares to deflect!
+HELA THE FEARSOME's dagger cuts into CLEAVER's body!
+   The slash is more sting than true damage!
+HELA THE FEARSOME relentlessly targets CLEAVER's body with her dagger
+CLEAVER tightens his grip and watches for the opening!
+HELA THE FEARSOME gets past CLEAVER's guard!
+HELA THE FEARSOME's dagger finds CLEAVER's body!
+   A shallow cut appears along the surface!
+HELA THE FEARSOME creates a whirling wall of steel
+HELA THE FEARSOME relentlessly targets CLEAVER's midsection with her dagger
+HELA THE FEARSOME's dagger finds CLEAVER's body!
+   The blade merely kisses the skin!
+
+MINUTE 2
+CLEAVER looks marginally sharper at this stage of the fight.
+
+CLEAVER sizes up HELA THE FEARSOME carefully
+CLEAVER chops at HELA THE FEARSOME's midsection with his battle axe
+CLEAVER's blow barely grazes HELA THE FEARSOME!
+CLEAVER steps threateningly close to the relentless HELA THE FEARSOME
+CLEAVER hacks at HELA THE FEARSOME's midsection with his battle axe
+CLEAVER's blow barely grazes HELA THE FEARSOME!
+CLEAVER directs an attack toward HELA THE FEARSOME
+CLEAVER chops at HELA THE FEARSOME's torso with his battle axe
+CLEAVER gets past HELA THE FEARSOME's guard!
+CLEAVER's battle axe cleaves into HELA THE FEARSOME's armor!
+   The weapon kisses the flesh with a shallow chop!
+HELA THE FEARSOME attacks in a flurry of blows
+HELA THE FEARSOME cuts at CLEAVER's body with her dagger
+CLEAVER raises his guard against the incoming blow!
+HELA THE FEARSOME's accuracy is rewarded!
+HELA THE FEARSOME's dagger finds CLEAVER's body!
+   The blade merely kisses the skin!
+Someone in the upper rows throws a piece of bread
+CLEAVER sizes up HELA THE FEARSOME carefully
+CLEAVER swings at HELA THE FEARSOME's torso with his battle axe
+HELA THE FEARSOME shifts weight, preparing to parry!
+HELA THE FEARSOME makes a desperate last-moment parry!
+HELA THE FEARSOME relentlessly presses forward with her dagger
+HELA THE FEARSOME attacks relentlessly at CLEAVER's midsection with her dagger
+CLEAVER sets his feet and prepares to deflect!
+CLEAVER's defenses are particularly strong!
+HELA THE FEARSOME attacks in a flurry of blows
+HELA THE FEARSOME relentlessly targets CLEAVER's torso with her dagger
+CLEAVER tightens his grip and watches for the opening!
+HELA THE FEARSOME gets past CLEAVER's guard!
+HELA THE FEARSOME's dagger cuts into CLEAVER's body!
+   The edge scrapes across the skin!
+HELA THE FEARSOME relentlessly targets CLEAVER's midsection with her dagger
+CLEAVER barely gets the parry off!
+HELA THE FEARSOME attacks relentlessly at CLEAVER's midsection with her dagger
+CLEAVER reads the attack and reacts!
+CLEAVER makes a desperate last-moment parry!
+HELA THE FEARSOME creates a whirling wall of steel
+HELA THE FEARSOME relentlessly targets CLEAVER's body with her dagger
+CLEAVER's defenses are particularly strong!
+HELA THE FEARSOME relentlessly presses forward with her dagger
+HELA THE FEARSOME drives a blow toward CLEAVER's torso with her dagger
+CLEAVER reads the attack and reacts!
+CLEAVER's defenses are particularly strong!
+HELA THE FEARSOME's wild fury is taking a psychological toll on CLEAVER!
+
+MINUTE 3
+HELA THE FEARSOME is visibly fading, their endurance all but spent.
+
+CLEAVER directs an attack toward HELA THE FEARSOME
+CLEAVER cleaves at HELA THE FEARSOME's midsection with his battle axe
+HELA THE FEARSOME braces to meet the attack!
+CLEAVER's battle axe chops into HELA THE FEARSOME's armor!
+   The strike cleaves deeply into the warrior!
+CLEAVER hacks at HELA THE FEARSOME's torso with his battle axe
+HELA THE FEARSOME tightens her grip and watches for the opening!
+CLEAVER's battle axe bites into HELA THE FEARSOME's body!
+   The blow hacks a painful wound into the body!
+HELA THE FEARSOME looks like she could use a moment to collect herself!
+HELA THE FEARSOME slashes at CLEAVER's midsection with her dagger
+CLEAVER makes an extraordinary effort, and parries the strike!
+CLEAVER sizes up HELA THE FEARSOME carefully
+CLEAVER swings at HELA THE FEARSOME's midsection with his battle axe
+HELA THE FEARSOME tightens her grip and watches for the opening!
+CLEAVER's battle axe bites into HELA THE FEARSOME's armor!
+   The attack nicks the warrior lightly!
+HELA THE FEARSOME stumbles and falls heavily!
+CLEAVER sizes up HELA THE FEARSOME carefully
+CLEAVER cleaves at HELA THE FEARSOME's torso with his battle axe
+HELA THE FEARSOME reads the attack and reacts!
+CLEAVER barely gets past HELA THE FEARSOME's defenses!
+CLEAVER's battle axe punches into HELA THE FEARSOME's armor!
+   The weapon cuts a deep, angry furrow!
+HELA THE FEARSOME would make a corpse envious!
+HELA THE FEARSOME can fight no more and begs for mercy!
+The Blood Master shows no mercy today!
+HELA THE FEARSOME hammers away with machine-like persistence
+HELA THE FEARSOME thrusts at CLEAVER's body with her dagger
+HELA THE FEARSOME's dagger finds CLEAVER's armor!
+   The weapon skims across and draws a thin line!
+Three drunks in the cheap seats start a brawl
+HELA THE FEARSOME relentlessly presses forward with her dagger
+HELA THE FEARSOME slices at CLEAVER's midsection with her dagger
+CLEAVER sets his feet and prepares to deflect!
+CLEAVER has a plan: don't get hit!
+HELA THE FEARSOME relentlessly presses forward with her dagger
+HELA THE FEARSOME hacks at CLEAVER's body with her dagger
+CLEAVER reads the attack and reacts!
+CLEAVER makes a desperate last-moment parry!
+HELA THE FEARSOME drives a blow toward CLEAVER's torso with her dagger
+HELA THE FEARSOME's blow barely grazes CLEAVER!
+HELA THE FEARSOME hammers away with machine-like persistence
+HELA THE FEARSOME slices at CLEAVER's body with her dagger
+CLEAVER's defenses are particularly strong!
+HELA THE FEARSOME slows noticeably
+
+MINUTE 4
+The gap between the two warriors is widening rapidly.
+
+CLEAVER hacks at HELA THE FEARSOME's body with his battle axe
+The blow connects!
+CLEAVER's battle axe chops into HELA THE FEARSOME's torso!
+   The attack cleaves through skin and meat!
+*** HELA THE FEARSOME's chest is grievously wounded!!! ***
+HELA THE FEARSOME clutches at her chest!
+HELA THE FEARSOME's breathing becomes labored!!
+HELA THE FEARSOME appeals to the Blood Master for mercy!
+The crowd screams for blood, mercy is denied!
+CLEAVER cleaves at HELA THE FEARSOME's body with his battle axe
+HELA THE FEARSOME sets her feet and prepares to deflect!
+CLEAVER's battle axe punches into HELA THE FEARSOME's body!
+   The strike merely grazes with a cleaving edge!
+HELA THE FEARSOME raises a hand in surrender!
+The Blood Master shows mercy, HELA THE FEARSOME lives to fight another day!
+
+The Blood Master raises CLEAVER's arm in victory!
+
+HELA THE FEARSOME has trained in nothing

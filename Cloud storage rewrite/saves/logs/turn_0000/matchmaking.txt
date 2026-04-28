@@ -1,0 +1,12 @@
+BLOODSPIRE — MATCHMAKING LOG
+Turn 0  |  Team: Test Warriors  |  2026-04-14 13:03:34
+========================================================================
+#    Fighter                Exp vs   Opponent               Exp Type             Result   Mins
+------------------------------------------------------------------------
+1    Cleaver                  1  vs  Hela the Fearsome        1 rivalry          WIN         4
+2    Basher                   1  vs  Lira Bonesnap            1 rivalry          WIN         3
+3    Slasher                  1  vs  Ulka Ironhide            1 rivalry          WIN        17
+4    Acrobat                  1  vs  Orm Blackhand            1 rivalry          WIN        10
+5    Striker                  1  vs  Ulka Stonefist           1 rivalry          WIN         6
+
+Total bouts: 5

@@ -1,0 +1,92 @@
+Fight #37
+Stress Team Turn 7  vs  The Iron Stalkers
+============================================================================
+
+============================================================================
+BASHER_2 (1-1-0)   vs   BRAN SEVENFINGER (4-1-2)
+STRESS TEAM TURN 7 (STRESS TESTER)   vs   THE IRON STALKERS (DARK FIST)
+Dwarf Female   vs   Half-Orc Female
+============================================================================
+
+BASHER_2 is 3'10"
+BASHER_2 weighs 151 lbs.
+BASHER_2 Popular With The Kids.
+BASHER_2 enters the arena unarmored and wears no helm.
+BASHER_2 fights using a MORNINGSTAR.
+
+BRAN SEVENFINGER is 5'9"
+BRAN SEVENFINGER weighs 221 lbs.
+BRAN SEVENFINGER Known To The Crowd.
+BRAN SEVENFINGER enters the arena in CLOTH and will wear a LEATHER CAP.
+BRAN SEVENFINGER fights using a WAR FLAIL.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The crowd roars its bloodthirsty approval
+BRAN SEVENFINGER charges forward in a wild frenzy
+BRAN SEVENFINGER flails at BASHER_2's rib cage with her war flail
+The blow connects!
+BRAN SEVENFINGER's war flail wraps around and cracks into BASHER_2's ribs!
+   The blow lands without full force
+BRAN SEVENFINGER swings at BASHER_2's chest with her war flail
+BASHER_2 just manages to deflect the blow!
+BASHER_2 tries to hit the mighty BRAN SEVENFINGER
+BASHER_2 pounds at BRAN SEVENFINGER's body with her morningstar
+BASHER_2's morningstar crashes into BRAN SEVENFINGER's body!
+   A solid blow has been struck!
+BRAN SEVENFINGER attacks in a berserker rage
+BRAN SEVENFINGER flails at BASHER_2's chest with her war flail
+BRAN SEVENFINGER's war flail lashes into BASHER_2's chest armor!
+   A solid blow has been struck!
+BASHER_2 directs an attack toward BRAN SEVENFINGER
+BASHER_2 pounds at BRAN SEVENFINGER's torso with her morningstar
+BASHER_2 whiffs completely
+BASHER_2 sizes up BRAN SEVENFINGER carefully
+BASHER_2 bludgeons BRAN SEVENFINGER's torso with her morningstar
+BASHER_2's morningstar crashes into BRAN SEVENFINGER's torso!
+   The resulting crunch echoes through the BLOODSPIRE!
+BRAN SEVENFINGER makes an explosive assault on BASHER_2's rib cage with her war flail
+The blow connects!
+BRAN SEVENFINGER's war flail lashes into BASHER_2's chest!
+   A devastating strike!
+Someone in the upper rows throws a piece of bread
+BRAN SEVENFINGER drives suddenly forward, war flail whistling through the air
+BRAN SEVENFINGER tries to demolish BASHER_2's chest with her war flail
+BRAN SEVENFINGER's blow barely grazes BASHER_2!
+
+MINUTE 2
+The fight remains stubbornly even, with neither warrior conceding ground.
+
+BASHER_2 hammers at BRAN SEVENFINGER's midsection with her morningstar
+The blow connects!
+BASHER_2's morningstar crunches into BRAN SEVENFINGER's torso!
+   The blow lands with bone-breaking force!
+BRAN SEVENFINGER goes crashing to the ground!
+*** BRAN SEVENFINGER has been permanently injured in the head!!! ***
+BRAN SEVENFINGER's skull wound weeps blood!
+BRAN SEVENFINGER's vision swims from the head wound!!
+BASHER_2 sizes up BRAN SEVENFINGER carefully
+BASHER_2 smashes at BRAN SEVENFINGER's torso with her morningstar
+BASHER_2's morningstar smashes into BRAN SEVENFINGER's torso!
+   Barely a scratch!
+BASHER_2 tries to hit the mighty BRAN SEVENFINGER
+BASHER_2 pounds at BRAN SEVENFINGER's midsection with her morningstar
+BASHER_2 barely gets past BRAN SEVENFINGER's defenses!
+BASHER_2's morningstar crashes into BRAN SEVENFINGER's armor!
+   An absolutely monstrous blow!
+*** BRAN SEVENFINGER's skull takes a terrible wound!!! ***
+BRAN SEVENFINGER's skull wound weeps blood!
+BRAN SEVENFINGER's vision swims from the head wound!!
+BRAN SEVENFINGER calls out for quarter!
+The crowd screams for blood, but the ref steps in!
+
+BASHER_2 stands victorious over the fallen BRAN SEVENFINGER!
+
+BRAN SEVENFINGER has trained in Skill

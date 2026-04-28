@@ -1,0 +1,152 @@
+Fight #43
+Stress Team Turn 9  vs  The Grim Shields
+============================================================================
+
+============================================================================
+HYBRID_1 (2-0-1)   vs   BRUL THE BLOODY (1-0-0)
+STRESS TEAM TURN 9 (STRESS TESTER)   vs   THE GRIM SHIELDS (GRIM EYE)
+Dwarf Male   vs   Tabaxi Male
+============================================================================
+
+HYBRID_1 is 4'1"
+HYBRID_1 weighs 187 lbs.
+HYBRID_1 Popular With The Kids.
+HYBRID_1 enters the arena unarmored and wears no helm.
+HYBRID_1 fights using a BATTLE AXE.
+
+BRUL THE BLOODY is 5'7"
+BRUL THE BLOODY weighs 165 lbs.
+BRUL THE BLOODY Known To The Crowd.
+BRUL THE BLOODY enters the arena in LEATHER and will wear a STEEL CAP.
+BRUL THE BLOODY fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The Blood Master raises his fist — the fight begins!
+HYBRID_1 chops at BRUL THE BLOODY's body with his battle axe
+HYBRID_1's battle axe cuts only air
+HYBRID_1 sizes up BRUL THE BLOODY carefully
+HYBRID_1 swings at BRUL THE BLOODY's midsection with his battle axe
+BRUL THE BLOODY makes an extraordinary effort, and parries the strike!
+BRUL THE BLOODY cuts at HYBRID_1's torso with his short sword
+The short sword finds its mark!
+BRUL THE BLOODY's short sword bites into HYBRID_1's ribs!
+   The blow has real authority behind it!
+HYBRID_1 cleaves at BRUL THE BLOODY's body with his battle axe
+BRUL THE BLOODY's guard holds firm!
+The powerful Cleave strike cleaves through the parry! BRUL THE BLOODY takes 9 damage!
+Someone in the upper rows throws a piece of bread
+HYBRID_1 chops at BRUL THE BLOODY's torso with his battle axe
+BRUL THE BLOODY's guard holds firm!
+The powerful Cleave strike cleaves through the parry! BRUL THE BLOODY takes 9 damage!
+BRUL THE BLOODY thrusts at HYBRID_1's chest with his short sword
+HYBRID_1 makes a desperate last-moment parry!
+BRUL THE BLOODY thrusts at HYBRID_1's torso with his short sword
+HYBRID_1 catches the weapon and deflects it cleanly!
+BRUL THE BLOODY directs an attack toward HYBRID_1
+BRUL THE BLOODY hacks at HYBRID_1's torso with his short sword
+HYBRID_1 is paying special attention to not being hit there!
+BRUL THE BLOODY cuts at HYBRID_1's sternum with his short sword
+BRUL THE BLOODY's short sword finds HYBRID_1's breastplate!
+   The blow does almost nothing
+
+MINUTE 2
+HYBRID_1 is firmly in control of the action.
+
+HYBRID_1 swings at BRUL THE BLOODY's midsection with his battle axe
+BRUL THE BLOODY's guard holds firm!
+BRUL THE BLOODY slashes at HYBRID_1's rib cage with his short sword
+BRUL THE BLOODY's short sword slices into HYBRID_1's chest!
+   The blow does almost nothing
+HYBRID_1 cleaves at BRUL THE BLOODY's body with his battle axe
+HYBRID_1's battle axe cleaves into BRUL THE BLOODY's torso!
+   The blow does almost nothing
+HYBRID_1 hacks at BRUL THE BLOODY's torso with his battle axe
+HYBRID_1's blow barely grazes BRUL THE BLOODY!
+BRUL THE BLOODY slices at HYBRID_1's torso with his short sword
+BRUL THE BLOODY's short sword slices into HYBRID_1's breastplate!
+   The resulting crunch echoes through the BLOODSPIRE!
+HYBRID_1 cleaves at BRUL THE BLOODY's body with his battle axe
+BRUL THE BLOODY has a plan: don't get hit!
+The powerful Cleave strike cleaves through the parry! BRUL THE BLOODY takes 9 damage!
+The pit bell rings early — it must be a mistake
+BRUL THE BLOODY drives a blow toward HYBRID_1's rib cage with his short sword
+The short sword finds its mark!
+BRUL THE BLOODY's short sword cuts into HYBRID_1's chest!
+   A solid blow has been struck!
+BRUL THE BLOODY slices at HYBRID_1's chest with his short sword
+BRUL THE BLOODY's short sword slices into HYBRID_1's torso!
+   Some damage is done
+BRUL THE BLOODY tries to hit the mighty HYBRID_1
+BRUL THE BLOODY slices at HYBRID_1's rib cage with his short sword
+The short sword finds its mark!
+BRUL THE BLOODY's short sword finds HYBRID_1's breastplate!
+   Some damage is done
+
+MINUTE 3
+HYBRID_1 has started to gain the upper hand, though the fight remains close.
+
+HYBRID_1 swings at BRUL THE BLOODY's midsection with his battle axe
+BRUL THE BLOODY is ready for the strike, and deftly parries it!
+BRUL THE BLOODY thrusts at HYBRID_1's chest with his short sword
+The short sword finds its mark!
+BRUL THE BLOODY's short sword bites into HYBRID_1's chest!
+   The armor does its job admirably
+HYBRID_1 hacks at BRUL THE BLOODY's body with his battle axe
+BRUL THE BLOODY makes a desperate last-moment parry!
+HYBRID_1 swings at BRUL THE BLOODY's midsection with his battle axe
+HYBRID_1's battle axe punches into BRUL THE BLOODY's armor!
+   The blow glances harmlessly off!
+BRUL THE BLOODY directs an attack toward HYBRID_1
+BRUL THE BLOODY cuts at HYBRID_1's torso with his short sword
+BRUL THE BLOODY's short sword cuts into HYBRID_1's ribs!
+   The blow does almost nothing
+HYBRID_1 cleaves at BRUL THE BLOODY's body with his battle axe
+BRUL THE BLOODY is ready for the strike, and deftly parries it!
+BRUL THE BLOODY sizes up HYBRID_1 carefully
+BRUL THE BLOODY hacks at HYBRID_1's torso with his short sword
+HYBRID_1 is ready for the strike, and deftly parries it!
+BRUL THE BLOODY directs an attack toward HYBRID_1
+BRUL THE BLOODY slices at HYBRID_1's chest with his short sword
+HYBRID_1 is paying special attention to not being hit there!
+BRUL THE BLOODY sizes up HYBRID_1 carefully
+BRUL THE BLOODY drives a blow toward HYBRID_1's chest with his short sword
+BRUL THE BLOODY's short sword finds HYBRID_1's breastplate!
+   The armor absorbs most of it
+HYBRID_1 calls out for quarter!
+HYBRID_1 must fight on, or die trying!
+
+MINUTE 4
+The momentum swings back and forth, with no clear leader emerging.
+
+BRUL THE BLOODY sizes up HYBRID_1 carefully
+BRUL THE BLOODY drives a blow toward HYBRID_1's rib cage with his short sword
+The blow connects!
+BRUL THE BLOODY's short sword finds HYBRID_1's torso!
+   The blow has real authority behind it!
+HYBRID_1 appeals to the Blood Master for mercy!
+The Blood Master shows no mercy today!
+HYBRID_1 sizes up BRUL THE BLOODY carefully
+HYBRID_1 swings at BRUL THE BLOODY's body with his battle axe
+BRUL THE BLOODY barely gets the parry off!
+HYBRID_1 hacks at BRUL THE BLOODY's body with his battle axe
+BRUL THE BLOODY barely gets the parry off!
+BRUL THE BLOODY slices at HYBRID_1's breast with his short sword
+BRUL THE BLOODY gets past HYBRID_1's guard!
+BRUL THE BLOODY's short sword cuts into HYBRID_1's ribs!
+   A telling hit!
+*** HYBRID_1's chest is grievously wounded!!! ***
+HYBRID_1's chest wound bleeds freely!
+HYBRID_1 gasps for air, ribs grinding painfully!!
+HYBRID_1 has perished in the BLOODSPIRE!!!
+
+BRUL THE BLOODY stands victorious over the fallen HYBRID_1!
+
+BRUL THE BLOODY has trained in nothing

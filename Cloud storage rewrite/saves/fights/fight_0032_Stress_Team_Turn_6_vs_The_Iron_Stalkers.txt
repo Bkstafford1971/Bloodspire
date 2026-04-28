@@ -1,0 +1,108 @@
+Fight #32
+Stress Team Turn 6  vs  The Iron Stalkers
+============================================================================
+
+============================================================================
+HYBRID_2 (0-1-0)   vs   BRAN SEVENFINGER (3-1-1)
+STRESS TEAM TURN 6 (STRESS TESTER)   vs   THE IRON STALKERS (DARK FIST)
+Human Male   vs   Half-Orc Female
+============================================================================
+
+HYBRID_2 is 5'7"
+HYBRID_2 weighs 165 lbs.
+HYBRID_2 Known To The Crowd.
+HYBRID_2 enters the arena unarmored and wears no helm.
+HYBRID_2 fights using a LONG SWORD.
+
+BRAN SEVENFINGER is 5'9"
+BRAN SEVENFINGER weighs 216 lbs.
+BRAN SEVENFINGER Known To The Crowd.
+BRAN SEVENFINGER enters the arena in CLOTH and will wear a LEATHER CAP.
+BRAN SEVENFINGER fights using a WAR FLAIL.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+A hush falls over the arena
+BRAN SEVENFINGER whips at HYBRID_2's rib cage with her war flail
+HYBRID_2 is paying special attention to not being hit there!
+BRAN SEVENFINGER flails at HYBRID_2's breast with her war flail
+BRAN SEVENFINGER's war flail wraps around and cracks into HYBRID_2's ribs!
+   That one will leave a mark!
+HYBRID_2 hacks at BRAN SEVENFINGER's body with his long sword
+HYBRID_2's accuracy is rewarded!
+HYBRID_2's long sword cuts into BRAN SEVENFINGER's armor!
+   The blow has real authority behind it!
+BRAN SEVENFINGER hurls herself forward with reckless abandon
+BRAN SEVENFINGER tries to demolish HYBRID_2's rib cage with her war flail
+BRAN SEVENFINGER's blow barely grazes HYBRID_2!
+BRAN SEVENFINGER savagely attacks HYBRID_2's torso with her war flail
+BRAN SEVENFINGER gets past HYBRID_2's guard!
+BRAN SEVENFINGER's war flail crashes into HYBRID_2's breastplate!
+   The strike lands with flesh-splattering fury!
+HYBRID_2 plummets downward with great speed!!
+*** HYBRID_2's chest is grievously wounded!!! ***
+HYBRID_2 clutches at his chest!
+HYBRID_2 gasps for air, ribs grinding painfully!!
+BRAN SEVENFINGER hacks away at HYBRID_2's sternum with her war flail
+The blow connects!
+BRAN SEVENFINGER's war flail wraps around and cracks into HYBRID_2's ribs!
+   The crowd winces at the sound of that blow!
+HYBRID_2 calls out for quarter!
+The Blood Master shows no mercy today!
+HYBRID_2 thrusts at BRAN SEVENFINGER's midsection with his long sword
+HYBRID_2's accuracy is rewarded!
+HYBRID_2's long sword slices into BRAN SEVENFINGER's body!
+   Some damage is done
+Money changes hands rapidly in the betting stands
+HYBRID_2 cuts at BRAN SEVENFINGER's body with his long sword
+HYBRID_2 barely gets past BRAN SEVENFINGER's defenses!
+HYBRID_2's long sword bites into BRAN SEVENFINGER's torso!
+   Some damage is done
+HYBRID_2 tries to hit the mighty BRAN SEVENFINGER
+HYBRID_2 slashes at BRAN SEVENFINGER's midsection with his long sword
+HYBRID_2's accuracy is rewarded!
+HYBRID_2's long sword slices into BRAN SEVENFINGER's armor!
+   The armor absorbs most of it
+
+MINUTE 2
+The gap between the two warriors is widening rapidly.
+
+HYBRID_2 gets up, shaken but ready
+HYBRID_2 thrusts at BRAN SEVENFINGER's torso with his long sword
+HYBRID_2 gets past BRAN SEVENFINGER's guard!
+HYBRID_2's long sword cuts into BRAN SEVENFINGER's torso!
+   The blow does almost nothing
+HYBRID_2 slices at BRAN SEVENFINGER's midsection with his long sword
+HYBRID_2's blow barely grazes BRAN SEVENFINGER!
+HYBRID_2 sizes up BRAN SEVENFINGER carefully
+HYBRID_2 thrusts at BRAN SEVENFINGER's midsection with his long sword
+HYBRID_2 gets past BRAN SEVENFINGER's guard!
+HYBRID_2's long sword bites into BRAN SEVENFINGER's torso!
+   The armor does its job admirably
+HYBRID_2 steps threateningly close to the stalwart BRAN SEVENFINGER
+HYBRID_2 drives a blow toward BRAN SEVENFINGER's torso with his long sword
+HYBRID_2's long sword cuts into BRAN SEVENFINGER's armor!
+   Barely a scratch!
+A vendor drops his tray with a tremendous crash
+BRAN SEVENFINGER flails at HYBRID_2's rib cage with her war flail
+BRAN SEVENFINGER's war flail wraps around and cracks into HYBRID_2's chest!
+   A solid blow has been struck!
+HYBRID_2 appeals to the Blood Master for mercy!
+The crowd screams for blood — mercy is denied!
+BRAN SEVENFINGER savagely attacks HYBRID_2's rib cage with her war flail
+BRAN SEVENFINGER gets past HYBRID_2's guard!
+BRAN SEVENFINGER's war flail crashes into HYBRID_2's torso!
+   A devastating strike!
+HYBRID_2 crashes to the arena floor!
+The HYBRID_2 is dead. The crowd erupts!!!
+
+BRAN SEVENFINGER stands victorious over the fallen HYBRID_2!
+
+BRAN SEVENFINGER has trained in nothing

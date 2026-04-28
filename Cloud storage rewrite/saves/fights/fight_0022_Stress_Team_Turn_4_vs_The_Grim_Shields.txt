@@ -1,0 +1,121 @@
+Fight #22
+Stress Team Turn 4  vs  The Grim Shields
+============================================================================
+
+============================================================================
+CLEAVER_2 (1-0-1)   vs   FEN THE CRUSHER (2-0-0)
+STRESS TEAM TURN 4 (STRESS TESTER)   vs   THE GRIM SHIELDS (GRIM EYE)
+Dwarf Female   vs   Tabaxi Female
+============================================================================
+
+CLEAVER_2 is 3'10"
+CLEAVER_2 weighs 151 lbs.
+CLEAVER_2 Popular With The Kids.
+CLEAVER_2 enters the arena unarmored and wears no helm.
+CLEAVER_2 fights using a GREAT AXE.
+
+FEN THE CRUSHER is 5'3"
+FEN THE CRUSHER weighs 134 lbs.
+FEN THE CRUSHER Known To The Crowd.
+FEN THE CRUSHER enters the arena in LEATHER and will wear a STEEL CAP.
+FEN THE CRUSHER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The afternoon sun beats down on the bloodstained sand
+FEN THE CRUSHER sizes up CLEAVER_2 carefully
+FEN THE CRUSHER thrusts at CLEAVER_2's torso with her short sword
+CLEAVER_2 barely gets the parry off!
+FEN THE CRUSHER steps threateningly close to the stalwart CLEAVER_2
+FEN THE CRUSHER drives a blow toward CLEAVER_2's torso with her short sword
+FEN THE CRUSHER's blow barely grazes CLEAVER_2!
+FEN THE CRUSHER cuts at CLEAVER_2's torso with her short sword
+The blow connects!
+FEN THE CRUSHER's short sword finds CLEAVER_2's body!
+   The resulting crunch echoes through the BLOODSPIRE!
+CLEAVER_2 steps threateningly close to the tenacious FEN THE CRUSHER
+CLEAVER_2 swings at FEN THE CRUSHER's midsection with her great axe
+CLEAVER_2's great axe chops into FEN THE CRUSHER's body!
+   Blood sprays through the air!
+Half the crowd rises to their feet in anticipation!
+FEN THE CRUSHER hacks at CLEAVER_2's body with her short sword
+The short sword finds its mark!
+FEN THE CRUSHER's short sword finds CLEAVER_2's torso!
+   The blow glances harmlessly off!
+CLEAVER_2 directs an attack toward FEN THE CRUSHER
+CLEAVER_2 swings at FEN THE CRUSHER's midsection with her great axe
+FEN THE CRUSHER makes an extraordinary effort, and parries the strike!
+CLEAVER_2 hacks at FEN THE CRUSHER's body with her great axe
+FEN THE CRUSHER barely gets the parry off!
+FEN THE CRUSHER tries to hit the mighty CLEAVER_2
+FEN THE CRUSHER slashes at CLEAVER_2's midsection with her short sword
+The blow connects!
+FEN THE CRUSHER's short sword slices into CLEAVER_2's armor!
+   The resulting crunch echoes through the BLOODSPIRE!
+
+MINUTE 2
+CLEAVER_2 has started to gain the upper hand, though the fight remains close.
+
+Half the crowd rises to their feet in anticipation!
+FEN THE CRUSHER drives a blow toward CLEAVER_2's body with her short sword
+CLEAVER_2 just manages to deflect the blow!
+CLEAVER_2 directs an attack toward FEN THE CRUSHER
+CLEAVER_2 hacks at FEN THE CRUSHER's midsection with her great axe
+FEN THE CRUSHER's guard holds firm!
+CLEAVER_2 swings at FEN THE CRUSHER's midsection with her great axe
+FEN THE CRUSHER catches the weapon and deflects it cleanly!
+CLEAVER_2 chops at FEN THE CRUSHER's torso with her great axe
+FEN THE CRUSHER has a plan: don't get hit!
+The announcer's voice cracks with excitement
+FEN THE CRUSHER cuts at CLEAVER_2's body with her short sword
+CLEAVER_2 barely gets the parry off!
+FEN THE CRUSHER sizes up CLEAVER_2 carefully
+FEN THE CRUSHER drives a blow toward CLEAVER_2's torso with her short sword
+CLEAVER_2 makes a desperate last-moment parry!
+FEN THE CRUSHER directs an attack toward CLEAVER_2
+FEN THE CRUSHER slashes at CLEAVER_2's body with her short sword
+CLEAVER_2 barely gets the parry off!
+FEN THE CRUSHER thrusts at CLEAVER_2's body with her short sword
+FEN THE CRUSHER's short sword finds CLEAVER_2's body!
+   Some damage is done
+
+MINUTE 3
+CLEAVER_2 maintains the lead, but nothing is decided yet.
+
+CLEAVER_2 swings at FEN THE CRUSHER's body with her great axe
+FEN THE CRUSHER catches the weapon and deflects it cleanly!
+CLEAVER_2 swings at FEN THE CRUSHER's body with her great axe
+FEN THE CRUSHER turns the blow aside with skill!
+The powerful Cleave strike cleaves through the parry! FEN THE CRUSHER takes 12 damage!
+CLEAVER_2 cleaves at FEN THE CRUSHER's body with her great axe
+FEN THE CRUSHER has a plan: don't get hit!
+FEN THE CRUSHER drives a blow toward CLEAVER_2's torso with her short sword
+FEN THE CRUSHER gets past CLEAVER_2's guard!
+FEN THE CRUSHER's short sword cuts into CLEAVER_2's torso!
+   A solid blow has been struck!
+The torchbearers scramble to keep up with the action
+FEN THE CRUSHER slashes at CLEAVER_2's midsection with her short sword
+CLEAVER_2 makes an extraordinary effort, and parries the strike!
+FEN THE CRUSHER directs an attack toward CLEAVER_2
+FEN THE CRUSHER cuts at CLEAVER_2's torso with her short sword
+The short sword finds its mark!
+FEN THE CRUSHER's short sword cuts into CLEAVER_2's armor!
+   A solid blow has been struck!
+CLEAVER_2 calls out for quarter!
+The crowd screams for blood — mercy is denied!
+FEN THE CRUSHER hacks at CLEAVER_2's torso with her short sword
+FEN THE CRUSHER's short sword bites into CLEAVER_2's body!
+   A glancing blow!
+CLEAVER_2 calls out for quarter!
+CLEAVER_2 is spared by the grace of the Blood Master!
+
+FEN THE CRUSHER stands victorious over the fallen CLEAVER_2!
+
+FEN THE CRUSHER has trained in Skill

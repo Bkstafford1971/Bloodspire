@@ -1,0 +1,20 @@
+{
+  "ILNEVAL": {
+    "url": "http://localhost:8766",
+    "managerId": "4bb9cbbf",
+    "managerName": "Ilneval",
+    "password": "Tin@0302",
+    "lastUpload": "4/19/2026, 6:43:16 PM",
+    "lastDownload": "4/19/2026, 6:54:31 PM",
+    "lastTurnRan": 3
+  },
+  "NEMESIS": {
+    "url": "http://localhost:8766",
+    "managerId": "7b978d48",
+    "managerName": "Ilneval",
+    "password": "password",
+    "lastUpload": "4/8/2026, 10:14:58 PM",
+    "lastDownload": "4/8/2026, 10:16:20 PM",
+    "lastTurnRan": 37
+  }
+}

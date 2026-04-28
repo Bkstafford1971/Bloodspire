@@ -1,0 +1,239 @@
+Date: 04/02/2026
+Bloodspire Arena (1)
+Turn - 20
+
+The Top Teams
+
+#    CAREER STANDINGS               W   L   K      %   #    LAST 5 TURNS                   W   L   K
+====================================================================================================
+1     Grim's Reapers (9008)        73  32   7  69.5%   1     Grim's Reapers (9008)        20   5   2
+2     VESTIAN RAIDERS (12)         61  34   4  64.2%   2     The Scaled Horde (9014)      18   7   2
+3     Vexx's Vicious (9001)        67  38   3  63.8%   3     Corvina's Chosen (9010)      18   7   0
+4     The Scaled Horde (9014)      28  17   2  62.2%   4     House Voss (9007)            17   8   1
+5     Corvina's Chosen (9010)      63  42   0  60.0%   5     Splitskull Syndicate (9005)  15  10   3
+6     Stonecraft Academy (9013)    26  19   0  57.8%   6     Stonecraft Academy (9013)    14  11   0
+7     House Voss (9007)            60  45   1  57.1%   7     Vexx's Vicious (9001)        13  12   0
+8     The Learned Fists (9004)     59  46   1  56.2%   8     The Goblin Syndicate (9012)  13  12   0
+9     NEW RACES TESTERS (13)       23  22   0  51.1%   9     The Nimble Blades (9015)     12  13   0
+10    Splitskull Syndicate (9005)  52  53   7  49.5%   10    The Thornwall Guard (9003)   12  13   0
+11    Briarwood Brawlers (9006)    52  53   1  49.5%   11    Shadows of the Pit (9011)    11  14   1
+12    The Goblin Syndicate (9012)  22  23   0  48.9%   12    The Learned Fists (9004)     10  15   0
+13    The Nimble Blades (9015)     22  23   0  48.9%   13    Craw's Crushers (9002)        9  16   0
+14    Craw's Crushers (9002)       42  63   6  40.0%   14    Briarwood Brawlers (9006)     8  17   1
+15    The Thornwall Guard (9003)   42  63   1  40.0%   15    The Quickblades (9009)        6  19   1
+16    The Iron Vanguard (9000)     35  70   0  33.3%   16    The Iron Vanguard (9000)      6  19   0
+17    Shadows of the Pit (9011)    34  71   4  32.4%   17    VESTIAN RAIDERS (12)          3   2   0
+18    The Quickblades (9009)       28  77   1  26.7%   18    NEW RACES TESTERS (13)        1   4   0
+
+
+
+
+Arena Happenings
+
+     BLOODSPIRE ARENA doesn't announce when it's about to teach someone a lesson.  It just waits for confidence to turn into error.  This turn was no exception.  GRANIUS exemplified this when they faced MALACHAR, ending the bout in under 4 minutes with a clarity that left no room for argument.  Such decisive wins earn memory, and 83 recognition to mark the occasion.
+     Vexx's Vicious walked into this turn with momentum on their side, and their 4-1-0 showing left them climbing the standings.  Decisions that held up under pressure separated them from the pretenders.    GRANIUS dispatched MALACHAR in decisive fashion, with the kind of technical certainty that forces rivals to reconsider their approach.    INELUKI dispatched ILAELITH in decisive fashion, with the kind of technical certainty that forces rivals to reconsider their approach.
+     Those who watched the longer bouts — stretching past the twentieth minute — saw a different type of contest surface.  STONEDRA and RAGNAR provided evidence that grinding persistence often matters more than early brilliance in BLOODSPIRE ARENA.  The throne remains occupied by DORIAN, who endured another turn without displacement.  Consistency in this arena proves more dangerous than spectacle, and the crowds grow restless under such discipline.
+     The Dark Arena claimed PHAEDRA this turn.  A career record of 0-0-0 carries weight until the moment it does not.  DORIAN provided the final statement, and BLOODSPIRE ARENA moved on as it always does — swiftly, without sentiment.
+     I'll raise a glass to the survivors.  The rest are beyond complaint.  Until next time — Horst Veyne, Pit Press Weekly
+
+
+
+CHAMPION
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Dorian                  16   4   3   99  Grim's Reapers (9008)
+
+ELITES
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Warfang                 20   1   2   99  Craw's Crushers (9002)
+Raelindra               19   1   1   99  The Learned Fists (9004)
+INELUKI                 18   1   2   99  VESTIAN RAIDERS (12)
+Wardrek                 18   2   2   99  Grim's Reapers (9008)
+JARNAUGA                17   2   2   99  VESTIAN RAIDERS (12)
+Ilaelith                18   3   0   99  Vexx's Vicious (9001)
+Jawrak                  18   3   2   99  Splitskull Syndicate (9005)
+Rocklock                17   4   0   99  Corvina's Chosen (9010)
+Heloise                 17   4   0   99  Corvina's Chosen (9010)
+Wendell                 16   5   0   99  House Voss (9007)
+Emberfist               16   5   2   99  Grim's Reapers (9008)
+Aeltharion              16   5   2   99  Shadows of the Pit (9011)
+Elawyn                  13   6   0   99  The Learned Fists (9004)
+Úravorn                 14   7   1   99  Vexx's Vicious (9001)
+Moldrak                 13   8   0   99  Corvina's Chosen (9010)
+Caelan                  11  10   1   99  House Voss (9007)
+Oravel                  15   6   0   95  House Voss (9007)
+Faenara                 13   8   1   93  The Quickblades (9009)
+Brenniel                13   8   0   91  Vexx's Vicious (9001)
+Ardith                  11   8   3   91  Splitskull Syndicate (9005)
+Goldvein                11   1   1   86  The Thornwall Guard (9003)
+Malachar                 9  12   0   84  Grim's Reapers (9008)
+GRANIUS                 13   6   0   83  VESTIAN RAIDERS (12)
+Briar                    9   0   0   77  The Goblin Syndicate (9012)
+Jurka                    9   0   0   77  The Scaled Horde (9014)
+Vaelindor                9   2   1   76  Shadows of the Pit (9011)
+Wort                    10  11   0   76  Briarwood Brawlers (9006)
+Oravel                  13   8   0   75  The Learned Fists (9004)
+Deirdre                 11  10   0   72  Briarwood Brawlers (9006)
+Thalassa                11  10   0   70  Briarwood Brawlers (9006)
+Soren                   11   9   0   68  The Iron Vanguard (9000)
+Osric                    9   0   0   67  Stonecraft Academy (9013)
+Hammerfist              10  11   0   67  The Thornwall Guard (9003)
+
+VETERANS
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Saelwyn                  7  11   0   61  The Learned Fists (9004)
+Nereth                  10  11   0   60  Corvina's Chosen (9010)
+Imogen                   9   3   0   58  Grim's Reapers (9008)
+Stonedra                10  11   0   58  The Thornwall Guard (9003)
+Pounce                   8   1   0   57  The Nimble Blades (9015)
+Calista                  6  15   0   57  Corvina's Chosen (9010)
+
+ADEPTS
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Krekath                  8   1   1   56  The Scaled Horde (9014)
+Caelindra                8   2   1   54  Vexx's Vicious (9001)
+Navar                    5   4   0   54  Stonecraft Academy (9013)
+PROXIMA                 10   9   0   54  VESTIAN RAIDERS (12)
+PUMYRA                   7   2   0   52  NEW RACES TESTERS (13)
+SLYTHE                   7   2   0   50  NEW RACES TESTERS (13)
+Wendell                  8  13   0   50  Splitskull Syndicate (9005)
+Galwyn                   8  13   0   47  Vexx's Vicious (9001)
+TRAVELOCITY              5   4   0   46  NEW RACES TESTERS (13)
+Úravîn                   4   7   0   46  Shadows of the Pit (9011)
+Oraelwyn                 6   0   0   45  House Voss (9007)
+Orivaelith               3  18   0   45  The Quickblades (9009)
+Onyx                     6   3   0   44  The Nimble Blades (9015)
+Daraveth                 4   6   0   44  The Quickblades (9009)
+Evander                  4   2   1   43  Splitskull Syndicate (9005)
+Ivar                     6  15   0   42  The Thornwall Guard (9003)
+Crushfang                4   5   1   41  The Scaled Horde (9014)
+Orak                     6  15   0   41  The Iron Vanguard (9000)
+Gribble                  4   5   0   40  The Goblin Syndicate (9012)
+Gorrak                   5   3   0   38  Craw's Crushers (9002)
+Yruuka                   4  17   1   37  Craw's Crushers (9002)
+Ragnar                   5  16   0   36  The Iron Vanguard (9000)
+Krenasha                 4   5   0   35  The Scaled Horde (9014)
+
+INITIATES
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Spitz                    4   5   0   33  The Nimble Blades (9015)
+Olla                     4  17   0   33  The Quickblades (9009)
+Cora                     4   5   0   32  The Goblin Syndicate (9012)
+Blitza                   3   6   0   32  The Goblin Syndicate (9012)
+Dirk                     3   6   0   32  The Nimble Blades (9015)
+Elspeth                  5   4   0   30  Stonecraft Academy (9013)
+GOBBY                    3   6   0   29  NEW RACES TESTERS (13)
+Berwyn                   3  18   0   29  The Thornwall Guard (9003)
+Ylva                     3   6   0   28  Stonecraft Academy (9013)
+Vrakesh                  3   6   0   25  The Scaled Horde (9014)
+Rruk                     2   4   0   24  The Iron Vanguard (9000)
+
+ROOKIES
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Erevan                   1   6   1   22  Craw's Crushers (9002)
+Rose                     1  11   0   20  The Quickblades (9009)
+Pruska                   0  12   0   18  Splitskull Syndicate (9005)
+Gunka                    1   8   0   17  The Nimble Blades (9015)
+Hessa                    1   5   1   16  Briarwood Brawlers (9006)
+Ashrok                   1   6   0   16  The Iron Vanguard (9000)
+Uglak                    0   7   0   14  Craw's Crushers (9002)
+Maethoron                0   9   0    8  Shadows of the Pit (9011)
+
+RECRUITS
+NAME                     W   L   K  REC  TEAM
+======================================================================
+PANTHRO                  1   4   0   17  VESTIAN RAIDERS (12)
+Brennan                  1   3   0   15  Stonecraft Academy (9013)
+Yalawyn                  2   0   0   10  House Voss (9007)
+RAT FACE                 1   2   0    7  NEW RACES TESTERS (13)
+Caelindra                0   2   0    3  The Learned Fists (9004)
+Galadriela               0   2   0    3  Shadows of the Pit (9011)
+Corwin                   0   0   0    0  Briarwood Brawlers (9006)
+Velta                    0   0   0    0  The Goblin Syndicate (9012)
+'-' denotes a warrior who did not fight this turn.
+
+
+
+THE DEAD
+NAME                     W   L   K  TEAM                    SLAIN BY               TURN
+===========================================================================
+Phaedra                  0   0   0  Briarwood Brawlers      Dorian                   20
+Lyle                     0   0   0  The Goblin Syndicate    Evander                  20
+
+
+
+LAST TURN'S FIGHTS
+===========================================================================
+GRANIUS defeated Malachar in a 4 minute hard-fought rivalry fight.
+Yalawyn defeated PANTHRO in a 8 minute action-packed rivalry fight.
+INELUKI outlasted Ilaelith in a 1 minute crushing rivalry fight.
+JARNAUGA outlasted Ivar in a 7 minute hard-fought rivalry fight.
+Saelwyn bested PROXIMA in a 10 minute action-packed rivalry fight.
+Vrakesh bested TRAVELOCITY in a 11 minute brutal rivalry fight.
+Gorrak overcame SLYTHE in a 7 minute contested rivalry fight.
+Ylva vanquished GOBBY in a 10 minute action-packed rivalry fight.
+Galadriela bested RAT FACE in a 1 minute crushing rivalry fight.
+PUMYRA vanquished Cora in a 3 minute clean rivalry fight.
+Erevan overcame Rruk in a 4 minute spirited rivalry fight.
+Faenara vanquished Orak in a 3 minute clean rivalry fight.
+Soren overcame Phaedra in a 6 minute hard-fought rivalry fight.
+Brenniel defeated Jawrak in a 2 minute solid rivalry fight.
+Dorian overcame Úravorn in a 2 minute competent rivalry fight.
+Moldrak overcame Yruuka in a 6 minute hard-fought rivalry fight.
+Oravel overcame Hammerfist in a 10 minute brutal rivalry fight.
+Goldvein defeated Caelindra in a 10 minute drawn-out rivalry fight.
+Stonedra bested Ragnar in a 30 minute drawn-out rivalry fight.
+Olla vanquished Berwyn in a 12 minute brutal rivalry fight.
+Oravel vanquished Thalassa in a 10 minute brutal rivalry fight.
+Deirdre overcame Galwyn in a 5 minute contested rivalry fight.
+Aeltharion outlasted Caelan in a 1 minute crushing rivalry fight.
+Elawyn outlasted Orivaelith in a 1 minute crushing rivalry fight.
+Elspeth bested Gribble in a 2 minute competent rivalry fight.
+Krekath defeated Blitza in a 5 minute contested rivalry fight.
+Lyle was slain by Evander in a 1 minute one-sided rivalry fight.
+Briar defeated Daraveth in a 2 minute clean rivalry fight.
+Vaelindor vanquished Crushfang in a 1 minute decisive rivalry fight.
+Navar overcame Krenasha in a 10 minute brutal rivalry fight.
+Jurka vanquished Ashrok in a 9 minute action-packed rivalry fight.
+Úravîn vanquished Gunka in a 2 minute competent rivalry fight.
+
+
+
+                      BATTLE REPORT
+
+    MOST POPULAR RACE                 RECORD DURING THE LAST 10 TURNS
+===========================================================================
+|RACE             FIGHTS  RACE                  W -    L -    K  PERCENT|
+===========================================================================
+|Human                401  Human               199 -  202 -   10      49%|
+|Elf                  176  Elf                 108 -   68 -    9      61%|
+|Half-Elf             171  Half-Elf            108 -   63 -    0      63%|
+|Half-Orc             161  Half-Orc             86 -   75 -    8      53%|
+|Dwarf                137  Dwarf                95 -   42 -    5      69%|
+|Halfling              72  Halfling             28 -   44 -    0      38%|
+|Goblin                57  Goblin               19 -   38 -    0      33%|
+|Lizardfolk            36  Lizardfolk           22 -   14 -    1      61%|
+|Tabaxi                32  Tabaxi               22 -   10 -    0      68%|
+|Gnome                  9  Gnome                 5 -    4 -    0      55%|
+===========================================================================
+
+
+                      TOP WARRIOR by RACE
+
+RACE          WARRIOR                      W   L  K  TEAM NAME
+===========================================================================
+Human         Dorian                      16   4  3  Grim's Reapers (9008)
+Elf           Raelindra                   19   1  1  The Learned Fists (9004)
+Half-Elf      Ilaelith                    18   3  0  Vexx's Vicious (9001)
+Half-Orc      Warfang                     20   1  2  Craw's Crushers (9002)
+Dwarf         Wardrek                     18   2  2  Grim's Reapers (9008)
+Halfling      Briar                        9   0  0  The Goblin Syndicate (9012)
+Goblin        Gribble                      4   5  0  The Goblin Syndicate (9012)
+Lizardfolk    Krekath                      8   1  1  The Scaled Horde (9014)
+Tabaxi        Pounce                       8   1  0  The Nimble Blades (9015)
+Gnome         TRAVELOCITY                  5   4  0  NEW RACES TESTERS (13)

@@ -1,0 +1,69 @@
+Fight #44
+Stress Team Turn 9  vs  The Iron Reapers
+============================================================================
+
+============================================================================
+HYBRID_3 (0-2-0)   vs   VORN SEVENFINGER (1-3-0)
+STRESS TEAM TURN 9 (STRESS TESTER)   vs   THE IRON REAPERS (STONE FANG)
+Elf Male   vs   Elf Female
+============================================================================
+
+HYBRID_3 is 5'1"
+HYBRID_3 weighs 125 lbs.
+HYBRID_3 Known To The Crowd.
+HYBRID_3 enters the arena unarmored and wears no helm.
+HYBRID_3 fights using a SHORT SWORD.
+
+VORN SEVENFINGER is 4'10"
+VORN SEVENFINGER weighs 122 lbs.
+VORN SEVENFINGER Known To The Crowd.
+VORN SEVENFINGER enters the arena in CLOTH and will wear a LEATHER CAP.
+VORN SEVENFINGER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+Dark clouds bode ill for the battle
+HYBRID_3 hacks at VORN SEVENFINGER's midsection with his short sword
+VORN SEVENFINGER has a plan: don't get hit!
+VORN SEVENFINGER relentlessly presses forward with her short sword
+VORN SEVENFINGER relentlessly targets HYBRID_3's torso with her short sword
+VORN SEVENFINGER finds the opening!
+VORN SEVENFINGER's short sword slices into HYBRID_3's chest armor!
+   A solid blow has been struck!
+HYBRID_3 tries to hit the mighty VORN SEVENFINGER
+HYBRID_3 slashes at VORN SEVENFINGER's body with his short sword
+The short sword finds its mark!
+HYBRID_3's short sword finds VORN SEVENFINGER's body!
+   The blow glances harmlessly off!
+HYBRID_3 cuts at VORN SEVENFINGER's torso with his short sword
+VORN SEVENFINGER makes an extraordinary effort, and parries the strike!
+HYBRID_3 slashes at VORN SEVENFINGER's midsection with his short sword
+VORN SEVENFINGER is ready for the strike, and deftly parries it!
+Someone boos the Elf, then sits very still hoping no one noticed
+VORN SEVENFINGER relentlessly presses forward with her short sword
+VORN SEVENFINGER attacks relentlessly at HYBRID_3's torso with her short sword
+VORN SEVENFINGER's accuracy is rewarded!
+VORN SEVENFINGER's short sword finds HYBRID_3's breastplate!
+   The blow has real authority behind it!
+HYBRID_3 plummets downward with great speed!!
+VORN SEVENFINGER hacks at HYBRID_3's chest with her short sword
+VORN SEVENFINGER's short sword finds HYBRID_3's ribs!
+   A minor hit!
+VORN SEVENFINGER hammers away with machine-like persistence
+VORN SEVENFINGER relentlessly targets HYBRID_3's torso with her short sword
+VORN SEVENFINGER barely gets past HYBRID_3's defenses!
+VORN SEVENFINGER's short sword finds HYBRID_3's ribs!
+   That one hurt badly!
+HYBRID_3 raises a hand in surrender!
+Mercy is granted — the fight is over!
+
+VORN SEVENFINGER is declared the winner!
+
+VORN SEVENFINGER has trained in Skill and Stat

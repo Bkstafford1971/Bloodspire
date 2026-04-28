@@ -1,0 +1,115 @@
+Date: 04/14/2026
+Bloodspire Arena (1)
+Turn - 0
+
+The Top Teams
+
+#    CAREER STANDINGS               W   L   K      %   #    LAST 5 TURNS                   W   L   K
+====================================================================================================
+1     Test Warriors (1)             5   0   0 100.0%   1     Test Warriors (1)             5   0   0
+2     The Wild Slayers (106)        7   1   0  87.5%   2     The Wild Slayers (106)        0   0   0
+3     The Iron Wolves (100)         8   2   2  80.0%   3     The Iron Wolves (100)         0   0   0
+4     The Grim Shields (105)        8   3   1  72.7%   4     The Grim Shields (105)        0   0   0
+5     The Iron Stalkers (103)       5   4   2  55.6%   5     The Iron Stalkers (103)       0   0   0
+6     The Iron Reapers (101)        4   8   0  33.3%   6     The Iron Reapers (101)        0   0   0
+7     The Grim Hammers (102)        0   1   0   0.0%   7     The Grim Hammers (102)        0   0   0
+8     The Crimson Reapers (104)     0   1   0   0.0%   8     The Crimson Reapers (104)     0   0   0
+9     The Dread Wolves (107)        0   2   0   0.0%   9     The Dread Wolves (107)        0   0   0
+
+
+
+
+Arena Happenings
+
+Managers entered this turn with plans.  Warriors entered with steel.  Only one of those things survived contact with reality in BLOODSPIRE ARENA.
+
+Nothing came easily for TEST WARRIORS this turn, and most things went wrong.  Their 5-0-0 reflected hesitant choices and punishment delivered on schedule.  Lessons were taught — whether anyone learned them remains to be seen.  Not everyone came out of this turn smiling.  THE DREAD WOLVES posted a 0-1-0 showing that the standings will remember even if the warriors prefer not to.  THE IRON STALKERS didn't top the board, but their 0-1-0 showing this turn was more instructive than the standings give credit for.  Fights are often decided before they begin, and THE IRON STALKERS is winning that preparation battle.  The scoreboard shows wins and losses.  What it doesn't show is which teams are trending in the right direction and which are sliding despite a respectable record.  In BLOODSPIRE ARENA, direction matters as much as position.
+
+Someone's going to challenge BASHER of TEST WARRIORS soon and discover they've made a bad decision.  After handling LIRA BONESNAP this turn and reaching 7 recognition, the gap between reputation and reality has officially closed.  Quietly and efficiently, CLEAVER of TEST WARRIORS put HELA THE FEARSOME down and climbed to 6 recognition.  The quiet ones are always the ones you didn't adjust for in time.  Victory rarely announces itself loudly in BLOODSPIRE ARENA.  ACROBAT overcame ORM BLACKHAND through patience and timing, not force, earning recognition through discipline rather than drama.  Few noticed at first — but many will remember.
+
+     Pull up a chair — there's more to unpack from this turn in BLOODSPIRE ARENA.  Holding the top spot is harder than taking it, and BASHER demonstrated why.  The throne remains occupied, and challengers are running out of excuses.
+
+Someone once asked me if I ever feel bad writing about losses.  I told them no.  They stopped asking me things after that, which I consider a personal victory.
+
+The turn closes.  The implications remain.  Until Turn 1 — Alarond the Scribe
+
+
+
+CHAMPION
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Basher                   1   0   0    7  Test Warriors (1)
+
+ROOKIES
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Fen the Crusher          5   1   0    0  The Grim Shields (105)
+Borak Smasher            5   1   0    0  The Wild Slayers (106)
+Bran Sevenfinger         4   2   2    0  The Iron Stalkers (103)
+Vorn Sevenfinger         3   3   0    0  The Iron Reapers (101)
+
+RECRUITS
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Cleaver                  1   0   0    6  Test Warriors (1)
+Acrobat                  1   0   0    6  Test Warriors (1)
+Striker                  1   0   0    6  Test Warriors (1)
+Slasher                  1   0   0    5  Test Warriors (1)
+Gara Sevenfinger         2   0   0    0  The Iron Wolves (100)
+Drok the Grim            5   0   2    0  The Iron Wolves (100)
+Brul the Bloody          3   0   1    0  The Grim Shields (105)
+Sven Skullcleave         2   0   0    0  The Wild Slayers (106)
+Lira Sevenfinger         1   1   0    0  The Iron Stalkers (103)
+Lira the Crusher         1   2   0    0  The Iron Wolves (100)
+Ulka Stonefist           0   1   0    0  The Iron Reapers (101)
+Lira Bonesnap            0   1   0    0  The Grim Hammers (102)
+Orm Blackhand            0   1   0    0  The Iron Stalkers (103)
+Ulka Ironhide            0   1   0    0  The Crimson Reapers (104)
+Petra Bonesnap           0   1   0    0  The Grim Shields (105)
+Hela the Fearsome        0   1   0    0  The Dread Wolves (107)
+Bran Skullcleave         0   1   0    0  The Dread Wolves (107)
+'-' denotes a warrior who did not fight this turn.
+
+
+
+LAST TURN'S FIGHTS
+===========================================================================
+Cleaver overcame Hela the Fearsome in a 4 minute hard-fought rivalry fight.
+Basher overcame Lira Bonesnap in a 3 minute solid rivalry fight.
+Slasher outlasted Ulka Ironhide in a 17 minute brutal rivalry fight.
+Acrobat outlasted Orm Blackhand in a 10 minute brutal rivalry fight.
+Striker bested Ulka Stonefist in a 6 minute spirited rivalry fight.
+
+
+
+                      BATTLE REPORT
+
+    MOST POPULAR RACE                 RECORD DURING THE LAST 10 TURNS
+===========================================================================
+|RACE             FIGHTS  RACE                  W -    L -    K  PERCENT|
+===========================================================================
+|Goblin                15  Goblin                9 -    6 -    0      60%|
+|Tabaxi                12  Tabaxi               10 -    2 -    1      83%|
+|Dwarf                 10  Dwarf                10 -    0 -    2     100%|
+|Elf                    8  Elf                   3 -    5 -    0      37%|
+|Half-Orc               7  Half-Orc              4 -    3 -    2      57%|
+|Gnome                  4  Gnome                 1 -    3 -    0      25%|
+|Half-Elf               2  Half-Elf              0 -    2 -    0       0%|
+|Halfling               1  Halfling              0 -    1 -    0       0%|
+|Lizardfolk             0  Lizardfolk            0 -    0 -    0       0%|
+===========================================================================
+
+
+                      TOP WARRIOR by RACE
+
+RACE          WARRIOR                      W   L  K  TEAM NAME
+===========================================================================
+Goblin        Borak Smasher                5   1  0  The Wild Slayers (106)
+Tabaxi        Fen the Crusher              5   1  0  The Grim Shields (105)
+Dwarf         Drok the Grim                5   0  2  The Iron Wolves (100)
+Elf           Vorn Sevenfinger             3   3  0  The Iron Reapers (101)
+Half-Orc      Bran Sevenfinger             4   2  2  The Iron Stalkers (103)
+Gnome         Lira Sevenfinger             1   1  0  The Iron Stalkers (103)
+Half-Elf      Borak the Relentless         0   0  0  The Iron Wolves (100)
+Halfling      Orm Ironhide                 0   0  0  The Iron Reapers (101)
+Lizardfolk    Gara the Fearsome            0   0  0  The Grim Shields (105)

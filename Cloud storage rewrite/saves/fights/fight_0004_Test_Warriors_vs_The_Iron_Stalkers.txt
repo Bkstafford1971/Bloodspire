@@ -1,0 +1,170 @@
+Fight #4
+Test Warriors  vs  The Iron Stalkers
+============================================================================
+
+============================================================================
+ACROBAT (0-0-0)   vs   LIRA SEVENFINGER (0-0-0)
+TEST WARRIORS (TEST MANAGER)   vs   THE IRON STALKERS (DARK FIST)
+Dwarf Male   vs   Gnome Male
+============================================================================
+
+ACROBAT is 3'7"
+ACROBAT weighs 144 lbs.
+ACROBAT Known To The Crowd.
+ACROBAT enters the arena unarmored and wears no helm.
+ACROBAT fights using a SHORT SWORD.
+
+LIRA SEVENFINGER is 5'3"
+LIRA SEVENFINGER weighs 146 lbs.
+LIRA SEVENFINGER Known To The Crowd.
+LIRA SEVENFINGER enters the arena in CLOTH and will wear a LEATHER CAP.
+LIRA SEVENFINGER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The torches flicker as a cold wind sweeps through the arena
+ACROBAT directs an attack toward LIRA SEVENFINGER
+ACROBAT thrusts at LIRA SEVENFINGER's torso with his short sword
+ACROBAT's blow barely grazes LIRA SEVENFINGER!
+ACROBAT cuts at LIRA SEVENFINGER's midsection with his short sword
+LIRA SEVENFINGER's defenses are particularly strong!
+ACROBAT slashes at LIRA SEVENFINGER's torso with his short sword
+ACROBAT's short sword finds LIRA SEVENFINGER's body!
+   The blow glances harmlessly off!
+LIRA SEVENFINGER tries to hit the mighty ACROBAT
+LIRA SEVENFINGER drives a blow toward ACROBAT's midsection with his short sword
+ACROBAT turns the blow aside with skill!
+LIRA SEVENFINGER steps threateningly close to the fearsome ACROBAT
+LIRA SEVENFINGER hacks at ACROBAT's midsection with his short sword
+LIRA SEVENFINGER's short sword slices into ACROBAT's body!
+   The blow does almost nothing
+The pit bell rings early — it must be a mistake
+LIRA SEVENFINGER drives a blow toward ACROBAT's torso with his short sword
+ACROBAT just manages to deflect the blow!
+
+MINUTE 2
+Nothing has changed — both combatants continue on level footing.
+
+LIRA SEVENFINGER tries to hit the mighty ACROBAT
+LIRA SEVENFINGER drives a blow toward ACROBAT's midsection with his short sword
+ACROBAT makes a desperate last-moment parry!
+LIRA SEVENFINGER steps threateningly close to the capable ACROBAT
+LIRA SEVENFINGER cuts at ACROBAT's torso with his short sword
+ACROBAT's defenses are particularly strong!
+ACROBAT tries to hit the mighty LIRA SEVENFINGER
+ACROBAT drives a blow toward LIRA SEVENFINGER's torso with his short sword
+ACROBAT's blow barely grazes LIRA SEVENFINGER!
+ACROBAT hacks at LIRA SEVENFINGER's midsection with his short sword
+ACROBAT's short sword slices into LIRA SEVENFINGER's armor!
+   The blow glances harmlessly off!
+ACROBAT thrusts at LIRA SEVENFINGER's midsection with his short sword
+LIRA SEVENFINGER's guard holds firm!
+Children in the stands look away, then look back
+LIRA SEVENFINGER tries to hit the mighty ACROBAT
+LIRA SEVENFINGER cuts at ACROBAT's torso with his short sword
+ACROBAT's guard holds firm!
+
+MINUTE 3
+While still competitive, ACROBAT seems just a step ahead.
+
+ACROBAT slices at LIRA SEVENFINGER's body with his short sword
+LIRA SEVENFINGER has a plan: don't get hit!
+ACROBAT tries to hit the mighty LIRA SEVENFINGER
+ACROBAT thrusts at LIRA SEVENFINGER's body with his short sword
+LIRA SEVENFINGER has a plan: don't get hit!
+ACROBAT tries to hit the mighty LIRA SEVENFINGER
+ACROBAT hacks at LIRA SEVENFINGER's body with his short sword
+ACROBAT's accuracy is rewarded!
+ACROBAT's short sword slices into LIRA SEVENFINGER's body!
+   A powerful hit draws screams from the crowd!
+LIRA SEVENFINGER tries to hit the mighty ACROBAT
+LIRA SEVENFINGER slices at ACROBAT's torso with his short sword
+ACROBAT catches the weapon and deflects it cleanly!
+Someone throws coins at the Dwarf — a tradition, apparently
+LIRA SEVENFINGER slashes at ACROBAT's body with his short sword
+LIRA SEVENFINGER's short sword bites into ACROBAT's torso!
+   Barely a scratch!
+LIRA SEVENFINGER tries to hit the mighty ACROBAT
+LIRA SEVENFINGER thrusts at ACROBAT's body with his short sword
+ACROBAT makes an extraordinary effort, and parries the strike!
+
+MINUTE 4
+ACROBAT continues to hold a narrow advantage.
+
+ACROBAT slashes at LIRA SEVENFINGER's midsection with his short sword
+LIRA SEVENFINGER just manages to deflect the blow!
+ACROBAT steps threateningly close to the relentless LIRA SEVENFINGER
+ACROBAT slashes at LIRA SEVENFINGER's body with his short sword
+ACROBAT's short sword cuts into LIRA SEVENFINGER's armor!
+   Barely a scratch!
+LIRA SEVENFINGER thrusts at ACROBAT's torso with his short sword
+ACROBAT's defenses are particularly strong!
+LIRA SEVENFINGER slashes at ACROBAT's body with his short sword
+ACROBAT turns the blow aside with skill!
+ACROBAT sizes up LIRA SEVENFINGER carefully
+ACROBAT slices at LIRA SEVENFINGER's torso with his short sword
+LIRA SEVENFINGER's defenses are particularly strong!
+LIRA SEVENFINGER sizes up ACROBAT carefully
+LIRA SEVENFINGER hacks at ACROBAT's body with his short sword
+ACROBAT is ready for the strike, and deftly parries it!
+
+MINUTE 5
+The slight edge remains with ACROBAT, though little has changed.
+
+ACROBAT tries to hit the mighty LIRA SEVENFINGER
+ACROBAT slashes at LIRA SEVENFINGER's body with his short sword
+ACROBAT's short sword cuts into LIRA SEVENFINGER's armor!
+   The blow lands without full force
+ACROBAT cuts at LIRA SEVENFINGER's midsection with his short sword
+LIRA SEVENFINGER makes a desperate last-moment parry!
+LIRA SEVENFINGER directs an attack toward ACROBAT
+LIRA SEVENFINGER slices at ACROBAT's body with his short sword
+ACROBAT has a plan: don't get hit!
+ACROBAT slashes at LIRA SEVENFINGER's midsection with his short sword
+ACROBAT's short sword finds LIRA SEVENFINGER's armor!
+   The armor absorbs most of it
+LIRA SEVENFINGER tries to hit the mighty ACROBAT
+LIRA SEVENFINGER hacks at ACROBAT's midsection with his short sword
+LIRA SEVENFINGER's short sword finds ACROBAT's torso!
+   The armor does its job admirably
+LIRA SEVENFINGER hacks at ACROBAT's torso with his short sword
+LIRA SEVENFINGER's short sword finds ACROBAT's body!
+   Barely a scratch!
+
+MINUTE 6
+ACROBAT is winning the fight.
+
+The torchbearers scramble to keep up with the action
+LIRA SEVENFINGER steps threateningly close to the fearsome ACROBAT
+LIRA SEVENFINGER slices at ACROBAT's torso with his short sword
+ACROBAT makes a desperate last-moment parry!
+ACROBAT slashes at LIRA SEVENFINGER's torso with his short sword
+LIRA SEVENFINGER makes an extraordinary effort, and parries the strike!
+LIRA SEVENFINGER sizes up ACROBAT carefully
+LIRA SEVENFINGER hacks at ACROBAT's torso with his short sword
+LIRA SEVENFINGER barely gets past ACROBAT's defenses!
+LIRA SEVENFINGER's short sword bites into ACROBAT's torso!
+   Barely a scratch!
+LIRA SEVENFINGER slices at ACROBAT's body with his short sword
+ACROBAT makes a desperate last-moment parry!
+ACROBAT cuts at LIRA SEVENFINGER's midsection with his short sword
+ACROBAT's blow barely grazes LIRA SEVENFINGER!
+A nobleman covers his eyes — then peeks through his fingers
+ACROBAT sizes up LIRA SEVENFINGER carefully
+ACROBAT slices at LIRA SEVENFINGER's midsection with his short sword
+ACROBAT gets past LIRA SEVENFINGER's guard!
+ACROBAT's short sword slices into LIRA SEVENFINGER's armor!
+   The resulting crunch echoes through the BLOODSPIRE!
+LIRA SEVENFINGER can fight no more and begs for mercy!
+LIRA SEVENFINGER is spared by the grace of the Blood Master!
+
+ACROBAT has won this affair of honor!
+
+LIRA SEVENFINGER has trained in Skill and Skill

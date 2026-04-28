@@ -1,0 +1,118 @@
+Fight #16
+Stress Team Turn 3  vs  The Iron Wolves
+============================================================================
+
+============================================================================
+STRIKER_1 (0-0-0)   vs   LIRA THE CRUSHER (0-1-0)
+STRESS TEAM TURN 3 (STRESS TESTER)   vs   THE IRON WOLVES (SILENT CLAW)
+Half-Orc Male   vs   Goblin Male
+============================================================================
+
+STRIKER_1 is 6'4"
+STRIKER_1 weighs 266 lbs.
+STRIKER_1 Known To The Crowd.
+STRIKER_1 enters the arena unarmored and wears no helm.
+STRIKER_1 fights using a WAR HAMMER.
+
+LIRA THE CRUSHER is 5'7"
+LIRA THE CRUSHER weighs 165 lbs.
+LIRA THE CRUSHER Known To The Crowd.
+LIRA THE CRUSHER enters the arena in LEATHER and will wear a STEEL CAP.
+LIRA THE CRUSHER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The Blood Master raises his fist — the fight begins!
+STRIKER_1 pounds at LIRA THE CRUSHER's body with his war hammer
+STRIKER_1's war hammer smashes into LIRA THE CRUSHER's armor!
+   Barely a scratch!
+LIRA THE CRUSHER slices at STRIKER_1's body with his short sword
+LIRA THE CRUSHER's short sword cuts into STRIKER_1's torso!
+   Little damage results from the strike
+STRIKER_1 steps threateningly close to the dangerous LIRA THE CRUSHER
+STRIKER_1 bludgeons LIRA THE CRUSHER's midsection with his war hammer
+LIRA THE CRUSHER's defenses are particularly strong!
+STRIKER_1 tries to hit the mighty LIRA THE CRUSHER
+STRIKER_1 bashes at LIRA THE CRUSHER's torso with his war hammer
+STRIKER_1 barely gets past LIRA THE CRUSHER's defenses!
+STRIKER_1's war hammer crashes into LIRA THE CRUSHER's body!
+   Great gobs of gore gush from the gash!
+LIRA THE CRUSHER is knocked off his feet!
+Three drunks in the cheap seats start a brawl
+LIRA THE CRUSHER cuts at STRIKER_1's midsection with his short sword
+STRIKER_1 catches the weapon and deflects it cleanly!
+LIRA THE CRUSHER directs an attack toward STRIKER_1
+LIRA THE CRUSHER drives a blow toward STRIKER_1's body with his short sword
+STRIKER_1 catches the weapon and deflects it cleanly!
+LIRA THE CRUSHER drives a blow toward STRIKER_1's midsection with his short sword
+LIRA THE CRUSHER's short sword cuts into STRIKER_1's armor!
+   The armor does its job admirably
+LIRA THE CRUSHER tries to hit the mighty STRIKER_1
+LIRA THE CRUSHER thrusts at STRIKER_1's body with his short sword
+LIRA THE CRUSHER gets past STRIKER_1's guard!
+LIRA THE CRUSHER's short sword slices into STRIKER_1's armor!
+   The armor does its job admirably
+LIRA THE CRUSHER steps threateningly close to the dangerous STRIKER_1
+LIRA THE CRUSHER hacks at STRIKER_1's midsection with his short sword
+STRIKER_1 just manages to deflect the blow!
+
+MINUTE 2
+The advantage is unmistakable now, and it belongs to STRIKER_1.
+
+LIRA THE CRUSHER staggers upright
+STRIKER_1 smashes at LIRA THE CRUSHER's midsection with his war hammer
+LIRA THE CRUSHER catches the weapon and deflects it cleanly!
+LIRA THE CRUSHER slices at STRIKER_1's torso with his short sword
+STRIKER_1 makes an extraordinary effort, and parries the strike!
+LIRA THE CRUSHER slices at STRIKER_1's body with his short sword
+The short sword finds its mark!
+LIRA THE CRUSHER's short sword slices into STRIKER_1's body!
+   The resulting crunch echoes through the BLOODSPIRE!
+*** STRIKER_1's sword arm is badly damaged!!! ***
+STRIKER_1's arm trembles with pain!
+STRIKER_1's weapon arm spasms in agony!!
+LIRA THE CRUSHER directs an attack toward STRIKER_1
+LIRA THE CRUSHER slices at STRIKER_1's torso with his short sword
+LIRA THE CRUSHER's short sword bites into STRIKER_1's armor!
+   The blow does almost nothing
+A vendor drops his tray with a tremendous crash
+LIRA THE CRUSHER cuts at STRIKER_1's midsection with his short sword
+STRIKER_1 is ready for the strike, and deftly parries it!
+STRIKER_1 pounds at LIRA THE CRUSHER's torso with his war hammer
+STRIKER_1 barely gets past LIRA THE CRUSHER's defenses!
+STRIKER_1's war hammer smashes into LIRA THE CRUSHER's armor!
+   The blow glances harmlessly off!
+LIRA THE CRUSHER crashes to the arena floor!
+LIRA THE CRUSHER slices at STRIKER_1's body with his short sword
+LIRA THE CRUSHER gets past STRIKER_1's guard!
+LIRA THE CRUSHER's short sword cuts into STRIKER_1's armor!
+   The blow does almost nothing
+STRIKER_1 tries to hit the mighty LIRA THE CRUSHER
+STRIKER_1 smashes at LIRA THE CRUSHER's body with his war hammer
+STRIKER_1's war hammer smashes into LIRA THE CRUSHER's torso!
+   The blow has real authority behind it!
+LIRA THE CRUSHER directs an attack toward STRIKER_1
+LIRA THE CRUSHER hacks at STRIKER_1's midsection with his short sword
+LIRA THE CRUSHER's blow barely grazes STRIKER_1!
+
+MINUTE 3
+STRIKER_1 holds firm command of the contest.
+
+STRIKER_1 steps threateningly close to the fierce LIRA THE CRUSHER
+STRIKER_1 bashes at LIRA THE CRUSHER's midsection with his war hammer
+STRIKER_1 finds the opening!
+STRIKER_1's war hammer crashes into LIRA THE CRUSHER's torso!
+   That one will leave a mark!
+LIRA THE CRUSHER appeals to the Blood Master for mercy!
+The ref saves the pitiable LIRA THE CRUSHER!
+
+The Blood Master raises STRIKER_1's arm in victory!
+
+LIRA THE CRUSHER has trained in Skill and Skill

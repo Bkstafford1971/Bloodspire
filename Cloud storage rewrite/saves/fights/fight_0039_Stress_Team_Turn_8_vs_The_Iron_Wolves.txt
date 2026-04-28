@@ -1,0 +1,90 @@
+Fight #39
+Stress Team Turn 8  vs  The Iron Wolves
+============================================================================
+
+============================================================================
+ACROBAT_1 (0-2-0)   vs   GARA SEVENFINGER (1-0-0)
+STRESS TEAM TURN 8 (STRESS TESTER)   vs   THE IRON WOLVES (SILENT CLAW)
+Elf Male   vs   Goblin Female
+============================================================================
+
+ACROBAT_1 is 5'0"
+ACROBAT_1 weighs 121 lbs.
+ACROBAT_1 Known To The Crowd.
+ACROBAT_1 enters the arena unarmored and wears no helm.
+ACROBAT_1 fights using a SHORT SWORD.
+
+GARA SEVENFINGER is 5'4"
+GARA SEVENFINGER weighs 138 lbs.
+GARA SEVENFINGER Known To The Crowd.
+GARA SEVENFINGER enters the arena in LEATHER and will wear a STEEL CAP.
+GARA SEVENFINGER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The torches flicker as a cold wind sweeps through the arena
+ACROBAT_1 cuts at GARA SEVENFINGER's torso with his short sword
+ACROBAT_1's short sword slices into GARA SEVENFINGER's torso!
+   Barely a scratch!
+GARA SEVENFINGER thrusts at ACROBAT_1's torso with her short sword
+The blow connects!
+GARA SEVENFINGER's short sword slices into ACROBAT_1's ribs!
+   Some damage is done
+ACROBAT_1 thrusts at GARA SEVENFINGER's body with his short sword
+GARA SEVENFINGER has a plan: don't get hit!
+ACROBAT_1 directs an attack toward GARA SEVENFINGER
+ACROBAT_1 hacks at GARA SEVENFINGER's body with his short sword
+ACROBAT_1's short sword bites into GARA SEVENFINGER's body!
+   The blow does almost nothing
+ACROBAT_1 sizes up GARA SEVENFINGER carefully
+ACROBAT_1 slices at GARA SEVENFINGER's torso with his short sword
+ACROBAT_1's short sword slices into GARA SEVENFINGER's body!
+   Little damage results from the strike
+ACROBAT_1 slices at GARA SEVENFINGER's body with his short sword
+ACROBAT_1 barely gets past GARA SEVENFINGER's defenses!
+ACROBAT_1's short sword cuts into GARA SEVENFINGER's armor!
+   The blow does almost nothing
+GARA SEVENFINGER tries to hit the mighty ACROBAT_1
+GARA SEVENFINGER slashes at ACROBAT_1's torso with her short sword
+GARA SEVENFINGER's short sword bites into ACROBAT_1's chest armor!
+   Some damage is done
+Money changes hands rapidly in the betting stands
+GARA SEVENFINGER thrusts at ACROBAT_1's chest with her short sword
+GARA SEVENFINGER's accuracy is rewarded!
+GARA SEVENFINGER's short sword slices into ACROBAT_1's breastplate!
+   That one will leave a mark!
+GARA SEVENFINGER tries to hit the mighty ACROBAT_1
+GARA SEVENFINGER slices at ACROBAT_1's chest with her short sword
+ACROBAT_1 barely gets the parry off!
+GARA SEVENFINGER steps threateningly close to the formidable ACROBAT_1
+GARA SEVENFINGER hacks at ACROBAT_1's chest with her short sword
+ACROBAT_1 is ready for the strike, and deftly parries it!
+GARA SEVENFINGER hacks at ACROBAT_1's rib cage with her short sword
+GARA SEVENFINGER's accuracy is rewarded!
+GARA SEVENFINGER's short sword bites into ACROBAT_1's ribs!
+   A devastating strike!
+*** ACROBAT_1's chest is grievously wounded!!! ***
+ACROBAT_1's chest wound bleeds freely!
+ACROBAT_1's breathing becomes labored!!
+
+MINUTE 2
+The crowd responds as GARA SEVENFINGER takes command of the fight.
+
+GARA SEVENFINGER directs an attack toward ACROBAT_1
+GARA SEVENFINGER slices at ACROBAT_1's chest with her short sword
+GARA SEVENFINGER barely gets past ACROBAT_1's defenses!
+GARA SEVENFINGER's short sword finds ACROBAT_1's torso!
+   A powerful hit draws screams from the crowd!
+ACROBAT_1 calls out for quarter!
+Mercy is granted — the fight is over!
+
+GARA SEVENFINGER stands victorious over the fallen ACROBAT_1!
+
+GARA SEVENFINGER has trained in Skill

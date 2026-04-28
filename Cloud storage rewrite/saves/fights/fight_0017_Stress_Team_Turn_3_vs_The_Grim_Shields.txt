@@ -1,0 +1,106 @@
+Fight #17
+Stress Team Turn 3  vs  The Grim Shields
+============================================================================
+
+============================================================================
+STRIKER_2 (0-0-0)   vs   FEN THE CRUSHER (1-0-0)
+STRESS TEAM TURN 3 (STRESS TESTER)   vs   THE GRIM SHIELDS (GRIM EYE)
+Half-Orc Female   vs   Tabaxi Female
+============================================================================
+
+STRIKER_2 is 5'11"
+STRIKER_2 weighs 214 lbs.
+STRIKER_2 Known To The Crowd.
+STRIKER_2 enters the arena unarmored and wears no helm.
+STRIKER_2 fights using a WAR HAMMER.
+
+FEN THE CRUSHER is 5'3"
+FEN THE CRUSHER weighs 134 lbs.
+FEN THE CRUSHER Known To The Crowd.
+FEN THE CRUSHER enters the arena in LEATHER and will wear a STEEL CAP.
+FEN THE CRUSHER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The smell of blood and sawdust fills the air
+STRIKER_2 smashes at FEN THE CRUSHER's torso with her war hammer
+FEN THE CRUSHER just manages to deflect the blow!
+STRIKER_2 tries to hit the mighty FEN THE CRUSHER
+STRIKER_2 pounds at FEN THE CRUSHER's torso with her war hammer
+FEN THE CRUSHER just manages to deflect the blow!
+FEN THE CRUSHER slashes at STRIKER_2's face with her short sword
+FEN THE CRUSHER finds the opening!
+FEN THE CRUSHER's short sword slices into STRIKER_2's skull!
+   The blow has real authority behind it!
+STRIKER_2 bludgeons FEN THE CRUSHER's midsection with her war hammer
+FEN THE CRUSHER is ready for the strike, and deftly parries it!
+FEN THE CRUSHER tries to hit the mighty STRIKER_2
+FEN THE CRUSHER slices at STRIKER_2's throat with her short sword
+STRIKER_2 barely gets the parry off!
+FEN THE CRUSHER tries to hit the mighty STRIKER_2
+FEN THE CRUSHER hacks at STRIKER_2's skull with her short sword
+FEN THE CRUSHER's short sword cuts into STRIKER_2's temple!
+   Little damage results from the strike
+FEN THE CRUSHER hacks at STRIKER_2's head with her short sword
+The blow connects!
+FEN THE CRUSHER's short sword slices into STRIKER_2's helm!
+   The resulting crunch echoes through the BLOODSPIRE!
+FEN THE CRUSHER drives a blow toward STRIKER_2's helm with her short sword
+STRIKER_2 turns the blow aside with skill!
+
+MINUTE 2
+The fight remains stubbornly even, with neither warrior conceding ground.
+
+FEN THE CRUSHER steps threateningly close to the powerful STRIKER_2
+FEN THE CRUSHER slashes at STRIKER_2's skull with her short sword
+STRIKER_2 is ready for the strike, and deftly parries it!
+STRIKER_2 sizes up FEN THE CRUSHER carefully
+STRIKER_2 bashes at FEN THE CRUSHER's body with her war hammer
+FEN THE CRUSHER makes a desperate last-moment parry!
+STRIKER_2 smashes at FEN THE CRUSHER's midsection with her war hammer
+FEN THE CRUSHER just manages to deflect the blow!
+FEN THE CRUSHER slices at STRIKER_2's face with her short sword
+FEN THE CRUSHER's blow barely grazes STRIKER_2!
+A nobleman covers his eyes — then peeks through his fingers
+STRIKER_2 hammers at FEN THE CRUSHER's body with her war hammer
+FEN THE CRUSHER barely gets the parry off!
+FEN THE CRUSHER steps threateningly close to the mighty STRIKER_2
+FEN THE CRUSHER slices at STRIKER_2's head with her short sword
+FEN THE CRUSHER's blow barely grazes STRIKER_2!
+FEN THE CRUSHER directs an attack toward STRIKER_2
+FEN THE CRUSHER cuts at STRIKER_2's face with her short sword
+FEN THE CRUSHER finds the opening!
+FEN THE CRUSHER's short sword finds STRIKER_2's helm!
+   A telling hit!
+FEN THE CRUSHER sizes up STRIKER_2 carefully
+FEN THE CRUSHER drives a blow toward STRIKER_2's helm with her short sword
+FEN THE CRUSHER's short sword bites into STRIKER_2's headgear!
+   Little damage results from the strike
+
+MINUTE 3
+Small advantages are beginning to stack up for FEN THE CRUSHER.
+
+FEN THE CRUSHER slashes at STRIKER_2's face with her short sword
+FEN THE CRUSHER's blow barely grazes STRIKER_2!
+STRIKER_2 tries to hit the mighty FEN THE CRUSHER
+STRIKER_2 bashes at FEN THE CRUSHER's body with her war hammer
+FEN THE CRUSHER's defenses are particularly strong!
+STRIKER_2 bashes at FEN THE CRUSHER's midsection with her war hammer
+FEN THE CRUSHER is ready for the strike, and deftly parries it!
+FEN THE CRUSHER hacks at STRIKER_2's face with her short sword
+The blow connects!
+FEN THE CRUSHER's short sword slices into STRIKER_2's temple!
+   That one will leave a mark!
+STRIKER_2 raises a hand in surrender!
+The Blood Master shows mercy — STRIKER_2 lives to fight another day!
+
+FEN THE CRUSHER has won this affair of honor!
+
+FEN THE CRUSHER has trained in Skill and Skill

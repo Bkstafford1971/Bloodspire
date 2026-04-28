@@ -1,0 +1,194 @@
+Date: 03/31/2026
+Bloodspire Arena (1)
+Turn - 4
+
+The Top Teams
+
+#    CAREER STANDINGS               W   L   K      %   #    LAST 5 TURNS                   W   L   K
+====================================================================================================
+1     Vexx's Vicious (9001)        15   5   0  75.0%   1     Grim's Reapers (9008)        15   5   3
+2     Grim's Reapers (9008)        15   5   3  75.0%   2     Vexx's Vicious (9001)        15   5   0
+3     House Voss (9007)            14   6   0  70.0%   3     House Voss (9007)            14   6   0
+4     The Learned Fists (9004)     13   7   1  65.0%   4     The Learned Fists (9004)     13   7   1
+5     Splitskull Syndicate (9005)  10  10   0  50.0%   5     Splitskull Syndicate (9005)  10  10   0
+6     Briarwood Brawlers (9006)    10  10   0  50.0%   6     Briarwood Brawlers (9006)    10  10   0
+7     VESTIAN RAIDERS (12)          7   8   0  46.7%   7     The Iron Vanguard (9000)      9  11   0
+8     NEMESISTERS (11)              6   7   0  46.2%   8     Craw's Crushers (9002)        7  13   0
+9     The Iron Vanguard (9000)      9  11   0  45.0%   9     The Thornwall Guard (9003)    6  14   0
+10    Craw's Crushers (9002)        7  13   0  35.0%   10    Corvina's Chosen (9010)       6  14   0
+11    The Thornwall Guard (9003)    6  14   0  30.0%   11    Shadows of the Pit (9011)     4  16   2
+12    Corvina's Chosen (9010)       6  14   0  30.0%   12    VESTIAN RAIDERS (12)          3   2   0
+13    Shadows of the Pit (9011)     4  16   2  20.0%   13    NEMESISTERS (11)              3   2   0
+14    The Quickblades (9009)        3  17   0  15.0%   14    The Quickblades (9009)        3  17   0
+
+
+
+
+Arena Happenings
+
+The sand has been raked, the blood has dried, and BLOODSPIRE ARENA has its stories for Turn 4.  Your correspondent The Unknown Spymaster has them all.
+
+VEXX'S VICIOUS went 4-1-0  THE LEARNED FISTS went 4-1-0  GRIM'S REAPERS went 4-1-1 with 1 kill (EMBERFIST over SOREN)  NEMESISTERS went 3-2-0  VESTIAN RAIDERS went 3-2-0  THE IRON VANGUARD went 2-3-0  CRAW'S CRUSHERS went 2-3-0  THE THORNWALL GUARD went 2-3-0  SPLITSKULL SYNDICATE went 2-3-0  BRIARWOOD BRAWLERS went 2-3-0  HOUSE VOSS went 2-3-0  CORVINA'S CHOSEN went 1-4-0  SHADOWS OF THE PIT went 1-4-0  THE QUICKBLADES went 0-5-0
+
+The night belonged to VEXX'S VICIOUS, who posted 4-1-0 and gave their fans something to cheer about.  The crowd took notice.  THE QUICKBLADES will want to forget this turn — a 0-5-0 night is not the kind of headlines anyone wants.  You're breakin' my heart.
+
+ONDINE slew YSEULT, and the crowd didn't even flinch.  Another day at the office.  DORIAN slew OLIVE, and the crowd didn't even flinch.  Another day at the office.  Tsk, tsk, EMBERFIST beat SOREN and SOREN will not be coming back.  You're breakin' my heart.
+
+The longer fights of the evening: RONIN MEOW WOO-FOO and MOLDRAK went 12 long minutes before RONIN MEOW WOO-FOO finally pulled ahead; AVERAGE JOE and IVAR went 30 long minutes before AVERAGE JOE finally pulled ahead; MOLDRAK and JARNAUGA went 11 long minutes before MOLDRAK finally pulled ahead.
+
+Quick work this turn: AELTHARION put down ICKYBOD CLAY in under a minute; WARFANG put down ULAELWYN in under a minute; RAELINDRA put down AELTHARION in under a minute.
+
+Ah, now we come to my favorite part, where we see all the guys who are dead and gone, and get to see if their team cared.  YSEULT of CRAW'S CRUSHERS fell to ONDINE with a career record of 0-0-0.  The arena does not mourn long.  OLIVE of BRIARWOOD BRAWLERS — 0-0-0 for a career — will not return.  DORIAN saw to that.
+
+The pit ran red this turn.  Blood was spilled: EMBERFIST ended SOREN.  Being a spy is great — other people die and you spend the rest of the day drinking to their memory.  Better tanked than dead!
+
+No change at the top: DORIAN (GRIM'S REAPERS) remains Champion with the highest recognition in the arena.  A warrior the fans refuse to forget.
+
+
+Always good to rest in BLOODSPIRE ARENA, but never good to wear out my welcome.  Look for me in future turns.  Until you see my quill in BLOODSPIRE ARENA again, farewell-- The Unknown Spymaster
+
+
+
+CHAMPION
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Dorian                   3   0   2   13  Grim's Reapers (9008)
+
+RECRUITS
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Emberfist                4   0   1   14  Grim's Reapers (9008)
+Brenniel                 4   0   0   12  Vexx's Vicious (9001)
+Úravorn                  4   0   0   12  Vexx's Vicious (9001)
+Wendell                  4   0   0   12  House Voss (9007)
+Caelan                   4   0   0   12  House Voss (9007)
+Brenna                   4   0   0   12  Grim's Reapers (9008)
+Aeltharion               3   1   1   12  Shadows of the Pit (9011)
+Raelindra                3   0   1   11  The Learned Fists (9004)
+Ilaelith                 3   1   0   10  Vexx's Vicious (9001)
+Kaeledrin                3   1   0   10  Vexx's Vicious (9001)
+Warfang                  3   1   0   10  Craw's Crushers (9002)
+Oravel                   3   1   0   10  The Learned Fists (9004)
+Jawrak                   3   1   0   10  Splitskull Syndicate (9005)
+Phaedra                  3   1   0   10  Briarwood Brawlers (9006)
+Oravel                   3   1   0   10  House Voss (9007)
+Rocklock                 3   1   0   10  Corvina's Chosen (9010)
+Wardrek                  3   0   0    9  Grim's Reapers (9008)
+Ondine                   2   2   0    8  The Iron Vanguard (9000)
+Urnaka                   2   2   0    8  The Iron Vanguard (9000)
+Ragnar                   2   2   0    8  The Iron Vanguard (9000)
+Yruuka                   2   2   0    8  Craw's Crushers (9002)
+Yosef                    2   2   0    8  Craw's Crushers (9002)
+Hammerfist               2   2   0    8  The Thornwall Guard (9003)
+Ivar                     2   2   0    8  The Thornwall Guard (9003)
+Orawyn                   2   2   0    8  The Learned Fists (9004)
+Xgrak                    2   2   0    8  Splitskull Syndicate (9005)
+Lungrak                  2   2   0    8  Splitskull Syndicate (9005)
+Wendell                  2   2   0    8  Splitskull Syndicate (9005)
+Wort                     2   2   0    8  Briarwood Brawlers (9006)
+Haelon                   2   2   0    8  House Voss (9007)
+Faenara                  2   2   0    8  The Quickblades (9009)
+Moldrak                  2   2   0    8  Corvina's Chosen (9010)
+Soren                    2   1   0    7  The Iron Vanguard (9000)
+Elawyn                   2   0   0    6  The Learned Fists (9004)
+Orak                     1   3   0    6  The Iron Vanguard (9000)
+Galwyn                   1   3   0    6  Vexx's Vicious (9001)
+Stonedra                 1   3   0    6  The Thornwall Guard (9003)
+Berwyn                   1   3   0    6  The Thornwall Guard (9003)
+Thalassa                 1   3   0    6  Briarwood Brawlers (9006)
+Deirdre                  1   3   0    6  Briarwood Brawlers (9006)
+Ulaelwyn                 1   3   0    6  House Voss (9007)
+Malachar                 1   3   0    6  Grim's Reapers (9008)
+Paendriel                1   3   0    6  The Quickblades (9009)
+Heloise                  1   3   0    6  Corvina's Chosen (9010)
+Fiamma                   0   4   0    4  Craw's Crushers (9002)
+Emboldrek                0   4   0    4  The Thornwall Guard (9003)
+Olla                     0   4   0    4  The Quickblades (9009)
+Orivaelith               0   4   0    4  The Quickblades (9009)
+Calista                  0   4   0    4  Corvina's Chosen (9010)
+Nereth                   0   4   0    4  Corvina's Chosen (9010)
+Xgraka                   0   4   0    4  Shadows of the Pit (9011)
+Paenara                  0   4   0    4  Shadows of the Pit (9011)
+TITAN                    3   0   0    3  NEMESISTERS (11)
+Saelwyn                  1   0   0    3  The Learned Fists (9004)
+RONIN MEOW WOO-FOO       2   1   0    3  NEMESISTERS (11)
+INELUKI                  2   1   0    3  VESTIAN RAIDERS (12)
+AVERAGE JOE              1   2   0    3  NEMESISTERS (11)
+GRANIUS                  1   2   0    3  VESTIAN RAIDERS (12)
+PROXIMA                  1   2   0    3  VESTIAN RAIDERS (12)
+Ardith                   0   2   0    2  Splitskull Syndicate (9005)
+Faenara                  0   2   0    2  Shadows of the Pit (9011)
+JARNAUGA                 2   1   0    1  VESTIAN RAIDERS (12)
+ICKYBOD CLAY             1   2   0    1  VESTIAN RAIDERS (12)
+POINTY-EARED FREAK       0   3   0    1  NEMESISTERS (11)
+RUM TUM TUGGER           0   1   0    1  NEMESISTERS (11)
+Heather                  0   1   0    1  The Quickblades (9009)
+Vilerak                  0   1   0    1  Shadows of the Pit (9011)
+Bonecrusher              0   0   0    0  Craw's Crushers (9002)
+Thistle                  0   0   0    0  Briarwood Brawlers (9006)
+'-' denotes a warrior who did not fight this turn.
+
+
+
+THE DEAD
+NAME                     W   L   K  TEAM                    SLAIN BY               TURN
+===========================================================================
+Yseult                   0   0   0  Craw's Crushers         Ondine                    4
+Olive                    0   0   0  Briarwood Brawlers      Dorian                    4
+
+
+
+LAST TURN'S FIGHTS
+===========================================================================
+RONIN MEOW WOO-FOO outlasted Moldrak in a 12 minute action-packed rivalry fight.
+TITAN outlasted Wort in a 6 minute hard-fought rivalry fight.
+Aeltharion vanquished POINTY-EARED FREAK in a 2 minute clean rivalry fight.
+AVERAGE JOE vanquished Ivar in a 30 minute grueling rivalry fight.
+Ilaelith bested RUM TUM TUGGER in a 4 minute hard-fought rivalry fight.
+GRANIUS defeated Wardrek in a 4 minute spirited rivalry fight.
+Urnaka overcame Faenara in a 4 minute hard-fought rivalry fight.
+Ragnar defeated Ulaelwyn in a 10 minute grueling rivalry fight.
+Úravorn bested Orak in a 5 minute hard-fought rivalry fight.
+Stonedra outlasted Soren in a 13 minute brutal rivalry fight.
+Ondine overcame Galwyn in a 4 minute contested rivalry fight.
+Orawyn outlasted Fiamma in a 3 minute competent rivalry fight.
+Hammerfist vanquished Elawyn in a 12 minute drawn-out rivalry fight.
+Dorian bested Emboldrek in a 5 minute spirited rivalry fight.
+Saelwyn vanquished Nereth in a 10 minute drawn-out rivalry fight.
+Lungrak defeated Wendell in a 4 minute hard-fought rivalry fight.
+Jawrak bested Olla in a 5 minute contested rivalry fight.
+Phaedra defeated Haelon in a 8 minute drawn-out rivalry fight.
+Oravel overcame Malachar in a 6 minute hard-fought rivalry fight.
+Emberfist bested Faenara in a 3 minute competent rivalry fight.
+Ardith overcame Orivaelith in a 2 minute solid rivalry fight.
+Vilerak vanquished Paendriel in a 8 minute action-packed rivalry fight.
+Kaeledrin defeated Calista in a 9 minute action-packed rivalry fight.
+Oravel outlasted Paenara in a 4 minute contested rivalry fight.
+
+
+
+                      BATTLE REPORT
+
+    MOST POPULAR RACE                 RECORD DURING THE LAST 10 TURNS
+===========================================================================
+|RACE             FIGHTS  RACE                  W -    L -    K  PERCENT|
+===========================================================================
+|Human                 82  Human                37 -   45 -    2      45%|
+|Half-Orc              39  Half-Orc             20 -   19 -    0      51%|
+|Elf                   39  Elf                  18 -   21 -    2      46%|
+|Half-Elf              39  Half-Elf             23 -   16 -    0      58%|
+|Dwarf                 30  Dwarf                17 -   13 -    1      56%|
+|Halfling              12  Halfling              3 -    9 -    0      25%|
+===========================================================================
+
+
+                      TOP WARRIOR by RACE
+
+RACE          WARRIOR                      W   L  K  TEAM NAME
+===========================================================================
+Human         Dorian                       3   0  2  Grim's Reapers (9008)
+Half-Orc      TITAN                        3   0  0  NEMESISTERS (11)
+Elf           Úravorn                      4   0  0  Vexx's Vicious (9001)
+Half-Elf      Brenniel                     4   0  0  Vexx's Vicious (9001)
+Dwarf         Emberfist                    4   0  1  Grim's Reapers (9008)
+Halfling      Wort                         2   2  0  Briarwood Brawlers (9006)

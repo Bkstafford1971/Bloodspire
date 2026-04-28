@@ -1,0 +1,120 @@
+Fight #20
+Stress Team Turn 3  vs  The Wild Slayers
+============================================================================
+
+============================================================================
+HYBRID_3 (0-0-0)   vs   BORAK SMASHER (2-1-0)
+STRESS TEAM TURN 3 (STRESS TESTER)   vs   THE WILD SLAYERS (SILENT CHAMPION)
+Elf Male   vs   Goblin Female
+============================================================================
+
+HYBRID_3 is 5'1"
+HYBRID_3 weighs 125 lbs.
+HYBRID_3 Known To The Crowd.
+HYBRID_3 enters the arena unarmored and wears no helm.
+HYBRID_3 fights using a SHORT SWORD.
+
+BORAK SMASHER is 5'3"
+BORAK SMASHER weighs 134 lbs.
+BORAK SMASHER Known To The Crowd.
+BORAK SMASHER enters the arena in CLOTH and will wear a LEATHER CAP.
+BORAK SMASHER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+An eerie silence settles over the BLOODSPIRE
+BORAK SMASHER drives a blow toward HYBRID_3's face with her short sword
+BORAK SMASHER's blow barely grazes HYBRID_3!
+HYBRID_3 sizes up BORAK SMASHER carefully
+HYBRID_3 cuts at BORAK SMASHER's body with his short sword
+BORAK SMASHER makes a desperate last-moment parry!
+BORAK SMASHER slashes at HYBRID_3's head with her short sword
+BORAK SMASHER's blow barely grazes HYBRID_3!
+HYBRID_3 steps threateningly close to the mighty BORAK SMASHER
+HYBRID_3 hacks at BORAK SMASHER's torso with his short sword
+HYBRID_3's blow barely grazes BORAK SMASHER!
+The crowd surges forward against the barriers!
+BORAK SMASHER slashes at HYBRID_3's skull with her short sword
+HYBRID_3 barely gets the parry off!
+HYBRID_3 steps threateningly close to the formidable BORAK SMASHER
+HYBRID_3 thrusts at BORAK SMASHER's midsection with his short sword
+BORAK SMASHER makes a desperate last-moment parry!
+HYBRID_3 drives a blow toward BORAK SMASHER's body with his short sword
+BORAK SMASHER's guard holds firm!
+BORAK SMASHER hacks at HYBRID_3's helm with her short sword
+BORAK SMASHER barely gets past HYBRID_3's defenses!
+BORAK SMASHER's short sword cuts into HYBRID_3's headgear!
+   The blow lands with bone-breaking force!
+BORAK SMASHER sizes up HYBRID_3 carefully
+BORAK SMASHER slices at HYBRID_3's head with her short sword
+BORAK SMASHER's short sword bites into HYBRID_3's helm!
+   A glancing blow!
+HYBRID_3 goes crashing to the ground!
+BORAK SMASHER keeps pressure on HYBRID_3 without committing
+
+MINUTE 2
+Momentum seems to be slowly shifting toward BORAK SMASHER.
+
+HYBRID_3 somersaults back to their feet with acrobatic grace!
+HYBRID_3 drives a blow toward BORAK SMASHER's body with his short sword
+HYBRID_3's short sword cuts into BORAK SMASHER's body!
+   A glancing blow!
+BORAK SMASHER plummets downward with great speed!!
+HYBRID_3 directs an attack toward BORAK SMASHER
+HYBRID_3 slices at BORAK SMASHER's torso with his short sword
+The blow connects!
+HYBRID_3's short sword slices into BORAK SMASHER's armor!
+   A telling hit!
+HYBRID_3 hacks at BORAK SMASHER's body with his short sword
+HYBRID_3's short sword cuts into BORAK SMASHER's torso!
+   Barely a scratch!
+HYBRID_3 hacks at BORAK SMASHER's midsection with his short sword
+HYBRID_3 gets past BORAK SMASHER's guard!
+HYBRID_3's short sword finds BORAK SMASHER's armor!
+   The resulting crunch echoes through the BLOODSPIRE!
+The Elf fans in the crowd begin an unsettling melodic chant
+BORAK SMASHER thrusts at HYBRID_3's helm with her short sword
+BORAK SMASHER's short sword finds HYBRID_3's headgear!
+   The blow glances harmlessly off!
+BORAK SMASHER hacks at HYBRID_3's face with her short sword
+BORAK SMASHER's short sword cuts into HYBRID_3's head!
+   Barely a scratch!
+BORAK SMASHER slices at HYBRID_3's throat with her short sword
+BORAK SMASHER finds the opening!
+BORAK SMASHER's short sword slices into HYBRID_3's skull!
+   The armor does its job admirably
+BORAK SMASHER directs an attack toward HYBRID_3
+BORAK SMASHER slices at HYBRID_3's skull with her short sword
+HYBRID_3's defenses are particularly strong!
+BORAK SMASHER directs an attack toward HYBRID_3
+BORAK SMASHER thrusts at HYBRID_3's face with her short sword
+BORAK SMASHER's accuracy is rewarded!
+BORAK SMASHER's short sword finds HYBRID_3's headgear!
+   Little damage results from the strike
+
+MINUTE 3
+The slight edge remains with BORAK SMASHER, though little has changed.
+
+BORAK SMASHER rises from the dust, spitting blood
+HYBRID_3 drives a blow toward BORAK SMASHER's body with his short sword
+The short sword finds its mark!
+HYBRID_3's short sword bites into BORAK SMASHER's armor!
+   The armor does its job admirably
+BORAK SMASHER directs an attack toward HYBRID_3
+BORAK SMASHER slashes at HYBRID_3's face with her short sword
+BORAK SMASHER finds the opening!
+BORAK SMASHER's short sword cuts into HYBRID_3's helm!
+   The blow lands with bone-breaking force!
+HYBRID_3 calls out for quarter!
+The Blood Master shows mercy — HYBRID_3 lives to fight another day!
+
+BORAK SMASHER is declared the winner!
+
+BORAK SMASHER has trained in nothing

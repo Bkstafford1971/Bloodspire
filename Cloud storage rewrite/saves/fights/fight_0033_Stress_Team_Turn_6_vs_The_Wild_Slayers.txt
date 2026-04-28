@@ -1,0 +1,93 @@
+Fight #33
+Stress Team Turn 6  vs  The Wild Slayers
+============================================================================
+
+============================================================================
+HYBRID_3 (0-1-0)   vs   BORAK SMASHER (4-1-0)
+STRESS TEAM TURN 6 (STRESS TESTER)   vs   THE WILD SLAYERS (SILENT CHAMPION)
+Elf Male   vs   Goblin Female
+============================================================================
+
+HYBRID_3 is 5'1"
+HYBRID_3 weighs 125 lbs.
+HYBRID_3 Known To The Crowd.
+HYBRID_3 enters the arena unarmored and wears no helm.
+HYBRID_3 fights using a SHORT SWORD.
+
+BORAK SMASHER is 5'3"
+BORAK SMASHER weighs 134 lbs.
+BORAK SMASHER Known To The Crowd.
+BORAK SMASHER enters the arena in CLOTH and will wear a LEATHER CAP.
+BORAK SMASHER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The crowd jeers as the combatants approach each other
+HYBRID_3 directs an attack toward BORAK SMASHER
+HYBRID_3 slashes at BORAK SMASHER's body with his short sword
+BORAK SMASHER just manages to deflect the blow!
+HYBRID_3 hacks at BORAK SMASHER's torso with his short sword
+HYBRID_3's short sword cuts into BORAK SMASHER's body!
+   Barely a scratch!
+BORAK SMASHER sizes up HYBRID_3 carefully
+BORAK SMASHER drives a blow toward HYBRID_3's breast with her short sword
+The blow connects!
+BORAK SMASHER's short sword bites into HYBRID_3's breastplate!
+   A telling hit!
+HYBRID_3 slashes at BORAK SMASHER's torso with his short sword
+HYBRID_3's short sword finds BORAK SMASHER's torso!
+   The blow lands without full force
+The announcer's voice cracks with excitement
+BORAK SMASHER slashes at HYBRID_3's torso with her short sword
+The blow connects!
+BORAK SMASHER's short sword finds HYBRID_3's ribs!
+   A devastating strike!
+HYBRID_3 cuts at BORAK SMASHER's torso with his short sword
+BORAK SMASHER turns the blow aside with skill!
+BORAK SMASHER slashes at HYBRID_3's rib cage with her short sword
+HYBRID_3's plan is not to get hit!
+BORAK SMASHER slashes at HYBRID_3's torso with her short sword
+HYBRID_3 is paying special attention to not being hit there!
+BORAK SMASHER thrusts at HYBRID_3's sternum with her short sword
+HYBRID_3 has that area well covered!
+
+MINUTE 2
+BORAK SMASHER is beginning to edge ahead in the exchange.
+
+BORAK SMASHER slices at HYBRID_3's sternum with her short sword
+BORAK SMASHER's accuracy is rewarded!
+BORAK SMASHER's short sword bites into HYBRID_3's chest!
+   That one hurt badly!
+HYBRID_3 stumbles and falls heavily!
+BORAK SMASHER directs an attack toward HYBRID_3
+BORAK SMASHER thrusts at HYBRID_3's breast with her short sword
+BORAK SMASHER's short sword bites into HYBRID_3's breastplate!
+   The blow has real authority behind it!
+HYBRID_3 raises a hand in surrender!
+The crowd screams for blood — mercy is denied!
+BORAK SMASHER directs an attack toward HYBRID_3
+BORAK SMASHER cuts at HYBRID_3's chest with her short sword
+HYBRID_3 makes a desperate last-moment parry!
+BORAK SMASHER tries to hit the mighty HYBRID_3
+BORAK SMASHER cuts at HYBRID_3's chest with her short sword
+BORAK SMASHER's short sword slices into HYBRID_3's chest!
+   The blow glances harmlessly off!
+HYBRID_3 calls out for quarter!
+The crowd screams for blood — mercy is denied!
+The smell of blood whips the crowd into a frenzy
+BORAK SMASHER drives a blow toward HYBRID_3's chest with her short sword
+BORAK SMASHER's short sword finds HYBRID_3's breastplate!
+   Some damage is done
+HYBRID_3 can fight no more and begs for mercy!
+Mercy is granted — the fight is over!
+
+BORAK SMASHER has won this affair of honor!
+
+BORAK SMASHER has trained in Stat

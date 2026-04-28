@@ -1,0 +1,80 @@
+Fight #2
+Test Warriors  vs  The Grim Shields
+============================================================================
+
+============================================================================
+BASHER (0-0-0)   vs   PETRA BONESNAP (0-0-0)
+TEST WARRIORS (TEST MANAGER)   vs   THE GRIM SHIELDS (GRIM EYE)
+Dwarf Male   vs   Half-Orc Male
+============================================================================
+
+BASHER is 3'10"
+BASHER weighs 165 lbs.
+BASHER Known To The Crowd.
+BASHER enters the arena unarmored and wears no helm.
+BASHER fights using a MORNINGSTAR.
+
+PETRA BONESNAP is 5'11"
+PETRA BONESNAP weighs 232 lbs.
+PETRA BONESNAP Known To The Crowd.
+PETRA BONESNAP enters the arena in LEATHER and will wear a STEEL CAP.
+PETRA BONESNAP fights using a OPEN HAND.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The afternoon sun beats down on the bloodstained sand
+BASHER steps threateningly close to the tenacious PETRA BONESNAP
+BASHER smashes at PETRA BONESNAP's midsection with his morningstar
+BASHER's morningstar slams into PETRA BONESNAP's armor!
+   The resulting crunch echoes through the BLOODSPIRE!
+BASHER bludgeons PETRA BONESNAP's midsection with his morningstar
+BASHER's morningstar crunches into PETRA BONESNAP's body!
+   A minor hit!
+BASHER directs an attack toward PETRA BONESNAP
+BASHER bludgeons PETRA BONESNAP's torso with his morningstar
+BASHER finds the opening!
+BASHER's morningstar smashes into PETRA BONESNAP's body!
+   A devastating strike!
+*** PETRA BONESNAP's skull takes a terrible wound!!! ***
+PETRA BONESNAP's head is bleeding badly!
+PETRA BONESNAP's vision swims from the head wound!!
+BASHER directs an attack toward PETRA BONESNAP
+BASHER smashes at PETRA BONESNAP's torso with his morningstar
+BASHER's morningstar crunches into PETRA BONESNAP's armor!
+   The armor does its job admirably
+The pit bell rings early — it must be a mistake
+PETRA BONESNAP swings at BASHER's chest with his open hand
+PETRA BONESNAP's blow barely grazes BASHER!
+PETRA BONESNAP charges forward in a wild frenzy
+PETRA BONESNAP swings at BASHER's rib cage with his open hand
+BASHER has that area well covered!
+PETRA BONESNAP strikes at BASHER's breast with his open hand
+BASHER's plan is not to get hit!
+PETRA BONESNAP swings at BASHER's breast with his open hand
+PETRA BONESNAP barely gets past BASHER's defenses!
+PETRA BONESNAP's open hand finds BASHER's chest!
+   Little damage results from the strike
+PETRA BONESNAP hacks away at BASHER's chest with his open hand
+BASHER's plan is not to get hit!
+
+MINUTE 2
+At this point, BASHER has seized control of the contest.
+
+BASHER steps threateningly close to the fearsome PETRA BONESNAP
+BASHER smashes at PETRA BONESNAP's midsection with his morningstar
+The blow connects!
+BASHER's morningstar slams into PETRA BONESNAP's body!
+   A solid blow has been struck!
+PETRA BONESNAP calls out for quarter!
+The Blood Master shows mercy — PETRA BONESNAP lives to fight another day!
+
+BASHER is declared the winner!
+
+PETRA BONESNAP has trained in Skill

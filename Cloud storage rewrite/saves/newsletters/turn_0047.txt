@@ -1,0 +1,254 @@
+Date: 04/12/2026
+Bloodspire Arena (1)
+Turn - 47
+
+The Top Teams
+
+#    CAREER STANDINGS               W   L   K      %   #    LAST 5 TURNS                   W   L   K
+====================================================================================================
+1     THE MISFITS (15)             59   6  13  90.8%   1     THE MISFITS (15)             25   0   5
+2     DUCKTALES (14)               63   7   7  90.0%   2     VESTIAN RAIDERS (12)         23   2   6
+3     VESTIAN RAIDERS (12)        208  42  30  83.2%   3     DUCKTALES (14)               24   1   3
+4     The Scaled Horde (9014)     133  57   6  70.0%   4     NEW RACES TESTERS (13)       22   3   5
+5     NEW RACES TESTERS (13)      126  78   6  61.8%   5     Craw's Crushers (9002)       18   7   6
+6     House Voss (9007)           152  98   3  60.8%   6     The Scaled Horde (9014)      21   4   2
+7     Grim's Reapers (9008)       152  98  16  60.8%   7     Grim's Reapers (9008)        17   8   4
+8     Corvina's Chosen (9010)     139 111   0  55.6%   8     House Voss (9007)            16   9   1
+9     The Learned Fists (9004)    138 112   3  55.2%   9     Briarwood Brawlers (9006)    15  10   2
+10    Stonecraft Academy (9013)   104  86   3  54.7%   10    Splitskull Syndicate (9005)  12  13   5
+11    THRASH METAL (16)             8   7   1  53.3%   11    Shadows of the Pit (9011)    13  12   1
+12    Vexx's Vicious (9001)       132 118   5  52.8%   12    The Iron Vanguard (9000)     13  12   0
+13    Briarwood Brawlers (9006)   126 124   3  50.4%   13    The Learned Fists (9004)     12  13   0
+14    Craw's Crushers (9002)      115 135  26  46.0%   14    Vexx's Vicious (9001)        10  15   0
+15    Splitskull Syndicate (9005) 113 137  21  45.2%   15    The Nimble Blades (9015)     10  15   0
+16    The Iron Vanguard (9000)    108 142   2  43.2%   16    The Goblin Syndicate (9012)   8  17   2
+17    The Goblin Syndicate (9012)  80 110   7  42.1%   17    THRASH METAL (16)             8   7   1
+18    The Nimble Blades (9015)     77 113   2  40.5%   18    Stonecraft Academy (9013)     9  16   0
+19    The Thornwall Guard (9003)   97 153   1  38.8%   19    The Quickblades (9009)        8  17   0
+20    Shadows of the Pit (9011)    91 159   8  36.4%   20    Corvina's Chosen (9010)       5  20   0
+21    The Quickblades (9009)       75 175   2  30.0%   21    The Thornwall Guard (9003)    3  22   0
+
+
+
+
+Arena Happenings
+
+Another turn came and went in BLOODSPIRE ARENA, leaving the standings rearranged and several reputations in urgent need of explanation.  Tradition holds firm.  The crowds were amazed this turn, as PUMYRA of NEW RACES TESTERS dethroned the reigning Champion in a fight that will be talked about for turns to come.  A new name atop the throne.
+
+VESTIAN RAIDERS didn't dominate this turn, but they endured it.  Their 5-0-2 reflects hard choices made under pressure, and the standings rewarded resolve over spectacle.  In BLOODSPIRE ARENA, that distinction matters more often than most admit.  The 5-0-0 posted by THE MISFITS this turn is the kind of result that makes observers revise their estimates.  Neither the best nor the worst showing, but one that suggested more than it confirmed.  It's worth remembering that every fight this turn had context — recognition gaps, grudges, avoidance patterns — that the final W-L record doesn't capture.  The standings are accurate.  They are also incomplete.
+
+Word travels fast in BLOODSPIRE ARENA, and right now it's all about GRANIUS of VESTIAN RAIDERS.  They made GRUB THE COINLESS look thoroughly outmatched and now sit at 99 recognition.  The kind of turn that changes how rivals plan.  Hey everybody, keep your eye on PANTHRO of VESTIAN RAIDERS — after dispatching MORT THE DITCH-DIGGER this turn, this fighter sits at 99 recognition and is moving fast.  Rival managers are adjusting their schedules accordingly.  INELUKI entered the arena with a plan and left without an argument.  BAWDY NELL never found footing, and the result was entirely predictable from the opening exchange.
+
+Some turns are for standings.  Some are for lesson-learning.  This one was for the record books.  Multiple kills in a single turn is the arena's way of ensuring no one mistakes enthusiasm for preparation.  When GRANIUS of VESTIAN RAIDERS and GRUB THE COINLESS met this turn, only one of them left on their own terms.  Kills generate a particular kind of attention in BLOODSPIRE ARENA, and GRANIUS now has more of it than they may have wanted.  They say BLOODSPIRE ARENA forgets quickly.  That may be true — but it records everything first.  JARNAUGA of VESTIAN RAIDERS has a kill on their ledger now, and that particular entry does not fade.
+
+When a turn produces multiple deaths, BLOODSPIRE ARENA has a habit of becoming very quiet for a short time and then very loud.  Today followed that pattern exactly.  The scheduling implications are immediate.  GRUB THE COINLESS will not return from the Dark Arena.  The schedule moved on quickly, as it always does.  The arena has no patience for nostalgia.  The Dark Arena claimed VERNON THE VERSIFIER this turn.  The fight ended as so many do — suddenly, decisively, and without ceremony.  In BLOODSPIRE ARENA, remembrance is brief, but final.  BLOODSPIRE ARENA has no room for regret.  MORT THE DITCH-DIGGER is gone, and the turn proceeds as scheduled.  The Dark Arena offered no correction, only conclusion, for WILBUR THE WEED-PULLER.  The record tells the rest.  Career ended at 0-0-0.  I was once told that the key to wisdom is knowing what you don't know.  I don't know how some of these managers keep their jobs.  There you have it.
+
+BLOODSPIRE ARENA will remember this turn longer than some warriors will.  — Mira Coldtongue, The Blood Ledger
+
+
+
+CHAMPION
+NAME                     W   L   K  REC  TEAM
+======================================================================
+PUMYRA                  30  10   2   99  NEW RACES TESTERS (13)
+
+ELITES
+NAME                     W   L   K  REC  TEAM
+======================================================================
+KELLENDIL               13   0   2   99  THE MISFITS (15)
+RIEDOTH                 13   0   6   99  THE MISFITS (15)
+Velta                   29   0   7   99  The Goblin Syndicate (9012)
+INELUKI                 49   1   6   99  VESTIAN RAIDERS (12)
+Osric                   37   1   3   99  Stonecraft Academy (9013)
+JARNAUGA                48   2  13   99  VESTIAN RAIDERS (12)
+Jurka                   36   2   1   99  The Scaled Horde (9014)
+Fleshrak                14   1   0   99  The Iron Vanguard (9000)
+HUEY                    13   1   4   99  DUCKTALES (14)
+LEWIE                   13   1   2   99  DUCKTALES (14)
+SCROOGE                 13   1   1   99  DUCKTALES (14)
+MORALO EVAL             12   1   3   99  THE MISFITS (15)
+ZHENGYI                 12   1   2   99  THE MISFITS (15)
+Nightka                 11   1   3   99  Craw's Crushers (9002)
+PANTHRO                 32   4   5   99  VESTIAN RAIDERS (12)
+Oraelwyn                31   4   1   99  House Voss (9007)
+Raelwyn                 20   3   0   99  The Learned Fists (9004)
+Ilandor                 13   2   1   99  House Voss (9007)
+GRANIUS                 43   7   4   99  VESTIAN RAIDERS (12)
+DEWEY                   12   2   0   99  DUCKTALES (14)
+LAUNCHPAD               12   2   0   99  DUCKTALES (14)
+SLYTHE                  34   6   0   99  NEW RACES TESTERS (13)
+Drago                   13   3   2   99  Craw's Crushers (9002)
+TRAVELOCITY             32   8   3   99  NEW RACES TESTERS (13)
+Heloise                 40  10   0   99  Corvina's Chosen (9010)
+Goldvein                31  10   1   99  The Thornwall Guard (9003)
+Caelindra               29  10   3   99  Vexx's Vicious (9001)
+Jaecaril                11   4   0   99  Shadows of the Pit (9011)
+Oravel                  36  14   0   99  House Voss (9007)
+Zaevindor               12   5   1   99  The Quickblades (9009)
+Rocklock                35  15   0   99  Corvina's Chosen (9010)
+Hawthorn                11   5   0   99  Stonecraft Academy (9013)
+Norgra                  13   6   0   99  Grim's Reapers (9008)
+PROXIMA                 34  16   2   99  VESTIAN RAIDERS (12)
+Jawrak                  33  17   8   99  Splitskull Syndicate (9005)
+Crushfang               25  13   1   99  The Scaled Horde (9014)
+Emberfist               32  18   6   99  Grim's Reapers (9008)
+Imogen                  26  15   4   99  Grim's Reapers (9008)
+Moldrak                 31  19   0   99  Corvina's Chosen (9010)
+Zorrak                  13   8   0   99  The Iron Vanguard (9000)
+Deirdre                 30  20   0   99  Briarwood Brawlers (9006)
+Dorian                  28  21   4   99  Grim's Reapers (9008)
+Elawyn                  27  21   0   99  The Learned Fists (9004)
+Thalassa                28  22   0   99  Briarwood Brawlers (9006)
+Hammerfist              26  24   0   99  The Thornwall Guard (9003)
+Malachar                26  24   0   99  Grim's Reapers (9008)
+Vrakesh                 19  19   1   99  The Scaled Horde (9014)
+Ardith                  23  25   3   99  Splitskull Syndicate (9005)
+Nereth                  19  31   0   99  Corvina's Chosen (9010)
+Stonedra                16  34   0   99  The Thornwall Guard (9003)
+Saelwyn                 13  34   0   99  The Learned Fists (9004)
+Saeron                   9   8   0   97  Vexx's Vicious (9001)
+Blitza                  10  28   0   96  The Goblin Syndicate (9012)
+Khressk                 10   5   0   94  The Scaled Horde (9014)
+Yalawyn                 11   6   0   94  Vexx's Vicious (9001)
+Ivar                    14  36   0   94  The Thornwall Guard (9003)
+Ashrok                  13  23   2   93  The Iron Vanguard (9000)
+Dinka                   10  13   0   90  The Nimble Blades (9015)
+Grusk                    9   0   0   85  The Scaled Horde (9014)
+Vexa                    10   2   0   85  The Nimble Blades (9015)
+Yalindor                 9  16   0   84  House Voss (9007)
+Varian                   9   0   2   83  Briarwood Brawlers (9006)
+KNOBGOBLIN              11   1   0   82  NEW RACES TESTERS (13)
+
+VETERANS
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Liraveth                 8   7   0   66  Vexx's Vicious (9001)
+Berwyn                   8  42   0   66  The Thornwall Guard (9003)
+INGEN JEGGAR             9   3   0   64  THE MISFITS (15)
+Orivandor                6   4   3   63  Shadows of the Pit (9011)
+Uladon                   7   3   0   57  The Learned Fists (9004)
+
+ADEPTS
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Orlaith                  5   9   0   54  Stonecraft Academy (9013)
+Thessaly                 6   0   2   53  Splitskull Syndicate (9005)
+Orivaelith               3   8   0   49  Shadows of the Pit (9011)
+Lurka                    5   3   1   47  Splitskull Syndicate (9005)
+Hunter                   4   4   0   45  The Nimble Blades (9015)
+Saoirse                  4   6   0   40  Stonecraft Academy (9013)
+Hicka                    4   4   0   39  The Goblin Syndicate (9012)
+
+INITIATES
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Ula                      2   4   0   29  The Goblin Syndicate (9012)
+Paenara                  2   6   0   24  Shadows of the Pit (9011)
+Velta                    1  18   0   24  The Quickblades (9009)
+
+ROOKIES
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Galadril                 2   4   0   19  Vexx's Vicious (9001)
+Snix                     0   6   0   14  The Nimble Blades (9015)
+
+RECRUITS
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Crukka                   5   0   2   47  Craw's Crushers (9002)
+LYNX-O                   5   0   1   43  NEW RACES TESTERS (13)
+Yarandir                 4   0   0   39  Shadows of the Pit (9011)
+Zoraka                   3   1   2   33  Craw's Crushers (9002)
+EXODUS                   3   0   0   27  THRASH METAL (16)
+Onyxfist                 3   1   0   27  Corvina's Chosen (9010)
+Saoirse                  2   1   0   23  Briarwood Brawlers (9006)
+Vaelthoron               2   0   0   20  The Quickblades (9009)
+Shadow                   2   2   0   18  The Nimble Blades (9015)
+BATHORY                  2   1   0   15  THRASH METAL (16)
+HAVOK                    1   2   0   12  THRASH METAL (16)
+TESTAMENT                1   2   1   10  THRASH METAL (16)
+DEATH ANGEL              1   2   0    8  THRASH METAL (16)
+Yarak                    0   3   0    7  The Iron Vanguard (9000)
+Galadriela               1   0   0    6  The Quickblades (9009)
+Winifred                 0   2   0    6  Stonecraft Academy (9013)
+Jirka                    0   2   0    4  The Goblin Syndicate (9012)
+Crushfang                0   1   0    3  Craw's Crushers (9002)
+Gruska                   0   1   0    1  The Iron Vanguard (9000)
+Lena                     0   1   0    1  The Quickblades (9009)
+'-' denotes a warrior who did not fight this turn.
+
+
+
+LAST TURN'S FIGHTS
+===========================================================================
+PUMYRA bested Vernon the Versifier in a 1 minute one-sided Champions Title fight.
+GRANIUS slew Grub the Coinless in a 1 minute decisive peasant fight.
+PANTHRO outlasted Mort the Ditch-Digger in a 1 minute crushing peasant fight.
+INELUKI vanquished Bawdy Nell in a 1 minute one-sided peasant fight.
+JARNAUGA slew Vernon the Versifier in a 1 minute decisive peasant fight.
+PROXIMA bested Mort the Ditch-Digger in a 1 minute one-sided peasant fight.
+TRAVELOCITY outlasted Mort the Ditch-Digger in a 1 minute decisive peasant fight.
+SLYTHE vanquished Grub the Coinless in a 3 minute solid peasant fight.
+LYNX-O vanquished Wilbur the Weed-Puller in a 1 minute crushing peasant fight.
+KNOBGOBLIN defeated Wandering Wanda in a 2 minute competent peasant fight.
+HUEY vanquished Grub the Coinless in a 1 minute decisive peasant fight.
+DEWEY defeated Mort the Ditch-Digger in a 6 minute contested peasant fight.
+LEWIE overcame Oswald the Soothsayer in a 1 minute crushing peasant fight.
+SCROOGE slew Mort the Ditch-Digger in a 2 minute clean peasant fight.
+LAUNCHPAD defeated Grub the Coinless in a 1 minute swift peasant fight.
+KELLENDIL vanquished Grub the Coinless in a 1 minute swift peasant fight.
+INGEN JEGGAR bested Hilda the Fishmonger in a 3 minute solid peasant fight.
+MORALO EVAL bested Grub the Coinless in a 1 minute decisive peasant fight.
+RIEDOTH defeated Hilda the Fishmonger in a 1 minute decisive peasant fight.
+ZHENGYI vanquished Grub the Coinless in a 1 minute crushing peasant fight.
+EXODUS vanquished Oswald the Soothsayer in a 1 minute one-sided peasant fight.
+BATHORY vanquished Wilbur the Weed-Puller in a 2 minute clean peasant fight.
+TESTAMENT slew Wilbur the Weed-Puller in a 2 minute clean peasant fight.
+DEATH ANGEL defeated Crackers McGee in a 1 minute crushing peasant fight.
+HAVOK overcame Wandering Wanda in a 2 minute clean peasant fight.
+
+
+
+THE DEAD
+NAME                     W   L   K  TEAM                    SLAIN BY               TURN
+=======================================================================================
+Grub the Coinless        0   0   0  The Peasants            GRANIUS                  47
+Vernon the Versifier     0   0   0  The Peasants            JARNAUGA                 47
+Mort the Ditch-Digger    0   0   0  The Peasants            SCROOGE                  47
+Wilbur the Weed-Puller   0   0   0  The Peasants            TESTAMENT                47
+
+
+
+                      BATTLE REPORT
+
+    MOST POPULAR RACE                 RECORD DURING THE LAST 10 TURNS
+===========================================================================
+|RACE             FIGHTS  RACE                  W -    L -    K  PERCENT|
+===========================================================================
+|Human                666  Human               379 -  287 -   30      56%|
+|Half-Elf             351  Half-Elf            231 -  120 -    6      65%|
+|Dwarf                341  Dwarf               213 -  128 -   11      62%|
+|Half-Orc             310  Half-Orc            229 -   81 -   35      73%|
+|Elf                  190  Elf                 138 -   52 -   13      72%|
+|Tabaxi               121  Tabaxi               96 -   25 -   11      79%|
+|Lizardfolk           120  Lizardfolk           88 -   32 -    4      73%|
+|Goblin                92  Goblin               36 -   56 -    1      39%|
+|Gnome                 57  Gnome                46 -   11 -    3      80%|
+|Halfling              55  Halfling             32 -   23 -    7      58%|
+===========================================================================
+
+
+                      TOP WARRIOR by RACE
+
+RACE          WARRIOR                      W   L  K  TEAM NAME
+===========================================================================
+Human         Osric                       37   1  3  Stonecraft Academy (9013)
+Half-Elf      GRANIUS                     43   7  4  VESTIAN RAIDERS (12)
+Dwarf         Emberfist                   32  18  6  Grim's Reapers (9008)
+Half-Orc      JARNAUGA                    48   2 13  VESTIAN RAIDERS (12)
+Elf           INELUKI                     49   1  6  VESTIAN RAIDERS (12)
+Tabaxi        PANTHRO                     32   4  5  VESTIAN RAIDERS (12)
+Lizardfolk    SLYTHE                      34   6  0  NEW RACES TESTERS (13)
+Goblin        KNOBGOBLIN                  11   1  0  NEW RACES TESTERS (13)
+Gnome         TRAVELOCITY                 32   8  3  NEW RACES TESTERS (13)
+Halfling      Velta                       29   0  7  The Goblin Syndicate (9012)
