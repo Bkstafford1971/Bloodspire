@@ -5294,6 +5294,25 @@ async function confirmReplaceTeam(teamId) {
     old_team_id: teamId,
   });
   if (!r.success) { alert('Error: ' + r.error); return; }
+
+  // Remove the old team from run_next_turn tracking
+  delete S.runNextTurn[teamId];
+  await API.post('/api/team/run_next_turn', {
+    manager_id: S.account.id, team_id: teamId, value: false,
+  });
+
+  // Withdraw the old team from the league server so it stops being auto-carried
+  const lg = S.league;
+  if (lg.url && lg.managerId && lg.password) {
+    try {
+      await fetch(lg.url.replace(/\/+$/, '') + '/api/team/withdraw', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ manager_id: lg.managerId, password: lg.password, team_id: teamId }),
+      });
+    } catch (_) { /* best-effort — offline or server not reachable */ }
+  }
+
   // Store replacement context and trigger new team creation
   S.replacingTeam = { old_team_id: teamId, new_team_id: r.new_team_id, manager_id: S.account.id };
   S.legacyTeams = null; // invalidate so Legacy tab reloads on next visit

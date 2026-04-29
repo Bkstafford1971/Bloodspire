@@ -1190,8 +1190,11 @@ def _run_turn(request_password, rerun_turn=None):
         # upload manually before that team can fight again.  Manual uploads
         # are never overwritten; auto-carries from a prior run of this same
         # turn are (so reruns refresh cleanly).
-        _next_turn = cfg["current_turn"]
-        _auto_ts   = time.strftime("%Y-%m-%d %H:%M:%S")
+        # Teams that were replaced/withdrawn (removed from manager's team_ids)
+        # are never auto-carried, even if they ran this turn.
+        _next_turn    = cfg["current_turn"]
+        _auto_ts      = time.strftime("%Y-%m-%d %H:%M:%S")
+        _mgrs_current = _load_managers()
         for _key, _res in all_results.items():
             if _key.startswith("ai_"):
                 continue
@@ -1203,6 +1206,18 @@ def _run_turn(request_password, rerun_turn=None):
                 continue
             _real_mid = _key.split("_team")[0]
             _tid      = _res.get("team_id") or _team_dict.get("team_id", "")
+            # Skip auto-carry if this team is no longer in the manager's roster
+            # (covers replaced/withdrawn teams).
+            try:
+                _int_tid = int(_tid)
+                _mgr_tids = [int(t) for t in _mgrs_current.get(_real_mid, {}).get("team_ids", [])
+                             if str(t).isdigit()]
+            except (ValueError, TypeError):
+                _mgr_tids = []
+                _int_tid  = None
+            if _int_tid not in _mgr_tids:
+                print(f"  [auto-carry] Skipping team {_tid} for {_real_mid} — no longer in manager roster.")
+                continue
             _fname    = (f"upload_{_real_mid}_team{_tid}.json" if _tid
                          else f"upload_{_real_mid}.json")
             _target   = os.path.join(_turn_dir(_next_turn), _fname)
@@ -2626,6 +2641,40 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 _save_managers(mgrs)
             self.send_json({"success":True,"turn":turn_num,
                             "message":f"Team uploaded for turn {turn_num}."}); return
+
+        if path == "/api/team/withdraw":
+            # Remove a team's upload from the current turn and from the
+            # manager's team_ids registry. Called when a client replaces a team
+            # so the old team stops being auto-carried by the server.
+            mid     = (b.get("manager_id") or "").strip()
+            pw      = (b.get("password")   or "").strip()
+            team_id = b.get("team_id")
+            if not all([mid, pw, team_id]):
+                self.send_json({"success": False, "error": "manager_id, password and team_id required."}); return
+            with _lock:
+                mgrs = _load_managers()
+                if mid not in mgrs:
+                    self.send_json({"success": False, "error": "Manager not found."}); return
+                if not _check_mgr_pw(mgrs[mid], pw):
+                    self.send_json({"success": False, "error": "Wrong password."}, 401); return
+                cfg      = _load_config()
+                turn_num = cfg["current_turn"]
+                # Delete the upload file for this team from the current turn dir.
+                fname  = f"upload_{mid}_team{team_id}.json"
+                fpath  = os.path.join(_turn_dir(turn_num), fname)
+                removed_upload = False
+                if os.path.exists(fpath):
+                    os.remove(fpath)
+                    removed_upload = True
+                # Remove the team from the manager's server-side team_ids list.
+                tids = mgrs[mid].get("team_ids", [])
+                try:
+                    int_tid = int(team_id)
+                    mgrs[mid]["team_ids"] = [t for t in tids if int(t) != int_tid]
+                except (ValueError, TypeError):
+                    mgrs[mid]["team_ids"] = [t for t in tids if str(t) != str(team_id)]
+                _save_managers(mgrs)
+            self.send_json({"success": True, "removed_upload": removed_upload}); return
 
         if path == "/api/run_turn":
             rerun = b.get("rerun_turn")
