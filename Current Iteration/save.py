@@ -312,7 +312,7 @@ def load_fight_log(fight_id: int) -> str:
 def archive_warrior_history(team_name: str, warrior):
     """
     Export the entire career narrative of a warrior to a single legacy file.
-    Used when a warrior is replaced to provide a permanent offline record.
+    Called at death time so all fight logs are still available on disk.
     """
     _ensure_dirs()
     safe_team = str(team_name).replace(" ", "_")

@@ -223,13 +223,6 @@ class Team:
         snapshot = dead.to_dict()
         snapshot["archived_killed_by"] = dead.killed_by
         snapshot["archived_turns"]     = getattr(dead, "turns_active", 0)
-        
-        # Generate a permanent offline legacy file for the dead warrior
-        try:
-            from save import archive_warrior_history
-            archive_warrior_history(self.team_name, dead)
-        except Exception:
-            pass
 
         # Add formatted injuries text for display
         snapshot["injuries_text"] = []

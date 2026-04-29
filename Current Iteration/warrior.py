@@ -799,7 +799,7 @@ class Warrior:
         """
         self.shown_max_messages = set()
 
-    def train_skill(self, skill: str) -> str:
+    def train_skill(self, skill: str, verbose: bool = False):
         """
         Apply one training session to a skill or attribute.
         Returns a human-readable result message (success OR no-progress).
@@ -841,29 +841,31 @@ class Warrior:
         # --- Attribute training ---
         if key in ATTRIBUTES:
             if key == "size":
-                return "SIZE cannot be trained — it is fixed at warrior creation."
+                msg = "SIZE cannot be trained — it is fixed at warrior creation."
+                return (msg, 0, 0) if verbose else msg
 
             current_val = self.get_attr(key)
             if current_val >= STAT_MAX:
                 # Only show max-level message once per training turn
                 if key in self.shown_max_messages:
-                    return ""  # Already shown this message this turn
-                
+                    return ("", 0, 0) if verbose else ""
+
                 self.shown_max_messages.add(key)
-                
+
                 # Attribute-specific max-level messages
                 if key == "strength":
-                    return f"{self.name} is as strong as they will ever be."
+                    msg = f"{self.name} is as strong as they will ever be."
                 elif key == "dexterity":
-                    return f"{self.name} is as nimble and agile as humanly possible."
+                    msg = f"{self.name} is as nimble and agile as humanly possible."
                 elif key == "constitution":
-                    return f"{self.name} is as tough and durable as anyone can get."
+                    msg = f"{self.name} is as tough and durable as anyone can get."
                 elif key == "intelligence":
-                    return f"{self.name} is as intelligent as they can possibly be."
+                    msg = f"{self.name} is as intelligent as they can possibly be."
                 elif key == "presence":
-                    return f"{self.name} has achieved maximum influence and presence."
+                    msg = f"{self.name} has achieved maximum influence and presence."
                 else:
-                    return f"{key.capitalize()} is already at maximum ({STAT_MAX})."
+                    msg = f"{key.capitalize()} is already at maximum ({STAT_MAX})."
+                return (msg, 0, 0) if verbose else msg
 
             gains = self.attribute_gains.get(key, 0)
             stat  = self.constitution
@@ -880,17 +882,19 @@ class Warrior:
 
             chance = max(5, min(96, chance))
 
-            if random.randint(1, 100) > chance:
+            _roll = random.randint(1, 100)
+            if _roll > chance:
                 tier_label = (
                     "mastery tier" if gains >= 8 else
                     "late tier"    if gains >= 6 else
                     "mid tier"     if gains >= 4 else
                     f"CON {stat}"
                 )
-                return (
+                msg = (
                     f"{skill.capitalize()} training: no progress this session "
                     f"({tier_label}, {chance}% chance)."
                 )
+                return (msg, _roll, chance) if verbose else msg
 
             new_val = min(STAT_MAX, current_val + 1)
             # --- Attribute-specific side effects ---
@@ -910,10 +914,11 @@ class Warrior:
             # in combat.py — they are derived live from the current stat value.
             # Presence hesitation chance is also derived live.
 
-            return (
+            msg = (
                 f"{skill.capitalize()} trained: {current_val} → {new_val}"
                 f"{tier_note} ({chance}% chance)"
             )
+            return (msg, _roll, chance) if verbose else msg
 
         # --- Skill training ---
         elif key in ALL_SKILLS:
@@ -921,11 +926,12 @@ class Warrior:
             if current_level >= 9:
                 # Only show max-level message once per training turn
                 if key in self.shown_max_messages:
-                    return ""  # Already shown this message this turn
-                
+                    return ("", 0, 0) if verbose else ""
+
                 self.shown_max_messages.add(key)
                 skill_name = skill.replace('_', ' ').title()
-                return f"{self.name} is already mastered in {skill_name}."
+                msg = f"{self.name} is already mastered in {skill_name}."
+                return (msg, 0, 0) if verbose else msg
 
             gains = current_level          # skill level == number of increases so far
             stat  = self.intelligence
@@ -942,20 +948,24 @@ class Warrior:
 
             chance = max(5, min(96, chance))
 
-            if random.randint(1, 100) > chance:
-                return (
+            _roll = random.randint(1, 100)
+            if _roll > chance:
+                msg = (
                     f"{skill.replace('_',' ').title()} training: no progress this session "
                     f"(INT {stat}, level {current_level}, {chance}% chance)."
                 )
+                return (msg, _roll, chance) if verbose else msg
 
             self.skills[key] = current_level + 1
             new_name = SKILL_LEVEL_NAMES[self.skills[key]]
-            return (
+            msg = (
                 f"{skill.replace('_',' ').title()} trained: "
                 f"Level {current_level} → Level {self.skills[key]} ({new_name}, {chance}% chance)"
             )
+            return (msg, _roll, chance) if verbose else msg
         else:
-            return f"Unknown skill or attribute: '{skill}'"
+            msg = f"Unknown skill or attribute: '{skill}'"
+            return (msg, 0, 0) if verbose else msg
 
     # =========================================================================
     # RECOGNITION
@@ -1224,9 +1234,9 @@ class Warrior:
     # =========================================================================
 
     _INJURY_DISPLAY = {
-        1: "annoying",   2: "bothersome",    3: "irritating",
-        4: "troublesome", 5: "painful",      6: "dreadful",
-        7: "incapacitating", 8: "devastating", 9: "fatal",
+        1: "Annoying",   2: "Bothersome",    3: "Irritating",
+        4: "Troublesome", 5: "Painful",      6: "Dreadful",
+        7: "Incapacitating", 8: "Devastating", 9: "Fatal",
     }
     _INJURY_LOCS = ["head", "chest", "abdomen", "primary_arm",
                     "secondary_arm", "primary_leg", "secondary_leg"]
@@ -1239,23 +1249,23 @@ class Warrior:
             if level > 0:
                 display_loc  = loc.replace("_", " ").title()
                 desc = self._INJURY_DISPLAY.get(level, f"level {level}")
-                article = "an" if desc[0] in "aeiou" else "a"
-                lines.append(f"Has {article} {desc} ({level}) injury to the {display_loc}")
+                article = "an" if desc[0].lower() in "aeiou" else "a"
+                lines.append(f"Has {article} {desc} ({level}) wound to the {display_loc}")
         return lines
 
     def to_dict(self) -> dict:
         """Serialize the warrior to a JSON-compatible dictionary."""
         # Build formatted skills list for UI display
         _skill_templates = {
-            1: "Has novice skill ({n}) in {s}",
-            2: "Has some skill ({n}) in {s}",
-            3: "Is skilled ({n}) in {s}",
-            4: "Has good skill ({n}) in {s}",
-            5: "Has very good skill ({n}) in {s}",
-            6: "Has excellent skill ({n}) in {s}",
-            7: "Is an expert ({n}) in {s}",
-            8: "Has incredible skill ({n}) in {s}",
-            9: "Is a master ({n}) in {s}",
+            1: "Has Novice Skill ({n}) in {s}",
+            2: "Has Some Skill ({n}) in {s}",
+            3: "Is Skilled ({n}) in {s}",
+            4: "Has Good Skill ({n}) in {s}",
+            5: "Is Very Skilled ({n}) in {s}",
+            6: "Has Excellent Skill ({n}) in {s}",
+            7: "Has Expert Skill ({n}) in {s}",
+            8: "Has Incredible Skill ({n}) in {s}",
+            9: "Is a Master ({n}) in {s}",
         }
         skills_text = [
             _skill_templates.get(level, "Has skill level {n} in {s}").format(

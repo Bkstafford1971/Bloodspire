@@ -971,6 +971,12 @@ def run_turn(
                 killed_by     = ow.name,
                 killer_fights = ow.total_fights,
             )
+            try:
+                from save import archive_warrior_history
+                archive_warrior_history(player_team.team_name, pw)
+                print(f"  Graveyard file written for {pw.name}.")
+            except Exception as _ge:
+                print(f"  WARNING: Could not write graveyard file for {pw.name}: {_ge}")
 
         # Handle opponent death
         if result.loser_died and result.loser is ow:

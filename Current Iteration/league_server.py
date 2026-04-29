@@ -86,6 +86,7 @@ def _load_config():
         ("show_max_hp", False),
         ("ai_teams_enabled", True),
         ("schedule_enabled", False),
+        ("admin_debug_manager_id", ""),
     ]:
         if key not in cfg:
             cfg[key] = default
@@ -309,6 +310,26 @@ def _run_turn(request_password, rerun_turn=None):
     set_show_luck_factor(_turn_start_flags.get("show_luck_factor", False))
     set_show_max_hp(_turn_start_flags.get("show_max_hp", False))
 
+    # Build debug warrior set — fights involving these warriors get verbose logs
+    # uploads keys are like "20_team1", "20_team22", so match on manager_id field
+    _dbg_mid = cfg.get("admin_debug_manager_id", "")
+    _debug_warrior_names: set = set()
+    _dbg_mgr_name = ""
+    if _dbg_mid:
+        for _upl in uploads.values():
+            if str(_upl.get("manager_id", "")) == str(_dbg_mid):
+                try:
+                    for _w in (_upl["team"].get("warriors") or []):
+                        if _w and _w.get("name"):
+                            _debug_warrior_names.add(_w["name"])
+                    if not _dbg_mgr_name:
+                        _dbg_mgr_name = _upl.get("manager_name", _dbg_mid)
+                except Exception:
+                    pass
+    _dbg_turn_dir = os.path.join(BASE_DIR, "saves", "admin_logs", f"turn_{turn_num:04d}") if _debug_warrior_names else ""
+    if _dbg_turn_dir:
+        os.makedirs(_dbg_turn_dir, exist_ok=True)
+
     team_map    = {}   # upload key -> Team object
     real_mid_map = {}  # upload key -> real manager_id (for same-manager exclusion)
     for mid, upload in uploads.items():
@@ -472,6 +493,13 @@ def _run_turn(request_password, rerun_turn=None):
                 try:
                     # Pre-assign fight ID so both managers share the same narrative ID
                     _pre_fid = _next_fid(cfg)
+                    _pre_dbg = None
+                    if _debug_warrior_names and (_pw.name in _debug_warrior_names or _ow.name in _debug_warrior_names):
+                        from combat_debug_logger import CombatDebugLogger as _CDBLogger
+                        _pre_dbg = _CDBLogger()
+                        _pre_dbg.fight_id   = _pre_fid
+                        _pre_dbg.turn_num   = turn_num
+                        _pre_dbg.debug_team = _dbg_mgr_name
                     _result  = run_fight(
                         _pw, _ow,
                         team_a_name    = _pt.team_name,
@@ -480,7 +508,14 @@ def _run_turn(request_password, rerun_turn=None):
                         manager_b_name = _bout.opponent_manager,
                         is_monster_fight = False,
                         challenger_name = getattr(_bout, 'challenger_name', None),
+                        debug_logger   = _pre_dbg,
                     )
+                    if _pre_dbg and _dbg_turn_dir:
+                        _pre_log = os.path.join(_dbg_turn_dir, f"fight_{_pre_fid:05d}_{_pw.name}_vs_{_ow.name}.txt")
+                        try:
+                            _pre_dbg.write_to_file(_pre_log)
+                        except Exception as _pre_log_err:
+                            print(f"  DEBUG LOG WARN (pre-pass): {_pre_log_err}")
                     # Scout flavor text injection
                     try:
                         from save import get_all_scouted_warriors
@@ -799,6 +834,15 @@ def _run_turn(request_password, rerun_turn=None):
                 })
                 continue  # skip the normal run_fight path below
 
+            _dbg_logger = None
+            fid = None
+            if _debug_warrior_names and (pw.name in _debug_warrior_names or ow.name in _debug_warrior_names):
+                from combat_debug_logger import CombatDebugLogger as _CDBLogger2
+                fid = _next_fid(cfg)
+                _dbg_logger = _CDBLogger2()
+                _dbg_logger.fight_id   = fid
+                _dbg_logger.turn_num   = turn_num
+                _dbg_logger.debug_team = _dbg_mgr_name
             result = run_fight(
                 pw, ow,
                 team_a_name    = player_team.team_name,
@@ -807,6 +851,7 @@ def _run_turn(request_password, rerun_turn=None):
                 manager_b_name = bout.opponent_manager,
                 is_monster_fight=(bout.opponent_team.team_name == "The Monsters"),
                 challenger_name = getattr(bout, 'challenger_name', None),
+                debug_logger   = _dbg_logger,
             )
             # Inject scout-attendance flavor text if any manager is watching either warrior
             try:
@@ -842,7 +887,14 @@ def _run_turn(request_password, rerun_turn=None):
             except Exception:
                 pass
 
-            fid    = _next_fid(cfg)
+            if fid is None:
+                fid = _next_fid(cfg)
+            if _dbg_logger and _dbg_turn_dir:
+                _log_path = os.path.join(_dbg_turn_dir, f"fight_{fid:05d}_{pw.name}_vs_{ow.name}.txt")
+                try:
+                    _dbg_logger.write_to_file(_log_path)
+                except Exception as _log_err:
+                    print(f"  DEBUG LOG WARN (main): {_log_err}")
             fight_logs[str(fid)] = result.narrative
             pw_won = result.winner is not None and result.winner.name == pw.name
             killed = result.loser_died and pw_won
@@ -1492,6 +1544,9 @@ def _admin_page():
     for mid, mgr in managers.items():
         manager_options += f'<option value="{mid}">{mgr["manager_name"]} (ID: {mid})</option>'
 
+    _dbg_mid = cfg.get("admin_debug_manager_id", "")
+    _dbg_display = managers.get(_dbg_mid, {}).get("manager_name", "None (disabled)") if _dbg_mid else "None (disabled)"
+
     return f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>BLOODSPIRE League — Admin</title>
@@ -1612,6 +1667,24 @@ def _admin_page():
   <button onclick="deleteSelectedManager()" class="danger" style="width:100%;padding:10px;font-size:13px;">
    DELETE SELECTED MANAGER
   </button>
+ </div>
+ <!-- ====================== COMBAT DEBUG LOGGING ====================== -->
+ <div class="panel" style="min-width:260px;max-width:340px">
+  <h3>Combat Debug Logging</h3>
+  <p style="font-size:11px;margin:0 0 8px;color:#555">
+   Select a manager's team to generate verbose fight logs.<br>
+   Every fight involving their warriors produces a detailed breakdown<br>
+   in <code>saves/admin_logs/turn_NNNN/</code> (admin-only).
+  </p>
+  <div style="margin-bottom:8px;font-size:12px">
+   Currently logging: <strong id="dbg-current">{_dbg_display}</strong>
+  </div>
+  <label style="display:block;margin-bottom:4px;font-size:12px">Select team to log:</label>
+  <select id="debug-team-select" style="width:100%;padding:4px;border:2px inset #808080;font-size:12px">
+   <option value="">-- None (disable logging) --</option>
+   {manager_options}
+  </select><br>
+  <button onclick="setDebugTeam()" style="margin-top:6px">💾 Set Debug Team</button>
  </div>
 </div>
 
@@ -1857,6 +1930,27 @@ async function deleteSelectedManager() {{
     }} catch(e) {{
         alert("Connection error: " + e.message);
     }}
+}}
+// =====================================================================
+
+async function setDebugTeam() {{
+ const sel = document.getElementById('debug-team-select');
+ const mid = sel.value;
+ const pw = pw_val();
+ if (!pw) {{ show('Enter the host password first.', 'err'); return; }}
+ try {{
+  const r = await fetch('/api/admin/set_debug_team', {{
+   method: 'POST',
+   headers: {{'Content-Type': 'application/json'}},
+   body: JSON.stringify({{host_password: pw, manager_id: mid}})
+  }});
+  const d = await r.json();
+  if (d.success) {{
+   const label = mid ? sel.options[sel.selectedIndex].text : 'None (disabled)';
+   document.getElementById('dbg-current').textContent = label;
+   show('Debug team saved: ' + (d.manager_name || 'None (disabled)'), 'ok');
+  }} else show('Error: ' + (d.error || 'update failed'), 'err');
+ }} catch(e) {{ show('Connection error: ' + e.message, 'err'); }}
 }}
 // =====================================================================
 
@@ -2791,6 +2885,21 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             })
             return
         # ============================================================
+
+        if path == "/api/admin/set_debug_team":
+            cfg = _load_config()
+            if not _check_host_pw(cfg, b.get("host_password", "")):
+                self.send_json({"success": False, "error": "Not authorised."}, 401); return
+            mid = (b.get("manager_id") or "").strip()
+            mname = ""
+            if mid:
+                managers = _load_managers()
+                if mid not in managers:
+                    self.send_json({"success": False, "error": "Manager not found."}); return
+                mname = managers[mid]["manager_name"]
+            cfg["admin_debug_manager_id"] = mid
+            _save_config(cfg)
+            self.send_json({"success": True, "manager_name": mname}); return
 
         if path == "/api/shutdown":
             self.send_json({"success": True, "message": "Shutting down..."})

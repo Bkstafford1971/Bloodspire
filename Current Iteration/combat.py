@@ -39,6 +39,8 @@ import random
 from dataclasses import dataclass, field
 from typing import Optional, List, Tuple
 
+from combat_debug_logger import CombatDebugLogger
+
 from warrior  import Warrior, Strategy, ATTRIBUTES
 from strategy import (
     FighterState, evaluate_triggers, get_style_advantage,
@@ -618,6 +620,417 @@ def _calc_damage_hybrid(
 
 
 # ---------------------------------------------------------------------------
+# VERBOSE ROLL FUNCTIONS  (used only when debug_logger is active)
+# Each function mirrors its normal counterpart exactly but also returns a
+# components dict so the admin log can show the full calculation breakdown.
+# ---------------------------------------------------------------------------
+
+def _initiative_roll_verbose(warrior: "Warrior", strategy: "Strategy", state: "_CState"):
+    roll         = _d100()
+    dex          = get_effective_dex_for_race(warrior.dexterity, warrior.armor or "None", warrior.helm or "None", warrior.race.name)
+    dex_bonus    = max(-10, min(10, (dex - 10) * 2))
+    skill_bonus  = warrior.skills.get("initiative", 0) * 3
+    luck_bonus   = warrior.luck
+    race_init    = warrior.race.modifiers.initiative_bonus
+    props        = get_style_props(strategy.style)
+    style_mod    = int(props.apm_modifier * 4)
+    activity_mod = (strategy.activity - 5) * 2
+    end_pen      = int(max(0, (40 - state.endurance) * 0.3)) if state.endurance < 40 else 0
+    if state.is_on_ground:
+        result = max(1, roll // 2)
+        return result, {"d100": roll, "on_ground_halved": "(÷2)"}
+    result = max(1, roll + dex_bonus + skill_bonus + luck_bonus + race_init + style_mod + activity_mod - end_pen)
+    comps = {
+        "d100": roll,
+        "dex_bonus": dex_bonus,
+        "init_skill_x3": skill_bonus,
+        "luck": luck_bonus,
+        "race_init": race_init,
+        "style_mod": style_mod,
+        "activity_mod": activity_mod,
+        "end_pen": -end_pen if end_pen else 0,
+    }
+    return result, comps
+
+
+def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CState"):
+    roll    = _d100()
+    dex     = get_effective_dex_for_race(attacker.dexterity, attacker.armor or "None", attacker.helm or "None", attacker.race.name)
+    dex_b   = max(-8, min(8, (dex - 10)))
+    wpn_key = attacker.primary_weapon.lower().replace(" ", "_").replace("&", "and")
+    wpn_sk  = attacker.skills.get(wpn_key, 0)
+    wpn_b   = wpn_sk * 5
+    luck_b  = attacker.luck
+    props   = get_style_props(strategy.style)
+    style_b = int(props.apm_modifier * 3)
+    feint_b = attacker.skills.get("feint", 0) * 2
+    lunge_b = attacker.skills.get("lunge", 0) * 3 if strategy.style == "Lunge" else 0
+    end_pen = int(max(0, (30 - state.endurance) * 0.5)) if state.endurance < 30 else 0
+    hp0_pen = 30 if state.current_hp <= 0 else 0
+    fav_b   = 5 if (attacker.favorite_weapon and attacker.primary_weapon == attacker.favorite_weapon) else 0
+    result  = max(1, roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b - end_pen - hp0_pen + fav_b)
+    comps = {
+        "d100": roll,
+        "dex_bonus": dex_b,
+        f"wpn_skill(lv{wpn_sk})x5": wpn_b,
+        "luck": luck_b,
+        "style_mod": style_b,
+        "feint": feint_b,
+        "lunge": lunge_b,
+        "fav_bonus": fav_b,
+        "end_pen": -end_pen if end_pen else 0,
+        "hp0_pen": -hp0_pen if hp0_pen else 0,
+    }
+    return result, comps
+
+
+def _defense_roll_verbose(
+    defender: "Warrior", strategy: "Strategy", state: "_CState",
+    attacker: "Warrior", aim_point: str, atk_style: str, is_parry: bool = True,
+):
+    roll      = _d100()
+    luck_b    = defender.luck
+    props     = get_style_props(strategy.style)
+    wpn_key   = defender.primary_weapon.lower().replace(" ", "_").replace("&", "and")
+    wpn_skill = defender.skills.get(wpn_key, 0)
+    dex_trained = defender.attribute_gains.get("dexterity", 0)
+    comps = {"d100": roll, "luck": luck_b}
+
+    if is_parry:
+        str_b         = max(-5, min(5, (defender.strength - 10) // 2))
+        skill_b       = defender.skills.get("parry", 0) * 4
+        wpn_b         = wpn_skill * 3
+        style_b       = props.parry_bonus * 3
+        act_mod       = (5 - strategy.activity) * 2
+        dex_train     = int(dex_trained * 2)
+        race_parry    = defender.race.modifiers.parry_bonus * 3
+        total         = roll + str_b + skill_b + wpn_b + style_b + act_mod + luck_b + dex_train + race_parry
+        comps.update({
+            "str_bonus": str_b,
+            f"parry_skill(lv{defender.skills.get('parry',0)})x4": skill_b,
+            f"wpn_skill(lv{wpn_skill})x3": wpn_b,
+            "style_parry": style_b,
+            "activity_mod": act_mod,
+            "dex_trained_x2": dex_train,
+            "race_parry_x3": race_parry,
+        })
+    else:
+        dex      = get_effective_dex_for_race(defender.dexterity, defender.armor or "None", defender.helm or "None", defender.race.name)
+        dex_b    = max(-8, min(8, (dex - 10)))
+        skill_b  = defender.skills.get("dodge", 0) * 4
+        wpn_b    = wpn_skill * 2
+        style_b  = props.dodge_bonus * 2
+        act_mod  = (strategy.activity - 5) * 2
+        size_diff= attacker.size - defender.size
+        size_b   = 5 if size_diff >= 3 else (-5 if size_diff <= -3 else 0)
+        dex_train= int(dex_trained * 2.5)
+        race_dg  = defender.race.modifiers.dodge_bonus * 2
+        acro_lv  = defender.skills.get("acrobatics", 0)
+        acro_b   = acro_lv * 2 if acro_lv > 0 else 0
+        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train + race_dg + acro_b
+        heavy_pen = 0
+        if defender.race.modifiers.heavy_weapon_penalty:
+            try:
+                _w = get_weapon(defender.primary_weapon)
+                _2h = (defender.secondary_weapon == "Open Hand" and _w.two_hand)
+                if (_w.weight >= 4.0 or (_w.two_hand and _2h)) and not (defender.race.modifiers.spear_exception and _w.category == "Polearm/Spear"):
+                    total -= 10
+                    heavy_pen = -10
+            except ValueError:
+                pass
+        comps.update({
+            "dex_bonus": dex_b,
+            f"dodge_skill(lv{defender.skills.get('dodge',0)})x4": skill_b,
+            f"wpn_skill(lv{wpn_skill})x2": wpn_b,
+            "style_dodge": style_b,
+            "activity_mod": act_mod,
+            "size_diff": size_b,
+            "dex_trained_x2.5": dex_train,
+            "race_dodge_x2": race_dg,
+            "acrobatics_x2": acro_b if acro_b else 0,
+            "heavy_wpn_pen": heavy_pen if heavy_pen else 0,
+        })
+
+    def_pt_bonus = 0
+    if strategy.defense_point != "None" and strategy.defense_point == aim_point and atk_style != "Decoy":
+        total += 15
+        def_pt_bonus = 15
+    comps["def_point_bonus"] = def_pt_bonus
+
+    shield_b = 0
+    try:
+        sec_w = get_weapon(defender.secondary_weapon or "Open Hand")
+        if sec_w.is_shield:
+            shield_b = 10 if defender.race.modifiers.shield_bonus else 5
+            total += shield_b
+    except ValueError:
+        pass
+    if shield_b:
+        comps["shield_bonus"] = shield_b
+
+    if props.total_kill_mode:
+        total = max(1, roll // 3)
+        comps["total_kill_mode_override"] = True
+        return total, comps
+
+    end_pen = 0
+    if state.endurance < 30:
+        end_pen = int((30 - state.endurance) * 0.4)
+        total -= end_pen
+    if state.is_on_ground:
+        total -= 25
+        comps["ground_pen"] = -25
+    if state.current_hp <= 0:
+        total -= 30
+        comps["hp0_pen"] = -30
+    if end_pen:
+        comps["end_pen"] = -end_pen
+
+    return max(1, total), comps
+
+
+def _calc_damage_verbose(
+    attacker, atk_strategy, weapon_name: str, defender,
+    margin: int, precision_bypass: float = 0.0, style_compat_penalty: float = 1.0,
+):
+    """Mirrors _calc_damage_hybrid but also returns a steps dict for the debug log."""
+    try:
+        weapon = get_weapon(weapon_name)
+    except ValueError:
+        weapon = OPEN_HAND
+
+    two_handed = (attacker.secondary_weapon == "Open Hand" and weapon.two_hand)
+    steps: dict = {}
+
+    base = weapon.weight * 2.5
+    steps["weapon_base"] = weapon.weight * 2.5
+
+    str_b = max(0.0, (attacker.strength - 10)) * 0.6
+    base += str_b
+    steps["str_bonus"] = str_b
+
+    flail_b = 0.0
+    if weapon.flail_bypass or weapon.category == "Flail":
+        flail_b = max(0.0, (attacker.size - 12)) * 0.4
+        base += flail_b
+    steps["flail_size_bonus"] = flail_b
+
+    two_hand_mult = 1.15 if (two_handed or weapon.two_hand) else 1.0
+    if two_hand_mult != 1.0:
+        base *= two_hand_mult
+    steps["two_hand_mult"] = two_hand_mult
+
+    r_mod     = attacker.race.modifiers
+    race_net  = r_mod.damage_bonus - r_mod.damage_penalty
+    base     += race_net
+    steps["race_net"] = race_net
+
+    props = get_style_props(atk_strategy.style)
+    sd    = props.damage_modifier
+    base += sd
+    steps["style_damage"] = sd
+
+    ac    = (5 - atk_strategy.activity) * 0.3
+    base += ac
+    steps["activity_contrib"] = ac
+
+    wpn_key_s = weapon_name.lower().replace(" ", "_").replace("&", "and")
+    ws_val    = attacker.skills.get(wpn_key_s, 0) * 0.8
+    base     += ws_val
+    steps["weapon_skill_contrib"] = ws_val
+
+    lc    = attacker.luck * 0.15
+    base += lc
+    steps["luck_contrib"] = lc
+
+    str_pen = strength_penalty(weapon.weight, attacker.strength, two_handed)
+    base   *= (1.0 - str_pen)
+    steps["str_penalty_factor"] = str_pen
+
+    hwm = 1.0
+    if r_mod.heavy_weapon_penalty:
+        is_heavy = weapon.weight >= 4.0 or (weapon.two_hand and two_handed)
+        if is_heavy and not (r_mod.spear_exception and weapon.category == "Polearm/Spear"):
+            base *= 0.8
+            hwm = 0.8
+    steps["heavy_weapon_mult"] = hwm
+
+    base *= style_compat_penalty
+    steps["style_compat"] = style_compat_penalty
+
+    # Specialized skill bonuses
+    cleave_b = 0.0
+    if _is_cleave_weapon(wpn_key_s):
+        cl = attacker.skills.get("cleave", 0)
+        if cl > 0:
+            cleave_b += cl * 2.0
+            base     += cl * 2.0
+            if cl == 9:
+                base *= 1.25
+                steps["cleave_master_mult"] = True
+            ddf = defender.skills.get("dodge", 0)
+            if ddf > 5:
+                mult = max(0.5, 1.0 - (ddf - 5) * 0.10)
+                base *= mult
+    steps["cleave_bonus"] = cleave_b
+
+    bash_b = 0.0
+    if _is_bash_weapon(wpn_key_s):
+        bl = attacker.skills.get("bash", 0)
+        if bl > 0:
+            bash_b += bl * 2.0
+            base   += bl * 2.0
+            ddf = defender.skills.get("dodge", 0)
+            if ddf > 5:
+                mult = max(0.5, 1.0 - (ddf - 5) * 0.10)
+                base *= mult
+    steps["bash_bonus"] = bash_b
+
+    slash_b = 0.0
+    if _is_slash_weapon(wpn_key_s):
+        sl = attacker.skills.get("slash", 0)
+        if sl > 0:
+            slash_b += sl * 1.0
+            base    += sl * 1.0
+            if defender.armor and defender.armor not in ["None", "Leather", "Studded Leather", "Boiled Leather"]:
+                base *= 0.85
+            dp = defender.skills.get("parry", 0)
+            if dp >= 5:
+                base *= max(0.8, 1.0 - (dp - 4) * 0.05)
+    steps["slash_bonus"] = slash_b
+
+    strike_b = 0.0
+    sl_v = attacker.skills.get("strike", 0)
+    if sl_v > 0:
+        strike_b += sl_v * 0.8
+        base     += sl_v * 0.8
+    steps["strike_bonus"] = strike_b
+
+    oh_b = 0.0
+    if _is_open_hand_weapon(wpn_key_s):
+        ohl = attacker.skills.get("open_hand", 0)
+        if ohl > 0:
+            oh_b += ohl * 2.0
+            base += ohl * 2.0
+            if ohl == 9:
+                base *= 1.20
+                steps["open_hand_master_mult"] = True
+            brl = attacker.skills.get("brawl", 0)
+            if brl > 0:
+                oh_b += brl * 0.5
+                base += brl * 0.5
+                if brl == 9:
+                    base *= 1.10
+                    steps["brawl_master_mult"] = True
+    steps["open_hand_bonus"] = oh_b
+
+    ceiling  = max(3, int(base))
+    fraction = max(0.10, min(1.00, margin / 55.0))
+    raw      = max(1, int(ceiling * fraction))
+
+    fav_b = 0
+    if attacker.favorite_weapon and weapon_name == attacker.favorite_weapon:
+        raw  += 1
+        fav_b = 1
+
+    armor_nm  = defender.armor or "None"
+    helm_nm   = defender.helm  or "None"
+    defense   = get_effective_defense_for_race(armor_nm, helm_nm, defender.race.name)
+    armor_def = defense
+
+    ap = False
+    if weapon.armor_piercing and is_ap_vulnerable(armor_nm):
+        defense = max(0, defense // 2)
+        ap = True
+
+    armor_after_ap = defense
+    if precision_bypass > 0.0:
+        defense = max(0, int(defense * (1.0 - precision_bypass)))
+
+    net = max(1, raw - defense)
+
+    steps.update({
+        "ceiling": ceiling,
+        "fraction": fraction,
+        "raw": raw - fav_b,
+        "fav_bonus": fav_b,
+        "raw_with_fav": raw,
+        "armor_name": armor_nm,
+        "armor_def": armor_def,
+        "armor_piercing": ap,
+        "armor_after_ap": armor_after_ap,
+        "precision_bypass": precision_bypass,
+        "final_armor": defense,
+        "net_pre_mods": net,
+    })
+    return net, weapon.category, steps
+
+
+def _concede_check_verbose(warrior: "Warrior", state: "_CState", is_monster_fight: bool = False):
+    if is_monster_fight:
+        return False, {"monster_fight": True, "d100": 0, "PRE_bonus": 0, "luck_half": 0, "total": 0, "threshold": 0}
+    roll      = _d100()
+    presence  = warrior.presence
+    pre_b     = max(-6, min(10, presence - 10))
+    luck_half = warrior.luck // 2
+    total     = roll + pre_b + luck_half
+    threshold = max(40, 68 - (presence // 3))
+    granted   = total >= threshold
+    return granted, {
+        "d100": roll, "PRE_bonus": pre_b, "luck_half": luck_half,
+        "total": total, "threshold": threshold,
+    }
+
+
+def _death_check_verbose(prev_hp: int, damage: int):
+    new_hp    = prev_hp - damage
+    if new_hp > 0:
+        return False, {"new_hp": new_hp, "overshoot": 0, "death_chance": 0.0}
+    overshoot    = abs(min(new_hp, 0))
+    death_chance = min(50.0, 0.5 + float(overshoot))
+    died         = random.random() * 100 < death_chance
+    return died, {"new_hp": new_hp, "overshoot": overshoot, "death_chance": death_chance}
+
+
+def _check_knockdown_verbose(warrior: "Warrior", state: "_CState", damage: int, cat: str):
+    if state.is_on_ground:
+        return False, 0, 0
+    chance = int((damage / max(1, warrior.max_hp)) * 80)
+    if cat in ("Hammer/Mace", "Flail"):
+        chance += 10
+    if cat == "Polearm/Spear":
+        chance += 5
+    chance -= max(0, (warrior.size - 12)) * 2
+    final  = max(1, chance)
+    roll   = random.randint(1, 100)
+    return roll <= final, final, roll
+
+
+def _check_perm_injury_verbose(warrior: "Warrior", damage: int, aim_point: str):
+    threshold = int(warrior.max_hp * 0.15)
+    if damage < warrior.max_hp * 0.15:
+        return None, threshold, 0, 0
+    chance = max(5, min(80, int((damage / warrior.max_hp) * 100) - 5))
+    if warrior.race.modifiers.fewer_perms:
+        chance = int(chance * 0.85)
+    roll = random.randint(1, 100)
+    if roll > chance:
+        return None, threshold, chance, roll
+    if aim_point and aim_point != "None":
+        loc_map = {
+            "Head": "head", "Chest": "chest", "Abdomen": "abdomen",
+            "Primary Arm": "primary_arm", "Secondary Arm": "secondary_arm",
+            "Primary Leg": "primary_leg", "Secondary Leg": "secondary_leg",
+        }
+        location = loc_map.get(aim_point, random.choice(_LOCATION_POOL))
+    else:
+        location = random.choice(_LOCATION_POOL)
+    pct    = damage / warrior.max_hp
+    levels = 3 if pct > 0.50 else (2 if pct > 0.35 else 1)
+    return (location, levels), threshold, chance, roll
+
+
+# ---------------------------------------------------------------------------
 # PERM INJURY
 # ---------------------------------------------------------------------------
 
@@ -917,6 +1330,7 @@ class CombatEngine:
         pos_b           : int  = 1,
         is_monster_fight: bool = False,
         challenger_name : str  = None,
+        debug_logger    : Optional[CombatDebugLogger] = None,
     ):
         self.warrior_a        = warrior_a
         self.warrior_b        = warrior_b
@@ -928,6 +1342,7 @@ class CombatEngine:
         self.pos_b            = pos_b
         self.is_monster_fight = is_monster_fight
         self.challenger_name  = challenger_name
+        self.debug_logger     = debug_logger
 
         self.state_a = _CState(warrior=warrior_a, current_hp=warrior_a.max_hp, endurance=100.0)
         self.state_b = _CState(warrior=warrior_b, current_hp=warrior_b.max_hp, endurance=100.0)
@@ -945,12 +1360,20 @@ class CombatEngine:
         self._used_adv_phrases: set = set()
         self._last_adv_tier: str = "even"
         self._last_adv_winner: str = ""
+        self._debug_action_counter: int = 0
 
     # =========================================================================
     # MAIN LOOP
     # =========================================================================
 
     def resolve_fight(self) -> FightResult:
+        if self.debug_logger:
+            self.debug_logger.log_header(
+                self.warrior_a, self.warrior_b,
+                self.team_a_name, self.team_b_name,
+                self.manager_a_name, self.manager_b_name,
+            )
+
         self._lines.append(N.build_fight_header(
             self.warrior_a, self.warrior_b,
             self.team_a_name, self.team_b_name,
@@ -1008,7 +1431,11 @@ class CombatEngine:
             if result.loser_died and result.loser is w:
                 training[pos_key] = []
                 continue
-            res = self._apply_training(w, opponent=opp)
+            if self.debug_logger:
+                res, _detail = self._apply_training_verbose(w, opponent=opp)
+                self.debug_logger.log_training(w.name, _detail)
+            else:
+                res = self._apply_training(w, opponent=opp)
             # Key by position ("warrior_a"/"warrior_b") to avoid collision when
             # both fighters share the same name.  Callers that need the training
             # list for warrior_a (always the player warrior) use "warrior_a".
@@ -1018,6 +1445,13 @@ class CombatEngine:
 
         result.training_results = training
         result.narrative        = "\n".join(self._lines)
+
+        if self.debug_logger and result.winner and result.loser:
+            self.debug_logger.log_result(
+                result.winner.name, result.loser.name,
+                result.loser_died, result.minutes_elapsed,
+                result.winner_hp_pct, result.loser_hp_pct,
+            )
         return result
 
     # =========================================================================
@@ -1128,8 +1562,12 @@ class CombatEngine:
 
         if idx_a != self.state_a.active_strat_idx:
             self._emit(N.strategy_switch_line(self.warrior_a.name, idx_a))
+            if self.debug_logger:
+                self.debug_logger.log_strategy_switch(self.warrior_a.name, self.state_a.active_strat_idx, idx_a)
         if idx_b != self.state_b.active_strat_idx:
             self._emit(N.strategy_switch_line(self.warrior_b.name, idx_b))
+            if self.debug_logger:
+                self.debug_logger.log_strategy_switch(self.warrior_b.name, self.state_b.active_strat_idx, idx_b)
         self.state_a.active_strategy  = strat_a;  self.state_a.active_strat_idx = idx_a
         self.state_b.active_strategy  = strat_b;  self.state_b.active_strat_idx = idx_b
 
@@ -1143,7 +1581,7 @@ class CombatEngine:
                 acrobatics_recovery = min(85, acrobatics_level * 20) if acrobatics_level > 0 else 0
                 # Use best recovery option available
                 recovery_chance = max(brawl_recovery, acrobatics_recovery)
-                
+
                 if random.randint(1, 100) <= recovery_chance:
                     st.is_on_ground       = False
                     st.consecutive_ground = 0
@@ -1155,6 +1593,14 @@ class CombatEngine:
 
         apm_a = _calc_apm(self.warrior_a, strat_a, self.state_a)
         apm_b = _calc_apm(self.warrior_b, strat_b, self.state_b)
+
+        if self.debug_logger:
+            self._debug_action_counter = 0
+            self.debug_logger.log_minute_start(
+                minute, self.state_a, self.state_b,
+                apm_a, apm_b, strat_a, strat_b,
+            )
+
         rem_a = apm_a;  rem_b = apm_b
         act_a = act_b = crowd = 0
 
@@ -1168,25 +1614,43 @@ class CombatEngine:
                 self._emit(N.crowd_line(self.warrior_a.race.name, self.warrior_b.race.name))
                 crowd = 0
 
+            _dbg_init = None
             if rem_a > 0 and rem_b > 0:
-                ia = _initiative_roll(self.warrior_a, strat_a, self.state_a)
-                ib = _initiative_roll(self.warrior_b, strat_b, self.state_b)
+                if self.debug_logger:
+                    ia, ia_comps = _initiative_roll_verbose(self.warrior_a, strat_a, self.state_a)
+                    ib, ib_comps = _initiative_roll_verbose(self.warrior_b, strat_b, self.state_b)
+                else:
+                    ia = _initiative_roll(self.warrior_a, strat_a, self.state_a)
+                    ib = _initiative_roll(self.warrior_b, strat_b, self.state_b)
+                    ia_comps = ib_comps = None
                 if ia >= ib:
                     as_, ds_ = self.state_a, self.state_b
                     ax, dx   = strat_a, strat_b
                     rem_a -= 1;  act_a += 1
+                    if self.debug_logger:
+                        self._debug_action_counter += 1
+                        _dbg_init = (self._debug_action_counter, ia, ia_comps, ib, ib_comps)
                 else:
                     as_, ds_ = self.state_b, self.state_a
                     ax, dx   = strat_b, strat_a
                     rem_b -= 1;  act_b += 1
+                    if self.debug_logger:
+                        self._debug_action_counter += 1
+                        _dbg_init = (self._debug_action_counter, ib, ib_comps, ia, ia_comps)
             elif rem_a > 0:
                 as_, ds_, ax, dx = self.state_a, self.state_b, strat_a, strat_b
                 rem_a -= 1;  act_a += 1
+                if self.debug_logger:
+                    self._debug_action_counter += 1
+                    _dbg_init = (self._debug_action_counter, None, None, None, None)
             else:
                 as_, ds_, ax, dx = self.state_b, self.state_a, strat_b, strat_a
                 rem_b -= 1;  act_b += 1
+                if self.debug_logger:
+                    self._debug_action_counter += 1
+                    _dbg_init = (self._debug_action_counter, None, None, None, None)
 
-            r = self._resolve_action(as_, ds_, ax, dx, minute)
+            r = self._resolve_action(as_, ds_, ax, dx, minute, _dbg_init)
             if r:
                 return r
 
@@ -1197,10 +1661,21 @@ class CombatEngine:
                     if r:
                         return r
 
+        old_end_a = self.state_a.endurance
+        old_end_b = self.state_b.endurance
+
         for ln in _update_endurance(self.state_a, strat_a, act_a, self.state_b):
             self._emit(ln)
         for ln in _update_endurance(self.state_b, strat_b, act_b, self.state_a):
             self._emit(ln)
+
+        if self.debug_logger:
+            self.debug_logger.log_minute_end(
+                self.state_a, self.state_b,
+                old_end_a, old_end_b,
+                act_a, act_b, strat_a, strat_b,
+            )
+
         self._prev_attacks_a = act_a
         self._prev_attacks_b = act_b
         return None
@@ -1245,19 +1720,19 @@ class CombatEngine:
     # ACTION
     # =========================================================================
 
-    def _resolve_action(self, as_: _CState, ds_: _CState, ax: Strategy, dx: Strategy, minute: int) -> Optional[FightResult]:
+    def _resolve_action(self, as_: _CState, ds_: _CState, ax: Strategy, dx: Strategy, minute: int, _dbg_init=None) -> Optional[FightResult]:
         att = as_.warrior;  dfr = ds_.warrior
         wpn = att.primary_weapon;  aim = ax.aim_point
 
         # Check weapon/style compatibility
         is_compatible, penalty_factor = _check_weapon_style_compatibility(wpn, ax.style)
-        
+
         # Use appropriate intent line (normal or awkward)
         if is_compatible:
             intent = N.style_intent_line(att.name, dfr.name, ax.style, wpn, att.gender)
         else:
             intent = N.awkward_style_intent_line(att.name, dfr.name, ax.style, wpn, att.gender)
-        
+
         if intent:
             self._emit(intent)
 
@@ -1277,16 +1752,20 @@ class CombatEngine:
         if fav_flavor:
             self._emit(fav_flavor)
 
-        atk_r = _attack_roll(att, ax, as_)
-        atk_r += get_style_advantage(ax.style, dx.style) * 6
-        
-        # Apply weapon/style incompatibility penalty to attack roll
-        if not is_compatible:
-            atk_r = int(atk_r - (1.0 - penalty_factor) * 25)  # -25 points * penalty severity
+        # --- ATTACK ROLL ---
+        _style_adv = get_style_advantage(ax.style, dx.style) * 6
+        _compat_pen = int((1.0 - penalty_factor) * 25) if not is_compatible else 0
+        if self.debug_logger:
+            _atk_base, _atk_comps = _attack_roll_verbose(att, ax, as_)
+            atk_r = _atk_base + _style_adv - _compat_pen
+        else:
+            atk_r = _attack_roll(att, ax, as_)
+            atk_r += _style_adv
+            if not is_compatible:
+                atk_r = int(atk_r - _compat_pen)
+            _atk_base = atk_r; _atk_comps = None
 
         # --- DECOY FEINT (pre-attack misdirection) ---
-        # A successful feint pulls the defender's guard off the real strike,
-        # imposing a flat penalty on their defense roll for this action.
         decoy_feint_landed = False
         if ax.style == "Decoy":
             if _attempt_feint(att, dfr, dx.style):
@@ -1295,20 +1774,54 @@ class CombatEngine:
             elif dx.style == "Counterstrike":
                 self._emit(N.decoy_feint_read_line(att.name, dfr.name))
 
-        # --- CALCULATED ATTACK PRECISION (pre-attack weak-point targeting) ---
-        # On success, the attacker threads the strike through a seam in the
-        # defender's armor — partial armor bypass and a small damage bonus
-        # apply. Big clunky weapons cannot precision-strike at all.
+        # --- CALCULATED ATTACK PRECISION ---
         ca_precision_landed = False
         if ax.style == "Calculated Attack":
             ca_precision_landed = _attempt_precision_strike(att, dfr, weapon, dx.style)
 
+        # --- DEFENSE ROLL ---
         props_d = get_style_props(dx.style)
         use_p   = props_d.parry_bonus >= props_d.dodge_bonus
-        def_r   = _defense_roll(dfr, dx, ds_, att, aim, ax.style, is_parry=use_p)
-        if decoy_feint_landed:
-            def_r = max(1, def_r - DECOY_FEINT_PENALTY)
-        margin  = atk_r - def_r
+        _decoy_pen_applied = DECOY_FEINT_PENALTY if decoy_feint_landed else 0
+        if self.debug_logger:
+            _def_base, _def_comps = _defense_roll_verbose(dfr, dx, ds_, att, aim, ax.style, is_parry=use_p)
+            def_r = max(1, _def_base - _decoy_pen_applied) if decoy_feint_landed else _def_base
+        else:
+            def_r = _defense_roll(dfr, dx, ds_, att, aim, ax.style, is_parry=use_p)
+            if decoy_feint_landed:
+                def_r = max(1, def_r - DECOY_FEINT_PENALTY)
+            _def_base = def_r; _def_comps = None
+
+        margin = atk_r - def_r
+
+        # --- DEBUG: log action header + rolls + margin ---
+        if self.debug_logger:
+            _an = _dbg_init[0] if _dbg_init else self._debug_action_counter
+            _ia     = _dbg_init[1] if _dbg_init else None
+            _ia_c   = _dbg_init[2] if _dbg_init else None
+            _ib     = _dbg_init[3] if _dbg_init else None
+            _ib_c   = _dbg_init[4] if _dbg_init else None
+            self.debug_logger.log_action_start(
+                _an, att.name, dfr.name, wpn, ax.style, aim,
+                is_compatible, penalty_factor,
+                _ia, _ia_c, _ib, _ib_c,
+            )
+            self.debug_logger.log_attack_roll(
+                att.name, _atk_base, _atk_comps, _style_adv, _compat_pen, atk_r,
+            )
+            self.debug_logger.log_defense_roll(
+                dfr.name, _def_comps, use_p,
+                props_d.parry_bonus, props_d.dodge_bonus,
+                _def_base, _decoy_pen_applied, def_r,
+            )
+            if margin <= 0:
+                _outcome = ("MISS" if margin == 0
+                            else ("PARRY" if use_p else "DODGE") + f" (margin {margin})")
+            elif margin < 10:
+                _outcome = f"GRAZE (margin {margin}, 1 HP)"
+            else:
+                _outcome = f"HIT (margin {margin})"
+            self.debug_logger.log_margin(atk_r, def_r, margin, _outcome)
 
         if margin <= 0:
             # Calculated Attack probe flavor — occasional line when a CA
@@ -1389,17 +1902,16 @@ class CombatEngine:
 
         if margin < 10:
             self._emit(f"{att.name.upper()}'s blow barely grazes {dfr.name.upper()}!")
+            prev_hp_graze = ds_.current_hp
             ds_.current_hp -= 1
+            if self.debug_logger:
+                self.debug_logger.log_hp_update(dfr.name, prev_hp_graze, 1, ds_.current_hp, dfr.max_hp, "graze")
             return None
 
         precision = "precise" if margin >= 50 else ("barely" if margin < 20 else "normal")
 
         # --- CRITICAL / SIGNATURE HIT ---
-        # Fires when weapon skill >= 5 and 25% chance rolls true.
-        # Replaces the normal hit_line with a weapon-specific signature line.
-        # Damage is floored at medium (12% of max HP) when the signature fires.
-        # CA precision hits take priority over signature hits for this strike.
-        wpn_key_sig  = wpn.lower().replace(" ", "_").replace("&", "and")
+        wpn_key_sig   = wpn.lower().replace(" ", "_").replace("&", "and")
         wpn_skill_lvl = att.skills.get(wpn_key_sig, 0)
         sig = None
         if wpn_skill_lvl >= 5 and random.random() < 0.25 and not ca_precision_landed:
@@ -1413,36 +1925,59 @@ class CombatEngine:
             for ln in N.hit_line(att.name, dfr.name, wpn, cat, aim, precision, attacker_race=att.race.name):
                 self._emit(ln)
 
-        dmg, wcats = _calc_damage_hybrid(
-            att, ax, wpn, dfr, margin,
-            precision_bypass=(CA_PRECISION_ARMOR_BYPASS if ca_precision_landed else 0.0),
-            style_compat_penalty=penalty_factor,
-        )
+        _pbypass = CA_PRECISION_ARMOR_BYPASS if ca_precision_landed else 0.0
+        if self.debug_logger:
+            dmg, wcats, _dmg_steps = _calc_damage_verbose(
+                att, ax, wpn, dfr, margin,
+                precision_bypass=_pbypass, style_compat_penalty=penalty_factor,
+            )
+        else:
+            dmg, wcats = _calc_damage_hybrid(
+                att, ax, wpn, dfr, margin,
+                precision_bypass=_pbypass, style_compat_penalty=penalty_factor,
+            )
+            _dmg_steps = None
+
+        _sig_floor = int(dfr.max_hp * 0.12) if sig else None
         if sig:
-            dmg = max(dmg, int(dfr.max_hp * 0.12))  # floor at minimum medium damage
+            dmg = max(dmg, int(dfr.max_hp * 0.12))
+        _ca_bonus = CA_PRECISION_DAMAGE_BONUS if ca_precision_landed else 0
         if ca_precision_landed:
-            dmg += CA_PRECISION_DAMAGE_BONUS
+            dmg += _ca_bonus
         self._emit(N.damage_line(dmg, dfr.max_hp, cat))
+
+        if self.debug_logger:
+            self.debug_logger.log_damage(
+                att.name, dfr.name, margin, _dmg_steps,
+                _sig_floor, _ca_bonus, dmg,
+            )
 
         prev_hp        = ds_.current_hp
         ds_.current_hp -= dmg
 
-        # --- Apply Bleeding Wounds from Slash skill---
+        if self.debug_logger:
+            self.debug_logger.log_hp_update(dfr.name, prev_hp, dmg, ds_.current_hp, dfr.max_hp)
+
+        # --- Bleeding Wounds (slash skill) ---
         wpn_key_std = wpn.lower().replace(" ", "_").replace("&", "and")
         if _is_slash_weapon(wpn_key_std):
             slash_level = att.skills.get("slash", 0)
             if slash_level > 0:
-                # 5% chance per slash level to cause bleeding
                 bleed_chance = slash_level * 5
                 if random.randint(1, 100) <= bleed_chance:
-                    # Add bleeding wound to accumulator (silent, hidden from player)
                     ds_.bleeding_wounds += 1
 
-        # --- Apply Bleeding Damage each round (silent, hidden from player) ---
+        # --- Bleeding Damage ---
         if ds_.bleeding_wounds > 0 and random.randint(1, 100) <= 40:
             bleed_dmg = _apply_bleeding_damage(ds_)
             if bleed_dmg > 0:
+                _pre_bleed_hp = ds_.current_hp
                 ds_.current_hp -= bleed_dmg
+                if self.debug_logger:
+                    self.debug_logger.log_bleed(
+                        dfr.name, ds_.bleeding_wounds, bleed_dmg,
+                        _pre_bleed_hp, ds_.current_hp, dfr.max_hp,
+                    )
 
         # Low-HP status commentary
         hp_pct = ds_.current_hp / max(1, dfr.max_hp)
@@ -1451,18 +1986,18 @@ class CombatEngine:
             if status_ln:
                 self._emit(status_ln)
 
-        # Near-kill tracking: attacker reduced defender through the 20% HP threshold
+        # Near-kill tracking
         nk_threshold = int(dfr.max_hp * 0.20)
         if prev_hp > nk_threshold >= ds_.current_hp:
             as_.near_kills_dealt += 1
 
-        # Handle Opportunity Throw weapon loss
+        # Opportunity Throw weapon loss
         if ax.style == "Opportunity Throw":
             weapon_loss_msg = self._handle_opportunity_throw_loss(att, as_)
             if weapon_loss_msg:
                 self._emit(weapon_loss_msg)
 
-        # Check for entangle/trip effects (Bola, Heavy Whip)
+        # Entangle/trip (Bola, Heavy Whip)
         was_thrown = ax.style == "Opportunity Throw"
         try:
             weapon = get_weapon(wpn)
@@ -1471,22 +2006,40 @@ class CombatEngine:
                 self._emit(entangle_msg)
                 ds_.is_on_ground = True
                 as_.knockdowns_dealt += 1
-                # Extra fall damage from the entangle (1-3 HP depending on impact)
                 fall_dmg = random.randint(1, 3)
+                _pre_fall = ds_.current_hp
                 ds_.current_hp -= fall_dmg
                 self._emit(f"{dfr.name.upper()} hits the ground hard!")
+                if self.debug_logger:
+                    self.debug_logger.log_hp_update(
+                        dfr.name, _pre_fall, fall_dmg, ds_.current_hp, dfr.max_hp, "entangle fall"
+                    )
         except ValueError:
             pass
 
-        if _check_knockdown(dfr, ds_, dmg, wcats):
+        # Knockdown
+        if self.debug_logger:
+            _kd, _kd_chance, _kd_roll = _check_knockdown_verbose(dfr, ds_, dmg, wcats)
+            self.debug_logger.log_knockdown(dfr.name, dmg, dfr.max_hp, wcats, _kd_chance, _kd_roll, _kd)
+        else:
+            _kd = _check_knockdown(dfr, ds_, dmg, wcats)
+        if _kd:
             self._emit(N.knockdown_line(dfr.name, dfr.gender))
             ds_.is_on_ground = True
             as_.knockdowns_dealt += 1
 
-        perm = _check_perm_injury(dfr, dmg, aim)
+        # Perm injury
+        if self.debug_logger:
+            _perm_result, _perm_thresh, _perm_chance, _perm_roll = _check_perm_injury_verbose(dfr, dmg, aim)
+            _perm_label = f"{_perm_result[0]} ({_perm_result[1]} level(s))" if _perm_result else None
+            self.debug_logger.log_perm_injury(dfr.name, dmg, dfr.max_hp, _perm_chance, _perm_roll, _perm_label)
+            perm = _perm_result
+        else:
+            perm = _check_perm_injury(dfr, dmg, aim)
+
         if perm:
             loc, lvls = perm
-            fatal     = dfr.injuries.add(loc, lvls)
+            fatal = dfr.injuries.add(loc, lvls)
             for ln in N.perm_injury_lines(dfr.name, loc, lvls, dfr.gender):
                 self._emit(ln)
             if fatal:
@@ -1539,7 +2092,14 @@ class CombatEngine:
             self._emit(N.death_line(dw.name, dw.gender))
             self._emit(""); self._emit(N.victory_line(kw.name, dw.name))
             return self._make_result(kw, dw, True, minute)
-        if _death_check(prev, dmg):
+        if self.debug_logger:
+            died, _dc = _death_check_verbose(prev, dmg)
+            _overshoot    = _dc.get("overshoot", 0)
+            _death_chance = _dc.get("death_chance", 0.0)
+            self.debug_logger.log_death_check(dw.name, prev, dmg, _overshoot, _death_chance, died)
+        else:
+            died = _death_check(prev, dmg)
+        if died:
             dw.is_dead = True
             self._emit(N.death_line(dw.name, dw.gender))
             self._emit(""); self._emit(N.victory_line(kw.name, dw.name))
@@ -1555,7 +2115,16 @@ class CombatEngine:
         dw = dying.warrior;  kw = killer.warrior
         self._emit(N.appeal_line(dw.name))
         dying.concede_attempts += 1
-        granted = _concede_check(dw, dying, self.is_monster_fight)
+        if self.debug_logger:
+            granted, _cc = _concede_check_verbose(dw, dying, self.is_monster_fight)
+            self.debug_logger.log_concede(
+                dw.name,
+                _cc.get("d100", 0), _cc.get("PRE_bonus", 0),
+                _cc.get("luck_half", 0), _cc.get("total", 0),
+                _cc.get("threshold", 0), granted,
+            )
+        else:
+            granted = _concede_check(dw, dying, self.is_monster_fight)
         self._emit(N.mercy_result_line(dw.name, granted))
         if granted:
             self._emit(""); self._emit(N.victory_line(kw.name, dw.name))
@@ -1619,6 +2188,71 @@ class CombatEngine:
 
         w.recalculate_derived()
         return res
+
+    def _apply_training_verbose(self, w: Warrior, opponent: Optional[Warrior] = None):
+        """Verbose version of _apply_training; returns (result_strings, detail_dicts)."""
+        w.reset_training_session()
+        res    = []
+        detail = []
+
+        for sk in w.trains[:3]:
+            msg, roll, chance = w.train_skill(sk, verbose=True)
+            if msg:
+                res.append(msg)
+            detail.append({
+                "skill":   sk,
+                "roll":    roll,
+                "chance":  chance,
+                "success": roll > 0 and roll <= chance,
+                "msg":     msg,
+                "source":  "train",
+            })
+
+        # INT 4th train: chance to learn a skill from opponent
+        if opponent and w.intelligence >= 15:
+            bonus_chance  = max(3, (w.intelligence - 14) * 4)
+            trigger_roll  = random.randint(1, 100)
+            if trigger_roll <= bonus_chance:
+                candidate_skills = []
+                for s in (opponent.strategies or []):
+                    if s.style in ("Parry", "Counterstrike"):
+                        candidate_skills.append("parry")
+                    if s.style in ("Strike", "Bash", "Total Kill", "Counterstrike"):
+                        candidate_skills.append("initiative")
+                    if s.style in ("Dodge",):
+                        candidate_skills.append("dodge")
+                opp_wpn = (opponent.primary_weapon or "Short Sword").lower().replace(" ", "_").replace("&", "and")
+                candidate_skills += [opp_wpn, "dodge", "parry", "initiative", "feint"]
+                random.shuffle(candidate_skills)
+                for sk in candidate_skills:
+                    sk_key = sk.lower().replace(" ", "_")
+                    if sk_key in w.skills:
+                        msg, roll, chance = w.train_skill(sk_key, verbose=True)
+                        if msg:
+                            res.append(f"[OBSERVED] {msg}")
+                        detail.append({
+                            "skill":         sk_key,
+                            "roll":          roll,
+                            "chance":        chance,
+                            "success":       roll > 0 and roll <= chance,
+                            "msg":           f"[OBSERVED] {msg}" if msg else "",
+                            "source":        "observed",
+                            "trigger_roll":  trigger_roll,
+                            "trigger_chance": bonus_chance,
+                        })
+                        break
+            else:
+                detail.append({
+                    "skill":   "observed_learning",
+                    "roll":    trigger_roll,
+                    "chance":  bonus_chance,
+                    "success": False,
+                    "msg":     "",
+                    "source":  "observed_trigger",
+                })
+
+        w.recalculate_derived()
+        return res, detail
 
     def _apply_presence_hesitation(self):
         """
@@ -1729,6 +2363,7 @@ def run_fight(
     manager_b_name  : str  = "Manager B",
     is_monster_fight: bool = False,
     challenger_name : str  = None,
+    debug_logger    : Optional[CombatDebugLogger] = None,
 ) -> FightResult:
     engine = CombatEngine(
         warrior_a, warrior_b,
@@ -1736,6 +2371,7 @@ def run_fight(
         manager_a_name, manager_b_name,
         is_monster_fight=is_monster_fight,
         challenger_name=challenger_name,
+        debug_logger=debug_logger,
     )
     result = engine.resolve_fight()
     if result.winner and result.loser:

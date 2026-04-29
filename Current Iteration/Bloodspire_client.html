@@ -1196,6 +1196,71 @@ const LocalAPI = {
 /* ============================================================
    UTILITIES
    ============================================================ */
+
+const _HEIGHT_RANGES = {
+  'Halfling':[37,61],'Elf':[56,71],'Half-Elf':[60,72],
+  'Human':[62,76],'Dwarf':[42,62],'Half-Orc':[65,90],
+  'Monster':[72,108],'Peasant':[62,76],
+};
+const _DENSITY = {
+  'Halfling':0.0434,'Elf':0.0338,'Half-Elf':0.0354,
+  'Human':0.0368,'Dwarf':0.0780,'Half-Orc':0.0462,
+  'Monster':0.0420,'Peasant':0.0368,
+};
+function calcMeasurements(race, gender, size, trainingWeightBonus) {
+  const [mn_m, mx_m] = _HEIGHT_RANGES[race] || [62, 76];
+  const female = gender === 'Female';
+  const mn = female ? Math.floor(mn_m * 0.95) : mn_m;
+  const mx = female ? Math.floor(mx_m * 0.95) : mx_m;
+  const size_t = Math.max(0, Math.min(1, ((size||8) - 3) / 22));
+  const height = Math.floor(mn + size_t * (mx - mn));
+  let density = _DENSITY[race] || 0.0368;
+  if (female) density *= 0.92;
+  const weight = Math.max(30, Math.floor(height * height * density)) + (trainingWeightBonus || 0);
+  return { height, weight };
+}
+
+const _SKILL_LABELS = {
+  1: 'Has Novice Skill ({n}) in {s}',
+  2: 'Has Some Skill ({n}) in {s}',
+  3: 'Is Skilled ({n}) in {s}',
+  4: 'Has Good Skill ({n}) in {s}',
+  5: 'Is Very Skilled ({n}) in {s}',
+  6: 'Has Excellent Skill ({n}) in {s}',
+  7: 'Has Expert Skill ({n}) in {s}',
+  8: 'Has Incredible Skill ({n}) in {s}',
+  9: 'Is a Master ({n}) in {s}',
+};
+const _INJURY_DESCS = {
+  1:'Annoying', 2:'Bothersome', 3:'Irritating', 4:'Troublesome',
+  5:'Painful',  6:'Dreadful',   7:'Incapacitating', 8:'Devastating', 9:'Fatal',
+};
+const _INJURY_LOCS = ['head','chest','abdomen','primary_arm','secondary_arm','primary_leg','secondary_leg'];
+
+function formatSkillsText(skills) {
+  const lines = [];
+  for (const [key, level] of Object.entries(skills || {}).sort((a,b) => a[0].localeCompare(b[0]))) {
+    if (!level) continue;
+    const name = key.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+    const tpl  = _SKILL_LABELS[level] || 'Has Skill Level ({n}) in {s}';
+    lines.push(tpl.replace('{n}', level).replace('{s}', name));
+  }
+  return lines;
+}
+
+function formatInjuriesText(injuries) {
+  const lines = [];
+  for (const loc of _INJURY_LOCS) {
+    const level = (injuries || {})[loc] || 0;
+    if (!level) continue;
+    const desc    = _INJURY_DESCS[level] || `Level ${level}`;
+    const article = /^[aeiou]/i.test(desc) ? 'an' : 'a';
+    const display = loc.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+    lines.push(`Has ${article} ${desc} (${level}) wound to the ${display}`);
+  }
+  return lines;
+}
+
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 // jsq(v): JSON-stringify v and HTML-entity-encode both ' and " so the result can
 // be safely embedded inside either single- or double-quoted HTML onclick attributes.
@@ -2285,7 +2350,8 @@ function buildStatsTab(team, w, wIdx) {
   // and overwriting the warrior's saved armor/weapons/trains/strategies.
   if (!S.gd) return '<div style="padding:20px;color:#555;">Loading game data...</div>';
   const gd = S.gd;
-  const ft = Math.floor(w.height_in/12), ins = w.height_in%12;
+  const { height: _hin, weight: _wlbs } = calcMeasurements(w.race, w.gender, w.size, w.training_weight_bonus);
+  const ft = Math.floor(_hin / 12), ins = _hin % 12;
 
   // Stat rows
   const attrs = ['strength','dexterity','constitution','intelligence','presence','size'];
@@ -2377,9 +2443,9 @@ function buildStatsTab(team, w, wIdx) {
     <td><select data-si="D" data-sf="defense_point" ${OC}>${stratOpts(aimPts, always.defense_point)}</select></td>
   </tr>`;
 
-  // Skills and injuries
-  const skillsText  = (w.skills_text||[]).join('\n') || '(none)';
-  const injText     = (w.injuries_text||[]).join('\n') || '(none)';
+  // Skills and injuries — built from raw dicts so post-merge data is always current
+  const skillsText = formatSkillsText(w.skills).join('\n') || '(none)';
+  const injText    = formatInjuriesText(w.injuries).join('\n') || '(none)';
 
   return `
 <div style="padding:4px;">
@@ -2400,7 +2466,7 @@ function buildStatsTab(team, w, wIdx) {
     <td style="padding:2px 12px 2px 8px;">Gender</td>
     <td><input type="text" class="ro" value="${esc(w.gender)}" style="width:80px;" readonly></td>
     <td style="padding:2px 8px;">Weight</td>
-    <td><input type="text" class="ro" value="${esc(w.weight_lbs)} lbs" style="width:60px;" readonly></td>
+    <td><input type="text" class="ro" value="${_wlbs} lbs" style="width:60px;" readonly></td>
   </tr>
 </table>
 
@@ -3134,8 +3200,8 @@ function buildArchivesTab(team) {
   let cards = '';
   archived.forEach(a => {
     const rec  = `${a.wins||0}-${a.losses||0}-${a.kills||0}`;
-    const inj  = a.injuries_text ? a.injuries_text.join('<br>') : '—';
-    const skls = (a.skills_text || []).join('<br>') || '—';
+    const inj  = formatInjuriesText(a.injuries).join('<br>') || '—';
+    const skls = formatSkillsText(a.skills).join('<br>') || '—';
     cards += `
 <div class="group" style="margin:6px 4px; background:#f9f7f4;">
   <span class="group-label" style="color:#800;">✝ ${esc(a.name)}</span>
@@ -3366,7 +3432,7 @@ async function rpSave(teamId, wIdx) {
   const adds = rs.adds || {};
   const base = rs.base;
   const body = {
-    team_id: teamId, slot_idx: wIdx,
+    team_id: teamId, warrior_idx: wIdx,
     name: nm.toUpperCase(), race: rs.race, gender: rs.gender,
     strength    : (base.strength     || 8) + (adds.strength     || 0),
     dexterity   : (base.dexterity    || 8) + (adds.dexterity    || 0),
@@ -3707,6 +3773,13 @@ async function doLogin() {
     S.view = 'main'; S.msg = '';
     await loadTeams();
     await loadLeagueSettings();
+    // Sync S.account.id with the league manager ID if they differ — the league
+    // settings ID is server-authoritative; the local account.json may be stale.
+    if (S.league.managerId && S.account && S.account.id !== S.league.managerId) {
+      S.account.id = S.league.managerId;
+      const _syncAcc = await _ensureAccountLoaded();
+      if (_syncAcc) { _syncAcc.id = S.league.managerId; await _persistAccount(_syncAcc); }
+    }
     render();
   } catch (err) {
     setMsg('Error: ' + (err.message || err), 'err'); render();
@@ -4002,7 +4075,7 @@ async function doSaveTeam() {
 
   try {
     const r = await API.post('/api/team/create', {
-      manager_id  : S.account.id,
+      manager_id  : S.league.managerId || S.account.id,
       password    : S.league.password || '',
       manager_name: S.account.manager_name,
       team_name   : tName,
@@ -4693,6 +4766,13 @@ async function doLeagueRegister() {
       S.league.url = url; S.league.managerId = d.manager_id;
       S.league.managerName = d.manager_name; S.league.password = pw;
       await API.post('/api/league_settings', {manager_name: S.account?.manager_name || name, url, managerId: d.manager_id, managerName: d.manager_name, password: pw});
+      // Sync account.json so S.account.id matches the server-assigned manager ID
+      const _acc = await _ensureAccountLoaded();
+      if (_acc && _acc.id !== d.manager_id) {
+        _acc.id = d.manager_id;
+        await _persistAccount(_acc);
+        if (S.account) S.account.id = d.manager_id;
+      }
       _leagueMsg('Registered! Manager ID: ' + d.manager_id, 'ok');
       setTimeout(() => { el('league-modal')?.remove(); render(); }, 1200);
     } else { _leagueMsg('Error: ' + d.error, 'err'); }
@@ -4724,6 +4804,13 @@ async function doReRegisterLeague() {
       manager_name: S.account?.manager_name || name,
       url, managerId: d.manager_id, managerName: d.manager_name, password: pw,
     });
+    // Sync account.json so S.account.id matches the server-assigned manager ID
+    const _acc2 = await _ensureAccountLoaded();
+    if (_acc2 && _acc2.id !== d.manager_id) {
+      _acc2.id = d.manager_id;
+      await _persistAccount(_acc2);
+      if (S.account) S.account.id = d.manager_id;
+    }
     _leagueMsg('✓ Re-registered! New ID: ' + d.manager_id, 'ok');
     setTimeout(() => { el('league-modal')?.remove(); render(); }, 1200);
   } catch(e) { _leagueMsg('Could not reach league server: ' + e.message, 'err'); }
