@@ -475,6 +475,18 @@ const Store = {
   async readNewsletter(turn) { return await fsaReadText(_newsletterPath(turn)); },
   async writeNewsletter(turn, text) { return await fsaWriteText(_newsletterPath(turn), text); },
   async writeTurnResult(turn, obj)  { return await fsaWriteJSON(_turnResultPath(turn), obj); },
+  async listArchivedTeamIds() {
+    const names = await fsaListDir('archives');
+    const ids = [];
+    for (const n of names) {
+      const m = n.match(/^team_(\d+)\.json$/);
+      if (m) ids.push(parseInt(m[1], 10));
+    }
+    return ids.sort((a, b) => a - b);
+  },
+  async readArchivedTeam(tid) {
+    return await fsaReadJSON(`archives/team_${String(tid).padStart(4,'0')}.json`);
+  },
 };
 
 /* ============================================================
@@ -604,6 +616,7 @@ const S = {
   challengeTargets: null, // null = not loaded; [] = loaded list of warriors
   runNextTurn:     {},    // {team_id: bool} per-team run flags
   replacingTeam:   null,  // {old_team_id, manager_id} when replacing
+  legacyTeams:     null,  // cached list of archived/replaced teams
   league: {               // league server connection settings
     url:         '',      // e.g. http://192.168.1.5:8766
     managerId:   '',
@@ -1671,7 +1684,7 @@ function buildManagerPanel() {
   const acc    = S.account || {};
   const tab    = S.mgrTab || 'account';
   const canAdd = acc.team_ids && acc.team_ids.length < 5;
-  const tabs   = [['account','Account'],['newsletters','Newsletters'],['scouting','Scouting'],['new_team','New Team']];
+  const tabs   = [['account','Account'],['newsletters','Newsletters'],['scouting','Scouting'],['legacy','Legacy'],['new_team','New Team']];
   let tabHtml  = '<div class="tabs">';
   tabs.forEach(([key,lbl]) => {
     const isDisabled = key === 'new_team' && !canAdd;
@@ -1813,6 +1826,10 @@ function buildManagerPanel() {
     body = buildScoutingTab();
   }
 
+  else if (activeTab === 'legacy') {
+    body = buildLegacyTab();
+  }
+
   else if (activeTab === 'new_team') {
     body = `<div style="padding:12px;">
       <p style="color:#555; font-size:11px;">Use <b>Action → New Team</b> to create a team.</p>
@@ -1838,7 +1855,109 @@ function setMgrTab(tab) {
       if (S.mgrTab === 'newsletters') refreshContent(); // Re-render if still on this tab
     });
   }
+  if (tab === 'legacy') {
+    S.legacyTeams = null; // force reload each time the tab is opened
+    _loadLegacyTeams().then(() => { if (S.mgrTab === 'legacy') refreshContent(); });
+  }
   refreshContent();
+}
+
+/* ============================================================
+   LEGACY TAB
+   ============================================================ */
+async function _loadLegacyTeams() {
+  const ids = await Store.listArchivedTeamIds();
+  const teams = [];
+  for (const tid of ids.slice().reverse()) { // newest (highest id) first
+    const team = await Store.readArchivedTeam(tid);
+    if (team) teams.push(team);
+  }
+  S.legacyTeams = teams;
+}
+
+function buildLegacyTab() {
+  if (S.legacyTeams === null) {
+    return '<div style="padding:20px; color:#666;">Loading legacy teams...</div>';
+  }
+  if (!S.legacyTeams.length) {
+    return `<div style="padding:12px; color:#555;">
+      <b>Legacy</b><br><br>No teams have been replaced yet.
+    </div>`;
+  }
+
+  function warriorCard(w) {
+    const rec  = `${w.wins||0}-${w.losses||0}-${w.kills||0}`;
+    const inj  = formatInjuriesText(w.injuries).join('<br>') || '—';
+    const skls = formatSkillsText(w.skills).join('<br>') || '—';
+    const isDead      = w.is_dead;
+    const isAscended  = w.ascended_to_monster;
+    const label = isDead
+      ? `<span style="color:#800;">✝ ${esc(w.name)}</span>`
+      : isAscended
+        ? `<span style="color:#844;">👹 ${esc(w.name)}</span>`
+        : `<span style="color:#555;">⚔ ${esc(w.name)}</span>`;
+    const statusLine = isDead
+      ? `Slain by: <b>${esc(w.archived_killed_by||w.killed_by||'Unknown')}</b>`
+      : isAscended
+        ? `<b>Ascended to Monsterdom</b>`
+        : `<b>Replaced</b>`;
+    return `
+<div class="group" style="margin:6px 4px; background:#f9f7f4;">
+  <span class="group-label">${label}</span>
+  <div style="display:flex; gap:20px; font-size:11px; flex-wrap:wrap; padding-top:4px;">
+    <div>
+      <div style="color:#666; margin-bottom:3px;">
+        ${esc(w.race||'')} ${esc(w.gender||'')} &mdash; ${rec} (${w.total_fights||0} fights)<br>
+        ${statusLine}
+      </div>
+      <table style="border-collapse:collapse; font-size:11px;">
+        ${['strength','dexterity','constitution','intelligence','presence','size'].map(attr => {
+          const deathVal = w[attr] != null ? w[attr] : '—';
+          const baseVal  = (w.initial_stats && w.initial_stats[attr] != null) ? ` (${w.initial_stats[attr]})` : '';
+          return `<tr><td style="padding:1px 6px; color:#555; width:90px;">${capitalize(attr)}</td>
+               <td style="padding:1px 6px; font-weight:bold;">${deathVal}${baseVal}</td></tr>`;
+        }).join('')}
+      </table>
+    </div>
+    <div>
+      <div style="color:#666; font-weight:bold; margin-bottom:3px;">Skills</div>
+      <div style="color:#333; line-height:1.5;">${skls}</div>
+    </div>
+    <div>
+      <div style="color:#666; font-weight:bold; margin-bottom:3px;">Permanent Injuries</div>
+      <div style="color:#800; line-height:1.5;">${inj}</div>
+    </div>
+  </div>
+</div>`;
+  }
+
+  let sections = '';
+  S.legacyTeams.forEach(team => {
+    let tw=0, tl=0, tk=0;
+    const allWarriors = [...(team.warriors||[]), ...(team.archived_warriors||[])].filter(Boolean);
+    allWarriors.forEach(w => { tw+=w.wins||0; tl+=w.losses||0; tk+=w.kills||0; });
+
+    // archived_warriors (fallen before dissolution) then warriors (active at dissolution)
+    const fallen   = (team.archived_warriors||[]).filter(Boolean).slice().reverse();
+    const atDeath  = (team.warriors||[]).filter(Boolean);
+    const warriors = [...atDeath, ...fallen];
+
+    let warriorCards = warriors.map(w => warriorCard(w)).join('');
+    if (!warriorCards) warriorCards = '<div style="padding:6px; color:#aaa;">No warrior records.</div>';
+
+    sections += `
+<div style="margin-bottom:12px;">
+  <div style="font-weight:bold; font-size:12px; padding:4px 6px; background:#d4d0c8; border:1px solid #bbb; margin-bottom:2px;">
+    ${esc(team.team_name)} &mdash; Career: ${tw}-${tl}-${tk}
+  </div>
+  ${warriorCards}
+</div>`;
+  });
+
+  return `<div style="padding:6px;">
+    <div style="font-weight:bold; margin-bottom:8px;">Legacy — Replaced Teams</div>
+    ${sections}
+  </div>`;
 }
 
 /* ============================================================
@@ -5177,6 +5296,7 @@ async function confirmReplaceTeam(teamId) {
   if (!r.success) { alert('Error: ' + r.error); return; }
   // Store replacement context and trigger new team creation
   S.replacingTeam = { old_team_id: teamId, new_team_id: r.new_team_id, manager_id: S.account.id };
+  S.legacyTeams = null; // invalidate so Legacy tab reloads on next visit
   setMsg('', '');
   initCreateTeam(true);  // pass flag = replacing
 }
