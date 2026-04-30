@@ -2830,7 +2830,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                         except: pass
                     elif f.endswith(".txt"): # These are text files, just remove
                         try: os.remove(os.path.join(GRAVEYARD_DIR, f))
-                    except: pass
+                        except: pass
             try:
                 save_champion_state({})
             except Exception:
@@ -2941,7 +2941,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 if "data" in b: # Protected
                     save_json_protected(fpath, b["data"])
                 else: # Not protected
-                    else:
+                    with open(fpath, "w", encoding="utf-8") as f:
                         f.write(b.get("text", ""))
                 self.send_json({"success": True})
             except Exception as e:

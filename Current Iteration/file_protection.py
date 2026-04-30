@@ -36,6 +36,8 @@ def save_checksum(json_filepath: str, data: Dict[Any, Any]):
     checksum = calculate_checksum(data)
     checksum_filepath = _get_checksum_filepath(json_filepath)
     try:
+        if os.path.exists(checksum_filepath):
+            make_file_writable(checksum_filepath)
         with open(checksum_filepath, 'w', encoding='utf-8') as f:
             f.write(checksum)
         # Make checksum file read-only too

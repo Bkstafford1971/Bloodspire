@@ -1,4 +1,4 @@
-﻿﻿# =============================================================================
+﻿# =============================================================================
 # save.py — BLOODSPIRE Save & Load System
 # =============================================================================
 # All data is stored as JSON files under the saves/ directory.
@@ -861,6 +861,11 @@ def reset_arena_complete():
     _rm_file(os.path.join(SAVES_DIR, "league_settings.json"))
     _rm_file(os.path.join(SAVES_DIR, "rivals.json"))
     _rm_file(os.path.join(SAVES_DIR, "league_client.json"))
+    _rm_file(os.path.join(SAVES_DIR, "league", "managers.json"))
+    _rm_file(os.path.join(SAVES_DIR, "league", "ai_teams.json"))
+    _rm_file(os.path.join(SAVES_DIR, "league", "config.json"))
+    _rm_file(os.path.join(SAVES_DIR, "league", "standings.json"))
+    _rm_file(os.path.join(SAVES_DIR, "league", "scout_narratives.json"))
 
     state = load_game_state()
     state["turn_number"]   = 0
