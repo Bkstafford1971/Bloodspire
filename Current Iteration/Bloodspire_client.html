@@ -2474,8 +2474,7 @@ function buildTeamPanel(team) {
       <td style="padding:3px 8px;">Team Number</td>
       <td><input type="text" class="ro" value="${esc(team.team_id)}" style="width:120px;" readonly></td>
       <td colspan="2" style="padding:3px 8px; text-align:right;">
-        <button onclick="confirmReplaceTeam(${tid})" style="margin-right:6px;">↺ Replace Team</button>
-        <button onclick="confirmRemoveTeam(${tid})" style="color:#800; border-color:#f88 #800 #800 #f88;">✕ Remove Team</button>
+        <button onclick="confirmReplaceTeam(${tid})">↺ Replace Team</button>
       </td>
     </tr>
   </table>
@@ -5470,23 +5469,6 @@ is  }
   initCreateTeam(true);  // pass flag = replacing
 }
 
-async function confirmRemoveTeam(teamId) {
-  const team = S.teams[teamId];
-  const tname = team ? team.team_name : `Team ${teamId}`;
-  if (!confirm(`Remove "${tname}" from your account?\n\nWarriors will be archived. This cannot be undone.`)) return;
-  const r = await API.post('/api/team/remove', {
-    manager_id: S.account.id, team_id: teamId
-  });
-  if (r.success) {
-    S.account.team_ids = S.account.team_ids.filter(id => id !== teamId);
-    delete S.teams[teamId];
-    S.sel = {type: null};
-    setMsg(`${tname} removed from your account.`, 'ok');
-    render();
-  } else {
-    alert('Error: ' + r.error);
-  }
-}
 
 async function runAllTeams() {
   const ids = (S.account?.team_ids || []).filter(tid => S.runNextTurn[tid] !== false);

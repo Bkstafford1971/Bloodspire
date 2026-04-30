@@ -832,6 +832,7 @@ def _run_turn(request_password, rerun_turn=None):
                 })
                 if slain:
                     player_team.kill_warrior(pw, killed_by=opp_name, killer_fights=opp_tf)
+                    player_team.auto_upload_enabled = False
                 opp_trained_d = _pvp["ow_trained_dict"] if _is_canonical_pw else _pvp["pw_trained_dict"]
                 bouts.append({
                     "warrior_name": pw.name, "opponent_name": opp_name,
@@ -949,6 +950,7 @@ def _run_turn(request_password, rerun_turn=None):
             })
             if slain:
                 player_team.kill_warrior(pw, killed_by=ow.name, killer_fights=ow.total_fights)
+                player_team.auto_upload_enabled = False
 
             # Monster ascension: if the player warrior slew a monster, they
             # are absorbed into The Monsters roster (replacing the fallen
@@ -1018,6 +1020,9 @@ def _run_turn(request_password, rerun_turn=None):
                 except Exception as _mb_err:
                     print(f"  WARN: mirror bout registration failed for {ow.name}: {_mb_err}")
 
+        # Track the last turn this team actively participated in
+        player_team.last_turn_ran = turn_num
+
         # Create two versions:
         # 1. team_slim: for server-side storage (strip fight_history to save space)
         # 2. team_full: for client download (keep fight_history so client has complete picture)
@@ -1081,6 +1086,15 @@ def _run_turn(request_password, rerun_turn=None):
         }
         _save_result(turn_num, manager_id, mgr_res)
         all_results[manager_id] = mgr_res
+
+        # Persist updated team state (last_turn_ran, auto_upload_enabled, dead warriors)
+        # to the team file so account recovery reflects current state.
+        if not manager_id.startswith("ai_") and getattr(player_team, "team_id", 0):
+            try:
+                from save import save_team as _save_team_file
+                _save_team_file(player_team)
+            except Exception as _ste:
+                print(f"  WARN: Could not persist team state for {mname}: {_ste}")
 
     # Merge mirror bouts: AI teams whose warriors fought as OW in another
     # manager's iteration need those fights in their own bouts list so the
@@ -2765,8 +2779,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                             filtered_warriors.append(None)
                     team_dict["warriors"] = filtered_warriors
                     filtered_teams.append(team_dict)
-                    # Include auto_upload_enabled and last_turn_ran
-                    team_dict["auto_upload_enabled"] = team.auto_upload_enabled
+                    # auto_upload_enabled and last_turn_ran are already in team_dict via to_dict()
 
                 self.send_json({"success":True,"teams":filtered_teams}); return
 
