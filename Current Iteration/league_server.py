@@ -1217,6 +1217,8 @@ def _run_turn(request_password, rerun_turn=None):
                 continue
             if any((w is None) or w.get("is_dead") for w in _warriors):
                 continue
+            if not _team_dict.get("auto_upload_enabled", True): # Skip if auto-upload is disabled
+                continue
             _real_mid = _key.split("_team")[0]
             _tid      = _res.get("team_id") or _team_dict.get("team_id", "")
             # Skip auto-carry if this team is no longer in the manager's roster
@@ -1243,6 +1245,7 @@ def _run_turn(request_password, rerun_turn=None):
                 "team_id"      : _tid,
                 "team"         : _team_dict,
                 "uploaded_at"  : f"{_auto_ts} (auto-carry)",
+                "auto_upload_enabled": True, # Auto-carried teams are eligible for future auto-carries
                 "auto_uploaded": True,
             })
 
@@ -2662,6 +2665,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     "team_id" : team_id,
                     "team" : team,
                     "uploaded_at" : upload_time,
+                    "auto_upload_enabled": True, # Manual upload re-enables auto-upload
                 })
                 mgrs[mid]["last_upload_timestamp"] = upload_time # This will be replaced by save_json_protected
                 _save_managers(mgrs)
@@ -2761,6 +2765,8 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                             filtered_warriors.append(None)
                     team_dict["warriors"] = filtered_warriors
                     filtered_teams.append(team_dict)
+                    # Include auto_upload_enabled and last_turn_ran
+                    team_dict["auto_upload_enabled"] = team.auto_upload_enabled
 
                 self.send_json({"success":True,"teams":filtered_teams}); return
 

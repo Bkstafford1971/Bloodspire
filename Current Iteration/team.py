@@ -1,4 +1,4 @@
-﻿# =============================================================================
+﻿﻿# =============================================================================
 # team.py — BLOODSPIRE Team Class
 # =============================================================================
 # A team always has exactly 5 warriors.
@@ -62,6 +62,8 @@ class Team:
         self.archived_warriors: List[dict] = []
 
         # Pending replacement rollup bases: {slot_idx: base_stats_dict}
+        self.last_turn_ran: int = 0
+        self.auto_upload_enabled: bool = True
         self.pending_replacements: Dict[int, dict] = {}
 
         # Rolling turn history for last-5-turns newsletter column
@@ -125,6 +127,11 @@ class Team:
         """Return living warriors only — excludes None slots and is_dead warriors."""
         return [w for w in self.warriors if w is not None
                 and w.is_alive and not getattr(w, "is_dead", False)]
+
+    @property
+    def has_five_active_warriors(self) -> bool:
+        """Returns True if the team has exactly 5 active (not dead) warriors."""
+        return len(self.active_warriors) == TEAM_SIZE
 
     @property
     def is_full(self) -> bool:
@@ -447,6 +454,8 @@ class Team:
             "archived_warriors"   : self.archived_warriors,
             "pending_replacements": {str(k): v for k, v in self.pending_replacements.items()},
             "turn_history"         : self.turn_history[-20:],  # keep last 20 turns
+            "last_turn_ran"       : self.last_turn_ran,
+            "auto_upload_enabled" : self.auto_upload_enabled,
         }
 
     @classmethod
@@ -485,6 +494,8 @@ class Team:
         team.archived_warriors   = data.get("archived_warriors", [])
         team.pending_replacements= {int(k): v for k, v in data.get("pending_replacements", {}).items()}
         team.turn_history        = data.get("turn_history", [])
+        team.last_turn_ran       = data.get("last_turn_ran", 0)
+        team.auto_upload_enabled = data.get("auto_upload_enabled", True)
         return team
 
 

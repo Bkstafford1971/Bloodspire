@@ -1,4 +1,4 @@
-﻿# =============================================================================
+﻿﻿# =============================================================================
 # matchmaking.py — BLOODSPIRE Turn Matchmaking Engine
 # =============================================================================
 # Builds the list of fights for a turn:
@@ -1025,6 +1025,10 @@ def run_turn(
     # Increment turns_active for every living warrior on the team
     for w in player_team.active_warriors:
         w.turns_active = getattr(w, 'turns_active', 0) + 1
+
+    # Update last_turn_ran for the team
+    player_team.last_turn_ran = turn
+
 
     # Save everything
     save_team(player_team)

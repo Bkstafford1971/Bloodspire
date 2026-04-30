@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -521,7 +521,7 @@ function randomHex(nBytes) {
    ============================================================ */
 function mergeResults(localTeam, serverResult) {
   const serverTeam     = serverResult.team || {};
-  const serverWarriors = serverTeam.warriors || []; // This will be replaced by load_json_protected
+  const serverWarriors = serverTeam.warriors || [];
   const out = JSON.parse(JSON.stringify(localTeam));
 
   for (let idx = 0; idx < serverWarriors.length && idx < out.warriors.length; idx++) {
@@ -570,6 +570,10 @@ function mergeResults(localTeam, serverResult) {
     }
 
     // Preserve local user-set: trains, strategies, gear, initial_stats, blood_cry
+  }
+  // Update team-level flags
+  if (serverTeam.last_turn_ran !== undefined) {
+    out.last_turn_ran = serverTeam.last_turn_ran;
   }
 
   // Team turn_history — append any new entries by turn number
@@ -627,7 +631,7 @@ const S = {
   savedPassword:    null, // saved password for auto-login (from session)
   savedRememberMe:  true, // whether Remember Me was checked last time
   challengeTargets: null, // null = not loaded; [] = loaded list of warriors
-  runNextTurn:     {},    // {team_id: bool} per-team run flags
+  // runNextTurn:     {},    // {team_id: bool} per-team run flags - now handled by team.auto_upload_enabled
   replacingTeam:   null,  // {old_team_id, manager_id} when replacing
   legacyTeams:     null,  // cached list of archived/replaced teams
   league: {               // league server connection settings
@@ -1082,10 +1086,12 @@ const LocalAPI = {
     if (!acc) return { success: false, error: 'No account loaded.' };
 
     if (path === '/api/team/run_next_turn') {
-      acc.run_next_turn = acc.run_next_turn || {};
-      acc.run_next_turn[String(body.team_id)] = !!body.value;
-      await _persistAccount(acc);
-      return { success: true };
+      // This API call is now handled by directly updating the team's auto_upload_enabled flag
+      const team = await Store.readTeam(parseInt(body.team_id, 10));
+      if (!team) return { success: false, error: 'Team not found.' };
+      team.auto_upload_enabled = !!body.value;
+      await Store.writeTeam(team);
+      return { success: true, team };
     }
     if (path === '/api/team/remove') {
       const tid = parseInt(body.team_id, 10);
@@ -1709,7 +1715,7 @@ async function treeSelectWarrior(tid, idx) {
 function buildManagerPanel() {
   const acc    = S.account || {};
   const tab    = S.mgrTab || 'account';
-  const canAdd = acc.team_ids && acc.team_ids.length < 5;
+  const canAdd = acc.team_ids && acc.team_ids.length < 5; // Max 5 teams per manager
   const tabs   = [['account','Account'],['newsletters','Newsletters'],['scouting','Scouting'],['legacy','Legacy'],['new_team','New Team']];
   let tabHtml  = '<div class="tabs">';
   tabs.forEach(([key,lbl]) => {
@@ -1764,15 +1770,25 @@ function buildManagerPanel() {
       <td style="padding:4px 8px;">Last Download</td>
       <td><input type="text" class="ro" value="${esc(S.league.lastDownload||'—')}" style="width:360px;" readonly></td>
       <td style="padding:4px 16px;">Last Turn Ran</td>
-      <td><input type="text" class="ro" value="${esc(String(S.league.lastTurnRan||'—'))}" style="width:160px;" readonly></td>
+      <td><input type="text" class="ro" value="${esc(String(S.league.lastTurnRan||'—'))}" style="width:160px;" readonly title="Last turn any of your teams ran"></td>
     </tr>
     <tr>
       <td style="padding:4px 8px;">Email Address</td>
       <td><input type="text" class="ro" value="${esc(acc.email||'—')}" style="width:360px;" readonly></td>
       <td style="padding:4px 16px;">Run Next Turn</td>
       <td>
-        <span style="font-size:11px; color:#555;">
-          ${(()=>{ const ids=acc.team_ids||[]; const cnt=ids.filter(tid=>S.runNextTurn?.[tid]!==false).length; return cnt+"/"+ids.length+" team"+(cnt===1?"":"s")+" queued"; })()}
+        <span style="font-size:11px; color:#555;" title="Teams with 5 active warriors and auto-upload enabled">
+          ${(()=>{
+            const ids=acc.team_ids||[];
+            let queuedCount = 0;
+            for (const tid of ids) {
+              const team = S.teams[tid];
+              if (team && team.has_five_active_warriors && team.auto_upload_enabled) {
+                queuedCount++;
+              }
+            }
+            return `${queuedCount}/${ids.length} team${queuedCount===1?"":"s"} queued`;
+          })()}
         </span>
       </td>
     </tr>
@@ -2423,7 +2439,8 @@ function buildTeamPanel(team) {
   const totalD = team.warriors.reduce((a,w)=>a+(w?w.kills||0:0),0)
               + (team.archived_warriors||[]).reduce((a,w)=>a+(w?w.kills||0:0),0); // K = kills
   const tid    = team.team_id;
-  const rnt    = S.runNextTurn?.[tid] !== false;   // default true
+  const rnt    = team.auto_upload_enabled;
+  const canRun = team.has_five_active_warriors;
   return `
 <div style="padding:4px;">
   <div style="font-weight:bold; margin-bottom:6px; font-size:12px;">Team</div>
@@ -2431,8 +2448,8 @@ function buildTeamPanel(team) {
     <tr>
       <td style="padding:3px 8px; width:90px;">Name</td>
       <td><input type="text" class="ro" value="${esc(team.team_name)}" style="width:320px;" readonly></td>
-      <td style="padding:3px 8px; width:140px; text-align:right;">Last Turn Ran</td>
-      <td><input type="text" class="ro" value="—" style="width:80px;" readonly></td>
+      <td style="padding:3px 8px; width:140px; text-align:right;" title="Last turn this team actively participated in">Last Turn Ran</td>
+      <td><input type="text" class="ro" value="${esc(String(team.last_turn_ran || '—'))}" style="width:80px;" readonly></td>
     </tr>
     <tr>
       <td style="padding:3px 8px;">Record</td>
@@ -2440,9 +2457,9 @@ function buildTeamPanel(team) {
       <td style="padding:3px 8px; text-align:right;">Run This Turn</td>
       <td>
         <input type="checkbox" id="cb-rnt-${tid}" ${rnt?'checked':''}
-               onchange="setRunNextTurn(${tid}, this.checked)"
+               onchange="setRunNextTurn(${tid}, this.checked)" ${canRun ? '' : 'disabled'}
                style="margin:4px;"
-               title="Include this team in Run All Teams / Upload All Teams">
+               title="${canRun ? 'Include this team in Run All Teams / Upload All Teams' : 'Team must have 5 active warriors to run'}">
       </td>
     </tr>
     <tr>
@@ -3957,10 +3974,12 @@ async function doLogin() {
         S.league.managerId   = serverReg.manager_id;
         S.league.managerName = serverReg.manager_name || name;
         S.league.password    = pass;
+   S.league.lastTurnRan = 0; // Reset for new account
 
         await idbUpdateMeta({ managerName: name, serverUrl: S.serverUrl,
                               rememberMe: remember, password: remember ? pass : '' });
 
+   // S.account.run_next_turn is deprecated, remove it
         S.account = { id: account.id, manager_name: account.manager_name,
                       email: '', team_ids: teamIds };
         S.savedRememberMe = remember;
@@ -3986,10 +4005,6 @@ async function doLogin() {
       manager_name: r.manager_name,
       email:        r.email || '',
       team_ids:     [...new Set(r.team_ids)],
-    };
-    if (r.run_next_turn) {
-      for (const [k, v] of Object.entries(r.run_next_turn))
-        S.runNextTurn[Number(k)] = v;
     }
     S.savedRememberMe = remember;
 
@@ -4089,6 +4104,7 @@ async function doCreateAccount() {
     settings.manager_id    = reg.manager_id;
     settings.manager_name  = reg.manager_name;
     settings.password      = pass;
+    settings.last_turn_ran = 0; // Reset for new account
     await Store.writeSettings(settings);
     S.league.url         = S.serverUrl;
     S.league.managerId   = reg.manager_id;
