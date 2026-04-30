@@ -52,7 +52,6 @@
             height: auto;
         }
 
-        /* Navigation Style */
         nav.top-nav {
             text-align: center;
             padding-bottom: 30px;
@@ -63,7 +62,7 @@
 
         .sidebar-invite-img {
             width: 80%; 
-            max-width: 450px; /* 72% of the logo's 550px max-width */
+            max-width: 450px;
             height: auto;
             margin-top: 7px;
             display: block;
@@ -78,7 +77,6 @@
 
         nav.top-nav a:hover { color: #fff2cc; }
 
-        /* Chiseled Header Styling */
         .arena-header {
             text-align: center;
             margin-bottom: 30px;
@@ -95,7 +93,6 @@
             filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.8));
         }
 
-        /* Section Styling */
         h2, h3 {
             font-family: 'Cinzel', serif;
             color: #d4af37;
@@ -113,6 +110,20 @@
             margin-bottom: 25px;
         }
 
+        /* Platform Selection Grid */
+        .download-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .platform-card {
+            padding: 15px;
+            background: #111;
+            border: 1px solid #222;
+        }
+
         .download-btn {
             display: inline-block;
             background-color: #8b1a1a;
@@ -121,17 +132,24 @@
             font-weight: bold;
             font-size: 1.0rem;
             text-decoration: none;
-            padding: 16px 30px;
+            padding: 16px 20px;
             border: 1px solid #a31616;
             transition: all 0.3s ease;
             margin: 10px 0;
             border-radius: 2px;
+            width: 80%;
         }
 
         .download-btn:hover {
             background-color: #a31616;
             border-color: #d4af37;
             transform: translateY(-2px);
+        }
+
+        .platform-meta {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 5px;
         }
 
         .guide-section {
@@ -162,6 +180,8 @@
         @media (max-width: 1100px) {
             .page-wrapper { flex-direction: column; }
             .sidebar, .main-content { flex: 0 0 100%; width: 100%; padding: 20px; }
+            .sidebar { height: auto; position: relative; }
+            .download-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -170,7 +190,6 @@
     <div class="page-wrapper">
         <aside class="sidebar">
             <img src="Logo.png" alt="Bloodspire Logo" class="sidebar-logo">
-
             <img src="invitation.png" alt="League Invitation" class="sidebar-invite-img">
         </aside>
 
@@ -186,61 +205,58 @@
             </section>
 
             <section class="download-action">
-                <p>Version 1.0.4 - Windows Build</p>
-                <a href="https://github.com/bkstafford1971/Bloodspire/raw/main/BloodspireArena.exe" class="download-btn">
-                    DOWNLOAD INSTALLER (.EXE)
-                </a>
-                <p><small>Secure installer for official league play.</small></p>
+                <h2>CHOOSE YOUR REALM</h2>
+                <div class="download-grid">
+                    <!-- Windows Build -->
+                    <div class="platform-card">
+                        <p>Version 1.0.4 - Windows Build</p>
+                        <a href="https://github.com/bkstafford1971/Bloodspire/raw/main/BloodspireArena.exe" class="download-btn">
+                            WINDOWS (.EXE)
+                        </a>
+                        <p class="platform-meta">Secure installer for official league play.</p>
+                    </div>
+                    <!-- Linux Build[cite: 2] -->
+                    <div class="platform-card">
+                        <p>Version 1.0.4 - Linux Script</p>
+                        <a href="https://github.com/bkstafford1971/Bloodspire/raw/main/bloodspire_linux_installer.sh" class="download-btn">
+                            LINUX (.SH)
+                        </a>
+                        <p class="platform-meta">Bash script for Debian/Ubuntu/Fedora.</p>
+                    </div>
+                </div>
             </section>
 
             <section class="guide-section">
                 <h2>Installation & First Launch</h2>
-                <p>Getting started with BLOODSPIRE is now simpler than ever thanks to the official installer.</p>
+                <p>Getting started with BLOODSPIRE is now simpler than ever thanks to our official platform installers.</p>
 
-                <h3>What the Installer Does</h3>
+                <h3>What the Installers Do</h3>
                 <ul>
-                    <li>Automatically place all game files into the <code>C:\Bloodspire</code> directory.</li>
-                    <li>Install a <strong>portable version of Python</strong> (no manual Python installation required).</li>
-                    <li>Install a <strong>client version of Tailscale</strong> (the secure VPN tunneling software needed for league play).</li>
-                    <li>Create a convenient <strong>Bloodspire shortcut on your Desktop</strong>.</li>
+                    <li>Automatically place all game files into the <code>C:\BloodspireArena</code> (Windows) or <code>/opt/bloodspire_arena</code> (Linux) directory.[cite: 2]</li>
+                    <li>Install a <strong>client version of Tailscale</strong> (the secure VPN tunneling software needed for league play).[cite: 2]</li>
+                    <li>Create a convenient <strong>Bloodspire shortcut on your Desktop</strong>.[cite: 2]</li>
                 </ul>
 
                 <h3>Step-by-Step Installation</h3>
-                <ol>
-                    <li><strong>Download and run the installer</strong> from the button above. Follow the on-screen prompts; the process is fully automatic.</li>
-                    <li><strong>After installation</strong>, double-click the <strong>Bloodspire</strong> shortcut on your Desktop. This launches the game client.</li>
-                    <li>A command window will open in the background (do not close it while playing), and your default web browser should automatically open the game at <code>http://localhost:8765</code>.</li>
-                    <li>If the browser does not open automatically, manually navigate to: <strong>http://localhost:8765</strong></li>
-                </ol>
                 <div class="important-note">
-                    <strong>Note:</strong> Always launch the game using the Desktop shortcut. The command window must remain open during play.
+                    <strong>Windows:</strong> Download the <code>.exe</code> and run it. The process is fully automatic. Launch via the Desktop shortcut.[cite: 2]
+                </div>
+                <div class="important-note">
+                    <strong>Linux:</strong> Download the <code>.sh</code> script. Open a terminal and run: <br>
+                    <code>chmod +x bloodspire_linux_installer.sh</code><br>
+                    <code>sudo ./bloodspire_linux_installer.sh</code>
                 </div>
 
                 <h2>Tailscale Setup (Required for League Play)</h2>
-                <p>BLOODSPIRE league play uses Tailscale to create a secure private network between you and the Arena Master’s server.</p>
+                <p>BLOODSPIRE league play uses Tailscale to create a secure private network between you and the Arena Master’s server.[cite: 2]</p>
                 <ol>
-                    <li><strong>Create a free Tailscale account:</strong> Go to <a href="https://tailscale.com/download" style="color:#d4af37;">tailscale.com/download</a> and sign up for a free account.</li>
-                    <li><strong>Contact the Arena Master:</strong> Email <strong>bkstafford1971@gmail.com</strong> with your <strong>Manager Name</strong> and the <strong>email address</strong> used for Tailscale.</li>
-                    <li><strong>Join the League Network:</strong> The Arena Master will send a secure invitation link. Click it while Tailscale is running and accept to join the private league network.</li>
-                </ol>
-
-                <h2>Connecting to the League Server</h2>
-                <p>Once Tailscale shows your device is "Connected" to the league network:</p>
-                <ol>
-                    <li>In the BLOODSPIRE client, go to <strong>Action → League Settings…</strong></li>
-                    <li>The <strong>League Server URL</strong> field should be automatically filled in as:<br>
-                        <strong>http://100.114.138.61:8766</strong></li>
-                    <li>If it is not, manually enter that exact URL.</li>
-                    <li>Enter your manager name and password and click <strong>Register & Save</strong>.</li>
+                    <li><strong>Create a free Tailscale account:</strong> Go to <a href="https://tailscale.com/download" style="color:#d4af37;">tailscale.com/download</a> and sign up for a free account.[cite: 2]</li>
+                    <li><strong>Contact the Arena Master:</strong> Email <strong>bkstafford1971@gmail.com</strong> with your <strong>Manager Name</strong> and the <strong>email address</strong> used for Tailscale.[cite: 2]</li>
+                    <li><strong>Join the League Network:</strong> Use the secure invitation link provided by the installer or the Arena Master to join the private network.[cite: 2]</li>
                 </ol>
 
                 <div class="important-note">
-                    <strong>Important Progress Notes:</strong>
-                    <ul>
-                        <li>Your progress saves automatically in the <code>saves</code> folder inside <code>C:\Bloodspire</code>.</li>
-                        <li>You must be connected via Tailscale to participate in official matches.</li>
-                        <li>Upload your teams before each deadline using <strong>Action → Upload</strong>.</li>
-                    </ul>
+                    <strong>Note:</strong> You must be connected via Tailscale to participate in official matches. Your progress saves automatically in the <code>saves</code> folder.[cite: 2]
                 </div>
             </section>
         </main>
