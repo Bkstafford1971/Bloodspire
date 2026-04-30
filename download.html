@@ -112,16 +112,18 @@
 
         /* Platform Selection Grid */
         .download-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            justify-content: center;
             gap: 20px;
             margin-top: 15px;
         }
 
         .platform-card {
-            padding: 15px;
+            padding: 20px;
             background: #111;
             border: 1px solid #222;
+            width: 100%;
+            max-width: 400px;
         }
 
         .download-btn {
@@ -181,7 +183,6 @@
             .page-wrapper { flex-direction: column; }
             .sidebar, .main-content { flex: 0 0 100%; width: 100%; padding: 20px; }
             .sidebar { height: auto; position: relative; }
-            .download-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -215,47 +216,35 @@
                         </a>
                         <p class="platform-meta">Secure installer for official league play.</p>
                     </div>
-                    <!-- Linux Build -->
-                    <div class="platform-card">
-                        <p>Version 1.0.4 - Linux Script</p>
-                        <a href="https://github.com/bkstafford1971/Bloodspire/raw/main/bloodspire_linux_installer.sh" class="download-btn">
-                            LINUX (.SH)
-                        </a>
-                        <p class="platform-meta">Bash script for Debian/Ubuntu/Fedora.</p>
-                    </div>
                 </div>
             </section>
 
             <section class="guide-section">
                 <h2>Installation & First Launch</h2>
-                <p>Getting started with BLOODSPIRE is now a seamless process. The official installer handles everything you need to enter the arena[cite: 1].</p>
+                <p>Getting started with BLOODSPIRE is simple. The official installer automates the setup so you can begin your ascent immediately.</p>
 
                 <h3>What the Installer Does</h3>
                 <ul>
-                    <li>Creates the game directory automatically on your system[cite: 1].</li>
-                    <li>Places all necessary game files and assets into the directory[cite: 1].</li>
-                    <li>Generates a <strong>Bloodspire shortcut</strong> on your Desktop for easy access[cite: 1].</li>
+                    <li>Creates the game directory automatically on your system.</li>
+                    <li>Places all required game files and assets into the directory.</li>
+                    <li>Generates a <strong>Bloodspire shortcut</strong> on your Desktop for quick access.</li>
                 </ul>
 
-                <h3>Step-by-Step Installation</h3>
+                <h3>Instructions</h3>
                 <div class="important-note">
-                    <strong>Windows:</strong> Download the <code>.exe</code> and run it[cite: 1]. The installer will set up your files and place a shortcut on your desktop automatically[cite: 1]. Once finished, simply double-click the Bloodspire icon to begin.
-                </div>
-                <div class="important-note">
-                    <strong>Linux:</strong> Download the <code>.sh</code> script. Open a terminal and run: <br>
-                    <code>chmod +x bloodspire_linux_installer.sh</code><br>
-                    <code>sudo ./bloodspire_linux_installer.sh</code>
+                    Download the <code>BloodspireArena.exe</code> and run it. The installer will create the necessary folders and place a shortcut on your desktop. Once the process completes, launch the game via the desktop icon.
                 </div>
 
                 <h2>League Connectivity</h2>
-                <p>To participate in official league play and connect to the remote server, ensure your manager details are registered[cite: 1].</p>
+                <p>To join official matches and compete against other managers, ensure your client is connected to the arena network.</p>
                 <ol>
-                    <li><strong>Contact the Arena Master:</strong> Email <strong>bkstafford1971@gmail.com</strong> with your <strong>Manager Name</strong>[cite: 1].</li>
-                    <li><strong>Network Access:</strong> Once registered, you will receive the credentials needed to connect your client to the Bloodspire game server[cite: 1].</li>
+                    <li><strong>Server URL:</strong> The official arena server is located at: <br>
+                        <code style="display: inline-block; margin-top: 5px;">http://bloodspirearena.dpdns.org</code></li>
+                    <li><strong>Registration:</strong> Email <strong>bkstafford1971@gmail.com</strong> with your <strong>Manager Name</strong> to have your account whitelisted for the current season.</li>
                 </ol>
 
                 <div class="important-note">
-                    <strong>Note:</strong> Your progress and gladiator stats are saved automatically within your local game directory[cite: 1].
+                    <strong>Note:</strong> Progress, gladiator stats, and league standing are updated in real-time while connected to the server.
                 </div>
             </section>
         </main>
