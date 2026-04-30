@@ -2066,6 +2066,14 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.p()
 
+        if path == "/api/ping":
+            cfg = _load_config()
+            self.send_json({
+                "status":     "ok",
+                "turn":       cfg.get("current_turn", 1),
+                "turn_state": cfg.get("turn_state", "open"),
+            }); return
+
         if path in ("/", "/admin"):
             self.send_html(_admin_page()); return
 

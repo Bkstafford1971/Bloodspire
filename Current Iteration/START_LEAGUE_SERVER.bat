@@ -50,8 +50,23 @@ REM echo  ⚠  Forward port 8766 on your router if players are connecting from o
 REM echo.
 
 cd /d "%~dp0"
-python league_server.py --host-password "%HOST_PW%"
 
-echo. 
-echo  Server has stopped.
-pause
+:run
+python league_server.py --host-password "%HOST_PW%"
+set EXIT_CODE=%errorlevel%
+
+:: Exit code 0 = intentional shutdown (Ctrl+C). Stop here.
+if %EXIT_CODE%==0 (
+    echo.
+    echo  Server stopped normally.
+    pause
+    exit /b 0
+)
+
+:: Non-zero = unexpected crash. Auto-restart after a short delay.
+echo.
+echo  !! Server crashed (exit code %EXIT_CODE%). Restarting in 15 seconds...
+echo     Press Ctrl+C now to cancel restart.
+echo.
+timeout /t 15 /nobreak >nul
+goto run

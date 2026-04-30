@@ -232,7 +232,7 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
    ============================================================ */
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
-const DEFAULT_SERVER_URL = "http://100.114.138.61:8766";
+const DEFAULT_SERVER_URL = "http://bloodspirearena.dpdns.org";
 
 /* ============================================================
    CHROMIUM GATE — File System Access API is Chromium-only
@@ -307,6 +307,10 @@ async function fsaVerifyPermission(handle, mode = 'readwrite') {
 async function fsaPickFolder() {
   const h = await window.showDirectoryPicker({ mode: 'readwrite' });
   await idbSet('folderHandle', h);
+  const meta = await idbGet('clientMeta') || {};
+  meta.folderName = h.name;
+  await idbSet('clientMeta', meta);
+  S.savedFolderName = h.name;
   return h;
 }
 async function fsaGetOrPickFolder() {
@@ -577,9 +581,10 @@ function mergeResults(localTeam, serverResult) {
    STATE
    ============================================================ */
 const S = {
-  serverUrl:    DEFAULT_SERVER_URL,  // absolute URL of the league server
-  folderHandle: null,                // FileSystemDirectoryHandle for local saves
-  folderReady:  false,               // true once the user has granted permission
+  serverUrl:       DEFAULT_SERVER_URL,  // absolute URL of the league server
+  folderHandle:    null,                // FileSystemDirectoryHandle for local saves
+  folderReady:     false,               // true once the user has granted permission
+  savedFolderName: null,                // display name of the last-selected folder
   view:        'folder_pick',        // 'folder_pick' | 'login' | 'main' | 'create_team' | 'turn_results'
   loginTab:    'new',     // 'login' | 'new'
   account:     null,
@@ -986,20 +991,29 @@ const LocalAPI = {
       if (!team) return { success: false, team_id: tid, error: 'Team not found locally.' };
       try {
         const url = (body.league_url || S.serverUrl).replace(/\/+$/,'');
-        const r = await fetch(url + '/api/upload', {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({
-            manager_id: body.league_manager_id,
-            password:   body.password,
-            team:       team,
-          }),
-        });
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 15000);
+        let r;
+        try {
+          r = await fetch(url + '/api/upload', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+              manager_id: body.league_manager_id,
+              password:   body.password,
+              team:       team,
+            }),
+            signal: ctrl.signal,
+          });
+        } finally {
+          clearTimeout(timer);
+        }
         const d = await r.json();
         if (d.success) return { success: true, team_id: tid, team_name: team.team_name, turn: d.turn };
         return { success: false, team_id: tid, team_name: team.team_name, error: d.error || 'upload failed' };
       } catch (e) {
-        return { success: false, team_id: tid, team_name: team.team_name, error: e.message || 'network error' };
+        const msg = e.name === 'AbortError' ? 'Server did not respond (timed out)' : (e.message || 'network error');
+        return { success: false, team_id: tid, team_name: team.team_name, error: msg };
       }
     }
 
@@ -1422,8 +1436,12 @@ function buildLogin() {
       ${S.msg ? `<div class="msg ${S.msgType}">${esc(S.msg)}</div>` : ''}
       ${(!S.folderReady && !S.isLocalBackend) ? `
         <div class="msg err" style="margin-bottom:12px;">
-          <b>Action required:</b> Your saved folder is not connected.<br>
-          <button onclick="doPickFolder()" style="margin-top:6px; font-weight:bold;">Reconnect to Save Folder</button>
+          <b>Folder access needed${S.savedFolderName ? ': <em>' + esc(S.savedFolderName) + '</em>' : ''}.</b><br>
+          <span style="font-size:11px;">Chrome needs a one-time click to restore access to your save folder.</span><br>
+          <button onclick="doPickFolder()" style="margin-top:6px; font-weight:bold;">
+            ${S._hadPriorFolder ? 'Restore Folder Access' : 'Connect Save Folder'}
+          </button>
+          ${S._hadPriorFolder ? `<button onclick="doPickFolder(true)" style="margin-top:6px; margin-left:6px; font-size:10px;">Pick Different Folder</button>` : ''}
         </div>
       ` : ''}
       ${isNew ? buildNewPlayerForm() : buildLoginForm()}
@@ -3851,7 +3869,108 @@ async function doLogin() {
     const remember = el('l-remember')?.checked !== false; // default true
     if (!name || !pass) { setMsg('Please enter your manager name and password.', 'err'); render(); return; }
 
-    const r = await API.post('/api/account/login', { manager_name: name, password: pass });
+    // Auto-restore folder access inline so the user doesn't need a separate click.
+    if (!S.folderReady && !S.isLocalBackend) {
+      try {
+        setMsg('Restoring folder access...', ''); render();
+        const h = await fsaGetOrPickFolder();
+        S.folderHandle    = h;
+        S.folderReady     = true;
+        S.savedFolderName = h.name;
+        // Reload settings from the now-accessible folder (server URL, etc.)
+        try {
+          const settings = await Store.readSettings();
+          if (settings?.server_url) S.serverUrl = settings.server_url;
+        } catch (_) {}
+        S.msg = '';
+      } catch (e) {
+        if (e && e.name === 'AbortError') { S.msg = ''; render(); return; }
+        setMsg('Could not access save folder: ' + (e.message || e), 'err'); render(); return;
+      }
+    }
+
+    let r = await API.post('/api/account/login', { manager_name: name, password: pass });
+
+    // If local auth fails and a server URL is set, try authenticating against
+    // the league server so users can recover their account on a new machine.
+    if (!r.success && S.serverUrl) {
+      setMsg('No local account found — checking league server...', ''); render();
+      try {
+        const base = S.serverUrl.replace(/\/+$/, '');
+        // /api/register returns the existing manager_id when name+password match
+        const serverReg = await fetch(base + '/api/register', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ manager_name: name, password: pass }),
+        }).then(res => res.json()).catch(() => null);
+
+        if (!serverReg?.success) {
+          setMsg(serverReg?.error || r.error || 'Login failed.', 'err'); render(); return;
+        }
+
+        // Credentials confirmed — download teams from server
+        const teamsResp = await fetch(base + '/api/team/get_my_team', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ manager_id: serverReg.manager_id, password: pass }),
+        }).then(res => res.json()).catch(() => ({ success: false, teams: [] }));
+
+        // Bootstrap a fresh local account.json from the server data
+        const salt    = randomHex(16);
+        const pw_hash = await sha256Hex(salt + pass);
+        const teamIds = [];
+        if (teamsResp?.success && teamsResp.teams?.length) {
+          for (const td of teamsResp.teams) {
+            if (td.team_id == null) continue;
+            await Store.writeTeam(td);
+            teamIds.push(td.team_id);
+          }
+        }
+        const account = {
+          id:                 serverReg.manager_id,
+          manager_name:       serverReg.manager_name || name,
+          email:              '',
+          salt,
+          password_hash:      pw_hash,
+          team_ids:           teamIds,
+          run_next_turn:      {},
+          remember,
+          password_plaintext: remember ? pass : '',
+        };
+        await Store.writeAccount(account);
+        S._accountCache = account;
+
+        // Persist league connection
+        const settings = await Store.readSettings();
+        settings.server_url   = S.serverUrl;
+        settings.manager_id   = serverReg.manager_id;
+        settings.manager_name = serverReg.manager_name || name;
+        settings.password     = pass;
+        await Store.writeSettings(settings);
+        S.league.url         = S.serverUrl;
+        S.league.managerId   = serverReg.manager_id;
+        S.league.managerName = serverReg.manager_name || name;
+        S.league.password    = pass;
+
+        await idbUpdateMeta({ managerName: name, serverUrl: S.serverUrl,
+                              rememberMe: remember, password: remember ? pass : '' });
+
+        S.account = { id: account.id, manager_name: account.manager_name,
+                      email: '', team_ids: teamIds };
+        S.savedRememberMe = remember;
+
+        const tc = teamIds.length;
+        const teamMsg = tc ? `${tc} team${tc > 1 ? 's' : ''} downloaded.`
+                           : 'No teams on server yet — create your first team.';
+        setMsg(`Account recovered from server. ${teamMsg}`, 'ok');
+        S.view = 'main';
+        await loadTeams();
+        await loadLeagueSettings();
+        render();
+        return;
+      } catch (srvErr) {
+        setMsg(r.error || 'Login failed.', 'err'); render(); return;
+      }
+    }
+
     if (!r.success) { setMsg(r.error, 'err'); render(); return; }
 
     S.account = {
@@ -5563,6 +5682,7 @@ async function init() {
   if (meta.serverUrl)   S.serverUrl = meta.serverUrl;
   if (meta.rememberMe !== undefined) S.savedRememberMe = meta.rememberMe;
   if (meta.password)    S.savedPassword = meta.password;
+  if (meta.folderName)  S.savedFolderName = meta.folderName;
 
   // 3. Try to reconnect folder handle
   let handle = await idbGet('folderHandle');
@@ -5576,10 +5696,16 @@ async function init() {
         return;
       }
     } catch (e) { console.warn('Handle query failed', e); }
+    // We have a stored handle but permission needs re-granting.
+    // Skip the full folder-pick screen — go straight to login where a
+    // compact "Restore access" button will call requestPermission() instead.
     S._hadPriorFolder = true;
+    S.view = 'login';
+    render();
+    return;
   }
 
-  // If we remember the manager, go straight to login (seamless experience)
+  // No stored folder handle at all — first-time setup
   if (S.savedManagerName) {
     S.view = 'login';
   } else {
