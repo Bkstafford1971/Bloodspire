@@ -22,6 +22,7 @@ import socketserver
 import sys
 import threading
 import time
+from file_protection import save_json_protected, load_json_protected, make_file_readonly, make_file_writable
 import webbrowser
 from typing import Optional
 
@@ -42,18 +43,30 @@ _global_server = None  # Reference for graceful shutdown from request handlers
 def _ensure_dirs():
     os.makedirs(LEAGUE_DIR, exist_ok=True)
 
-def _load_json(path, default):
+def _load_json(path, default, protected=True):
     try:
-        with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
+        if protected:
+            return load_json_protected(path)
+        else:
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError, ValueError) as e:
+        if protected and isinstance(e, ValueError):
+            print(f"  WARNING: Tampered file detected: {path} - {e}")
         return default
 
-def _save_json(path, data):
+def _save_json(path, data, protected=True):
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, default=str)
+    try:
+        if protected:
+            save_json_protected(path, data)
+        else:
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2, default=str)
+    except IOError as e:
+        print(f"  ERROR: Could not save {path}: {e}")
 
+# Configuration and data paths that should be protected
 def _config_path():   return os.path.join(LEAGUE_DIR, "config.json")
 def _managers_path(): return os.path.join(LEAGUE_DIR, "managers.json")
 def _standings_path():return os.path.join(LEAGUE_DIR, "standings.json")
@@ -64,10 +77,10 @@ def _turn_dir(turn_num):
     return d
 
 def _load_config():
-    cfg = _load_json(_config_path(), {
+    cfg = _load_json(_config_path(), { # Protected
         "current_turn": 1,
         "turn_state": "open",
-        "host_password_hash": "",
+        "host_password_hash": "", # This will be set on first run
         "host_password_salt": "",
         "fight_counter": 0,
         "reset_count": 0,
@@ -103,13 +116,13 @@ def _load_config():
     return cfg
 
 def _save_config(cfg):   _save_json(_config_path(), cfg)
-def _load_managers():    return _load_json(_managers_path(), {})
-def _save_managers(m):   _save_json(_managers_path(), m)
-def _load_standings():   return _load_json(_standings_path(), {})
-def _save_standings(s):  _save_json(_standings_path(), s)
+def _load_managers():    return _load_json(_managers_path(), {}) # Protected
+def _save_managers(m):   _save_json(_managers_path(), m) # Protected
+def _load_standings():   return _load_json(_standings_path(), {}) # Protected
+def _save_standings(s):  _save_json(_standings_path(), s) # Protected
 
 def _load_uploads(turn_num):
-    td = _turn_dir(turn_num)
+    td = _turn_dir(turn_num) # This directory contains protected files
     if not os.path.exists(td): return {}
     uploads = {}
     for fname in sorted(os.listdir(td)):
@@ -117,7 +130,7 @@ def _load_uploads(turn_num):
             continue
         data = _load_json(os.path.join(td, fname), None)
         if not data:
-            continue
+            continue # If tampered, _load_json returns None, so it's skipped
         mid     = data.get("manager_id") or ""
         team_id = data.get("team_id") or (data.get("team") or {}).get("team_id", "")
         # Key by manager_id+team_id so multiple teams from same manager coexist
@@ -131,10 +144,10 @@ def _save_upload(turn_num, manager_id, data):
         fname = f"upload_{manager_id}_team{team_id}.json"
     else:
         fname = f"upload_{manager_id}.json"
-    _save_json(os.path.join(_turn_dir(turn_num), fname), data)
+    _save_json(os.path.join(_turn_dir(turn_num), fname), data) # Protected
 
 def _load_result(turn_num, manager_id):
-    return _load_json(os.path.join(_turn_dir(turn_num), f"result_{manager_id}.json"), None)
+    return _load_json(os.path.join(_turn_dir(turn_num), f"result_{manager_id}.json"), None) # Protected
 
 def _save_result(turn_num, manager_id, data):
     # Include team_id in filename so a manager with multiple teams has separate files
@@ -143,7 +156,7 @@ def _save_result(turn_num, manager_id, data):
         fname = f"result_{manager_id}_team{team_id}.json"
     else:
         fname = f"result_{manager_id}.json"
-    _save_json(os.path.join(_turn_dir(turn_num), fname), data)
+    _save_json(os.path.join(_turn_dir(turn_num), fname), data) # Protected
 
 
 # =============================================================================
@@ -218,7 +231,7 @@ def _store_scout_narrative(warrior_name: str, narrative: str, turn_num: int) -> 
     Persist the fight narrative for a scouted warrior so the client can
     retrieve it via the scout report without needing to chase fight_ids.
     Stored at saves/league/scout_narratives.json keyed by warrior name.
-    """
+    """ # This is a protected file
     path = os.path.join(LEAGUE_DIR, "scout_narratives.json")
     try:
         data = _load_json(path, {})
@@ -2134,11 +2147,12 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
         if path == "/api/newsletter":
             q        = self.qs()
             turn_num = int(q.get("turn", 0))
-            if not turn_num:
+            if not turn_num: # Newsletter is a text file, not JSON, but should be read-only
                 self.send_json({"success":False,"error":"turn required"}); return
             nl_path = os.path.join(_turn_dir(turn_num), "newsletter.txt")
             if not os.path.exists(nl_path):
                 self.send_json({"success":False,"error":f"No newsletter for turn {turn_num}"}); return
+            make_file_writable(nl_path) # Temporarily make writable to read
             with open(nl_path,"r",encoding="utf-8") as _f:
                 nl_text = _f.read()
             self.send_json({"success":True,"turn":turn_num,"newsletter":nl_text}); return
@@ -2153,8 +2167,10 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             for turn_num in range(current_turn, 0, -1):
                 nl_path = os.path.join(_turn_dir(turn_num), "newsletter.txt")
                 if os.path.exists(nl_path):
+                    make_file_writable(nl_path) # Temporarily make writable to read
                     with open(nl_path,"r",encoding="utf-8") as _f:
                         nl_text = _f.read()
+                    make_file_readonly(nl_path) # Set back to read-only
                     self.send_json({"success":True,"turn":turn_num,"newsletter":nl_text}); return
             self.send_json({"success":False,"error":"No newsletters found"}); return
 
@@ -2292,9 +2308,11 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             # Include newsletter for this turn if available
             nl_text = ""
             nl_path = os.path.join(_turn_dir(res_turn), "newsletter.txt")
-            if os.path.exists(nl_path):
+            if os.path.exists(nl_path): # Newsletter is a text file, not JSON, but should be read-only
+                make_file_writable(nl_path) # Temporarily make writable to read
                 with open(nl_path, "r", encoding="utf-8") as _nf:
                     nl_text = _nf.read()
+                make_file_readonly(nl_path) # Set back to read-only
             # If there are no team results, allow the request to succeed if a newsletter exists
             if not team_results and not nl_text:
                 self.send_json({"success":False,"error":"No results found for your manager this turn."}); return
@@ -2519,7 +2537,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 if not _check_mgr_pw(mgrs[mid], pw):
                     self.send_json({"success":False,"error":"Wrong password."}); return
                 manager_name = mgrs[mid]["manager_name"]
-            from team    import Team, TEAM_SIZE
+            from team    import Team, TEAM_SIZE # This will be replaced by save_json_protected
             from warrior import Warrior, ATTRIBUTES
             from save    import save_team, next_team_id
             if len(warriors_data) < TEAM_SIZE:
@@ -2549,7 +2567,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     w.luck = _rand.randint(1, 30)
                     w.initial_stats = {attr: int(wd[attr]) for attr in ATTRIBUTES}
                     team.add_warrior(w)
-                save_team(team)
+                save_team(team) # Protected
             except Exception as e:
                 import traceback; traceback.print_exc()
                 self.send_json({"success":False,"error":f"{e}"}); return
@@ -2559,7 +2577,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 if mid in mgrs:
                     tids = mgrs[mid].setdefault("team_ids", [])
                     if team.team_id not in tids:
-                        tids.append(team.team_id)
+                        tids.append(team.team_id) # This will be replaced by save_json_protected
                     _save_managers(mgrs)
             self.send_json({"success":True,"team_id":team.team_id,"team":team.to_dict()}); return
 
@@ -2636,7 +2654,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 if cfg["turn_state"] == "results_ready":
                     cfg["turn_state"] = "open"; _save_config(cfg)
                 turn_num = cfg["current_turn"]
-                team_id = team.get("team_id", "") if isinstance(team, dict) else ""
+                team_id = team.get("team_id", "") if isinstance(team, dict) else "" # This will be replaced by save_json_protected
                 upload_time = time.strftime("%Y-%m-%d %H:%M:%S")
                 _save_upload(turn_num, mid, {
                     "manager_id" : mid,
@@ -2645,7 +2663,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     "team" : team,
                     "uploaded_at" : upload_time,
                 })
-                mgrs[mid]["last_upload_timestamp"] = upload_time
+                mgrs[mid]["last_upload_timestamp"] = upload_time # This will be replaced by save_json_protected
                 _save_managers(mgrs)
             self.send_json({"success":True,"turn":turn_num,
                             "message":f"Team uploaded for turn {turn_num}."}); return
@@ -2668,7 +2686,9 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 cfg      = _load_config()
                 turn_num = cfg["current_turn"]
                 # Delete the upload file for this team from the current turn dir.
-                fname  = f"upload_{mid}_team{team_id}.json"
+                fname  = f"upload_{mid}_team{team_id}.json" # This is a protected file
+                checksum_fname = fname.replace('.json', '.checksum')
+
                 fpath  = os.path.join(_turn_dir(turn_num), fname)
                 removed_upload = False
                 if os.path.exists(fpath):
@@ -2676,6 +2696,9 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     removed_upload = True
                 # Remove the team from the manager's server-side team_ids list.
                 tids = mgrs[mid].get("team_ids", [])
+                checksum_fpath = os.path.join(_turn_dir(turn_num), checksum_fname)
+                if os.path.exists(checksum_fpath):
+                    os.remove(checksum_fpath)
                 try:
                     int_tid = int(team_id)
                     mgrs[mid]["team_ids"] = [t for t in tids if int(t) != int_tid]
@@ -2702,7 +2725,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 if not _check_mgr_pw(mgrs[mid], pw):
                     self.send_json({"success":False,"error":"Wrong password."}); return
 
-                from save import load_team
+                from save import load_team # This will be replaced by load_json_protected
                 manager_teams = []
                 # If a specific team_id is requested, try to load only that one
                 if team_id:
@@ -2746,13 +2769,18 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             if not _check_host_pw(cfg, b.get("host_password","")):
                 self.send_json({"success":False,"error":"Not authorised."}); return
             import shutil
+            # Remove protected files and their checksums
             for entry in os.listdir(LEAGUE_DIR):
                 full = os.path.join(LEAGUE_DIR, entry)
                 if entry.startswith("turn_") and os.path.isdir(full):
                     shutil.rmtree(full)
+            # Remove individual protected files and their checksums
             for fname in ("ai_teams.json", "managers.json", "standings.json",
                           "scout_narratives.json", "scouting.json"):
                 fpath = os.path.join(LEAGUE_DIR, fname)
+                checksum_fpath = fpath.replace('.json', '.checksum')
+                if os.path.exists(checksum_fpath):
+                    os.remove(checksum_fpath)
                 if os.path.exists(fpath):
                     os.remove(fpath)
 
@@ -2760,19 +2788,29 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             # that file too; otherwise old turn-1 selections survive a reset and
             # reappear when current_turn is reset back to 1.
             from save import TEAMS_DIR, GRAVEYARD_DIR, SCOUTING_FILE, save_champion_state
+            # Remove protected files and their checksums
             for fpath in (SCOUTING_FILE,):
                 if os.path.exists(fpath):
                     os.remove(fpath)
+                    checksum_fpath = fpath.replace('.json', '.checksum')
+                    if os.path.exists(checksum_fpath):
+                        os.remove(checksum_fpath)
 
             # Clean up global teams, graveyard and reset champion state
             if os.path.exists(TEAMS_DIR):
                 for f in os.listdir(TEAMS_DIR):
-                    if f.startswith("team_") and f.endswith(".json"):
+                    if f.startswith("team_") and f.endswith(".json"): # These are protected files
                         try: os.remove(os.path.join(TEAMS_DIR, f))
+                        except: pass
+                        try: os.remove(os.path.join(TEAMS_DIR, f.replace('.json', '.checksum')))
                         except: pass
             if os.path.exists(GRAVEYARD_DIR):
                 for f in os.listdir(GRAVEYARD_DIR):
-                    try: os.remove(os.path.join(GRAVEYARD_DIR, f))
+                    if f.endswith(".json") or f.endswith(".checksum"): # These are protected files
+                        try: os.remove(os.path.join(GRAVEYARD_DIR, f))
+                        except: pass
+                    elif f.endswith(".txt"): # These are text files, just remove
+                        try: os.remove(os.path.join(GRAVEYARD_DIR, f))
                     except: pass
             try:
                 save_champion_state({})
@@ -2780,7 +2818,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 pass
 
             cfg["current_turn"] = 1; cfg["turn_state"] = "open"; cfg["fight_counter"] = 0
-            cfg["schedule_last_run_at"] = ""
+            cfg["schedule_last_run_at"] = "" # This will be replaced by save_json_protected
             cfg["schedule_last_run_turn"] = 0
             cfg["schedule_last_run_result"] = ""
             for _sl in cfg.get("schedule_slots", []):
@@ -2861,10 +2899,13 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             fpath = _safe_path(q.get("path"))
             if not fpath or not os.path.exists(fpath):
                 self.send_json({"success": False, "error": "File not found"}, 404); return
-            try:
-                with open(fpath, "r", encoding="utf-8") as f:
-                    content = f.read()
-                if fpath.endswith(".json"):
+            try: # Use protected load for JSON, regular for text
+                if fpath.endswith(".json"): # Protected
+                    content = load_json_protected(fpath)
+                else: # Not protected
+                    with open(fpath, "r", encoding="utf-8") as f:
+                        content = f.read()
+                if fpath.endswith(".json"): # Return JSON object if it was JSON
                     self.send_json({"success": True, "data": json.loads(content)})
                 else:
                     self.send_json({"success": True, "text": content})
@@ -2877,10 +2918,10 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             if not fpath:
                 self.send_json({"success": False, "error": "Invalid path"}, 400); return
             try:
-                os.makedirs(os.path.dirname(fpath), exist_ok=True)
-                with open(fpath, "w", encoding="utf-8") as f:
-                    if "data" in b:
-                        json.dump(b["data"], f, indent=2)
+                os.makedirs(os.path.dirname(fpath), exist_ok=True) # Use protected save for JSON, regular for text
+                if "data" in b: # Protected
+                    save_json_protected(fpath, b["data"])
+                else: # Not protected
                     else:
                         f.write(b.get("text", ""))
                 self.send_json({"success": True})
@@ -2891,7 +2932,11 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
         if path == "/api/local/delete":
             fpath = _safe_path(b.get("path"))
             if fpath and os.path.exists(fpath):
-                try: os.remove(fpath)
+                try: # Also remove checksum file if it exists
+                    os.remove(fpath)
+                    checksum_fpath = fpath.replace('.json', '.checksum')
+                    if os.path.exists(checksum_fpath):
+                        os.remove(checksum_fpath)
                 except: pass
             self.send_json({"success": True}); return
 
@@ -2922,7 +2967,9 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 manager_name = mgrs[mid]["manager_name"]
 
                 # Delete the manager
-                del mgrs[mid]
+                del mgrs[mid] # This will be replaced by save_json_protected
+                # Also delete manager's teams from the teams directory
+                # This is handled by the client's `Store.deleteTeam`
                 _save_managers(mgrs)
 
                 # Clean up current turn files
@@ -2930,7 +2977,10 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 td = _turn_dir(turn_num)
                 if os.path.exists(td):
                     for fname in list(os.listdir(td)):
-                        if fname.startswith(f"upload_{mid}_") or fname.startswith(f"result_{mid}_"):
+                        if fname.startswith(f"upload_{mid}_") or fname.startswith(f"result_{mid}_"): # These are protected files
+                            checksum_fpath = os.path.join(td, fname.replace('.json', '.checksum'))
+                            if os.path.exists(checksum_fpath):
+                                os.remove(checksum_fpath)
                             try:
                                 os.remove(os.path.join(td, fname))
                             except Exception:

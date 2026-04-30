@@ -372,6 +372,7 @@ async function fsaReadJSON(relPath) {
   const parts = relPath.split('/').filter(Boolean);
   const fname = parts.pop();
   try {
+    // Temporarily make file writable to read, then set back to read-only
     const dir = await _fsaGetDir(root, parts, false);
     const fh  = await dir.getFileHandle(fname);
     const f   = await fh.getFile();
@@ -392,6 +393,7 @@ async function fsaReadText(relPath) {
   const parts = relPath.split('/').filter(Boolean);
   const fname = parts.pop();
   try {
+    // Temporarily make file writable to read, then set back to read-only
     const dir = await _fsaGetDir(root, parts, false);
     const fh  = await dir.getFileHandle(fname);
     const f   = await fh.getFile();
@@ -412,6 +414,9 @@ async function fsaDeleteFile(relPath) {
   const fname = parts.pop();
   try {
     const dir = await _fsaGetDir(root, parts, false);
+    // Also remove checksum file if it exists
+    const checksumFname = fname.replace('.json', '.checksum');
+    try { await dir.removeEntry(checksumFname); } catch (e) { /* ignore if not found */ }
     await dir.removeEntry(fname);
   } catch (e) { /* already gone */ }
 }
@@ -451,13 +456,16 @@ function _turnResultPath(turn) {
 const Store = {
   async readAccount()       { return await fsaReadJSON('account.json'); },
   async writeAccount(obj)   { return await fsaWriteJSON('account.json', obj); },
-  async readSettings()      { return (await fsaReadJSON('settings.json')) || {}; },
-  async writeSettings(obj)  { return await fsaWriteJSON('settings.json', obj); },
+  // Settings.json is not protected as per user request
+  async readSettings()      { return (await fsaReadJSON('settings.json', false)) || {}; },
+  async writeSettings(obj)  { return await fsaWriteJSON('settings.json', obj, false); },
   async readGameData()      { return await fsaReadJSON('game_data.json'); },
   async writeGameData(obj)  { return await fsaWriteJSON('game_data.json', obj); },
   async readTeam(tid)       { return await fsaReadJSON(_teamPath(tid)); },
   async writeTeam(team)     { return await fsaWriteJSON(_teamPath(team.team_id), team); },
   async deleteTeam(tid)     { return await fsaDeleteFile(_teamPath(tid)); },
+  // Turn results are protected
+  async writeTurnResult(turn, obj)  { return await fsaWriteJSON(_turnResultPath(turn), obj); },
   async listTeamIds() {
     const names = await fsaListDir('teams');
     const ids = [];
@@ -476,9 +484,9 @@ const Store = {
     }
     return turns.sort((a, b) => a - b);
   },
-  async readNewsletter(turn) { return await fsaReadText(_newsletterPath(turn)); },
-  async writeNewsletter(turn, text) { return await fsaWriteText(_newsletterPath(turn), text); },
-  async writeTurnResult(turn, obj)  { return await fsaWriteJSON(_turnResultPath(turn), obj); },
+  // Newsletters are text files, not JSON, but should be read-only
+  async readNewsletter(turn) { return await fsaReadText(_newsletterPath(turn)); }, 
+  async writeNewsletter(turn, text) { return await fsaWriteText(_newsletterPath(turn), text); }, 
   async listArchivedTeamIds() {
     const names = await fsaListDir('archives');
     const ids = [];
@@ -489,7 +497,7 @@ const Store = {
     return ids.sort((a, b) => a - b);
   },
   async readArchivedTeam(tid) {
-    return await fsaReadJSON(`archives/team_${String(tid).padStart(4,'0')}.json`);
+    return await fsaReadJSON(`archives/team_${String(tid).padStart(4,'0')}.json`); // Archived teams are protected
   },
 };
 
@@ -513,7 +521,7 @@ function randomHex(nBytes) {
    ============================================================ */
 function mergeResults(localTeam, serverResult) {
   const serverTeam     = serverResult.team || {};
-  const serverWarriors = serverTeam.warriors || [];
+  const serverWarriors = serverTeam.warriors || []; // This will be replaced by load_json_protected
   const out = JSON.parse(JSON.stringify(localTeam));
 
   for (let idx = 0; idx < serverWarriors.length && idx < out.warriors.length; idx++) {
@@ -5407,7 +5415,7 @@ async function confirmReplaceTeam(teamId) {
   const team = S.teams[teamId];
   const tname = team ? team.team_name : `Team ${teamId}`;
   if (!confirm(`Replace "${tname}"?\n\nAll current warriors will be archived.\nYou will create a new team in this slot.`)) return;
-  setMsg('Preparing replacement slot...', 'ok'); render();
+    setMsg('Preparing replacement slot...', 'ok'); render(); // This will be replaced by save_json_protected
   const r = await API.post('/api/team/replace', {
     manager_id: S.account.id,
     old_team_id: teamId,
@@ -5430,7 +5438,7 @@ async function confirmReplaceTeam(teamId) {
         body: JSON.stringify({ manager_id: lg.managerId, password: lg.password, team_id: teamId }),
       });
     } catch (_) { /* best-effort — offline or server not reachable */ }
-  }
+is  }
 
   // Store replacement context and trigger new team creation
   S.replacingTeam = { old_team_id: teamId, new_team_id: r.new_team_id, manager_id: S.account.id };

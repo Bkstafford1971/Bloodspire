@@ -807,14 +807,14 @@ class Warrior:
 
         GRADUATED LEARNING CURVE — two-factor formula:
           1. Base chance from governing stat (INT for skills, CON for attributes):
-               stat  3-8  -> 38%    stat  9-14 -> 65%
-               stat 15-20 -> 82%    stat 21-25 -> 94%
+               stat  3-8  -> 28%    stat  9-14 -> 45%
+               stat 15-20 -> 55%    stat 21-25 -> 72%
           2. Difficulty multiplier from current level / gains so far:
                0-3 : x1.00   4-5 : x0.65   6-7 : x0.40   8+ : x0.25
           3. Mastery bonus (level/gains >= 8, stat >= 15): +(stat-14)*1.5
-          4. Racial bonus (Humans & Gnomes): +7 to chance after multiply, capped 94.
+          4. Racial bonus (Humans & Gnomes): +7 to chance after multiply, capped 90.
              Applies to BOTH skill and attribute training.
-          Final chance clamped 5%-96%.
+          Final chance clamped 5%-90%.
 
         SKILL training (weapon skills + non-weapon skills):
           Governed by Intelligence. gains = current skill level (0-based).
@@ -826,10 +826,10 @@ class Warrior:
 
         # Shared helper: base chance from stat band
         def _base_chance(stat: int) -> int:
-            if stat <= 8:   return 38
-            if stat <= 14:  return 65
-            if stat <= 20:  return 82
-            return 94
+            if stat <= 8:   return 28
+            if stat <= 14:  return 45
+            if stat <= 20:  return 55
+            return 72
 
         # Shared helper: difficulty multiplier from gains
         def _multiplier(gains: int) -> float:
@@ -878,9 +878,9 @@ class Warrior:
 
             # Racial bonus (Humans & Gnomes) — applies to attributes
             if self.race.modifiers.trains_stats_faster:
-                chance = min(94, chance + 7)
+                chance = min(90, chance + 7)
 
-            chance = max(5, min(96, chance))
+            chance = max(5, min(90, chance))
 
             _roll = random.randint(1, 100)
             if _roll > chance:
@@ -944,9 +944,9 @@ class Warrior:
 
             # Racial bonus (Humans & Gnomes) — now applies to skills too
             if self.race.modifiers.trains_stats_faster:
-                chance = min(94, chance + 7)
+                chance = min(90, chance + 7)
 
-            chance = max(5, min(96, chance))
+            chance = max(5, min(90, chance))
 
             _roll = random.randint(1, 100)
             if _roll > chance:
