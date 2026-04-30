@@ -575,6 +575,9 @@ function mergeResults(localTeam, serverResult) {
   if (serverTeam.last_turn_ran !== undefined) {
     out.last_turn_ran = serverTeam.last_turn_ran;
   }
+  if (serverTeam.auto_upload_enabled !== undefined) {
+    out.auto_upload_enabled = serverTeam.auto_upload_enabled;
+  }
 
   // Team turn_history — append any new entries by turn number
   out.turn_history = out.turn_history || [];
@@ -1318,6 +1321,11 @@ function opts(items, val, blankLabel) {
 
 function fmtRecord(w) { return `${w.wins||0}-${w.losses||0}-${w.kills||0}`; }  // W-L-K
 
+function hasFiveActiveWarriors(team) {
+  if (!team || !team.warriors || team.warriors.length !== 5) return false;
+  return team.warriors.every(w => w && !w.is_dead);
+}
+
 async function loadTeams() {
   if (!S.account) return;
   for (const tid of S.account.team_ids) {
@@ -1783,7 +1791,7 @@ function buildManagerPanel() {
             let queuedCount = 0;
             for (const tid of ids) {
               const team = S.teams[tid];
-              if (team && team.has_five_active_warriors && team.auto_upload_enabled) {
+              if (team && hasFiveActiveWarriors(team) && team.auto_upload_enabled) {
                 queuedCount++;
               }
             }
@@ -2440,7 +2448,7 @@ function buildTeamPanel(team) {
               + (team.archived_warriors||[]).reduce((a,w)=>a+(w?w.kills||0:0),0); // K = kills
   const tid    = team.team_id;
   const rnt    = team.auto_upload_enabled;
-  const canRun = team.has_five_active_warriors;
+  const canRun = hasFiveActiveWarriors(team);
   return `
 <div style="padding:4px;">
   <div style="font-weight:bold; margin-bottom:6px; font-size:12px;">Team</div>
@@ -5418,11 +5426,10 @@ async function doLeagueDownloadAll() {
    ============================================================ */
 
 async function setRunNextTurn(teamId, value) {
-  S.runNextTurn[teamId] = value;
-  if (!S.account) return;
-  await API.post('/api/team/run_next_turn', {
-    manager_id: S.account.id, team_id: teamId, value
+  const r = await API.post('/api/team/run_next_turn', {
+    manager_id: S.account?.id, team_id: teamId, value
   });
+  if (r.success && r.team) S.teams[teamId] = r.team;
   // Refresh account tab summary if visible
   if (S.mgrTab === 'account') refreshContent();
 }
@@ -5566,7 +5573,10 @@ async function uploadAllTeams() {
   // Get team IDs from account, filtered by Run This Turn checkbox
   // Default is true — if checkbox state is unknown, include the team
   const accountIds = S.account?.team_ids || [];
-  const ids = accountIds.filter(tid => S.runNextTurn[tid] !== false);
+  const ids = accountIds.filter(tid => {
+    const t = S.teams[tid];
+    return t && t.auto_upload_enabled && hasFiveActiveWarriors(t);
+  });
   if (!ids.length) {
     setMsg('No teams are checked for "Run This Turn". Check the box on the team panel.', 'err');
     return;
