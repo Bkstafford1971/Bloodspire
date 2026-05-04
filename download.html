@@ -216,23 +216,44 @@
                         </a>
                         <p class="platform-meta">Secure installer for official league play.</p>
                     </div>
+
+                    <!-- macOS Build -->
+                    <div class="platform-card">
+                        <p>Version 1.0.4 - macOS Build</p>
+                        <a href="https://mega.nz/file/56p2HZJZ#c0H2WSQWuEa2zIGbrr8PIn7_XsmIh4JICkkZzvXVtW0" class="download-btn">
+                            MACOS (.ZIP)
+                        </a>
+                        <p class="platform-meta">Compatible with Intel and Apple Silicon.</p>
+                    </div>
                 </div>
             </section>
 
             <section class="guide-section">
                 <h2>Installation & First Launch</h2>
-                <p>Getting started with BLOODSPIRE is simple. The official installer automates the setup so you can begin your ascent immediately.</p>
+                
+                <div style="display: flex; gap: 40px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 300px;">
+                        <h3>Windows Instructions</h3>
+                        <p>The official installer automates the setup so you can begin your ascent immediately.</p>
+                        <div class="important-note">
+                            Download the <code>BloodspireArena.exe</code> and run it. The installer will create the necessary folders and place a shortcut on your desktop automatically.
+                        </div>
+                    </div>
 
-                <h3>What the Installer Does</h3>
-                <ul>
-                    <li>Creates the game directory automatically on your system.</li>
-                    <li>Places all required game files and assets into the directory.</li>
-                    <li>Generates a <strong>Bloodspire shortcut</strong> on your Desktop for quick access.</li>
-                </ul>
+                    <div style="flex: 1; min-width: 300px;">
+                        <h3>macOS Instructions</h3>
+                        <p>Follow these steps to authorize the client for the arena:</p>
+                        <ol>
+                            <li>Double-click the <code>.zip</code> to extract <strong>bloodspire.app</strong>.</li>
+                            <li>Drag <strong>bloodspire.app</strong> into <code>/Applications</code>.</li>
+                            <li><strong>First launch only:</strong> Right-click <strong>bloodspire</strong> in Applications &rarr; click <strong>Open</strong> &rarr; click <strong>Open</strong> again in the dialog.</li>
+                            <li>After that, normal double-clicking will work.</li>
+                        </ol>
+                    </div>
+                </div>
 
-                <h3>Instructions</h3>
-                <div class="important-note">
-                    Download the <code>BloodspireArena.exe</code> and run it. The installer will create the necessary folders and place a shortcut on your desktop automatically. Once the process completes, launch the game via the desktop icon.
+                <div class="important-note" style="text-align: center;">
+                    <strong>Note:</strong> The macOS right-click method is required to bypass Gatekeeper for unsigned applications.
                 </div>
 
                 <h2>League Connectivity & Support</h2>
