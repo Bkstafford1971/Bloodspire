@@ -288,7 +288,7 @@
                 </div>
             </section>
 
-            <!-- DOWNLOAD COUNTER -->
+                        <!-- DOWNLOAD COUNTER -->
             <div class="download-counter">
                 <p style="margin: 5px 0 8px 0; color: #888; font-size: 0.95rem;">WINDOWS DOWNLOADS</p>
                 <span id="win-count" class="counter-number">0</span>
@@ -298,12 +298,7 @@
     </div>
 
     <script>
-        // Simple persistent counter using localStorage
-        // Note: This counts per browser/device. For a global counter visible to everyone, 
-        // you would need a backend (PHP/Node.js + database) or a 3rd-party service.
-        
         let winCount = parseInt(localStorage.getItem('bloodspireWinDownloads') || '0');
-
         const countElement = document.getElementById('win-count');
         const winLink = document.getElementById('windows-download');
 
@@ -311,17 +306,22 @@
             countElement.textContent = winCount.toLocaleString();
         }
 
-        // Update on page load
         updateCounter();
 
-        // Increment counter when Windows download is clicked
-        winLink.addEventListener('click', function() {
+        // Improved click handler - uses mousedown + small delay to ensure it counts
+        winLink.addEventListener('mousedown', function() {
             winCount++;
             localStorage.setItem('bloodspireWinDownloads', winCount);
             updateCounter();
-            
-            // Optional: You can also send the click to your own server here
-            // fetch('https://yourserver.com/log-download', { method: 'POST' });
+        });
+
+        // Also support keyboard activation (Enter/Space)
+        winLink.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                winCount++;
+                localStorage.setItem('bloodspireWinDownloads', winCount);
+                updateCounter();
+            }
         });
     </script>
 </body>
