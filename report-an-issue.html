@@ -4,58 +4,88 @@
     <meta charset="UTF-8">
     <title>Report an Issue - Bloodspire</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 0 20px; }
-        .button { background-color: #2da44e; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; }
-        .button:hover { background-color: #2c974b; }
-        .note { background-color: #f6f8fa; border-left: 5px solid #007bff; padding: 15px; margin: 20px 0; }
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; max-width: 600px; margin: 40px auto; padding: 0 20px; background-color: #000; color: #d1d1d1; }
+        h2 { font-family: 'Cinzel', serif; color: #a31616; text-transform: uppercase; }
+        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
+        label { margin-bottom: 5px; font-weight: bold; color: #d4af37; }
+        input, select, textarea { 
+            padding: 10px; 
+            background: #1a1a1a; 
+            border: 1px solid #333; 
+            color: #fff; 
+            border-radius: 4px; 
+        }
+        .button { 
+            background-color: #a31616; 
+            color: white; 
+            padding: 12px 20px; 
+            text-decoration: none; 
+            border-radius: 6px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border: none;
+            text-transform: uppercase;
+        }
+        .button:hover { background-color: #d11a1a; }
+        .note { font-style: italic; font-size: 0.85rem; color: #b0b0b0; margin-bottom: 20px; }
     </style>
 </head>
 <body>
+
     <h2>Report an Issue</h2>
-    <p>Help improve the simulation by reporting bugs or suggesting features. No account is required.</p>
+    <p class="note">Help improve Bloodspire. Your report will be reviewed, and updates will be posted in the Announcements section on the main page.</p>
 
-    <!-- UPDATE THE ACTION URL WITH YOUR FORMSPREE ENDPOINT -->
-    <form action="https://formspree.io/f/YOUR_UNIQUE_ID" method="POST" style="display: flex; flex-direction: column; gap: 15px; max-width: 500px;">
+    <!-- REPLACE THE URL BELOW WITH YOUR FORMSPREE ENDPOINT -->
+    <form action="https://formspree.io/f/mrejqnqq" method="POST">
         
-        <label>Manager Name:
-            <input type="text" name="manager_name" required style="width: 100%;">
-        </label>
+        <div class="form-group">
+            <label>Manager Name</label>
+            <input type="text" name="Manager Name" required>
+        </div>
 
-        <label>Team Name:
-            <input type="text" name="team_name" required style="width: 100%;">
-        </label>
+        <div class="form-group">
+            <label>Team Name</label>
+            <input type="text" name="Team Name" required>
+        </div>
 
-        <label>Warrior Name(s):
-            <input type="text" name="warrior_names" required style="width: 100%;">
-        </label>
+        <div class="form-group">
+            <label>Warrior Name(s)</label>
+            <input type="text" name="Warrior Names" required>
+        </div>
 
-        <label>Turn #:
-            <input type="number" name="turn_number" required style="width: 100%;">
-        </label>
+        <div class="form-group">
+            <label>Turn #</label>
+            <input type="text" name="Turn Number" required>
+        </div>
 
-        <label>Submission Type:
-            <select name="type" required style="width: 100%;">
+        <div class="form-group">
+            <label>Submission Type</label>
+            <select name="Submission Type" required>
                 <option value="Bug">Bug</option>
                 <option value="Feature Request">Feature Request</option>
             </select>
-        </label>
+        </div>
 
-        <label>Description:
-            <textarea name="description" rows="4" required style="width: 100%;"></textarea>
-        </label>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="Description" rows="4" placeholder="Describe what happened..." required></textarea>
+        </div>
 
-        <label>Expected Behavior:
-            <textarea name="expected_behavior" rows="3" style="width: 100%;"></textarea>
-        </label>
+        <div class="form-group">
+            <label>Expected Behavior</label>
+            <textarea name="Expected Behavior" rows="3" placeholder="What should have happened?"></textarea>
+        </div>
 
-        <label>Link to Screenshot/File (Optional):
-            <input type="url" name="file_link" placeholder="Paste a link to your screenshot" style="width: 100%;">
-            <small>Note: Free form handlers usually require a link rather than a direct upload.</small>
-        </label>
+        <div class="form-group">
+            <label>Screenshot or File Link</label>
+            <input type="url" name="File Link" placeholder="Paste a link to your screenshot (e.g. Imgur)">
+            <p style="font-size: 0.75rem; color: #888;">Note: Upload your image to a service like Imgur and paste the link here.</p>
+        </div>
 
         <button type="submit" class="button">Submit Report</button>
     </form>
 
-    <p><small><a href="index.html">← Return to the Game</a></small></p>
+    <p style="margin-top: 30px;"><small><a href="index.html" style="color: #d4af37;">← Return to the Arena</a></small></p>
+
 </body>
 </html>
