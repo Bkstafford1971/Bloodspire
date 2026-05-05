@@ -11,25 +11,51 @@
     </style>
 </head>
 <body>
-
     <h2>Report an Issue</h2>
-    <p>Help improve the simulation by reporting bugs, balance issues, or mechanical glitches encountered during playtesting.</p>
+    <p>Help improve the simulation by reporting bugs or suggesting features. No account is required.</p>
 
-    <div class="note">
-        <strong>Requirement:</strong> You will need a GitHub account to submit a report. This allows me to reply directly to you if I need more information or once the fix is live.
-    </div>
+    <!-- UPDATE THE ACTION URL WITH YOUR FORMSPREE ENDPOINT -->
+    <form action="https://formspree.io/f/YOUR_UNIQUE_ID" method="POST" style="display: flex; flex-direction: column; gap: 15px; max-width: 500px;">
+        
+        <label>Manager Name:
+            <input type="text" name="manager_name" required style="width: 100%;">
+        </label>
 
-    <h3>How to Report:</h3>
-    <ul>
-        <li>Describe exactly what you were doing when the issue occurred.</li>
-        <li>Include any specific error messages or unexpected combat outcomes.</li>
-        <li>Mention the browser or device you are using.</li>
-    </ul>
+        <label>Team Name:
+            <input type="text" name="team_name" required style="width: 100%;">
+        </label>
 
-    <!-- REPLACE THE URL BELOW WITH YOUR ACTUAL REPOSITORY URL -->
-    <a href="https://github.com/Bkstafford1971/Bloodspire/issues/new" class="button">Open GitHub Issue Tracker</a>
+        <label>Warrior Name(s):
+            <input type="text" name="warrior_names" required style="width: 100%;">
+        </label>
+
+        <label>Turn #:
+            <input type="number" name="turn_number" required style="width: 100%;">
+        </label>
+
+        <label>Submission Type:
+            <select name="type" required style="width: 100%;">
+                <option value="Bug">Bug</option>
+                <option value="Feature Request">Feature Request</option>
+            </select>
+        </label>
+
+        <label>Description:
+            <textarea name="description" rows="4" required style="width: 100%;"></textarea>
+        </label>
+
+        <label>Expected Behavior:
+            <textarea name="expected_behavior" rows="3" style="width: 100%;"></textarea>
+        </label>
+
+        <label>Link to Screenshot/File (Optional):
+            <input type="url" name="file_link" placeholder="Paste a link to your screenshot" style="width: 100%;">
+            <small>Note: Free form handlers usually require a link rather than a direct upload.</small>
+        </label>
+
+        <button type="submit" class="button">Submit Report</button>
+    </form>
 
     <p><small><a href="index.html">← Return to the Game</a></small></p>
-
 </body>
 </html>
