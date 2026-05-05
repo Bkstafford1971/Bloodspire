@@ -179,6 +179,23 @@
             font-family: monospace;
         }
 
+        /* Download Counter */
+        .download-counter {
+            text-align: center;
+            margin: 40px 0 20px 0;
+            padding: 15px;
+            background: #0a0a0a;
+            border: 1px solid #222;
+            border-top: 2px solid #8b1a1a;
+            font-family: 'Cinzel', serif;
+        }
+
+        .counter-number {
+            font-size: 2.2rem;
+            color: #d4af37;
+            font-weight: bold;
+        }
+
         @media (max-width: 1100px) {
             .page-wrapper { flex-direction: column; }
             .sidebar, .main-content { flex: 0 0 100%; width: 100%; padding: 20px; }
@@ -211,7 +228,9 @@
                     <!-- Windows Build -->
                     <div class="platform-card">
                         <p>Version 1.2.0 - Windows Build</p>
-                        <a href="https://mega.nz/file/ErBE2aRR#Gn12kzIVtbQ481XN9S3x_ZxhRW9KAG6k48c55eeeKjI" class="download-btn">
+                        <a href="https://mega.nz/file/ErBE2aRR#Gn12kzIVtbQ481XN9S3x_ZxhRW9KAG6k48c55eeeKjI" 
+                           class="download-btn" 
+                           id="windows-download">
                             WINDOWS (.EXE)
                         </a>
                         <p class="platform-meta">Secure installer for official league play.</p>
@@ -268,14 +287,42 @@
                     <strong>Note:</strong> Progress, gladiator stats, and league standing are updated in real-time while connected to the server.
                 </div>
             </section>
-            <!-- Download Counter Display -->
-            <section style="text-align: center; margin-top: 50px; padding: 20px; border-top: 1px solid #222;">
-                <p style="font-family: 'Cinzel', serif; color: #888; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;">
-                    Arena Entrants (Windows): <span id="download-count" style="color: #d4af37; font-weight: bold;">0</span>
-                </p>
-            </section>
+
+            <!-- DOWNLOAD COUNTER -->
+            <div class="download-counter">
+                <p style="margin: 5px 0 8px 0; color: #888; font-size: 0.95rem;">WINDOWS DOWNLOADS</p>
+                <span id="win-count" class="counter-number">0</span>
+                <p style="margin: 5px 0 0 0; font-size: 0.8rem; color: #666;">times</p>
+            </div>
         </main>
     </div>
 
+    <script>
+        // Simple persistent counter using localStorage
+        // Note: This counts per browser/device. For a global counter visible to everyone, 
+        // you would need a backend (PHP/Node.js + database) or a 3rd-party service.
+        
+        let winCount = parseInt(localStorage.getItem('bloodspireWinDownloads') || '0');
+
+        const countElement = document.getElementById('win-count');
+        const winLink = document.getElementById('windows-download');
+
+        function updateCounter() {
+            countElement.textContent = winCount.toLocaleString();
+        }
+
+        // Update on page load
+        updateCounter();
+
+        // Increment counter when Windows download is clicked
+        winLink.addEventListener('click', function() {
+            winCount++;
+            localStorage.setItem('bloodspireWinDownloads', winCount);
+            updateCounter();
+            
+            // Optional: You can also send the click to your own server here
+            // fetch('https://yourserver.com/log-download', { method: 'POST' });
+        });
+    </script>
 </body>
 </html>
