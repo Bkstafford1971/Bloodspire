@@ -1,0 +1,39 @@
+name: Playtest Report
+description: Submit a bug or feature request for the simulation
+title: "[REPORT]: "
+labels: ["playtest"]
+body:
+  - type: input
+    id: manager_info
+    attributes:
+      label: Manager & Team Info
+      placeholder: "e.g., Manager: Valerius | Team: The Iron Suns"
+    validations:
+      required: true
+  - type: input
+    id: turn_warrior
+    attributes:
+      label: Turn # and Warrior Name
+      placeholder: "e.g., Turn 14 | Warrior: Theron"
+  - type: dropdown
+    id: type
+    attributes:
+      label: Submission Type
+      options:
+        - Bug
+        - Feature Request
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description of Bug/Request
+      description: Describe what happened or what you'd like to see.
+      placeholder: "The combat log didn't update after the killing blow..."
+    validations:
+      required: true
+  - type: textarea
+    id: files
+    attributes:
+      label: Screenshots or Files
+      description: You can drag and drop images here or paste them directly.
