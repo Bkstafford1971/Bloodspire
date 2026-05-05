@@ -1,0 +1,110 @@
+Fight #21
+Stress Team Turn 4  vs  The Iron Wolves
+============================================================================
+
+============================================================================
+CLEAVER_1 (1-0-0)   vs   LIRA THE CRUSHER (0-2-0)
+STRESS TEAM TURN 4 (STRESS TESTER)   vs   THE IRON WOLVES (SILENT CLAW)
+Dwarf Male   vs   Goblin Male
+============================================================================
+
+CLEAVER_1 is 4'2"
+CLEAVER_1 weighs 195 lbs.
+CLEAVER_1 Popular With The Kids.
+CLEAVER_1 enters the arena unarmored and wears no helm.
+CLEAVER_1 fights using a BATTLE AXE.
+
+LIRA THE CRUSHER is 5'7"
+LIRA THE CRUSHER weighs 165 lbs.
+LIRA THE CRUSHER Known To The Crowd.
+LIRA THE CRUSHER enters the arena in LEATHER and will wear a STEEL CAP.
+LIRA THE CRUSHER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The Blood Master raises his fist — the fight begins!
+CLEAVER_1 hacks at LIRA THE CRUSHER's midsection with his battle axe
+LIRA THE CRUSHER has a plan: don't get hit!
+LIRA THE CRUSHER drives a blow toward CLEAVER_1's face with his short sword
+LIRA THE CRUSHER finds the opening!
+LIRA THE CRUSHER's short sword finds CLEAVER_1's headgear!
+   A solid blow has been struck!
+CLEAVER_1 stumbles and falls heavily!
+LIRA THE CRUSHER cuts at CLEAVER_1's head with his short sword
+LIRA THE CRUSHER barely gets past CLEAVER_1's defenses!
+LIRA THE CRUSHER's short sword slices into CLEAVER_1's temple!
+   The blow lands without full force
+LIRA THE CRUSHER hacks at CLEAVER_1's skull with his short sword
+LIRA THE CRUSHER finds the opening!
+LIRA THE CRUSHER's short sword slices into CLEAVER_1's helm!
+   A solid blow has been struck!
+A spectator calls out, 'Give him what he deserves!'
+LIRA THE CRUSHER thrusts at CLEAVER_1's skull with his short sword
+The blow connects!
+LIRA THE CRUSHER's short sword finds CLEAVER_1's headgear!
+   The blow does almost nothing
+LIRA THE CRUSHER sizes up CLEAVER_1 carefully
+LIRA THE CRUSHER drives a blow toward CLEAVER_1's skull with his short sword
+LIRA THE CRUSHER's blow barely grazes CLEAVER_1!
+LIRA THE CRUSHER directs an attack toward CLEAVER_1
+LIRA THE CRUSHER drives a blow toward CLEAVER_1's face with his short sword
+LIRA THE CRUSHER finds the opening!
+LIRA THE CRUSHER's short sword slices into CLEAVER_1's skull!
+   A telling hit!
+LIRA THE CRUSHER thrusts at CLEAVER_1's helm with his short sword
+LIRA THE CRUSHER gets past CLEAVER_1's guard!
+LIRA THE CRUSHER's short sword finds CLEAVER_1's helm!
+   A minor hit!
+CLEAVER_1 raises a hand in surrender!
+No quarter is given!
+CLEAVER_1 swings at LIRA THE CRUSHER's midsection with his battle axe
+LIRA THE CRUSHER barely gets the parry off!
+Half the crowd rises to their feet in anticipation!
+CLEAVER_1 directs an attack toward LIRA THE CRUSHER
+CLEAVER_1 swings at LIRA THE CRUSHER's torso with his battle axe
+LIRA THE CRUSHER barely gets the parry off!
+
+MINUTE 2
+LIRA THE CRUSHER is dictating the pace and flow of the fight.
+
+The announcer's voice cracks with excitement
+ * LIRA THE CRUSHER switches to strategy 1
+LIRA THE CRUSHER drives a blow toward CLEAVER_1's skull with his short sword
+LIRA THE CRUSHER's short sword finds CLEAVER_1's helm!
+   Some damage is done
+CLEAVER_1 can fight no more and begs for mercy!
+No quarter is given!
+LIRA THE CRUSHER hacks at CLEAVER_1's throat with his short sword
+LIRA THE CRUSHER's short sword finds CLEAVER_1's temple!
+   Barely a scratch!
+CLEAVER_1 calls out for quarter!
+The crowd screams for blood — mercy is denied!
+LIRA THE CRUSHER cuts at CLEAVER_1's head with his short sword
+CLEAVER_1 just manages to deflect the blow!
+CLEAVER_1 sizes up LIRA THE CRUSHER carefully
+CLEAVER_1 cleaves at LIRA THE CRUSHER's midsection with his battle axe
+LIRA THE CRUSHER is paying special attention to not being hit there!
+LIRA THE CRUSHER thrusts at CLEAVER_1's helm with his short sword
+LIRA THE CRUSHER's short sword slices into CLEAVER_1's skull!
+   The armor absorbs most of it
+CLEAVER_1 calls out for quarter!
+The crowd screams for blood — mercy is denied!
+CLEAVER_1 tries to hit the mighty LIRA THE CRUSHER
+CLEAVER_1 cleaves at LIRA THE CRUSHER's torso with his battle axe
+LIRA THE CRUSHER's plan is not to get hit!
+The announcer's voice cracks with excitement
+LIRA THE CRUSHER cuts at CLEAVER_1's skull with his short sword
+LIRA THE CRUSHER's blow barely grazes CLEAVER_1!
+CLEAVER_1 appeals to the Blood Master for mercy!
+The ref saves the pitiable CLEAVER_1!
+
+LIRA THE CRUSHER has won this affair of honor!
+
+LIRA THE CRUSHER has trained in Skill and Skill

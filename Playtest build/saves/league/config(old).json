@@ -1,0 +1,17 @@
+{
+  "current_turn": 8,
+  "turn_state": "results_ready",
+  "host_password_hash": "d8c7ac622104d3cdae02aca277c9da8119efec93f8c91ff0c7c478ededd4826a",
+  "host_password_salt": "f7903842301fef02d6717f0999f33c28",
+  "fight_counter": 751,
+  "reset_count": 4,
+  "started_at": "2026-03-30 09:40:57",
+  "processing_started_at": "2026-04-24T09:21:12.650548",
+  "show_favorite_weapon": true,
+  "show_luck_factor": false,
+  "show_max_hp": false,
+  "ai_teams_enabled": true,
+  "schedule_enabled": false,
+  "schedule_day": "Monday",
+  "schedule_time": "15:51"
+}

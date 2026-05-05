@@ -1,0 +1,1894 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #386   Turn: 8
+  Debug team: Ilneval
+  Ilneval / DECEPTICONS   vs   Maester Ironstone / Stonecraft Academy
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: DIRGE
+  ────────────────────────────────────
+    Race: Dwarf  |  Gender: Male
+    STR:15  DEX:20  CON:15  INT:11  PRE:9  SIZ:10
+    Max HP: 62   Luck: 6
+    Armor: Brigandine   Helm: Helm
+    Primary: Halberd   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Wall of Steel / Act:8 / Aim:Chest / Def:None
+      [2] Always  →  Bash / Act:7 / Aim:Head / Def:Chest
+
+  ────────────────────────────────────
+  WARRIOR B: DAVEN
+  ────────────────────────────────────
+    Race: Human  |  Gender: Male
+    STR:12  DEX:17  CON:13  INT:22  PRE:9  SIZ:14
+    Max HP: 53   Luck: 28
+    Armor: Cuir Boulli   Helm: None
+    Primary: Short Sword   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Feint / Act:4 / Aim:Chest / Def:Chest
+    Skills: dodge:7  initiative:1  parry:1  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — DIRGE: 5   |   DAVEN: 6
+  HP    — DIRGE: 62/62 (100%)   |   DAVEN: 53/53 (100%)
+  END   — DIRGE: 100.0   |   DAVEN: 100.0
+  STRAT — DIRGE: [Bash / Act:7]   |   DAVEN: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[68]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 107
+    DIRGE                   : d100[55]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 73
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[55]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 94
+    Final ATK: 94
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[87]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 139
+    Final DEF: 139
+  Margin: 94 − 139 = -45   ▶  PARRY (margin -45)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[75]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 93
+    DAVEN                   : d100[3]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 42
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[10]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 28
+    Final ATK: 28
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[38]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 87
+    Final DEF: 87
+  Margin: 28 − 87 = -59   ▶  PARRY (margin -59)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[53]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 92
+    DIRGE                   : d100[65]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 83
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[55]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 94
+    Final ATK: 94
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[11]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 63
+    Final DEF: 63
+  Margin: 94 − 63 = 31   ▶  HIT (margin 31)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 31/55.0)) = 0.564
+    Raw: max(1, int(13 × 0.564)) = 7
+    Favorite weapon +1 → raw = 8
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 8 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 62/62 (100.0%)
+    hit     : −1
+    After  : 61/62 (98.4%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 25  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[76]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 115
+    DIRGE                   : d100[26]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 44
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[44]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 83
+    Final ATK: 83
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[74]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 126
+    Final DEF: 126
+  Margin: 83 − 126 = -43   ▶  PARRY (margin -43)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[69]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 108
+    DIRGE                   : d100[64]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 82
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[51]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 90
+    Final ATK: 90
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[58]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 110
+    Final DEF: 110
+  Margin: 90 − 110 = -20   ▶  PARRY (margin -20)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[95]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 113
+    DAVEN                   : d100[25]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 64
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[76]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 94
+    Final ATK: 94
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[80]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 129
+    Final DEF: 129
+  Margin: 94 − 129 = -35   ▶  PARRY (margin -35)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[29]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 68
+    DIRGE                   : d100[36]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 54
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[27]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 66
+    Final ATK: 66
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[21]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 73
+    Final DEF: 73
+  Margin: 66 − 73 = -7   ▶  PARRY (margin -7)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[69]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 108
+    DIRGE                   : d100[12]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 30
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[49]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 88
+    Final ATK: 88
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[68]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 120
+    Final DEF: 120
+  Margin: 88 − 120 = -32   ▶  PARRY (margin -32)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[99]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 117
+    Final ATK: 117
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[27]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 76
+    Final DEF: 76
+  Margin: 117 − 76 = 41   ▶  HIT (margin 41)
+  Damage (DIRGE → DAVEN):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 18.75
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      strength underweight pen     ×0.75 (25% penalty)
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 41/55.0)) = 0.745
+    Raw: max(1, int(23 × 0.745)) = 17
+    Favorite weapon +1 → raw = 18
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 18 − 3) = 15
+  ▶ FINAL DAMAGE: 15
+  HP Pool (DAVEN):
+    Before : 53/53 (100.0%)
+    hit     : −15
+    After  : 38/53 (71.7%)
+  Knockdown Check (DAVEN):
+    base = int(15/53 × 80) = 22   cat bonus [Polearm/Spear]: +5   final: 23%
+    Roll: 80  →  no knockdown
+  Perm Injury Check (DAVEN):
+    threshold = 15% of 53 = 7   damage 15 ≥ threshold
+    chance = max(5, min(80, int(15/53×100) − 5)) = 19%
+    Roll: 77  →  no injury
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[55]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 73
+    Final ATK: 73
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[3]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 52
+    Final DEF: 52
+  Margin: 73 − 52 = 21   ▶  HIT (margin 21)
+  Damage (DIRGE → DAVEN):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 18.75
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      strength underweight pen     ×0.75 (25% penalty)
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 21/55.0)) = 0.382
+    Raw: max(1, int(23 × 0.382)) = 8
+    Favorite weapon +1 → raw = 9
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 9 − 3) = 6
+  ▶ FINAL DAMAGE: 6
+  HP Pool (DAVEN):
+    Before : 38/53 (71.7%)
+    hit     : −6
+    After  : 32/53 (60.4%)
+  Knockdown Check (DAVEN):
+    base = int(6/53 × 80) = 9   cat bonus [Polearm/Spear]: +5   final: 10%
+    Roll: 46  →  no knockdown
+  Perm Injury Check (DAVEN):
+    threshold = 15% of 53 = 7   damage 6 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[97]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 115
+    Final ATK: 115
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[54]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 103
+    Final DEF: 103
+  Margin: 115 − 103 = 12   ▶  HIT (margin 12)
+  Damage (DIRGE → DAVEN):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 18.75
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      strength underweight pen     ×0.75 (25% penalty)
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 12/55.0)) = 0.218
+    Raw: max(1, int(23 × 0.218)) = 5
+    Favorite weapon +1 → raw = 6
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 6 − 3) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (DAVEN):
+    Before : 32/53 (60.4%)
+    hit     : −3
+    After  : 29/53 (54.7%)
+  Knockdown Check (DAVEN):
+    base = int(3/53 × 80) = 4   cat bonus [Polearm/Spear]: +5   final: 5%
+    Roll: 99  →  no knockdown
+  Perm Injury Check (DAVEN):
+    threshold = 15% of 53 = 7   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    DIRGE: 100.0 END − (7.60 burn × 5 actions) = 61.0
+    DAVEN: 100.0 END − (1.70 burn × 6 actions) = 89.8
+    HP POOL — DIRGE: 61/62 (98%)
+    HP POOL — DAVEN: 29/53 (55%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — DIRGE: 5   |   DAVEN: 6
+  HP    — DIRGE: 61/62 (98%)   |   DAVEN: 29/53 (55%)
+  END   — DIRGE: 61.0   |   DAVEN: 89.8
+  STRAT — DIRGE: [Bash / Act:7]   |   DAVEN: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[26]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 65
+    DIRGE                   : d100[27]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 45
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[86]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 125
+    Final ATK: 125
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[59]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 111
+    Final DEF: 111
+  Margin: 125 − 111 = 14   ▶  HIT (margin 14)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 14/55.0)) = 0.255
+    Raw: max(1, int(13 × 0.255)) = 3
+    Favorite weapon +1 → raw = 4
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 4 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 61/62 (98.4%)
+    hit     : −1
+    After  : 60/62 (96.8%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 68  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[43]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 82
+    DIRGE                   : d100[40]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 58
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[13]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 52
+    Final ATK: 52
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[40]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 92
+    Final DEF: 92
+  Margin: 52 − 92 = -40   ▶  PARRY (margin -40)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[99]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 117
+    DAVEN                   : d100[22]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 61
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[37]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 55
+    Final ATK: 55
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[23]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 72
+    Final DEF: 72
+  Margin: 55 − 72 = -17   ▶  PARRY (margin -17)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[97]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 136
+    DIRGE                   : d100[99]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 117
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[43]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 82
+    Final ATK: 82
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[80]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 132
+    Final DEF: 132
+  Margin: 82 − 132 = -50   ▶  PARRY (margin -50)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[9]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 48
+    DIRGE                   : d100[23]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 41
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[26]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 65
+    Final ATK: 65
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[60]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 112
+    Final DEF: 112
+  Margin: 65 − 112 = -47   ▶  PARRY (margin -47)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[94]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 112
+    DAVEN                   : d100[61]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 100
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[15]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 33
+    Final ATK: 33
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[6]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 55
+    Final DEF: 55
+  Margin: 33 − 55 = -22   ▶  PARRY (margin -22)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[77]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 116
+    DIRGE                   : d100[94]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 112
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[83]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 122
+    Final ATK: 122
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[78]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 130
+    Final DEF: 130
+  Margin: 122 − 130 = -8   ▶  PARRY (margin -8)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[93]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 132
+    DIRGE                   : d100[67]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 85
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[66]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 105
+    Final ATK: 105
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[9]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 61
+    Final DEF: 61
+  Margin: 105 − 61 = 44   ▶  HIT (margin 44)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 44/55.0)) = 0.800
+    Raw: max(1, int(13 × 0.800)) = 10
+    Favorite weapon +1 → raw = 11
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 11 − 7) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (DIRGE):
+    Before : 60/62 (96.8%)
+    hit     : −4
+    After  : 56/62 (90.3%)
+  Knockdown Check (DIRGE):
+    base = int(4/62 × 80) = 5   cat bonus [Sword/Knife]: +0   final: 5%
+    Roll: 97  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 4 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[22]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 40
+    Final ATK: 40
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[6]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 55
+    Final DEF: 55
+  Margin: 40 − 55 = -15   ▶  PARRY (margin -15)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[47]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 65
+    Final ATK: 65
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[44]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 93
+    Final DEF: 93
+  Margin: 65 − 93 = -28   ▶  PARRY (margin -28)
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[21]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 39
+    Final ATK: 39
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[95]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 144
+    Final DEF: 144
+  Margin: 39 − 144 = -105   ▶  PARRY (margin -105)
+
+  ── END OF MINUTE ──
+    DIRGE: 61.0 END − (7.60 burn × 5 actions) = 22.0
+    DAVEN: 89.8 END − (1.70 burn × 6 actions) = 79.6
+    HP POOL — DIRGE: 56/62 (90%)
+    HP POOL — DAVEN: 29/53 (55%)
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — DIRGE: 5   |   DAVEN: 6
+  HP    — DIRGE: 56/62 (90%)   |   DAVEN: 29/53 (55%)
+  END   — DIRGE: 22.0   |   DAVEN: 79.6
+  STRAT — DIRGE: [Bash / Act:7]   |   DAVEN: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[99]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 138
+    DIRGE                   : d100[31]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-5] = 44
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[42]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 81
+    Final ATK: 81
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[97]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-3]
+    Subtotal: 146
+    Final DEF: 146
+  Margin: 81 − 146 = -65   ▶  PARRY (margin -65)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[68]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 107
+    DIRGE                   : d100[61]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-5] = 74
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[99]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 138
+    Final ATK: 138
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[21]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-3]
+    Subtotal: 70
+    Final DEF: 70
+  Margin: 138 − 70 = 68   ▶  HIT (margin 68)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 68/55.0)) = 1.000
+    Raw: max(1, int(13 × 1.000)) = 13
+    Favorite weapon +1 → raw = 14
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 14 − 7) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (DIRGE):
+    Before : 56/62 (90.3%)
+    hit     : −7
+    After  : 49/62 (79.0%)
+  Knockdown Check (DIRGE):
+    base = int(7/62 × 80) = 9   cat bonus [Sword/Knife]: +0   final: 9%
+    Roll: 63  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 7 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[84]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 123
+    DIRGE                   : d100[70]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-5] = 83
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[67]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 106
+    Final ATK: 106
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[67]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-3]
+    Subtotal: 116
+    Final DEF: 116
+  Margin: 106 − 116 = -10   ▶  PARRY (margin -10)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[43]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 82
+    DIRGE                   : d100[66]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-5] = 79
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[41]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 80
+    Final ATK: 80
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[4]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-3]
+    Subtotal: 53
+    Final DEF: 53
+  Margin: 80 − 53 = 27   ▶  HIT (margin 27)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 27/55.0)) = 0.491
+    Raw: max(1, int(13 × 0.491)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 7 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 49/62 (79.0%)
+    hit     : −1
+    After  : 48/62 (77.4%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 46  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[61]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 100
+    DIRGE                   : d100[86]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-5] = 99
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[16]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 55
+    Final ATK: 55
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[66]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-3]
+    Subtotal: 115
+    Final DEF: 115
+  Margin: 55 − 115 = -60   ▶  PARRY (margin -60)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[61]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 100
+    DIRGE                   : d100[69]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-5] = 82
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[72]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 111
+    Final ATK: 111
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[2]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-3]
+    Subtotal: 51
+    Final DEF: 51
+  Margin: 111 − 51 = 60   ▶  HIT (margin 60)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 60/55.0)) = 1.000
+    Raw: max(1, int(13 × 1.000)) = 13
+    Favorite weapon +1 → raw = 14
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 14 − 7) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (DIRGE):
+    Before : 48/62 (77.4%)
+    hit     : −7
+    After  : 41/62 (66.1%)
+  Knockdown Check (DIRGE):
+    base = int(7/62 × 80) = 9   cat bonus [Sword/Knife]: +0   final: 9%
+    Roll: 58  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 7 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[11]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-4]
+    Subtotal: 25
+    Final ATK: 25
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[84]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 133
+    Final DEF: 133
+  Margin: 25 − 133 = -108   ▶  PARRY (margin -108)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[45]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-4]
+    Subtotal: 59
+    Final ATK: 59
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[26]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 75
+    Final DEF: 75
+  Margin: 59 − 75 = -16   ▶  PARRY (margin -16)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[2]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-4]
+    Subtotal: 16
+    Final ATK: 16
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[70]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 119
+    Final DEF: 119
+  Margin: 16 − 119 = -103   ▶  PARRY (margin -103)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[16]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-4]
+    Subtotal: 30
+    Final ATK: 30
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[54]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 103
+    Final DEF: 103
+  Margin: 30 − 103 = -73   ▶  PARRY (margin -73)
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[45]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-4]
+    Subtotal: 59
+    Final ATK: 59
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[74]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 123
+    Final DEF: 123
+  Margin: 59 − 123 = -64   ▶  PARRY (margin -64)
+
+  ── END OF MINUTE ──
+    DIRGE: 22.0 END − (7.60 burn × 5 actions) = 0.0
+    DAVEN: 79.6 END − (1.70 burn × 6 actions) = 69.4
+    HP POOL — DIRGE: 41/62 (66%)
+    HP POOL — DAVEN: 29/53 (55%)
+
+==============================================================================
+  MINUTE 4
+==============================================================================
+  APM   — DIRGE: 4   |   DAVEN: 6
+  HP    — DIRGE: 41/62 (66%)   |   DAVEN: 29/53 (55%)
+  END   — DIRGE: 0.0   |   DAVEN: 69.4
+  STRAT — DIRGE: [Bash / Act:7]   |   DAVEN: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[93]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 132
+    DIRGE                   : d100[61]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 67
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[68]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 107
+    Final ATK: 107
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[95]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 135
+    Final DEF: 135
+  Margin: 107 − 135 = -28   ▶  PARRY (margin -28)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[60]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 66
+    DAVEN                   : d100[25]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 64
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[80]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 83
+    Final ATK: 83
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[95]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 144
+    Final DEF: 144
+  Margin: 83 − 144 = -61   ▶  PARRY (margin -61)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[19]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 58
+    DIRGE                   : d100[7]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 13
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[89]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 128
+    Final ATK: 128
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[71]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 111
+    Final DEF: 111
+  Margin: 128 − 111 = 17   ▶  HIT (margin 17)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 17/55.0)) = 0.309
+    Raw: max(1, int(13 × 0.309)) = 4
+    Favorite weapon +1 → raw = 5
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 5 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 41/62 (66.1%)
+    hit     : −1
+    After  : 40/62 (64.5%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 31  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[95]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 134
+    DIRGE                   : d100[28]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 34
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[18]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 57
+    Final ATK: 57
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[76]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 116
+    Final DEF: 116
+  Margin: 57 − 116 = -59   ▶  PARRY (margin -59)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[57]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 96
+    DIRGE                   : d100[58]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 64
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[20]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 59
+    Final ATK: 59
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[42]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 82
+    Final DEF: 82
+  Margin: 59 − 82 = -23   ▶  PARRY (margin -23)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[76]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 115
+    DIRGE                   : d100[69]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 75
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[73]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 112
+    Final ATK: 112
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[56]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 96
+    Final DEF: 96
+  Margin: 112 − 96 = 16   ▶  HIT (margin 16)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 16/55.0)) = 0.291
+    Raw: max(1, int(13 × 0.291)) = 3
+    Favorite weapon +1 → raw = 4
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 4 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 40/62 (64.5%)
+    hit     : −1
+    After  : 39/62 (62.9%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 36  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[6]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 45
+    DIRGE                   : d100[38]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 44
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[59]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 98
+    Final ATK: 98
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[27]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 67
+    Final DEF: 67
+  Margin: 98 − 67 = 31   ▶  HIT (margin 31)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 31/55.0)) = 0.564
+    Raw: max(1, int(13 × 0.564)) = 7
+    Favorite weapon +1 → raw = 8
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 8 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 39/62 (62.9%)
+    hit     : −1
+    After  : 38/62 (61.3%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 4  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[13]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 16
+    Final ATK: 16
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[52]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 101
+    Final DEF: 101
+  Margin: 16 − 101 = -85   ▶  PARRY (margin -85)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[77]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 80
+    Final ATK: 80
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[44]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 93
+    Final DEF: 93
+  Margin: 80 − 93 = -13   ▶  PARRY (margin -13)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[52]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 55
+    Final ATK: 55
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[8]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 57
+    Final DEF: 57
+  Margin: 55 − 57 = -2   ▶  PARRY (margin -2)
+
+  ── END OF MINUTE ──
+    DIRGE: 0.0 END − (7.60 burn × 4 actions) = 0.0
+    DAVEN: 69.4 END − (1.70 burn × 6 actions) = 59.2
+    HP POOL — DIRGE: 38/62 (61%)
+    HP POOL — DAVEN: 29/53 (55%)
+
+==============================================================================
+  MINUTE 5
+==============================================================================
+  APM   — DIRGE: 4   |   DAVEN: 6
+  HP    — DIRGE: 38/62 (61%)   |   DAVEN: 29/53 (55%)
+  END   — DIRGE: 0.0   |   DAVEN: 59.2
+  STRAT — DIRGE: [Bash / Act:7]   |   DAVEN: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[66]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 72
+    DAVEN                   : d100[15]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 54
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[76]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 79
+    Final ATK: 79
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[9]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 58
+    Final DEF: 58
+  Margin: 79 − 58 = 21   ▶  HIT (margin 21)
+  Damage (DIRGE → DAVEN):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 18.75
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      strength underweight pen     ×0.75 (25% penalty)
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 21/55.0)) = 0.382
+    Raw: max(1, int(23 × 0.382)) = 8
+    Favorite weapon +1 → raw = 9
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 9 − 3) = 6
+  ▶ FINAL DAMAGE: 6
+  HP Pool (DAVEN):
+    Before : 29/53 (54.7%)
+    hit     : −6
+    After  : 23/53 (43.4%)
+  Knockdown Check (DAVEN):
+    base = int(6/53 × 80) = 9   cat bonus [Polearm/Spear]: +5   final: 10%
+    Roll: 91  →  no knockdown
+  Perm Injury Check (DAVEN):
+    threshold = 15% of 53 = 7   damage 6 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[14]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 53
+    DIRGE                   : d100[16]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 22
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[37]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 76
+    Final ATK: 76
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[24]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 64
+    Final DEF: 64
+  Margin: 76 − 64 = 12   ▶  HIT (margin 12)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 12/55.0)) = 0.218
+    Raw: max(1, int(13 × 0.218)) = 2
+    Favorite weapon +1 → raw = 3
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 3 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 38/62 (61.3%)
+    hit     : −1
+    After  : 37/62 (59.7%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 7  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[74]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 113
+    DIRGE                   : d100[43]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 49
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[99]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 138
+    Final ATK: 138
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[87]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 127
+    Final DEF: 127
+  Margin: 138 − 127 = 11   ▶  HIT (margin 11)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 11/55.0)) = 0.200
+    Raw: max(1, int(13 × 0.200)) = 2
+    Favorite weapon +1 → raw = 3
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 3 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 37/62 (59.7%)
+    hit     : −1
+    After  : 36/62 (58.1%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 21  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[85]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 124
+    DIRGE                   : d100[66]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 72
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[54]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 93
+    Final ATK: 93
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[12]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 52
+    Final DEF: 52
+  Margin: 93 − 52 = 41   ▶  HIT (margin 41)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 41/55.0)) = 0.745
+    Raw: max(1, int(13 × 0.745)) = 9
+    Favorite weapon +1 → raw = 10
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 10 − 7) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (DIRGE):
+    Before : 36/62 (58.1%)
+    hit     : −3
+    After  : 33/62 (53.2%)
+  Knockdown Check (DIRGE):
+    base = int(3/62 × 80) = 3   cat bonus [Sword/Knife]: +0   final: 3%
+    Roll: 73  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[44]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 83
+    DIRGE                   : d100[14]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 20
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[65]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 104
+    Final ATK: 104
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[56]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 96
+    Final DEF: 96
+  Margin: 104 − 96 = 8   ▶  GRAZE (margin 8, 1 HP)
+  HP Pool (DIRGE):
+    Before : 33/62 (53.2%)
+    graze   : −1
+    After  : 32/62 (51.6%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[12]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 51
+    DIRGE                   : d100[42]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 48
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[52]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 91
+    Final ATK: 91
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[82]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 122
+    Final DEF: 122
+  Margin: 91 − 122 = -31   ▶  PARRY (margin -31)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[44]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 83
+    DIRGE                   : d100[25]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 31
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[85]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 124
+    Final ATK: 124
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[56]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 96
+    Final DEF: 96
+  Margin: 124 − 96 = 28   ▶  HIT (margin 28)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 28/55.0)) = 0.509
+    Raw: max(1, int(13 × 0.509)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 7 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 32/62 (51.6%)
+    hit     : −1
+    After  : 31/62 (50.0%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 42  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[68]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 71
+    Final ATK: 71
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[41]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 90
+    Final DEF: 90
+  Margin: 71 − 90 = -19   ▶  PARRY (margin -19)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[90]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 93
+    Final ATK: 93
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[92]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 141
+    Final DEF: 141
+  Margin: 93 − 141 = -48   ▶  PARRY (margin -48)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[30]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 33
+    Final ATK: 33
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[83]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 132
+    Final DEF: 132
+  Margin: 33 − 132 = -99   ▶  PARRY (margin -99)
+
+  ── END OF MINUTE ──
+    DIRGE: 0.0 END − (7.60 burn × 4 actions) = 0.0
+    DAVEN: 59.2 END − (1.70 burn × 6 actions) = 49.0
+    HP POOL — DIRGE: 31/62 (50%)
+    HP POOL — DAVEN: 23/53 (43%)
+
+==============================================================================
+  MINUTE 6
+==============================================================================
+  APM   — DIRGE: 4   |   DAVEN: 6
+  HP    — DIRGE: 31/62 (50%)   |   DAVEN: 23/53 (43%)
+  END   — DIRGE: 0.0   |   DAVEN: 49.0
+  STRAT — DIRGE: [Bash / Act:7]   |   DAVEN: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[75]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 81
+    DAVEN                   : d100[22]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 61
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[85]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 88
+    Final ATK: 88
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[31]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 88 − 80 = 8   ▶  GRAZE (margin 8, 1 HP)
+  HP Pool (DAVEN):
+    Before : 23/53 (43.4%)
+    graze   : −1
+    After  : 22/53 (41.5%)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[93]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 132
+    DIRGE                   : d100[16]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 22
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[89]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 128
+    Final ATK: 128
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[90]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 130
+    Final DEF: 130
+  Margin: 128 − 130 = -2   ▶  PARRY (margin -2)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[15]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 54
+    DIRGE                   : d100[31]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 37
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[20]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 59
+    Final ATK: 59
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[8]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 48
+    Final DEF: 48
+  Margin: 59 − 48 = 11   ▶  HIT (margin 11)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 11/55.0)) = 0.200
+    Raw: max(1, int(13 × 0.200)) = 2
+    Favorite weapon +1 → raw = 3
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 3 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 31/62 (50.0%)
+    hit     : −1
+    After  : 30/62 (48.4%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 23  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[84]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 123
+    DIRGE                   : d100[57]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 63
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[1]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 40
+    Final ATK: 40
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[81]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 121
+    Final DEF: 121
+  Margin: 40 − 121 = -81   ▶  PARRY (margin -81)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[92]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 98
+    DAVEN                   : d100[41]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 80
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[84]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 87
+    Final ATK: 87
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[29]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 78
+    Final DEF: 78
+  Margin: 87 − 78 = 9   ▶  GRAZE (margin 9, 1 HP)
+  HP Pool (DAVEN):
+    Before : 22/53 (41.5%)
+    graze   : −1
+    After  : 21/53 (39.6%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[80]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 86
+    DAVEN                   : d100[31]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 70
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[10]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 13
+    Final ATK: 13
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[88]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 137
+    Final DEF: 137
+  Margin: 13 − 137 = -124   ▶  PARRY (margin -124)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[9]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 48
+    DIRGE                   : d100[36]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 42
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[61]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 100
+    Final ATK: 100
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[68]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 108
+    Final DEF: 108
+  Margin: 100 − 108 = -8   ▶  PARRY (margin -8)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[68]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 107
+    DIRGE                   : d100[73]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 79
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[56]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 95
+    Final ATK: 95
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[7]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 47
+    Final DEF: 47
+  Margin: 95 − 47 = 48   ▶  HIT (margin 48)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 48/55.0)) = 0.873
+    Raw: max(1, int(13 × 0.873)) = 11
+    Favorite weapon +1 → raw = 12
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 12 − 7) = 5
+  ▶ FINAL DAMAGE: 5
+  HP Pool (DIRGE):
+    Before : 30/62 (48.4%)
+    hit     : −5
+    After  : 25/62 (40.3%)
+  Knockdown Check (DIRGE):
+    base = int(5/62 × 80) = 6   cat bonus [Sword/Knife]: +0   final: 6%
+    Roll: 92  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 5 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[84]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 123
+    DIRGE                   : d100[75]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 81
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[82]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 121
+    Final ATK: 121
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[83]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 123
+    Final DEF: 123
+  Margin: 121 − 123 = -2   ▶  PARRY (margin -2)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[31]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 34
+    Final ATK: 34
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[10]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 59
+    Final DEF: 59
+  Margin: 34 − 59 = -25   ▶  PARRY (margin -25)
+
+  ── END OF MINUTE ──
+    DIRGE: 0.0 END − (7.60 burn × 4 actions) = 0.0
+    DAVEN: 49.0 END − (1.70 burn × 6 actions) = 38.8
+    HP POOL — DIRGE: 25/62 (40%)
+    HP POOL — DAVEN: 21/53 (40%)
+
+==============================================================================
+  MINUTE 7
+==============================================================================
+  APM   — DIRGE: 4   |   DAVEN: 6
+  HP    — DIRGE: 25/62 (40%)   |   DAVEN: 21/53 (40%)
+  END   — DIRGE: 0.0   |   DAVEN: 38.8
+  STRAT — DIRGE: [Bash / Act:7]   |   DAVEN: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[96]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 135
+    DIRGE                   : d100[62]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 68
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[6]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 45
+    Final ATK: 45
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[53]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 93
+    Final DEF: 93
+  Margin: 45 − 93 = -48   ▶  PARRY (margin -48)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[31]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 70
+    DIRGE                   : d100[53]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 59
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[80]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 119
+    Final ATK: 119
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[43]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 83
+    Final DEF: 83
+  Margin: 119 − 83 = 36   ▶  HIT (margin 36)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 36/55.0)) = 0.655
+    Raw: max(1, int(13 × 0.655)) = 8
+    Favorite weapon +1 → raw = 9
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 9 − 7) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (DIRGE):
+    Before : 25/62 (40.3%)
+    hit     : −2
+    After  : 23/62 (37.1%)
+  Knockdown Check (DIRGE):
+    base = int(2/62 × 80) = 2   cat bonus [Sword/Knife]: +0   final: 2%
+    Roll: 72  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[57]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 96
+    DIRGE                   : d100[58]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 64
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[72]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 111
+    Final ATK: 111
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[10]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 50
+    Final DEF: 50
+  Margin: 111 − 50 = 61   ▶  HIT (margin 61)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 61/55.0)) = 1.000
+    Raw: max(1, int(13 × 1.000)) = 13
+    Favorite weapon +1 → raw = 14
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 14 − 7) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (DIRGE):
+    Before : 23/62 (37.1%)
+    hit     : −7
+    After  : 16/62 (25.8%)
+  Knockdown Check (DIRGE):
+    base = int(7/62 × 80) = 9   cat bonus [Sword/Knife]: +0   final: 9%
+    Roll: 49  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 7 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[31]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 70
+    DIRGE                   : d100[27]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 33
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[43]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 82
+    Final ATK: 82
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[53]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 93
+    Final DEF: 93
+  Margin: 82 − 93 = -11   ▶  PARRY (margin -11)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[82]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 121
+    DIRGE                   : d100[9]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 15
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[41]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 80
+    Final ATK: 80
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[94]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 134
+    Final DEF: 134
+  Margin: 80 − 134 = -54   ▶  PARRY (margin -54)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[83]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 89
+    DAVEN                   : d100[11]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 50
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[58]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 61
+    Final ATK: 61
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[45]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 94
+    Final DEF: 94
+  Margin: 61 − 94 = -33   ▶  PARRY (margin -33)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[75]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2] = 114
+    DIRGE                   : d100[53]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 59
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[64]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 103
+    Final ATK: 103
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[76]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+18]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 116
+    Final DEF: 116
+  Margin: 103 − 116 = -13   ▶  PARRY (margin -13)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[43]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 46
+    Final ATK: 46
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[94]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 143
+    Final DEF: 143
+  Margin: 46 − 143 = -97   ▶  PARRY (margin -97)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[39]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 42
+    Final ATK: 42
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[2]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 51
+    Final DEF: 51
+  Margin: 42 − 51 = -9   ▶  PARRY (margin -9)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[67]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 70
+    Final ATK: 70
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[73]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]
+    Subtotal: 122
+    Final DEF: 122
+  Margin: 70 − 122 = -52   ▶  PARRY (margin -52)
+
+  ── END OF MINUTE ──
+    DIRGE: 0.0 END − (7.60 burn × 4 actions) = 0.0
+    DAVEN: 38.8 END − (1.70 burn × 6 actions) = 28.6
+    HP POOL — DIRGE: 16/62 (26%)
+    HP POOL — DAVEN: 21/53 (40%)
+  ▶ STRATEGY SWITCH — DIRGE: [2] → [1]
+
+==============================================================================
+  MINUTE 8
+==============================================================================
+  APM   — DIRGE: 6   |   DAVEN: 6
+  HP    — DIRGE: 16/62 (26%)   |   DAVEN: 21/53 (40%)
+  END   — DIRGE: 0.0   |   DAVEN: 28.6
+  STRAT — DIRGE: [Wall of Steel / Act:8]   |   DAVEN: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[82]  dex_bonus[+10]  luck[+6]  style_mod[+6]  activity_mod[+6]  end_pen[-12] = 98
+    DAVEN                   : d100[9]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2]  end_pen[-3] = 45
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DAVEN   Weapon: Halberd   Style: Wall of Steel   Aim: Chest
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.75 (−6 to attack roll)
+  Attack Roll (DIRGE):
+    d100[46]  dex_bonus[+8]  luck[+6]  style_mod[+4]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 54
+    − compat penalty: −6
+    Final ATK: 48
+  Defense Roll (DAVEN, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[22]  luck[+28]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  dex_trained_x2[+14]  def_point_bonus[+15]
+    Subtotal: 86
+    Final DEF: 86
+  Margin: 48 − 86 = -38   ▶  PARRY (margin -38)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[40]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2]  end_pen[-3] = 76
+    DIRGE                   : d100[49]  dex_bonus[+10]  luck[+6]  style_mod[+6]  activity_mod[+6]  end_pen[-12] = 65
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[81]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 120
+    Final ATK: 120
+  Defense Roll (DIRGE, PARRY — parry_bonus(3) ≥ dodge_bonus(0)):
+    d100[100]  luck[+6]  str_bonus[+2]  style_parry[+9]  activity_mod[-6]  dex_trained_x2[+18]  race_parry_x3[+18]  end_pen[-12]
+    Subtotal: 135
+    Final DEF: 135
+  Margin: 120 − 135 = -15   ▶  PARRY (margin -15)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[78]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2]  end_pen[-3] = 114
+    DIRGE                   : d100[46]  dex_bonus[+10]  luck[+6]  style_mod[+6]  activity_mod[+6]  end_pen[-12] = 62
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[79]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 118
+    Final ATK: 118
+  Defense Roll (DIRGE, PARRY — parry_bonus(3) ≥ dodge_bonus(0)):
+    d100[86]  luck[+6]  str_bonus[+2]  style_parry[+9]  activity_mod[-6]  dex_trained_x2[+18]  race_parry_x3[+18]  end_pen[-12]
+    Subtotal: 121
+    Final DEF: 121
+  Margin: 118 − 121 = -3   ▶  PARRY (margin -3)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[67]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2]  end_pen[-3] = 103
+    DIRGE                   : d100[49]  dex_bonus[+10]  luck[+6]  style_mod[+6]  activity_mod[+6]  end_pen[-12] = 65
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[23]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 62
+    Final ATK: 62
+  Defense Roll (DIRGE, PARRY — parry_bonus(3) ≥ dodge_bonus(0)):
+    d100[85]  luck[+6]  str_bonus[+2]  style_parry[+9]  activity_mod[-6]  dex_trained_x2[+18]  race_parry_x3[+18]  end_pen[-12]
+    Subtotal: 120
+    Final DEF: 120
+  Margin: 62 − 120 = -58   ▶  PARRY (margin -58)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DAVEN                   : d100[98]  dex_bonus[+10]  init_skill_x3[+3]  luck[+28]  activity_mod[-2]  end_pen[-3] = 134
+    DIRGE                   : d100[40]  dex_bonus[+10]  luck[+6]  style_mod[+6]  activity_mod[+6]  end_pen[-12] = 56
+    ▶ DAVEN wins → ATTACKS
+  Attack: DAVEN → DIRGE   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (DAVEN):
+    d100[99]  dex_bonus[+6]  luck[+28]  fav_bonus[+5]
+    Subtotal: 138
+    Final ATK: 138
+  Defense Roll (DIRGE, PARRY — parry_bonus(3) ≥ dodge_bonus(0)):
+    d100[64]  luck[+6]  str_bonus[+2]  style_parry[+9]  activity_mod[-6]  dex_trained_x2[+18]  race_parry_x3[+18]  end_pen[-12]
+    Subtotal: 99
+    Final DEF: 99
+  Margin: 138 − 99 = 39   ▶  HIT (margin 39)
+  Damage (DAVEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+      activity contrib             +0.30
+      luck ×0.15                   +4.20
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 39/55.0)) = 0.709
+    Raw: max(1, int(13 × 0.709)) = 9
+    Favorite weapon +1 → raw = 10
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 10 − 7) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (DIRGE):
+    Before : 16/62 (25.8%)
+    hit     : −3
+    After  : 13/62 (21.0%)
+  Knockdown Check (DIRGE):
+    base = int(3/62 × 80) = 3   cat bonus [Sword/Knife]: +0   final: 3%
+    Roll: 4  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 3 < threshold
+    → Below threshold — no injury possible
+  Concede Attempt (DIRGE):
+    d100[78] + PRE_bonus[-1] + luck//2[3] = 80
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    80 ≥ 65  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: DIRGE
+==============================================================================
+  Dexterity: d100=81 vs 14% — FAIL
+    → Dexterity training: no progress this session (mastery tier, 14% chance).
+  Dexterity: d100=28 vs 14% — FAIL
+    → Dexterity training: no progress this session (mastery tier, 14% chance).
+  Dexterity: d100=96 vs 14% — FAIL
+    → Dexterity training: no progress this session (mastery tier, 14% chance).
+
+==============================================================================
+  TRAINING: DAVEN
+==============================================================================
+  Dexterity: d100=100 vs 25% — FAIL
+    → Dexterity training: no progress this session (late tier, 25% chance).
+  Intelligence: d100=57 vs 18% — FAIL
+    → Intelligence training: no progress this session (mastery tier, 18% chance).
+  Dodge: d100=24 vs 35% — SUCCESS
+    → Dodge trained: Level 7 → Level 8 (Incredible Skill, 35% chance)
+  [OBSERVED] Initiative: trigger d100=18/32% passed  |  skill d100=10 vs 79% — SUCCESS
+    → Initiative trained: Level 1 → Level 2 (Some Skill, 79% chance)
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : DAVEN  (39.6% HP remaining)
+  Loser  : DIRGE  (survived, 21.0% HP)
+  Duration: 8 minute(s)
+==============================================================================

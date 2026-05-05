@@ -1,0 +1,97 @@
+Fight #41
+Stress Team Turn 8  vs  The Iron Reapers
+============================================================================
+
+============================================================================
+RIPOSTE_2 (1-1-1)   vs   VORN SEVENFINGER (0-3-0)
+STRESS TEAM TURN 8 (STRESS TESTER)   vs   THE IRON REAPERS (STONE FANG)
+Human Female   vs   Elf Female
+============================================================================
+
+RIPOSTE_2 is 5'3"
+RIPOSTE_2 weighs 134 lbs.
+RIPOSTE_2 Popular With The Kids.
+RIPOSTE_2 enters the arena unarmored and wears no helm.
+RIPOSTE_2 fights using a LONG SWORD.
+
+VORN SEVENFINGER is 4'10"
+VORN SEVENFINGER weighs 116 lbs.
+VORN SEVENFINGER Known To The Crowd.
+VORN SEVENFINGER enters the arena in CLOTH and will wear a LEATHER CAP.
+VORN SEVENFINGER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The torches flicker as a cold wind sweeps through the arena
+VORN SEVENFINGER drives a blow toward RIPOSTE_2's chest with her short sword
+VORN SEVENFINGER's short sword finds RIPOSTE_2's chest!
+   A glancing blow!
+RIPOSTE_2 plummets downward with great speed!!
+VORN SEVENFINGER attacks in a flurry of blows
+VORN SEVENFINGER relentlessly targets RIPOSTE_2's torso with her short sword
+VORN SEVENFINGER barely gets past RIPOSTE_2's defenses!
+VORN SEVENFINGER's short sword slices into RIPOSTE_2's chest armor!
+   That one hurt badly!
+VORN SEVENFINGER relentlessly targets RIPOSTE_2's chest with her short sword
+VORN SEVENFINGER's short sword slices into RIPOSTE_2's torso!
+   The blow does almost nothing
+VORN SEVENFINGER thrusts at RIPOSTE_2's breast with her short sword
+RIPOSTE_2 is paying special attention to not being hit there!
+VORN SEVENFINGER relentlessly targets RIPOSTE_2's sternum with her short sword
+VORN SEVENFINGER gets past RIPOSTE_2's guard!
+VORN SEVENFINGER's short sword bites into RIPOSTE_2's torso!
+   A devastating strike!
+RIPOSTE_2 slashes at VORN SEVENFINGER's midsection with her long sword
+VORN SEVENFINGER makes a desperate last-moment parry!
+VORN SEVENFINGER creates a whirling wall of steel
+VORN SEVENFINGER relentlessly targets RIPOSTE_2's rib cage with her short sword
+VORN SEVENFINGER's short sword slices into RIPOSTE_2's ribs!
+   The blow lands without full force
+VORN SEVENFINGER cuts at RIPOSTE_2's breast with her short sword
+The short sword finds its mark!
+VORN SEVENFINGER's short sword finds RIPOSTE_2's breastplate!
+   That one hurt badly!
+RIPOSTE_2 can fight no more and begs for mercy!
+The Blood Master shows no mercy today!
+A spectator calls out, 'Give him what he deserves!'
+RIPOSTE_2 tries to hit the mighty VORN SEVENFINGER
+RIPOSTE_2 drives a blow toward VORN SEVENFINGER's midsection with her long sword
+RIPOSTE_2's accuracy is rewarded!
+RIPOSTE_2's long sword bites into VORN SEVENFINGER's body!
+   The blow does almost nothing
+RIPOSTE_2 thrusts at VORN SEVENFINGER's torso with her long sword
+VORN SEVENFINGER catches the weapon and deflects it cleanly!
+RIPOSTE_2 cuts at VORN SEVENFINGER's torso with her long sword
+RIPOSTE_2's long sword bites into VORN SEVENFINGER's torso!
+   The blow does almost nothing
+RIPOSTE_2 sizes up VORN SEVENFINGER carefully
+RIPOSTE_2 slashes at VORN SEVENFINGER's body with her long sword
+VORN SEVENFINGER barely gets the parry off!
+
+MINUTE 2
+This has become a one-sided affair in favor of VORN SEVENFINGER.
+
+RIPOSTE_2 hacks at VORN SEVENFINGER's body with her long sword
+RIPOSTE_2's long sword finds VORN SEVENFINGER's armor!
+   The armor does its job admirably
+RIPOSTE_2 slices at VORN SEVENFINGER's torso with her long sword
+VORN SEVENFINGER's defenses are particularly strong!
+VORN SEVENFINGER hammers away with machine-like persistence
+VORN SEVENFINGER slashes at RIPOSTE_2's chest with her short sword
+RIPOSTE_2's plan is not to get hit!
+VORN SEVENFINGER attacks relentlessly at RIPOSTE_2's chest with her short sword
+VORN SEVENFINGER's short sword bites into RIPOSTE_2's chest!
+   Little damage results from the strike
+RIPOSTE_2 raises a hand in surrender!
+Mercy is granted — the fight is over!
+
+VORN SEVENFINGER is declared the winner!
+
+VORN SEVENFINGER has trained in Stat

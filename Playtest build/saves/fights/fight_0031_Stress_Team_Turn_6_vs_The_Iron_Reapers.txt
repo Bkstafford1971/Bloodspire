@@ -1,0 +1,104 @@
+Fight #31
+Stress Team Turn 6  vs  The Iron Reapers
+============================================================================
+
+============================================================================
+HYBRID_1 (1-0-1)   vs   VORN SEVENFINGER (0-1-0)
+STRESS TEAM TURN 6 (STRESS TESTER)   vs   THE IRON REAPERS (STONE FANG)
+Dwarf Male   vs   Elf Female
+============================================================================
+
+HYBRID_1 is 4'1"
+HYBRID_1 weighs 187 lbs.
+HYBRID_1 Popular With The Kids.
+HYBRID_1 enters the arena unarmored and wears no helm.
+HYBRID_1 fights using a BATTLE AXE.
+
+VORN SEVENFINGER is 4'10"
+VORN SEVENFINGER weighs 116 lbs.
+VORN SEVENFINGER Known To The Crowd.
+VORN SEVENFINGER enters the arena in CLOTH and will wear a LEATHER CAP.
+VORN SEVENFINGER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+A hush falls over the arena
+VORN SEVENFINGER slices at HYBRID_1's head with her short sword
+VORN SEVENFINGER gets past HYBRID_1's guard!
+VORN SEVENFINGER's short sword finds HYBRID_1's headgear!
+   The blow has real authority behind it!
+VORN SEVENFINGER attacks in a flurry of blows
+VORN SEVENFINGER thrusts at HYBRID_1's throat with her short sword
+VORN SEVENFINGER barely gets past HYBRID_1's defenses!
+VORN SEVENFINGER's short sword finds HYBRID_1's head!
+   The blow has real authority behind it!
+*** HYBRID_1 has been permanently injured in the head!!! ***
+HYBRID_1's skull wound weeps blood!
+HYBRID_1's vision swims from the head wound!!
+HYBRID_1 chops at VORN SEVENFINGER's body with his battle axe
+VORN SEVENFINGER makes an extraordinary effort, and parries the strike!
+HYBRID_1 steps threateningly close to the powerful VORN SEVENFINGER
+HYBRID_1 cleaves at VORN SEVENFINGER's body with his battle axe
+VORN SEVENFINGER barely gets the parry off!
+VORN SEVENFINGER creates a whirling wall of steel
+VORN SEVENFINGER relentlessly targets HYBRID_1's head with her short sword
+VORN SEVENFINGER's short sword bites into HYBRID_1's headgear!
+   The blow glances harmlessly off!
+HYBRID_1 chops at VORN SEVENFINGER's torso with his battle axe
+HYBRID_1's battle axe chops into VORN SEVENFINGER's torso!
+   A powerful hit draws screams from the crowd!
+HYBRID_1 steps threateningly close to the relentless VORN SEVENFINGER
+HYBRID_1 chops at VORN SEVENFINGER's midsection with his battle axe
+HYBRID_1's battle axe bites into VORN SEVENFINGER's armor!
+   A glancing blow!
+VORN SEVENFINGER relentlessly targets HYBRID_1's skull with her short sword
+The short sword finds its mark!
+VORN SEVENFINGER's short sword bites into HYBRID_1's skull!
+   The blow does almost nothing
+VORN SEVENFINGER relentlessly presses forward with her short sword
+VORN SEVENFINGER attacks relentlessly at HYBRID_1's head with her short sword
+VORN SEVENFINGER's short sword slices into HYBRID_1's headgear!
+   The armor absorbs most of it
+VORN SEVENFINGER thrusts at HYBRID_1's face with her short sword
+HYBRID_1's defenses are particularly strong!
+
+MINUTE 2
+While still competitive, HYBRID_1 seems just a step ahead.
+
+Someone boos the Elf, then sits very still hoping no one noticed
+VORN SEVENFINGER hammers away with machine-like persistence
+VORN SEVENFINGER slashes at HYBRID_1's helm with her short sword
+VORN SEVENFINGER's blow barely grazes HYBRID_1!
+VORN SEVENFINGER slashes at HYBRID_1's throat with her short sword
+VORN SEVENFINGER's short sword finds HYBRID_1's skull!
+   The blow lands without full force
+HYBRID_1 sizes up VORN SEVENFINGER carefully
+HYBRID_1 hacks at VORN SEVENFINGER's body with his battle axe
+VORN SEVENFINGER turns the blow aside with skill!
+The powerful Cleave strike cleaves through the parry! VORN SEVENFINGER takes 9 damage!
+VORN SEVENFINGER hammers away with machine-like persistence
+VORN SEVENFINGER attacks relentlessly at HYBRID_1's helm with her short sword
+VORN SEVENFINGER's accuracy is rewarded!
+VORN SEVENFINGER's short sword finds HYBRID_1's helm!
+   The blow lands without full force
+VORN SEVENFINGER hammers away with machine-like persistence
+VORN SEVENFINGER relentlessly targets HYBRID_1's skull with her short sword
+VORN SEVENFINGER's aim is off — the blow finds nothing
+Money changes hands rapidly in the betting stands
+HYBRID_1 steps threateningly close to the formidable VORN SEVENFINGER
+HYBRID_1 hacks at VORN SEVENFINGER's midsection with his battle axe
+VORN SEVENFINGER makes an extraordinary effort, and parries the strike!
+The powerful Cleave strike cleaves through the parry! VORN SEVENFINGER takes 9 damage!
+VORN SEVENFINGER raises a hand in surrender!
+Mercy is granted — the fight is over!
+
+HYBRID_1 has won this affair of honor!
+
+VORN SEVENFINGER has trained in nothing

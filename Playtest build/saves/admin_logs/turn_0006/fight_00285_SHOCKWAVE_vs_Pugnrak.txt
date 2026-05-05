@@ -1,0 +1,360 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #285   Turn: 6
+  Debug team: Ilneval
+  Ilneval / DECEPTICONS   vs   Vex Scalebane / The Scaled Horde
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: SHOCKWAVE
+  ────────────────────────────────────
+    Race: Human  |  Gender: Male
+    STR:18  DEX:12  CON:17  INT:12  PRE:10  SIZ:9
+    Max HP: 52   Luck: 14
+    Armor: Cuir Boulli   Helm: Steel Cap
+    Primary: Boar Spear   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Lunge / Act:7 / Aim:None / Def:Chest
+
+  ────────────────────────────────────
+  WARRIOR B: PUGNRAK
+  ────────────────────────────────────
+    Race: Half-Orc  |  Gender: Male
+    STR:19  DEX:18  CON:5  INT:10  PRE:15  SIZ:9
+    Max HP: 41   Luck: 24
+    Armor: Chain   Helm: None
+    Primary: Morningstar   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Counterstrike / Act:5 / Aim:Chest / Def:Chest
+    Skills: dodge:6  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — SHOCKWAVE: 6   |   PUGNRAK: 3
+  HP    — SHOCKWAVE: 52/52 (100%)   |   PUGNRAK: 41/41 (100%)
+  END   — SHOCKWAVE: 100.0   |   PUGNRAK: 100.0
+  STRAT — SHOCKWAVE: [Lunge / Act:7]   |   PUGNRAK: [Counterstrike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    PUGNRAK                 : d100[100]  dex_bonus[+10]  luck[+24]  race_init[-3]  style_mod[-6] = 125
+    SHOCKWAVE               : d100[80]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 102
+    ▶ PUGNRAK wins → ATTACKS
+  Attack: PUGNRAK → SHOCKWAVE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (PUGNRAK):
+    d100[99]  dex_bonus[+6]  luck[+24]  style_mod[-4]
+    Subtotal: 125
+    + style advantage: +6
+    Final ATK: 131
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[45]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 87
+    Final DEF: 87
+  Margin: 131 − 87 = 44   ▶  HIT (margin 44)
+  Damage (PUGNRAK → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +5.40
+      race damage net              +8.00
+      style modifier               +2.00
+      luck ×0.15                   +3.60
+    Ceiling: 29
+    Fraction: max(0.10, min(1.0, 44/55.0)) = 0.800
+    Raw: max(1, int(29 × 0.800)) = 23
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 23 − 5) = 18
+  ▶ FINAL DAMAGE: 18
+  HP Pool (SHOCKWAVE):
+    Before : 52/52 (100.0%)
+    hit     : −18
+    After  : 34/52 (65.4%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(18/52 × 80) = 27   cat bonus [Hammer/Mace]: +10   final: 37%
+    Roll: 48  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 52 = 7   damage 18 ≥ threshold
+    chance = max(5, min(80, int(18/52×100) − 5)) = 24%
+    Roll: 22  →  chest (1 level(s))
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[75]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 97
+    PUGNRAK                 : d100[24]  dex_bonus[+10]  luck[+24]  race_init[-3]  style_mod[-6] = 49
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → PUGNRAK   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[54]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 75
+    + style advantage: +6
+    Final ATK: 81
+  Defense Roll (PUGNRAK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[40]  luck[+24]  str_bonus[+4]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 82
+    Final DEF: 82
+  Margin: 81 − 82 = -1   ▶  PARRY (margin -1)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[75]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 97
+    PUGNRAK                 : d100[21]  dex_bonus[+10]  luck[+24]  race_init[-3]  style_mod[-6] = 46
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → PUGNRAK   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[31]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 52
+    + style advantage: +6
+    Final ATK: 58
+  Defense Roll (PUGNRAK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[41]  luck[+24]  str_bonus[+4]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 83
+    Final DEF: 83
+  Margin: 58 − 83 = -25   ▶  PARRY (margin -25)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[81]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 103
+    PUGNRAK                 : d100[71]  dex_bonus[+10]  luck[+24]  race_init[-3]  style_mod[-6] = 96
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → PUGNRAK   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[33]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 54
+    + style advantage: +6
+    Final ATK: 60
+  Defense Roll (PUGNRAK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[13]  luck[+24]  str_bonus[+4]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 55
+    Final DEF: 55
+  Margin: 60 − 55 = 5   ▶  GRAZE (margin 5, 1 HP)
+  HP Pool (PUGNRAK):
+    Before : 41/41 (100.0%)
+    graze   : −1
+    After  : 40/41 (97.6%)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[87]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 109
+    PUGNRAK                 : d100[76]  dex_bonus[+10]  luck[+24]  race_init[-3]  style_mod[-6] = 101
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → PUGNRAK   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[22]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 43
+    + style advantage: +6
+    Final ATK: 49
+  Defense Roll (PUGNRAK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[89]  luck[+24]  str_bonus[+4]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 131
+    Final DEF: 131
+  Margin: 49 − 131 = -82   ▶  PARRY (margin -82)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[48]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 70
+    PUGNRAK                 : d100[13]  dex_bonus[+10]  luck[+24]  race_init[-3]  style_mod[-6] = 38
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → PUGNRAK   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[67]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 88
+    + style advantage: +6
+    Final ATK: 94
+  Defense Roll (PUGNRAK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[47]  luck[+24]  str_bonus[+4]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 89
+    Final DEF: 89
+  Margin: 94 − 89 = 5   ▶  GRAZE (margin 5, 1 HP)
+  HP Pool (PUGNRAK):
+    Before : 40/41 (97.6%)
+    graze   : −1
+    After  : 39/41 (95.1%)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[97]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 119
+    PUGNRAK                 : d100[40]  dex_bonus[+10]  luck[+24]  race_init[-3]  style_mod[-6] = 65
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → PUGNRAK   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[18]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 39
+    + style advantage: +6
+    Final ATK: 45
+  Defense Roll (PUGNRAK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[54]  luck[+24]  str_bonus[+4]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 96
+    Final DEF: 96
+  Margin: 45 − 96 = -51   ▶  PARRY (margin -51)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: PUGNRAK has uncontested action
+  Attack: PUGNRAK → SHOCKWAVE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (PUGNRAK):
+    d100[38]  dex_bonus[+6]  luck[+24]  style_mod[-4]
+    Subtotal: 64
+    + style advantage: +6
+    Final ATK: 70
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[15]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 57
+    Final DEF: 57
+  Margin: 70 − 57 = 13   ▶  HIT (margin 13)
+  Damage (PUGNRAK → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +5.40
+      race damage net              +8.00
+      style modifier               +2.00
+      luck ×0.15                   +3.60
+    Ceiling: 29
+    Fraction: max(0.10, min(1.0, 13/55.0)) = 0.236
+    Raw: max(1, int(29 × 0.236)) = 6
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 6 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHOCKWAVE):
+    Before : 34/52 (65.4%)
+    hit     : −1
+    After  : 33/52 (63.5%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(1/52 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 41  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 52 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: PUGNRAK has uncontested action
+  Attack: PUGNRAK → SHOCKWAVE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (PUGNRAK):
+    d100[90]  dex_bonus[+6]  luck[+24]  style_mod[-4]
+    Subtotal: 116
+    + style advantage: +6
+    Final ATK: 122
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[2]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 44
+    Final DEF: 44
+  Margin: 122 − 44 = 78   ▶  HIT (margin 78)
+  Damage (PUGNRAK → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +5.40
+      race damage net              +8.00
+      style modifier               +2.00
+      luck ×0.15                   +3.60
+    Ceiling: 29
+    Fraction: max(0.10, min(1.0, 78/55.0)) = 1.000
+    Raw: max(1, int(29 × 1.000)) = 29
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 29 − 5) = 24
+  ▶ FINAL DAMAGE: 24
+  HP Pool (SHOCKWAVE):
+    Before : 33/52 (63.5%)
+    hit     : −24
+    After  : 9/52 (17.3%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(24/52 × 80) = 36   cat bonus [Hammer/Mace]: +10   final: 46%
+    Roll: 25  →  ▶ KNOCKDOWN
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 52 = 7   damage 24 ≥ threshold
+    chance = max(5, min(80, int(24/52×100) − 5)) = 34%
+    Roll: 45  →  no injury
+  Concede Attempt (SHOCKWAVE):
+    d100[33] + PRE_bonus[+0] + luck//2[7] = 40
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    40 < 65  →  mercy denied — fight continues
+
+  ── END OF MINUTE ──
+    SHOCKWAVE: 100.0 END − (6.60 burn × 6 actions) = 59.9
+    PUGNRAK: 100.0 END − (3.50 burn × 3 actions) = 89.5
+    HP POOL — SHOCKWAVE: 9/52 (17%)
+    HP POOL — PUGNRAK: 39/41 (95%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — SHOCKWAVE: 6   |   PUGNRAK: 3
+  HP    — SHOCKWAVE: 9/52 (17%)   |   PUGNRAK: 39/41 (95%)
+  END   — SHOCKWAVE: 59.9   |   PUGNRAK: 89.5
+  STRAT — SHOCKWAVE: [Lunge / Act:7]   |   PUGNRAK: [Counterstrike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    PUGNRAK                 : d100[82]  dex_bonus[+10]  luck[+24]  race_init[-3]  style_mod[-6] = 107
+    SHOCKWAVE               : d100[63]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 85
+    ▶ PUGNRAK wins → ATTACKS
+  Attack: PUGNRAK → SHOCKWAVE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (PUGNRAK):
+    d100[57]  dex_bonus[+6]  luck[+24]  style_mod[-4]
+    Subtotal: 83
+    + style advantage: +6
+    Final ATK: 89
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[6]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 48
+    Final DEF: 48
+  Margin: 89 − 48 = 41   ▶  HIT (margin 41)
+  Damage (PUGNRAK → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +5.40
+      race damage net              +8.00
+      style modifier               +2.00
+      luck ×0.15                   +3.60
+    Ceiling: 29
+    Fraction: max(0.10, min(1.0, 41/55.0)) = 0.745
+    Raw: max(1, int(29 × 0.745)) = 21
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 21 − 5) = 16
+  ▶ FINAL DAMAGE: 16
+  HP Pool (SHOCKWAVE):
+    Before : 9/52 (17.3%)
+    hit     : −16
+    After  : -7/52 (0.0%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(16/52 × 80) = 24   cat bonus [Hammer/Mace]: +10   final: 34%
+    Roll: 20  →  ▶ KNOCKDOWN
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 52 = 7   damage 16 ≥ threshold
+    chance = max(5, min(80, int(16/52×100) − 5)) = 21%
+    Roll: 34  →  no injury
+  Death Check (SHOCKWAVE):
+    prev_hp: 9   damage: 16   new_hp: -7
+    overshoot: 7
+    death_chance = min(50.0, 0.5 + 7) = 7.5%
+    → survives (concede system takes over)
+  Concede Attempt (SHOCKWAVE):
+    d100[97] + PRE_bonus[+0] + luck//2[7] = 104
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    104 ≥ 65  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: SHOCKWAVE
+==============================================================================
+  Strength: d100=65 vs 29% — FAIL
+    → Strength training: no progress this session (late tier, 29% chance).
+  Strength: d100=97 vs 29% — FAIL
+    → Strength training: no progress this session (late tier, 29% chance).
+  Strength: d100=78 vs 29% — FAIL
+    → Strength training: no progress this session (late tier, 29% chance).
+
+==============================================================================
+  TRAINING: PUGNRAK
+==============================================================================
+  Dodge: d100=42 vs 18% — FAIL
+    → Dodge training: no progress this session (INT 10, level 6, 18% chance).
+  Strength: d100=52 vs 28% — FAIL
+    → Strength training: no progress this session (CON 5, 28% chance).
+  Dexterity: d100=79 vs 18% — FAIL
+    → Dexterity training: no progress this session (mid tier, 18% chance).
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : PUGNRAK  (95.1% HP remaining)
+  Loser  : SHOCKWAVE  (survived, 0.0% HP)
+  Duration: 2 minute(s)
+==============================================================================

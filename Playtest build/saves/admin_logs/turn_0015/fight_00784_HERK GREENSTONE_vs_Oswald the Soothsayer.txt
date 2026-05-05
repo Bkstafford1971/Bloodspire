@@ -1,0 +1,1180 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #784   Turn: 15
+  Debug team: Electron
+  Electron / SHADES OF THE PAST   vs   The Arena / The Peasants
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: HERK GREENSTONE
+  ────────────────────────────────────
+    Race: Half-Elf  |  Gender: Male
+    STR:11  DEX:14  CON:15  INT:15  PRE:9  SIZ:15
+    Max HP: 58   Luck: 5
+    Armor: Cuir Boulli   Helm: Steel Cap
+    Primary: Morningstar   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:7 / Aim:None / Def:Chest
+
+  ────────────────────────────────────
+  WARRIOR B: OSWALD THE SOOTHSAYER
+  ────────────────────────────────────
+    Race: Peasant  |  Gender: Male
+    STR:10  DEX:13  CON:11  INT:15  PRE:12  SIZ:12
+    Max HP: 45   Luck: 0
+    Armor: Cloth   Helm: None
+    Primary: Short Sword   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:5 / Aim:Chest / Def:Chest
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — HERK GREENSTONE: 6   |   OSWALD THE SOOTHSAYER: 5
+  HP    — HERK GREENSTONE: 58/58 (100%)   |   OSWALD THE SOOTHSAYER: 45/45 (100%)
+  END   — HERK GREENSTONE: 100.0   |   OSWALD THE SOOTHSAYER: 100.0
+  STRAT — HERK GREENSTONE: [Strike / Act:7]   |   OSWALD THE SOOTHSAYER: [Strike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    OSWALD THE SOOTHSAYER   : d100[75]  dex_bonus[+6] = 81
+    HERK GREENSTONE         : d100[4]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 19
+    ▶ OSWALD THE SOOTHSAYER wins → ATTACKS
+  Attack: OSWALD THE SOOTHSAYER → HERK GREENSTONE   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (OSWALD THE SOOTHSAYER):
+    d100[49]  dex_bonus[+3]
+    Subtotal: 52
+    Final ATK: 52
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[89]  luck[+5]  activity_mod[-4]  dex_trained_x2[+10]  def_point_bonus[+15]
+    Subtotal: 115
+    Final DEF: 115
+  Margin: 52 − 115 = -63   ▶  PARRY (margin -63)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    OSWALD THE SOOTHSAYER   : d100[59]  dex_bonus[+6] = 65
+    HERK GREENSTONE         : d100[4]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 19
+    ▶ OSWALD THE SOOTHSAYER wins → ATTACKS
+  Attack: OSWALD THE SOOTHSAYER → HERK GREENSTONE   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (OSWALD THE SOOTHSAYER):
+    d100[14]  dex_bonus[+3]
+    Subtotal: 17
+    Final ATK: 17
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[43]  luck[+5]  activity_mod[-4]  dex_trained_x2[+10]  def_point_bonus[+15]
+    Subtotal: 69
+    Final DEF: 69
+  Margin: 17 − 69 = -52   ▶  PARRY (margin -52)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[65]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 80
+    OSWALD THE SOOTHSAYER   : d100[44]  dex_bonus[+6] = 50
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[53]  dex_bonus[+3]  luck[+5]
+    Subtotal: 61
+    Final ATK: 61
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[32]
+    Subtotal: 32
+    Final DEF: 32
+  Margin: 61 − 32 = 29   ▶  HIT (margin 29)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 29/55.0)) = 0.527
+    Raw: max(1, int(7 × 0.527)) = 3
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 3 − 1) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : 45/45 (100.0%)
+    hit     : −2
+    After  : 43/45 (95.6%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(2/45 × 80) = 3   cat bonus [Hammer/Mace]: +10   final: 13%
+    Roll: 75  →  no knockdown
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[18]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 33
+    OSWALD THE SOOTHSAYER   : d100[17]  dex_bonus[+6] = 23
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[63]  dex_bonus[+3]  luck[+5]
+    Subtotal: 71
+    Final ATK: 71
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[5]
+    Subtotal: 5
+    Final DEF: 5
+  Margin: 71 − 5 = 66   ▶  HIT (margin 66)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 66/55.0)) = 1.000
+    Raw: max(1, int(7 × 1.000)) = 7
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 7 − 1) = 6
+  ▶ FINAL DAMAGE: 6
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : 43/45 (95.6%)
+    hit     : −6
+    After  : 37/45 (82.2%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(6/45 × 80) = 10   cat bonus [Hammer/Mace]: +10   final: 20%
+    Roll: 93  →  no knockdown
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 6 ≥ threshold
+    chance = max(5, min(80, int(6/45×100) − 5)) = 0%
+    Roll: 0  →  no injury
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[77]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 92
+    OSWALD THE SOOTHSAYER   : d100[67]  dex_bonus[+6] = 73
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[33]  dex_bonus[+3]  luck[+5]
+    Subtotal: 41
+    Final ATK: 41
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[59]
+    Subtotal: 59
+    Final DEF: 59
+  Margin: 41 − 59 = -18   ▶  PARRY (margin -18)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[59]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 74
+    OSWALD THE SOOTHSAYER   : d100[66]  dex_bonus[+6] = 72
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[25]  dex_bonus[+3]  luck[+5]
+    Subtotal: 33
+    Final ATK: 33
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[77]
+    Subtotal: 77
+    Final DEF: 77
+  Margin: 33 − 77 = -44   ▶  PARRY (margin -44)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[93]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 108
+    OSWALD THE SOOTHSAYER   : d100[80]  dex_bonus[+6] = 86
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[3]  dex_bonus[+3]  luck[+5]
+    Subtotal: 11
+    Final ATK: 11
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[22]
+    Subtotal: 22
+    Final DEF: 22
+  Margin: 11 − 22 = -11   ▶  PARRY (margin -11)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[43]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 58
+    OSWALD THE SOOTHSAYER   : d100[4]  dex_bonus[+6] = 10
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[10]  dex_bonus[+3]  luck[+5]
+    Subtotal: 18
+    Final ATK: 18
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[2]
+    Subtotal: 2
+    Final DEF: 2
+  Margin: 18 − 2 = 16   ▶  HIT (margin 16)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 16/55.0)) = 0.291
+    Raw: max(1, int(7 × 0.291)) = 2
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 2 − 1) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : 37/45 (82.2%)
+    hit     : −1
+    After  : 36/45 (80.0%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(1/45 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 37  →  no knockdown
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: OSWALD THE SOOTHSAYER has uncontested action
+  Attack: OSWALD THE SOOTHSAYER → HERK GREENSTONE   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (OSWALD THE SOOTHSAYER):
+    d100[64]  dex_bonus[+3]
+    Subtotal: 67
+    Final ATK: 67
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[91]  luck[+5]  activity_mod[-4]  dex_trained_x2[+10]  def_point_bonus[+15]
+    Subtotal: 117
+    Final DEF: 117
+  Margin: 67 − 117 = -50   ▶  PARRY (margin -50)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: OSWALD THE SOOTHSAYER has uncontested action
+  Attack: OSWALD THE SOOTHSAYER → HERK GREENSTONE   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (OSWALD THE SOOTHSAYER):
+    d100[86]  dex_bonus[+3]
+    Subtotal: 89
+    Final ATK: 89
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[38]  luck[+5]  activity_mod[-4]  dex_trained_x2[+10]  def_point_bonus[+15]
+    Subtotal: 64
+    Final DEF: 64
+  Margin: 89 − 64 = 25   ▶  HIT (margin 25)
+  Damage (OSWALD THE SOOTHSAYER → HERK GREENSTONE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 25/55.0)) = 0.455
+    Raw: max(1, int(7 × 0.455)) = 3
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 3 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HERK GREENSTONE):
+    Before : 58/58 (100.0%)
+    hit     : −1
+    After  : 57/58 (98.3%)
+  Knockdown Check (HERK GREENSTONE):
+    base = int(1/58 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 20  →  no knockdown
+  Perm Injury Check (HERK GREENSTONE):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: OSWALD THE SOOTHSAYER has uncontested action
+  Attack: OSWALD THE SOOTHSAYER → HERK GREENSTONE   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (OSWALD THE SOOTHSAYER):
+    d100[17]  dex_bonus[+3]
+    Subtotal: 20
+    Final ATK: 20
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[21]  luck[+5]  activity_mod[-4]  dex_trained_x2[+10]  def_point_bonus[+15]
+    Subtotal: 47
+    Final DEF: 47
+  Margin: 20 − 47 = -27   ▶  PARRY (margin -27)
+
+  ── END OF MINUTE ──
+    HERK GREENSTONE: 100.0 END − (2.60 burn × 6 actions) = 83.9
+    OSWALD THE SOOTHSAYER: 100.0 END − (2.00 burn × 5 actions) = 90.0
+    HP POOL — HERK GREENSTONE: 57/58 (98%)
+    HP POOL — OSWALD THE SOOTHSAYER: 36/45 (80%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — HERK GREENSTONE: 6   |   OSWALD THE SOOTHSAYER: 5
+  HP    — HERK GREENSTONE: 57/58 (98%)   |   OSWALD THE SOOTHSAYER: 36/45 (80%)
+  END   — HERK GREENSTONE: 83.9   |   OSWALD THE SOOTHSAYER: 90.0
+  STRAT — HERK GREENSTONE: [Strike / Act:7]   |   OSWALD THE SOOTHSAYER: [Strike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[89]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 104
+    OSWALD THE SOOTHSAYER   : d100[14]  dex_bonus[+6] = 20
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[61]  dex_bonus[+3]  luck[+5]
+    Subtotal: 69
+    Final ATK: 69
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[23]
+    Subtotal: 23
+    Final DEF: 23
+  Margin: 69 − 23 = 46   ▶  HIT (margin 46)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 46/55.0)) = 0.836
+    Raw: max(1, int(7 × 0.836)) = 5
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 5 − 1) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : 36/45 (80.0%)
+    hit     : −4
+    After  : 32/45 (71.1%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(4/45 × 80) = 7   cat bonus [Hammer/Mace]: +10   final: 17%
+    Roll: 26  →  no knockdown
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 4 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    OSWALD THE SOOTHSAYER   : d100[57]  dex_bonus[+6] = 63
+    HERK GREENSTONE         : d100[23]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 38
+    ▶ OSWALD THE SOOTHSAYER wins → ATTACKS
+  Attack: OSWALD THE SOOTHSAYER → HERK GREENSTONE   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (OSWALD THE SOOTHSAYER):
+    d100[1]  dex_bonus[+3]
+    Subtotal: 4
+    Final ATK: 4
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[84]  luck[+5]  activity_mod[-4]  dex_trained_x2[+10]  def_point_bonus[+15]
+    Subtotal: 110
+    Final DEF: 110
+  Margin: 4 − 110 = -106   ▶  PARRY (margin -106)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[48]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 63
+    OSWALD THE SOOTHSAYER   : d100[13]  dex_bonus[+6] = 19
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[88]  dex_bonus[+3]  luck[+5]
+    Subtotal: 96
+    Final ATK: 96
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[77]
+    Subtotal: 77
+    Final DEF: 77
+  Margin: 96 − 77 = 19   ▶  HIT (margin 19)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 19/55.0)) = 0.345
+    Raw: max(1, int(7 × 0.345)) = 2
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 2 − 1) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : 32/45 (71.1%)
+    hit     : −1
+    After  : 31/45 (68.9%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(1/45 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 28  →  no knockdown
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    OSWALD THE SOOTHSAYER   : d100[61]  dex_bonus[+6] = 67
+    HERK GREENSTONE         : d100[18]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 33
+    ▶ OSWALD THE SOOTHSAYER wins → ATTACKS
+  Attack: OSWALD THE SOOTHSAYER → HERK GREENSTONE   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (OSWALD THE SOOTHSAYER):
+    d100[48]  dex_bonus[+3]
+    Subtotal: 51
+    Final ATK: 51
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[50]  luck[+5]  activity_mod[-4]  dex_trained_x2[+10]  def_point_bonus[+15]
+    Subtotal: 76
+    Final DEF: 76
+  Margin: 51 − 76 = -25   ▶  PARRY (margin -25)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[87]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 102
+    OSWALD THE SOOTHSAYER   : d100[76]  dex_bonus[+6] = 82
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[100]  dex_bonus[+3]  luck[+5]
+    Subtotal: 108
+    Final ATK: 108
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[8]
+    Subtotal: 8
+    Final DEF: 8
+  Margin: 108 − 8 = 100   ▶  HIT (margin 100)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 100/55.0)) = 1.000
+    Raw: max(1, int(7 × 1.000)) = 7
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 7 − 1) = 6
+  ▶ FINAL DAMAGE: 6
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : 31/45 (68.9%)
+    hit     : −6
+    After  : 25/45 (55.6%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(6/45 × 80) = 10   cat bonus [Hammer/Mace]: +10   final: 20%
+    Roll: 94  →  no knockdown
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 6 ≥ threshold
+    chance = max(5, min(80, int(6/45×100) − 5)) = 0%
+    Roll: 0  →  no injury
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[94]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 109
+    OSWALD THE SOOTHSAYER   : d100[32]  dex_bonus[+6] = 38
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[21]  dex_bonus[+3]  luck[+5]
+    Subtotal: 29
+    Final ATK: 29
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[17]
+    Subtotal: 17
+    Final DEF: 17
+  Margin: 29 − 17 = 12   ▶  HIT (margin 12)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 12/55.0)) = 0.218
+    Raw: max(1, int(7 × 0.218)) = 1
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 1 − 1) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : 25/45 (55.6%)
+    hit     : −1
+    After  : 24/45 (53.3%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(1/45 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 74  →  no knockdown
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[67]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 82
+    OSWALD THE SOOTHSAYER   : d100[40]  dex_bonus[+6] = 46
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[64]  dex_bonus[+3]  luck[+5]
+    Subtotal: 72
+    Final ATK: 72
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[61]
+    Subtotal: 61
+    Final DEF: 61
+  Margin: 72 − 61 = 11   ▶  HIT (margin 11)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 11/55.0)) = 0.200
+    Raw: max(1, int(7 × 0.200)) = 1
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 1 − 1) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : 24/45 (53.3%)
+    hit     : −1
+    After  : 23/45 (51.1%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(1/45 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 6  →  ▶ KNOCKDOWN
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[66]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 81
+    OSWALD THE SOOTHSAYER   : d100[48]  on_ground_halved[(÷2)] = 24
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[32]  dex_bonus[+3]  luck[+5]
+    Subtotal: 40
+    Final ATK: 40
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[81]  ground_pen[-25]
+    Subtotal: 56
+    Final DEF: 56
+  Margin: 40 − 56 = -16   ▶  PARRY (margin -16)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: OSWALD THE SOOTHSAYER has uncontested action
+  Attack: OSWALD THE SOOTHSAYER → HERK GREENSTONE   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (OSWALD THE SOOTHSAYER):
+    d100[15]  dex_bonus[+3]
+    Subtotal: 18
+    Final ATK: 18
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[12]  luck[+5]  activity_mod[-4]  dex_trained_x2[+10]  def_point_bonus[+15]
+    Subtotal: 38
+    Final DEF: 38
+  Margin: 18 − 38 = -20   ▶  PARRY (margin -20)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: OSWALD THE SOOTHSAYER has uncontested action
+  Attack: OSWALD THE SOOTHSAYER → HERK GREENSTONE   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (OSWALD THE SOOTHSAYER):
+    d100[53]  dex_bonus[+3]
+    Subtotal: 56
+    Final ATK: 56
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[42]  luck[+5]  activity_mod[-4]  dex_trained_x2[+10]  def_point_bonus[+15]
+    Subtotal: 68
+    Final DEF: 68
+  Margin: 56 − 68 = -12   ▶  PARRY (margin -12)
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: OSWALD THE SOOTHSAYER has uncontested action
+  Attack: OSWALD THE SOOTHSAYER → HERK GREENSTONE   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (OSWALD THE SOOTHSAYER):
+    d100[43]  dex_bonus[+3]
+    Subtotal: 46
+    Final ATK: 46
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[69]  luck[+5]  activity_mod[-4]  dex_trained_x2[+10]  def_point_bonus[+15]
+    Subtotal: 95
+    Final DEF: 95
+  Margin: 46 − 95 = -49   ▶  PARRY (margin -49)
+
+  ── END OF MINUTE ──
+    HERK GREENSTONE: 83.9 END − (2.60 burn × 6 actions) = 67.8
+    OSWALD THE SOOTHSAYER: 90.0 END − (2.00 burn × 5 actions) = 80.0
+    HP POOL — HERK GREENSTONE: 57/58 (98%)
+    HP POOL — OSWALD THE SOOTHSAYER: 23/45 (51%)
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — HERK GREENSTONE: 6   |   OSWALD THE SOOTHSAYER: 3
+  HP    — HERK GREENSTONE: 57/58 (98%)   |   OSWALD THE SOOTHSAYER: 23/45 (51%)
+  END   — HERK GREENSTONE: 67.8   |   OSWALD THE SOOTHSAYER: 80.0
+  STRAT — HERK GREENSTONE: [Strike / Act:7]   |   OSWALD THE SOOTHSAYER: [Strike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[59]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 74
+    OSWALD THE SOOTHSAYER   : d100[65]  on_ground_halved[(÷2)] = 32
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[58]  dex_bonus[+3]  luck[+5]
+    Subtotal: 66
+    Final ATK: 66
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[45]  ground_pen[-25]
+    Subtotal: 20
+    Final DEF: 20
+  Margin: 66 − 20 = 46   ▶  HIT (margin 46)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 46/55.0)) = 0.836
+    Raw: max(1, int(7 × 0.836)) = 5
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 5 − 1) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : 23/45 (51.1%)
+    hit     : −4
+    After  : 19/45 (42.2%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(4/45 × 80) = 7   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 4 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[62]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 77
+    OSWALD THE SOOTHSAYER   : d100[21]  on_ground_halved[(÷2)] = 10
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[19]  dex_bonus[+3]  luck[+5]
+    Subtotal: 27
+    Final ATK: 27
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[39]  ground_pen[-25]
+    Subtotal: 14
+    Final DEF: 14
+  Margin: 27 − 14 = 13   ▶  HIT (margin 13)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 13/55.0)) = 0.236
+    Raw: max(1, int(7 × 0.236)) = 1
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 1 − 1) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : 19/45 (42.2%)
+    hit     : −1
+    After  : 18/45 (40.0%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(1/45 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[17]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 32
+    OSWALD THE SOOTHSAYER   : d100[52]  on_ground_halved[(÷2)] = 26
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[45]  dex_bonus[+3]  luck[+5]
+    Subtotal: 53
+    Final ATK: 53
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[60]  ground_pen[-25]
+    Subtotal: 35
+    Final DEF: 35
+  Margin: 53 − 35 = 18   ▶  HIT (margin 18)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 18/55.0)) = 0.327
+    Raw: max(1, int(7 × 0.327)) = 2
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 2 − 1) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : 18/45 (40.0%)
+    hit     : −1
+    After  : 17/45 (37.8%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(1/45 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[48]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 63
+    OSWALD THE SOOTHSAYER   : d100[8]  on_ground_halved[(÷2)] = 4
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[18]  dex_bonus[+3]  luck[+5]
+    Subtotal: 26
+    Final ATK: 26
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[59]  ground_pen[-25]
+    Subtotal: 34
+    Final DEF: 34
+  Margin: 26 − 34 = -8   ▶  PARRY (margin -8)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[24]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 39
+    OSWALD THE SOOTHSAYER   : d100[77]  on_ground_halved[(÷2)] = 38
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[75]  dex_bonus[+3]  luck[+5]
+    Subtotal: 83
+    Final ATK: 83
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[16]  ground_pen[-25]
+    Subtotal: 1
+    Final DEF: 1
+  Margin: 83 − 1 = 82   ▶  HIT (margin 82)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 82/55.0)) = 1.000
+    Raw: max(1, int(7 × 1.000)) = 7
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 7 − 1) = 6
+  ▶ FINAL DAMAGE: 6
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : 17/45 (37.8%)
+    hit     : −6
+    After  : 11/45 (24.4%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(6/45 × 80) = 10   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 6 ≥ threshold
+    chance = max(5, min(80, int(6/45×100) − 5)) = 0%
+    Roll: 0  →  no injury
+  Concede Attempt (OSWALD THE SOOTHSAYER):
+    d100[1] + PRE_bonus[+2] + luck//2[0] = 3
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    3 < 64  →  mercy denied — fight continues
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    OSWALD THE SOOTHSAYER   : d100[87]  on_ground_halved[(÷2)] = 43
+    HERK GREENSTONE         : d100[24]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 39
+    ▶ OSWALD THE SOOTHSAYER wins → ATTACKS
+  Attack: OSWALD THE SOOTHSAYER → HERK GREENSTONE   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (OSWALD THE SOOTHSAYER):
+    d100[11]  dex_bonus[+3]
+    Subtotal: 14
+    Final ATK: 14
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[96]  luck[+5]  activity_mod[-4]  dex_trained_x2[+10]  def_point_bonus[+15]
+    Subtotal: 122
+    Final DEF: 122
+  Margin: 14 − 122 = -108   ▶  PARRY (margin -108)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[41]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 56
+    OSWALD THE SOOTHSAYER   : d100[73]  on_ground_halved[(÷2)] = 36
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[36]  dex_bonus[+3]  luck[+5]
+    Subtotal: 44
+    Final ATK: 44
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[17]  ground_pen[-25]
+    Subtotal: 1
+    Final DEF: 1
+  Margin: 44 − 1 = 43   ▶  HIT (margin 43)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 43/55.0)) = 0.782
+    Raw: max(1, int(7 × 0.782)) = 5
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 5 − 1) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : 11/45 (24.4%)
+    hit     : −4
+    After  : 7/45 (15.6%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(4/45 × 80) = 7   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 4 < threshold
+    → Below threshold — no injury possible
+  Concede Attempt (OSWALD THE SOOTHSAYER):
+    d100[25] + PRE_bonus[+2] + luck//2[0] = 27
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    27 < 64  →  mercy denied — fight continues
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: OSWALD THE SOOTHSAYER has uncontested action
+  Attack: OSWALD THE SOOTHSAYER → HERK GREENSTONE   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (OSWALD THE SOOTHSAYER):
+    d100[31]  dex_bonus[+3]
+    Subtotal: 34
+    Final ATK: 34
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[30]  luck[+5]  activity_mod[-4]  dex_trained_x2[+10]  def_point_bonus[+15]
+    Subtotal: 56
+    Final DEF: 56
+  Margin: 34 − 56 = -22   ▶  PARRY (margin -22)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: OSWALD THE SOOTHSAYER has uncontested action
+  Attack: OSWALD THE SOOTHSAYER → HERK GREENSTONE   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (OSWALD THE SOOTHSAYER):
+    d100[96]  dex_bonus[+3]
+    Subtotal: 99
+    Final ATK: 99
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[51]  luck[+5]  activity_mod[-4]  dex_trained_x2[+10]  def_point_bonus[+15]
+    Subtotal: 77
+    Final DEF: 77
+  Margin: 99 − 77 = 22   ▶  HIT (margin 22)
+  Damage (OSWALD THE SOOTHSAYER → HERK GREENSTONE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 22/55.0)) = 0.400
+    Raw: max(1, int(7 × 0.400)) = 2
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 2 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HERK GREENSTONE):
+    Before : 57/58 (98.3%)
+    hit     : −1
+    After  : 56/58 (96.6%)
+  Knockdown Check (HERK GREENSTONE):
+    base = int(1/58 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 96  →  no knockdown
+  Perm Injury Check (HERK GREENSTONE):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    HERK GREENSTONE: 67.8 END − (2.60 burn × 6 actions) = 51.7
+    OSWALD THE SOOTHSAYER: 80.0 END − (2.00 burn × 3 actions) = 74.0
+    HP POOL — HERK GREENSTONE: 56/58 (97%)
+    HP POOL — OSWALD THE SOOTHSAYER: 7/45 (16%)
+
+==============================================================================
+  MINUTE 4
+==============================================================================
+  APM   — HERK GREENSTONE: 6   |   OSWALD THE SOOTHSAYER: 3
+  HP    — HERK GREENSTONE: 56/58 (97%)   |   OSWALD THE SOOTHSAYER: 7/45 (16%)
+  END   — HERK GREENSTONE: 51.7   |   OSWALD THE SOOTHSAYER: 74.0
+  STRAT — HERK GREENSTONE: [Strike / Act:7]   |   OSWALD THE SOOTHSAYER: [Strike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[68]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 83
+    OSWALD THE SOOTHSAYER   : d100[57]  on_ground_halved[(÷2)] = 28
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[17]  dex_bonus[+3]  luck[+5]
+    Subtotal: 25
+    Final ATK: 25
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[78]  ground_pen[-25]
+    Subtotal: 53
+    Final DEF: 53
+  Margin: 25 − 53 = -28   ▶  PARRY (margin -28)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[25]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 40
+    OSWALD THE SOOTHSAYER   : d100[27]  on_ground_halved[(÷2)] = 13
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[54]  dex_bonus[+3]  luck[+5]
+    Subtotal: 62
+    Final ATK: 62
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[44]  ground_pen[-25]
+    Subtotal: 19
+    Final DEF: 19
+  Margin: 62 − 19 = 43   ▶  HIT (margin 43)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 43/55.0)) = 0.782
+    Raw: max(1, int(7 × 0.782)) = 5
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 5 − 1) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : 7/45 (15.6%)
+    hit     : −4
+    After  : 3/45 (6.7%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(4/45 × 80) = 7   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 4 < threshold
+    → Below threshold — no injury possible
+  Concede Attempt (OSWALD THE SOOTHSAYER):
+    d100[11] + PRE_bonus[+2] + luck//2[0] = 13
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    13 < 64  →  mercy denied — fight continues
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    OSWALD THE SOOTHSAYER   : d100[71]  on_ground_halved[(÷2)] = 35
+    HERK GREENSTONE         : d100[15]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 30
+    ▶ OSWALD THE SOOTHSAYER wins → ATTACKS
+  Attack: OSWALD THE SOOTHSAYER → HERK GREENSTONE   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (OSWALD THE SOOTHSAYER):
+    d100[56]  dex_bonus[+3]
+    Subtotal: 59
+    Final ATK: 59
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[15]  luck[+5]  activity_mod[-4]  dex_trained_x2[+10]  def_point_bonus[+15]
+    Subtotal: 41
+    Final DEF: 41
+  Margin: 59 − 41 = 18   ▶  HIT (margin 18)
+  Damage (OSWALD THE SOOTHSAYER → HERK GREENSTONE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 18/55.0)) = 0.327
+    Raw: max(1, int(7 × 0.327)) = 2
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 2 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HERK GREENSTONE):
+    Before : 56/58 (96.6%)
+    hit     : −1
+    After  : 55/58 (94.8%)
+  Knockdown Check (HERK GREENSTONE):
+    base = int(1/58 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 28  →  no knockdown
+  Perm Injury Check (HERK GREENSTONE):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[64]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 79
+    OSWALD THE SOOTHSAYER   : d100[1]  on_ground_halved[(÷2)] = 1
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[99]  dex_bonus[+3]  luck[+5]
+    Subtotal: 107
+    Final ATK: 107
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[69]  ground_pen[-25]
+    Subtotal: 44
+    Final DEF: 44
+  Margin: 107 − 44 = 63   ▶  HIT (margin 63)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 63/55.0)) = 1.000
+    Raw: max(1, int(7 × 1.000)) = 7
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 7 − 1) = 6
+  ▶ FINAL DAMAGE: 6
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : 3/45 (6.7%)
+    hit     : −6
+    After  : -3/45 (0.0%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(6/45 × 80) = 10   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 6 ≥ threshold
+    chance = max(5, min(80, int(6/45×100) − 5)) = 0%
+    Roll: 0  →  no injury
+  Death Check (OSWALD THE SOOTHSAYER):
+    prev_hp: 3   damage: 6   new_hp: -3
+    overshoot: 3
+    death_chance = min(50.0, 0.5 + 3) = 3.5%
+    → survives (concede system takes over)
+  Concede Attempt (OSWALD THE SOOTHSAYER):
+    d100[54] + PRE_bonus[+2] + luck//2[0] = 56
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    56 < 64  →  mercy denied — fight continues
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[17]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 32
+    OSWALD THE SOOTHSAYER   : d100[58]  on_ground_halved[(÷2)] = 29
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[94]  dex_bonus[+3]  luck[+5]
+    Subtotal: 102
+    Final ATK: 102
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[27]  ground_pen[-25]  hp0_pen[-30]
+    Subtotal: 1
+    Final DEF: 1
+  Margin: 102 − 1 = 101   ▶  HIT (margin 101)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 101/55.0)) = 1.000
+    Raw: max(1, int(7 × 1.000)) = 7
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 7 − 1) = 6
+  ▶ FINAL DAMAGE: 6
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : -3/45 (-6.7%)
+    hit     : −6
+    After  : -9/45 (0.0%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(6/45 × 80) = 10   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 6 ≥ threshold
+    chance = max(5, min(80, int(6/45×100) − 5)) = 0%
+    Roll: 0  →  no injury
+  Death Check (OSWALD THE SOOTHSAYER):
+    prev_hp: -3   damage: 6   new_hp: -9
+    overshoot: 9
+    death_chance = min(50.0, 0.5 + 9) = 9.5%
+    → survives (concede system takes over)
+  Concede Attempt (OSWALD THE SOOTHSAYER):
+    d100[1] + PRE_bonus[+2] + luck//2[0] = 3
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    3 < 64  →  mercy denied — fight continues
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[24]  dex_bonus[+6]  luck[+5]  activity_mod[+4] = 39
+    OSWALD THE SOOTHSAYER   : d100[14]  on_ground_halved[(÷2)] = 7
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → OSWALD THE SOOTHSAYER   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[58]  dex_bonus[+3]  luck[+5]
+    Subtotal: 66
+    Final ATK: 66
+  Defense Roll (OSWALD THE SOOTHSAYER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[90]  ground_pen[-25]  hp0_pen[-30]
+    Subtotal: 35
+    Final DEF: 35
+  Margin: 66 − 35 = 31   ▶  HIT (margin 31)
+  Damage (HERK GREENSTONE → OSWALD THE SOOTHSAYER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 31/55.0)) = 0.564
+    Raw: max(1, int(7 × 0.564)) = 3
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 3 − 1) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (OSWALD THE SOOTHSAYER):
+    Before : -9/45 (-20.0%)
+    hit     : −2
+    After  : -11/45 (0.0%)
+  Knockdown Check (OSWALD THE SOOTHSAYER):
+    base = int(2/45 × 80) = 3   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (OSWALD THE SOOTHSAYER):
+    threshold = 15% of 45 = 6   damage 2 < threshold
+    → Below threshold — no injury possible
+  Death Check (OSWALD THE SOOTHSAYER):
+    prev_hp: -9   damage: 2   new_hp: -11
+    overshoot: 11
+    death_chance = min(50.0, 0.5 + 11) = 11.5%
+    → survives (concede system takes over)
+  Concede Attempt (OSWALD THE SOOTHSAYER):
+    d100[75] + PRE_bonus[+2] + luck//2[0] = 77
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    77 ≥ 64  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: HERK GREENSTONE
+==============================================================================
+  Dexterity: d100=50 vs 35% — FAIL
+    → Dexterity training: no progress this session (mid tier, 35% chance).
+  Dexterity: d100=55 vs 35% — FAIL
+    → Dexterity training: no progress this session (mid tier, 35% chance).
+  Dexterity: d100=39 vs 35% — FAIL
+    → Dexterity training: no progress this session (mid tier, 35% chance).
+  INT observed learning: d100=63 vs 4% — no trigger
+
+==============================================================================
+  TRAINING: OSWALD THE SOOTHSAYER
+==============================================================================
+  INT observed learning: d100=58 vs 4% — no trigger
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : HERK GREENSTONE  (94.8% HP remaining)
+  Loser  : OSWALD THE SOOTHSAYER  (survived, 0.0% HP)
+  Duration: 4 minute(s)
+==============================================================================

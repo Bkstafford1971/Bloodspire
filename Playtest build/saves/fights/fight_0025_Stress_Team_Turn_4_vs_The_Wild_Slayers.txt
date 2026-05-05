@@ -1,0 +1,88 @@
+Fight #25
+Stress Team Turn 4  vs  The Wild Slayers
+============================================================================
+
+============================================================================
+SLASHER_1 (0-1-0)   vs   BORAK SMASHER (3-1-0)
+STRESS TEAM TURN 4 (STRESS TESTER)   vs   THE WILD SLAYERS (SILENT CHAMPION)
+Human Male   vs   Goblin Female
+============================================================================
+
+SLASHER_1 is 5'7"
+SLASHER_1 weighs 165 lbs.
+SLASHER_1 Known To The Crowd.
+SLASHER_1 enters the arena unarmored and wears no helm.
+SLASHER_1 fights using a LONG SWORD.
+
+BORAK SMASHER is 5'3"
+BORAK SMASHER weighs 134 lbs.
+BORAK SMASHER Known To The Crowd.
+BORAK SMASHER enters the arena in CLOTH and will wear a LEATHER CAP.
+BORAK SMASHER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The afternoon sun beats down on the bloodstained sand
+BORAK SMASHER directs an attack toward SLASHER_1
+BORAK SMASHER slices at SLASHER_1's torso with her short sword
+The blow connects!
+BORAK SMASHER's short sword finds SLASHER_1's armor!
+   A telling hit!
+BORAK SMASHER steps threateningly close to the capable SLASHER_1
+BORAK SMASHER drives a blow toward SLASHER_1's body with her short sword
+BORAK SMASHER's short sword slices into SLASHER_1's torso!
+   The blow glances harmlessly off!
+SLASHER_1 sizes up BORAK SMASHER carefully
+SLASHER_1 cuts at BORAK SMASHER's torso with his long sword
+BORAK SMASHER has a plan: don't get hit!
+BORAK SMASHER thrusts at SLASHER_1's torso with her short sword
+BORAK SMASHER's short sword finds SLASHER_1's torso!
+   The blow lands without full force
+A spectator calls out, 'Give him what he deserves!'
+BORAK SMASHER sizes up SLASHER_1 carefully
+BORAK SMASHER slashes at SLASHER_1's midsection with her short sword
+SLASHER_1 is ready for the strike, and deftly parries it!
+BORAK SMASHER cuts at SLASHER_1's body with her short sword
+SLASHER_1 makes a desperate last-moment parry!
+SLASHER_1 sizes up BORAK SMASHER carefully
+SLASHER_1 slashes at BORAK SMASHER's midsection with his long sword
+BORAK SMASHER makes a desperate last-moment parry!
+SLASHER_1 sizes up BORAK SMASHER carefully
+SLASHER_1 hacks at BORAK SMASHER's midsection with his long sword
+SLASHER_1's long sword finds BORAK SMASHER's body!
+   Barely a scratch!
+SLASHER_1 tries to hit the mighty BORAK SMASHER
+SLASHER_1 hacks at BORAK SMASHER's midsection with his long sword
+BORAK SMASHER makes a desperate last-moment parry!
+
+MINUTE 2
+It's a narrow lead, but BORAK SMASHER may be starting to pull ahead.
+
+SLASHER_1 directs an attack toward BORAK SMASHER
+SLASHER_1 drives a blow toward BORAK SMASHER's torso with his long sword
+SLASHER_1's blow barely grazes BORAK SMASHER!
+BORAK SMASHER thrusts at SLASHER_1's body with her short sword
+BORAK SMASHER barely gets past SLASHER_1's defenses!
+BORAK SMASHER's short sword finds SLASHER_1's armor!
+   The blow has real authority behind it!
+SLASHER_1 steps threateningly close to the capable BORAK SMASHER
+SLASHER_1 drives a blow toward BORAK SMASHER's body with his long sword
+BORAK SMASHER has a plan: don't get hit!
+BORAK SMASHER sizes up SLASHER_1 carefully
+BORAK SMASHER drives a blow toward SLASHER_1's torso with her short sword
+The short sword finds its mark!
+BORAK SMASHER's short sword finds SLASHER_1's body!
+   The resulting crunch echoes through the BLOODSPIRE!
+SLASHER_1 calls out for quarter!
+SLASHER_1 is spared by the grace of the Blood Master!
+
+BORAK SMASHER is declared the winner!
+
+BORAK SMASHER has trained in nothing

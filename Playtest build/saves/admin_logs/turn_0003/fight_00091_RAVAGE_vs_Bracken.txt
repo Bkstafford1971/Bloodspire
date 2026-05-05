@@ -1,0 +1,580 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #91   Turn: 3
+  Debug team: Ilneval
+  Ilneval / DECEPTICONS   vs   Penny Briarwood / Briarwood Brawlers
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: RAVAGE
+  ────────────────────────────────────
+    Race: Tabaxi  |  Gender: Male
+    STR:15  DEX:14  CON:14  INT:15  PRE:9  SIZ:7
+    Max HP: 35   Luck: 20
+    Armor: Cuir Boulli   Helm: Steel Cap
+    Primary: Scimitar   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Slash / Act:8 / Aim:None / Def:Chest
+
+  ────────────────────────────────────
+  WARRIOR B: BRACKEN
+  ────────────────────────────────────
+    Race: Halfling  |  Gender: Male
+    STR:17  DEX:14  CON:6  INT:15  PRE:12  SIZ:12
+    Max HP: 35   Luck: 13
+    Armor: Chain   Helm: None
+    Primary: Morningstar   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Counterstrike / Act:5 / Aim:Chest / Def:Chest
+    Skills: dodge:3  feint:1  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — RAVAGE: 5   |   BRACKEN: 5
+  HP    — RAVAGE: 35/35 (100%)   |   BRACKEN: 35/35 (100%)
+  END   — RAVAGE: 100.0   |   BRACKEN: 100.0
+  STRAT — RAVAGE: [Slash / Act:8]   |   BRACKEN: [Counterstrike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[63]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 94
+    BRACKEN                 : d100[6]  dex_bonus[+4]  luck[+13]  style_mod[-6] = 17
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → BRACKEN   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[98]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 122
+    + style advantage: -6
+    Final ATK: 116
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[46]  luck[+13]  str_bonus[+3]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 74
+    Final DEF: 74
+  Margin: 116 − 74 = 42   ▶  HIT (margin 42)
+  Damage (RAVAGE → BRACKEN):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 8.75
+      STR bonus                    +3.00
+      style modifier               +4.00
+      activity contrib             -0.90
+      luck ×0.15                   +3.00
+    Ceiling: 17
+    Fraction: max(0.10, min(1.0, 42/55.0)) = 0.764
+    Raw: max(1, int(17 × 0.764)) = 12
+    Favorite weapon +1 → raw = 13
+    Armor: Chain  base DEF: 6
+    Net = max(1, 13 − 6) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (BRACKEN):
+    Before : 35/35 (100.0%)
+    hit     : −7
+    After  : 28/35 (80.0%)
+  Knockdown Check (BRACKEN):
+    base = int(7/35 × 80) = 16   cat bonus [Sword/Knife]: +0   final: 16%
+    Roll: 70  →  no knockdown
+  Perm Injury Check (BRACKEN):
+    threshold = 15% of 35 = 5   damage 7 ≥ threshold
+    chance = max(5, min(80, int(7/35×100) − 5)) = 15%
+    Roll: 40  →  no injury
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[89]  dex_bonus[+4]  luck[+13]  style_mod[-6] = 100
+    RAVAGE                  : d100[30]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 61
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[98]  dex_bonus[+2]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 111
+    + style advantage: +6
+    Final ATK: 117
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[29]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]
+    Subtotal: 56
+    Final DEF: 56
+  Margin: 117 − 56 = 61   ▶  HIT (margin 61)
+  Damage (BRACKEN → RAVAGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +4.20
+      race damage net              -6.00
+      style modifier               +2.00
+      luck ×0.15                   +1.95
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 61/55.0)) = 1.000
+    Raw: max(1, int(12 × 1.000)) = 12
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 12 − 5) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (RAVAGE):
+    Before : 35/35 (100.0%)
+    hit     : −7
+    After  : 28/35 (80.0%)
+  Knockdown Check (RAVAGE):
+    base = int(7/35 × 80) = 16   cat bonus [Hammer/Mace]: +10   final: 26%
+    Roll: 14  →  ▶ KNOCKDOWN
+  Perm Injury Check (RAVAGE):
+    threshold = 15% of 35 = 5   damage 7 ≥ threshold
+    chance = max(5, min(80, int(7/35×100) − 5)) = 15%
+    Roll: 68  →  no injury
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[42]  dex_bonus[+4]  luck[+13]  style_mod[-6] = 53
+    RAVAGE                  : d100[83]  on_ground_halved[(÷2)] = 41
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[62]  dex_bonus[+2]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 75
+    + style advantage: +6
+    Final ATK: 81
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[38]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 40
+    Final DEF: 40
+  Margin: 81 − 40 = 41   ▶  HIT (margin 41)
+  Damage (BRACKEN → RAVAGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +4.20
+      race damage net              -6.00
+      style modifier               +2.00
+      luck ×0.15                   +1.95
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 41/55.0)) = 0.745
+    Raw: max(1, int(12 × 0.745)) = 8
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 8 − 5) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (RAVAGE):
+    Before : 28/35 (80.0%)
+    hit     : −3
+    After  : 25/35 (71.4%)
+  Knockdown Check (RAVAGE):
+    base = int(3/35 × 80) = 6   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (RAVAGE):
+    threshold = 15% of 35 = 5   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[36]  dex_bonus[+4]  luck[+13]  style_mod[-6] = 47
+    RAVAGE                  : d100[3]  on_ground_halved[(÷2)] = 1
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[16]  dex_bonus[+2]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 29
+    + style advantage: +6
+    Final ATK: 35
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[33]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 35
+    Final DEF: 35
+  Margin: 35 − 35 = 0   ▶  MISS
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[88]  dex_bonus[+4]  luck[+13]  style_mod[-6] = 99
+    RAVAGE                  : d100[45]  on_ground_halved[(÷2)] = 22
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[49]  dex_bonus[+2]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 62
+    + style advantage: +6
+    Final ATK: 68
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[65]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 67
+    Final DEF: 67
+  Margin: 68 − 67 = 1   ▶  GRAZE (margin 1, 1 HP)
+  HP Pool (RAVAGE):
+    Before : 25/35 (71.4%)
+    graze   : −1
+    After  : 24/35 (68.6%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[71]  dex_bonus[+4]  luck[+13]  style_mod[-6] = 82
+    RAVAGE                  : d100[70]  on_ground_halved[(÷2)] = 35
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[71]  dex_bonus[+2]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 84
+    + style advantage: +6
+    Final ATK: 90
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[73]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 75
+    Final DEF: 75
+  Margin: 90 − 75 = 15   ▶  HIT (margin 15)
+  Damage (BRACKEN → RAVAGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +4.20
+      race damage net              -6.00
+      style modifier               +2.00
+      luck ×0.15                   +1.95
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 15/55.0)) = 0.273
+    Raw: max(1, int(12 × 0.273)) = 3
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 3 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (RAVAGE):
+    Before : 24/35 (68.6%)
+    hit     : −1
+    After  : 23/35 (65.7%)
+  Knockdown Check (RAVAGE):
+    base = int(1/35 × 80) = 2   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (RAVAGE):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: RAVAGE has uncontested action
+  Attack: RAVAGE → BRACKEN   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[82]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 106
+    + style advantage: -6
+    Final ATK: 100
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[91]  luck[+13]  str_bonus[+3]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 119
+    Final DEF: 119
+  Margin: 100 − 119 = -19   ▶  PARRY (margin -19)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: RAVAGE has uncontested action
+  Attack: RAVAGE → BRACKEN   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[99]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 123
+    + style advantage: -6
+    Final ATK: 117
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[91]  luck[+13]  str_bonus[+3]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 119
+    Final DEF: 119
+  Margin: 117 − 119 = -2   ▶  PARRY (margin -2)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: RAVAGE has uncontested action
+  Attack: RAVAGE → BRACKEN   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[18]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 42
+    + style advantage: -6
+    Final ATK: 36
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[19]  luck[+13]  str_bonus[+3]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 47
+    Final DEF: 47
+  Margin: 36 − 47 = -11   ▶  PARRY (margin -11)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: RAVAGE has uncontested action
+  Attack: RAVAGE → BRACKEN   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[100]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 124
+    + style advantage: -6
+    Final ATK: 118
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[87]  luck[+13]  str_bonus[+3]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 115
+    Final DEF: 115
+  Margin: 118 − 115 = 3   ▶  GRAZE (margin 3, 1 HP)
+  HP Pool (BRACKEN):
+    Before : 28/35 (80.0%)
+    graze   : −1
+    After  : 27/35 (77.1%)
+
+  ── END OF MINUTE ──
+    RAVAGE: 100.0 END − (5.90 burn × 5 actions) = 70.0
+    BRACKEN: 100.0 END − (3.50 burn × 5 actions) = 82.5
+    HP POOL — RAVAGE: 23/35 (66%)
+    HP POOL — BRACKEN: 27/35 (77%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — RAVAGE: 2   |   BRACKEN: 5
+  HP    — RAVAGE: 23/35 (66%)   |   BRACKEN: 27/35 (77%)
+  END   — RAVAGE: 70.0   |   BRACKEN: 82.5
+  STRAT — RAVAGE: [Slash / Act:8]   |   BRACKEN: [Counterstrike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[72]  dex_bonus[+4]  luck[+13]  style_mod[-6] = 83
+    RAVAGE                  : d100[52]  on_ground_halved[(÷2)] = 26
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[49]  dex_bonus[+2]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 62
+    + style advantage: +6
+    Final ATK: 68
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[23]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 25
+    Final DEF: 25
+  Margin: 68 − 25 = 43   ▶  HIT (margin 43)
+  Damage (BRACKEN → RAVAGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +4.20
+      race damage net              -6.00
+      style modifier               +2.00
+      luck ×0.15                   +1.95
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 43/55.0)) = 0.782
+    Raw: max(1, int(12 × 0.782)) = 9
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 9 − 5) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (RAVAGE):
+    Before : 23/35 (65.7%)
+    hit     : −4
+    After  : 19/35 (54.3%)
+  Knockdown Check (RAVAGE):
+    base = int(4/35 × 80) = 9   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (RAVAGE):
+    threshold = 15% of 35 = 5   damage 4 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[37]  dex_bonus[+4]  luck[+13]  style_mod[-6] = 48
+    RAVAGE                  : d100[18]  on_ground_halved[(÷2)] = 9
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[4]  dex_bonus[+2]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 17
+    + style advantage: +6
+    Final ATK: 23
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[25]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 27
+    Final DEF: 27
+  Margin: 23 − 27 = -4   ▶  PARRY (margin -4)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[39]  dex_bonus[+4]  luck[+13]  style_mod[-6] = 50
+    RAVAGE                  : d100[30]  on_ground_halved[(÷2)] = 15
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[3]  dex_bonus[+2]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 16
+    + style advantage: +6
+    Final ATK: 22
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[3]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 5
+    Final DEF: 5
+  Margin: 22 − 5 = 17   ▶  HIT (margin 17)
+  Damage (BRACKEN → RAVAGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +4.20
+      race damage net              -6.00
+      style modifier               +2.00
+      luck ×0.15                   +1.95
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 17/55.0)) = 0.309
+    Raw: max(1, int(12 × 0.309)) = 3
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 3 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (RAVAGE):
+    Before : 19/35 (54.3%)
+    hit     : −1
+    After  : 18/35 (51.4%)
+  Knockdown Check (RAVAGE):
+    base = int(1/35 × 80) = 2   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (RAVAGE):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[37]  dex_bonus[+4]  luck[+13]  style_mod[-6] = 48
+    RAVAGE                  : d100[72]  on_ground_halved[(÷2)] = 36
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[2]  dex_bonus[+2]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 15
+    + style advantage: +6
+    Final ATK: 21
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[46]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 48
+    Final DEF: 48
+  Margin: 21 − 48 = -27   ▶  PARRY (margin -27)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[63]  dex_bonus[+4]  luck[+13]  style_mod[-6] = 74
+    RAVAGE                  : d100[81]  on_ground_halved[(÷2)] = 40
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[37]  dex_bonus[+2]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 50
+    + style advantage: +6
+    Final ATK: 56
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[3]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 5
+    Final DEF: 5
+  Margin: 56 − 5 = 51   ▶  HIT (margin 51)
+  Damage (BRACKEN → RAVAGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +4.20
+      race damage net              -6.00
+      style modifier               +2.00
+      luck ×0.15                   +1.95
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 51/55.0)) = 0.927
+    Raw: max(1, int(12 × 0.927)) = 11
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 11 − 5) = 6
+  ▶ FINAL DAMAGE: 6
+  HP Pool (RAVAGE):
+    Before : 18/35 (51.4%)
+    hit     : −6
+    After  : 12/35 (34.3%)
+  Knockdown Check (RAVAGE):
+    base = int(6/35 × 80) = 13   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (RAVAGE):
+    threshold = 15% of 35 = 5   damage 6 ≥ threshold
+    chance = max(5, min(80, int(6/35×100) − 5)) = 12%
+    Roll: 92  →  no injury
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: RAVAGE has uncontested action
+  Attack: RAVAGE → BRACKEN   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[84]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 108
+    + style advantage: -6
+    Final ATK: 102
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[12]  luck[+13]  str_bonus[+3]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 40
+    Final DEF: 40
+  Margin: 102 − 40 = 62   ▶  HIT (margin 62)
+  Damage (RAVAGE → BRACKEN):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 8.75
+      STR bonus                    +3.00
+      style modifier               +4.00
+      activity contrib             -0.90
+      luck ×0.15                   +3.00
+    Ceiling: 17
+    Fraction: max(0.10, min(1.0, 62/55.0)) = 1.000
+    Raw: max(1, int(17 × 1.000)) = 17
+    Favorite weapon +1 → raw = 18
+    Armor: Chain  base DEF: 6
+    Net = max(1, 18 − 6) = 12
+  ▶ FINAL DAMAGE: 12
+  HP Pool (BRACKEN):
+    Before : 27/35 (77.1%)
+    hit     : −12
+    After  : 15/35 (42.9%)
+  Knockdown Check (BRACKEN):
+    base = int(12/35 × 80) = 27   cat bonus [Sword/Knife]: +0   final: 27%
+    Roll: 84  →  no knockdown
+  Perm Injury Check (BRACKEN):
+    threshold = 15% of 35 = 5   damage 12 ≥ threshold
+    chance = max(5, min(80, int(12/35×100) − 5)) = 29%
+    Roll: 50  →  no injury
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: RAVAGE has uncontested action
+  Attack: RAVAGE → BRACKEN   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[72]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 96
+    + style advantage: -6
+    Final ATK: 90
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[20]  luck[+13]  str_bonus[+3]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 48
+    Final DEF: 48
+  Margin: 90 − 48 = 42   ▶  HIT (margin 42)
+  Damage (RAVAGE → BRACKEN):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 8.75
+      STR bonus                    +3.00
+      style modifier               +4.00
+      activity contrib             -0.90
+      luck ×0.15                   +3.00
+    Ceiling: 17
+    Fraction: max(0.10, min(1.0, 42/55.0)) = 0.764
+    Raw: max(1, int(17 × 0.764)) = 12
+    Favorite weapon +1 → raw = 13
+    Armor: Chain  base DEF: 6
+    Net = max(1, 13 − 6) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (BRACKEN):
+    Before : 15/35 (42.9%)
+    hit     : −7
+    After  : 8/35 (22.9%)
+  Knockdown Check (BRACKEN):
+    base = int(7/35 × 80) = 16   cat bonus [Sword/Knife]: +0   final: 16%
+    Roll: 56  →  no knockdown
+  Perm Injury Check (BRACKEN):
+    threshold = 15% of 35 = 5   damage 7 ≥ threshold
+    chance = max(5, min(80, int(7/35×100) − 5)) = 15%
+    Roll: 75  →  no injury
+  Concede Attempt (BRACKEN):
+    d100[78] + PRE_bonus[+2] + luck//2[6] = 86
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    86 ≥ 64  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: RAVAGE
+==============================================================================
+  Strength: d100=60 vs 45% — FAIL
+    → Strength training: no progress this session (CON 14, 45% chance).
+  Dexterity: d100=46 vs 45% — FAIL
+    → Dexterity training: no progress this session (CON 14, 45% chance).
+  Constitution: d100=52 vs 45% — FAIL
+    → Constitution training: no progress this session (CON 14, 45% chance).
+  INT observed learning: d100=31 vs 4% — no trigger
+
+==============================================================================
+  TRAINING: BRACKEN
+==============================================================================
+  Strength: d100=50 vs 28% — FAIL
+    → Strength training: no progress this session (CON 6, 28% chance).
+  Dexterity: d100=49 vs 28% — FAIL
+    → Dexterity training: no progress this session (CON 6, 28% chance).
+  Dodge: d100=36 vs 55% — SUCCESS
+    → Dodge trained: Level 3 → Level 4 (Good Skill, 55% chance)
+  INT observed learning: d100=70 vs 4% — no trigger
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : RAVAGE  (34.3% HP remaining)
+  Loser  : BRACKEN  (survived, 22.9% HP)
+  Duration: 2 minute(s)
+==============================================================================

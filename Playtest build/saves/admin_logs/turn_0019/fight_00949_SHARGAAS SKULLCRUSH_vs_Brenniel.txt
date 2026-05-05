@@ -1,0 +1,1036 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #949   Turn: 19
+  Debug team: Electron
+  Electron / SHADES OF THE PAST   vs   Madame Vexx / Vexx's Vicious
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: SHARGAAS SKULLCRUSH
+  ────────────────────────────────────
+    Race: Half-Orc  |  Gender: Male
+    STR:16  DEX:8  CON:16  INT:8  PRE:7  SIZ:16
+    Max HP: 70   Luck: 13
+    Armor: Half-Plate   Helm: Full Helm
+    Primary: War Flail   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Bash / Act:4 / Aim:None / Def:None
+
+  ────────────────────────────────────
+  WARRIOR B: BRENNIEL
+  ────────────────────────────────────
+    Race: Half-Elf  |  Gender: Male
+    STR:10  DEX:13  CON:15  INT:11  PRE:10  SIZ:17
+    Max HP: 61   Luck: 25
+    Armor: Brigandine   Helm: None
+    Primary: Great Sword   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:7 / Aim:Head / Def:None
+    Skills: initiative:3  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — SHARGAAS SKULLCRUSH: 2   |   BRENNIEL: 6
+  HP    — SHARGAAS SKULLCRUSH: 70/70 (100%)   |   BRENNIEL: 61/61 (100%)
+  END   — SHARGAAS SKULLCRUSH: 100.0   |   BRENNIEL: 100.0
+  STRAT — SHARGAAS SKULLCRUSH: [Bash / Act:4]   |   BRENNIEL: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[39]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 81
+    SHARGAAS SKULLCRUSH     : d100[40]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 36
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[41]  dex_bonus[+2]  luck[+25]
+    Subtotal: 68
+    + style advantage: -6
+    Final ATK: 62
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[58]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 73
+    Final DEF: 73
+  Margin: 62 − 73 = -11   ▶  PARRY (margin -11)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[96]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 92
+    BRENNIEL                : d100[29]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 71
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → BRENNIEL   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[49]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 59
+    + style advantage: +6
+    Final ATK: 65
+  Defense Roll (BRENNIEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[77]  luck[+25]  activity_mod[-4]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 65 − 98 = -33   ▶  PARRY (margin -33)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[46]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 88
+    SHARGAAS SKULLCRUSH     : d100[48]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 44
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[64]  dex_bonus[+2]  luck[+25]
+    Subtotal: 91
+    + style advantage: -6
+    Final ATK: 85
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[66]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 81
+    Final DEF: 81
+  Margin: 85 − 81 = 4   ▶  GRAZE (margin 4, 1 HP)
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 70/70 (100.0%)
+    graze   : −1
+    After  : 69/70 (98.6%)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[52]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 94
+    SHARGAAS SKULLCRUSH     : d100[76]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 72
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[31]  dex_bonus[+2]  luck[+25]
+    Subtotal: 58
+    + style advantage: -6
+    Final ATK: 52
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[10]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 25
+    Final DEF: 25
+  Margin: 52 − 25 = 27   ▶  HIT (margin 27)
+  Damage (BRENNIEL → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      two-hand multiplier          ×1.15
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.75
+      strength underweight pen     ×0.30 (70% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 27/55.0)) = 0.491
+    Raw: max(1, int(7 × 0.491)) = 3
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 3 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 69/70 (98.6%)
+    hit     : −1
+    After  : 68/70 (97.1%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 87  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[81]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 77
+    BRENNIEL                : d100[9]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 51
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → BRENNIEL   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[43]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 53
+    + style advantage: +6
+    Final ATK: 59
+  Defense Roll (BRENNIEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[89]  luck[+25]  activity_mod[-4]
+    Subtotal: 110
+    Final DEF: 110
+  Margin: 59 − 110 = -51   ▶  PARRY (margin -51)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: BRENNIEL has uncontested action
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[10]  dex_bonus[+2]  luck[+25]
+    Subtotal: 37
+    + style advantage: -6
+    Final ATK: 31
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[87]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 102
+    Final DEF: 102
+  Margin: 31 − 102 = -71   ▶  PARRY (margin -71)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: BRENNIEL has uncontested action
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[28]  dex_bonus[+2]  luck[+25]
+    Subtotal: 55
+    + style advantage: -6
+    Final ATK: 49
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[91]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 106
+    Final DEF: 106
+  Margin: 49 − 106 = -57   ▶  PARRY (margin -57)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: BRENNIEL has uncontested action
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[84]  dex_bonus[+2]  luck[+25]
+    Subtotal: 111
+    + style advantage: -6
+    Final ATK: 105
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[34]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 49
+    Final DEF: 49
+  Margin: 105 − 49 = 56   ▶  HIT (margin 56)
+  Damage (BRENNIEL → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      two-hand multiplier          ×1.15
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.75
+      strength underweight pen     ×0.30 (70% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 56/55.0)) = 1.000
+    Raw: max(1, int(7 × 1.000)) = 7
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 7 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 68/70 (97.1%)
+    hit     : −1
+    After  : 67/70 (95.7%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 2  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    SHARGAAS SKULLCRUSH: 100.0 END − (6.70 burn × 2 actions) = 86.6
+    BRENNIEL: 100.0 END − (2.60 burn × 6 actions) = 84.4
+    HP POOL — SHARGAAS SKULLCRUSH: 67/70 (96%)
+    HP POOL — BRENNIEL: 61/61 (100%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — SHARGAAS SKULLCRUSH: 2   |   BRENNIEL: 6
+  HP    — SHARGAAS SKULLCRUSH: 67/70 (96%)   |   BRENNIEL: 61/61 (100%)
+  END   — SHARGAAS SKULLCRUSH: 86.6   |   BRENNIEL: 84.4
+  STRAT — SHARGAAS SKULLCRUSH: [Bash / Act:4]   |   BRENNIEL: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[72]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 114
+    SHARGAAS SKULLCRUSH     : d100[23]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 19
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[58]  dex_bonus[+2]  luck[+25]
+    Subtotal: 85
+    + style advantage: -6
+    Final ATK: 79
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[41]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 56
+    Final DEF: 56
+  Margin: 79 − 56 = 23   ▶  HIT (margin 23)
+  Damage (BRENNIEL → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      two-hand multiplier          ×1.15
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.75
+      strength underweight pen     ×0.30 (70% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 23/55.0)) = 0.418
+    Raw: max(1, int(7 × 0.418)) = 2
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 2 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 67/70 (95.7%)
+    hit     : −1
+    After  : 66/70 (94.3%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 42  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[77]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 119
+    SHARGAAS SKULLCRUSH     : d100[49]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 45
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[74]  dex_bonus[+2]  luck[+25]
+    Subtotal: 101
+    + style advantage: -6
+    Final ATK: 95
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[100]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 115
+    Final DEF: 115
+  Margin: 95 − 115 = -20   ▶  PARRY (margin -20)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[89]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 85
+    BRENNIEL                : d100[28]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 70
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → BRENNIEL   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[90]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 100
+    + style advantage: +6
+    Final ATK: 106
+  Defense Roll (BRENNIEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[78]  luck[+25]  activity_mod[-4]
+    Subtotal: 99
+    Final DEF: 99
+  Margin: 106 − 99 = 7   ▶  GRAZE (margin 7, 1 HP)
+  HP Pool (BRENNIEL):
+    Before : 61/61 (100.0%)
+    graze   : −1
+    After  : 60/61 (98.4%)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[32]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 74
+    SHARGAAS SKULLCRUSH     : d100[58]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 54
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[52]  dex_bonus[+2]  luck[+25]
+    Subtotal: 79
+    + style advantage: -6
+    Final ATK: 73
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[94]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 109
+    Final DEF: 109
+  Margin: 73 − 109 = -36   ▶  PARRY (margin -36)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[80]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 122
+    SHARGAAS SKULLCRUSH     : d100[74]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 70
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[26]  dex_bonus[+2]  luck[+25]
+    Subtotal: 53
+    + style advantage: -6
+    Final ATK: 47
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[11]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 26
+    Final DEF: 26
+  Margin: 47 − 26 = 21   ▶  HIT (margin 21)
+  Damage (BRENNIEL → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      two-hand multiplier          ×1.15
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.75
+      strength underweight pen     ×0.30 (70% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 21/55.0)) = 0.382
+    Raw: max(1, int(7 × 0.382)) = 2
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 2 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 66/70 (94.3%)
+    hit     : −1
+    After  : 65/70 (92.9%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 40  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[90]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 132
+    SHARGAAS SKULLCRUSH     : d100[50]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 46
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[87]  dex_bonus[+2]  luck[+25]
+    Subtotal: 114
+    + style advantage: -6
+    Final ATK: 108
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[1]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 16
+    Final DEF: 16
+  Margin: 108 − 16 = 92   ▶  HIT (margin 92)
+  Damage (BRENNIEL → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      two-hand multiplier          ×1.15
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.75
+      strength underweight pen     ×0.30 (70% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 92/55.0)) = 1.000
+    Raw: max(1, int(7 × 1.000)) = 7
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 7 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 65/70 (92.9%)
+    hit     : −1
+    After  : 64/70 (91.4%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 76  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[94]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 136
+    SHARGAAS SKULLCRUSH     : d100[99]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 95
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[4]  dex_bonus[+2]  luck[+25]
+    Subtotal: 31
+    + style advantage: -6
+    Final ATK: 25
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[16]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 31
+    Final DEF: 31
+  Margin: 25 − 31 = -6   ▶  PARRY (margin -6)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: SHARGAAS SKULLCRUSH has uncontested action
+  Attack: SHARGAAS SKULLCRUSH → BRENNIEL   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[62]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 72
+    + style advantage: +6
+    Final ATK: 78
+  Defense Roll (BRENNIEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[32]  luck[+25]  activity_mod[-4]
+    Subtotal: 53
+    Final DEF: 53
+  Margin: 78 − 53 = 25   ▶  HIT (margin 25)
+  Damage (SHARGAAS SKULLCRUSH → BRENNIEL):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 12.50
+      STR bonus                    +3.60
+      flail/size bonus             +1.60
+      race damage net              +8.00
+      style modifier               +3.00
+      activity contrib             +0.30
+      luck ×0.15                   +1.95
+    Ceiling: 30
+    Fraction: max(0.10, min(1.0, 25/55.0)) = 0.455
+    Raw: max(1, int(30 × 0.455)) = 13
+    Favorite weapon +1 → raw = 14
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 14 − 4) = 10
+  ▶ FINAL DAMAGE: 10
+  HP Pool (BRENNIEL):
+    Before : 60/61 (98.4%)
+    hit     : −10
+    After  : 50/61 (82.0%)
+  Knockdown Check (BRENNIEL):
+    base = int(10/61 × 80) = 13   cat bonus [Flail]: +10   final: 13%
+    Roll: 28  →  no knockdown
+  Perm Injury Check (BRENNIEL):
+    threshold = 15% of 61 = 9   damage 10 ≥ threshold
+    chance = max(5, min(80, int(10/61×100) − 5)) = 11%
+    Roll: 39  →  no injury
+
+  ── END OF MINUTE ──
+    SHARGAAS SKULLCRUSH: 86.6 END − (6.70 burn × 2 actions) = 73.2
+    BRENNIEL: 84.4 END − (2.60 burn × 6 actions) = 68.8
+    HP POOL — SHARGAAS SKULLCRUSH: 64/70 (91%)
+    HP POOL — BRENNIEL: 50/61 (82%)
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — SHARGAAS SKULLCRUSH: 2   |   BRENNIEL: 6
+  HP    — SHARGAAS SKULLCRUSH: 64/70 (91%)   |   BRENNIEL: 50/61 (82%)
+  END   — SHARGAAS SKULLCRUSH: 73.2   |   BRENNIEL: 68.8
+  STRAT — SHARGAAS SKULLCRUSH: [Bash / Act:4]   |   BRENNIEL: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[72]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 114
+    SHARGAAS SKULLCRUSH     : d100[31]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 27
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[27]  dex_bonus[+2]  luck[+25]
+    Subtotal: 54
+    + style advantage: -6
+    Final ATK: 48
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[44]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 59
+    Final DEF: 59
+  Margin: 48 − 59 = -11   ▶  PARRY (margin -11)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[17]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 59
+    SHARGAAS SKULLCRUSH     : d100[21]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 17
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[25]  dex_bonus[+2]  luck[+25]
+    Subtotal: 52
+    + style advantage: -6
+    Final ATK: 46
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[41]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 56
+    Final DEF: 56
+  Margin: 46 − 56 = -10   ▶  PARRY (margin -10)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[35]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 77
+    SHARGAAS SKULLCRUSH     : d100[10]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 6
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[23]  dex_bonus[+2]  luck[+25]
+    Subtotal: 50
+    + style advantage: -6
+    Final ATK: 44
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[18]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 33
+    Final DEF: 33
+  Margin: 44 − 33 = 11   ▶  HIT (margin 11)
+  Damage (BRENNIEL → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      two-hand multiplier          ×1.15
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.75
+      strength underweight pen     ×0.30 (70% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 11/55.0)) = 0.200
+    Raw: max(1, int(7 × 0.200)) = 1
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 1 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 64/70 (91.4%)
+    hit     : −1
+    After  : 63/70 (90.0%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 86  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[51]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 93
+    SHARGAAS SKULLCRUSH     : d100[8]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 4
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[52]  dex_bonus[+2]  luck[+25]
+    Subtotal: 79
+    + style advantage: -6
+    Final ATK: 73
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[70]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 85
+    Final DEF: 85
+  Margin: 73 − 85 = -12   ▶  PARRY (margin -12)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[46]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 88
+    SHARGAAS SKULLCRUSH     : d100[77]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 73
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[91]  dex_bonus[+2]  luck[+25]
+    Subtotal: 118
+    + style advantage: -6
+    Final ATK: 112
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[29]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 44
+    Final DEF: 44
+  Margin: 112 − 44 = 68   ▶  HIT (margin 68)
+  Damage (BRENNIEL → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      two-hand multiplier          ×1.15
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.75
+      strength underweight pen     ×0.30 (70% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 68/55.0)) = 1.000
+    Raw: max(1, int(7 × 1.000)) = 7
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 7 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 63/70 (90.0%)
+    hit     : −1
+    After  : 62/70 (88.6%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 5  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[15]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 57
+    SHARGAAS SKULLCRUSH     : d100[43]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 39
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[32]  dex_bonus[+2]  luck[+25]
+    Subtotal: 59
+    + style advantage: -6
+    Final ATK: 53
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[9]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 24
+    Final DEF: 24
+  Margin: 53 − 24 = 29   ▶  HIT (margin 29)
+  Damage (BRENNIEL → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      two-hand multiplier          ×1.15
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.75
+      strength underweight pen     ×0.30 (70% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 29/55.0)) = 0.527
+    Raw: max(1, int(7 × 0.527)) = 3
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 3 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 62/70 (88.6%)
+    hit     : −1
+    After  : 61/70 (87.1%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 95  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: SHARGAAS SKULLCRUSH has uncontested action
+  Attack: SHARGAAS SKULLCRUSH → BRENNIEL   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[23]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 33
+    + style advantage: +6
+    Final ATK: 39
+  Defense Roll (BRENNIEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[16]  luck[+25]  activity_mod[-4]
+    Subtotal: 37
+    Final DEF: 37
+  Margin: 39 − 37 = 2   ▶  GRAZE (margin 2, 1 HP)
+  HP Pool (BRENNIEL):
+    Before : 50/61 (82.0%)
+    graze   : −1
+    After  : 49/61 (80.3%)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: SHARGAAS SKULLCRUSH has uncontested action
+  Attack: SHARGAAS SKULLCRUSH → BRENNIEL   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[56]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 66
+    + style advantage: +6
+    Final ATK: 72
+  Defense Roll (BRENNIEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[49]  luck[+25]  activity_mod[-4]
+    Subtotal: 70
+    Final DEF: 70
+  Margin: 72 − 70 = 2   ▶  GRAZE (margin 2, 1 HP)
+  HP Pool (BRENNIEL):
+    Before : 49/61 (80.3%)
+    graze   : −1
+    After  : 48/61 (78.7%)
+
+  ── END OF MINUTE ──
+    SHARGAAS SKULLCRUSH: 73.2 END − (6.70 burn × 2 actions) = 59.8
+    BRENNIEL: 68.8 END − (2.60 burn × 6 actions) = 53.2
+    HP POOL — SHARGAAS SKULLCRUSH: 61/70 (87%)
+    HP POOL — BRENNIEL: 48/61 (79%)
+
+==============================================================================
+  MINUTE 4
+==============================================================================
+  APM   — SHARGAAS SKULLCRUSH: 2   |   BRENNIEL: 6
+  HP    — SHARGAAS SKULLCRUSH: 61/70 (87%)   |   BRENNIEL: 48/61 (79%)
+  END   — SHARGAAS SKULLCRUSH: 59.8   |   BRENNIEL: 53.2
+  STRAT — SHARGAAS SKULLCRUSH: [Bash / Act:4]   |   BRENNIEL: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[93]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 135
+    SHARGAAS SKULLCRUSH     : d100[17]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 13
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[58]  dex_bonus[+2]  luck[+25]
+    Subtotal: 85
+    + style advantage: -6
+    Final ATK: 79
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[2]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 17
+    Final DEF: 17
+  Margin: 79 − 17 = 62   ▶  HIT (margin 62)
+  Damage (BRENNIEL → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      two-hand multiplier          ×1.15
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.75
+      strength underweight pen     ×0.30 (70% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 62/55.0)) = 1.000
+    Raw: max(1, int(7 × 1.000)) = 7
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 7 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 61/70 (87.1%)
+    hit     : −1
+    After  : 60/70 (85.7%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 72  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[4]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 46
+    SHARGAAS SKULLCRUSH     : d100[48]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 44
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[51]  dex_bonus[+2]  luck[+25]
+    Subtotal: 78
+    + style advantage: -6
+    Final ATK: 72
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[50]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 65
+    Final DEF: 65
+  Margin: 72 − 65 = 7   ▶  GRAZE (margin 7, 1 HP)
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 60/70 (85.7%)
+    graze   : −1
+    After  : 59/70 (84.3%)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[88]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 84
+    BRENNIEL                : d100[29]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 71
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → BRENNIEL   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[67]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 77
+    + style advantage: +6
+    Final ATK: 83
+  Defense Roll (BRENNIEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[1]  luck[+25]  activity_mod[-4]
+    Subtotal: 22
+    Final DEF: 22
+  Margin: 83 − 22 = 61   ▶  HIT (margin 61)
+  Damage (SHARGAAS SKULLCRUSH → BRENNIEL):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 12.50
+      STR bonus                    +3.60
+      flail/size bonus             +1.60
+      race damage net              +8.00
+      style modifier               +3.00
+      activity contrib             +0.30
+      luck ×0.15                   +1.95
+    Ceiling: 30
+    Fraction: max(0.10, min(1.0, 61/55.0)) = 1.000
+    Raw: max(1, int(30 × 1.000)) = 30
+    Favorite weapon +1 → raw = 31
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 31 − 4) = 27
+  ▶ FINAL DAMAGE: 27
+  HP Pool (BRENNIEL):
+    Before : 48/61 (78.7%)
+    hit     : −27
+    After  : 21/61 (34.4%)
+  Knockdown Check (BRENNIEL):
+    base = int(27/61 × 80) = 35   cat bonus [Flail]: +10   final: 35%
+    Roll: 54  →  no knockdown
+  Perm Injury Check (BRENNIEL):
+    threshold = 15% of 61 = 9   damage 27 ≥ threshold
+    chance = max(5, min(80, int(27/61×100) − 5)) = 39%
+    Roll: 98  →  no injury
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[44]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 86
+    SHARGAAS SKULLCRUSH     : d100[58]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 54
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[92]  dex_bonus[+2]  luck[+25]
+    Subtotal: 119
+    + style advantage: -6
+    Final ATK: 113
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[54]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 69
+    Final DEF: 69
+  Margin: 113 − 69 = 44   ▶  HIT (margin 44)
+  Damage (BRENNIEL → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      two-hand multiplier          ×1.15
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.75
+      strength underweight pen     ×0.30 (70% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 44/55.0)) = 0.800
+    Raw: max(1, int(7 × 0.800)) = 5
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 5 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 59/70 (84.3%)
+    hit     : −1
+    After  : 58/70 (82.9%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 48  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNIEL                : d100[4]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 46
+    SHARGAAS SKULLCRUSH     : d100[17]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 13
+    ▶ BRENNIEL wins → ATTACKS
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[74]  dex_bonus[+2]  luck[+25]
+    Subtotal: 101
+    + style advantage: -6
+    Final ATK: 95
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[78]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 93
+    Final DEF: 93
+  Margin: 95 − 93 = 2   ▶  GRAZE (margin 2, 1 HP)
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 58/70 (82.9%)
+    graze   : −1
+    After  : 57/70 (81.4%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[80]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 76
+    BRENNIEL                : d100[11]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 53
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → BRENNIEL   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[18]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 28
+    + style advantage: +6
+    Final ATK: 34
+  Defense Roll (BRENNIEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[5]  luck[+25]  activity_mod[-4]
+    Subtotal: 26
+    Final DEF: 26
+  Margin: 34 − 26 = 8   ▶  GRAZE (margin 8, 1 HP)
+  HP Pool (BRENNIEL):
+    Before : 21/61 (34.4%)
+    graze   : −1
+    After  : 20/61 (32.8%)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: BRENNIEL has uncontested action
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[96]  dex_bonus[+2]  luck[+25]
+    Subtotal: 123
+    + style advantage: -6
+    Final ATK: 117
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[5]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 20
+    Final DEF: 20
+  Margin: 117 − 20 = 97   ▶  HIT (margin 97)
+  Damage (BRENNIEL → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      two-hand multiplier          ×1.15
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.75
+      strength underweight pen     ×0.30 (70% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 97/55.0)) = 1.000
+    Raw: max(1, int(7 × 1.000)) = 7
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 7 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 57/70 (81.4%)
+    hit     : −1
+    After  : 56/70 (80.0%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 34  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: BRENNIEL has uncontested action
+  Attack: BRENNIEL → SHARGAAS SKULLCRUSH   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (BRENNIEL):
+    d100[16]  dex_bonus[+2]  luck[+25]
+    Subtotal: 43
+    + style advantage: -6
+    Final ATK: 37
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[85]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 100
+    Final DEF: 100
+  Margin: 37 − 100 = -63   ▶  PARRY (margin -63)
+
+  ── END OF MINUTE ──
+    SHARGAAS SKULLCRUSH: 59.8 END − (6.70 burn × 2 actions) = 46.4
+    BRENNIEL: 53.2 END − (2.60 burn × 6 actions) = 37.6
+    HP POOL — SHARGAAS SKULLCRUSH: 56/70 (80%)
+    HP POOL — BRENNIEL: 20/61 (33%)
+
+==============================================================================
+  MINUTE 5
+==============================================================================
+  APM   — SHARGAAS SKULLCRUSH: 2   |   BRENNIEL: 5
+  HP    — SHARGAAS SKULLCRUSH: 56/70 (80%)   |   BRENNIEL: 20/61 (33%)
+  END   — SHARGAAS SKULLCRUSH: 46.4   |   BRENNIEL: 37.6
+  STRAT — SHARGAAS SKULLCRUSH: [Bash / Act:4]   |   BRENNIEL: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[74]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 70
+    BRENNIEL                : d100[25]  dex_bonus[+4]  init_skill_x3[+9]  luck[+25]  activity_mod[+4] = 67
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → BRENNIEL   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[86]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 96
+    + style advantage: +6
+    Final ATK: 102
+  Defense Roll (BRENNIEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[53]  luck[+25]  activity_mod[-4]
+    Subtotal: 74
+    Final DEF: 74
+  Margin: 102 − 74 = 28   ▶  HIT (margin 28)
+  Damage (SHARGAAS SKULLCRUSH → BRENNIEL):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 12.50
+      STR bonus                    +3.60
+      flail/size bonus             +1.60
+      race damage net              +8.00
+      style modifier               +3.00
+      activity contrib             +0.30
+      luck ×0.15                   +1.95
+    Ceiling: 30
+    Fraction: max(0.10, min(1.0, 28/55.0)) = 0.509
+    Raw: max(1, int(30 × 0.509)) = 15
+    Favorite weapon +1 → raw = 16
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 16 − 4) = 12
+  ▶ FINAL DAMAGE: 12
+  HP Pool (BRENNIEL):
+    Before : 20/61 (32.8%)
+    hit     : −12
+    After  : 8/61 (13.1%)
+  Knockdown Check (BRENNIEL):
+    base = int(12/61 × 80) = 15   cat bonus [Flail]: +10   final: 15%
+    Roll: 83  →  no knockdown
+  Perm Injury Check (BRENNIEL):
+    threshold = 15% of 61 = 9   damage 12 ≥ threshold
+    chance = max(5, min(80, int(12/61×100) − 5)) = 14%
+    Roll: 20  →  no injury
+  Concede Attempt (BRENNIEL):
+    d100[84] + PRE_bonus[+0] + luck//2[12] = 96
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    96 ≥ 65  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: SHARGAAS SKULLCRUSH
+==============================================================================
+  Dexterity: d100=69 vs 55% — FAIL
+    → Dexterity training: no progress this session (CON 16, 55% chance).
+  Dexterity: d100=13 vs 55% — SUCCESS
+    → Dexterity trained: 8 → 9 (55% chance)
+  Dexterity: d100=57 vs 55% — FAIL
+    → Dexterity training: no progress this session (CON 16, 55% chance).
+
+==============================================================================
+  TRAINING: BRENNIEL
+==============================================================================
+  Constitution: d100=52 vs 55% — SUCCESS
+    → Constitution trained: 15 → 16 (55% chance)
+  Strength: d100=42 vs 55% — SUCCESS
+    → Strength trained: 10 → 11 (55% chance)
+  Initiative: d100=92 vs 45% — FAIL
+    → Initiative training: no progress this session (INT 11, level 3, 45% chance).
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : SHARGAAS SKULLCRUSH  (80.0% HP remaining)
+  Loser  : BRENNIEL  (survived, 13.1% HP)
+  Duration: 5 minute(s)
+==============================================================================

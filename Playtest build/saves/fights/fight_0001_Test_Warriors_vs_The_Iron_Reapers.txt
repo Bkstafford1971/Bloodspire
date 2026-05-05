@@ -1,0 +1,132 @@
+Fight #1
+Test Warriors  vs  The Iron Reapers
+============================================================================
+
+============================================================================
+CLEAVER (0-0-0)   vs   BORAK BONESNAP (0-0-0)
+TEST WARRIORS (TEST MANAGER)   vs   THE IRON REAPERS (STONE FANG)
+Dwarf Male   vs   Goblin Male
+============================================================================
+
+CLEAVER is 3'10"
+CLEAVER weighs 165 lbs.
+CLEAVER Known To The Crowd.
+CLEAVER enters the arena unarmored and wears no helm.
+CLEAVER fights using a BATTLE AXE.
+
+BORAK BONESNAP is 5'5"
+BORAK BONESNAP weighs 155 lbs.
+BORAK BONESNAP Known To The Crowd.
+BORAK BONESNAP enters the arena in CLOTH and will wear a LEATHER CAP.
+BORAK BONESNAP fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+A hush falls over the arena
+BORAK BONESNAP steps threateningly close to the dangerous CLEAVER
+BORAK BONESNAP slashes at CLEAVER's breast with his short sword
+CLEAVER just manages to deflect the blow!
+BORAK BONESNAP directs an attack toward CLEAVER
+BORAK BONESNAP slices at CLEAVER's rib cage with his short sword
+BORAK BONESNAP's short sword cuts into CLEAVER's ribs!
+   The armor does its job admirably
+BORAK BONESNAP drives a blow toward CLEAVER's torso with his short sword
+BORAK BONESNAP's short sword finds CLEAVER's ribs!
+   The blow glances harmlessly off!
+BORAK BONESNAP tries to hit the mighty CLEAVER
+BORAK BONESNAP cuts at CLEAVER's rib cage with his short sword
+CLEAVER has that area well covered!
+CLEAVER directs an attack toward BORAK BONESNAP
+CLEAVER swings at BORAK BONESNAP's midsection with his battle axe
+CLEAVER gets past BORAK BONESNAP's guard!
+CLEAVER's battle axe bites into BORAK BONESNAP's armor!
+   A telling hit!
+*** BORAK BONESNAP's sword arm is badly damaged!!! ***
+BORAK BONESNAP's weapon arm is bleeding!
+BORAK BONESNAP nearly drops his weapon from the pain!!
+A nobleman covers his eyes — then peeks through his fingers
+CLEAVER chops at BORAK BONESNAP's torso with his battle axe
+BORAK BONESNAP's defenses are particularly strong!
+CLEAVER sizes up BORAK BONESNAP carefully
+CLEAVER swings at BORAK BONESNAP's body with his battle axe
+CLEAVER's blow barely grazes BORAK BONESNAP!
+
+MINUTE 2
+CLEAVER is firmly in control of the action.
+
+CLEAVER chops at BORAK BONESNAP's torso with his battle axe
+CLEAVER's battle axe cleaves into BORAK BONESNAP's armor!
+   Barely a scratch!
+CLEAVER directs an attack toward BORAK BONESNAP
+CLEAVER chops at BORAK BONESNAP's body with his battle axe
+The blow connects!
+CLEAVER's battle axe chops into BORAK BONESNAP's torso!
+   A glancing blow!
+BORAK BONESNAP slices at CLEAVER's sternum with his short sword
+BORAK BONESNAP's short sword slices into CLEAVER's chest armor!
+   Barely a scratch!
+CLEAVER sizes up BORAK BONESNAP carefully
+CLEAVER hacks at BORAK BONESNAP's torso with his battle axe
+CLEAVER's battle axe bites into BORAK BONESNAP's torso!
+   The blow does almost nothing
+BORAK BONESNAP tries to hit the mighty CLEAVER
+BORAK BONESNAP drives a blow toward CLEAVER's chest with his short sword
+CLEAVER is paying special attention to not being hit there!
+BORAK BONESNAP drives a blow toward CLEAVER's chest with his short sword
+CLEAVER's plan is not to get hit!
+Whistles and jeers rain down from the stands!
+BORAK BONESNAP hacks at CLEAVER's rib cage with his short sword
+BORAK BONESNAP's short sword slices into CLEAVER's chest armor!
+   The armor does its job admirably
+
+MINUTE 3
+CLEAVER holds firm command of the contest.
+
+CLEAVER sizes up BORAK BONESNAP carefully
+CLEAVER chops at BORAK BONESNAP's torso with his battle axe
+CLEAVER's blow barely grazes BORAK BONESNAP!
+BORAK BONESNAP hacks at CLEAVER's torso with his short sword
+CLEAVER makes a desperate last-moment parry!
+BORAK BONESNAP sizes up CLEAVER carefully
+BORAK BONESNAP hacks at CLEAVER's breast with his short sword
+CLEAVER's plan is not to get hit!
+CLEAVER sizes up BORAK BONESNAP carefully
+CLEAVER chops at BORAK BONESNAP's midsection with his battle axe
+CLEAVER's battle axe bites into BORAK BONESNAP's armor!
+   A minor hit!
+BORAK BONESNAP sizes up CLEAVER carefully
+BORAK BONESNAP drives a blow toward CLEAVER's breast with his short sword
+BORAK BONESNAP barely gets past CLEAVER's defenses!
+BORAK BONESNAP's short sword slices into CLEAVER's ribs!
+   The blow glances harmlessly off!
+The torchbearers scramble to keep up with the action
+CLEAVER hacks at BORAK BONESNAP's midsection with his battle axe
+CLEAVER's blow barely grazes BORAK BONESNAP!
+BORAK BONESNAP sizes up CLEAVER carefully
+BORAK BONESNAP drives a blow toward CLEAVER's sternum with his short sword
+CLEAVER's plan is not to get hit!
+
+MINUTE 4
+CLEAVER remains in control, pressing their advantage.
+
+CLEAVER chops at BORAK BONESNAP's torso with his battle axe
+The battle axe finds its mark!
+CLEAVER's battle axe bites into BORAK BONESNAP's torso!
+   That one hurt badly!
+CLEAVER swings at BORAK BONESNAP's midsection with his battle axe
+CLEAVER gets past BORAK BONESNAP's guard!
+CLEAVER's battle axe punches into BORAK BONESNAP's armor!
+   Barely a scratch!
+BORAK BONESNAP appeals to the Blood Master for mercy!
+Mercy is granted — the fight is over!
+
+CLEAVER is declared the winner!
+
+BORAK BONESNAP has trained in Skill

@@ -1,0 +1,1612 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #4   Turn: 1
+  Debug team: Ilneval
+  Ilneval / DECEPTICONS   vs   Wulfric the Grim / Grim's Reapers
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: SCAVENGER
+  ────────────────────────────────────
+    Race: Tabaxi  |  Gender: Male
+    STR:11  DEX:15  CON:11  INT:15  PRE:9  SIZ:10
+    Max HP: 35   Luck: 20
+    Armor: Cuir Boulli   Helm: Leather Cap
+    Primary: Flail   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:6 / Aim:None / Def:Chest
+
+  ────────────────────────────────────
+  WARRIOR B: GARETH
+  ────────────────────────────────────
+    Race: Human  |  Gender: Male
+    STR:9  DEX:16  CON:18  INT:6  PRE:17  SIZ:5
+    Max HP: 41   Luck: 17
+    Armor: Brigandine   Helm: None
+    Primary: Battle Axe   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:7 / Aim:Head / Def:None
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — SCAVENGER: 6   |   GARETH: 6
+  HP    — SCAVENGER: 35/35 (100%)   |   GARETH: 41/41 (100%)
+  END   — SCAVENGER: 100.0   |   GARETH: 100.0
+  STRAT — SCAVENGER: [Strike / Act:6]   |   GARETH: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[47]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 82
+    GARETH                  : d100[7]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 38
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[2]  dex_bonus[+4]  luck[+20]
+    Subtotal: 26
+    Final ATK: 26
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[2]  luck[+17]  str_bonus[-1]  activity_mod[-4]
+    Subtotal: 14
+    Final DEF: 14
+  Margin: 26 − 14 = 12   ▶  HIT (margin 12)
+  Damage (SCAVENGER → GARETH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.50
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 12/55.0)) = 0.218
+    Raw: max(1, int(9 × 0.218)) = 1
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 1 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (GARETH):
+    Before : 41/41 (100.0%)
+    hit     : −1
+    After  : 40/41 (97.6%)
+  Knockdown Check (GARETH):
+    base = int(1/41 × 80) = 1   cat bonus [Flail]: +10   final: 11%
+    Roll: 18  →  no knockdown
+  Perm Injury Check (GARETH):
+    threshold = 15% of 41 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[69]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 104
+    GARETH                  : d100[32]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 63
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[8]  dex_bonus[+4]  luck[+20]
+    Subtotal: 32
+    Final ATK: 32
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[49]  luck[+17]  str_bonus[-1]  activity_mod[-4]
+    Subtotal: 61
+    Final DEF: 61
+  Margin: 32 − 61 = -29   ▶  PARRY (margin -29)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[93]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 128
+    GARETH                  : d100[6]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 37
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[84]  dex_bonus[+4]  luck[+20]
+    Subtotal: 108
+    Final ATK: 108
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[39]  luck[+17]  str_bonus[-1]  activity_mod[-4]
+    Subtotal: 51
+    Final DEF: 51
+  Margin: 108 − 51 = 57   ▶  HIT (margin 57)
+  Damage (SCAVENGER → GARETH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.50
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 57/55.0)) = 1.000
+    Raw: max(1, int(9 × 1.000)) = 9
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 9 − 4) = 5
+  ▶ FINAL DAMAGE: 5
+  HP Pool (GARETH):
+    Before : 40/41 (97.6%)
+    hit     : −5
+    After  : 35/41 (85.4%)
+  Knockdown Check (GARETH):
+    base = int(5/41 × 80) = 9   cat bonus [Flail]: +10   final: 19%
+    Roll: 53  →  no knockdown
+  Perm Injury Check (GARETH):
+    threshold = 15% of 41 = 6   damage 5 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[91]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 122
+    SCAVENGER               : d100[69]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 104
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[82]  dex_bonus[+5]  luck[+17]
+    Subtotal: 104
+    Final ATK: 104
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[87]  luck[+20]  activity_mod[-2]
+    Subtotal: 105
+    Final DEF: 105
+  Margin: 104 − 105 = -1   ▶  PARRY (margin -1)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[99]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 130
+    SCAVENGER               : d100[3]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 38
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[76]  dex_bonus[+5]  luck[+17]
+    Subtotal: 98
+    Final ATK: 98
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[67]  luck[+20]  activity_mod[-2]
+    Subtotal: 85
+    Final DEF: 85
+  Margin: 98 − 85 = 13   ▶  HIT (margin 13)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 13/55.0)) = 0.236
+    Raw: max(1, int(6 × 0.236)) = 1
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 1 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 35/35 (100.0%)
+    hit     : −1
+    After  : 34/35 (97.1%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/35 × 80) = 2   cat bonus [Axe/Pick]: +0   final: 2%
+    Roll: 89  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[98]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 129
+    SCAVENGER               : d100[82]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 117
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[98]  dex_bonus[+5]  luck[+17]
+    Subtotal: 120
+    Final ATK: 120
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[22]  luck[+20]  activity_mod[-2]
+    Subtotal: 40
+    Final DEF: 40
+  Margin: 120 − 40 = 80   ▶  HIT (margin 80)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 80/55.0)) = 1.000
+    Raw: max(1, int(6 × 1.000)) = 6
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 6 − 4) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (SCAVENGER):
+    Before : 34/35 (97.1%)
+    hit     : −2
+    After  : 32/35 (91.4%)
+  Knockdown Check (SCAVENGER):
+    base = int(2/35 × 80) = 4   cat bonus [Axe/Pick]: +0   final: 4%
+    Roll: 4  →  ▶ KNOCKDOWN
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[95]  on_ground_halved[(÷2)] = 47
+    GARETH                  : d100[12]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 43
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[52]  dex_bonus[+4]  luck[+20]
+    Subtotal: 76
+    Final ATK: 76
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[4]  luck[+17]  str_bonus[-1]  activity_mod[-4]
+    Subtotal: 16
+    Final DEF: 16
+  Margin: 76 − 16 = 60   ▶  HIT (margin 60)
+  Damage (SCAVENGER → GARETH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.50
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 60/55.0)) = 1.000
+    Raw: max(1, int(9 × 1.000)) = 9
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 9 − 4) = 5
+  ▶ FINAL DAMAGE: 5
+  HP Pool (GARETH):
+    Before : 35/41 (85.4%)
+    hit     : −5
+    After  : 30/41 (73.2%)
+  Knockdown Check (GARETH):
+    base = int(5/41 × 80) = 9   cat bonus [Flail]: +10   final: 19%
+    Roll: 38  →  no knockdown
+  Perm Injury Check (GARETH):
+    threshold = 15% of 41 = 6   damage 5 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[48]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 79
+    SCAVENGER               : d100[100]  on_ground_halved[(÷2)] = 50
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[72]  dex_bonus[+5]  luck[+17]
+    Subtotal: 94
+    Final ATK: 94
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[74]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 67
+    Final DEF: 67
+  Margin: 94 − 67 = 27   ▶  HIT (margin 27)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 27/55.0)) = 0.491
+    Raw: max(1, int(6 × 0.491)) = 2
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 32/35 (91.4%)
+    hit     : −1
+    After  : 31/35 (88.6%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/35 × 80) = 2   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[63]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 94
+    SCAVENGER               : d100[73]  on_ground_halved[(÷2)] = 36
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[35]  dex_bonus[+5]  luck[+17]
+    Subtotal: 57
+    Final ATK: 57
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[28]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 21
+    Final DEF: 21
+  Margin: 57 − 21 = 36   ▶  HIT (margin 36)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 36/55.0)) = 0.655
+    Raw: max(1, int(6 × 0.655)) = 3
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 3 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 31/35 (88.6%)
+    hit     : −1
+    After  : 30/35 (85.7%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/35 × 80) = 2   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[40]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 71
+    SCAVENGER               : d100[50]  on_ground_halved[(÷2)] = 25
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[75]  dex_bonus[+5]  luck[+17]
+    Subtotal: 97
+    Final ATK: 97
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[45]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 38
+    Final DEF: 38
+  Margin: 97 − 38 = 59   ▶  HIT (margin 59)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 59/55.0)) = 1.000
+    Raw: max(1, int(6 × 1.000)) = 6
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 6 − 4) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (SCAVENGER):
+    Before : 30/35 (85.7%)
+    hit     : −2
+    After  : 28/35 (80.0%)
+  Knockdown Check (SCAVENGER):
+    base = int(2/35 × 80) = 4   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[6]  dex_bonus[+4]  luck[+20]
+    Subtotal: 30
+    Final ATK: 30
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[98]  luck[+17]  str_bonus[-1]  activity_mod[-4]
+    Subtotal: 110
+    Final DEF: 110
+  Margin: 30 − 110 = -80   ▶  PARRY (margin -80)
+
+  ─── ACTION 12 ───────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[58]  dex_bonus[+4]  luck[+20]
+    Subtotal: 82
+    Final ATK: 82
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[28]  luck[+17]  str_bonus[-1]  activity_mod[-4]
+    Subtotal: 40
+    Final DEF: 40
+  Margin: 82 − 40 = 42   ▶  HIT (margin 42)
+  Damage (SCAVENGER → GARETH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.50
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 42/55.0)) = 0.764
+    Raw: max(1, int(9 × 0.764)) = 6
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 6 − 4) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (GARETH):
+    Before : 30/41 (73.2%)
+    hit     : −2
+    After  : 28/41 (68.3%)
+  Knockdown Check (GARETH):
+    base = int(2/41 × 80) = 3   cat bonus [Flail]: +10   final: 13%
+    Roll: 13  →  ▶ KNOCKDOWN
+  Perm Injury Check (GARETH):
+    threshold = 15% of 41 = 6   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    SCAVENGER: 100.0 END − (2.30 burn × 6 actions) = 86.2
+    GARETH: 100.0 END − (2.60 burn × 6 actions) = 84.4
+    HP POOL — SCAVENGER: 28/35 (80%)
+    HP POOL — GARETH: 28/41 (68%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — SCAVENGER: 3   |   GARETH: 6
+  HP    — SCAVENGER: 28/35 (80%)   |   GARETH: 28/41 (68%)
+  END   — SCAVENGER: 86.2   |   GARETH: 84.4
+  STRAT — SCAVENGER: [Strike / Act:6]   |   GARETH: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[67]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 98
+    SCAVENGER               : d100[21]  on_ground_halved[(÷2)] = 10
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[71]  dex_bonus[+5]  luck[+17]
+    Subtotal: 93
+    Final ATK: 93
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[45]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 38
+    Final DEF: 38
+  Margin: 93 − 38 = 55   ▶  HIT (margin 55)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 55/55.0)) = 1.000
+    Raw: max(1, int(6 × 1.000)) = 6
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 6 − 4) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (SCAVENGER):
+    Before : 28/35 (80.0%)
+    hit     : −2
+    After  : 26/35 (74.3%)
+  Knockdown Check (SCAVENGER):
+    base = int(2/35 × 80) = 4   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[72]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 103
+    SCAVENGER               : d100[82]  on_ground_halved[(÷2)] = 41
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[15]  dex_bonus[+5]  luck[+17]
+    Subtotal: 37
+    Final ATK: 37
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[80]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 73
+    Final DEF: 73
+  Margin: 37 − 73 = -36   ▶  PARRY (margin -36)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[9]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 40
+    SCAVENGER               : d100[22]  on_ground_halved[(÷2)] = 11
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[80]  dex_bonus[+5]  luck[+17]
+    Subtotal: 102
+    Final ATK: 102
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[67]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 60
+    Final DEF: 60
+  Margin: 102 − 60 = 42   ▶  HIT (margin 42)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 42/55.0)) = 0.764
+    Raw: max(1, int(6 × 0.764)) = 4
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 4 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 26/35 (74.3%)
+    hit     : −1
+    After  : 25/35 (71.4%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/35 × 80) = 2   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[88]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 119
+    SCAVENGER               : d100[64]  on_ground_halved[(÷2)] = 32
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[81]  dex_bonus[+5]  luck[+17]
+    Subtotal: 103
+    Final ATK: 103
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[14]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 7
+    Final DEF: 7
+  Margin: 103 − 7 = 96   ▶  HIT (margin 96)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 96/55.0)) = 1.000
+    Raw: max(1, int(6 × 1.000)) = 6
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 6 − 4) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (SCAVENGER):
+    Before : 25/35 (71.4%)
+    hit     : −2
+    After  : 23/35 (65.7%)
+  Knockdown Check (SCAVENGER):
+    base = int(2/35 × 80) = 4   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[46]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 77
+    SCAVENGER               : d100[40]  on_ground_halved[(÷2)] = 20
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[100]  dex_bonus[+5]  luck[+17]
+    Subtotal: 122
+    Final ATK: 122
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[21]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 14
+    Final DEF: 14
+  Margin: 122 − 14 = 108   ▶  HIT (margin 108)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 108/55.0)) = 1.000
+    Raw: max(1, int(6 × 1.000)) = 6
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 6 − 4) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (SCAVENGER):
+    Before : 23/35 (65.7%)
+    hit     : −2
+    After  : 21/35 (60.0%)
+  Knockdown Check (SCAVENGER):
+    base = int(2/35 × 80) = 4   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[64]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 95
+    SCAVENGER               : d100[44]  on_ground_halved[(÷2)] = 22
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[60]  dex_bonus[+5]  luck[+17]
+    Subtotal: 82
+    Final ATK: 82
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[56]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 49
+    Final DEF: 49
+  Margin: 82 − 49 = 33   ▶  HIT (margin 33)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 33/55.0)) = 0.600
+    Raw: max(1, int(6 × 0.600)) = 3
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 3 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 21/35 (60.0%)
+    hit     : −1
+    After  : 20/35 (57.1%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/35 × 80) = 2   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[59]  dex_bonus[+4]  luck[+20]
+    Subtotal: 83
+    Final ATK: 83
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[18]  luck[+17]  str_bonus[-1]  activity_mod[-4]
+    Subtotal: 30
+    Final DEF: 30
+  Margin: 83 − 30 = 53   ▶  HIT (margin 53)
+  Damage (SCAVENGER → GARETH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.50
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 53/55.0)) = 0.964
+    Raw: max(1, int(9 × 0.964)) = 8
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 8 − 4) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (GARETH):
+    Before : 28/41 (68.3%)
+    hit     : −4
+    After  : 24/41 (58.5%)
+  Knockdown Check (GARETH):
+    base = int(4/41 × 80) = 7   cat bonus [Flail]: +10   final: 17%
+    Roll: 95  →  no knockdown
+  Perm Injury Check (GARETH):
+    threshold = 15% of 41 = 6   damage 4 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[39]  dex_bonus[+4]  luck[+20]
+    Subtotal: 63
+    Final ATK: 63
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[21]  luck[+17]  str_bonus[-1]  activity_mod[-4]
+    Subtotal: 33
+    Final DEF: 33
+  Margin: 63 − 33 = 30   ▶  HIT (margin 30)
+  Damage (SCAVENGER → GARETH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.50
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 30/55.0)) = 0.545
+    Raw: max(1, int(9 × 0.545)) = 4
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 4 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (GARETH):
+    Before : 24/41 (58.5%)
+    hit     : −1
+    After  : 23/41 (56.1%)
+  Knockdown Check (GARETH):
+    base = int(1/41 × 80) = 1   cat bonus [Flail]: +10   final: 11%
+    Roll: 82  →  no knockdown
+  Perm Injury Check (GARETH):
+    threshold = 15% of 41 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[22]  dex_bonus[+4]  luck[+20]
+    Subtotal: 46
+    Final ATK: 46
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[38]  luck[+17]  str_bonus[-1]  activity_mod[-4]
+    Subtotal: 50
+    Final DEF: 50
+  Margin: 46 − 50 = -4   ▶  PARRY (margin -4)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 86.2 END − (2.30 burn × 3 actions) = 79.3
+    GARETH: 84.4 END − (2.60 burn × 6 actions) = 68.8
+    HP POOL — SCAVENGER: 20/35 (57%)
+    HP POOL — GARETH: 23/41 (56%)
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — SCAVENGER: 3   |   GARETH: 6
+  HP    — SCAVENGER: 20/35 (57%)   |   GARETH: 23/41 (56%)
+  END   — SCAVENGER: 79.3   |   GARETH: 68.8
+  STRAT — SCAVENGER: [Strike / Act:6]   |   GARETH: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[28]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 59
+    SCAVENGER               : d100[74]  on_ground_halved[(÷2)] = 37
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[21]  dex_bonus[+5]  luck[+17]
+    Subtotal: 43
+    Final ATK: 43
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[1]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 1
+    Final DEF: 1
+  Margin: 43 − 1 = 42   ▶  HIT (margin 42)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 42/55.0)) = 0.764
+    Raw: max(1, int(6 × 0.764)) = 4
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 4 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 20/35 (57.1%)
+    hit     : −1
+    After  : 19/35 (54.3%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/35 × 80) = 2   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[62]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 93
+    SCAVENGER               : d100[98]  on_ground_halved[(÷2)] = 49
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[18]  dex_bonus[+5]  luck[+17]
+    Subtotal: 40
+    Final ATK: 40
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[13]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 6
+    Final DEF: 6
+  Margin: 40 − 6 = 34   ▶  HIT (margin 34)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 34/55.0)) = 0.618
+    Raw: max(1, int(6 × 0.618)) = 3
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 3 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 19/35 (54.3%)
+    hit     : −1
+    After  : 18/35 (51.4%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/35 × 80) = 2   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[88]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 119
+    SCAVENGER               : d100[74]  on_ground_halved[(÷2)] = 37
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[16]  dex_bonus[+5]  luck[+17]
+    Subtotal: 38
+    Final ATK: 38
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[97]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 90
+    Final DEF: 90
+  Margin: 38 − 90 = -52   ▶  PARRY (margin -52)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[50]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 81
+    SCAVENGER               : d100[9]  on_ground_halved[(÷2)] = 4
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[85]  dex_bonus[+5]  luck[+17]
+    Subtotal: 107
+    Final ATK: 107
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[53]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 46
+    Final DEF: 46
+  Margin: 107 − 46 = 61   ▶  HIT (margin 61)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 61/55.0)) = 1.000
+    Raw: max(1, int(6 × 1.000)) = 6
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 6 − 4) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (SCAVENGER):
+    Before : 18/35 (51.4%)
+    hit     : −2
+    After  : 16/35 (45.7%)
+  Knockdown Check (SCAVENGER):
+    base = int(2/35 × 80) = 4   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[15]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 46
+    SCAVENGER               : d100[43]  on_ground_halved[(÷2)] = 21
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[8]  dex_bonus[+5]  luck[+17]
+    Subtotal: 30
+    Final ATK: 30
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[25]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 18
+    Final DEF: 18
+  Margin: 30 − 18 = 12   ▶  HIT (margin 12)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 12/55.0)) = 0.218
+    Raw: max(1, int(6 × 0.218)) = 1
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 1 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 16/35 (45.7%)
+    hit     : −1
+    After  : 15/35 (42.9%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/35 × 80) = 2   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[59]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 90
+    SCAVENGER               : d100[11]  on_ground_halved[(÷2)] = 5
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[4]  dex_bonus[+5]  luck[+17]
+    Subtotal: 26
+    Final ATK: 26
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[11]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 4
+    Final DEF: 4
+  Margin: 26 − 4 = 22   ▶  HIT (margin 22)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 22/55.0)) = 0.400
+    Raw: max(1, int(6 × 0.400)) = 2
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 15/35 (42.9%)
+    hit     : −1
+    After  : 14/35 (40.0%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/35 × 80) = 2   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[68]  dex_bonus[+4]  luck[+20]
+    Subtotal: 92
+    Final ATK: 92
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[89]  luck[+17]  str_bonus[-1]  activity_mod[-4]
+    Subtotal: 101
+    Final DEF: 101
+  Margin: 92 − 101 = -9   ▶  PARRY (margin -9)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[92]  dex_bonus[+4]  luck[+20]
+    Subtotal: 116
+    Final ATK: 116
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[94]  luck[+17]  str_bonus[-1]  activity_mod[-4]
+    Subtotal: 106
+    Final DEF: 106
+  Margin: 116 − 106 = 10   ▶  HIT (margin 10)
+  Damage (SCAVENGER → GARETH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.50
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 10/55.0)) = 0.182
+    Raw: max(1, int(9 × 0.182)) = 1
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 1 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (GARETH):
+    Before : 23/41 (56.1%)
+    hit     : −1
+    After  : 22/41 (53.7%)
+  Knockdown Check (GARETH):
+    base = int(1/41 × 80) = 1   cat bonus [Flail]: +10   final: 11%
+    Roll: 79  →  no knockdown
+  Perm Injury Check (GARETH):
+    threshold = 15% of 41 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[73]  dex_bonus[+4]  luck[+20]
+    Subtotal: 97
+    Final ATK: 97
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[3]  luck[+17]  str_bonus[-1]  activity_mod[-4]
+    Subtotal: 15
+    Final DEF: 15
+  Margin: 97 − 15 = 82   ▶  HIT (margin 82)
+  Damage (SCAVENGER → GARETH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.50
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 82/55.0)) = 1.000
+    Raw: max(1, int(9 × 1.000)) = 9
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 9 − 4) = 5
+  ▶ FINAL DAMAGE: 5
+  HP Pool (GARETH):
+    Before : 22/41 (53.7%)
+    hit     : −5
+    After  : 17/41 (41.5%)
+  Knockdown Check (GARETH):
+    base = int(5/41 × 80) = 9   cat bonus [Flail]: +10   final: 19%
+    Roll: 31  →  no knockdown
+  Perm Injury Check (GARETH):
+    threshold = 15% of 41 = 6   damage 5 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    SCAVENGER: 79.3 END − (2.30 burn × 3 actions) = 72.4
+    GARETH: 68.8 END − (2.60 burn × 6 actions) = 53.2
+    HP POOL — SCAVENGER: 14/35 (40%)
+    HP POOL — GARETH: 17/41 (41%)
+
+==============================================================================
+  MINUTE 4
+==============================================================================
+  APM   — SCAVENGER: 3   |   GARETH: 6
+  HP    — SCAVENGER: 14/35 (40%)   |   GARETH: 17/41 (41%)
+  END   — SCAVENGER: 72.4   |   GARETH: 53.2
+  STRAT — SCAVENGER: [Strike / Act:6]   |   GARETH: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[55]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 86
+    SCAVENGER               : d100[18]  on_ground_halved[(÷2)] = 9
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[85]  dex_bonus[+5]  luck[+17]
+    Subtotal: 107
+    Final ATK: 107
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[81]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 74
+    Final DEF: 74
+  Margin: 107 − 74 = 33   ▶  HIT (margin 33)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 33/55.0)) = 0.600
+    Raw: max(1, int(6 × 0.600)) = 3
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 3 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 14/35 (40.0%)
+    hit     : −1
+    After  : 13/35 (37.1%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/35 × 80) = 2   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[77]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 108
+    SCAVENGER               : d100[39]  on_ground_halved[(÷2)] = 19
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[15]  dex_bonus[+5]  luck[+17]
+    Subtotal: 37
+    Final ATK: 37
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[51]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 44
+    Final DEF: 44
+  Margin: 37 − 44 = -7   ▶  PARRY (margin -7)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[12]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 43
+    SCAVENGER               : d100[56]  on_ground_halved[(÷2)] = 28
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[18]  dex_bonus[+5]  luck[+17]
+    Subtotal: 40
+    Final ATK: 40
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[8]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 1
+    Final DEF: 1
+  Margin: 40 − 1 = 39   ▶  HIT (margin 39)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 39/55.0)) = 0.709
+    Raw: max(1, int(6 × 0.709)) = 4
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 4 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 13/35 (37.1%)
+    hit     : −1
+    After  : 12/35 (34.3%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/35 × 80) = 2   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[77]  on_ground_halved[(÷2)] = 38
+    GARETH                  : d100[2]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 33
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[84]  dex_bonus[+4]  luck[+20]
+    Subtotal: 108
+    Final ATK: 108
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[39]  luck[+17]  str_bonus[-1]  activity_mod[-4]
+    Subtotal: 51
+    Final DEF: 51
+  Margin: 108 − 51 = 57   ▶  HIT (margin 57)
+  Damage (SCAVENGER → GARETH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.50
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 57/55.0)) = 1.000
+    Raw: max(1, int(9 × 1.000)) = 9
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 9 − 4) = 5
+  ▶ FINAL DAMAGE: 5
+  HP Pool (GARETH):
+    Before : 17/41 (41.5%)
+    hit     : −5
+    After  : 12/41 (29.3%)
+  Knockdown Check (GARETH):
+    base = int(5/41 × 80) = 9   cat bonus [Flail]: +10   final: 19%
+    Roll: 39  →  no knockdown
+  Perm Injury Check (GARETH):
+    threshold = 15% of 41 = 6   damage 5 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[85]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 116
+    SCAVENGER               : d100[13]  on_ground_halved[(÷2)] = 6
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[9]  dex_bonus[+5]  luck[+17]
+    Subtotal: 31
+    Final ATK: 31
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[38]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 31
+    Final DEF: 31
+  Margin: 31 − 31 = 0   ▶  MISS
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[90]  on_ground_halved[(÷2)] = 45
+    GARETH                  : d100[13]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 44
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[29]  dex_bonus[+4]  luck[+20]
+    Subtotal: 53
+    Final ATK: 53
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[72]  luck[+17]  str_bonus[-1]  activity_mod[-4]
+    Subtotal: 84
+    Final DEF: 84
+  Margin: 53 − 84 = -31   ▶  PARRY (margin -31)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[20]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 51
+    SCAVENGER               : d100[8]  on_ground_halved[(÷2)] = 4
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[29]  dex_bonus[+5]  luck[+17]
+    Subtotal: 51
+    Final ATK: 51
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[62]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 55
+    Final DEF: 55
+  Margin: 51 − 55 = -4   ▶  PARRY (margin -4)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[53]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 84
+    SCAVENGER               : d100[30]  on_ground_halved[(÷2)] = 15
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[56]  dex_bonus[+5]  luck[+17]
+    Subtotal: 78
+    Final ATK: 78
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[54]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 47
+    Final DEF: 47
+  Margin: 78 − 47 = 31   ▶  HIT (margin 31)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 31/55.0)) = 0.564
+    Raw: max(1, int(6 × 0.564)) = 3
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 3 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 12/35 (34.3%)
+    hit     : −1
+    After  : 11/35 (31.4%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/35 × 80) = 2   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[3]  dex_bonus[+4]  luck[+20]
+    Subtotal: 27
+    Final ATK: 27
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[96]  luck[+17]  str_bonus[-1]  activity_mod[-4]
+    Subtotal: 108
+    Final DEF: 108
+  Margin: 27 − 108 = -81   ▶  PARRY (margin -81)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 72.4 END − (2.30 burn × 3 actions) = 65.5
+    GARETH: 53.2 END − (2.60 burn × 6 actions) = 37.6
+    HP POOL — SCAVENGER: 11/35 (31%)
+    HP POOL — GARETH: 12/41 (29%)
+
+==============================================================================
+  MINUTE 5
+==============================================================================
+  APM   — SCAVENGER: 3   |   GARETH: 6
+  HP    — SCAVENGER: 11/35 (31%)   |   GARETH: 12/41 (29%)
+  END   — SCAVENGER: 65.5   |   GARETH: 37.6
+  STRAT — SCAVENGER: [Strike / Act:6]   |   GARETH: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[99]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 130
+    SCAVENGER               : d100[90]  on_ground_halved[(÷2)] = 45
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[65]  dex_bonus[+5]  luck[+17]
+    Subtotal: 87
+    Final ATK: 87
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[6]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 1
+    Final DEF: 1
+  Margin: 87 − 1 = 86   ▶  HIT (margin 86)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 86/55.0)) = 1.000
+    Raw: max(1, int(6 × 1.000)) = 6
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 6 − 4) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (SCAVENGER):
+    Before : 11/35 (31.4%)
+    hit     : −2
+    After  : 9/35 (25.7%)
+  Knockdown Check (SCAVENGER):
+    base = int(2/35 × 80) = 4   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[42]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 73
+    SCAVENGER               : d100[92]  on_ground_halved[(÷2)] = 46
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[7]  dex_bonus[+5]  luck[+17]
+    Subtotal: 29
+    Final ATK: 29
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[87]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 29 − 80 = -51   ▶  PARRY (margin -51)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[18]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 49
+    SCAVENGER               : d100[20]  on_ground_halved[(÷2)] = 10
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[73]  dex_bonus[+5]  luck[+17]
+    Subtotal: 95
+    Final ATK: 95
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[87]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 95 − 80 = 15   ▶  HIT (margin 15)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 15/55.0)) = 0.273
+    Raw: max(1, int(6 × 0.273)) = 1
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 1 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 9/35 (25.7%)
+    hit     : −1
+    After  : 8/35 (22.9%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/35 × 80) = 2   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+  Concede Attempt (SCAVENGER):
+    d100[16] + PRE_bonus[-1] + luck//2[10] = 25
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    25 < 65  →  mercy denied — fight continues
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[48]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 79
+    SCAVENGER               : d100[22]  on_ground_halved[(÷2)] = 11
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[19]  dex_bonus[+5]  luck[+17]
+    Subtotal: 41
+    Final ATK: 41
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[54]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 47
+    Final DEF: 47
+  Margin: 41 − 47 = -6   ▶  PARRY (margin -6)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[26]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 57
+    SCAVENGER               : d100[36]  on_ground_halved[(÷2)] = 18
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[37]  dex_bonus[+5]  luck[+17]
+    Subtotal: 59
+    Final ATK: 59
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[59]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 52
+    Final DEF: 52
+  Margin: 59 − 52 = 7   ▶  GRAZE (margin 7, 1 HP)
+  HP Pool (SCAVENGER):
+    Before : 8/35 (22.9%)
+    graze   : −1
+    After  : 7/35 (20.0%)
+  Concede Attempt (SCAVENGER):
+    d100[27] + PRE_bonus[-1] + luck//2[10] = 36
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    36 < 65  →  mercy denied — fight continues
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[72]  dex_bonus[+10]  luck[+17]  activity_mod[+4] = 103
+    SCAVENGER               : d100[67]  on_ground_halved[(÷2)] = 33
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[46]  dex_bonus[+5]  luck[+17]
+    Subtotal: 68
+    Final ATK: 68
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[88]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 81
+    Final DEF: 81
+  Margin: 68 − 81 = -13   ▶  PARRY (margin -13)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[43]  dex_bonus[+4]  luck[+20]
+    Subtotal: 67
+    Final ATK: 67
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[12]  luck[+17]  str_bonus[-1]  activity_mod[-4]
+    Subtotal: 24
+    Final DEF: 24
+  Margin: 67 − 24 = 43   ▶  HIT (margin 43)
+  Damage (SCAVENGER → GARETH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.50
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 43/55.0)) = 0.782
+    Raw: max(1, int(9 × 0.782)) = 7
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 7 − 4) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (GARETH):
+    Before : 12/41 (29.3%)
+    hit     : −3
+    After  : 9/41 (22.0%)
+  Knockdown Check (GARETH):
+    base = int(3/41 × 80) = 5   cat bonus [Flail]: +10   final: 15%
+    Roll: 3  →  ▶ KNOCKDOWN
+  Perm Injury Check (GARETH):
+    threshold = 15% of 41 = 6   damage 3 < threshold
+    → Below threshold — no injury possible
+  Concede Attempt (GARETH):
+    d100[5] + PRE_bonus[+7] + luck//2[8] = 20
+    threshold = max(40, 68 − (PRE // 3)) = 63
+    20 < 63  →  mercy denied — fight continues
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[10]  dex_bonus[+4]  luck[+20]
+    Subtotal: 34
+    Final ATK: 34
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[79]  luck[+17]  str_bonus[-1]  activity_mod[-4]  ground_pen[-25]
+    Subtotal: 66
+    Final DEF: 66
+  Margin: 34 − 66 = -32   ▶  PARRY (margin -32)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → GARETH   Weapon: Flail   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[79]  dex_bonus[+4]  luck[+20]
+    Subtotal: 103
+    Final ATK: 103
+  Defense Roll (GARETH, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[85]  luck[+17]  str_bonus[-1]  activity_mod[-4]  ground_pen[-25]
+    Subtotal: 72
+    Final DEF: 72
+  Margin: 103 − 72 = 31   ▶  HIT (margin 31)
+  Damage (SCAVENGER → GARETH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.50
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 31/55.0)) = 0.564
+    Raw: max(1, int(9 × 0.564)) = 5
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 5 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (GARETH):
+    Before : 9/41 (22.0%)
+    hit     : −1
+    After  : 8/41 (19.5%)
+  Knockdown Check (GARETH):
+    base = int(1/41 × 80) = 1   cat bonus [Flail]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (GARETH):
+    threshold = 15% of 41 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+  Concede Attempt (GARETH):
+    d100[9] + PRE_bonus[+7] + luck//2[8] = 24
+    threshold = max(40, 68 − (PRE // 3)) = 63
+    24 < 63  →  mercy denied — fight continues
+
+  ── END OF MINUTE ──
+    SCAVENGER: 65.5 END − (2.30 burn × 3 actions) = 58.6
+    GARETH: 37.6 END − (2.60 burn × 6 actions) = 22.0
+    HP POOL — SCAVENGER: 7/35 (20%)
+    HP POOL — GARETH: 8/41 (20%)
+
+==============================================================================
+  MINUTE 6
+==============================================================================
+  APM   — SCAVENGER: 3   |   GARETH: 3
+  HP    — SCAVENGER: 7/35 (20%)   |   GARETH: 8/41 (20%)
+  END   — SCAVENGER: 58.6   |   GARETH: 22.0
+  STRAT — SCAVENGER: [Strike / Act:6]   |   GARETH: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARETH                  : d100[97]  on_ground_halved[(÷2)] = 48
+    SCAVENGER               : d100[82]  on_ground_halved[(÷2)] = 41
+    ▶ GARETH wins → ATTACKS
+  Attack: GARETH → SCAVENGER   Weapon: Battle Axe   Style: Strike   Aim: Head
+  Attack Roll (GARETH):
+    d100[70]  dex_bonus[+5]  luck[+17]  end_pen[-3]
+    Subtotal: 89
+    Final ATK: 89
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[8]  luck[+20]  activity_mod[-2]  ground_pen[-25]
+    Subtotal: 1
+    Final DEF: 1
+  Margin: 89 − 1 = 88   ▶  HIT (margin 88)
+  Damage (GARETH → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      activity contrib             -0.60
+      luck ×0.15                   +2.55
+      strength underweight pen     ×0.50 (50% penalty)
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 88/55.0)) = 1.000
+    Raw: max(1, int(6 × 1.000)) = 6
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 6 − 4) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (SCAVENGER):
+    Before : 7/35 (20.0%)
+    hit     : −2
+    After  : 5/35 (14.3%)
+  Knockdown Check (SCAVENGER):
+    base = int(2/35 × 80) = 4   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 35 = 5   damage 2 < threshold
+    → Below threshold — no injury possible
+  Concede Attempt (SCAVENGER):
+    d100[61] + PRE_bonus[-1] + luck//2[10] = 70
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    70 ≥ 65  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: SCAVENGER
+==============================================================================
+  Constitution: d100=45 vs 45% — SUCCESS
+    → Constitution trained: 11 → 12 (45% chance)
+  Constitution: d100=40 vs 45% — SUCCESS
+    → Constitution trained: 12 → 13 (45% chance)
+  Constitution: d100=11 vs 45% — SUCCESS
+    → Constitution trained: 13 → 14 (45% chance)
+  INT observed learning: d100=99 vs 4% — no trigger
+
+==============================================================================
+  TRAINING: GARETH
+==============================================================================
+  Strength: d100=14 vs 62% — SUCCESS
+    → Strength trained: 9 → 10 (62% chance)
+  Constitution: d100=86 vs 62% — FAIL
+    → Constitution training: no progress this session (CON 18, 62% chance).
+  Initiative: d100=49 vs 35% — FAIL
+    → Initiative training: no progress this session (INT 6, level 0, 35% chance).
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : GARETH  (19.5% HP remaining)
+  Loser  : SCAVENGER  (survived, 14.3% HP)
+  Duration: 6 minute(s)
+==============================================================================

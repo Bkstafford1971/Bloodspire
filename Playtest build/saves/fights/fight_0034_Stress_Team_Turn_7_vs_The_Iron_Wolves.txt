@@ -1,0 +1,104 @@
+Fight #34
+Stress Team Turn 7  vs  The Iron Wolves
+============================================================================
+
+============================================================================
+CLEAVER_1 (1-1-0)   vs   DROK THE GRIM (2-0-2)
+STRESS TEAM TURN 7 (STRESS TESTER)   vs   THE IRON WOLVES (SILENT CLAW)
+Dwarf Male   vs   Dwarf Female
+============================================================================
+
+CLEAVER_1 is 4'2"
+CLEAVER_1 weighs 195 lbs.
+CLEAVER_1 Popular With The Kids.
+CLEAVER_1 enters the arena unarmored and wears no helm.
+CLEAVER_1 fights using a BATTLE AXE.
+
+DROK THE GRIM is 3'9"
+DROK THE GRIM weighs 145 lbs.
+DROK THE GRIM Known To The Crowd.
+DROK THE GRIM enters the arena in LEATHER and will wear a STEEL CAP.
+DROK THE GRIM fights using a BOAR SPEAR with an off-hand BUCKLER.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+Thunder rumbles ominously in the distance
+CLEAVER_1 hacks at DROK THE GRIM's midsection with his battle axe
+DROK THE GRIM turns the blow aside with skill!
+The powerful Cleave strike cleaves through the parry! DROK THE GRIM takes 9 damage!
+CLEAVER_1 chops at DROK THE GRIM's body with his battle axe
+CLEAVER_1's blow barely grazes DROK THE GRIM!
+DROK THE GRIM retaliates against CLEAVER_1's head with her boar spear
+CLEAVER_1 just manages to deflect the blow!
+DROK THE GRIM waits patiently for CLEAVER_1 to make a mistake
+DROK THE GRIM lunges at CLEAVER_1's skull with her boar spear
+DROK THE GRIM's boar spear punches into CLEAVER_1's temple!
+   Barely a scratch!
+CLEAVER_1 swings at DROK THE GRIM's body with his battle axe
+DROK THE GRIM barely gets the parry off!
+DROK THE GRIM holds ground, watching CLEAVER_1 like a hawk
+DROK THE GRIM jabs at CLEAVER_1's throat with her boar spear
+DROK THE GRIM barely gets past CLEAVER_1's defenses!
+DROK THE GRIM's boar spear punches into CLEAVER_1's skull!
+   A solid blow has been struck!
+DROK THE GRIM holds ground, watching CLEAVER_1 like a hawk
+DROK THE GRIM lunges at CLEAVER_1's skull with her boar spear
+The boar spear finds its mark!
+DROK THE GRIM's boar spear drives into CLEAVER_1's skull!
+   The armor absorbs most of it
+
+MINUTE 2
+The balance holds; neither fighter has found the breakthrough they need.
+
+CLEAVER_1 sizes up DROK THE GRIM carefully
+CLEAVER_1 hacks at DROK THE GRIM's body with his battle axe
+DROK THE GRIM barely gets the parry off!
+CLEAVER_1 hacks at DROK THE GRIM's body with his battle axe
+DROK THE GRIM makes a desperate last-moment parry!
+DROK THE GRIM lunges at CLEAVER_1's face with her boar spear
+DROK THE GRIM's boar spear punches into CLEAVER_1's headgear!
+   Some damage is done
+CLEAVER_1 cleaves at DROK THE GRIM's midsection with his battle axe
+DROK THE GRIM turns the blow aside with skill!
+DROK THE GRIM seizes the opening and launches a counter-attack!
+DROK THE GRIM barely gets past CLEAVER_1's defenses!
+DROK THE GRIM's boar spear buries itself in CLEAVER_1's headgear!
+   A glancing blow!
+A drunk yells, 'Which one is the Dwarf?' — looking at the right one
+DROK THE GRIM thrusts at CLEAVER_1's face with her boar spear
+DROK THE GRIM's boar spear buries itself in CLEAVER_1's helm!
+   A glancing blow!
+DROK THE GRIM anxiously awaits CLEAVER_1's next move
+DROK THE GRIM thrusts at CLEAVER_1's face with her boar spear
+DROK THE GRIM's boar spear punches into CLEAVER_1's temple!
+   A minor hit!
+CLEAVER_1 plummets downward with great speed!!
+DROK THE GRIM drives a blow toward CLEAVER_1's skull with her boar spear
+DROK THE GRIM's boar spear buries itself in CLEAVER_1's skull!
+   The blow lands without full force
+CLEAVER_1 calls out for quarter!
+The crowd screams for blood — mercy is denied!
+
+MINUTE 3
+It's becoming evident that DROK THE GRIM has the upper hand.
+
+ * DROK THE GRIM switches to strategy 1
+DROK THE GRIM retaliates against CLEAVER_1's throat with her boar spear
+CLEAVER_1 just manages to deflect the blow!
+DROK THE GRIM fires back at CLEAVER_1's skull with her boar spear
+DROK THE GRIM finds the opening!
+DROK THE GRIM's boar spear drives into CLEAVER_1's skull!
+   The blow has real authority behind it!
+CLEAVER_1 appeals to the Blood Master for mercy!
+The ref saves the pitiable CLEAVER_1!
+
+The Blood Master raises DROK THE GRIM's arm in victory!
+
+DROK THE GRIM has trained in Skill and Skill

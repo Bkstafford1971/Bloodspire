@@ -1,0 +1,70 @@
+Fight #24
+Stress Team Turn 4  vs  The Iron Stalkers
+============================================================================
+
+============================================================================
+BASHER_2 (1-0-0)   vs   BRAN SEVENFINGER (2-1-1)
+STRESS TEAM TURN 4 (STRESS TESTER)   vs   THE IRON STALKERS (DARK FIST)
+Dwarf Female   vs   Half-Orc Female
+============================================================================
+
+BASHER_2 is 3'10"
+BASHER_2 weighs 151 lbs.
+BASHER_2 Popular With The Kids.
+BASHER_2 enters the arena unarmored and wears no helm.
+BASHER_2 fights using a MORNINGSTAR.
+
+BRAN SEVENFINGER is 5'9"
+BRAN SEVENFINGER weighs 216 lbs.
+BRAN SEVENFINGER Known To The Crowd.
+BRAN SEVENFINGER enters the arena in CLOTH and will wear a LEATHER CAP.
+BRAN SEVENFINGER fights using a WAR FLAIL.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+Thunder rumbles ominously in the distance
+BASHER_2 smashes at BRAN SEVENFINGER's midsection with her morningstar
+The morningstar finds its mark!
+BASHER_2's morningstar smashes into BRAN SEVENFINGER's torso!
+   A powerful hit draws screams from the crowd!
+BRAN SEVENFINGER flails at BASHER_2's breast with her war flail
+BRAN SEVENFINGER's war flail whips into BASHER_2's torso!
+   A minor hit!
+BASHER_2 sizes up BRAN SEVENFINGER carefully
+BASHER_2 bludgeons BRAN SEVENFINGER's midsection with her morningstar
+BRAN SEVENFINGER just manages to deflect the blow!
+BRAN SEVENFINGER tries to demolish BASHER_2's breast with her war flail
+The war flail finds its mark!
+BRAN SEVENFINGER's war flail whips into BASHER_2's torso!
+   The blow lands with bone-breaking force!
+BASHER_2 is knocked off her feet!
+*** BASHER_2's chest is grievously wounded!!! ***
+BASHER_2's chest wound bleeds freely!
+BASHER_2 gasps for air, ribs grinding painfully!!
+BRAN SEVENFINGER hacks away at BASHER_2's breast with her war flail
+BRAN SEVENFINGER finds the opening!
+BRAN SEVENFINGER's war flail whips into BASHER_2's ribs!
+   A powerful hit draws screams from the crowd!
+BRAN SEVENFINGER charges forward in a wild frenzy
+BRAN SEVENFINGER hacks away at BASHER_2's chest with her war flail
+BASHER_2 barely gets the parry off!
+BASHER_2 bludgeons BRAN SEVENFINGER's body with her morningstar
+BASHER_2's morningstar slams into BRAN SEVENFINGER's armor!
+   That one hurt badly!
+BRAN SEVENFINGER hurls herself forward with reckless abandon
+BRAN SEVENFINGER lashes out at BASHER_2's breast with her war flail
+BRAN SEVENFINGER's war flail wraps around and cracks into BASHER_2's ribs!
+   A minor hit!
+BASHER_2 raises a hand in surrender!
+The crowd screams for blood, but the ref steps in!
+
+BRAN SEVENFINGER is declared the winner!
+
+BRAN SEVENFINGER has trained in Skill

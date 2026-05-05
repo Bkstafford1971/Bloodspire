@@ -1,0 +1,147 @@
+Fight #12
+Stress Team Turn 2  vs  The Grim Shields
+============================================================================
+
+============================================================================
+ACROBAT_1 (0-0-0)   vs   FEN THE CRUSHER (0-0-0)
+STRESS TEAM TURN 2 (STRESS TESTER)   vs   THE GRIM SHIELDS (GRIM EYE)
+Elf Male   vs   Tabaxi Female
+============================================================================
+
+ACROBAT_1 is 5'0"
+ACROBAT_1 weighs 121 lbs.
+ACROBAT_1 Known To The Crowd.
+ACROBAT_1 enters the arena unarmored and wears no helm.
+ACROBAT_1 fights using a SHORT SWORD.
+
+FEN THE CRUSHER is 5'3"
+FEN THE CRUSHER weighs 134 lbs.
+FEN THE CRUSHER Known To The Crowd.
+FEN THE CRUSHER enters the arena in LEATHER and will wear a STEEL CAP.
+FEN THE CRUSHER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The smell of blood and sawdust fills the air
+ACROBAT_1 slices at FEN THE CRUSHER's torso with his short sword
+ACROBAT_1's short sword slices into FEN THE CRUSHER's body!
+   The blow glances harmlessly off!
+ACROBAT_1 slices at FEN THE CRUSHER's body with his short sword
+ACROBAT_1 gets past FEN THE CRUSHER's guard!
+ACROBAT_1's short sword bites into FEN THE CRUSHER's torso!
+   The blow does almost nothing
+ACROBAT_1 sizes up FEN THE CRUSHER carefully
+ACROBAT_1 slashes at FEN THE CRUSHER's midsection with his short sword
+ACROBAT_1's accuracy is rewarded!
+ACROBAT_1's short sword finds FEN THE CRUSHER's torso!
+   Little damage results from the strike
+FEN THE CRUSHER drives a blow toward ACROBAT_1's midsection with her short sword
+ACROBAT_1 makes a desperate last-moment parry!
+ACROBAT_1 thrusts at FEN THE CRUSHER's body with his short sword
+FEN THE CRUSHER makes a desperate last-moment parry!
+ACROBAT_1 drives a blow toward FEN THE CRUSHER's torso with his short sword
+ACROBAT_1 barely gets past FEN THE CRUSHER's defenses!
+ACROBAT_1's short sword cuts into FEN THE CRUSHER's armor!
+   The armor does its job admirably
+Someone boos the Elf, then sits very still hoping no one noticed
+FEN THE CRUSHER steps threateningly close to the fierce ACROBAT_1
+FEN THE CRUSHER slashes at ACROBAT_1's torso with her short sword
+FEN THE CRUSHER's short sword slices into ACROBAT_1's armor!
+   The blow lands without full force
+FEN THE CRUSHER slashes at ACROBAT_1's body with her short sword
+ACROBAT_1 catches the weapon and deflects it cleanly!
+FEN THE CRUSHER steps threateningly close to the fierce ACROBAT_1
+FEN THE CRUSHER slices at ACROBAT_1's body with her short sword
+FEN THE CRUSHER's accuracy is rewarded!
+FEN THE CRUSHER's short sword slices into ACROBAT_1's armor!
+   That one hurt badly!
+*** ACROBAT_1's sword arm is badly damaged!!! ***
+ACROBAT_1's arm trembles with pain!
+ACROBAT_1's weapon arm spasms in agony!!
+FEN THE CRUSHER hacks at ACROBAT_1's torso with her short sword
+ACROBAT_1 makes an extraordinary effort, and parries the strike!
+
+MINUTE 2
+FEN THE CRUSHER appears to have a slight advantage.
+
+Three drunks in the cheap seats start a brawl
+FEN THE CRUSHER slices at ACROBAT_1's torso with her short sword
+The blow connects!
+FEN THE CRUSHER's short sword finds ACROBAT_1's armor!
+   A devastating strike!
+ACROBAT_1 cuts at FEN THE CRUSHER's midsection with his short sword
+FEN THE CRUSHER just manages to deflect the blow!
+ACROBAT_1 steps threateningly close to the mighty FEN THE CRUSHER
+ACROBAT_1 drives a blow toward FEN THE CRUSHER's midsection with his short sword
+FEN THE CRUSHER catches the weapon and deflects it cleanly!
+FEN THE CRUSHER directs an attack toward ACROBAT_1
+FEN THE CRUSHER cuts at ACROBAT_1's midsection with her short sword
+The short sword finds its mark!
+FEN THE CRUSHER's short sword cuts into ACROBAT_1's torso!
+   A solid blow has been struck!
+ACROBAT_1 can fight no more and begs for mercy!
+The Blood Master shows no mercy today!
+A vendor drops his tray with a tremendous crash
+ACROBAT_1 directs an attack toward FEN THE CRUSHER
+ACROBAT_1 cuts at FEN THE CRUSHER's midsection with his short sword
+FEN THE CRUSHER just manages to deflect the blow!
+FEN THE CRUSHER slashes at ACROBAT_1's midsection with her short sword
+ACROBAT_1 has a plan: don't get hit!
+FEN THE CRUSHER sizes up ACROBAT_1 carefully
+FEN THE CRUSHER slashes at ACROBAT_1's torso with her short sword
+ACROBAT_1 is ready for the strike, and deftly parries it!
+FEN THE CRUSHER slashes at ACROBAT_1's torso with her short sword
+FEN THE CRUSHER's blow barely grazes ACROBAT_1!
+ACROBAT_1 can fight no more and begs for mercy!
+ACROBAT_1 must fight on, or die trying!
+ACROBAT_1 slices at FEN THE CRUSHER's torso with his short sword
+ACROBAT_1's blow barely grazes FEN THE CRUSHER!
+ACROBAT_1 slashes at FEN THE CRUSHER's body with his short sword
+FEN THE CRUSHER turns the blow aside with skill!
+ACROBAT_1 keeps pressure on FEN THE CRUSHER without committing
+
+MINUTE 3
+FEN THE CRUSHER is completely overwhelming their opponent.
+
+ACROBAT_1 steps threateningly close to the mighty FEN THE CRUSHER
+ACROBAT_1 hacks at FEN THE CRUSHER's torso with his short sword
+The blow connects!
+ACROBAT_1's short sword slices into FEN THE CRUSHER's armor!
+   A minor hit!
+ACROBAT_1 sizes up FEN THE CRUSHER carefully
+ACROBAT_1 drives a blow toward FEN THE CRUSHER's torso with his short sword
+ACROBAT_1's short sword cuts into FEN THE CRUSHER's torso!
+   Little damage results from the strike
+ACROBAT_1 directs an attack toward FEN THE CRUSHER
+ACROBAT_1 hacks at FEN THE CRUSHER's torso with his short sword
+The blow connects!
+ACROBAT_1's short sword bites into FEN THE CRUSHER's torso!
+   The blow does almost nothing
+FEN THE CRUSHER slashes at ACROBAT_1's midsection with her short sword
+ACROBAT_1 barely gets the parry off!
+FEN THE CRUSHER steps threateningly close to the tenacious ACROBAT_1
+FEN THE CRUSHER slices at ACROBAT_1's midsection with her short sword
+FEN THE CRUSHER's short sword slices into ACROBAT_1's armor!
+   Some damage is done
+ACROBAT_1 appeals to the Blood Master for mercy!
+The crowd screams for blood — mercy is denied!
+Half the crowd rises to their feet in anticipation!
+ACROBAT_1 thrusts at FEN THE CRUSHER's torso with his short sword
+ACROBAT_1's blow barely grazes FEN THE CRUSHER!
+ACROBAT_1 slashes at FEN THE CRUSHER's midsection with his short sword
+FEN THE CRUSHER catches the weapon and deflects it cleanly!
+FEN THE CRUSHER hacks at ACROBAT_1's midsection with her short sword
+FEN THE CRUSHER's blow barely grazes ACROBAT_1!
+ACROBAT_1 calls out for quarter!
+The ref saves the pitiable ACROBAT_1!
+
+The Blood Master raises FEN THE CRUSHER's arm in victory!
+
+FEN THE CRUSHER has trained in Skill

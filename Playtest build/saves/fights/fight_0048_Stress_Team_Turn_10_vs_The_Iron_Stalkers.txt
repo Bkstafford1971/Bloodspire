@@ -1,0 +1,72 @@
+Fight #48
+Stress Team Turn 10  vs  The Iron Stalkers
+============================================================================
+
+============================================================================
+BASHER_2 (2-1-0)   vs   LIRA SEVENFINGER (0-1-0)
+STRESS TEAM TURN 10 (STRESS TESTER)   vs   THE IRON STALKERS (DARK FIST)
+Dwarf Female   vs   Gnome Male
+============================================================================
+
+BASHER_2 is 3'10"
+BASHER_2 weighs 151 lbs.
+BASHER_2 Popular With The Kids.
+BASHER_2 enters the arena unarmored and wears no helm.
+BASHER_2 fights using a MORNINGSTAR.
+
+LIRA SEVENFINGER is 5'3"
+LIRA SEVENFINGER weighs 146 lbs.
+LIRA SEVENFINGER Known To The Crowd.
+LIRA SEVENFINGER enters the arena in CLOTH and will wear a LEATHER CAP.
+LIRA SEVENFINGER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The crowd jeers as the combatants approach each other
+LIRA SEVENFINGER steps threateningly close to the relentless BASHER_2
+LIRA SEVENFINGER slashes at BASHER_2's torso with his short sword
+LIRA SEVENFINGER gets past BASHER_2's guard!
+LIRA SEVENFINGER's short sword slices into BASHER_2's armor!
+   A solid blow has been struck!
+BASHER_2 hammers at LIRA SEVENFINGER's body with her morningstar
+LIRA SEVENFINGER turns the blow aside with skill!
+The powerful Bash strike cleaves through the parry! LIRA SEVENFINGER takes 8 damage!
+BASHER_2 pounds at LIRA SEVENFINGER's torso with her morningstar
+LIRA SEVENFINGER just manages to deflect the blow!
+BASHER_2 sizes up LIRA SEVENFINGER carefully
+BASHER_2 bludgeons LIRA SEVENFINGER's torso with her morningstar
+LIRA SEVENFINGER is ready for the strike, and deftly parries it!
+The powerful Bash strike cleaves through the parry! LIRA SEVENFINGER takes 8 damage!
+LIRA SEVENFINGER drives a blow toward BASHER_2's torso with his short sword
+LIRA SEVENFINGER barely gets past BASHER_2's defenses!
+LIRA SEVENFINGER's short sword bites into BASHER_2's body!
+   A solid blow has been struck!
+Someone throws coins at the Dwarf — a tradition, apparently
+LIRA SEVENFINGER steps threateningly close to the relentless BASHER_2
+LIRA SEVENFINGER hacks at BASHER_2's body with his short sword
+LIRA SEVENFINGER barely gets past BASHER_2's defenses!
+LIRA SEVENFINGER's short sword cuts into BASHER_2's torso!
+   A minor hit!
+LIRA SEVENFINGER tries to hit the mighty BASHER_2
+LIRA SEVENFINGER drives a blow toward BASHER_2's midsection with his short sword
+LIRA SEVENFINGER barely gets past BASHER_2's defenses!
+LIRA SEVENFINGER's short sword bites into BASHER_2's torso!
+   A solid blow has been struck!
+LIRA SEVENFINGER directs an attack toward BASHER_2
+LIRA SEVENFINGER thrusts at BASHER_2's torso with his short sword
+LIRA SEVENFINGER barely gets past BASHER_2's defenses!
+LIRA SEVENFINGER's short sword bites into BASHER_2's armor!
+   The blow has real authority behind it!
+BASHER_2 calls out for quarter!
+The ref saves the pitiable BASHER_2!
+
+The Blood Master raises LIRA SEVENFINGER's arm in victory!
+
+LIRA SEVENFINGER has trained in Skill

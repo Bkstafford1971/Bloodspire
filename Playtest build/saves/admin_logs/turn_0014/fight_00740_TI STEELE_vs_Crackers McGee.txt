@@ -1,0 +1,469 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #740   Turn: 14
+  Debug team: Electron
+  Electron / SHADES OF THE PAST   vs   The Arena / The Peasants
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: TI STEELE
+  ────────────────────────────────────
+    Race: Lizardfolk  |  Gender: Male
+    STR:15  DEX:15  CON:15  INT:15  PRE:3  SIZ:13
+    Max HP: 65   Luck: 8
+    Armor: Leather   Helm: Steel Cap
+    Primary: Pole Axe   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Slash / Act:7 / Aim:Abdomen / Def:Chest
+    Skills: cleave:6  
+
+  ────────────────────────────────────
+  WARRIOR B: CRACKERS MCGEE
+  ────────────────────────────────────
+    Race: Peasant  |  Gender: Male
+    STR:11  DEX:12  CON:11  INT:13  PRE:8  SIZ:11
+    Max HP: 44   Luck: 0
+    Armor: Cloth   Helm: None
+    Primary: Hatchet   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:5 / Aim:Chest / Def:Chest
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — TI STEELE: 4   |   CRACKERS MCGEE: 5
+  HP    — TI STEELE: 65/65 (100%)   |   CRACKERS MCGEE: 44/44 (100%)
+  END   — TI STEELE: 100.0   |   CRACKERS MCGEE: 100.0
+  STRAT — TI STEELE: [Slash / Act:7]   |   CRACKERS MCGEE: [Strike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TI STEELE               : d100[47]  dex_bonus[+8]  luck[+8]  style_mod[-6]  activity_mod[+4] = 61
+    CRACKERS MCGEE          : d100[56]  dex_bonus[+4] = 60
+    ▶ TI STEELE wins → ATTACKS
+  Attack: TI STEELE → CRACKERS MCGEE   Weapon: Pole Axe   Style: Slash   Aim: Abdomen
+  Attack Roll (TI STEELE):
+    d100[51]  dex_bonus[+4]  luck[+8]  style_mod[-4]
+    Subtotal: 59
+    + style advantage: -6
+    Final ATK: 53
+  Defense Roll (CRACKERS MCGEE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[86]
+    Subtotal: 86
+    Final DEF: 86
+  Margin: 53 − 86 = -33   ▶  PARRY (margin -33)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TI STEELE               : d100[44]  dex_bonus[+8]  luck[+8]  style_mod[-6]  activity_mod[+4] = 58
+    CRACKERS MCGEE          : d100[16]  dex_bonus[+4] = 20
+    ▶ TI STEELE wins → ATTACKS
+  Attack: TI STEELE → CRACKERS MCGEE   Weapon: Pole Axe   Style: Slash   Aim: Abdomen
+  Attack Roll (TI STEELE):
+    d100[29]  dex_bonus[+4]  luck[+8]  style_mod[-4]
+    Subtotal: 37
+    + style advantage: -6
+    Final ATK: 31
+  Defense Roll (CRACKERS MCGEE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[90]
+    Subtotal: 90
+    Final DEF: 90
+  Margin: 31 − 90 = -59   ▶  PARRY (margin -59)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TI STEELE               : d100[94]  dex_bonus[+8]  luck[+8]  style_mod[-6]  activity_mod[+4] = 108
+    CRACKERS MCGEE          : d100[50]  dex_bonus[+4] = 54
+    ▶ TI STEELE wins → ATTACKS
+  Attack: TI STEELE → CRACKERS MCGEE   Weapon: Pole Axe   Style: Slash   Aim: Abdomen
+  Attack Roll (TI STEELE):
+    d100[33]  dex_bonus[+4]  luck[+8]  style_mod[-4]
+    Subtotal: 41
+    + style advantage: -6
+    Final ATK: 35
+  Defense Roll (CRACKERS MCGEE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[34]
+    Subtotal: 34
+    Final DEF: 34
+  Margin: 35 − 34 = 1   ▶  GRAZE (margin 1, 1 HP)
+  HP Pool (CRACKERS MCGEE):
+    Before : 33/44 (75.0%)
+    graze   : −1
+    After  : 32/44 (72.7%)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TI STEELE               : d100[80]  dex_bonus[+8]  luck[+8]  style_mod[-6]  activity_mod[+4] = 94
+    CRACKERS MCGEE          : d100[43]  dex_bonus[+4] = 47
+    ▶ TI STEELE wins → ATTACKS
+  Attack: TI STEELE → CRACKERS MCGEE   Weapon: Pole Axe   Style: Slash   Aim: Abdomen
+  Attack Roll (TI STEELE):
+    d100[51]  dex_bonus[+4]  luck[+8]  style_mod[-4]
+    Subtotal: 59
+    + style advantage: -6
+    Final ATK: 53
+  Defense Roll (CRACKERS MCGEE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[47]
+    Subtotal: 47
+    Final DEF: 47
+  Margin: 53 − 47 = 6   ▶  GRAZE (margin 6, 1 HP)
+  HP Pool (CRACKERS MCGEE):
+    Before : 32/44 (72.7%)
+    graze   : −1
+    After  : 31/44 (70.5%)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: CRACKERS MCGEE has uncontested action
+  Attack: CRACKERS MCGEE → TI STEELE   Weapon: Hatchet   Style: Strike   Aim: Chest
+  Attack Roll (CRACKERS MCGEE):
+    d100[25]  dex_bonus[+2]
+    Subtotal: 27
+    Final ATK: 27
+  Defense Roll (TI STEELE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[96]  luck[+8]  str_bonus[+2]  style_parry[-6]  activity_mod[-4]  dex_trained_x2[+6]  def_point_bonus[+15]
+    Subtotal: 117
+    Final DEF: 117
+  Margin: 27 − 117 = -90   ▶  PARRY (margin -90)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: CRACKERS MCGEE has uncontested action
+  Attack: CRACKERS MCGEE → TI STEELE   Weapon: Hatchet   Style: Strike   Aim: Chest
+  Attack Roll (CRACKERS MCGEE):
+    d100[11]  dex_bonus[+2]
+    Subtotal: 13
+    Final ATK: 13
+  Defense Roll (TI STEELE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[87]  luck[+8]  str_bonus[+2]  style_parry[-6]  activity_mod[-4]  dex_trained_x2[+6]  def_point_bonus[+15]
+    Subtotal: 108
+    Final DEF: 108
+  Margin: 13 − 108 = -95   ▶  PARRY (margin -95)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: CRACKERS MCGEE has uncontested action
+  Attack: CRACKERS MCGEE → TI STEELE   Weapon: Hatchet   Style: Strike   Aim: Chest
+  Attack Roll (CRACKERS MCGEE):
+    d100[86]  dex_bonus[+2]
+    Subtotal: 88
+    Final ATK: 88
+  Defense Roll (TI STEELE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[84]  luck[+8]  str_bonus[+2]  style_parry[-6]  activity_mod[-4]  dex_trained_x2[+6]  def_point_bonus[+15]
+    Subtotal: 105
+    Final DEF: 105
+  Margin: 88 − 105 = -17   ▶  PARRY (margin -17)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: CRACKERS MCGEE has uncontested action
+  Attack: CRACKERS MCGEE → TI STEELE   Weapon: Hatchet   Style: Strike   Aim: Chest
+  Attack Roll (CRACKERS MCGEE):
+    d100[76]  dex_bonus[+2]
+    Subtotal: 78
+    Final ATK: 78
+  Defense Roll (TI STEELE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[67]  luck[+8]  str_bonus[+2]  style_parry[-6]  activity_mod[-4]  dex_trained_x2[+6]  def_point_bonus[+15]
+    Subtotal: 88
+    Final DEF: 88
+  Margin: 78 − 88 = -10   ▶  PARRY (margin -10)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: CRACKERS MCGEE has uncontested action
+  Attack: CRACKERS MCGEE → TI STEELE   Weapon: Hatchet   Style: Strike   Aim: Chest
+  Attack Roll (CRACKERS MCGEE):
+    d100[75]  dex_bonus[+2]
+    Subtotal: 77
+    Final ATK: 77
+  Defense Roll (TI STEELE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[37]  luck[+8]  str_bonus[+2]  style_parry[-6]  activity_mod[-4]  dex_trained_x2[+6]  def_point_bonus[+15]
+    Subtotal: 58
+    Final DEF: 58
+  Margin: 77 − 58 = 19   ▶  HIT (margin 19)
+  Damage (CRACKERS MCGEE → TI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 4.50
+      STR bonus                    +0.60
+    Ceiling: 5
+    Fraction: max(0.10, min(1.0, 19/55.0)) = 0.345
+    Raw: max(1, int(5 × 0.345)) = 1
+    Armor: Leather  base DEF: 8
+    Net = max(1, 1 − 8) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (TI STEELE):
+    Before : 65/65 (100.0%)
+    hit     : −1
+    After  : 64/65 (98.5%)
+  Knockdown Check (TI STEELE):
+    base = int(1/65 × 80) = 1   cat bonus [Axe/Pick]: +0   final: 1%
+    Roll: 90  →  no knockdown
+  Perm Injury Check (TI STEELE):
+    threshold = 15% of 65 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    TI STEELE: 100.0 END − (5.60 burn × 4 actions) = 77.1
+    CRACKERS MCGEE: 100.0 END − (2.00 burn × 5 actions) = 90.0
+    HP POOL — TI STEELE: 64/65 (98%)
+    HP POOL — CRACKERS MCGEE: 31/44 (70%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — TI STEELE: 4   |   CRACKERS MCGEE: 5
+  HP    — TI STEELE: 64/65 (98%)   |   CRACKERS MCGEE: 31/44 (70%)
+  END   — TI STEELE: 77.1   |   CRACKERS MCGEE: 90.0
+  STRAT — TI STEELE: [Slash / Act:7]   |   CRACKERS MCGEE: [Strike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TI STEELE               : d100[73]  dex_bonus[+8]  luck[+8]  style_mod[-6]  activity_mod[+4] = 87
+    CRACKERS MCGEE          : d100[76]  dex_bonus[+4] = 80
+    ▶ TI STEELE wins → ATTACKS
+  Attack: TI STEELE → CRACKERS MCGEE   Weapon: Pole Axe   Style: Slash   Aim: Abdomen
+  Attack Roll (TI STEELE):
+    d100[95]  dex_bonus[+4]  luck[+8]  style_mod[-4]
+    Subtotal: 103
+    + style advantage: -6
+    Final ATK: 97
+  Defense Roll (CRACKERS MCGEE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[99]
+    Subtotal: 99
+    Final DEF: 99
+  Margin: 97 − 99 = -2   ▶  PARRY (margin -2)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TI STEELE               : d100[18]  dex_bonus[+8]  luck[+8]  style_mod[-6]  activity_mod[+4] = 32
+    CRACKERS MCGEE          : d100[23]  dex_bonus[+4] = 27
+    ▶ TI STEELE wins → ATTACKS
+  Attack: TI STEELE → CRACKERS MCGEE   Weapon: Pole Axe   Style: Slash   Aim: Abdomen
+  Attack Roll (TI STEELE):
+    d100[15]  dex_bonus[+4]  luck[+8]  style_mod[-4]
+    Subtotal: 23
+    + style advantage: -6
+    Final ATK: 17
+  Defense Roll (CRACKERS MCGEE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[2]
+    Subtotal: 2
+    Final DEF: 2
+  Margin: 17 − 2 = 15   ▶  HIT (margin 15)
+  Damage (TI STEELE → CRACKERS MCGEE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 13.75
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      style modifier               +4.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.20
+      cleave skill bonus               +12.00
+    Ceiling: 35
+    Fraction: max(0.10, min(1.0, 15/55.0)) = 0.273
+    Raw: max(1, int(35 × 0.273)) = 9
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 9 − 1) = 8
+  ▶ FINAL DAMAGE: 8
+  HP Pool (CRACKERS MCGEE):
+    Before : 31/44 (70.5%)
+    hit     : −8
+    After  : 23/44 (52.3%)
+  Knockdown Check (CRACKERS MCGEE):
+    base = int(8/44 × 80) = 14   cat bonus [Polearm/Spear]: +5   final: 19%
+    Roll: 66  →  no knockdown
+  Perm Injury Check (CRACKERS MCGEE):
+    threshold = 15% of 44 = 6   damage 8 ≥ threshold
+    chance = max(5, min(80, int(8/44×100) − 5)) = 13%
+    Roll: 75  →  no injury
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CRACKERS MCGEE          : d100[58]  dex_bonus[+4] = 62
+    TI STEELE               : d100[36]  dex_bonus[+8]  luck[+8]  style_mod[-6]  activity_mod[+4] = 50
+    ▶ CRACKERS MCGEE wins → ATTACKS
+  Attack: CRACKERS MCGEE → TI STEELE   Weapon: Hatchet   Style: Strike   Aim: Chest
+  Attack Roll (CRACKERS MCGEE):
+    d100[72]  dex_bonus[+2]
+    Subtotal: 74
+    Final ATK: 74
+  Defense Roll (TI STEELE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[33]  luck[+8]  str_bonus[+2]  style_parry[-6]  activity_mod[-4]  dex_trained_x2[+6]  def_point_bonus[+15]
+    Subtotal: 54
+    Final DEF: 54
+  Margin: 74 − 54 = 20   ▶  HIT (margin 20)
+  Damage (CRACKERS MCGEE → TI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 4.50
+      STR bonus                    +0.60
+    Ceiling: 5
+    Fraction: max(0.10, min(1.0, 20/55.0)) = 0.364
+    Raw: max(1, int(5 × 0.364)) = 1
+    Armor: Leather  base DEF: 8
+    Net = max(1, 1 − 8) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (TI STEELE):
+    Before : 64/65 (98.5%)
+    hit     : −1
+    After  : 63/65 (96.9%)
+  Knockdown Check (TI STEELE):
+    base = int(1/65 × 80) = 1   cat bonus [Axe/Pick]: +0   final: 1%
+    Roll: 36  →  no knockdown
+  Perm Injury Check (TI STEELE):
+    threshold = 15% of 65 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CRACKERS MCGEE          : d100[53]  dex_bonus[+4] = 57
+    TI STEELE               : d100[36]  dex_bonus[+8]  luck[+8]  style_mod[-6]  activity_mod[+4] = 50
+    ▶ CRACKERS MCGEE wins → ATTACKS
+  Attack: CRACKERS MCGEE → TI STEELE   Weapon: Hatchet   Style: Strike   Aim: Chest
+  Attack Roll (CRACKERS MCGEE):
+    d100[57]  dex_bonus[+2]
+    Subtotal: 59
+    Final ATK: 59
+  Defense Roll (TI STEELE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[50]  luck[+8]  str_bonus[+2]  style_parry[-6]  activity_mod[-4]  dex_trained_x2[+6]  def_point_bonus[+15]
+    Subtotal: 71
+    Final DEF: 71
+  Margin: 59 − 71 = -12   ▶  PARRY (margin -12)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TI STEELE               : d100[8]  dex_bonus[+8]  luck[+8]  style_mod[-6]  activity_mod[+4] = 22
+    CRACKERS MCGEE          : d100[14]  dex_bonus[+4] = 18
+    ▶ TI STEELE wins → ATTACKS
+  Attack: TI STEELE → CRACKERS MCGEE   Weapon: Pole Axe   Style: Slash   Aim: Abdomen
+  Attack Roll (TI STEELE):
+    d100[91]  dex_bonus[+4]  luck[+8]  style_mod[-4]
+    Subtotal: 99
+    + style advantage: -6
+    Final ATK: 93
+  Defense Roll (CRACKERS MCGEE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[19]
+    Subtotal: 19
+    Final DEF: 19
+  Margin: 93 − 19 = 74   ▶  HIT (margin 74)
+  Damage (TI STEELE → CRACKERS MCGEE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 13.75
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      style modifier               +4.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.20
+      cleave skill bonus               +12.00
+    Ceiling: 35
+    Fraction: max(0.10, min(1.0, 74/55.0)) = 1.000
+    Raw: max(1, int(35 × 1.000)) = 35
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 35 − 1) = 34
+  ▶ FINAL DAMAGE: 34
+  HP Pool (CRACKERS MCGEE):
+    Before : 23/44 (52.3%)
+    hit     : −34
+    After  : -11/44 (0.0%)
+  Knockdown Check (CRACKERS MCGEE):
+    base = int(34/44 × 80) = 61   cat bonus [Polearm/Spear]: +5   final: 66%
+    Roll: 5  →  ▶ KNOCKDOWN
+  Perm Injury Check (CRACKERS MCGEE):
+    threshold = 15% of 44 = 6   damage 34 ≥ threshold
+    chance = max(5, min(80, int(34/44×100) − 5)) = 72%
+    Roll: 96  →  no injury
+  Death Check (CRACKERS MCGEE):
+    prev_hp: 23   damage: 34   new_hp: -11
+    overshoot: 11
+    death_chance = min(50.0, 0.5 + 11) = 11.5%
+    → survives (concede system takes over)
+  Concede Attempt (CRACKERS MCGEE):
+    d100[33] + PRE_bonus[-2] + luck//2[0] = 31
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    31 < 66  →  mercy denied — fight continues
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TI STEELE               : d100[80]  dex_bonus[+8]  luck[+8]  style_mod[-6]  activity_mod[+4] = 94
+    CRACKERS MCGEE          : d100[18]  on_ground_halved[(÷2)] = 9
+    ▶ TI STEELE wins → ATTACKS
+  Attack: TI STEELE → CRACKERS MCGEE   Weapon: Pole Axe   Style: Slash   Aim: Abdomen
+  Attack Roll (TI STEELE):
+    d100[18]  dex_bonus[+4]  luck[+8]  style_mod[-4]
+    Subtotal: 26
+    + style advantage: -6
+    Final ATK: 20
+  Defense Roll (CRACKERS MCGEE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[1]  ground_pen[-25]  hp0_pen[-30]
+    Subtotal: 1
+    Final DEF: 1
+  Margin: 20 − 1 = 19   ▶  HIT (margin 19)
+  Damage (TI STEELE → CRACKERS MCGEE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 13.75
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      style modifier               +4.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.20
+      cleave skill bonus               +12.00
+    Ceiling: 35
+    Fraction: max(0.10, min(1.0, 19/55.0)) = 0.345
+    Raw: max(1, int(35 × 0.345)) = 12
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 12 − 1) = 11
+  ▶ FINAL DAMAGE: 11
+  HP Pool (CRACKERS MCGEE):
+    Before : -11/44 (-25.0%)
+    hit     : −11
+    After  : -22/44 (0.0%)
+  Knockdown Check (CRACKERS MCGEE):
+    base = int(11/44 × 80) = 20   cat bonus [Polearm/Spear]: +5   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (CRACKERS MCGEE):
+    threshold = 15% of 44 = 6   damage 11 ≥ threshold
+    chance = max(5, min(80, int(11/44×100) − 5)) = 20%
+    Roll: 96  →  no injury
+  Death Check (CRACKERS MCGEE):
+    prev_hp: -11   damage: 11   new_hp: -22
+    overshoot: 22
+    death_chance = min(50.0, 0.5 + 22) = 22.5%
+    → survives (concede system takes over)
+  Concede Attempt (CRACKERS MCGEE):
+    d100[16] + PRE_bonus[-2] + luck//2[0] = 14
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    14 < 66  →  mercy denied — fight continues
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: CRACKERS MCGEE has uncontested action
+  Attack: CRACKERS MCGEE → TI STEELE   Weapon: Hatchet   Style: Strike   Aim: Chest
+  Attack Roll (CRACKERS MCGEE):
+    d100[77]  dex_bonus[+2]  hp0_pen[-30]
+    Subtotal: 49
+    Final ATK: 49
+  Defense Roll (TI STEELE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[72]  luck[+8]  str_bonus[+2]  style_parry[-6]  activity_mod[-4]  dex_trained_x2[+6]  def_point_bonus[+15]
+    Subtotal: 93
+    Final DEF: 93
+  Margin: 49 − 93 = -44   ▶  PARRY (margin -44)
+  Concede Attempt (CRACKERS MCGEE):
+    d100[93] + PRE_bonus[-2] + luck//2[0] = 91
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    91 ≥ 66  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: TI STEELE
+==============================================================================
+  Intelligence: d100=54 vs 55% — SUCCESS
+    → Intelligence trained: 15 → 16 (55% chance)
+  Cleave: d100=29 vs 22% — FAIL
+    → Cleave training: no progress this session (INT 16, level 6, 22% chance).
+  Cleave: d100=14 vs 22% — SUCCESS
+    → Cleave trained: Level 6 → Level 7 (Expert Skill, 22% chance)
+  INT observed learning: d100=13 vs 8% — no trigger
+
+==============================================================================
+  TRAINING: CRACKERS MCGEE
+==============================================================================
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : TI STEELE  (96.9% HP remaining)
+  Loser  : CRACKERS MCGEE  (survived, 0.0% HP)
+  Duration: 2 minute(s)
+==============================================================================

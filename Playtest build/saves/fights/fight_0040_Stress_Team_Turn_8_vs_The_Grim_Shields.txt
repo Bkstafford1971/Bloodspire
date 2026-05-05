@@ -1,0 +1,64 @@
+Fight #40
+Stress Team Turn 8  vs  The Grim Shields
+============================================================================
+
+============================================================================
+ACROBAT_2 (0-2-0)   vs   BRUL THE BLOODY (0-0-0)
+STRESS TEAM TURN 8 (STRESS TESTER)   vs   THE GRIM SHIELDS (GRIM EYE)
+Elf Female   vs   Tabaxi Male
+============================================================================
+
+ACROBAT_2 is 4'9"
+ACROBAT_2 weighs 101 lbs.
+ACROBAT_2 Known To The Crowd.
+ACROBAT_2 enters the arena unarmored and wears no helm.
+ACROBAT_2 fights using a SHORT SWORD.
+
+BRUL THE BLOODY is 5'7"
+BRUL THE BLOODY weighs 165 lbs.
+BRUL THE BLOODY Known To The Crowd.
+BRUL THE BLOODY enters the arena in LEATHER and will wear a STEEL CAP.
+BRUL THE BLOODY fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The crowd jeers as the combatants approach each other
+ACROBAT_2 slices at BRUL THE BLOODY's torso with her short sword
+ACROBAT_2's blow barely grazes BRUL THE BLOODY!
+BRUL THE BLOODY slices at ACROBAT_2's helm with his short sword
+BRUL THE BLOODY's short sword slices into ACROBAT_2's head!
+   The resulting crunch echoes through the BLOODSPIRE!
+ACROBAT_2 steps threateningly close to the dangerous BRUL THE BLOODY
+ACROBAT_2 hacks at BRUL THE BLOODY's body with her short sword
+BRUL THE BLOODY's guard holds firm!
+ACROBAT_2 hacks at BRUL THE BLOODY's midsection with her short sword
+BRUL THE BLOODY makes a desperate last-moment parry!
+The crowd surges forward against the barriers!
+ACROBAT_2 slashes at BRUL THE BLOODY's body with her short sword
+BRUL THE BLOODY catches the weapon and deflects it cleanly!
+BRUL THE BLOODY hacks at ACROBAT_2's face with his short sword
+ACROBAT_2 just manages to deflect the blow!
+ACROBAT_2 drives a blow toward BRUL THE BLOODY's torso with her short sword
+BRUL THE BLOODY just manages to deflect the blow!
+BRUL THE BLOODY thrusts at ACROBAT_2's helm with his short sword
+BRUL THE BLOODY barely gets past ACROBAT_2's defenses!
+BRUL THE BLOODY's short sword bites into ACROBAT_2's headgear!
+   The wound delivers terrible agony!
+BRUL THE BLOODY sizes up ACROBAT_2 carefully
+BRUL THE BLOODY thrusts at ACROBAT_2's helm with his short sword
+BRUL THE BLOODY gets past ACROBAT_2's guard!
+BRUL THE BLOODY's short sword slices into ACROBAT_2's skull!
+   A devastating strike!
+ACROBAT_2 can fight no more and begs for mercy!
+The crowd screams for blood, but the ref steps in!
+
+BRUL THE BLOODY is declared the winner!
+
+BRUL THE BLOODY has trained in Skill

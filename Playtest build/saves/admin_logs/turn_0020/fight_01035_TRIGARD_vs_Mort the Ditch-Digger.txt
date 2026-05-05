@@ -1,0 +1,361 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #1035   Turn: 20
+  Debug team: Electron
+  Electron / SHADES OF THE PAST   vs   The Arena / The Peasants
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: TRIGARD
+  ────────────────────────────────────
+    Race: Dwarf  |  Gender: Male
+    STR:15  DEX:11  CON:16  INT:11  PRE:10  SIZ:11
+    Max HP: 65   Luck: 23
+    Armor: Scale   Helm: Camail
+    Primary: Battle Axe   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Bash / Act:7 / Aim:Head / Def:Chest
+    Skills: bash:9  
+
+  ────────────────────────────────────
+  WARRIOR B: MORT THE DITCH-DIGGER
+  ────────────────────────────────────
+    Race: Peasant  |  Gender: Male
+    STR:13  DEX:10  CON:14  INT:10  PRE:11  SIZ:15
+    Max HP: 57   Luck: 0
+    Armor: Cloth   Helm: None
+    Primary: Morningstar   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:5 / Aim:Chest / Def:Chest
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — TRIGARD: 4   |   MORT THE DITCH-DIGGER: 4
+  HP    — TRIGARD: 65/65 (100%)   |   MORT THE DITCH-DIGGER: 57/57 (100%)
+  END   — TRIGARD: 100.0   |   MORT THE DITCH-DIGGER: 100.0
+  STRAT — TRIGARD: [Bash / Act:7]   |   MORT THE DITCH-DIGGER: [Strike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MORT THE DITCH-DIGGER   : d100[82] = 82
+    TRIGARD                 : d100[24]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 45
+    ▶ MORT THE DITCH-DIGGER wins → ATTACKS
+  Attack: MORT THE DITCH-DIGGER → TRIGARD   Weapon: Morningstar   Style: Strike   Aim: Chest
+  Attack Roll (MORT THE DITCH-DIGGER):
+    d100[34]
+    Subtotal: 34
+    + style advantage: -6
+    Final ATK: 28
+  Defense Roll (TRIGARD, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[96]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+4]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 151
+    Final DEF: 151
+  Margin: 28 − 151 = -123   ▶  PARRY (margin -123)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[20]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 41
+    MORT THE DITCH-DIGGER   : d100[12] = 12
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → MORT THE DITCH-DIGGER   Weapon: Battle Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[2]  dex_bonus[-2]  luck[+23]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 27
+    + style advantage: +6
+    Final ATK: 33
+  Defense Roll (MORT THE DITCH-DIGGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[83]  str_bonus[+1]
+    Subtotal: 84
+    Final DEF: 84
+  Margin: 33 − 84 = -51   ▶  PARRY (margin -51)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[65]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 86
+    MORT THE DITCH-DIGGER   : d100[31] = 31
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → MORT THE DITCH-DIGGER   Weapon: Battle Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[50]  dex_bonus[-2]  luck[+23]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 75
+    + style advantage: +6
+    Final ATK: 81
+  Defense Roll (MORT THE DITCH-DIGGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[76]  str_bonus[+1]
+    Subtotal: 77
+    Final DEF: 77
+  Margin: 81 − 77 = 4   ▶  GRAZE (margin 4, 1 HP)
+  HP Pool (MORT THE DITCH-DIGGER):
+    Before : 57/57 (100.0%)
+    graze   : −1
+    After  : 56/57 (98.2%)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[71]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 92
+    MORT THE DITCH-DIGGER   : d100[75] = 75
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → MORT THE DITCH-DIGGER   Weapon: Battle Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[99]  dex_bonus[-2]  luck[+23]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 124
+    + style advantage: +6
+    Final ATK: 130
+  Defense Roll (MORT THE DITCH-DIGGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[80]  str_bonus[+1]
+    Subtotal: 81
+    Final DEF: 81
+  Margin: 130 − 81 = 49   ▶  HIT (margin 49)
+  Damage (TRIGARD → MORT THE DITCH-DIGGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +3.00
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 49/55.0)) = 0.891
+    Raw: max(1, int(23 × 0.891)) = 20
+    Favorite weapon +1 → raw = 21
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 21 − 1) = 20
+  ▶ FINAL DAMAGE: 20
+  HP Pool (MORT THE DITCH-DIGGER):
+    Before : 56/57 (98.2%)
+    hit     : −20
+    After  : 36/57 (63.2%)
+  Knockdown Check (MORT THE DITCH-DIGGER):
+    base = int(20/57 × 80) = 28   cat bonus [Axe/Pick]: +0   final: 22%
+    Roll: 93  →  no knockdown
+  Perm Injury Check (MORT THE DITCH-DIGGER):
+    threshold = 15% of 57 = 8   damage 20 ≥ threshold
+    chance = max(5, min(80, int(20/57×100) − 5)) = 30%
+    Roll: 81  →  no injury
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MORT THE DITCH-DIGGER   : d100[85] = 85
+    TRIGARD                 : d100[42]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 63
+    ▶ MORT THE DITCH-DIGGER wins → ATTACKS
+  Attack: MORT THE DITCH-DIGGER → TRIGARD   Weapon: Morningstar   Style: Strike   Aim: Chest
+  Attack Roll (MORT THE DITCH-DIGGER):
+    d100[84]
+    Subtotal: 84
+    + style advantage: -6
+    Final ATK: 78
+  Defense Roll (TRIGARD, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[59]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+4]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 114
+    Final DEF: 114
+  Margin: 78 − 114 = -36   ▶  PARRY (margin -36)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: MORT THE DITCH-DIGGER has uncontested action
+  Attack: MORT THE DITCH-DIGGER → TRIGARD   Weapon: Morningstar   Style: Strike   Aim: Chest
+  Attack Roll (MORT THE DITCH-DIGGER):
+    d100[30]
+    Subtotal: 30
+    + style advantage: -6
+    Final ATK: 24
+  Defense Roll (TRIGARD, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[32]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+4]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 87
+    Final DEF: 87
+  Margin: 24 − 87 = -63   ▶  PARRY (margin -63)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: MORT THE DITCH-DIGGER has uncontested action
+  Attack: MORT THE DITCH-DIGGER → TRIGARD   Weapon: Morningstar   Style: Strike   Aim: Chest
+  Attack Roll (MORT THE DITCH-DIGGER):
+    d100[98]
+    Subtotal: 98
+    + style advantage: -6
+    Final ATK: 92
+  Defense Roll (TRIGARD, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[17]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+4]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 72
+    Final DEF: 72
+  Margin: 92 − 72 = 20   ▶  HIT (margin 20)
+  Damage (MORT THE DITCH-DIGGER → TRIGARD):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +1.80
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 20/55.0)) = 0.364
+    Raw: max(1, int(11 × 0.364)) = 4
+    Armor: Scale  base DEF: 9
+    Net = max(1, 4 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (TRIGARD):
+    Before : 65/65 (100.0%)
+    hit     : −1
+    After  : 64/65 (98.5%)
+  Knockdown Check (TRIGARD):
+    base = int(1/65 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 86  →  no knockdown
+  Perm Injury Check (TRIGARD):
+    threshold = 15% of 65 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    TRIGARD: 100.0 END − (7.60 burn × 4 actions) = 69.1
+    MORT THE DITCH-DIGGER: 100.0 END − (2.00 burn × 4 actions) = 92.0
+    HP POOL — TRIGARD: 64/65 (98%)
+    HP POOL — MORT THE DITCH-DIGGER: 36/57 (63%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — TRIGARD: 4   |   MORT THE DITCH-DIGGER: 4
+  HP    — TRIGARD: 64/65 (98%)   |   MORT THE DITCH-DIGGER: 36/57 (63%)
+  END   — TRIGARD: 69.1   |   MORT THE DITCH-DIGGER: 92.0
+  STRAT — TRIGARD: [Bash / Act:7]   |   MORT THE DITCH-DIGGER: [Strike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[27]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 48
+    MORT THE DITCH-DIGGER   : d100[47] = 47
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → MORT THE DITCH-DIGGER   Weapon: Battle Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[43]  dex_bonus[-2]  luck[+23]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 68
+    + style advantage: +6
+    Final ATK: 74
+  Defense Roll (MORT THE DITCH-DIGGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[42]  str_bonus[+1]
+    Subtotal: 43
+    Final DEF: 43
+  Margin: 74 − 43 = 31   ▶  HIT (margin 31)
+  Damage (TRIGARD → MORT THE DITCH-DIGGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +3.00
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 31/55.0)) = 0.564
+    Raw: max(1, int(23 × 0.564)) = 12
+    Favorite weapon +1 → raw = 13
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 13 − 1) = 12
+  ▶ FINAL DAMAGE: 12
+  HP Pool (MORT THE DITCH-DIGGER):
+    Before : 36/57 (63.2%)
+    hit     : −12
+    After  : 24/57 (42.1%)
+  Knockdown Check (MORT THE DITCH-DIGGER):
+    base = int(12/57 × 80) = 16   cat bonus [Axe/Pick]: +0   final: 10%
+    Roll: 48  →  no knockdown
+  Perm Injury Check (MORT THE DITCH-DIGGER):
+    threshold = 15% of 57 = 8   damage 12 ≥ threshold
+    chance = max(5, min(80, int(12/57×100) − 5)) = 16%
+    Roll: 65  →  no injury
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MORT THE DITCH-DIGGER   : d100[80] = 80
+    TRIGARD                 : d100[58]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 79
+    ▶ MORT THE DITCH-DIGGER wins → ATTACKS
+  Attack: MORT THE DITCH-DIGGER → TRIGARD   Weapon: Morningstar   Style: Strike   Aim: Chest
+  Attack Roll (MORT THE DITCH-DIGGER):
+    d100[22]
+    Subtotal: 22
+    + style advantage: -6
+    Final ATK: 16
+  Defense Roll (TRIGARD, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[97]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+4]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 152
+    Final DEF: 152
+  Margin: 16 − 152 = -136   ▶  PARRY (margin -136)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[64]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 85
+    MORT THE DITCH-DIGGER   : d100[47] = 47
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → MORT THE DITCH-DIGGER   Weapon: Battle Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[11]  dex_bonus[-2]  luck[+23]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 36
+    + style advantage: +6
+    Final ATK: 42
+  Defense Roll (MORT THE DITCH-DIGGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[97]  str_bonus[+1]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 42 − 98 = -56   ▶  PARRY (margin -56)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[85]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 106
+    MORT THE DITCH-DIGGER   : d100[49] = 49
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → MORT THE DITCH-DIGGER   Weapon: Battle Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[58]  dex_bonus[-2]  luck[+23]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 83
+    + style advantage: +6
+    Final ATK: 89
+  Defense Roll (MORT THE DITCH-DIGGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[56]  str_bonus[+1]
+    Subtotal: 57
+    Final DEF: 57
+  Margin: 89 − 57 = 32   ▶  HIT (margin 32)
+  Damage (TRIGARD → MORT THE DITCH-DIGGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +3.00
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 32/55.0)) = 0.582
+    Raw: max(1, int(23 × 0.582)) = 13
+    Favorite weapon +1 → raw = 14
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 14 − 1) = 13
+  ▶ FINAL DAMAGE: 13
+  HP Pool (MORT THE DITCH-DIGGER):
+    Before : 24/57 (42.1%)
+    hit     : −13
+    After  : 11/57 (19.3%)
+  Knockdown Check (MORT THE DITCH-DIGGER):
+    base = int(13/57 × 80) = 18   cat bonus [Axe/Pick]: +0   final: 12%
+    Roll: 13  →  no knockdown
+  Perm Injury Check (MORT THE DITCH-DIGGER):
+    threshold = 15% of 57 = 8   damage 13 ≥ threshold
+    chance = max(5, min(80, int(13/57×100) − 5)) = 17%
+    Roll: 63  →  no injury
+  Concede Attempt (MORT THE DITCH-DIGGER):
+    d100[65] + PRE_bonus[+1] + luck//2[0] = 66
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    66 ≥ 65  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: TRIGARD
+==============================================================================
+  Battle Axe: d100=80 vs 45% — FAIL
+    → Battle Axe training: no progress this session (INT 11, level 0, 45% chance).
+  Battle Axe: d100=86 vs 45% — FAIL
+    → Battle Axe training: no progress this session (INT 11, level 0, 45% chance).
+  Battle Axe: d100=30 vs 45% — SUCCESS
+    → Battle Axe trained: Level 0 → Level 1 (Novice, 45% chance)
+
+==============================================================================
+  TRAINING: MORT THE DITCH-DIGGER
+==============================================================================
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : TRIGARD  (98.5% HP remaining)
+  Loser  : MORT THE DITCH-DIGGER  (survived, 19.3% HP)
+  Duration: 2 minute(s)
+==============================================================================

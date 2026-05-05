@@ -1,0 +1,23 @@
+{
+  "accounts": [
+    {
+      "id": "aa0870db",
+      "manager_name": "ILNEVAL",
+      "email": "bkstafford1971@gmail.com",
+      "pw_hash": "d07abf05d8caa57b9c1e7aaa744ba39ea174ea3d26b968c6a1e9211e33476ef9",
+      "salt": "730ec7ec0e5df08f75607ac9053c7140",
+      "team_ids": [
+        17
+      ]
+    },
+    {
+      "id": "20",
+      "manager_name": "DEATH",
+      "email": "",
+      "pw_hash": "dbbc1ecfc1ccc035b4790c24bd0c78d70566c663fa67b421ad20eddcb4d67c30",
+      "salt": "2840763a3394bd8dd37be595814c5df9",
+      "team_ids": [],
+      "run_next_turn": {}
+    }
+  ]
+}

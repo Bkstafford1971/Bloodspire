@@ -1,0 +1,383 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #906   Turn: 18
+  Debug team: Electron
+  Electron / AUTOBOTS   vs   The Unnamed One / Shadows of the Pit
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: WHEELJACK
+  ────────────────────────────────────
+    Race: Dwarf  |  Gender: Male
+    STR:14  DEX:13  CON:15  INT:15  PRE:11  SIZ:7
+    Max HP: 55   Luck: 29
+    Armor: Chain   Helm: Full Helm
+    Primary: War Hammer   Secondary: Target Shield
+    Strategies:
+      [1] Always  →  Wall of Steel / Act:6 / Aim:None / Def:Chest
+    Skills: initiative:1  parry:7  
+
+  ────────────────────────────────────
+  WARRIOR B: CRUSHFANG
+  ────────────────────────────────────
+    Race: Half-Orc  |  Gender: Male
+    STR:18  DEX:6  CON:17  INT:18  PRE:8  SIZ:11
+    Max HP: 62   Luck: 28
+    Armor: Leather   Helm: None
+    Primary: Great Sword   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Total Kill / Act:9 / Aim:Head / Def:None
+    Skills: feint:1  initiative:9  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — WHEELJACK: 6   |   CRUSHFANG: 7
+  HP    — WHEELJACK: 55/55 (100%)   |   CRUSHFANG: 62/62 (100%)
+  END   — WHEELJACK: 100.0   |   CRUSHFANG: 100.0
+  STRAT — WHEELJACK: [Wall of Steel / Act:6]   |   CRUSHFANG: [Total Kill / Act:9]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CRUSHFANG               : d100[77]  dex_bonus[-8]  init_skill_x3[+27]  luck[+28]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 135
+    WHEELJACK               : d100[4]  dex_bonus[-2]  init_skill_x3[+3]  luck[+29]  style_mod[+6]  activity_mod[+2] = 42
+    ▶ CRUSHFANG wins → ATTACKS
+  Attack: CRUSHFANG → WHEELJACK   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (CRUSHFANG):
+    d100[76]  dex_bonus[-4]  luck[+28]  style_mod[+4]  feint[+2]
+    Subtotal: 106
+    + style advantage: -6
+    Final ATK: 100
+  Defense Roll (WHEELJACK, PARRY — parry_bonus(3) ≥ dodge_bonus(0)):
+    d100[48]  luck[+29]  str_bonus[+2]  parry_skill(lv7)x4[+28]  style_parry[+9]  activity_mod[-2]  dex_trained_x2[+8]  race_parry_x3[+18]  shield_bonus[+10]
+    Subtotal: 150
+    Final DEF: 150
+  Margin: 100 − 150 = -50   ▶  PARRY (margin -50)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CRUSHFANG               : d100[30]  dex_bonus[-8]  init_skill_x3[+27]  luck[+28]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 88
+    WHEELJACK               : d100[26]  dex_bonus[-2]  init_skill_x3[+3]  luck[+29]  style_mod[+6]  activity_mod[+2] = 64
+    ▶ CRUSHFANG wins → ATTACKS
+  Attack: CRUSHFANG → WHEELJACK   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (CRUSHFANG):
+    d100[52]  dex_bonus[-4]  luck[+28]  style_mod[+4]  feint[+2]
+    Subtotal: 82
+    + style advantage: -6
+    Final ATK: 76
+  Defense Roll (WHEELJACK, PARRY — parry_bonus(3) ≥ dodge_bonus(0)):
+    d100[2]  luck[+29]  str_bonus[+2]  parry_skill(lv7)x4[+28]  style_parry[+9]  activity_mod[-2]  dex_trained_x2[+8]  race_parry_x3[+18]  shield_bonus[+10]
+    Subtotal: 104
+    Final DEF: 104
+  Margin: 76 − 104 = -28   ▶  PARRY (margin -28)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CRUSHFANG               : d100[53]  dex_bonus[-8]  init_skill_x3[+27]  luck[+28]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 111
+    WHEELJACK               : d100[19]  dex_bonus[-2]  init_skill_x3[+3]  luck[+29]  style_mod[+6]  activity_mod[+2] = 57
+    ▶ CRUSHFANG wins → ATTACKS
+  Attack: CRUSHFANG → WHEELJACK   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (CRUSHFANG):
+    d100[58]  dex_bonus[-4]  luck[+28]  style_mod[+4]  feint[+2]
+    Subtotal: 88
+    + style advantage: -6
+    Final ATK: 82
+  Defense Roll (WHEELJACK, PARRY — parry_bonus(3) ≥ dodge_bonus(0)):
+    d100[44]  luck[+29]  str_bonus[+2]  parry_skill(lv7)x4[+28]  style_parry[+9]  activity_mod[-2]  dex_trained_x2[+8]  race_parry_x3[+18]  shield_bonus[+10]
+    Subtotal: 146
+    Final DEF: 146
+  Margin: 82 − 146 = -64   ▶  PARRY (margin -64)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    WHEELJACK               : d100[98]  dex_bonus[-2]  init_skill_x3[+3]  luck[+29]  style_mod[+6]  activity_mod[+2] = 136
+    CRUSHFANG               : d100[34]  dex_bonus[-8]  init_skill_x3[+27]  luck[+28]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 92
+    ▶ WHEELJACK wins → ATTACKS
+  Attack: WHEELJACK → CRUSHFANG   Weapon: War Hammer   Style: Wall of Steel   Aim: None
+  Attack Roll (WHEELJACK):
+    d100[3]  dex_bonus[-1]  luck[+29]  style_mod[+4]
+    Subtotal: 35
+    Final ATK: 35
+  Defense Roll (CRUSHFANG, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[77]  luck[+28]  str_bonus[+4]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 25
+    Final DEF: 25
+  Margin: 35 − 25 = 10   ▶  HIT (margin 10)
+  Damage (WHEELJACK → CRUSHFANG):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +2.40
+      race damage net              +3.00
+      style modifier               -2.00
+      activity contrib             -0.30
+      luck ×0.15                   +4.35
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 10/55.0)) = 0.182
+    Raw: max(1, int(18 × 0.182)) = 3
+    Armor: Leather  base DEF: 2
+    Net = max(1, 3 − 2) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (CRUSHFANG):
+    Before : 62/62 (100.0%)
+    hit     : −1
+    After  : 61/62 (98.4%)
+  Knockdown Check (CRUSHFANG):
+    base = int(1/62 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 12  →  no knockdown
+  Perm Injury Check (CRUSHFANG):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CRUSHFANG               : d100[56]  dex_bonus[-8]  init_skill_x3[+27]  luck[+28]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 114
+    WHEELJACK               : d100[9]  dex_bonus[-2]  init_skill_x3[+3]  luck[+29]  style_mod[+6]  activity_mod[+2] = 47
+    ▶ CRUSHFANG wins → ATTACKS
+  Attack: CRUSHFANG → WHEELJACK   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (CRUSHFANG):
+    d100[63]  dex_bonus[-4]  luck[+28]  style_mod[+4]  feint[+2]
+    Subtotal: 93
+    + style advantage: -6
+    Final ATK: 87
+  Defense Roll (WHEELJACK, PARRY — parry_bonus(3) ≥ dodge_bonus(0)):
+    d100[32]  luck[+29]  str_bonus[+2]  parry_skill(lv7)x4[+28]  style_parry[+9]  activity_mod[-2]  dex_trained_x2[+8]  race_parry_x3[+18]  shield_bonus[+10]
+    Subtotal: 134
+    Final DEF: 134
+  Margin: 87 − 134 = -47   ▶  PARRY (margin -47)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CRUSHFANG               : d100[87]  dex_bonus[-8]  init_skill_x3[+27]  luck[+28]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 145
+    WHEELJACK               : d100[57]  dex_bonus[-2]  init_skill_x3[+3]  luck[+29]  style_mod[+6]  activity_mod[+2] = 95
+    ▶ CRUSHFANG wins → ATTACKS
+  Attack: CRUSHFANG → WHEELJACK   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (CRUSHFANG):
+    d100[84]  dex_bonus[-4]  luck[+28]  style_mod[+4]  feint[+2]
+    Subtotal: 114
+    + style advantage: -6
+    Final ATK: 108
+  Defense Roll (WHEELJACK, PARRY — parry_bonus(3) ≥ dodge_bonus(0)):
+    d100[60]  luck[+29]  str_bonus[+2]  parry_skill(lv7)x4[+28]  style_parry[+9]  activity_mod[-2]  dex_trained_x2[+8]  race_parry_x3[+18]  shield_bonus[+10]
+    Subtotal: 162
+    Final DEF: 162
+  Margin: 108 − 162 = -54   ▶  PARRY (margin -54)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    WHEELJACK               : d100[93]  dex_bonus[-2]  init_skill_x3[+3]  luck[+29]  style_mod[+6]  activity_mod[+2] = 131
+    CRUSHFANG               : d100[59]  dex_bonus[-8]  init_skill_x3[+27]  luck[+28]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 117
+    ▶ WHEELJACK wins → ATTACKS
+  Attack: WHEELJACK → CRUSHFANG   Weapon: War Hammer   Style: Wall of Steel   Aim: None
+  Attack Roll (WHEELJACK):
+    d100[48]  dex_bonus[-1]  luck[+29]  style_mod[+4]
+    Subtotal: 80
+    Final ATK: 80
+  Defense Roll (CRUSHFANG, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[70]  luck[+28]  str_bonus[+4]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 23
+    Final DEF: 23
+  Margin: 80 − 23 = 57   ▶  HIT (margin 57)
+  Damage (WHEELJACK → CRUSHFANG):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +2.40
+      race damage net              +3.00
+      style modifier               -2.00
+      activity contrib             -0.30
+      luck ×0.15                   +4.35
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 57/55.0)) = 1.000
+    Raw: max(1, int(18 × 1.000)) = 18
+    Armor: Leather  base DEF: 2
+    Net = max(1, 18 − 2) = 16
+  ▶ FINAL DAMAGE: 16
+  HP Pool (CRUSHFANG):
+    Before : 61/62 (98.4%)
+    hit     : −16
+    After  : 45/62 (72.6%)
+  Knockdown Check (CRUSHFANG):
+    base = int(16/62 × 80) = 20   cat bonus [Hammer/Mace]: +10   final: 30%
+    Roll: 65  →  no knockdown
+  Perm Injury Check (CRUSHFANG):
+    threshold = 15% of 62 = 9   damage 16 ≥ threshold
+    chance = max(5, min(80, int(16/62×100) − 5)) = 20%
+    Roll: 37  →  no injury
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CRUSHFANG               : d100[68]  dex_bonus[-8]  init_skill_x3[+27]  luck[+28]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 126
+    WHEELJACK               : d100[84]  dex_bonus[-2]  init_skill_x3[+3]  luck[+29]  style_mod[+6]  activity_mod[+2] = 122
+    ▶ CRUSHFANG wins → ATTACKS
+  Attack: CRUSHFANG → WHEELJACK   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (CRUSHFANG):
+    d100[78]  dex_bonus[-4]  luck[+28]  style_mod[+4]  feint[+2]
+    Subtotal: 108
+    + style advantage: -6
+    Final ATK: 102
+  Defense Roll (WHEELJACK, PARRY — parry_bonus(3) ≥ dodge_bonus(0)):
+    d100[43]  luck[+29]  str_bonus[+2]  parry_skill(lv7)x4[+28]  style_parry[+9]  activity_mod[-2]  dex_trained_x2[+8]  race_parry_x3[+18]  shield_bonus[+10]
+    Subtotal: 145
+    Final DEF: 145
+  Margin: 102 − 145 = -43   ▶  PARRY (margin -43)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CRUSHFANG               : d100[78]  dex_bonus[-8]  init_skill_x3[+27]  luck[+28]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 136
+    WHEELJACK               : d100[50]  dex_bonus[-2]  init_skill_x3[+3]  luck[+29]  style_mod[+6]  activity_mod[+2] = 88
+    ▶ CRUSHFANG wins → ATTACKS
+  Attack: CRUSHFANG → WHEELJACK   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (CRUSHFANG):
+    d100[28]  dex_bonus[-4]  luck[+28]  style_mod[+4]  feint[+2]
+    Subtotal: 58
+    + style advantage: -6
+    Final ATK: 52
+  Defense Roll (WHEELJACK, PARRY — parry_bonus(3) ≥ dodge_bonus(0)):
+    d100[2]  luck[+29]  str_bonus[+2]  parry_skill(lv7)x4[+28]  style_parry[+9]  activity_mod[-2]  dex_trained_x2[+8]  race_parry_x3[+18]  shield_bonus[+10]
+    Subtotal: 104
+    Final DEF: 104
+  Margin: 52 − 104 = -52   ▶  PARRY (margin -52)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: WHEELJACK has uncontested action
+  Attack: WHEELJACK → CRUSHFANG   Weapon: War Hammer   Style: Wall of Steel   Aim: None
+  Attack Roll (WHEELJACK):
+    d100[21]  dex_bonus[-1]  luck[+29]  style_mod[+4]
+    Subtotal: 53
+    Final ATK: 53
+  Defense Roll (CRUSHFANG, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[80]  luck[+28]  str_bonus[+4]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 26
+    Final DEF: 26
+  Margin: 53 − 26 = 27   ▶  HIT (margin 27)
+  Damage (WHEELJACK → CRUSHFANG):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +2.40
+      race damage net              +3.00
+      style modifier               -2.00
+      activity contrib             -0.30
+      luck ×0.15                   +4.35
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 27/55.0)) = 0.491
+    Raw: max(1, int(18 × 0.491)) = 8
+    Armor: Leather  base DEF: 2
+    Net = max(1, 8 − 2) = 6
+  ▶ FINAL DAMAGE: 6
+  HP Pool (CRUSHFANG):
+    Before : 45/62 (72.6%)
+    hit     : −6
+    After  : 39/62 (62.9%)
+  Knockdown Check (CRUSHFANG):
+    base = int(6/62 × 80) = 7   cat bonus [Hammer/Mace]: +10   final: 17%
+    Roll: 43  →  no knockdown
+  Perm Injury Check (CRUSHFANG):
+    threshold = 15% of 62 = 9   damage 6 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: WHEELJACK has uncontested action
+  Attack: WHEELJACK → CRUSHFANG   Weapon: War Hammer   Style: Wall of Steel   Aim: None
+  Attack Roll (WHEELJACK):
+    d100[91]  dex_bonus[-1]  luck[+29]  style_mod[+4]
+    Subtotal: 123
+    Final ATK: 123
+  Defense Roll (CRUSHFANG, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[5]  luck[+28]  str_bonus[+4]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 1
+    Final DEF: 1
+  Margin: 123 − 1 = 122   ▶  HIT (margin 122)
+  Damage (WHEELJACK → CRUSHFANG):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +2.40
+      race damage net              +3.00
+      style modifier               -2.00
+      activity contrib             -0.30
+      luck ×0.15                   +4.35
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 122/55.0)) = 1.000
+    Raw: max(1, int(18 × 1.000)) = 18
+    Armor: Leather  base DEF: 2
+    Net = max(1, 18 − 2) = 16
+  ▶ FINAL DAMAGE: 16
+  HP Pool (CRUSHFANG):
+    Before : 39/62 (62.9%)
+    hit     : −16
+    After  : 23/62 (37.1%)
+  Knockdown Check (CRUSHFANG):
+    base = int(16/62 × 80) = 20   cat bonus [Hammer/Mace]: +10   final: 30%
+    Roll: 36  →  no knockdown
+  Perm Injury Check (CRUSHFANG):
+    threshold = 15% of 62 = 9   damage 16 ≥ threshold
+    chance = max(5, min(80, int(16/62×100) − 5)) = 20%
+    Roll: 61  →  no injury
+
+  ─── ACTION 12 ───────────────────────────────────────────────────────────────
+  Initiative: WHEELJACK has uncontested action
+  Attack: WHEELJACK → CRUSHFANG   Weapon: War Hammer   Style: Wall of Steel   Aim: None
+  Attack Roll (WHEELJACK):
+    d100[87]  dex_bonus[-1]  luck[+29]  style_mod[+4]
+    Subtotal: 119
+    Final ATK: 119
+  Defense Roll (CRUSHFANG, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[62]  luck[+28]  str_bonus[+4]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 20
+    Final DEF: 20
+  Margin: 119 − 20 = 99   ▶  HIT (margin 99)
+  Damage (WHEELJACK → CRUSHFANG):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +2.40
+      race damage net              +3.00
+      style modifier               -2.00
+      activity contrib             -0.30
+      luck ×0.15                   +4.35
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 99/55.0)) = 1.000
+    Raw: max(1, int(18 × 1.000)) = 18
+    Armor: Leather  base DEF: 2
+    Net = max(1, 18 − 2) = 16
+  ▶ FINAL DAMAGE: 16
+  HP Pool (CRUSHFANG):
+    Before : 23/62 (37.1%)
+    hit     : −16
+    After  : 7/62 (11.3%)
+  Knockdown Check (CRUSHFANG):
+    base = int(16/62 × 80) = 20   cat bonus [Hammer/Mace]: +10   final: 30%
+    Roll: 82  →  no knockdown
+  Perm Injury Check (CRUSHFANG):
+    threshold = 15% of 62 = 9   damage 16 ≥ threshold
+    chance = max(5, min(80, int(16/62×100) − 5)) = 20%
+    Roll: 10  →  primary_leg (1 level(s))
+  Concede Attempt (CRUSHFANG):
+    d100[72] + PRE_bonus[-2] + luck//2[14] = 84
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    84 ≥ 66  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: WHEELJACK
+==============================================================================
+  Parry: d100=66 vs 22% — FAIL
+    → Parry training: no progress this session (INT 15, level 7, 22% chance).
+  Parry: d100=61 vs 22% — FAIL
+    → Parry training: no progress this session (INT 15, level 7, 22% chance).
+  Parry: d100=82 vs 22% — FAIL
+    → Parry training: no progress this session (INT 15, level 7, 22% chance).
+  INT observed learning: d100=91 vs 4% — no trigger
+
+==============================================================================
+  TRAINING: CRUSHFANG
+==============================================================================
+  Initiative: Crushfang is already mastered in Initiative.
+  Strength: d100=20 vs 22% — SUCCESS
+    → Strength trained: 18 → 19 [late] (22% chance)
+  INT observed learning: d100=79 vs 16% — no trigger
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : WHEELJACK  (100.0% HP remaining)
+  Loser  : CRUSHFANG  (survived, 11.3% HP)
+  Duration: 1 minute(s)
+==============================================================================

@@ -1,0 +1,394 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #288   Turn: 6
+  Debug team: Ilneval
+  Ilneval / DECEPTICONS   vs   Big Rufus Craw / Craw's Crushers
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: RAMPAGE
+  ────────────────────────────────────
+    Race: Goblin  |  Gender: Male
+    STR:15  DEX:13  CON:13  INT:11  PRE:7  SIZ:12
+    Max HP: 44   Luck: 23
+    Armor: Cuir Boulli   Helm: Steel Cap
+    Primary: Club   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Bash / Act:7 / Aim:Abdomen / Def:None
+    Skills: initiative:5  
+
+  ────────────────────────────────────
+  WARRIOR B: LUNGKA
+  ────────────────────────────────────
+    Race: Half-Orc  |  Gender: Female
+    STR:17  DEX:5  CON:11  INT:7  PRE:19  SIZ:17
+    Max HP: 65   Luck: 19
+    Armor: Leather   Helm: None
+    Primary: Great Sword   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Total Kill / Act:9 / Aim:Head / Def:None
+    Skills: initiative:1  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — RAMPAGE: 6   |   LUNGKA: 6
+  HP    — RAMPAGE: 44/44 (100%)   |   LUNGKA: 65/65 (100%)
+  END   — RAMPAGE: 100.0   |   LUNGKA: 100.0
+  STRAT — RAMPAGE: [Bash / Act:7]   |   LUNGKA: [Total Kill / Act:9]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAMPAGE                 : d100[69]  dex_bonus[+4]  init_skill_x3[+15]  luck[+23]  race_init[+5]  style_mod[-2]  activity_mod[+4] = 118
+    LUNGKA                  : d100[39]  dex_bonus[-10]  init_skill_x3[+3]  luck[+19]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 62
+    ▶ RAMPAGE wins → ATTACKS
+  Attack: RAMPAGE → LUNGKA   Weapon: Club   Style: Bash   Aim: Abdomen
+  Attack Roll (RAMPAGE):
+    d100[38]  dex_bonus[+2]  luck[+23]  style_mod[-1]
+    Subtotal: 62
+    Final ATK: 62
+  Defense Roll (LUNGKA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[93]  luck[+19]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 31
+    Final DEF: 31
+  Margin: 62 − 31 = 31   ▶  HIT (margin 31)
+  Damage (RAMPAGE → LUNGKA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.75
+      STR bonus                    +3.00
+      race damage net              -6.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 31/55.0)) = 0.564
+    Raw: max(1, int(9 × 0.564)) = 5
+    Armor: Leather  base DEF: 2
+    Net = max(1, 5 − 2) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (LUNGKA):
+    Before : 65/65 (100.0%)
+    hit     : −3
+    After  : 62/65 (95.4%)
+  Knockdown Check (LUNGKA):
+    base = int(3/65 × 80) = 3   cat bonus [Hammer/Mace]: +10   final: 3%
+    Roll: 81  →  no knockdown
+  Perm Injury Check (LUNGKA):
+    threshold = 15% of 65 = 9   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAMPAGE                 : d100[15]  dex_bonus[+4]  init_skill_x3[+15]  luck[+23]  race_init[+5]  style_mod[-2]  activity_mod[+4] = 64
+    LUNGKA                  : d100[25]  dex_bonus[-10]  init_skill_x3[+3]  luck[+19]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 48
+    ▶ RAMPAGE wins → ATTACKS
+  Attack: RAMPAGE → LUNGKA   Weapon: Club   Style: Bash   Aim: Abdomen
+  Attack Roll (RAMPAGE):
+    d100[19]  dex_bonus[+2]  luck[+23]  style_mod[-1]
+    Subtotal: 43
+    Final ATK: 43
+  Defense Roll (LUNGKA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[29]  luck[+19]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 9
+    Final DEF: 9
+  Margin: 43 − 9 = 34   ▶  HIT (margin 34)
+  Damage (RAMPAGE → LUNGKA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.75
+      STR bonus                    +3.00
+      race damage net              -6.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 34/55.0)) = 0.618
+    Raw: max(1, int(9 × 0.618)) = 5
+    Armor: Leather  base DEF: 2
+    Net = max(1, 5 − 2) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (LUNGKA):
+    Before : 62/65 (95.4%)
+    hit     : −3
+    After  : 59/65 (90.8%)
+  Knockdown Check (LUNGKA):
+    base = int(3/65 × 80) = 3   cat bonus [Hammer/Mace]: +10   final: 3%
+    Roll: 13  →  no knockdown
+  Perm Injury Check (LUNGKA):
+    threshold = 15% of 65 = 9   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAMPAGE                 : d100[60]  dex_bonus[+4]  init_skill_x3[+15]  luck[+23]  race_init[+5]  style_mod[-2]  activity_mod[+4] = 109
+    LUNGKA                  : d100[83]  dex_bonus[-10]  init_skill_x3[+3]  luck[+19]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 106
+    ▶ RAMPAGE wins → ATTACKS
+  Attack: RAMPAGE → LUNGKA   Weapon: Club   Style: Bash   Aim: Abdomen
+  Attack Roll (RAMPAGE):
+    d100[33]  dex_bonus[+2]  luck[+23]  style_mod[-1]
+    Subtotal: 57
+    Final ATK: 57
+  Defense Roll (LUNGKA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[97]  luck[+19]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 32
+    Final DEF: 32
+  Margin: 57 − 32 = 25   ▶  HIT (margin 25)
+  Damage (RAMPAGE → LUNGKA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.75
+      STR bonus                    +3.00
+      race damage net              -6.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 25/55.0)) = 0.455
+    Raw: max(1, int(9 × 0.455)) = 4
+    Armor: Leather  base DEF: 2
+    Net = max(1, 4 − 2) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (LUNGKA):
+    Before : 59/65 (90.8%)
+    hit     : −2
+    After  : 57/65 (87.7%)
+  Knockdown Check (LUNGKA):
+    base = int(2/65 × 80) = 2   cat bonus [Hammer/Mace]: +10   final: 2%
+    Roll: 77  →  no knockdown
+  Perm Injury Check (LUNGKA):
+    threshold = 15% of 65 = 9   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAMPAGE                 : d100[63]  dex_bonus[+4]  init_skill_x3[+15]  luck[+23]  race_init[+5]  style_mod[-2]  activity_mod[+4] = 112
+    LUNGKA                  : d100[26]  dex_bonus[-10]  init_skill_x3[+3]  luck[+19]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 49
+    ▶ RAMPAGE wins → ATTACKS
+  Attack: RAMPAGE → LUNGKA   Weapon: Club   Style: Bash   Aim: Abdomen
+  Attack Roll (RAMPAGE):
+    d100[49]  dex_bonus[+2]  luck[+23]  style_mod[-1]
+    Subtotal: 73
+    Final ATK: 73
+  Defense Roll (LUNGKA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[3]  luck[+19]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 1
+    Final DEF: 1
+  Margin: 73 − 1 = 72   ▶  HIT (margin 72)
+  Damage (RAMPAGE → LUNGKA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.75
+      STR bonus                    +3.00
+      race damage net              -6.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 72/55.0)) = 1.000
+    Raw: max(1, int(9 × 1.000)) = 9
+    Armor: Leather  base DEF: 2
+    Net = max(1, 9 − 2) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (LUNGKA):
+    Before : 57/65 (87.7%)
+    hit     : −7
+    After  : 50/65 (76.9%)
+  Knockdown Check (LUNGKA):
+    base = int(7/65 × 80) = 8   cat bonus [Hammer/Mace]: +10   final: 8%
+    Roll: 1  →  ▶ KNOCKDOWN
+  Perm Injury Check (LUNGKA):
+    threshold = 15% of 65 = 9   damage 7 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAMPAGE                 : d100[69]  dex_bonus[+4]  init_skill_x3[+15]  luck[+23]  race_init[+5]  style_mod[-2]  activity_mod[+4] = 118
+    LUNGKA                  : d100[20]  on_ground_halved[(÷2)] = 10
+    ▶ RAMPAGE wins → ATTACKS
+  Attack: RAMPAGE → LUNGKA   Weapon: Club   Style: Bash   Aim: Abdomen
+  Attack Roll (RAMPAGE):
+    d100[61]  dex_bonus[+2]  luck[+23]  style_mod[-1]
+    Subtotal: 85
+    Final ATK: 85
+  Defense Roll (LUNGKA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[71]  luck[+19]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 23
+    Final DEF: 23
+  Margin: 85 − 23 = 62   ▶  HIT (margin 62)
+  Damage (RAMPAGE → LUNGKA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.75
+      STR bonus                    +3.00
+      race damage net              -6.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 62/55.0)) = 1.000
+    Raw: max(1, int(9 × 1.000)) = 9
+    Armor: Leather  base DEF: 2
+    Net = max(1, 9 − 2) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (LUNGKA):
+    Before : 50/65 (76.9%)
+    hit     : −7
+    After  : 43/65 (66.2%)
+  Knockdown Check (LUNGKA):
+    base = int(7/65 × 80) = 8   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (LUNGKA):
+    threshold = 15% of 65 = 9   damage 7 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAMPAGE                 : d100[8]  dex_bonus[+4]  init_skill_x3[+15]  luck[+23]  race_init[+5]  style_mod[-2]  activity_mod[+4] = 57
+    LUNGKA                  : d100[61]  on_ground_halved[(÷2)] = 30
+    ▶ RAMPAGE wins → ATTACKS
+  Attack: RAMPAGE → LUNGKA   Weapon: Club   Style: Bash   Aim: Abdomen
+  Attack Roll (RAMPAGE):
+    d100[70]  dex_bonus[+2]  luck[+23]  style_mod[-1]
+    Subtotal: 94
+    Final ATK: 94
+  Defense Roll (LUNGKA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[56]  luck[+19]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 18
+    Final DEF: 18
+  Margin: 94 − 18 = 76   ▶  HIT (margin 76)
+  Damage (RAMPAGE → LUNGKA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.75
+      STR bonus                    +3.00
+      race damage net              -6.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 9
+    Fraction: max(0.10, min(1.0, 76/55.0)) = 1.000
+    Raw: max(1, int(9 × 1.000)) = 9
+    Armor: Leather  base DEF: 2
+    Net = max(1, 9 − 2) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (LUNGKA):
+    Before : 43/65 (66.2%)
+    hit     : −7
+    After  : 36/65 (55.4%)
+  Knockdown Check (LUNGKA):
+    base = int(7/65 × 80) = 8   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (LUNGKA):
+    threshold = 15% of 65 = 9   damage 7 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: LUNGKA has uncontested action
+  Attack: LUNGKA → RAMPAGE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (LUNGKA):
+    d100[46]  dex_bonus[-5]  luck[+19]  style_mod[+4]
+    Subtotal: 64
+    + style advantage: +6
+    Final ATK: 70
+  Defense Roll (RAMPAGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[15]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]
+    Subtotal: 33
+    Final DEF: 33
+  Margin: 70 − 33 = 37   ▶  HIT (margin 37)
+  Damage (LUNGKA → RAMPAGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      STR bonus                    +4.20
+      two-hand multiplier          ×1.15
+      race damage net              +8.00
+      style modifier               +5.00
+      activity contrib             -1.20
+      luck ×0.15                   +2.85
+    Ceiling: 39
+    Fraction: max(0.10, min(1.0, 37/55.0)) = 0.673
+    Raw: max(1, int(39 × 0.673)) = 26
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 26 − 5) = 21
+  ▶ FINAL DAMAGE: 21
+  HP Pool (RAMPAGE):
+    Before : 44/44 (100.0%)
+    hit     : −21
+    After  : 23/44 (52.3%)
+  Knockdown Check (RAMPAGE):
+    base = int(21/44 × 80) = 38   cat bonus [Sword/Knife]: +0   final: 38%
+    Roll: 74  →  no knockdown
+  Perm Injury Check (RAMPAGE):
+    threshold = 15% of 44 = 6   damage 21 ≥ threshold
+    chance = max(5, min(80, int(21/44×100) − 5)) = 42%
+    Roll: 76  →  no injury
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: LUNGKA has uncontested action
+  Attack: LUNGKA → RAMPAGE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (LUNGKA):
+    d100[96]  dex_bonus[-5]  luck[+19]  style_mod[+4]
+    Subtotal: 114
+    + style advantage: +6
+    Final ATK: 120
+  Defense Roll (RAMPAGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[49]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]
+    Subtotal: 67
+    Final DEF: 67
+  Margin: 120 − 67 = 53   ▶  HIT (margin 53)
+  Damage (LUNGKA → RAMPAGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      STR bonus                    +4.20
+      two-hand multiplier          ×1.15
+      race damage net              +8.00
+      style modifier               +5.00
+      activity contrib             -1.20
+      luck ×0.15                   +2.85
+    Ceiling: 39
+    Fraction: max(0.10, min(1.0, 53/55.0)) = 0.964
+    Raw: max(1, int(39 × 0.964)) = 37
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 37 − 5) = 32
+  ▶ FINAL DAMAGE: 32
+  HP Pool (RAMPAGE):
+    Before : 23/44 (52.3%)
+    hit     : −32
+    After  : -9/44 (0.0%)
+  Knockdown Check (RAMPAGE):
+    base = int(32/44 × 80) = 58   cat bonus [Sword/Knife]: +0   final: 58%
+    Roll: 81  →  no knockdown
+  Perm Injury Check (RAMPAGE):
+    threshold = 15% of 44 = 6   damage 32 ≥ threshold
+    chance = max(5, min(80, int(32/44×100) − 5)) = 67%
+    Roll: 38  →  head (3 level(s))
+  Death Check (RAMPAGE):
+    prev_hp: 23   damage: 32   new_hp: -9
+    overshoot: 9
+    death_chance = min(50.0, 0.5 + 9) = 9.5%
+    → survives (concede system takes over)
+  Concede Attempt (RAMPAGE):
+    d100[59] + PRE_bonus[-3] + luck//2[11] = 67
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    67 ≥ 66  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: RAMPAGE
+==============================================================================
+  Initiative: d100=48 vs 29% — FAIL
+    → Initiative training: no progress this session (INT 11, level 5, 29% chance).
+  Initiative: d100=50 vs 29% — FAIL
+    → Initiative training: no progress this session (INT 11, level 5, 29% chance).
+  Initiative: d100=10 vs 29% — SUCCESS
+    → Initiative trained: Level 5 → Level 6 (Excellent Skill, 29% chance)
+
+==============================================================================
+  TRAINING: LUNGKA
+==============================================================================
+  Strength: d100=66 vs 29% — FAIL
+    → Strength training: no progress this session (mid tier, 29% chance).
+  Initiative: d100=56 vs 28% — FAIL
+    → Initiative training: no progress this session (INT 7, level 1, 28% chance).
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : LUNGKA  (55.4% HP remaining)
+  Loser  : RAMPAGE  (survived, 0.0% HP)
+  Duration: 1 minute(s)
+==============================================================================

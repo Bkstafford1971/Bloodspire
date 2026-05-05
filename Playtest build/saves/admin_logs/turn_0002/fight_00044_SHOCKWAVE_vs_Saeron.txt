@@ -1,0 +1,421 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #44   Turn: 2
+  Debug team: Ilneval
+  Ilneval / DECEPTICONS   vs   Loquat the Wise / The Learned Fists
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: SHOCKWAVE
+  ────────────────────────────────────
+    Race: Human  |  Gender: Male
+    STR:13  DEX:12  CON:17  INT:12  PRE:10  SIZ:9
+    Max HP: 50   Luck: 14
+    Armor: Cuir Boulli   Helm: Steel Cap
+    Primary: Boar Spear   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Lunge / Act:7 / Aim:None / Def:Chest
+
+  ────────────────────────────────────
+  WARRIOR B: SAERON
+  ────────────────────────────────────
+    Race: Half-Elf  |  Gender: Male
+    STR:13  DEX:18  CON:15  INT:7  PRE:12  SIZ:6
+    Max HP: 41   Luck: 29
+    Armor: Cuir Boulli   Helm: None
+    Primary: Boar Spear   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Feint / Act:4 / Aim:Chest / Def:Chest
+    Skills: feint:1  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — SHOCKWAVE: 6   |   SAERON: 6
+  HP    — SHOCKWAVE: 50/50 (100%)   |   SAERON: 41/41 (100%)
+  END   — SHOCKWAVE: 100.0   |   SAERON: 100.0
+  STRAT — SHOCKWAVE: [Lunge / Act:7]   |   SAERON: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SAERON                  : d100[33]  dex_bonus[+10]  luck[+29]  activity_mod[-2] = 70
+    SHOCKWAVE               : d100[18]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 40
+    ▶ SAERON wins → ATTACKS
+  Attack: SAERON → SHOCKWAVE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (SAERON):
+    d100[37]  dex_bonus[+7]  luck[+29]  feint[+2]
+    Subtotal: 75
+    Final ATK: 75
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[95]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  size_diff[-5]  def_point_bonus[+15]
+    Subtotal: 132
+    Final DEF: 132
+  Margin: 75 − 132 = -57   ▶  DODGE (margin -57)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SAERON                  : d100[79]  dex_bonus[+10]  luck[+29]  activity_mod[-2] = 116
+    SHOCKWAVE               : d100[48]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 70
+    ▶ SAERON wins → ATTACKS
+  Attack: SAERON → SHOCKWAVE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (SAERON):
+    d100[40]  dex_bonus[+7]  luck[+29]  feint[+2]
+    Subtotal: 78
+    Final ATK: 78
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[58]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  size_diff[-5]  def_point_bonus[+15]
+    Subtotal: 95
+    Final DEF: 95
+  Margin: 78 − 95 = -17   ▶  DODGE (margin -17)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SAERON                  : d100[72]  dex_bonus[+10]  luck[+29]  activity_mod[-2] = 109
+    SHOCKWAVE               : d100[55]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 77
+    ▶ SAERON wins → ATTACKS
+  Attack: SAERON → SHOCKWAVE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (SAERON):
+    d100[25]  dex_bonus[+7]  luck[+29]  feint[+2]
+    Subtotal: 63
+    Final ATK: 63
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[51]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  size_diff[-5]  def_point_bonus[+15]
+    Subtotal: 88
+    Final DEF: 88
+  Margin: 63 − 88 = -25   ▶  DODGE (margin -25)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[51]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 73
+    SAERON                  : d100[14]  dex_bonus[+10]  luck[+29]  activity_mod[-2] = 51
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAERON   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[18]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 39
+    Final ATK: 39
+  Defense Roll (SAERON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[28]  luck[+29]  str_bonus[+1]  activity_mod[+2]
+    Subtotal: 60
+    Final DEF: 60
+  Margin: 39 − 60 = -21   ▶  PARRY (margin -21)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[64]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 86
+    SAERON                  : d100[4]  dex_bonus[+10]  luck[+29]  activity_mod[-2] = 41
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAERON   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[89]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 110
+    Final ATK: 110
+  Defense Roll (SAERON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[25]  luck[+29]  str_bonus[+1]  activity_mod[+2]
+    Subtotal: 57
+    Final DEF: 57
+  Margin: 110 − 57 = 53   ▶  HIT (margin 53)
+  Damage (SHOCKWAVE → SAERON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +2.10
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 53/55.0)) = 0.964
+    Raw: max(1, int(11 × 0.964)) = 10
+    Favorite weapon +1 → raw = 11
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 11 − 3) = 8
+  ▶ FINAL DAMAGE: 8
+  HP Pool (SAERON):
+    Before : 41/41 (100.0%)
+    hit     : −8
+    After  : 33/41 (80.5%)
+  Knockdown Check (SAERON):
+    base = int(8/41 × 80) = 15   cat bonus [Polearm/Spear]: +5   final: 20%
+    Roll: 52  →  no knockdown
+  Perm Injury Check (SAERON):
+    threshold = 15% of 41 = 6   damage 8 ≥ threshold
+    chance = max(5, min(80, int(8/41×100) − 5)) = 14%
+    Roll: 4  →  head (1 level(s))
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[98]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 120
+    SAERON                  : d100[33]  dex_bonus[+10]  luck[+29]  activity_mod[-2] = 70
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAERON   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[10]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 31
+    Final ATK: 31
+  Defense Roll (SAERON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[23]  luck[+29]  str_bonus[+1]  activity_mod[+2]
+    Subtotal: 55
+    Final DEF: 55
+  Margin: 31 − 55 = -24   ▶  PARRY (margin -24)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[76]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 98
+    SAERON                  : d100[60]  dex_bonus[+10]  luck[+29]  activity_mod[-2] = 97
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAERON   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[25]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 46
+    Final ATK: 46
+  Defense Roll (SAERON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[88]  luck[+29]  str_bonus[+1]  activity_mod[+2]
+    Subtotal: 120
+    Final DEF: 120
+  Margin: 46 − 120 = -74   ▶  PARRY (margin -74)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SAERON                  : d100[46]  dex_bonus[+10]  luck[+29]  activity_mod[-2] = 83
+    SHOCKWAVE               : d100[24]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 46
+    ▶ SAERON wins → ATTACKS
+  Attack: SAERON → SHOCKWAVE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (SAERON):
+    d100[63]  dex_bonus[+7]  luck[+29]  feint[+2]
+    Subtotal: 101
+    Final ATK: 101
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[94]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  size_diff[-5]  def_point_bonus[+15]
+    Subtotal: 131
+    Final DEF: 131
+  Margin: 101 − 131 = -30   ▶  DODGE (margin -30)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SAERON                  : d100[89]  dex_bonus[+10]  luck[+29]  activity_mod[-2] = 126
+    SHOCKWAVE               : d100[80]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 102
+    ▶ SAERON wins → ATTACKS
+  Attack: SAERON → SHOCKWAVE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (SAERON):
+    d100[58]  dex_bonus[+7]  luck[+29]  feint[+2]
+    Subtotal: 96
+    Final ATK: 96
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[84]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  size_diff[-5]  def_point_bonus[+15]
+    Subtotal: 121
+    Final DEF: 121
+  Margin: 96 − 121 = -25   ▶  DODGE (margin -25)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[89]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 111
+    SAERON                  : d100[56]  dex_bonus[+10]  luck[+29]  activity_mod[-2] = 93
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAERON   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[40]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 61
+    Final ATK: 61
+  Defense Roll (SAERON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[88]  luck[+29]  str_bonus[+1]  activity_mod[+2]
+    Subtotal: 120
+    Final DEF: 120
+  Margin: 61 − 120 = -59   ▶  PARRY (margin -59)
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative:
+    SAERON                  : d100[62]  dex_bonus[+10]  luck[+29]  activity_mod[-2] = 99
+    SHOCKWAVE               : d100[31]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 53
+    ▶ SAERON wins → ATTACKS
+  Attack: SAERON → SHOCKWAVE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (SAERON):
+    d100[22]  dex_bonus[+7]  luck[+29]  feint[+2]
+    Subtotal: 60
+    Final ATK: 60
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[81]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  size_diff[-5]  def_point_bonus[+15]
+    Subtotal: 118
+    Final DEF: 118
+  Margin: 60 − 118 = -58   ▶  DODGE (margin -58)
+
+  ─── ACTION 12 ───────────────────────────────────────────────────────────────
+  Initiative: SHOCKWAVE has uncontested action
+  Attack: SHOCKWAVE → SAERON   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[95]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 116
+    Final ATK: 116
+  Defense Roll (SAERON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[25]  luck[+29]  str_bonus[+1]  activity_mod[+2]
+    Subtotal: 57
+    Final DEF: 57
+  Margin: 116 − 57 = 59   ▶  HIT (margin 59)
+  Damage (SHOCKWAVE → SAERON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +2.10
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 59/55.0)) = 1.000
+    Raw: max(1, int(11 × 1.000)) = 11
+    Favorite weapon +1 → raw = 12
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 12 − 3) = 9
+  ▶ FINAL DAMAGE: 9
+  HP Pool (SAERON):
+    Before : 33/41 (80.5%)
+    hit     : −9
+    After  : 24/41 (58.5%)
+  Knockdown Check (SAERON):
+    base = int(9/41 × 80) = 17   cat bonus [Polearm/Spear]: +5   final: 22%
+    Roll: 12  →  ▶ KNOCKDOWN
+  Perm Injury Check (SAERON):
+    threshold = 15% of 41 = 6   damage 9 ≥ threshold
+    chance = max(5, min(80, int(9/41×100) − 5)) = 16%
+    Roll: 30  →  no injury
+
+  ── END OF MINUTE ──
+    SHOCKWAVE: 100.0 END − (6.60 burn × 6 actions) = 59.4
+    SAERON: 100.0 END − (1.70 burn × 6 actions) = 89.8
+    HP POOL — SHOCKWAVE: 50/50 (100%)
+    HP POOL — SAERON: 24/41 (59%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — SHOCKWAVE: 6   |   SAERON: 3
+  HP    — SHOCKWAVE: 50/50 (100%)   |   SAERON: 24/41 (59%)
+  END   — SHOCKWAVE: 59.4   |   SAERON: 89.8
+  STRAT — SHOCKWAVE: [Lunge / Act:7]   |   SAERON: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[75]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 97
+    SAERON                  : d100[62]  on_ground_halved[(÷2)] = 31
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAERON   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[10]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 31
+    Final ATK: 31
+  Defense Roll (SAERON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[92]  luck[+29]  str_bonus[+1]  activity_mod[+2]  ground_pen[-25]
+    Subtotal: 99
+    Final DEF: 99
+  Margin: 31 − 99 = -68   ▶  PARRY (margin -68)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[51]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 73
+    SAERON                  : d100[36]  on_ground_halved[(÷2)] = 18
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAERON   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[82]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 103
+    Final ATK: 103
+  Defense Roll (SAERON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[51]  luck[+29]  str_bonus[+1]  activity_mod[+2]  ground_pen[-25]
+    Subtotal: 58
+    Final DEF: 58
+  Margin: 103 − 58 = 45   ▶  HIT (margin 45)
+  Damage (SHOCKWAVE → SAERON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +2.10
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 45/55.0)) = 0.818
+    Raw: max(1, int(11 × 0.818)) = 9
+    Favorite weapon +1 → raw = 10
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 10 − 3) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (SAERON):
+    Before : 24/41 (58.5%)
+    hit     : −7
+    After  : 17/41 (41.5%)
+  Knockdown Check (SAERON):
+    base = int(7/41 × 80) = 13   cat bonus [Polearm/Spear]: +5   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SAERON):
+    threshold = 15% of 41 = 6   damage 7 ≥ threshold
+    chance = max(5, min(80, int(7/41×100) − 5)) = 12%
+    Roll: 100  →  no injury
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[45]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 67
+    SAERON                  : d100[69]  on_ground_halved[(÷2)] = 34
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAERON   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[86]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 107
+    Final ATK: 107
+  Defense Roll (SAERON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[10]  luck[+29]  str_bonus[+1]  activity_mod[+2]  ground_pen[-25]
+    Subtotal: 17
+    Final DEF: 17
+  Margin: 107 − 17 = 90   ▶  HIT (margin 90)
+  Damage (SHOCKWAVE → SAERON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +2.10
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 90/55.0)) = 1.000
+    Raw: max(1, int(11 × 1.000)) = 11
+    Favorite weapon +1 → raw = 12
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 12 − 3) = 9
+  ▶ FINAL DAMAGE: 9
+  HP Pool (SAERON):
+    Before : 17/41 (41.5%)
+    hit     : −9
+    After  : 8/41 (19.5%)
+  Knockdown Check (SAERON):
+    base = int(9/41 × 80) = 17   cat bonus [Polearm/Spear]: +5   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SAERON):
+    threshold = 15% of 41 = 6   damage 9 ≥ threshold
+    chance = max(5, min(80, int(9/41×100) − 5)) = 16%
+    Roll: 63  →  no injury
+  Concede Attempt (SAERON):
+    d100[64] + PRE_bonus[+2] + luck//2[14] = 80
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    80 ≥ 64  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: SHOCKWAVE
+==============================================================================
+  Strength: d100=22 vs 62% — SUCCESS
+    → Strength trained: 13 → 14 (62% chance)
+  Strength: d100=59 vs 62% — SUCCESS
+    → Strength trained: 14 → 15 (62% chance)
+  Strength: d100=32 vs 42% — SUCCESS
+    → Strength trained: 15 → 16 (42% chance)
+
+==============================================================================
+  TRAINING: SAERON
+==============================================================================
+  Dexterity: d100=2 vs 55% — SUCCESS
+    → Dexterity trained: 18 → 19 (55% chance)
+  Dodge: d100=81 vs 28% — FAIL
+    → Dodge training: no progress this session (INT 7, level 0, 28% chance).
+  Feint: d100=98 vs 28% — FAIL
+    → Feint training: no progress this session (INT 7, level 1, 28% chance).
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : SHOCKWAVE  (100.0% HP remaining)
+  Loser  : SAERON  (survived, 19.5% HP)
+  Duration: 2 minute(s)
+==============================================================================

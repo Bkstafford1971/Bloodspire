@@ -1,0 +1,2622 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #781   Turn: 15
+  Debug team: Electron
+  Electron / AUTOBOTS   vs   Count Aldren Voss / House Voss
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: HUFFER
+  ────────────────────────────────────
+    Race: Gnome  |  Gender: Male
+    STR:15  DEX:15  CON:15  INT:11  PRE:6  SIZ:11
+    Max HP: 58   Luck: 9
+    Armor: Brigandine   Helm: Full Helm
+    Primary: Morningstar   Secondary: Target Shield
+    Strategies:
+      [1] Always  →  Strike / Act:7 / Aim:Primary Arm / Def:Head
+
+  ────────────────────────────────────
+  WARRIOR B: ULRIC
+  ────────────────────────────────────
+    Race: Human  |  Gender: Male
+    STR:14  DEX:8  CON:11  INT:16  PRE:13  SIZ:10
+    Max HP: 43   Luck: 18
+    Armor: Cuir Boulli   Helm: None
+    Primary: Short Sword   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Feint / Act:4 / Aim:Chest / Def:Chest
+    Skills: dodge:3  feint:1  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — HUFFER: 5   |   ULRIC: 5
+  HP    — HUFFER: 58/58 (100%)   |   ULRIC: 43/43 (100%)
+  END   — HUFFER: 100.0   |   ULRIC: 100.0
+  STRAT — HUFFER: [Strike / Act:7]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[96]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 113
+    ULRIC                   : d100[42]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 52
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[12]  dex_bonus[+2]  luck[+9]
+    Subtotal: 23
+    Final ATK: 23
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[51]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 75
+    Final DEF: 75
+  Margin: 23 − 75 = -52   ▶  PARRY (margin -52)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[77]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 94
+    ULRIC                   : d100[28]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 38
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[15]  dex_bonus[+2]  luck[+9]
+    Subtotal: 26
+    Final ATK: 26
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[84]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 108
+    Final DEF: 108
+  Margin: 26 − 108 = -82   ▶  PARRY (margin -82)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[71]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 88
+    ULRIC                   : d100[47]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 57
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[81]  dex_bonus[+2]  luck[+9]
+    Subtotal: 92
+    Final ATK: 92
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[87]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 111
+    Final DEF: 111
+  Margin: 92 − 111 = -19   ▶  PARRY (margin -19)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[59]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 76
+    ULRIC                   : d100[60]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 70
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[83]  dex_bonus[+2]  luck[+9]
+    Subtotal: 94
+    Final ATK: 94
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[3]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 27
+    Final DEF: 27
+  Margin: 94 − 27 = 67   ▶  HIT (margin 67)
+  Damage (HUFFER → ULRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 67/55.0)) = 1.000
+    Raw: max(1, int(10 × 1.000)) = 10
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 10 − 3) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (ULRIC):
+    Before : 43/43 (100.0%)
+    hit     : −7
+    After  : 36/43 (83.7%)
+  Knockdown Check (ULRIC):
+    base = int(7/43 × 80) = 13   cat bonus [Hammer/Mace]: +10   final: 23%
+    Roll: 100  →  no knockdown
+  Perm Injury Check (ULRIC):
+    threshold = 15% of 43 = 6   damage 7 ≥ threshold
+    chance = max(5, min(80, int(7/43×100) − 5)) = 9%
+    Roll: 31  →  no injury
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[68]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 85
+    ULRIC                   : d100[5]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 15
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[16]  dex_bonus[+2]  luck[+9]
+    Subtotal: 27
+    Final ATK: 27
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[89]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 113
+    Final DEF: 113
+  Margin: 27 − 113 = -86   ▶  PARRY (margin -86)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[68]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 90
+    Final ATK: 90
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[82]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 109
+    Final DEF: 109
+  Margin: 90 − 109 = -19   ▶  PARRY (margin -19)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[87]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 109
+    Final ATK: 109
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[26]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 53
+    Final DEF: 53
+  Margin: 109 − 53 = 56   ▶  HIT (margin 56)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 56/55.0)) = 1.000
+    Raw: max(1, int(12 × 1.000)) = 12
+    Favorite weapon +1 → raw = 13
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 13 − 9) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (HUFFER):
+    Before : 58/58 (100.0%)
+    hit     : −4
+    After  : 54/58 (93.1%)
+  Knockdown Check (HUFFER):
+    base = int(4/58 × 80) = 5   cat bonus [Sword/Knife]: +0   final: 5%
+    Roll: 33  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 4 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[100]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 122
+    Final ATK: 122
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[64]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 91
+    Final DEF: 91
+  Margin: 122 − 91 = 31   ▶  HIT (margin 31)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 31/55.0)) = 0.564
+    Raw: max(1, int(12 × 0.564)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 7 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 54/58 (93.1%)
+    hit     : −1
+    After  : 53/58 (91.4%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 13  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[95]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 117
+    Final ATK: 117
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[46]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 73
+    Final DEF: 73
+  Margin: 117 − 73 = 44   ▶  HIT (margin 44)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 44/55.0)) = 0.800
+    Raw: max(1, int(12 × 0.800)) = 9
+    Favorite weapon +1 → raw = 10
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 10 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 53/58 (91.4%)
+    hit     : −1
+    After  : 52/58 (89.7%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 66  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[21]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 43
+    Final ATK: 43
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[81]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 108
+    Final DEF: 108
+  Margin: 43 − 108 = -65   ▶  PARRY (margin -65)
+
+  ── END OF MINUTE ──
+    HUFFER: 100.0 END − (2.60 burn × 5 actions) = 86.0
+    ULRIC: 100.0 END − (1.70 burn × 5 actions) = 91.5
+    HP POOL — HUFFER: 52/58 (90%)
+    HP POOL — ULRIC: 36/43 (84%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — HUFFER: 5   |   ULRIC: 5
+  HP    — HUFFER: 52/58 (90%)   |   ULRIC: 36/43 (84%)
+  END   — HUFFER: 86.0   |   ULRIC: 91.5
+  STRAT — HUFFER: [Strike / Act:7]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[88]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 98
+    HUFFER                  : d100[10]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 27
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[77]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 99
+    Final ATK: 99
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[17]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 44
+    Final DEF: 44
+  Margin: 99 − 44 = 55   ▶  HIT (margin 55)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 55/55.0)) = 1.000
+    Raw: max(1, int(12 × 1.000)) = 12
+    Favorite weapon +1 → raw = 13
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 13 − 9) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (HUFFER):
+    Before : 52/58 (89.7%)
+    hit     : −4
+    After  : 48/58 (82.8%)
+  Knockdown Check (HUFFER):
+    base = int(4/58 × 80) = 5   cat bonus [Sword/Knife]: +0   final: 5%
+    Roll: 74  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 4 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[81]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 91
+    HUFFER                  : d100[60]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 77
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[43]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 65
+    Final ATK: 65
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[53]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 65 − 80 = -15   ▶  PARRY (margin -15)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[70]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 87
+    ULRIC                   : d100[33]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 43
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[90]  dex_bonus[+2]  luck[+9]
+    Subtotal: 101
+    Final ATK: 101
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[56]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 101 − 80 = 21   ▶  HIT (margin 21)
+  Damage (HUFFER → ULRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 21/55.0)) = 0.382
+    Raw: max(1, int(10 × 0.382)) = 3
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 3 − 3) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (ULRIC):
+    Before : 36/43 (83.7%)
+    hit     : −1
+    After  : 35/43 (81.4%)
+  Knockdown Check (ULRIC):
+    base = int(1/43 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 64  →  no knockdown
+  Perm Injury Check (ULRIC):
+    threshold = 15% of 43 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[96]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 113
+    ULRIC                   : d100[70]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 80
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[83]  dex_bonus[+2]  luck[+9]
+    Subtotal: 94
+    Final ATK: 94
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[54]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 78
+    Final DEF: 78
+  Margin: 94 − 78 = 16   ▶  HIT (margin 16)
+  Damage (HUFFER → ULRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 16/55.0)) = 0.291
+    Raw: max(1, int(10 × 0.291)) = 2
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 2 − 3) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (ULRIC):
+    Before : 35/43 (81.4%)
+    hit     : −1
+    After  : 34/43 (79.1%)
+  Knockdown Check (ULRIC):
+    base = int(1/43 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 58  →  no knockdown
+  Perm Injury Check (ULRIC):
+    threshold = 15% of 43 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[46]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 56
+    HUFFER                  : d100[11]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 28
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[1]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 23
+    Final ATK: 23
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[32]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 59
+    Final DEF: 59
+  Margin: 23 − 59 = -36   ▶  PARRY (margin -36)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[46]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 63
+    ULRIC                   : d100[20]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 30
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[28]  dex_bonus[+2]  luck[+9]
+    Subtotal: 39
+    Final ATK: 39
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[28]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 52
+    Final DEF: 52
+  Margin: 39 − 52 = -13   ▶  PARRY (margin -13)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[72]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 82
+    HUFFER                  : d100[26]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 43
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[33]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 55
+    Final ATK: 55
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[96]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 123
+    Final DEF: 123
+  Margin: 55 − 123 = -68   ▶  PARRY (margin -68)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[95]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 112
+    ULRIC                   : d100[93]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 103
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[6]  dex_bonus[+2]  luck[+9]
+    Subtotal: 17
+    Final ATK: 17
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[85]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 109
+    Final DEF: 109
+  Margin: 17 − 109 = -92   ▶  PARRY (margin -92)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[33]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 50
+    ULRIC                   : d100[37]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 47
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[59]  dex_bonus[+2]  luck[+9]
+    Subtotal: 70
+    Final ATK: 70
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[27]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 51
+    Final DEF: 51
+  Margin: 70 − 51 = 19   ▶  HIT (margin 19)
+  Damage (HUFFER → ULRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 19/55.0)) = 0.345
+    Raw: max(1, int(10 × 0.345)) = 3
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 3 − 3) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (ULRIC):
+    Before : 34/43 (79.1%)
+    hit     : −1
+    After  : 33/43 (76.7%)
+  Knockdown Check (ULRIC):
+    base = int(1/43 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 26  →  no knockdown
+  Perm Injury Check (ULRIC):
+    threshold = 15% of 43 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[4]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 26
+    Final ATK: 26
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[99]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 126
+    Final DEF: 126
+  Margin: 26 − 126 = -100   ▶  PARRY (margin -100)
+
+  ── END OF MINUTE ──
+    HUFFER: 86.0 END − (2.60 burn × 5 actions) = 72.0
+    ULRIC: 91.5 END − (1.70 burn × 5 actions) = 83.0
+    HP POOL — HUFFER: 48/58 (83%)
+    HP POOL — ULRIC: 33/43 (77%)
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — HUFFER: 5   |   ULRIC: 5
+  HP    — HUFFER: 48/58 (83%)   |   ULRIC: 33/43 (77%)
+  END   — HUFFER: 72.0   |   ULRIC: 83.0
+  STRAT — HUFFER: [Strike / Act:7]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[98]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 108
+    HUFFER                  : d100[17]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 34
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[22]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 44
+    Final ATK: 44
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[11]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 38
+    Final DEF: 38
+  Margin: 44 − 38 = 6   ▶  GRAZE (margin 6, 1 HP)
+  HP Pool (HUFFER):
+    Before : 48/58 (82.8%)
+    graze   : −1
+    After  : 47/58 (81.0%)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[99]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 109
+    HUFFER                  : d100[83]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 100
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[33]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 55
+    Final ATK: 55
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[70]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 97
+    Final DEF: 97
+  Margin: 55 − 97 = -42   ▶  PARRY (margin -42)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[23]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 40
+    ULRIC                   : d100[23]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 33
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[57]  dex_bonus[+2]  luck[+9]
+    Subtotal: 68
+    Final ATK: 68
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[67]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 91
+    Final DEF: 91
+  Margin: 68 − 91 = -23   ▶  PARRY (margin -23)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[49]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 59
+    HUFFER                  : d100[33]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 50
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[42]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 64
+    Final ATK: 64
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[81]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 108
+    Final DEF: 108
+  Margin: 64 − 108 = -44   ▶  PARRY (margin -44)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[63]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 80
+    ULRIC                   : d100[48]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 58
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[75]  dex_bonus[+2]  luck[+9]
+    Subtotal: 86
+    Final ATK: 86
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[73]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 97
+    Final DEF: 97
+  Margin: 86 − 97 = -11   ▶  PARRY (margin -11)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[89]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 106
+    ULRIC                   : d100[41]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 51
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[18]  dex_bonus[+2]  luck[+9]
+    Subtotal: 29
+    Final ATK: 29
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[59]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 83
+    Final DEF: 83
+  Margin: 29 − 83 = -54   ▶  PARRY (margin -54)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[14]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 24
+    HUFFER                  : d100[3]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 20
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[94]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 116
+    Final ATK: 116
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[53]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 116 − 80 = 36   ▶  HIT (margin 36)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 36/55.0)) = 0.655
+    Raw: max(1, int(12 × 0.655)) = 7
+    Favorite weapon +1 → raw = 8
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 8 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 47/58 (81.0%)
+    hit     : −1
+    After  : 46/58 (79.3%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 80  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[82]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 92
+    HUFFER                  : d100[63]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 80
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[40]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 62
+    Final ATK: 62
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[96]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 123
+    Final DEF: 123
+  Margin: 62 − 123 = -61   ▶  PARRY (margin -61)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[34]  dex_bonus[+2]  luck[+9]
+    Subtotal: 45
+    Final ATK: 45
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[28]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 52
+    Final DEF: 52
+  Margin: 45 − 52 = -7   ▶  PARRY (margin -7)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[92]  dex_bonus[+2]  luck[+9]
+    Subtotal: 103
+    Final ATK: 103
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[87]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 111
+    Final DEF: 111
+  Margin: 103 − 111 = -8   ▶  PARRY (margin -8)
+
+  ── END OF MINUTE ──
+    HUFFER: 72.0 END − (2.60 burn × 5 actions) = 58.0
+    ULRIC: 83.0 END − (1.70 burn × 5 actions) = 74.5
+    HP POOL — HUFFER: 46/58 (79%)
+    HP POOL — ULRIC: 33/43 (77%)
+
+==============================================================================
+  MINUTE 4
+==============================================================================
+  APM   — HUFFER: 5   |   ULRIC: 5
+  HP    — HUFFER: 46/58 (79%)   |   ULRIC: 33/43 (77%)
+  END   — HUFFER: 58.0   |   ULRIC: 74.5
+  STRAT — HUFFER: [Strike / Act:7]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[80]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 97
+    ULRIC                   : d100[33]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 43
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[63]  dex_bonus[+2]  luck[+9]
+    Subtotal: 74
+    Final ATK: 74
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[23]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 47
+    Final DEF: 47
+  Margin: 74 − 47 = 27   ▶  HIT (margin 27)
+  Damage (HUFFER → ULRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 27/55.0)) = 0.491
+    Raw: max(1, int(10 × 0.491)) = 4
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 4 − 3) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (ULRIC):
+    Before : 33/43 (76.7%)
+    hit     : −1
+    After  : 32/43 (74.4%)
+  Knockdown Check (ULRIC):
+    base = int(1/43 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 48  →  no knockdown
+  Perm Injury Check (ULRIC):
+    threshold = 15% of 43 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[12]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 29
+    ULRIC                   : d100[14]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 24
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[83]  dex_bonus[+2]  luck[+9]
+    Subtotal: 94
+    Final ATK: 94
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[72]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 96
+    Final DEF: 96
+  Margin: 94 − 96 = -2   ▶  PARRY (margin -2)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[77]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 94
+    ULRIC                   : d100[35]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 45
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[73]  dex_bonus[+2]  luck[+9]
+    Subtotal: 84
+    Final ATK: 84
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[87]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 111
+    Final DEF: 111
+  Margin: 84 − 111 = -27   ▶  PARRY (margin -27)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[33]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 43
+    HUFFER                  : d100[13]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 30
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[49]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 71
+    Final ATK: 71
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[39]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 66
+    Final DEF: 66
+  Margin: 71 − 66 = 5   ▶  GRAZE (margin 5, 1 HP)
+  HP Pool (HUFFER):
+    Before : 46/58 (79.3%)
+    graze   : −1
+    After  : 45/58 (77.6%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[62]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 72
+    HUFFER                  : d100[11]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 28
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[91]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 113
+    Final ATK: 113
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[52]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 79
+    Final DEF: 79
+  Margin: 113 − 79 = 34   ▶  HIT (margin 34)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 34/55.0)) = 0.618
+    Raw: max(1, int(12 × 0.618)) = 7
+    Favorite weapon +1 → raw = 8
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 8 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 45/58 (77.6%)
+    hit     : −1
+    After  : 44/58 (75.9%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 36  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[57]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 67
+    HUFFER                  : d100[6]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 23
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[83]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 105
+    Final ATK: 105
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[94]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 121
+    Final DEF: 121
+  Margin: 105 − 121 = -16   ▶  PARRY (margin -16)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[89]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 106
+    ULRIC                   : d100[72]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 82
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[24]  dex_bonus[+2]  luck[+9]
+    Subtotal: 35
+    Final ATK: 35
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[5]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 29
+    Final DEF: 29
+  Margin: 35 − 29 = 6   ▶  GRAZE (margin 6, 1 HP)
+  HP Pool (ULRIC):
+    Before : 32/43 (74.4%)
+    graze   : −1
+    After  : 31/43 (72.1%)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[90]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 100
+    HUFFER                  : d100[55]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 72
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[61]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 83
+    Final ATK: 83
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[11]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 38
+    Final DEF: 38
+  Margin: 83 − 38 = 45   ▶  HIT (margin 45)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 45/55.0)) = 0.818
+    Raw: max(1, int(12 × 0.818)) = 9
+    Favorite weapon +1 → raw = 10
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 10 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 44/58 (75.9%)
+    hit     : −1
+    After  : 43/58 (74.1%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 95  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[91]  dex_bonus[+2]  luck[+9]
+    Subtotal: 102
+    Final ATK: 102
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[42]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 66
+    Final DEF: 66
+  Margin: 102 − 66 = 36   ▶  HIT (margin 36)
+  Damage (HUFFER → ULRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 36/55.0)) = 0.655
+    Raw: max(1, int(10 × 0.655)) = 6
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 6 − 3) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (ULRIC):
+    Before : 31/43 (72.1%)
+    hit     : −3
+    After  : 28/43 (65.1%)
+  Knockdown Check (ULRIC):
+    base = int(3/43 × 80) = 5   cat bonus [Hammer/Mace]: +10   final: 15%
+    Roll: 93  →  no knockdown
+  Perm Injury Check (ULRIC):
+    threshold = 15% of 43 = 6   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    HUFFER: 58.0 END − (2.60 burn × 5 actions) = 44.0
+    ULRIC: 74.5 END − (1.70 burn × 5 actions) = 66.0
+    HP POOL — HUFFER: 43/58 (74%)
+    HP POOL — ULRIC: 28/43 (65%)
+
+==============================================================================
+  MINUTE 5
+==============================================================================
+  APM   — HUFFER: 5   |   ULRIC: 5
+  HP    — HUFFER: 43/58 (74%)   |   ULRIC: 28/43 (65%)
+  END   — HUFFER: 44.0   |   ULRIC: 66.0
+  STRAT — HUFFER: [Strike / Act:7]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[81]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 91
+    HUFFER                  : d100[10]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 27
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[8]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 30
+    Final ATK: 30
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[76]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 103
+    Final DEF: 103
+  Margin: 30 − 103 = -73   ▶  PARRY (margin -73)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[83]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 100
+    ULRIC                   : d100[4]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 14
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[65]  dex_bonus[+2]  luck[+9]
+    Subtotal: 76
+    Final ATK: 76
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[25]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 49
+    Final DEF: 49
+  Margin: 76 − 49 = 27   ▶  HIT (margin 27)
+  Damage (HUFFER → ULRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 27/55.0)) = 0.491
+    Raw: max(1, int(10 × 0.491)) = 4
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 4 − 3) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (ULRIC):
+    Before : 28/43 (65.1%)
+    hit     : −1
+    After  : 27/43 (62.8%)
+  Knockdown Check (ULRIC):
+    base = int(1/43 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 5  →  ▶ KNOCKDOWN
+  Perm Injury Check (ULRIC):
+    threshold = 15% of 43 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[47]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 64
+    ULRIC                   : d100[38]  on_ground_halved[(÷2)] = 19
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[7]  dex_bonus[+2]  luck[+9]
+    Subtotal: 18
+    Final ATK: 18
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[34]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]  ground_pen[-25]
+    Subtotal: 33
+    Final DEF: 33
+  Margin: 18 − 33 = -15   ▶  PARRY (margin -15)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[80]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 97
+    ULRIC                   : d100[57]  on_ground_halved[(÷2)] = 28
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[8]  dex_bonus[+2]  luck[+9]
+    Subtotal: 19
+    Final ATK: 19
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[39]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]  ground_pen[-25]
+    Subtotal: 38
+    Final DEF: 38
+  Margin: 19 − 38 = -19   ▶  PARRY (margin -19)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[70]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 87
+    ULRIC                   : d100[81]  on_ground_halved[(÷2)] = 40
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[63]  dex_bonus[+2]  luck[+9]
+    Subtotal: 74
+    Final ATK: 74
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[68]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]  ground_pen[-25]
+    Subtotal: 67
+    Final DEF: 67
+  Margin: 74 − 67 = 7   ▶  GRAZE (margin 7, 1 HP)
+  HP Pool (ULRIC):
+    Before : 27/43 (62.8%)
+    graze   : −1
+    After  : 26/43 (60.5%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[52]  dex_bonus[+4]  luck[+9]  activity_mod[+4] = 69
+    ULRIC                   : d100[1]  on_ground_halved[(÷2)] = 1
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[37]  dex_bonus[+2]  luck[+9]
+    Subtotal: 48
+    Final ATK: 48
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[68]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]  ground_pen[-25]
+    Subtotal: 67
+    Final DEF: 67
+  Margin: 48 − 67 = -19   ▶  PARRY (margin -19)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[100]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 122
+    Final ATK: 122
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[80]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 107
+    Final DEF: 107
+  Margin: 122 − 107 = 15   ▶  HIT (margin 15)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 15/55.0)) = 0.273
+    Raw: max(1, int(12 × 0.273)) = 3
+    Favorite weapon +1 → raw = 4
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 4 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 43/58 (74.1%)
+    hit     : −1
+    After  : 42/58 (72.4%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 86  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[40]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 62
+    Final ATK: 62
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[100]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 127
+    Final DEF: 127
+  Margin: 62 − 127 = -65   ▶  PARRY (margin -65)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[18]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 40
+    Final ATK: 40
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[16]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 43
+    Final DEF: 43
+  Margin: 40 − 43 = -3   ▶  PARRY (margin -3)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[91]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 113
+    Final ATK: 113
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[12]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 39
+    Final DEF: 39
+  Margin: 113 − 39 = 74   ▶  HIT (margin 74)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 74/55.0)) = 1.000
+    Raw: max(1, int(12 × 1.000)) = 12
+    Favorite weapon +1 → raw = 13
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 13 − 9) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (HUFFER):
+    Before : 42/58 (72.4%)
+    hit     : −4
+    After  : 38/58 (65.5%)
+  Knockdown Check (HUFFER):
+    base = int(4/58 × 80) = 5   cat bonus [Sword/Knife]: +0   final: 5%
+    Roll: 77  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 4 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    HUFFER: 44.0 END − (2.60 burn × 5 actions) = 30.0
+    ULRIC: 66.0 END − (1.70 burn × 5 actions) = 57.5
+    HP POOL — HUFFER: 38/58 (66%)
+    HP POOL — ULRIC: 26/43 (60%)
+
+==============================================================================
+  MINUTE 6
+==============================================================================
+  APM   — HUFFER: 4   |   ULRIC: 5
+  HP    — HUFFER: 38/58 (66%)   |   ULRIC: 26/43 (60%)
+  END   — HUFFER: 30.0   |   ULRIC: 57.5
+  STRAT — HUFFER: [Strike / Act:7]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[98]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 108
+    HUFFER                  : d100[5]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-3] = 19
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[28]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 50
+    Final ATK: 50
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[63]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 90
+    Final DEF: 90
+  Margin: 50 − 90 = -40   ▶  PARRY (margin -40)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[30]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-3] = 44
+    ULRIC                   : d100[18]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 28
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[24]  dex_bonus[+2]  luck[+9]
+    Subtotal: 35
+    Final ATK: 35
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[75]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 99
+    Final DEF: 99
+  Margin: 35 − 99 = -64   ▶  PARRY (margin -64)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[23]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 33
+    HUFFER                  : d100[7]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-3] = 21
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[38]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 60
+    Final ATK: 60
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[28]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 55
+    Final DEF: 55
+  Margin: 60 − 55 = 5   ▶  GRAZE (margin 5, 1 HP)
+  HP Pool (HUFFER):
+    Before : 38/58 (65.5%)
+    graze   : −1
+    After  : 37/58 (63.8%)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[94]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 104
+    HUFFER                  : d100[76]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-3] = 90
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[12]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 34
+    Final ATK: 34
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[57]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 84
+    Final DEF: 84
+  Margin: 34 − 84 = -50   ▶  PARRY (margin -50)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[31]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 41
+    HUFFER                  : d100[24]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-3] = 38
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[80]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 102
+    Final ATK: 102
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[21]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 48
+    Final DEF: 48
+  Margin: 102 − 48 = 54   ▶  HIT (margin 54)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 54/55.0)) = 0.982
+    Raw: max(1, int(12 × 0.982)) = 11
+    Favorite weapon +1 → raw = 12
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 12 − 9) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (HUFFER):
+    Before : 37/58 (63.8%)
+    hit     : −3
+    After  : 34/58 (58.6%)
+  Knockdown Check (HUFFER):
+    base = int(3/58 × 80) = 4   cat bonus [Sword/Knife]: +0   final: 4%
+    Roll: 21  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[90]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 100
+    HUFFER                  : d100[66]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-3] = 80
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[6]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 28
+    Final ATK: 28
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[17]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 44
+    Final DEF: 44
+  Margin: 28 − 44 = -16   ▶  PARRY (margin -16)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[2]  dex_bonus[+2]  luck[+9]
+    Subtotal: 13
+    Final ATK: 13
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[58]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 82
+    Final DEF: 82
+  Margin: 13 − 82 = -69   ▶  PARRY (margin -69)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[5]  dex_bonus[+2]  luck[+9]
+    Subtotal: 16
+    Final ATK: 16
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[11]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 35
+    Final DEF: 35
+  Margin: 16 − 35 = -19   ▶  PARRY (margin -19)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[84]  dex_bonus[+2]  luck[+9]
+    Subtotal: 95
+    Final ATK: 95
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[80]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 104
+    Final DEF: 104
+  Margin: 95 − 104 = -9   ▶  PARRY (margin -9)
+
+  ── END OF MINUTE ──
+    HUFFER: 30.0 END − (2.60 burn × 4 actions) = 18.6
+    ULRIC: 57.5 END − (1.70 burn × 5 actions) = 49.0
+    HP POOL — HUFFER: 34/58 (59%)
+    HP POOL — ULRIC: 26/43 (60%)
+
+==============================================================================
+  MINUTE 7
+==============================================================================
+  APM   — HUFFER: 4   |   ULRIC: 5
+  HP    — HUFFER: 34/58 (59%)   |   ULRIC: 26/43 (60%)
+  END   — HUFFER: 18.6   |   ULRIC: 49.0
+  STRAT — HUFFER: [Strike / Act:7]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[62]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-6] = 73
+    ULRIC                   : d100[34]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 44
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[2]  dex_bonus[+2]  luck[+9]  end_pen[-5]
+    Subtotal: 8
+    Final ATK: 8
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[77]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 101
+    Final DEF: 101
+  Margin: 8 − 101 = -93   ▶  PARRY (margin -93)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[52]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 62
+    HUFFER                  : d100[22]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-6] = 33
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[47]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 69
+    Final ATK: 69
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[55]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-4]
+    Subtotal: 78
+    Final DEF: 78
+  Margin: 69 − 78 = -9   ▶  PARRY (margin -9)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[96]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 106
+    HUFFER                  : d100[41]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-6] = 52
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[23]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 45
+    Final ATK: 45
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[2]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-4]
+    Subtotal: 25
+    Final DEF: 25
+  Margin: 45 − 25 = 20   ▶  HIT (margin 20)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 20/55.0)) = 0.364
+    Raw: max(1, int(12 × 0.364)) = 4
+    Favorite weapon +1 → raw = 5
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 5 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 34/58 (58.6%)
+    hit     : −1
+    After  : 33/58 (56.9%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 36  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[87]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 97
+    HUFFER                  : d100[81]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-6] = 92
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[69]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 91
+    Final ATK: 91
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[35]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-4]
+    Subtotal: 58
+    Final DEF: 58
+  Margin: 91 − 58 = 33   ▶  HIT (margin 33)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 33/55.0)) = 0.600
+    Raw: max(1, int(12 × 0.600)) = 7
+    Favorite weapon +1 → raw = 8
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 8 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 33/58 (56.9%)
+    hit     : −1
+    After  : 32/58 (55.2%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 10  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[91]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 101
+    HUFFER                  : d100[78]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-6] = 89
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[84]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 106
+    Final ATK: 106
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[20]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-4]
+    Subtotal: 43
+    Final DEF: 43
+  Margin: 106 − 43 = 63   ▶  HIT (margin 63)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 63/55.0)) = 1.000
+    Raw: max(1, int(12 × 1.000)) = 12
+    Favorite weapon +1 → raw = 13
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 13 − 9) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (HUFFER):
+    Before : 32/58 (55.2%)
+    hit     : −4
+    After  : 28/58 (48.3%)
+  Knockdown Check (HUFFER):
+    base = int(4/58 × 80) = 5   cat bonus [Sword/Knife]: +0   final: 5%
+    Roll: 80  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 4 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[32]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 42
+    HUFFER                  : d100[11]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-6] = 22
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[96]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 118
+    Final ATK: 118
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[37]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-4]
+    Subtotal: 60
+    Final DEF: 60
+  Margin: 118 − 60 = 58   ▶  HIT (margin 58)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 58/55.0)) = 1.000
+    Raw: max(1, int(12 × 1.000)) = 12
+    Favorite weapon +1 → raw = 13
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 13 − 9) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (HUFFER):
+    Before : 28/58 (48.3%)
+    hit     : −4
+    After  : 24/58 (41.4%)
+  Knockdown Check (HUFFER):
+    base = int(4/58 × 80) = 5   cat bonus [Sword/Knife]: +0   final: 5%
+    Roll: 9  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 4 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[13]  dex_bonus[+2]  luck[+9]  end_pen[-5]
+    Subtotal: 19
+    Final ATK: 19
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[3]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 27
+    Final DEF: 27
+  Margin: 19 − 27 = -8   ▶  PARRY (margin -8)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[56]  dex_bonus[+2]  luck[+9]  end_pen[-5]
+    Subtotal: 62
+    Final ATK: 62
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[33]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 57
+    Final DEF: 57
+  Margin: 62 − 57 = 5   ▶  GRAZE (margin 5, 1 HP)
+  HP Pool (ULRIC):
+    Before : 26/43 (60.5%)
+    graze   : −1
+    After  : 25/43 (58.1%)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[54]  dex_bonus[+2]  luck[+9]  end_pen[-5]
+    Subtotal: 60
+    Final ATK: 60
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[89]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 113
+    Final DEF: 113
+  Margin: 60 − 113 = -53   ▶  PARRY (margin -53)
+
+  ── END OF MINUTE ──
+    HUFFER: 18.6 END − (2.60 burn × 4 actions) = 7.2
+    ULRIC: 49.0 END − (1.70 burn × 5 actions) = 40.5
+    HP POOL — HUFFER: 24/58 (41%)
+    HP POOL — ULRIC: 25/43 (58%)
+
+==============================================================================
+  MINUTE 8
+==============================================================================
+  APM   — HUFFER: 4   |   ULRIC: 5
+  HP    — HUFFER: 24/58 (41%)   |   ULRIC: 25/43 (58%)
+  END   — HUFFER: 7.2   |   ULRIC: 40.5
+  STRAT — HUFFER: [Strike / Act:7]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[90]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-9] = 98
+    ULRIC                   : d100[64]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 74
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[49]  dex_bonus[+2]  luck[+9]  end_pen[-11]
+    Subtotal: 49
+    Final ATK: 49
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[68]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 92
+    Final DEF: 92
+  Margin: 49 − 92 = -43   ▶  PARRY (margin -43)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[33]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 43
+    HUFFER                  : d100[2]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-9] = 10
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[40]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 62
+    Final ATK: 62
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[85]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-9]
+    Subtotal: 103
+    Final DEF: 103
+  Margin: 62 − 103 = -41   ▶  PARRY (margin -41)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[41]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 51
+    HUFFER                  : d100[42]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-9] = 50
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[39]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 61
+    Final ATK: 61
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[94]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-9]
+    Subtotal: 112
+    Final DEF: 112
+  Margin: 61 − 112 = -51   ▶  PARRY (margin -51)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[70]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 80
+    HUFFER                  : d100[48]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-9] = 56
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[93]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 115
+    Final ATK: 115
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[35]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-9]
+    Subtotal: 53
+    Final DEF: 53
+  Margin: 115 − 53 = 62   ▶  HIT (margin 62)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 62/55.0)) = 1.000
+    Raw: max(1, int(12 × 1.000)) = 12
+    Favorite weapon +1 → raw = 13
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 13 − 9) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (HUFFER):
+    Before : 24/58 (41.4%)
+    hit     : −4
+    After  : 20/58 (34.5%)
+  Knockdown Check (HUFFER):
+    base = int(4/58 × 80) = 5   cat bonus [Sword/Knife]: +0   final: 5%
+    Roll: 24  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 4 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[89]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 99
+    HUFFER                  : d100[24]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-9] = 32
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[1]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 23
+    Final ATK: 23
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[9]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-9]
+    Subtotal: 27
+    Final DEF: 27
+  Margin: 23 − 27 = -4   ▶  PARRY (margin -4)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[60]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-9] = 68
+    ULRIC                   : d100[3]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 13
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[6]  dex_bonus[+2]  luck[+9]  end_pen[-11]
+    Subtotal: 6
+    Final ATK: 6
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[25]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 49
+    Final DEF: 49
+  Margin: 6 − 49 = -43   ▶  PARRY (margin -43)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[68]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-9] = 76
+    ULRIC                   : d100[18]  dex_bonus[-6]  luck[+18]  activity_mod[-2] = 28
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[59]  dex_bonus[+2]  luck[+9]  end_pen[-11]
+    Subtotal: 59
+    Final ATK: 59
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[60]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 84
+    Final DEF: 84
+  Margin: 59 − 84 = -25   ▶  PARRY (margin -25)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[49]  dex_bonus[+2]  luck[+9]  end_pen[-11]
+    Subtotal: 49
+    Final ATK: 49
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[56]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 49 − 80 = -31   ▶  PARRY (margin -31)
+
+  ── END OF MINUTE ──
+    HUFFER: 7.2 END − (2.60 burn × 4 actions) = 0.0
+    ULRIC: 40.5 END − (1.70 burn × 5 actions) = 32.0
+    HP POOL — HUFFER: 20/58 (34%)
+    HP POOL — ULRIC: 25/43 (58%)
+
+==============================================================================
+  MINUTE 9
+==============================================================================
+  APM   — HUFFER: 3   |   ULRIC: 4
+  HP    — HUFFER: 20/58 (34%)   |   ULRIC: 25/43 (58%)
+  END   — HUFFER: 0.0   |   ULRIC: 32.0
+  STRAT — HUFFER: [Strike / Act:7]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[57]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-2] = 65
+    HUFFER                  : d100[53]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 58
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[54]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 76
+    Final ATK: 76
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[100]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 115
+    Final DEF: 115
+  Margin: 76 − 115 = -39   ▶  PARRY (margin -39)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[78]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-2] = 86
+    HUFFER                  : d100[10]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 15
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[1]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 23
+    Final ATK: 23
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[37]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 52
+    Final DEF: 52
+  Margin: 23 − 52 = -29   ▶  PARRY (margin -29)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[62]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 67
+    ULRIC                   : d100[15]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-2] = 23
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[72]  dex_bonus[+2]  luck[+9]  end_pen[-15]
+    Subtotal: 68
+    Final ATK: 68
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[93]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 117
+    Final DEF: 117
+  Margin: 68 − 117 = -49   ▶  PARRY (margin -49)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[71]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-2] = 79
+    HUFFER                  : d100[54]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 59
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[1]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 23
+    Final ATK: 23
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[39]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 54
+    Final DEF: 54
+  Margin: 23 − 54 = -31   ▶  PARRY (margin -31)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[63]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 68
+    ULRIC                   : d100[58]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-2] = 66
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[91]  dex_bonus[+2]  luck[+9]  end_pen[-15]
+    Subtotal: 87
+    Final ATK: 87
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[100]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 124
+    Final DEF: 124
+  Margin: 87 − 124 = -37   ▶  PARRY (margin -37)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[58]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 63
+    ULRIC                   : d100[24]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-2] = 32
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[52]  dex_bonus[+2]  luck[+9]  end_pen[-15]
+    Subtotal: 48
+    Final ATK: 48
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[6]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]
+    Subtotal: 30
+    Final DEF: 30
+  Margin: 48 − 30 = 18   ▶  HIT (margin 18)
+  Damage (HUFFER → ULRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 18/55.0)) = 0.327
+    Raw: max(1, int(10 × 0.327)) = 3
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 3 − 3) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (ULRIC):
+    Before : 25/43 (58.1%)
+    hit     : −1
+    After  : 24/43 (55.8%)
+  Knockdown Check (ULRIC):
+    base = int(1/43 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 80  →  no knockdown
+  Perm Injury Check (ULRIC):
+    threshold = 15% of 43 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[89]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]
+    Subtotal: 111
+    Final ATK: 111
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[53]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 68
+    Final DEF: 68
+  Margin: 111 − 68 = 43   ▶  HIT (margin 43)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 43/55.0)) = 0.782
+    Raw: max(1, int(12 × 0.782)) = 9
+    Favorite weapon +1 → raw = 10
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 10 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 20/58 (34.5%)
+    hit     : −1
+    After  : 19/58 (32.8%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 79  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    HUFFER: 0.0 END − (2.60 burn × 3 actions) = 0.0
+    ULRIC: 32.0 END − (1.70 burn × 4 actions) = 25.2
+    HP POOL — HUFFER: 19/58 (33%)
+    HP POOL — ULRIC: 24/43 (56%)
+
+==============================================================================
+  MINUTE 10
+==============================================================================
+  APM   — HUFFER: 3   |   ULRIC: 4
+  HP    — HUFFER: 19/58 (33%)   |   ULRIC: 24/43 (56%)
+  END   — HUFFER: 0.0   |   ULRIC: 25.2
+  STRAT — HUFFER: [Strike / Act:7]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[62]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-4] = 68
+    HUFFER                  : d100[30]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 35
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[95]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]  end_pen[-2]
+    Subtotal: 115
+    Final ATK: 115
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[53]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 68
+    Final DEF: 68
+  Margin: 115 − 68 = 47   ▶  HIT (margin 47)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 47/55.0)) = 0.855
+    Raw: max(1, int(12 × 0.855)) = 10
+    Favorite weapon +1 → raw = 11
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 11 − 9) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (HUFFER):
+    Before : 19/58 (32.8%)
+    hit     : −2
+    After  : 17/58 (29.3%)
+  Knockdown Check (HUFFER):
+    base = int(2/58 × 80) = 2   cat bonus [Sword/Knife]: +0   final: 2%
+    Roll: 60  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[83]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-4] = 89
+    HUFFER                  : d100[15]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 20
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[39]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]  end_pen[-2]
+    Subtotal: 59
+    Final ATK: 59
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[99]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 114
+    Final DEF: 114
+  Margin: 59 − 114 = -55   ▶  PARRY (margin -55)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[27]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 32
+    ULRIC                   : d100[25]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-4] = 31
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[8]  dex_bonus[+2]  luck[+9]  end_pen[-15]
+    Subtotal: 4
+    Final ATK: 4
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[7]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]  end_pen[-1]
+    Subtotal: 30
+    Final DEF: 30
+  Margin: 4 − 30 = -26   ▶  PARRY (margin -26)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[99]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-4] = 105
+    HUFFER                  : d100[83]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 88
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[11]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]  end_pen[-2]
+    Subtotal: 31
+    Final ATK: 31
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[86]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 101
+    Final DEF: 101
+  Margin: 31 − 101 = -70   ▶  PARRY (margin -70)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[68]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-4] = 74
+    HUFFER                  : d100[66]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 71
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[10]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]  end_pen[-2]
+    Subtotal: 30
+    Final ATK: 30
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[62]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 77
+    Final DEF: 77
+  Margin: 30 − 77 = -47   ▶  PARRY (margin -47)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[13]  dex_bonus[+2]  luck[+9]  end_pen[-15]
+    Subtotal: 9
+    Final ATK: 9
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[44]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]  end_pen[-1]
+    Subtotal: 67
+    Final DEF: 67
+  Margin: 9 − 67 = -58   ▶  PARRY (margin -58)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[96]  dex_bonus[+2]  luck[+9]  end_pen[-15]
+    Subtotal: 92
+    Final ATK: 92
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[70]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]  end_pen[-1]
+    Subtotal: 93
+    Final DEF: 93
+  Margin: 92 − 93 = -1   ▶  PARRY (margin -1)
+
+  ── END OF MINUTE ──
+    HUFFER: 0.0 END − (2.60 burn × 3 actions) = 0.0
+    ULRIC: 25.2 END − (1.70 burn × 4 actions) = 18.4
+    HP POOL — HUFFER: 17/58 (29%)
+    HP POOL — ULRIC: 24/43 (56%)
+
+==============================================================================
+  MINUTE 11
+==============================================================================
+  APM   — HUFFER: 3   |   ULRIC: 4
+  HP    — HUFFER: 17/58 (29%)   |   ULRIC: 24/43 (56%)
+  END   — HUFFER: 0.0   |   ULRIC: 18.4
+  STRAT — HUFFER: [Strike / Act:7]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[11]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 16
+    ULRIC                   : d100[8]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-6] = 12
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[36]  dex_bonus[+2]  luck[+9]  end_pen[-15]
+    Subtotal: 32
+    Final ATK: 32
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[56]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]  end_pen[-4]
+    Subtotal: 76
+    Final DEF: 76
+  Margin: 32 − 76 = -44   ▶  PARRY (margin -44)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[31]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-6] = 35
+    HUFFER                  : d100[23]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 28
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[13]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]  end_pen[-5]
+    Subtotal: 30
+    Final ATK: 30
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[43]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 58
+    Final DEF: 58
+  Margin: 30 − 58 = -28   ▶  PARRY (margin -28)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[86]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 91
+    ULRIC                   : d100[32]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-6] = 36
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[57]  dex_bonus[+2]  luck[+9]  end_pen[-15]
+    Subtotal: 53
+    Final ATK: 53
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[80]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]  end_pen[-4]
+    Subtotal: 100
+    Final DEF: 100
+  Margin: 53 − 100 = -47   ▶  PARRY (margin -47)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[68]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 73
+    ULRIC                   : d100[33]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-6] = 37
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[79]  dex_bonus[+2]  luck[+9]  end_pen[-15]
+    Subtotal: 75
+    Final ATK: 75
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[73]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]  end_pen[-4]
+    Subtotal: 93
+    Final DEF: 93
+  Margin: 75 − 93 = -18   ▶  PARRY (margin -18)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[67]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]  end_pen[-5]
+    Subtotal: 84
+    Final ATK: 84
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[65]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 84 − 80 = 4   ▶  GRAZE (margin 4, 1 HP)
+  HP Pool (HUFFER):
+    Before : 17/58 (29.3%)
+    graze   : −1
+    After  : 16/58 (27.6%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[30]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]  end_pen[-5]
+    Subtotal: 47
+    Final ATK: 47
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[77]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 92
+    Final DEF: 92
+  Margin: 47 − 92 = -45   ▶  PARRY (margin -45)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[35]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]  end_pen[-5]
+    Subtotal: 52
+    Final ATK: 52
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[44]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 59
+    Final DEF: 59
+  Margin: 52 − 59 = -7   ▶  PARRY (margin -7)
+
+  ── END OF MINUTE ──
+    HUFFER: 0.0 END − (2.60 burn × 3 actions) = 0.0
+    ULRIC: 18.4 END − (1.70 burn × 4 actions) = 11.6
+    HP POOL — HUFFER: 16/58 (28%)
+    HP POOL — ULRIC: 24/43 (56%)
+
+==============================================================================
+  MINUTE 12
+==============================================================================
+  APM   — HUFFER: 3   |   ULRIC: 4
+  HP    — HUFFER: 16/58 (28%)   |   ULRIC: 24/43 (56%)
+  END   — HUFFER: 0.0   |   ULRIC: 11.6
+  STRAT — HUFFER: [Strike / Act:7]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[64]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-8] = 66
+    HUFFER                  : d100[6]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 11
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[3]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]  end_pen[-9]
+    Subtotal: 16
+    Final ATK: 16
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[12]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 27
+    Final DEF: 27
+  Margin: 16 − 27 = -11   ▶  PARRY (margin -11)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[90]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 95
+    ULRIC                   : d100[78]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-8] = 80
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[93]  dex_bonus[+2]  luck[+9]  end_pen[-15]
+    Subtotal: 89
+    Final ATK: 89
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[63]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]  end_pen[-7]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 89 − 80 = 9   ▶  GRAZE (margin 9, 1 HP)
+  HP Pool (ULRIC):
+    Before : 24/43 (55.8%)
+    graze   : −1
+    After  : 23/43 (53.5%)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[15]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 20
+    ULRIC                   : d100[13]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-8] = 15
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[22]  dex_bonus[+2]  luck[+9]  end_pen[-15]
+    Subtotal: 18
+    Final ATK: 18
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[60]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]  end_pen[-7]
+    Subtotal: 77
+    Final DEF: 77
+  Margin: 18 − 77 = -59   ▶  PARRY (margin -59)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[97]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 102
+    ULRIC                   : d100[11]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-8] = 13
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[63]  dex_bonus[+2]  luck[+9]  end_pen[-15]
+    Subtotal: 59
+    Final ATK: 59
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[92]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]  end_pen[-7]
+    Subtotal: 109
+    Final DEF: 109
+  Margin: 59 − 109 = -50   ▶  PARRY (margin -50)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[2]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]  end_pen[-9]
+    Subtotal: 15
+    Final ATK: 15
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[79]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 94
+    Final DEF: 94
+  Margin: 15 − 94 = -79   ▶  PARRY (margin -79)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[20]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]  end_pen[-9]
+    Subtotal: 33
+    Final ATK: 33
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[25]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 40
+    Final DEF: 40
+  Margin: 33 − 40 = -7   ▶  PARRY (margin -7)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[86]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]  end_pen[-9]
+    Subtotal: 99
+    Final ATK: 99
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[55]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 70
+    Final DEF: 70
+  Margin: 99 − 70 = 29   ▶  HIT (margin 29)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 29/55.0)) = 0.527
+    Raw: max(1, int(12 × 0.527)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 7 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 16/58 (27.6%)
+    hit     : −1
+    After  : 15/58 (25.9%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 23  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    HUFFER: 0.0 END − (2.60 burn × 3 actions) = 0.0
+    ULRIC: 11.6 END − (1.70 burn × 4 actions) = 4.8
+    HP POOL — HUFFER: 15/58 (26%)
+    HP POOL — ULRIC: 23/43 (53%)
+
+==============================================================================
+  MINUTE 13
+==============================================================================
+  APM   — HUFFER: 3   |   ULRIC: 3
+  HP    — HUFFER: 1/58 (2%)   |   ULRIC: 23/43 (53%)
+  END   — HUFFER: 0.0   |   ULRIC: 4.8
+  STRAT — HUFFER: [Strike / Act:7]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[52]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-10] = 52
+    HUFFER                  : d100[42]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 47
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[42]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]  end_pen[-12]
+    Subtotal: 52
+    Final ATK: 52
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[89]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 104
+    Final DEF: 104
+  Margin: 52 − 104 = -52   ▶  PARRY (margin -52)
+  Concede Attempt (HUFFER):
+    d100[34] + PRE_bonus[-4] + luck//2[4] = 34
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    34 < 66  →  mercy denied — fight continues
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[56]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-10] = 56
+    HUFFER                  : d100[43]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 48
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[45]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]  end_pen[-12]
+    Subtotal: 55
+    Final ATK: 55
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[86]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 101
+    Final DEF: 101
+  Margin: 55 − 101 = -46   ▶  PARRY (margin -46)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[81]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 86
+    ULRIC                   : d100[38]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-10] = 38
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[21]  dex_bonus[+2]  luck[+9]  end_pen[-15]
+    Subtotal: 17
+    Final ATK: 17
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[26]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]  end_pen[-10]
+    Subtotal: 40
+    Final DEF: 40
+  Margin: 17 − 40 = -23   ▶  PARRY (margin -23)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[85]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-10] = 85
+    HUFFER                  : d100[69]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 74
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[93]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]  end_pen[-12]
+    Subtotal: 103
+    Final ATK: 103
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[79]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 94
+    Final DEF: 94
+  Margin: 103 − 94 = 9   ▶  GRAZE (margin 9, 1 HP)
+  HP Pool (HUFFER):
+    Before : 1/58 (1.7%)
+    graze   : −1
+    After  : 0/58 (0.0%)
+  Concede Attempt (HUFFER):
+    d100[39] + PRE_bonus[-4] + luck//2[4] = 39
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    39 < 66  →  mercy denied — fight continues
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[43]  dex_bonus[+2]  luck[+9]  end_pen[-15]  hp0_pen[-30]
+    Subtotal: 9
+    Final ATK: 9
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[25]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]  end_pen[-10]
+    Subtotal: 39
+    Final DEF: 39
+  Margin: 9 − 39 = -30   ▶  PARRY (margin -30)
+  Concede Attempt (HUFFER):
+    d100[20] + PRE_bonus[-4] + luck//2[4] = 20
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    20 < 66  →  mercy denied — fight continues
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → ULRIC   Weapon: Morningstar   Style: Strike   Aim: Primary Arm
+  Attack Roll (HUFFER):
+    d100[97]  dex_bonus[+2]  luck[+9]  end_pen[-15]  hp0_pen[-30]
+    Subtotal: 63
+    Final ATK: 63
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[34]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+2]  end_pen[-10]
+    Subtotal: 48
+    Final DEF: 48
+  Margin: 63 − 48 = 15   ▶  HIT (margin 15)
+  Damage (HUFFER → ULRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 15/55.0)) = 0.273
+    Raw: max(1, int(10 × 0.273)) = 2
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 2 − 3) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (ULRIC):
+    Before : 23/43 (53.5%)
+    hit     : −1
+    After  : 22/43 (51.2%)
+  Knockdown Check (ULRIC):
+    base = int(1/43 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 49  →  no knockdown
+  Perm Injury Check (ULRIC):
+    threshold = 15% of 43 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+  Concede Attempt (HUFFER):
+    d100[10] + PRE_bonus[-4] + luck//2[4] = 10
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    10 < 66  →  mercy denied — fight continues
+
+  ── END OF MINUTE ──
+    HUFFER: 0.0 END − (2.60 burn × 3 actions) = 0.0
+    ULRIC: 4.8 END − (1.70 burn × 3 actions) = 0.0
+    HP POOL — HUFFER: 0/58 (0%)
+    HP POOL — ULRIC: 22/43 (51%)
+
+==============================================================================
+  MINUTE 14
+==============================================================================
+  APM   — HUFFER: 3   |   ULRIC: 3
+  HP    — HUFFER: 0/58 (0%)   |   ULRIC: 6/43 (14%)
+  END   — HUFFER: 0.0   |   ULRIC: 0.0
+  STRAT — HUFFER: [Strike / Act:7]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[46]  dex_bonus[-6]  luck[+18]  activity_mod[-2]  end_pen[-12] = 44
+    HUFFER                  : d100[1]  dex_bonus[+4]  luck[+9]  activity_mod[+4]  end_pen[-12] = 6
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → HUFFER   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[67]  dex_bonus[-3]  luck[+18]  feint[+2]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 74
+    Final ATK: 74
+  Defense Roll (HUFFER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[54]  luck[+9]  str_bonus[+2]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  hp0_pen[-30]  end_pen[-12]
+    Subtotal: 39
+    Final DEF: 39
+  Margin: 74 − 39 = 35   ▶  HIT (margin 35)
+  Damage (ULRIC → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 35/55.0)) = 0.636
+    Raw: max(1, int(12 × 0.636)) = 7
+    Favorite weapon +1 → raw = 8
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 8 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 0/58 (0.0%)
+    hit     : −1
+    After  : -1/58 (0.0%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 89  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+  Death Check (HUFFER):
+    prev_hp: 0   damage: 1   new_hp: -1
+    overshoot: 1
+    death_chance = min(50.0, 0.5 + 1) = 1.5%
+    → survives (concede system takes over)
+  Concede Attempt (HUFFER):
+    d100[95] + PRE_bonus[-4] + luck//2[4] = 95
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    95 ≥ 66  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: HUFFER
+==============================================================================
+  Intelligence: d100=66 vs 62% — FAIL
+    → Intelligence training: no progress this session (CON 15, 62% chance).
+  Intelligence: d100=7 vs 62% — SUCCESS
+    → Intelligence trained: 11 → 12 (62% chance)
+  Intelligence: d100=90 vs 62% — FAIL
+    → Intelligence training: no progress this session (CON 15, 62% chance).
+
+==============================================================================
+  TRAINING: ULRIC
+==============================================================================
+  Dodge: d100=35 vs 62% — SUCCESS
+    → Dodge trained: Level 3 → Level 4 (Good Skill, 62% chance)
+  Feint: d100=45 vs 62% — SUCCESS
+    → Feint trained: Level 1 → Level 2 (Some Skill, 62% chance)
+  Dexterity: d100=41 vs 52% — SUCCESS
+    → Dexterity trained: 8 → 9 (52% chance)
+  INT observed learning: d100=58 vs 8% — no trigger
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : ULRIC  (14.0% HP remaining)
+  Loser  : HUFFER  (survived, 0.0% HP)
+  Duration: 14 minute(s)
+==============================================================================

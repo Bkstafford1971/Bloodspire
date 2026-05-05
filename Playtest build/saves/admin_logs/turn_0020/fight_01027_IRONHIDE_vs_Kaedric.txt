@@ -1,0 +1,2256 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #1027   Turn: 20
+  Debug team: Electron
+  Electron / AUTOBOTS   vs   Sister Thornwall / The Thornwall Guard
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: IRONHIDE
+  ────────────────────────────────────
+    Race: Tabaxi  |  Gender: Male
+    STR:15  DEX:17  CON:16  INT:15  PRE:8  SIZ:12
+    Max HP: 48   Luck: 20
+    Armor: Cuir Boulli   Helm: Steel Cap
+    Primary: Javelin   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Engage & Withdraw / Act:4 / Aim:None / Def:None
+      [2] Always  →  Strike / Act:6 / Aim:None / Def:None
+      [3] Always  →  Lunge / Act:7 / Aim:None / Def:Head
+
+  ────────────────────────────────────
+  WARRIOR B: KAEDRIC
+  ────────────────────────────────────
+    Race: Human  |  Gender: Male
+    STR:9  DEX:22  CON:20  INT:9  PRE:6  SIZ:16
+    Max HP: 66   Luck: 17
+    Armor: Full Plate   Helm: None
+    Primary: Open Hand   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Parry / Act:3 / Aim:Chest / Def:Chest
+    Skills: dodge:7  parry:6  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — IRONHIDE: 7   |   KAEDRIC: 3
+  HP    — IRONHIDE: 48/48 (100%)   |   KAEDRIC: 66/66 (100%)
+  END   — IRONHIDE: 100.0   |   KAEDRIC: 100.0
+  STRAT — IRONHIDE: [Lunge / Act:7]   |   KAEDRIC: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[84]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 97
+    IRONHIDE                : d100[50]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[+2]  activity_mod[+4] = 91
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[88]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 105
+    Final ATK: 105
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[1]  luck[+20]  dex_bonus[+6]  style_dodge[+8]  activity_mod[+4]  size_diff[+5]  race_dodge_x2[+14]
+    Subtotal: 58
+    Final DEF: 58
+  Margin: 105 − 58 = 47   ▶  HIT (margin 47)
+  Damage (KAEDRIC → IRONHIDE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +2.55
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 47/55.0)) = 0.855
+    Raw: max(1, int(3 × 0.855)) = 2
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 2 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (IRONHIDE):
+    Before : 48/48 (100.0%)
+    hit     : −1
+    After  : 47/48 (97.9%)
+  Knockdown Check (IRONHIDE):
+    base = int(1/48 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 68  →  no knockdown
+  Perm Injury Check (IRONHIDE):
+    threshold = 15% of 48 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[55]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[+2]  activity_mod[+4] = 96
+    KAEDRIC                 : d100[21]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 34
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Lunge   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[11]  dex_bonus[+6]  luck[+20]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 43
+    + style advantage: -6
+    Final ATK: 37
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[70]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 132
+    Final DEF: 132
+  Margin: 37 − 132 = -95   ▶  PARRY (margin -95)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[11]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[+2]  activity_mod[+4] = 52
+    KAEDRIC                 : d100[14]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 27
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Lunge   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[95]  dex_bonus[+6]  luck[+20]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 127
+    + style advantage: -6
+    Final ATK: 121
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[78]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 140
+    Final DEF: 140
+  Margin: 121 − 140 = -19   ▶  PARRY (margin -19)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[59]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[+2]  activity_mod[+4] = 100
+    KAEDRIC                 : d100[50]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 63
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Lunge   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[18]  dex_bonus[+6]  luck[+20]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 50
+    + style advantage: -6
+    Final ATK: 44
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[66]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 128
+    Final DEF: 128
+  Margin: 44 − 128 = -84   ▶  PARRY (margin -84)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[70]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[+2]  activity_mod[+4] = 111
+    KAEDRIC                 : d100[34]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 47
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Lunge   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[65]  dex_bonus[+6]  luck[+20]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 97
+    + style advantage: -6
+    Final ATK: 91
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[18]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 91 − 80 = 11   ▶  HIT (margin 11)
+  Damage (IRONHIDE → KAEDRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.25
+      STR bonus                    +3.00
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.00
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 11/55.0)) = 0.200
+    Raw: max(1, int(10 × 0.200)) = 2
+    Favorite weapon +1 → raw = 3
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 3 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (KAEDRIC):
+    Before : 66/66 (100.0%)
+    hit     : −1
+    After  : 65/66 (98.5%)
+  Knockdown Check (KAEDRIC):
+    base = int(1/66 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 1  →  ▶ KNOCKDOWN
+  Perm Injury Check (KAEDRIC):
+    threshold = 15% of 66 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[63]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[+2]  activity_mod[+4] = 104
+    KAEDRIC                 : d100[51]  on_ground_halved[(÷2)] = 25
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Lunge   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[50]  dex_bonus[+6]  luck[+20]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 82
+    + style advantage: -6
+    Final ATK: 76
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[7]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]  ground_pen[-25]
+    Subtotal: 44
+    Final DEF: 44
+  Margin: 76 − 44 = 32   ▶  HIT (margin 32)
+  Damage (IRONHIDE → KAEDRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.25
+      STR bonus                    +3.00
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.00
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 32/55.0)) = 0.582
+    Raw: max(1, int(10 × 0.582)) = 5
+    Favorite weapon +1 → raw = 6
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 6 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (KAEDRIC):
+    Before : 65/66 (98.5%)
+    hit     : −1
+    After  : 64/66 (97.0%)
+  Knockdown Check (KAEDRIC):
+    base = int(1/66 × 80) = 1   cat bonus [Oddball]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (KAEDRIC):
+    threshold = 15% of 66 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[63]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[+2]  activity_mod[+4] = 104
+    KAEDRIC                 : d100[49]  on_ground_halved[(÷2)] = 24
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Lunge   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[95]  dex_bonus[+6]  luck[+20]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 127
+    + style advantage: -6
+    Final ATK: 121
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[74]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]  ground_pen[-25]
+    Subtotal: 111
+    Final DEF: 111
+  Margin: 121 − 111 = 10   ▶  HIT (margin 10)
+  Damage (IRONHIDE → KAEDRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.25
+      STR bonus                    +3.00
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.00
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 10/55.0)) = 0.182
+    Raw: max(1, int(10 × 0.182)) = 1
+    Favorite weapon +1 → raw = 2
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 2 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (KAEDRIC):
+    Before : 64/66 (97.0%)
+    hit     : −1
+    After  : 63/66 (95.5%)
+  Knockdown Check (KAEDRIC):
+    base = int(1/66 × 80) = 1   cat bonus [Oddball]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (KAEDRIC):
+    threshold = 15% of 66 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[40]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[+2]  activity_mod[+4] = 81
+    KAEDRIC                 : d100[81]  on_ground_halved[(÷2)] = 40
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Lunge   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[13]  dex_bonus[+6]  luck[+20]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 45
+    + style advantage: -6
+    Final ATK: 39
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[23]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]  ground_pen[-25]
+    Subtotal: 60
+    Final DEF: 60
+  Margin: 39 − 60 = -21   ▶  PARRY (margin -21)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: KAEDRIC has uncontested action
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[98]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 115
+    Final ATK: 115
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[38]  luck[+20]  dex_bonus[+6]  style_dodge[+8]  activity_mod[+4]  size_diff[+5]  race_dodge_x2[+14]
+    Subtotal: 95
+    Final DEF: 95
+  Margin: 115 − 95 = 20   ▶  HIT (margin 20)
+  Damage (KAEDRIC → IRONHIDE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +2.55
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 20/55.0)) = 0.364
+    Raw: max(1, int(3 × 0.364)) = 1
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 1 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (IRONHIDE):
+    Before : 47/48 (97.9%)
+    hit     : −1
+    After  : 46/48 (95.8%)
+  Knockdown Check (IRONHIDE):
+    base = int(1/48 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 40  →  no knockdown
+  Perm Injury Check (IRONHIDE):
+    threshold = 15% of 48 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: KAEDRIC has uncontested action
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[51]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 68
+    Final ATK: 68
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[41]  luck[+20]  dex_bonus[+6]  style_dodge[+8]  activity_mod[+4]  size_diff[+5]  race_dodge_x2[+14]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 68 − 98 = -30   ▶  DODGE (margin -30)
+
+  ── END OF MINUTE ──
+    IRONHIDE: 100.0 END − (6.60 burn × 7 actions) = 53.8
+    KAEDRIC: 100.0 END − (0.40 burn × 3 actions) = 98.8
+    HP POOL — IRONHIDE: 46/48 (96%)
+    HP POOL — KAEDRIC: 63/66 (95%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — IRONHIDE: 7   |   KAEDRIC: 3
+  HP    — IRONHIDE: 46/48 (96%)   |   KAEDRIC: 63/66 (95%)
+  END   — IRONHIDE: 53.8   |   KAEDRIC: 98.8
+  STRAT — IRONHIDE: [Lunge / Act:7]   |   KAEDRIC: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[74]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 87
+    IRONHIDE                : d100[15]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[+2]  activity_mod[+4] = 56
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[54]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 71
+    Final ATK: 71
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[47]  luck[+20]  dex_bonus[+6]  style_dodge[+8]  activity_mod[+4]  size_diff[+5]  race_dodge_x2[+14]
+    Subtotal: 104
+    Final DEF: 104
+  Margin: 71 − 104 = -33   ▶  DODGE (margin -33)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[57]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[+2]  activity_mod[+4] = 98
+    KAEDRIC                 : d100[46]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 59
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Lunge   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[26]  dex_bonus[+6]  luck[+20]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 58
+    + style advantage: -6
+    Final ATK: 52
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[78]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 140
+    Final DEF: 140
+  Margin: 52 − 140 = -88   ▶  PARRY (margin -88)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[93]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[+2]  activity_mod[+4] = 134
+    KAEDRIC                 : d100[68]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 81
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Lunge   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[72]  dex_bonus[+6]  luck[+20]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 104
+    + style advantage: -6
+    Final ATK: 98
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[89]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 151
+    Final DEF: 151
+  Margin: 98 − 151 = -53   ▶  PARRY (margin -53)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[68]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[+2]  activity_mod[+4] = 109
+    KAEDRIC                 : d100[26]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 39
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Lunge   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[54]  dex_bonus[+6]  luck[+20]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 86
+    + style advantage: -6
+    Final ATK: 80
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[74]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 136
+    Final DEF: 136
+  Margin: 80 − 136 = -56   ▶  PARRY (margin -56)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[88]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 101
+    IRONHIDE                : d100[48]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[+2]  activity_mod[+4] = 89
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[99]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 116
+    Final ATK: 116
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[62]  luck[+20]  dex_bonus[+6]  style_dodge[+8]  activity_mod[+4]  size_diff[+5]  race_dodge_x2[+14]
+    Subtotal: 119
+    Final DEF: 119
+  Margin: 116 − 119 = -3   ▶  DODGE (margin -3)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[85]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 98
+    IRONHIDE                : d100[29]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[+2]  activity_mod[+4] = 70
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[20]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 37
+    Final ATK: 37
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[4]  luck[+20]  dex_bonus[+6]  style_dodge[+8]  activity_mod[+4]  size_diff[+5]  race_dodge_x2[+14]
+    Subtotal: 61
+    Final DEF: 61
+  Margin: 37 − 61 = -24   ▶  DODGE (margin -24)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Lunge   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[87]  dex_bonus[+6]  luck[+20]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 119
+    + style advantage: -6
+    Final ATK: 113
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[100]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 162
+    Final DEF: 162
+  Margin: 113 − 162 = -49   ▶  PARRY (margin -49)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Lunge   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[12]  dex_bonus[+6]  luck[+20]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 44
+    + style advantage: -6
+    Final ATK: 38
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[97]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 159
+    Final DEF: 159
+  Margin: 38 − 159 = -121   ▶  PARRY (margin -121)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Lunge   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[80]  dex_bonus[+6]  luck[+20]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 112
+    + style advantage: -6
+    Final ATK: 106
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[17]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 79
+    Final DEF: 79
+  Margin: 106 − 79 = 27   ▶  HIT (margin 27)
+  Damage (IRONHIDE → KAEDRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.25
+      STR bonus                    +3.00
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.00
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 27/55.0)) = 0.491
+    Raw: max(1, int(10 × 0.491)) = 4
+    Favorite weapon +1 → raw = 5
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 5 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (KAEDRIC):
+    Before : 63/66 (95.5%)
+    hit     : −1
+    After  : 62/66 (93.9%)
+  Knockdown Check (KAEDRIC):
+    base = int(1/66 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 93  →  no knockdown
+  Perm Injury Check (KAEDRIC):
+    threshold = 15% of 66 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Lunge   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[5]  dex_bonus[+6]  luck[+20]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 37
+    + style advantage: -6
+    Final ATK: 31
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[40]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 102
+    Final DEF: 102
+  Margin: 31 − 102 = -71   ▶  PARRY (margin -71)
+
+  ── END OF MINUTE ──
+    IRONHIDE: 53.8 END − (6.60 burn × 7 actions) = 7.6
+    KAEDRIC: 98.8 END − (0.40 burn × 3 actions) = 97.6
+    HP POOL — IRONHIDE: 46/48 (96%)
+    HP POOL — KAEDRIC: 62/66 (94%)
+  ▶ STRATEGY SWITCH — IRONHIDE: [3] → [1]
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — IRONHIDE: 4   |   KAEDRIC: 3
+  HP    — IRONHIDE: 46/48 (96%)   |   KAEDRIC: 62/66 (94%)
+  END   — IRONHIDE: 7.6   |   KAEDRIC: 97.6
+  STRAT — IRONHIDE: [Engage & Withdraw / Act:4]   |   KAEDRIC: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[41]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 54
+    IRONHIDE                : d100[13]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-9] = 36
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[59]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 76
+    Final ATK: 76
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[25]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-8]
+    Subtotal: 70
+    Final DEF: 70
+  Margin: 76 − 70 = 6   ▶  GRAZE (margin 6, 1 HP)
+  HP Pool (IRONHIDE):
+    Before : 46/48 (95.8%)
+    graze   : −1
+    After  : 45/48 (93.8%)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[88]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 101
+    IRONHIDE                : d100[15]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-9] = 38
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[47]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 64
+    Final ATK: 64
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[100]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-8]
+    Subtotal: 145
+    Final DEF: 145
+  Margin: 64 − 145 = -81   ▶  DODGE (margin -81)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[45]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-9] = 68
+    KAEDRIC                 : d100[44]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 57
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[28]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-11]
+    Subtotal: 48
+    + style advantage: +6
+    Final ATK: 54
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[89]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 151
+    Final DEF: 151
+  Margin: 54 − 151 = -97   ▶  PARRY (margin -97)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[57]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 70
+    IRONHIDE                : d100[12]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-9] = 35
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[68]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 85
+    Final ATK: 85
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[58]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-8]
+    Subtotal: 103
+    Final DEF: 103
+  Margin: 85 − 103 = -18   ▶  DODGE (margin -18)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[7]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-11]
+    Subtotal: 27
+    + style advantage: +6
+    Final ATK: 33
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[7]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 69
+    Final DEF: 69
+  Margin: 33 − 69 = -36   ▶  PARRY (margin -36)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[18]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-11]
+    Subtotal: 38
+    + style advantage: +6
+    Final ATK: 44
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[46]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 108
+    Final DEF: 108
+  Margin: 44 − 108 = -64   ▶  PARRY (margin -64)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[78]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-11]
+    Subtotal: 98
+    + style advantage: +6
+    Final ATK: 104
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[12]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 74
+    Final DEF: 74
+  Margin: 104 − 74 = 30   ▶  HIT (margin 30)
+  Damage (IRONHIDE → KAEDRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.25
+      STR bonus                    +3.00
+      style modifier               -1.00
+      activity contrib             +0.30
+      luck ×0.15                   +3.00
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 30/55.0)) = 0.545
+    Raw: max(1, int(11 × 0.545)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 7 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (KAEDRIC):
+    Before : 62/66 (93.9%)
+    hit     : −1
+    After  : 61/66 (92.4%)
+  Knockdown Check (KAEDRIC):
+    base = int(1/66 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 31  →  no knockdown
+  Perm Injury Check (KAEDRIC):
+    threshold = 15% of 66 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    IRONHIDE: 7.6 END − (1.70 burn × 4 actions) = 0.8
+    KAEDRIC: 97.6 END − (0.40 burn × 3 actions) = 95.4
+    HP POOL — IRONHIDE: 45/48 (94%)
+    HP POOL — KAEDRIC: 61/66 (92%)
+
+==============================================================================
+  MINUTE 4
+==============================================================================
+  APM   — IRONHIDE: 4   |   KAEDRIC: 3
+  HP    — IRONHIDE: 45/48 (94%)   |   KAEDRIC: 61/66 (92%)
+  END   — IRONHIDE: 0.8   |   KAEDRIC: 95.4
+  STRAT — IRONHIDE: [Engage & Withdraw / Act:4]   |   KAEDRIC: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[67]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-11] = 88
+    KAEDRIC                 : d100[70]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 83
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[7]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-14]
+    Subtotal: 24
+    + style advantage: +6
+    Final ATK: 30
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[85]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 147
+    Final DEF: 147
+  Margin: 30 − 147 = -117   ▶  PARRY (margin -117)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[90]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 103
+    IRONHIDE                : d100[45]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-11] = 66
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[6]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 23
+    Final ATK: 23
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[96]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-11]
+    Subtotal: 138
+    Final DEF: 138
+  Margin: 23 − 138 = -115   ▶  DODGE (margin -115)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[13]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-11] = 34
+    KAEDRIC                 : d100[2]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 15
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[83]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-14]
+    Subtotal: 100
+    + style advantage: +6
+    Final ATK: 106
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[27]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 89
+    Final DEF: 89
+  Margin: 106 − 89 = 17   ▶  HIT (margin 17)
+  Damage (IRONHIDE → KAEDRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.25
+      STR bonus                    +3.00
+      style modifier               -1.00
+      activity contrib             +0.30
+      luck ×0.15                   +3.00
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 17/55.0)) = 0.309
+    Raw: max(1, int(11 × 0.309)) = 3
+    Favorite weapon +1 → raw = 4
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 4 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (KAEDRIC):
+    Before : 61/66 (92.4%)
+    hit     : −1
+    After  : 60/66 (90.9%)
+  Knockdown Check (KAEDRIC):
+    base = int(1/66 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 36  →  no knockdown
+  Perm Injury Check (KAEDRIC):
+    threshold = 15% of 66 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[76]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-11] = 97
+    KAEDRIC                 : d100[7]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 20
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[92]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-14]
+    Subtotal: 109
+    + style advantage: +6
+    Final ATK: 115
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[61]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 123
+    Final DEF: 123
+  Margin: 115 − 123 = -8   ▶  PARRY (margin -8)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[94]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-11] = 115
+    KAEDRIC                 : d100[34]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 47
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[87]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-14]
+    Subtotal: 104
+    + style advantage: +6
+    Final ATK: 110
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[50]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 112
+    Final DEF: 112
+  Margin: 110 − 112 = -2   ▶  PARRY (margin -2)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: KAEDRIC has uncontested action
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[60]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 77
+    Final ATK: 77
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[36]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-11]
+    Subtotal: 78
+    Final DEF: 78
+  Margin: 77 − 78 = -1   ▶  DODGE (margin -1)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: KAEDRIC has uncontested action
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[97]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 114
+    Final ATK: 114
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[20]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-11]
+    Subtotal: 62
+    Final DEF: 62
+  Margin: 114 − 62 = 52   ▶  HIT (margin 52)
+  Damage (KAEDRIC → IRONHIDE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +2.55
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 52/55.0)) = 0.945
+    Raw: max(1, int(3 × 0.945)) = 2
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 2 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (IRONHIDE):
+    Before : 45/48 (93.8%)
+    hit     : −1
+    After  : 44/48 (91.7%)
+  Knockdown Check (IRONHIDE):
+    base = int(1/48 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 35  →  no knockdown
+  Perm Injury Check (IRONHIDE):
+    threshold = 15% of 48 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    IRONHIDE: 0.8 END − (1.70 burn × 4 actions) = 0.0
+    KAEDRIC: 95.4 END − (0.40 burn × 3 actions) = 93.2
+    HP POOL — IRONHIDE: 44/48 (92%)
+    HP POOL — KAEDRIC: 60/66 (91%)
+
+==============================================================================
+  MINUTE 5
+==============================================================================
+  APM   — IRONHIDE: 4   |   KAEDRIC: 3
+  HP    — IRONHIDE: 44/48 (92%)   |   KAEDRIC: 60/66 (91%)
+  END   — IRONHIDE: 0.0   |   KAEDRIC: 93.2
+  STRAT — IRONHIDE: [Engage & Withdraw / Act:4]   |   KAEDRIC: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[94]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 114
+    KAEDRIC                 : d100[39]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 52
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[68]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 84
+    + style advantage: +6
+    Final ATK: 90
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[80]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 142
+    Final DEF: 142
+  Margin: 90 − 142 = -52   ▶  PARRY (margin -52)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[98]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 111
+    IRONHIDE                : d100[1]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 21
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[26]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 43
+    Final ATK: 43
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[48]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 89
+    Final DEF: 89
+  Margin: 43 − 89 = -46   ▶  DODGE (margin -46)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[96]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 109
+    IRONHIDE                : d100[32]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 52
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[20]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 37
+    Final ATK: 37
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[72]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 113
+    Final DEF: 113
+  Margin: 37 − 113 = -76   ▶  DODGE (margin -76)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[85]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 105
+    KAEDRIC                 : d100[42]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 55
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[82]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 98
+    + style advantage: +6
+    Final ATK: 104
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[99]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 161
+    Final DEF: 161
+  Margin: 104 − 161 = -57   ▶  PARRY (margin -57)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[100]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 113
+    IRONHIDE                : d100[24]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 44
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[58]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 75
+    Final ATK: 75
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[23]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 64
+    Final DEF: 64
+  Margin: 75 − 64 = 11   ▶  HIT (margin 11)
+  Damage (KAEDRIC → IRONHIDE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +2.55
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 11/55.0)) = 0.200
+    Raw: max(1, int(3 × 0.200)) = 1
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 1 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (IRONHIDE):
+    Before : 44/48 (91.7%)
+    hit     : −1
+    After  : 43/48 (89.6%)
+  Knockdown Check (IRONHIDE):
+    base = int(1/48 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 74  →  no knockdown
+  Perm Injury Check (IRONHIDE):
+    threshold = 15% of 48 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[100]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 116
+    + style advantage: +6
+    Final ATK: 122
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[29]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 91
+    Final DEF: 91
+  Margin: 122 − 91 = 31   ▶  HIT (margin 31)
+  Damage (IRONHIDE → KAEDRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.25
+      STR bonus                    +3.00
+      style modifier               -1.00
+      activity contrib             +0.30
+      luck ×0.15                   +3.00
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 31/55.0)) = 0.564
+    Raw: max(1, int(11 × 0.564)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 7 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (KAEDRIC):
+    Before : 60/66 (90.9%)
+    hit     : −1
+    After  : 59/66 (89.4%)
+  Knockdown Check (KAEDRIC):
+    base = int(1/66 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 16  →  no knockdown
+  Perm Injury Check (KAEDRIC):
+    threshold = 15% of 66 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[82]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 98
+    + style advantage: +6
+    Final ATK: 104
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[72]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 134
+    Final DEF: 134
+  Margin: 104 − 134 = -30   ▶  PARRY (margin -30)
+
+  ── END OF MINUTE ──
+    IRONHIDE: 0.0 END − (1.70 burn × 4 actions) = 0.0
+    KAEDRIC: 93.2 END − (0.40 burn × 3 actions) = 91.0
+    HP POOL — IRONHIDE: 43/48 (90%)
+    HP POOL — KAEDRIC: 59/66 (89%)
+
+==============================================================================
+  MINUTE 6
+==============================================================================
+  APM   — IRONHIDE: 4   |   KAEDRIC: 3
+  HP    — IRONHIDE: 43/48 (90%)   |   KAEDRIC: 59/66 (89%)
+  END   — IRONHIDE: 0.0   |   KAEDRIC: 91.0
+  STRAT — IRONHIDE: [Engage & Withdraw / Act:4]   |   KAEDRIC: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[86]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 99
+    IRONHIDE                : d100[44]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 64
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[67]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 84
+    Final ATK: 84
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[6]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 47
+    Final DEF: 47
+  Margin: 84 − 47 = 37   ▶  HIT (margin 37)
+  Damage (KAEDRIC → IRONHIDE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +2.55
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 37/55.0)) = 0.673
+    Raw: max(1, int(3 × 0.673)) = 2
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 2 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (IRONHIDE):
+    Before : 43/48 (89.6%)
+    hit     : −1
+    After  : 42/48 (87.5%)
+  Knockdown Check (IRONHIDE):
+    base = int(1/48 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 8  →  no knockdown
+  Perm Injury Check (IRONHIDE):
+    threshold = 15% of 48 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[75]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 95
+    KAEDRIC                 : d100[72]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 85
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[8]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 24
+    + style advantage: +6
+    Final ATK: 30
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[22]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 84
+    Final DEF: 84
+  Margin: 30 − 84 = -54   ▶  PARRY (margin -54)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[27]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 40
+    IRONHIDE                : d100[10]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 30
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[63]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 80
+    Final ATK: 80
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[85]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 126
+    Final DEF: 126
+  Margin: 80 − 126 = -46   ▶  DODGE (margin -46)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[84]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 104
+    KAEDRIC                 : d100[49]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 62
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[94]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 110
+    + style advantage: +6
+    Final ATK: 116
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[62]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 124
+    Final DEF: 124
+  Margin: 116 − 124 = -8   ▶  PARRY (margin -8)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[88]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 101
+    IRONHIDE                : d100[63]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 83
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[33]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 50
+    Final ATK: 50
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[93]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 134
+    Final DEF: 134
+  Margin: 50 − 134 = -84   ▶  DODGE (margin -84)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[67]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 83
+    + style advantage: +6
+    Final ATK: 89
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[61]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 123
+    Final DEF: 123
+  Margin: 89 − 123 = -34   ▶  PARRY (margin -34)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[78]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 94
+    + style advantage: +6
+    Final ATK: 100
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[91]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 153
+    Final DEF: 153
+  Margin: 100 − 153 = -53   ▶  PARRY (margin -53)
+
+  ── END OF MINUTE ──
+    IRONHIDE: 0.0 END − (1.70 burn × 4 actions) = 0.0
+    KAEDRIC: 91.0 END − (0.40 burn × 3 actions) = 88.8
+    HP POOL — IRONHIDE: 42/48 (88%)
+    HP POOL — KAEDRIC: 59/66 (89%)
+
+==============================================================================
+  MINUTE 7
+==============================================================================
+  APM   — IRONHIDE: 4   |   KAEDRIC: 3
+  HP    — IRONHIDE: 42/48 (88%)   |   KAEDRIC: 59/66 (89%)
+  END   — IRONHIDE: 0.0   |   KAEDRIC: 88.8
+  STRAT — IRONHIDE: [Engage & Withdraw / Act:4]   |   KAEDRIC: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[73]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 93
+    KAEDRIC                 : d100[37]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 50
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[12]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 28
+    + style advantage: +6
+    Final ATK: 34
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[1]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 63
+    Final DEF: 63
+  Margin: 34 − 63 = -29   ▶  PARRY (margin -29)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[90]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 103
+    IRONHIDE                : d100[4]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 24
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[60]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 77
+    Final ATK: 77
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[39]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 77 − 80 = -3   ▶  DODGE (margin -3)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[36]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 56
+    KAEDRIC                 : d100[21]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 34
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[78]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 94
+    + style advantage: +6
+    Final ATK: 100
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[37]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 99
+    Final DEF: 99
+  Margin: 100 − 99 = 1   ▶  GRAZE (margin 1, 1 HP)
+  HP Pool (KAEDRIC):
+    Before : 59/66 (89.4%)
+    graze   : −1
+    After  : 58/66 (87.9%)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[95]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 115
+    KAEDRIC                 : d100[25]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 38
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[28]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 44
+    + style advantage: +6
+    Final ATK: 50
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[33]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 95
+    Final DEF: 95
+  Margin: 50 − 95 = -45   ▶  PARRY (margin -45)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[98]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 118
+    KAEDRIC                 : d100[67]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 80
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[29]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 45
+    + style advantage: +6
+    Final ATK: 51
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[15]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 77
+    Final DEF: 77
+  Margin: 51 − 77 = -26   ▶  PARRY (margin -26)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: KAEDRIC has uncontested action
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[65]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 82
+    Final ATK: 82
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[35]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 76
+    Final DEF: 76
+  Margin: 82 − 76 = 6   ▶  GRAZE (margin 6, 1 HP)
+  HP Pool (IRONHIDE):
+    Before : 42/48 (87.5%)
+    graze   : −1
+    After  : 41/48 (85.4%)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: KAEDRIC has uncontested action
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[72]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 89
+    Final ATK: 89
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[72]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 113
+    Final DEF: 113
+  Margin: 89 − 113 = -24   ▶  DODGE (margin -24)
+
+  ── END OF MINUTE ──
+    IRONHIDE: 0.0 END − (1.70 burn × 4 actions) = 0.0
+    KAEDRIC: 88.8 END − (0.40 burn × 3 actions) = 86.6
+    HP POOL — IRONHIDE: 41/48 (85%)
+    HP POOL — KAEDRIC: 58/66 (88%)
+
+==============================================================================
+  MINUTE 8
+==============================================================================
+  APM   — IRONHIDE: 4   |   KAEDRIC: 3
+  HP    — IRONHIDE: 41/48 (85%)   |   KAEDRIC: 58/66 (88%)
+  END   — IRONHIDE: 0.0   |   KAEDRIC: 86.6
+  STRAT — IRONHIDE: [Engage & Withdraw / Act:4]   |   KAEDRIC: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[89]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 102
+    IRONHIDE                : d100[63]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 83
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[31]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 48
+    Final ATK: 48
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[62]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 103
+    Final DEF: 103
+  Margin: 48 − 103 = -55   ▶  DODGE (margin -55)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[84]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 104
+    KAEDRIC                 : d100[28]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 41
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[98]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 114
+    + style advantage: +6
+    Final ATK: 120
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[19]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 81
+    Final DEF: 81
+  Margin: 120 − 81 = 39   ▶  HIT (margin 39)
+  Damage (IRONHIDE → KAEDRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.25
+      STR bonus                    +3.00
+      style modifier               -1.00
+      activity contrib             +0.30
+      luck ×0.15                   +3.00
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 39/55.0)) = 0.709
+    Raw: max(1, int(11 × 0.709)) = 7
+    Favorite weapon +1 → raw = 8
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 8 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (KAEDRIC):
+    Before : 58/66 (87.9%)
+    hit     : −1
+    After  : 57/66 (86.4%)
+  Knockdown Check (KAEDRIC):
+    base = int(1/66 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 73  →  no knockdown
+  Perm Injury Check (KAEDRIC):
+    threshold = 15% of 66 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[84]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 97
+    IRONHIDE                : d100[64]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 84
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[77]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 94
+    Final ATK: 94
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[74]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 115
+    Final DEF: 115
+  Margin: 94 − 115 = -21   ▶  DODGE (margin -21)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[57]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 77
+    KAEDRIC                 : d100[48]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 61
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[38]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 54
+    + style advantage: +6
+    Final ATK: 60
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[50]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 112
+    Final DEF: 112
+  Margin: 60 − 112 = -52   ▶  PARRY (margin -52)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[45]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 65
+    KAEDRIC                 : d100[5]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 18
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[61]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 77
+    + style advantage: +6
+    Final ATK: 83
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[82]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 144
+    Final DEF: 144
+  Margin: 83 − 144 = -61   ▶  PARRY (margin -61)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[74]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 87
+    IRONHIDE                : d100[5]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 25
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[43]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 60
+    Final ATK: 60
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[58]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 99
+    Final DEF: 99
+  Margin: 60 − 99 = -39   ▶  DODGE (margin -39)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[40]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 56
+    + style advantage: +6
+    Final ATK: 62
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[33]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 95
+    Final DEF: 95
+  Margin: 62 − 95 = -33   ▶  PARRY (margin -33)
+
+  ── END OF MINUTE ──
+    IRONHIDE: 0.0 END − (1.70 burn × 4 actions) = 0.0
+    KAEDRIC: 86.6 END − (0.40 burn × 3 actions) = 84.4
+    HP POOL — IRONHIDE: 41/48 (85%)
+    HP POOL — KAEDRIC: 57/66 (86%)
+
+==============================================================================
+  MINUTE 9
+==============================================================================
+  APM   — IRONHIDE: 4   |   KAEDRIC: 3
+  HP    — IRONHIDE: 41/48 (85%)   |   KAEDRIC: 57/66 (86%)
+  END   — IRONHIDE: 0.0   |   KAEDRIC: 84.4
+  STRAT — IRONHIDE: [Engage & Withdraw / Act:4]   |   KAEDRIC: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[30]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 43
+    IRONHIDE                : d100[22]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 42
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[75]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 92
+    Final ATK: 92
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[49]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 90
+    Final DEF: 90
+  Margin: 92 − 90 = 2   ▶  GRAZE (margin 2, 1 HP)
+  HP Pool (IRONHIDE):
+    Before : 41/48 (85.4%)
+    graze   : −1
+    After  : 40/48 (83.3%)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[48]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 68
+    KAEDRIC                 : d100[12]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 25
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[38]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 54
+    + style advantage: +6
+    Final ATK: 60
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[29]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 91
+    Final DEF: 91
+  Margin: 60 − 91 = -31   ▶  PARRY (margin -31)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[100]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 113
+    IRONHIDE                : d100[38]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 58
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[10]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 27
+    Final ATK: 27
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[82]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 123
+    Final DEF: 123
+  Margin: 27 − 123 = -96   ▶  DODGE (margin -96)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[51]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 71
+    KAEDRIC                 : d100[17]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 30
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[73]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 89
+    + style advantage: +6
+    Final ATK: 95
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[58]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 120
+    Final DEF: 120
+  Margin: 95 − 120 = -25   ▶  PARRY (margin -25)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[30]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 50
+    KAEDRIC                 : d100[16]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 29
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[62]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 78
+    + style advantage: +6
+    Final ATK: 84
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[45]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 107
+    Final DEF: 107
+  Margin: 84 − 107 = -23   ▶  PARRY (margin -23)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[94]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 107
+    IRONHIDE                : d100[4]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 24
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[40]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 57
+    Final ATK: 57
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[17]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 58
+    Final DEF: 58
+  Margin: 57 − 58 = -1   ▶  DODGE (margin -1)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[17]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 33
+    + style advantage: +6
+    Final ATK: 39
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[26]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 88
+    Final DEF: 88
+  Margin: 39 − 88 = -49   ▶  PARRY (margin -49)
+
+  ── END OF MINUTE ──
+    IRONHIDE: 0.0 END − (1.70 burn × 4 actions) = 0.0
+    KAEDRIC: 84.4 END − (0.40 burn × 3 actions) = 82.2
+    HP POOL — IRONHIDE: 40/48 (83%)
+    HP POOL — KAEDRIC: 57/66 (86%)
+
+==============================================================================
+  MINUTE 10
+==============================================================================
+  APM   — IRONHIDE: 4   |   KAEDRIC: 3
+  HP    — IRONHIDE: 40/48 (83%)   |   KAEDRIC: 49/66 (74%)
+  END   — IRONHIDE: 0.0   |   KAEDRIC: 82.2
+  STRAT — IRONHIDE: [Engage & Withdraw / Act:4]   |   KAEDRIC: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[79]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 99
+    KAEDRIC                 : d100[12]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 25
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[70]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 86
+    + style advantage: +6
+    Final ATK: 92
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[29]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 91
+    Final DEF: 91
+  Margin: 92 − 91 = 1   ▶  GRAZE (margin 1, 1 HP)
+  HP Pool (KAEDRIC):
+    Before : 49/66 (74.2%)
+    graze   : −1
+    After  : 48/66 (72.7%)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[92]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 105
+    IRONHIDE                : d100[70]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 90
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[83]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 100
+    Final ATK: 100
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[43]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 84
+    Final DEF: 84
+  Margin: 100 − 84 = 16   ▶  HIT (margin 16)
+  Damage (KAEDRIC → IRONHIDE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +2.55
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 16/55.0)) = 0.291
+    Raw: max(1, int(3 × 0.291)) = 1
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 1 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (IRONHIDE):
+    Before : 40/48 (83.3%)
+    hit     : −1
+    After  : 39/48 (81.2%)
+  Knockdown Check (IRONHIDE):
+    base = int(1/48 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 84  →  no knockdown
+  Perm Injury Check (IRONHIDE):
+    threshold = 15% of 48 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[53]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 66
+    IRONHIDE                : d100[38]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 58
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[40]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 57
+    Final ATK: 57
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[43]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 84
+    Final DEF: 84
+  Margin: 57 − 84 = -27   ▶  DODGE (margin -27)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[98]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 118
+    KAEDRIC                 : d100[7]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 20
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[5]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 21
+    + style advantage: +6
+    Final ATK: 27
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[53]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 115
+    Final DEF: 115
+  Margin: 27 − 115 = -88   ▶  PARRY (margin -88)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[86]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 99
+    IRONHIDE                : d100[62]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 82
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[1]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 18
+    Final ATK: 18
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[28]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 69
+    Final DEF: 69
+  Margin: 18 − 69 = -51   ▶  DODGE (margin -51)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[18]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 34
+    + style advantage: +6
+    Final ATK: 40
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[38]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 100
+    Final DEF: 100
+  Margin: 40 − 100 = -60   ▶  PARRY (margin -60)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[74]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 90
+    + style advantage: +6
+    Final ATK: 96
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[70]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 132
+    Final DEF: 132
+  Margin: 96 − 132 = -36   ▶  PARRY (margin -36)
+
+  ── END OF MINUTE ──
+    IRONHIDE: 0.0 END − (1.70 burn × 4 actions) = 0.0
+    KAEDRIC: 82.2 END − (0.40 burn × 3 actions) = 80.0
+    HP POOL — IRONHIDE: 39/48 (81%)
+    HP POOL — KAEDRIC: 48/66 (73%)
+
+==============================================================================
+  MINUTE 11
+==============================================================================
+  APM   — IRONHIDE: 4   |   KAEDRIC: 3
+  HP    — IRONHIDE: 39/48 (81%)   |   KAEDRIC: 38/66 (58%)
+  END   — IRONHIDE: 0.0   |   KAEDRIC: 80.0
+  STRAT — IRONHIDE: [Engage & Withdraw / Act:4]   |   KAEDRIC: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[89]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 102
+    IRONHIDE                : d100[76]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 96
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[45]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 62
+    Final ATK: 62
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[21]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 62
+    Final DEF: 62
+  Margin: 62 − 62 = 0   ▶  MISS
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[53]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 66
+    IRONHIDE                : d100[32]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 52
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[12]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 29
+    Final ATK: 29
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[74]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 115
+    Final DEF: 115
+  Margin: 29 − 115 = -86   ▶  DODGE (margin -86)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[55]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 68
+    IRONHIDE                : d100[37]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 57
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[41]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 58
+    Final ATK: 58
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[50]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 91
+    Final DEF: 91
+  Margin: 58 − 91 = -33   ▶  DODGE (margin -33)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[36]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 52
+    + style advantage: +6
+    Final ATK: 58
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[93]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 155
+    Final DEF: 155
+  Margin: 58 − 155 = -97   ▶  PARRY (margin -97)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[20]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 36
+    + style advantage: +6
+    Final ATK: 42
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[80]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 142
+    Final DEF: 142
+  Margin: 42 − 142 = -100   ▶  PARRY (margin -100)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[35]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 51
+    + style advantage: +6
+    Final ATK: 57
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[96]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 158
+    Final DEF: 158
+  Margin: 57 − 158 = -101   ▶  PARRY (margin -101)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: IRONHIDE has uncontested action
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[69]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 85
+    + style advantage: +6
+    Final ATK: 91
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[76]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 138
+    Final DEF: 138
+  Margin: 91 − 138 = -47   ▶  PARRY (margin -47)
+
+  ── END OF MINUTE ──
+    IRONHIDE: 0.0 END − (1.70 burn × 4 actions) = 0.0
+    KAEDRIC: 80.0 END − (0.40 burn × 3 actions) = 77.8
+    HP POOL — IRONHIDE: 39/48 (81%)
+    HP POOL — KAEDRIC: 38/66 (58%)
+
+==============================================================================
+  MINUTE 12
+==============================================================================
+  APM   — IRONHIDE: 4   |   KAEDRIC: 3
+  HP    — IRONHIDE: 39/48 (81%)   |   KAEDRIC: 38/66 (58%)
+  END   — IRONHIDE: 0.0   |   KAEDRIC: 77.8
+  STRAT — IRONHIDE: [Engage & Withdraw / Act:4]   |   KAEDRIC: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[67]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 87
+    KAEDRIC                 : d100[56]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 69
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[26]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 42
+    + style advantage: +6
+    Final ATK: 48
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[35]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 97
+    Final DEF: 97
+  Margin: 48 − 97 = -49   ▶  PARRY (margin -49)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[78]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 98
+    KAEDRIC                 : d100[13]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 26
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[52]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 68
+    + style advantage: +6
+    Final ATK: 74
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[19]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 81
+    Final DEF: 81
+  Margin: 74 − 81 = -7   ▶  PARRY (margin -7)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[58]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 71
+    IRONHIDE                : d100[40]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 60
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[11]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 28
+    Final ATK: 28
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[84]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 125
+    Final DEF: 125
+  Margin: 28 − 125 = -97   ▶  DODGE (margin -97)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[92]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 112
+    KAEDRIC                 : d100[19]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 32
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[50]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 66
+    + style advantage: +6
+    Final ATK: 72
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[67]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 129
+    Final DEF: 129
+  Margin: 72 − 129 = -57   ▶  PARRY (margin -57)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[76]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 96
+    KAEDRIC                 : d100[64]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 77
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[92]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 108
+    + style advantage: +6
+    Final ATK: 114
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[62]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 124
+    Final DEF: 124
+  Margin: 114 − 124 = -10   ▶  PARRY (margin -10)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: KAEDRIC has uncontested action
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[83]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 100
+    Final ATK: 100
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[57]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 100 − 98 = 2   ▶  GRAZE (margin 2, 1 HP)
+  HP Pool (IRONHIDE):
+    Before : 39/48 (81.2%)
+    graze   : −1
+    After  : 38/48 (79.2%)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: KAEDRIC has uncontested action
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[70]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 87
+    Final ATK: 87
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[41]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 82
+    Final DEF: 82
+  Margin: 87 − 82 = 5   ▶  GRAZE (margin 5, 1 HP)
+  HP Pool (IRONHIDE):
+    Before : 38/48 (79.2%)
+    graze   : −1
+    After  : 37/48 (77.1%)
+
+  ── END OF MINUTE ──
+    IRONHIDE: 0.0 END − (1.70 burn × 4 actions) = 0.0
+    KAEDRIC: 77.8 END − (0.40 burn × 3 actions) = 75.6
+    HP POOL — IRONHIDE: 37/48 (77%)
+    HP POOL — KAEDRIC: 38/66 (58%)
+
+==============================================================================
+  MINUTE 13
+==============================================================================
+  APM   — IRONHIDE: 4   |   KAEDRIC: 3
+  HP    — IRONHIDE: 37/48 (77%)   |   KAEDRIC: 24/66 (36%)
+  END   — IRONHIDE: 0.0   |   KAEDRIC: 75.6
+  STRAT — IRONHIDE: [Engage & Withdraw / Act:4]   |   KAEDRIC: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[86]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 106
+    KAEDRIC                 : d100[74]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 87
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[69]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 85
+    + style advantage: +6
+    Final ATK: 91
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[42]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 104
+    Final DEF: 104
+  Margin: 91 − 104 = -13   ▶  PARRY (margin -13)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[20]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 40
+    KAEDRIC                 : d100[7]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 20
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[78]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 94
+    + style advantage: +6
+    Final ATK: 100
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[11]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 73
+    Final DEF: 73
+  Margin: 100 − 73 = 27   ▶  HIT (margin 27)
+  Damage (IRONHIDE → KAEDRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.25
+      STR bonus                    +3.00
+      style modifier               -1.00
+      activity contrib             +0.30
+      luck ×0.15                   +3.00
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 27/55.0)) = 0.491
+    Raw: max(1, int(11 × 0.491)) = 5
+    Favorite weapon +1 → raw = 6
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 6 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (KAEDRIC):
+    Before : 24/66 (36.4%)
+    hit     : −1
+    After  : 23/66 (34.8%)
+  Knockdown Check (KAEDRIC):
+    base = int(1/66 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 70  →  no knockdown
+  Perm Injury Check (KAEDRIC):
+    threshold = 15% of 66 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[7]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 27
+    KAEDRIC                 : d100[6]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 19
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[75]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 91
+    + style advantage: +6
+    Final ATK: 97
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[77]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 139
+    Final DEF: 139
+  Margin: 97 − 139 = -42   ▶  PARRY (margin -42)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[42]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 62
+    KAEDRIC                 : d100[25]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 38
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[33]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 49
+    + style advantage: +6
+    Final ATK: 55
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[56]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 118
+    Final DEF: 118
+  Margin: 55 − 118 = -63   ▶  PARRY (margin -63)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: KAEDRIC has uncontested action
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[61]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 78
+    Final ATK: 78
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[16]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 57
+    Final DEF: 57
+  Margin: 78 − 57 = 21   ▶  HIT (margin 21)
+  Damage (KAEDRIC → IRONHIDE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +2.55
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 21/55.0)) = 0.382
+    Raw: max(1, int(3 × 0.382)) = 1
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 1 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (IRONHIDE):
+    Before : 37/48 (77.1%)
+    hit     : −1
+    After  : 36/48 (75.0%)
+  Knockdown Check (IRONHIDE):
+    base = int(1/48 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 74  →  no knockdown
+  Perm Injury Check (IRONHIDE):
+    threshold = 15% of 48 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: KAEDRIC has uncontested action
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[89]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 106
+    Final ATK: 106
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[65]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 106
+    Final DEF: 106
+  Margin: 106 − 106 = 0   ▶  MISS
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: KAEDRIC has uncontested action
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[12]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 29
+    Final ATK: 29
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[89]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 130
+    Final DEF: 130
+  Margin: 29 − 130 = -101   ▶  DODGE (margin -101)
+
+  ── END OF MINUTE ──
+    IRONHIDE: 0.0 END − (1.70 burn × 4 actions) = 0.0
+    KAEDRIC: 75.6 END − (0.40 burn × 3 actions) = 73.4
+    HP POOL — IRONHIDE: 36/48 (75%)
+    HP POOL — KAEDRIC: 23/66 (35%)
+
+==============================================================================
+  MINUTE 14
+==============================================================================
+  APM   — IRONHIDE: 4   |   KAEDRIC: 3
+  HP    — IRONHIDE: 36/48 (75%)   |   KAEDRIC: 7/66 (11%)
+  END   — IRONHIDE: 0.0   |   KAEDRIC: 73.4
+  STRAT — IRONHIDE: [Engage & Withdraw / Act:4]   |   KAEDRIC: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[67]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 87
+    KAEDRIC                 : d100[25]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 38
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[26]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 42
+    + style advantage: +6
+    Final ATK: 48
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[85]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 147
+    Final DEF: 147
+  Margin: 48 − 147 = -99   ▶  PARRY (margin -99)
+  Concede Attempt (KAEDRIC):
+    d100[26] + PRE_bonus[-4] + luck//2[8] = 30
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    30 < 66  →  mercy denied — fight continues
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAEDRIC                 : d100[94]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 107
+    IRONHIDE                : d100[41]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 61
+    ▶ KAEDRIC wins → ATTACKS
+  Attack: KAEDRIC → IRONHIDE   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (KAEDRIC):
+    d100[59]  dex_bonus[+7]  luck[+17]  style_mod[-7]
+    Subtotal: 76
+    Final ATK: 76
+  Defense Roll (IRONHIDE, DODGE — dodge_bonus(5) > parry_bonus(0)):
+    d100[26]  luck[+20]  dex_bonus[+6]  style_dodge[+10]  activity_mod[-2]  size_diff[+5]  race_dodge_x2[+14]  end_pen[-12]
+    Subtotal: 67
+    Final DEF: 67
+  Margin: 76 − 67 = 9   ▶  GRAZE (margin 9, 1 HP)
+  HP Pool (IRONHIDE):
+    Before : 36/48 (75.0%)
+    graze   : −1
+    After  : 35/48 (72.9%)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    IRONHIDE                : d100[83]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-1]  activity_mod[-2]  end_pen[-12] = 103
+    KAEDRIC                 : d100[59]  dex_bonus[+10]  luck[+17]  style_mod[-10]  activity_mod[-4] = 72
+    ▶ IRONHIDE wins → ATTACKS
+  Attack: IRONHIDE → KAEDRIC   Weapon: Javelin   Style: Engage & Withdraw   Aim: None
+  Attack Roll (IRONHIDE):
+    d100[54]  dex_bonus[+6]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 70
+    + style advantage: +6
+    Final ATK: 76
+  Defense Roll (KAEDRIC, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[2]  luck[+17]  str_bonus[-1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 64
+    Final DEF: 64
+  Margin: 76 − 64 = 12   ▶  HIT (margin 12)
+  Damage (IRONHIDE → KAEDRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 6.25
+      STR bonus                    +3.00
+      style modifier               -1.00
+      activity contrib             +0.30
+      luck ×0.15                   +3.00
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 12/55.0)) = 0.218
+    Raw: max(1, int(11 × 0.218)) = 2
+    Favorite weapon +1 → raw = 3
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 3 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (KAEDRIC):
+    Before : 7/66 (10.6%)
+    hit     : −1
+    After  : 6/66 (9.1%)
+  Knockdown Check (KAEDRIC):
+    base = int(1/66 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 4  →  no knockdown
+  Perm Injury Check (KAEDRIC):
+    threshold = 15% of 66 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+  Concede Attempt (KAEDRIC):
+    d100[82] + PRE_bonus[-4] + luck//2[8] = 86
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    86 ≥ 66  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: IRONHIDE
+==============================================================================
+  Javelin: d100=44 vs 55% — SUCCESS
+    → Javelin trained: Level 0 → Level 1 (Novice, 55% chance)
+  Javelin: d100=55 vs 55% — SUCCESS
+    → Javelin trained: Level 1 → Level 2 (Some Skill, 55% chance)
+  Javelin: d100=57 vs 55% — FAIL
+    → Javelin training: no progress this session (INT 15, level 2, 55% chance).
+  INT observed learning: d100=37 vs 4% — no trigger
+
+==============================================================================
+  TRAINING: KAEDRIC
+==============================================================================
+  Parry: d100=96 vs 25% — FAIL
+    → Parry training: no progress this session (INT 9, level 6, 25% chance).
+  Constitution: d100=100 vs 29% — FAIL
+    → Constitution training: no progress this session (mastery tier, 29% chance).
+  Dodge: d100=42 vs 25% — FAIL
+    → Dodge training: no progress this session (INT 9, level 7, 25% chance).
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : IRONHIDE  (72.9% HP remaining)
+  Loser  : KAEDRIC  (survived, 9.1% HP)
+  Duration: 14 minute(s)
+==============================================================================

@@ -1,0 +1,115 @@
+Fight #47
+Stress Team Turn 10  vs  The Iron Reapers
+============================================================================
+
+============================================================================
+BASHER_1 (3-0-0)   vs   VORN SEVENFINGER (2-3-0)
+STRESS TEAM TURN 10 (STRESS TESTER)   vs   THE IRON REAPERS (STONE FANG)
+Dwarf Male   vs   Elf Female
+============================================================================
+
+BASHER_1 is 4'2"
+BASHER_1 weighs 195 lbs.
+BASHER_1 Well Liked.
+BASHER_1 enters the arena unarmored and wears no helm.
+BASHER_1 fights using a WAR HAMMER.
+
+VORN SEVENFINGER is 4'10"
+VORN SEVENFINGER weighs 134 lbs.
+VORN SEVENFINGER Known To The Crowd.
+VORN SEVENFINGER enters the arena in LEATHER and will wear a STEEL CAP.
+VORN SEVENFINGER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The Blood Master raises his fist — the fight begins!
+VORN SEVENFINGER creates a whirling wall of steel
+VORN SEVENFINGER attacks relentlessly at BASHER_1's torso with her short sword
+VORN SEVENFINGER finds the opening!
+VORN SEVENFINGER's short sword bites into BASHER_1's ribs!
+   That one will leave a mark!
+*** BASHER_1 has been permanently injured in the chest!!! ***
+BASHER_1 clutches at his chest!
+BASHER_1's breathing becomes labored!!
+BASHER_1 sizes up VORN SEVENFINGER carefully
+BASHER_1 hammers at VORN SEVENFINGER's midsection with his war hammer
+VORN SEVENFINGER barely gets the parry off!
+BASHER_1 hammers at VORN SEVENFINGER's body with his war hammer
+BASHER_1's war hammer slams into VORN SEVENFINGER's body!
+   A minor hit!
+BASHER_1 hammers at VORN SEVENFINGER's midsection with his war hammer
+VORN SEVENFINGER is ready for the strike, and deftly parries it!
+Someone boos the Elf, then sits very still hoping no one noticed
+VORN SEVENFINGER creates a whirling wall of steel
+VORN SEVENFINGER hacks at BASHER_1's chest with her short sword
+BASHER_1 makes a desperate last-moment parry!
+VORN SEVENFINGER slices at BASHER_1's rib cage with her short sword
+The short sword finds its mark!
+VORN SEVENFINGER's short sword cuts into BASHER_1's breastplate!
+   The armor absorbs most of it
+VORN SEVENFINGER slashes at BASHER_1's chest with her short sword
+VORN SEVENFINGER's short sword finds BASHER_1's chest armor!
+   Some damage is done
+VORN SEVENFINGER creates a whirling wall of steel
+VORN SEVENFINGER attacks relentlessly at BASHER_1's torso with her short sword
+VORN SEVENFINGER's short sword slices into BASHER_1's chest!
+   Little damage results from the strike
+VORN SEVENFINGER hacks at BASHER_1's chest with her short sword
+VORN SEVENFINGER's short sword finds BASHER_1's chest armor!
+   The armor does its job admirably
+The torchbearers scramble to keep up with the action
+VORN SEVENFINGER attacks relentlessly at BASHER_1's rib cage with her short sword
+VORN SEVENFINGER's short sword slices into BASHER_1's ribs!
+   The blow does almost nothing
+BASHER_1 keeps pressure on VORN SEVENFINGER without committing
+
+MINUTE 2
+The balance holds; neither fighter has found the breakthrough they need.
+
+VORN SEVENFINGER relentlessly targets BASHER_1's rib cage with her short sword
+VORN SEVENFINGER's accuracy is rewarded!
+VORN SEVENFINGER's short sword finds BASHER_1's ribs!
+   Some damage is done
+BASHER_1 steps threateningly close to the mighty VORN SEVENFINGER
+BASHER_1 pounds at VORN SEVENFINGER's midsection with his war hammer
+VORN SEVENFINGER's defenses are particularly strong!
+VORN SEVENFINGER relentlessly targets BASHER_1's torso with her short sword
+BASHER_1's defenses are particularly strong!
+BASHER_1 bludgeons VORN SEVENFINGER's torso with his war hammer
+VORN SEVENFINGER just manages to deflect the blow!
+BASHER_1 smashes at VORN SEVENFINGER's torso with his war hammer
+VORN SEVENFINGER barely gets the parry off!
+VORN SEVENFINGER hammers away with machine-like persistence
+VORN SEVENFINGER attacks relentlessly at BASHER_1's chest with her short sword
+VORN SEVENFINGER's blow barely grazes BASHER_1!
+Arena guards hold back rioting fans!
+VORN SEVENFINGER thrusts at BASHER_1's rib cage with her short sword
+VORN SEVENFINGER finds the opening!
+VORN SEVENFINGER's short sword slices into BASHER_1's breastplate!
+   A solid blow has been struck!
+VORN SEVENFINGER relentlessly presses forward with her short sword
+VORN SEVENFINGER drives a blow toward BASHER_1's breast with her short sword
+BASHER_1's plan is not to get hit!
+VORN SEVENFINGER creates a whirling wall of steel
+VORN SEVENFINGER drives a blow toward BASHER_1's sternum with her short sword
+VORN SEVENFINGER gets past BASHER_1's guard!
+VORN SEVENFINGER's short sword cuts into BASHER_1's chest armor!
+   That one will leave a mark!
+BASHER_1 calls out for quarter!
+The crowd screams for blood — mercy is denied!
+VORN SEVENFINGER relentlessly targets BASHER_1's rib cage with her short sword
+VORN SEVENFINGER's short sword bites into BASHER_1's ribs!
+   The blow lands without full force
+BASHER_1 raises a hand in surrender!
+The ref saves the pitiable BASHER_1!
+
+VORN SEVENFINGER is declared the winner!
+
+VORN SEVENFINGER has trained in Skill

@@ -1,0 +1,53 @@
+{
+  "20": {
+    "manager_name": "The Chosen One",
+    "salt": "100cd5a710e0a1bf75175dc2f66edc3f",
+    "password_hash": "01069437120cc809b31a267e1523e4b1fc0ebfdd3d43e1e7b91d6bef06800216",
+    "registered_at": "2026-05-03 10:23:40",
+    "team_ids": [
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "last_upload_timestamp": "2026-05-03 11:12:38"
+  },
+  "21": {
+    "manager_name": "Ilneval",
+    "salt": "04f44d4ffac36a5ff12fce182aaf671a",
+    "password_hash": "f2ebac90e90f6fd16f4c00ca727f58ba9eeb2159c77f86bbbb077dc6cd178cf9",
+    "registered_at": "2026-05-03 11:13:58",
+    "team_ids": [
+      41,
+      42,
+      43,
+      44,
+      45
+    ],
+    "last_upload_timestamp": "2026-05-05 08:16:26"
+  },
+  "22": {
+    "manager_name": "D-man",
+    "salt": "927618a685e5b5f5eb53ea56003bb975",
+    "password_hash": "519b218dd0906c69fe3c39979cacf1f09eb57702e356f5e616cc2a65a32b5b08",
+    "registered_at": "2026-05-03 19:33:25",
+    "team_ids": [
+      46
+    ],
+    "last_upload_timestamp": "2026-05-03 19:44:07"
+  },
+  "23": {
+    "manager_name": "Sanguine Savior",
+    "salt": "00714fa4aafa88e02413fad74c19dcb2",
+    "password_hash": "85bac2a9f83743b7040abf64964a4e77432d1c03eac6e74bc0f7f8afbdd34d48",
+    "registered_at": "2026-05-04 20:45:13",
+    "team_ids": [
+      47,
+      48,
+      49,
+      50
+    ],
+    "last_upload_timestamp": "2026-05-05 08:08:11"
+  }
+}

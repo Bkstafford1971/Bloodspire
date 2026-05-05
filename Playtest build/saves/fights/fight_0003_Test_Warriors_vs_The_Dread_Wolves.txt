@@ -1,0 +1,95 @@
+Fight #3
+Test Warriors  vs  The Dread Wolves
+============================================================================
+
+============================================================================
+SLASHER (0-0-0)   vs   BRAN SKULLCLEAVE (0-0-0)
+TEST WARRIORS (TEST MANAGER)   vs   THE DREAD WOLVES (IRON WARLORD)
+Dwarf Male   vs   Half-Elf Female
+============================================================================
+
+SLASHER is 4'1"
+SLASHER weighs 187 lbs.
+SLASHER Known To The Crowd.
+SLASHER enters the arena unarmored and wears no helm.
+SLASHER fights using a LONG SWORD.
+
+BRAN SKULLCLEAVE is 5'0"
+BRAN SKULLCLEAVE weighs 117 lbs.
+BRAN SKULLCLEAVE Known To The Crowd.
+BRAN SKULLCLEAVE enters the arena in CLOTH and will wear a LEATHER CAP.
+BRAN SKULLCLEAVE fights using a BASTARD SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The torches flicker as a cold wind sweeps through the arena
+SLASHER slices at BRAN SKULLCLEAVE's torso with his long sword
+SLASHER's accuracy is rewarded!
+SLASHER's long sword bites into BRAN SKULLCLEAVE's body!
+   The resulting crunch echoes through the BLOODSPIRE!
+SLASHER steps threateningly close to the dangerous BRAN SKULLCLEAVE
+SLASHER cuts at BRAN SKULLCLEAVE's midsection with his long sword
+SLASHER finds the opening!
+SLASHER's long sword finds BRAN SKULLCLEAVE's torso!
+   The blow has real authority behind it!
+BRAN SKULLCLEAVE seeks to open a telling wound
+BRAN SKULLCLEAVE slices at SLASHER's face with her bastard sword
+SLASHER turns the blow aside with skill!
+SLASHER hacks at BRAN SKULLCLEAVE's body with his long sword
+SLASHER's accuracy is rewarded!
+SLASHER's long sword slices into BRAN SKULLCLEAVE's torso!
+   The crowd winces at the sound of that blow!
+BRAN SKULLCLEAVE draws back for a sweeping slash
+BRAN SKULLCLEAVE rakes at SLASHER's throat with her bastard sword
+BRAN SKULLCLEAVE finds the opening!
+BRAN SKULLCLEAVE's bastard sword finds SLASHER's skull!
+   The blow does almost nothing
+
+MINUTE 2
+SLASHER is firmly in control of the action.
+
+A nobleman covers his eyes — then peeks through his fingers
+BRAN SKULLCLEAVE cuts at SLASHER's skull with her bastard sword
+SLASHER's guard holds firm!
+SLASHER directs an attack toward BRAN SKULLCLEAVE
+SLASHER drives a blow toward BRAN SKULLCLEAVE's body with his long sword
+BRAN SKULLCLEAVE just manages to deflect the blow!
+BRAN SKULLCLEAVE slices at SLASHER's face with her bastard sword
+SLASHER is ready for the strike, and deftly parries it!
+SLASHER thrusts at BRAN SKULLCLEAVE's midsection with his long sword
+BRAN SKULLCLEAVE has a plan: don't get hit!
+SLASHER cuts at BRAN SKULLCLEAVE's midsection with his long sword
+SLASHER's blow barely grazes BRAN SKULLCLEAVE!
+
+MINUTE 3
+SLASHER holds firm command of the contest.
+
+SLASHER directs an attack toward BRAN SKULLCLEAVE
+SLASHER thrusts at BRAN SKULLCLEAVE's midsection with his long sword
+SLASHER finds the opening!
+SLASHER's long sword finds BRAN SKULLCLEAVE's torso!
+   A telling hit!
+*** BRAN SKULLCLEAVE has been permanently injured in the weapon arm!!! ***
+BRAN SKULLCLEAVE's weapon arm is bleeding!
+BRAN SKULLCLEAVE nearly drops her weapon from the pain!!
+SLASHER drives a blow toward BRAN SKULLCLEAVE's torso with his long sword
+The long sword finds its mark!
+SLASHER's long sword slices into BRAN SKULLCLEAVE's torso!
+   The armor does its job admirably
+SLASHER tries to hit the mighty BRAN SKULLCLEAVE
+SLASHER slices at BRAN SKULLCLEAVE's torso with his long sword
+SLASHER's long sword bites into BRAN SKULLCLEAVE's armor!
+   A minor hit!
+BRAN SKULLCLEAVE raises a hand in surrender!
+The crowd screams for blood, but the ref steps in!
+
+SLASHER stands victorious over the fallen BRAN SKULLCLEAVE!
+
+BRAN SKULLCLEAVE has trained in Skill and Skill

@@ -1,0 +1,418 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #911   Turn: 18
+  Debug team: Electron
+  Electron / SHADES OF THE PAST   vs   Wulfric the Grim / Grim's Reapers
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: TRIGARD
+  ────────────────────────────────────
+    Race: Dwarf  |  Gender: Male
+    STR:15  DEX:11  CON:16  INT:11  PRE:10  SIZ:11
+    Max HP: 65   Luck: 23
+    Armor: Scale   Helm: Camail
+    Primary: Pick Axe   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Bash / Act:7 / Aim:Head / Def:Chest
+    Skills: bash:8  
+
+  ────────────────────────────────────
+  WARRIOR B: GARRETT
+  ────────────────────────────────────
+    Race: Human  |  Gender: Male
+    STR:23  DEX:11  CON:17  INT:9  PRE:9  SIZ:12
+    Max HP: 61   Luck: 12
+    Armor: Brigandine   Helm: None
+    Primary: Great Sword   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:7 / Aim:Head / Def:None
+    Skills: initiative:4  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — TRIGARD: 4   |   GARRETT: 5
+  HP    — TRIGARD: 65/65 (100%)   |   GARRETT: 61/61 (100%)
+  END   — TRIGARD: 100.0   |   GARRETT: 100.0
+  STRAT — TRIGARD: [Bash / Act:7]   |   GARRETT: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[97]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 118
+    GARRETT                 : d100[73]  init_skill_x3[+12]  luck[+12]  activity_mod[+4] = 101
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → GARRETT   Weapon: Pick Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[25]  dex_bonus[-2]  luck[+23]  style_mod[-1]
+    Subtotal: 45
+    + style advantage: +6
+    Final ATK: 51
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[28]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 41
+    Final DEF: 41
+  Margin: 51 − 41 = 10   ▶  HIT (margin 10)
+  Damage (TRIGARD → GARRETT):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 12.00
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 26
+    Fraction: max(0.10, min(1.0, 10/55.0)) = 0.182
+    Raw: max(1, int(26 × 0.182)) = 4
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 4 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (GARRETT):
+    Before : 61/61 (100.0%)
+    hit     : −1
+    After  : 60/61 (98.4%)
+  Knockdown Check (GARRETT):
+    base = int(1/61 × 80) = 1   cat bonus [Axe/Pick]: +0   final: 1%
+    Roll: 79  →  no knockdown
+  Perm Injury Check (GARRETT):
+    threshold = 15% of 61 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[44]  init_skill_x3[+12]  luck[+12]  activity_mod[+4] = 72
+    TRIGARD                 : d100[23]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 44
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → TRIGARD   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[10]  luck[+12]
+    Subtotal: 22
+    + style advantage: -6
+    Final ATK: 16
+  Defense Roll (TRIGARD, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[24]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+4]  race_parry_x3[+18]
+    Subtotal: 64
+    Final DEF: 64
+  Margin: 16 − 64 = -48   ▶  PARRY (margin -48)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[74]  init_skill_x3[+12]  luck[+12]  activity_mod[+4] = 102
+    TRIGARD                 : d100[52]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 73
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → TRIGARD   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[93]  luck[+12]
+    Subtotal: 105
+    + style advantage: -6
+    Final ATK: 99
+  Defense Roll (TRIGARD, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[5]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+4]  race_parry_x3[+18]
+    Subtotal: 45
+    Final DEF: 45
+  Margin: 99 − 45 = 54   ▶  HIT (margin 54)
+  Damage (GARRETT → TRIGARD):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      STR bonus                    +7.80
+      two-hand multiplier          ×1.15
+      activity contrib             -0.60
+      luck ×0.15                   +1.80
+    Ceiling: 29
+    Fraction: max(0.10, min(1.0, 54/55.0)) = 0.982
+    Raw: max(1, int(29 × 0.982)) = 28
+    Armor: Scale  base DEF: 9
+    Net = max(1, 28 − 9) = 19
+  ▶ FINAL DAMAGE: 19
+  HP Pool (TRIGARD):
+    Before : 65/65 (100.0%)
+    hit     : −19
+    After  : 46/65 (70.8%)
+  Knockdown Check (TRIGARD):
+    base = int(19/65 × 80) = 23   cat bonus [Sword/Knife]: +0   final: 23%
+    Roll: 25  →  no knockdown
+  Perm Injury Check (TRIGARD):
+    threshold = 15% of 65 = 9   damage 19 ≥ threshold
+    chance = max(5, min(80, int(19/65×100) − 5)) = 24%
+    Roll: 12  →  head (1 level(s))
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[94]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 115
+    GARRETT                 : d100[51]  init_skill_x3[+12]  luck[+12]  activity_mod[+4] = 79
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → GARRETT   Weapon: Pick Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[6]  dex_bonus[-2]  luck[+23]  style_mod[-1]
+    Subtotal: 26
+    + style advantage: +6
+    Final ATK: 32
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[66]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 79
+    Final DEF: 79
+  Margin: 32 − 79 = -47   ▶  PARRY (margin -47)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[92]  init_skill_x3[+12]  luck[+12]  activity_mod[+4] = 120
+    TRIGARD                 : d100[88]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 109
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → TRIGARD   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[56]  luck[+12]
+    Subtotal: 68
+    + style advantage: -6
+    Final ATK: 62
+  Defense Roll (TRIGARD, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[29]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+4]  race_parry_x3[+18]
+    Subtotal: 69
+    Final DEF: 69
+  Margin: 62 − 69 = -7   ▶  PARRY (margin -7)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[5]  init_skill_x3[+12]  luck[+12]  activity_mod[+4] = 33
+    TRIGARD                 : d100[3]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 24
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → TRIGARD   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[55]  luck[+12]
+    Subtotal: 67
+    + style advantage: -6
+    Final ATK: 61
+  Defense Roll (TRIGARD, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[66]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+4]  race_parry_x3[+18]
+    Subtotal: 106
+    Final DEF: 106
+  Margin: 61 − 106 = -45   ▶  PARRY (margin -45)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[26]  init_skill_x3[+12]  luck[+12]  activity_mod[+4] = 54
+    TRIGARD                 : d100[8]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 29
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → TRIGARD   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[50]  luck[+12]
+    Subtotal: 62
+    + style advantage: -6
+    Final ATK: 56
+  Defense Roll (TRIGARD, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[35]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+4]  race_parry_x3[+18]
+    Subtotal: 75
+    Final DEF: 75
+  Margin: 56 − 75 = -19   ▶  PARRY (margin -19)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: TRIGARD has uncontested action
+  Attack: TRIGARD → GARRETT   Weapon: Pick Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[93]  dex_bonus[-2]  luck[+23]  style_mod[-1]
+    Subtotal: 113
+    + style advantage: +6
+    Final ATK: 119
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[77]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 90
+    Final DEF: 90
+  Margin: 119 − 90 = 29   ▶  HIT (margin 29)
+  Damage (TRIGARD → GARRETT):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 12.00
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 26
+    Fraction: max(0.10, min(1.0, 29/55.0)) = 0.527
+    Raw: max(1, int(26 × 0.527)) = 13
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 13 − 4) = 9
+  ▶ FINAL DAMAGE: 9
+  HP Pool (GARRETT):
+    Before : 60/61 (98.4%)
+    hit     : −9
+    After  : 51/61 (83.6%)
+  Knockdown Check (GARRETT):
+    base = int(9/61 × 80) = 11   cat bonus [Axe/Pick]: +0   final: 11%
+    Roll: 76  →  no knockdown
+  Perm Injury Check (GARRETT):
+    threshold = 15% of 61 = 9   damage 9 ≥ threshold
+    chance = max(5, min(80, int(9/61×100) − 5)) = 0%
+    Roll: 0  →  no injury
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: TRIGARD has uncontested action
+  Attack: TRIGARD → GARRETT   Weapon: Pick Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[94]  dex_bonus[-2]  luck[+23]  style_mod[-1]
+    Subtotal: 114
+    + style advantage: +6
+    Final ATK: 120
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[65]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 78
+    Final DEF: 78
+  Margin: 120 − 78 = 42   ▶  HIT (margin 42)
+  Damage (TRIGARD → GARRETT):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 12.00
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 26
+    Fraction: max(0.10, min(1.0, 42/55.0)) = 0.764
+    Raw: max(1, int(26 × 0.764)) = 19
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 19 − 4) = 15
+  ▶ FINAL DAMAGE: 15
+  HP Pool (GARRETT):
+    Before : 51/61 (83.6%)
+    hit     : −15
+    After  : 36/61 (59.0%)
+  Knockdown Check (GARRETT):
+    base = int(15/61 × 80) = 19   cat bonus [Axe/Pick]: +0   final: 19%
+    Roll: 38  →  no knockdown
+  Perm Injury Check (GARRETT):
+    threshold = 15% of 61 = 9   damage 15 ≥ threshold
+    chance = max(5, min(80, int(15/61×100) − 5)) = 16%
+    Roll: 64  →  no injury
+
+  ── END OF MINUTE ──
+    TRIGARD: 100.0 END − (7.60 burn × 4 actions) = 69.6
+    GARRETT: 100.0 END − (2.60 burn × 5 actions) = 87.0
+    HP POOL — TRIGARD: 46/65 (71%)
+    HP POOL — GARRETT: 36/61 (59%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — TRIGARD: 4   |   GARRETT: 5
+  HP    — TRIGARD: 46/65 (71%)   |   GARRETT: 36/61 (59%)
+  END   — TRIGARD: 69.6   |   GARRETT: 87.0
+  STRAT — TRIGARD: [Bash / Act:7]   |   GARRETT: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[71]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 92
+    GARRETT                 : d100[23]  init_skill_x3[+12]  luck[+12]  activity_mod[+4] = 51
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → GARRETT   Weapon: Pick Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[45]  dex_bonus[-2]  luck[+23]  style_mod[-1]
+    Subtotal: 65
+    + style advantage: +6
+    Final ATK: 71
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[6]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 19
+    Final DEF: 19
+  Margin: 71 − 19 = 52   ▶  HIT (margin 52)
+  Damage (TRIGARD → GARRETT):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 12.00
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 26
+    Fraction: max(0.10, min(1.0, 52/55.0)) = 0.945
+    Raw: max(1, int(26 × 0.945)) = 24
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 24 − 4) = 20
+  ▶ FINAL DAMAGE: 20
+  HP Pool (GARRETT):
+    Before : 36/61 (59.0%)
+    hit     : −20
+    After  : 16/61 (26.2%)
+  Knockdown Check (GARRETT):
+    base = int(20/61 × 80) = 26   cat bonus [Axe/Pick]: +0   final: 26%
+    Roll: 22  →  ▶ KNOCKDOWN
+  Perm Injury Check (GARRETT):
+    threshold = 15% of 61 = 9   damage 20 ≥ threshold
+    chance = max(5, min(80, int(20/61×100) − 5)) = 22%
+    Roll: 78  →  no injury
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[10]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 31
+    GARRETT                 : d100[31]  on_ground_halved[(÷2)] = 15
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → GARRETT   Weapon: Pick Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[16]  dex_bonus[-2]  luck[+23]  style_mod[-1]
+    Subtotal: 36
+    + style advantage: +6
+    Final ATK: 42
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[18]  luck[+12]  str_bonus[+5]  activity_mod[-4]  ground_pen[-25]
+    Subtotal: 6
+    Final DEF: 6
+  Margin: 42 − 6 = 36   ▶  HIT (margin 36)
+  Damage (TRIGARD → GARRETT):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 12.00
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 26
+    Fraction: max(0.10, min(1.0, 36/55.0)) = 0.655
+    Raw: max(1, int(26 × 0.655)) = 17
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 17 − 4) = 13
+  ▶ FINAL DAMAGE: 13
+  HP Pool (GARRETT):
+    Before : 16/61 (26.2%)
+    hit     : −13
+    After  : 3/61 (4.9%)
+  Knockdown Check (GARRETT):
+    base = int(13/61 × 80) = 17   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (GARRETT):
+    threshold = 15% of 61 = 9   damage 13 ≥ threshold
+    chance = max(5, min(80, int(13/61×100) − 5)) = 13%
+    Roll: 71  →  no injury
+  Concede Attempt (GARRETT):
+    d100[96] + PRE_bonus[-1] + luck//2[6] = 101
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    101 ≥ 65  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: TRIGARD
+==============================================================================
+  Bash: d100=56 vs 11% — FAIL
+    → Bash training: no progress this session (INT 11, level 8, 11% chance).
+  Bash: d100=8 vs 11% — SUCCESS
+    → Bash trained: Level 8 → Level 9 (Master Skill, 11% chance)
+  Bash: TRIGARD is already mastered in Bash.
+
+==============================================================================
+  TRAINING: GARRETT
+==============================================================================
+  Strength: d100=9 vs 42% — SUCCESS
+    → Strength trained: 23 → 24 (42% chance)
+  Initiative: d100=97 vs 36% — FAIL
+    → Initiative training: no progress this session (INT 9, level 4, 36% chance).
+  Constitution: d100=65 vs 29% — FAIL
+    → Constitution training: no progress this session (late tier, 29% chance).
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : TRIGARD  (70.8% HP remaining)
+  Loser  : GARRETT  (survived, 4.9% HP)
+  Duration: 2 minute(s)
+==============================================================================

@@ -1,0 +1,507 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #135   Turn: 3
+  Debug team: Ilneval
+  Ilneval / DECEPTICONS   vs   Zara Quickblade / The Quickblades
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: SHOCKWAVE
+  ────────────────────────────────────
+    Race: Human  |  Gender: Male
+    STR:16  DEX:12  CON:17  INT:12  PRE:10  SIZ:9
+    Max HP: 51   Luck: 14
+    Armor: Cuir Boulli   Helm: Steel Cap
+    Primary: Boar Spear   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Lunge / Act:7 / Aim:None / Def:Chest
+
+  ────────────────────────────────────
+  WARRIOR B: ROSIE
+  ────────────────────────────────────
+    Race: Halfling  |  Gender: Female
+    STR:3  DEX:23  CON:8  INT:10  PRE:19  SIZ:8
+    Max HP: 23   Luck: 29
+    Armor: Brigandine   Helm: None
+    Primary: Morningstar   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:7 / Aim:Head / Def:None
+    Skills: initiative:1  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — SHOCKWAVE: 6   |   ROSIE: 8
+  HP    — SHOCKWAVE: 51/51 (100%)   |   ROSIE: 23/23 (100%)
+  END   — SHOCKWAVE: 100.0   |   ROSIE: 100.0
+  STRAT — SHOCKWAVE: [Lunge / Act:7]   |   ROSIE: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSIE                   : d100[25]  dex_bonus[+10]  init_skill_x3[+3]  luck[+29]  activity_mod[+4] = 71
+    SHOCKWAVE               : d100[41]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 63
+    ▶ ROSIE wins → ATTACKS
+  Attack: ROSIE → SHOCKWAVE   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (ROSIE):
+    d100[41]  dex_bonus[+8]  luck[+29]
+    Subtotal: 78
+    + style advantage: -6
+    Final ATK: 72
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[16]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]
+    Subtotal: 43
+    Final DEF: 43
+  Margin: 72 − 43 = 29   ▶  HIT (margin 29)
+  Damage (ROSIE → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      race damage net              -6.00
+      activity contrib             -0.60
+      luck ×0.15                   +4.35
+      strength underweight pen     ×0.00 (100% penalty)
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 29/55.0)) = 0.527
+    Raw: max(1, int(3 × 0.527)) = 1
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 1 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHOCKWAVE):
+    Before : 51/51 (100.0%)
+    hit     : −1
+    After  : 50/51 (98.0%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(1/51 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 91  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 51 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSIE                   : d100[83]  dex_bonus[+10]  init_skill_x3[+3]  luck[+29]  activity_mod[+4] = 129
+    SHOCKWAVE               : d100[98]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 120
+    ▶ ROSIE wins → ATTACKS
+  Attack: ROSIE → SHOCKWAVE   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (ROSIE):
+    d100[53]  dex_bonus[+8]  luck[+29]
+    Subtotal: 90
+    + style advantage: -6
+    Final ATK: 84
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[55]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]
+    Subtotal: 82
+    Final DEF: 82
+  Margin: 84 − 82 = 2   ▶  GRAZE (margin 2, 1 HP)
+  HP Pool (SHOCKWAVE):
+    Before : 50/51 (98.0%)
+    graze   : −1
+    After  : 49/51 (96.1%)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSIE                   : d100[51]  dex_bonus[+10]  init_skill_x3[+3]  luck[+29]  activity_mod[+4] = 97
+    SHOCKWAVE               : d100[20]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 42
+    ▶ ROSIE wins → ATTACKS
+  Attack: ROSIE → SHOCKWAVE   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (ROSIE):
+    d100[12]  dex_bonus[+8]  luck[+29]
+    Subtotal: 49
+    + style advantage: -6
+    Final ATK: 43
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[26]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]
+    Subtotal: 53
+    Final DEF: 53
+  Margin: 43 − 53 = -10   ▶  DODGE (margin -10)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSIE                   : d100[79]  dex_bonus[+10]  init_skill_x3[+3]  luck[+29]  activity_mod[+4] = 125
+    SHOCKWAVE               : d100[45]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 67
+    ▶ ROSIE wins → ATTACKS
+  Attack: ROSIE → SHOCKWAVE   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (ROSIE):
+    d100[63]  dex_bonus[+8]  luck[+29]
+    Subtotal: 100
+    + style advantage: -6
+    Final ATK: 94
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[94]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]
+    Subtotal: 121
+    Final DEF: 121
+  Margin: 94 − 121 = -27   ▶  DODGE (margin -27)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[65]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 87
+    ROSIE                   : d100[35]  dex_bonus[+10]  init_skill_x3[+3]  luck[+29]  activity_mod[+4] = 81
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → ROSIE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[8]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 29
+    Final ATK: 29
+  Defense Roll (ROSIE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[7]  luck[+29]  str_bonus[-4]  activity_mod[-4]
+    Subtotal: 28
+    Final DEF: 28
+  Margin: 29 − 28 = 1   ▶  GRAZE (margin 1, 1 HP)
+  HP Pool (ROSIE):
+    Before : 23/23 (100.0%)
+    graze   : −1
+    After  : 22/23 (95.7%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSIE                   : d100[97]  dex_bonus[+10]  init_skill_x3[+3]  luck[+29]  activity_mod[+4] = 143
+    SHOCKWAVE               : d100[2]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 24
+    ▶ ROSIE wins → ATTACKS
+  Attack: ROSIE → SHOCKWAVE   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (ROSIE):
+    d100[69]  dex_bonus[+8]  luck[+29]
+    Subtotal: 106
+    + style advantage: -6
+    Final ATK: 100
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[73]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]
+    Subtotal: 100
+    Final DEF: 100
+  Margin: 100 − 100 = 0   ▶  MISS
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSIE                   : d100[41]  dex_bonus[+10]  init_skill_x3[+3]  luck[+29]  activity_mod[+4] = 87
+    SHOCKWAVE               : d100[59]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 81
+    ▶ ROSIE wins → ATTACKS
+  Attack: ROSIE → SHOCKWAVE   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (ROSIE):
+    d100[81]  dex_bonus[+8]  luck[+29]
+    Subtotal: 118
+    + style advantage: -6
+    Final ATK: 112
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[15]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]
+    Subtotal: 42
+    Final DEF: 42
+  Margin: 112 − 42 = 70   ▶  HIT (margin 70)
+  Damage (ROSIE → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      race damage net              -6.00
+      activity contrib             -0.60
+      luck ×0.15                   +4.35
+      strength underweight pen     ×0.00 (100% penalty)
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 70/55.0)) = 1.000
+    Raw: max(1, int(3 × 1.000)) = 3
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 3 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHOCKWAVE):
+    Before : 49/51 (96.1%)
+    hit     : −1
+    After  : 48/51 (94.1%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(1/51 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 26  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 51 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSIE                   : d100[56]  dex_bonus[+10]  init_skill_x3[+3]  luck[+29]  activity_mod[+4] = 102
+    SHOCKWAVE               : d100[27]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 49
+    ▶ ROSIE wins → ATTACKS
+  Attack: ROSIE → SHOCKWAVE   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (ROSIE):
+    d100[91]  dex_bonus[+8]  luck[+29]
+    Subtotal: 128
+    + style advantage: -6
+    Final ATK: 122
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[91]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]
+    Subtotal: 118
+    Final DEF: 118
+  Margin: 122 − 118 = 4   ▶  GRAZE (margin 4, 1 HP)
+  HP Pool (SHOCKWAVE):
+    Before : 48/51 (94.1%)
+    graze   : −1
+    After  : 47/51 (92.2%)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSIE                   : d100[74]  dex_bonus[+10]  init_skill_x3[+3]  luck[+29]  activity_mod[+4] = 120
+    SHOCKWAVE               : d100[86]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 108
+    ▶ ROSIE wins → ATTACKS
+  Attack: ROSIE → SHOCKWAVE   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (ROSIE):
+    d100[25]  dex_bonus[+8]  luck[+29]
+    Subtotal: 62
+    + style advantage: -6
+    Final ATK: 56
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[89]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]
+    Subtotal: 116
+    Final DEF: 116
+  Margin: 56 − 116 = -60   ▶  DODGE (margin -60)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: SHOCKWAVE has uncontested action
+  Attack: SHOCKWAVE → ROSIE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[24]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 45
+    Final ATK: 45
+  Defense Roll (ROSIE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[2]  luck[+29]  str_bonus[-4]  activity_mod[-4]
+    Subtotal: 23
+    Final DEF: 23
+  Margin: 45 − 23 = 22   ▶  HIT (margin 22)
+  Damage (SHOCKWAVE → ROSIE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +3.60
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +2.10
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 22/55.0)) = 0.400
+    Raw: max(1, int(13 × 0.400)) = 5
+    Favorite weapon +1 → raw = 6
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 6 − 4) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (ROSIE):
+    Before : 22/23 (95.7%)
+    hit     : −2
+    After  : 20/23 (87.0%)
+  Knockdown Check (ROSIE):
+    base = int(2/23 × 80) = 6   cat bonus [Polearm/Spear]: +5   final: 11%
+    Roll: 93  →  no knockdown
+  Perm Injury Check (ROSIE):
+    threshold = 15% of 23 = 3   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: SHOCKWAVE has uncontested action
+  Attack: SHOCKWAVE → ROSIE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[62]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 83
+    Final ATK: 83
+  Defense Roll (ROSIE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[39]  luck[+29]  str_bonus[-4]  activity_mod[-4]
+    Subtotal: 60
+    Final DEF: 60
+  Margin: 83 − 60 = 23   ▶  HIT (margin 23)
+  Damage (SHOCKWAVE → ROSIE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +3.60
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +2.10
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 23/55.0)) = 0.418
+    Raw: max(1, int(13 × 0.418)) = 5
+    Favorite weapon +1 → raw = 6
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 6 − 4) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (ROSIE):
+    Before : 20/23 (87.0%)
+    hit     : −2
+    After  : 18/23 (78.3%)
+  Knockdown Check (ROSIE):
+    base = int(2/23 × 80) = 6   cat bonus [Polearm/Spear]: +5   final: 11%
+    Roll: 8  →  ▶ KNOCKDOWN
+  Perm Injury Check (ROSIE):
+    threshold = 15% of 23 = 3   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 12 ───────────────────────────────────────────────────────────────
+  Initiative: SHOCKWAVE has uncontested action
+  Attack: SHOCKWAVE → ROSIE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[94]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 115
+    Final ATK: 115
+  Defense Roll (ROSIE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[75]  luck[+29]  str_bonus[-4]  activity_mod[-4]  ground_pen[-25]
+    Subtotal: 71
+    Final DEF: 71
+  Margin: 115 − 71 = 44   ▶  HIT (margin 44)
+  Damage (SHOCKWAVE → ROSIE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +3.60
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +2.10
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 44/55.0)) = 0.800
+    Raw: max(1, int(13 × 0.800)) = 10
+    Favorite weapon +1 → raw = 11
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 11 − 4) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (ROSIE):
+    Before : 18/23 (78.3%)
+    hit     : −7
+    After  : 11/23 (47.8%)
+  Knockdown Check (ROSIE):
+    base = int(7/23 × 80) = 24   cat bonus [Polearm/Spear]: +5   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (ROSIE):
+    threshold = 15% of 23 = 3   damage 7 ≥ threshold
+    chance = max(5, min(80, int(7/23×100) − 5)) = 25%
+    Roll: 24  →  head (1 level(s))
+
+  ─── ACTION 13 ───────────────────────────────────────────────────────────────
+  Initiative: SHOCKWAVE has uncontested action
+  Attack: SHOCKWAVE → ROSIE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[31]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 52
+    Final ATK: 52
+  Defense Roll (ROSIE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[32]  luck[+29]  str_bonus[-4]  activity_mod[-4]  ground_pen[-25]
+    Subtotal: 28
+    Final DEF: 28
+  Margin: 52 − 28 = 24   ▶  HIT (margin 24)
+  Damage (SHOCKWAVE → ROSIE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +3.60
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +2.10
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 24/55.0)) = 0.436
+    Raw: max(1, int(13 × 0.436)) = 5
+    Favorite weapon +1 → raw = 6
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 6 − 4) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (ROSIE):
+    Before : 11/23 (47.8%)
+    hit     : −2
+    After  : 9/23 (39.1%)
+  Knockdown Check (ROSIE):
+    base = int(2/23 × 80) = 6   cat bonus [Polearm/Spear]: +5   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (ROSIE):
+    threshold = 15% of 23 = 3   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 14 ───────────────────────────────────────────────────────────────
+  Initiative: SHOCKWAVE has uncontested action
+  Attack: SHOCKWAVE → ROSIE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[78]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 99
+    Final ATK: 99
+  Defense Roll (ROSIE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[43]  luck[+29]  str_bonus[-4]  activity_mod[-4]  ground_pen[-25]
+    Subtotal: 39
+    Final DEF: 39
+  Margin: 99 − 39 = 60   ▶  HIT (margin 60)
+  Damage (SHOCKWAVE → ROSIE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +3.60
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +2.10
+    Ceiling: 13
+    Fraction: max(0.10, min(1.0, 60/55.0)) = 1.000
+    Raw: max(1, int(13 × 1.000)) = 13
+    Favorite weapon +1 → raw = 14
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 14 − 4) = 10
+  ▶ FINAL DAMAGE: 10
+  HP Pool (ROSIE):
+    Before : 9/23 (39.1%)
+    hit     : −10
+    After  : -1/23 (0.0%)
+  Knockdown Check (ROSIE):
+    base = int(10/23 × 80) = 34   cat bonus [Polearm/Spear]: +5   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (ROSIE):
+    threshold = 15% of 23 = 3   damage 10 ≥ threshold
+    chance = max(5, min(80, int(10/23×100) − 5)) = 38%
+    Roll: 34  →  chest (2 level(s))
+  Death Check (ROSIE):
+    prev_hp: 9   damage: 10   new_hp: -1
+    overshoot: 1
+    death_chance = min(50.0, 0.5 + 1) = 1.5%
+    → survives (concede system takes over)
+  Concede Attempt (ROSIE):
+    d100[16] + PRE_bonus[+9] + luck//2[14] = 39
+    threshold = max(40, 68 − (PRE // 3)) = 62
+    39 < 62  →  mercy denied — fight continues
+
+  ── END OF MINUTE ──
+    SHOCKWAVE: 100.0 END − (6.60 burn × 6 actions) = 60.4
+    ROSIE: 100.0 END − (2.60 burn × 8 actions) = 79.2
+    HP POOL — SHOCKWAVE: 47/51 (92%)
+    HP POOL — ROSIE: -1/23 (-4%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — SHOCKWAVE: 6   |   ROSIE: 8
+  HP    — SHOCKWAVE: 47/51 (92%)   |   ROSIE: -1/23 (-4%)
+  END   — SHOCKWAVE: 60.4   |   ROSIE: 79.2
+  STRAT — SHOCKWAVE: [Lunge / Act:7]   |   ROSIE: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSIE                   : d100[97]  dex_bonus[+10]  init_skill_x3[+3]  luck[+29]  activity_mod[+4] = 143
+    SHOCKWAVE               : d100[79]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 101
+    ▶ ROSIE wins → ATTACKS
+  Attack: ROSIE → SHOCKWAVE   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (ROSIE):
+    d100[96]  dex_bonus[+8]  luck[+29]  hp0_pen[-30]
+    Subtotal: 103
+    + style advantage: -6
+    Final ATK: 97
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[90]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]
+    Subtotal: 117
+    Final DEF: 117
+  Margin: 97 − 117 = -20   ▶  DODGE (margin -20)
+  Concede Attempt (ROSIE):
+    d100[75] + PRE_bonus[+9] + luck//2[14] = 98
+    threshold = max(40, 68 − (PRE // 3)) = 62
+    98 ≥ 62  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: SHOCKWAVE
+==============================================================================
+  Strength: d100=76 vs 42% — FAIL
+    → Strength training: no progress this session (mid tier, 42% chance).
+  Strength: d100=62 vs 42% — FAIL
+    → Strength training: no progress this session (mid tier, 42% chance).
+  Strength: d100=47 vs 42% — FAIL
+    → Strength training: no progress this session (mid tier, 42% chance).
+
+==============================================================================
+  TRAINING: ROSIE
+==============================================================================
+  Strength: d100=61 vs 28% — FAIL
+    → Strength training: no progress this session (CON 8, 28% chance).
+  Constitution: d100=89 vs 28% — FAIL
+    → Constitution training: no progress this session (CON 8, 28% chance).
+  Initiative: d100=83 vs 45% — FAIL
+    → Initiative training: no progress this session (INT 10, level 1, 45% chance).
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : SHOCKWAVE  (92.2% HP remaining)
+  Loser  : ROSIE  (survived, 0.0% HP)
+  Duration: 2 minute(s)
+==============================================================================

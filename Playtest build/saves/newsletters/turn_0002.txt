@@ -1,0 +1,203 @@
+Date: 04/19/2026
+Bloodspire Arena (1)
+Turn - 2
+
+The Top Teams
+
+#    CAREER STANDINGS               W   L   K      %   #    LAST 5 TURNS                   W   L   K
+====================================================================================================
+1     Shadows of the Pit (9011)     1   0   1 100.0%   1     Vexx's Vicious (9001)         7   2   1
+2     Stonecraft Academy (9013)     6   1   1  85.7%   2     Stonecraft Academy (9013)     6   1   1
+3     The Learned Fists (9004)      5   1   0  83.3%   3     TESTING TEAM (17)             6   4   1
+4     Vexx's Vicious (9001)         7   2   1  77.8%   4     The Learned Fists (9004)      5   1   0
+5     Splitskull Syndicate (9005)   2   1   0  66.7%   5     The Iron Vanguard (9000)      5   5   0
+6     House Voss (9007)             2   1   0  66.7%   6     Grim's Reapers (9008)         4   5   0
+7     TESTING TEAM (17)             6   4   1  60.0%   7     Craw's Crushers (9002)        3   5   0
+8     The Iron Vanguard (9000)      5   5   0  50.0%   8     Shadows of the Pit (9011)     1   0   1
+9     Grim's Reapers (9008)         4   5   0  44.4%   9     Splitskull Syndicate (9005)   2   1   0
+10    Craw's Crushers (9002)        3   5   0  37.5%   10    House Voss (9007)             2   1   0
+11    Corvina's Chosen (9010)       2   4   0  33.3%   11    Corvina's Chosen (9010)       2   4   0
+12    Briarwood Brawlers (9006)     1   2   0  33.3%   12    Briarwood Brawlers (9006)     1   2   0
+13    The Quickblades (9009)        1   2   0  33.3%   13    The Quickblades (9009)        1   2   0
+14    The Thornwall Guard (9003)    1   7   0  12.5%   14    The Thornwall Guard (9003)    1   7   0
+15    The Goblin Syndicate (9012)   0   0   0   0.0%   15    The Goblin Syndicate (9012)   0   0   0
+16    The Scaled Horde (9014)       0   1   0   0.0%   16    The Scaled Horde (9014)       0   1   0
+17    The Nimble Blades (9015)      0   1   0   0.0%   17    The Nimble Blades (9015)      0   1   0
+
+
+
+
+Arena Happenings
+
+I heard three versions of this turn at Bloodspire, and every one got louder with each drink.  Somewhere between the boasting and the lies is what really happened in BLOODSPIRE ARENA.  Lucky for you, I paid attention.  The arena is defined by presence, and PUMYRA of NEW RACES TESTERS continues to provide it.  The Championship throne remains occupied, another turn's triumph for the incumbent.
+
+VEXX'S VICIOUS didn't dominate this turn, but they endured it.  Their 5-0-1 reflects hard choices made under pressure, and the standings rewarded resolve over spectacle.  In BLOODSPIRE ARENA, that distinction matters more often than most admit.  Meanwhile, THE NIMBLE BLADES had a turn they'd rather forget — 1-4-0 is the sort of record that generates uncomfortable conversations in the team quarters.  In a turn with bigger headlines elsewhere, THE SCALED HORDE quietly posted a 2-3-0 record that says something about their direction.  BLOODSPIRE ARENA tends to reward the teams that don't need the biggest story to keep moving forward.  Every manager in BLOODSPIRE ARENA is reading the same standings and drawing different conclusions.  That's the nature of this place.  The ones who read it correctly tend to keep doing so.  The ones who don't have an explanation ready.
+
+Watch out for TEST HUMAN of TESTING TEAM, who turned OSRIC into a stepping stone this turn and climbed to 14 recognition doing it.  That performance won't be forgotten by the bookmakers.  Hey everybody, keep your eye on HORNSBY of STONECRAFT ACADEMY — after dispatching DARATHORN this turn, this fighter sits at 13 recognition and is moving fast.  Rival managers are adjusting their schedules accordingly.  Victory rarely announces itself loudly in BLOODSPIRE ARENA.  TEST DWARF overcame MARIGOLD through patience and timing, not force, earning recognition through discipline rather than drama.  Few noticed at first — but many will remember.
+
+This was not a gentle turn at BLOODSPIRE ARENA.  Multiple careers ended today, and the atmosphere in the aftermath reflected that.  The business continues regardless, but some turns leave a mark on the crowd.  The most decisive result of the turn belonged to TEST HUMAN of TESTING TEAM.  OSRIC will not dispute it from where they are now.  The Dark Arena does not offer second opinions.  Word spreads fast after a kill, and the word this turn involves SAELINDORN of VEXX'S VICIOUS and the permanent absence of ROSALIND.  Recognition follows performance in BLOODSPIRE ARENA, and nothing performs quite like finality.
+
+More than one manager left this turn with a vacancy to fill.  The Dark Arena was active today, and the rosters that entered the turn are not the same ones that will prepare for the next one.  Records like 0-1-0 eventually make demands.  OSRIC answered them in the Dark Arena, where explanations are no longer required.  The crowd quieted when ROSALIND fell, if only briefly.  Then the next fight was announced, and BLOODSPIRE ARENA moved on.  FELIS will not return from the Dark Arena.  The schedule moved on quickly, as it always does.  The arena has no patience for nostalgia.  They pay me to write this down.  Some turns I feel guilty about taking the coin.  This was not one of those turns.  BLOODSPIRE ARENA delivered.
+
+The turn is complete, the outcomes recorded, and the excuses already forming.  Whatever comes next, BLOODSPIRE ARENA will be ready.  — Horst Veyne, Pit Press Weekly
+
+
+
+CHAMPION
+NAME                     W   L   K  REC  TEAM
+======================================================================
+  (vacant this turn)
+
+RECRUITS
+NAME                     W   L   K  REC  TEAM
+======================================================================
+TEST HUMAN               2   0   1   14  TESTING TEAM (17)
+Hornsby                  2   0   1   13  Stonecraft Academy (9013)
+TEST DWARF               2   0   0   12  TESTING TEAM (17)
+Weladris                 2   0   0   12  Vexx's Vicious (9001)
+Cragora                  2   0   0   12  Grim's Reapers (9008)
+Lurk                     2   0   0   11  The Iron Vanguard (9000)
+Grakka                   2   0   0   11  Craw's Crushers (9002)
+Jareth                   2   0   0   10  The Iron Vanguard (9000)
+Naethoron                2   0   0    9  Vexx's Vicious (9001)
+Baldrek                  2   0   0    9  Stonecraft Academy (9013)
+Saelindorn               1   0   1    8  Vexx's Vicious (9001)
+TEST HALF-ORC            1   1   0    8  TESTING TEAM (17)
+Goldhera                 1   1   0    8  Grim's Reapers (9008)
+Yordra                   1   0   0    7  Corvina's Chosen (9010)
+Gorrak                   1   0   1    7  Shadows of the Pit (9011)
+Pumpernickel             1   0   0    7  Stonecraft Academy (9013)
+Roldra                   1   1   0    7  The Thornwall Guard (9003)
+Isolde                   1   1   0    7  Grim's Reapers (9008)
+Elarindë                 1   0   0    6  The Learned Fists (9004)
+Caelan                   1   0   0    6  House Voss (9007)
+Foulcry                  1   1   0    6  Craw's Crushers (9002)
+Urgra                    1   1   0    6  Stonecraft Academy (9013)
+Ulaelwyn                 1   0   0    5  Vexx's Vicious (9001)
+Faelwyn                  1   0   0    5  The Learned Fists (9004)
+Haelon                   1   0   0    5  The Learned Fists (9004)
+Zaevithra                1   0   0    5  The Learned Fists (9004)
+Darkgore                 1   0   0    5  Splitskull Syndicate (9005)
+Ragnar                   1   0   0    5  House Voss (9007)
+Berwyn                   1   0   0    5  Corvina's Chosen (9010)
+Erithiel                 1   1   0    5  Vexx's Vicious (9001)
+Calista                  1   1   0    5  Briarwood Brawlers (9006)
+Zaevîn                   1   0   0    4  The Quickblades (9009)
+TEST HALF-ELF            1   1   0    2  TESTING TEAM (17)
+Zarek                    1   1   0    2  The Iron Vanguard (9000)
+Maelith                  1   1   0    2  The Learned Fists (9004)
+Xraka                    1   1   0    2  Splitskull Syndicate (9005)
+TEST HALFLING            0   2   0    2  TESTING TEAM (17)
+Pruska                   0   2   0    2  The Iron Vanguard (9000)
+Yorick                   0   2   0    2  The Iron Vanguard (9000)
+Throatcutter             0   2   0    2  Craw's Crushers (9002)
+Yruuk                    0   2   0    2  Craw's Crushers (9002)
+Peldrak                  0   2   0    2  The Thornwall Guard (9003)
+Aedan                    0   2   0    2  The Thornwall Guard (9003)
+Dagna                    0   2   0    2  Grim's Reapers (9008)
+Ironvara                 0   2   0    2  Corvina's Chosen (9010)
+Nerissa                  0   1   0    1  The Thornwall Guard (9003)
+Cormac                   0   1   0    1  The Thornwall Guard (9003)
+Quillan                  0   1   0    1  Briarwood Brawlers (9006)
+Jessamine                0   1   0    1  Grim's Reapers (9008)
+Paelithra                0   1   0    1  The Quickblades (9009)
+Fennel                   0   1   0    1  The Quickblades (9009)
+Boltrek                  0   1   0    1  Corvina's Chosen (9010)
+Brennan                  0   1   0    1  Corvina's Chosen (9010)
+Urnaka                   0   1   0    1  The Scaled Horde (9014)
+Murxa                    0   1   0    1  The Nimble Blades (9015)
+'-' denotes a warrior who did not fight this turn.
+
+
+
+LAST TURN'S FIGHTS
+===========================================================================
+TEST HUMAN slew Osric in a 1 minute swift fight.
+TEST HALF-ORC bested Imogen in a 3 minute clean fight.
+TEST DWARF defeated Marigold in a 2 minute competent fight.
+Scratkesha vanquished TEST HALF-ELF in a 8 minute brutal fight.
+Elarindë overcame TEST HALFLING in a 3 minute competent fight.
+Thessaly vanquished Pruska in a 4 minute spirited fight.
+Lurk vanquished Aelwen in a 2 minute competent fight.
+Ragnar outlasted Yorick in a 10 minute brutal fight.
+Jareth vanquished Darkgore in a 3 minute solid fight.
+Garrett vanquished Zarek in a 1 minute decisive fight.
+Weladris vanquished Paelithra in a 2 minute competent fight.
+Ulaelwyn outlasted Pix in a 5 minute spirited fight.
+Saelindorn slew Rosalind in a 2 minute clean fight.
+Erithiel defeated Bramble in a 10 minute drawn-out fight.
+Naethoron overcame Orcbreaker in a 4 minute spirited fight.
+Foulcry outlasted Broderick in a 3 minute competent fight.
+Quillan bested Throatcutter in a 2 minute clean fight.
+Lorcan defeated Yruuk in a 1 minute crushing fight.
+Grakka vanquished Cormac in a 3 minute competent fight.
+Drakka vanquished Nerissa in a 8 minute drawn-out fight.
+Roldra overcame Foulka in a 6 minute contested fight.
+Cobble vanquished Peldrak in a 13 minute brutal fight.
+Fennel vanquished Aedan in a 13 minute brutal fight.
+Faenarath outlasted Maelith in a 3 minute solid fight.
+Faelwyn outlasted Vaelindra in a 2 minute clean fight.
+Haelon outlasted Wendell in a 13 minute drawn-out fight.
+Zaevithra bested Nettle in a 4 minute spirited fight.
+Krethil vanquished Xraka in a 5 minute spirited fight.
+Calista overcame Scrasixa in a 16 minute grueling fight.
+Caelan overcame Thistle in a 4 minute contested fight.
+Cragora vanquished Zaevîn in a 2 minute competent fight.
+Jolta outlasted Dagna in a 7 minute hard-fought fight.
+Xaelindra defeated Jessamine in a 2 minute competent fight.
+Isolde bested Brennan in a 12 minute drawn-out fight.
+Goldhera outlasted Sabin in a 1 minute crushing fight.
+Berwyn vanquished Naerdúr in a 10 minute brutal fight.
+Yordra outlasted Yarandorn in a 7 minute contested fight.
+Pumpernickel bested Ironvara in a 21 minute brutal fight.
+Gorrak slew Felis in a 1 minute one-sided fight.
+Urgra defeated Urnaka in a 12 minute action-packed fight.
+Hornsby overcame Darathorn in a 5 minute spirited fight.
+Crackers McGee defeated Boltrek in a 19 minute drawn-out fight.
+Baldrek overcame Crackers McGee in a 12 minute drawn-out fight.
+Mort the Ditch-Digger defeated Murxa in a 3 minute competent fight.
+
+
+
+THE DEAD
+NAME                     W   L   K  TEAM                    SLAIN BY               TURN
+=======================================================================================
+Osric                    0   1   0  Splitskull Syndicate    TEST HUMAN                2
+Rosalind                 0   1   0  House Voss              Saelindorn                2
+Felis                    0   1   0  The Nimble Blades       Gorrak                    2
+
+
+
+                      BATTLE REPORT
+
+    MOST POPULAR RACE                 RECORD DURING THE LAST 10 TURNS
+===========================================================================
+|RACE             FIGHTS  RACE                  W -    L -    K  PERCENT|
+===========================================================================
+|Human                 24  Human                10 -   14 -    1      41%|
+|Half-Orc              19  Half-Orc              9 -   10 -    1      47%|
+|Dwarf                 18  Dwarf                10 -    8 -    0      55%|
+|Elf                   11  Elf                   9 -    2 -    1      81%|
+|Half-Elf               7  Half-Elf              5 -    2 -    0      71%|
+|Halfling               3  Halfling              0 -    3 -    0       0%|
+|Gnome                  3  Gnome                 3 -    0 -    1     100%|
+|Goblin                 1  Goblin                0 -    1 -    0       0%|
+|Lizardfolk             0  Lizardfolk            0 -    0 -    0       0%|
+|Tabaxi                 0  Tabaxi                0 -    0 -    0       0%|
+===========================================================================
+
+
+                      TOP WARRIOR by RACE
+
+RACE          WARRIOR                      W   L  K  TEAM NAME
+===========================================================================
+Human         TEST HUMAN                   2   0  1  TESTING TEAM (17)
+Half-Orc      Lurk                         2   0  0  The Iron Vanguard (9000)
+Dwarf         TEST DWARF                   2   0  0  TESTING TEAM (17)
+Elf           Weladris                     2   0  0  Vexx's Vicious (9001)
+Half-Elf      Ulaelwyn                     1   0  0  Vexx's Vicious (9001)
+Halfling      Bramble                      0   0  0  Briarwood Brawlers (9006)
+Gnome         Hornsby                      2   0  1  Stonecraft Academy (9013)
+Goblin        Pix                          0   0  0  The Goblin Syndicate (9012)
+Lizardfolk    Scrasixa                     0   0  0  The Scaled Horde (9014)
+Tabaxi        Felis                        0   0  0  The Nimble Blades (9015)

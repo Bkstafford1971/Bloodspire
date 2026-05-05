@@ -1,0 +1,176 @@
+Fight #11
+Stress Team Turn 2  vs  The Iron Wolves
+============================================================================
+
+============================================================================
+SLASHER_2 (0-0-0)   vs   DROK THE GRIM (0-0-0)
+STRESS TEAM TURN 2 (STRESS TESTER)   vs   THE IRON WOLVES (SILENT CLAW)
+Human Female   vs   Dwarf Female
+============================================================================
+
+SLASHER_2 is 5'3"
+SLASHER_2 weighs 134 lbs.
+SLASHER_2 Known To The Crowd.
+SLASHER_2 enters the arena unarmored and wears no helm.
+SLASHER_2 fights using a SCIMITAR.
+
+DROK THE GRIM is 3'9"
+DROK THE GRIM weighs 145 lbs.
+DROK THE GRIM Known To The Crowd.
+DROK THE GRIM enters the arena in LEATHER and will wear a STEEL CAP.
+DROK THE GRIM fights using a BOAR SPEAR with an off-hand BUCKLER.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+An eerie silence settles over the BLOODSPIRE
+SLASHER_2 sizes up DROK THE GRIM carefully
+SLASHER_2 drives a blow toward DROK THE GRIM's body with her scimitar
+DROK THE GRIM just manages to deflect the blow!
+SLASHER_2 directs an attack toward DROK THE GRIM
+SLASHER_2 thrusts at DROK THE GRIM's body with her scimitar
+DROK THE GRIM turns the blow aside with skill!
+DROK THE GRIM anxiously awaits SLASHER_2's next move
+DROK THE GRIM lunges at SLASHER_2's torso with her boar spear
+SLASHER_2 just manages to deflect the blow!
+DROK THE GRIM waits patiently for SLASHER_2 to make a mistake
+DROK THE GRIM lunges at SLASHER_2's body with her boar spear
+DROK THE GRIM finds the opening!
+DROK THE GRIM's boar spear buries itself in SLASHER_2's armor!
+   The blow has real authority behind it!
+Money changes hands rapidly in the betting stands
+DROK THE GRIM waits patiently for SLASHER_2 to make a mistake
+DROK THE GRIM retaliates against SLASHER_2's torso with her boar spear
+DROK THE GRIM's accuracy is rewarded!
+DROK THE GRIM's boar spear buries itself in SLASHER_2's torso!
+   The blow glances harmlessly off!
+SLASHER_2 hacks at DROK THE GRIM's torso with her scimitar
+SLASHER_2 finds the opening!
+SLASHER_2's scimitar bites into DROK THE GRIM's torso!
+   Little damage results from the strike
+SLASHER_2 drives a blow toward DROK THE GRIM's torso with her scimitar
+DROK THE GRIM catches the weapon and deflects it cleanly!
+
+MINUTE 2
+While still competitive, DROK THE GRIM seems just a step ahead.
+
+SLASHER_2 slashes at DROK THE GRIM's body with her scimitar
+The scimitar finds its mark!
+SLASHER_2's scimitar bites into DROK THE GRIM's armor!
+   The blow glances harmlessly off!
+DROK THE GRIM waits patiently for SLASHER_2 to make a mistake
+DROK THE GRIM thrusts at SLASHER_2's torso with her boar spear
+SLASHER_2 barely gets the parry off!
+SLASHER_2 thrusts at DROK THE GRIM's midsection with her scimitar
+SLASHER_2's scimitar finds DROK THE GRIM's body!
+   The blow glances harmlessly off!
+DROK THE GRIM is bleeding from the deep slash wound!
+SLASHER_2 hacks at DROK THE GRIM's midsection with her scimitar
+SLASHER_2's scimitar finds DROK THE GRIM's torso!
+   The blow glances harmlessly off!
+DROK THE GRIM is bleeding from the deep slash wound!
+DROK THE GRIM loses 1 HP from bleeding wounds.
+SLASHER_2 steps threateningly close to the capable DROK THE GRIM
+SLASHER_2 thrusts at DROK THE GRIM's midsection with her scimitar
+DROK THE GRIM makes a desperate last-moment parry!
+A spectator calls out, 'Give him what he deserves!'
+DROK THE GRIM thrusts at SLASHER_2's midsection with her boar spear
+DROK THE GRIM's boar spear punches into SLASHER_2's torso!
+   A minor hit!
+DROK THE GRIM retaliates against SLASHER_2's midsection with her boar spear
+DROK THE GRIM's boar spear punches into SLASHER_2's body!
+   A minor hit!
+SLASHER_2 is knocked off her feet!
+
+MINUTE 3
+The slight edge remains with DROK THE GRIM, though little has changed.
+
+ * DROK THE GRIM switches to strategy 1
+SLASHER_2 gets up, shaken but ready
+DROK THE GRIM jabs at SLASHER_2's skull with her boar spear
+DROK THE GRIM barely gets past SLASHER_2's defenses!
+DROK THE GRIM's boar spear buries itself in SLASHER_2's head!
+   A minor hit!
+SLASHER_2 hacks at DROK THE GRIM's body with her scimitar
+DROK THE GRIM's plan is not to get hit!
+DROK THE GRIM seizes the opening and launches a counter-attack!
+DROK THE GRIM finds the opening!
+DROK THE GRIM's boar spear punches into SLASHER_2's skull!
+   The armor absorbs most of it
+SLASHER_2 slices at DROK THE GRIM's midsection with her scimitar
+DROK THE GRIM barely gets the parry off!
+SLASHER_2 hacks at DROK THE GRIM's midsection with her scimitar
+SLASHER_2's scimitar finds DROK THE GRIM's body!
+   The armor does its job admirably
+Money changes hands rapidly in the betting stands
+DROK THE GRIM waits patiently for SLASHER_2 to make a mistake
+DROK THE GRIM fires back at SLASHER_2's skull with her boar spear
+SLASHER_2 barely gets the parry off!
+SLASHER_2 slashes at DROK THE GRIM's torso with her scimitar
+DROK THE GRIM catches the weapon and deflects it cleanly!
+DROK THE GRIM fires back at SLASHER_2's head with her boar spear
+The boar spear finds its mark!
+DROK THE GRIM's boar spear punches into SLASHER_2's skull!
+   Some damage is done
+SLASHER_2 plummets downward with great speed!!
+DROK THE GRIM counters with a blow at SLASHER_2's face with her boar spear
+DROK THE GRIM's accuracy is rewarded!
+DROK THE GRIM's boar spear buries itself in SLASHER_2's skull!
+   That one will leave a mark!
+SLASHER_2 can fight no more and begs for mercy!
+The Blood Master shows no mercy today!
+
+MINUTE 4
+This fight is slipping badly away from SLASHER_2.
+
+SLASHER_2 rises from the dust, spitting blood
+SLASHER_2 slices at DROK THE GRIM's midsection with her scimitar
+DROK THE GRIM is paying special attention to not being hit there!
+SLASHER_2 cuts at DROK THE GRIM's midsection with her scimitar
+DROK THE GRIM is paying special attention to not being hit there!
+SLASHER_2 sizes up DROK THE GRIM carefully
+SLASHER_2 drives a blow toward DROK THE GRIM's torso with her scimitar
+DROK THE GRIM has a plan: don't get hit!
+DROK THE GRIM fires back at SLASHER_2's helm with her boar spear
+SLASHER_2's defenses are particularly strong!
+SLASHER_2 drives a blow toward DROK THE GRIM's body with her scimitar
+DROK THE GRIM barely gets the parry off!
+DROK THE GRIM anxiously awaits SLASHER_2's next move
+DROK THE GRIM lunges at SLASHER_2's face with her boar spear
+SLASHER_2 makes an extraordinary effort, and parries the strike!
+A dog runs loose in the upper tier!
+DROK THE GRIM jabs at SLASHER_2's skull with her boar spear
+SLASHER_2 makes a desperate last-moment parry!
+DROK THE GRIM lunges at SLASHER_2's face with her boar spear
+DROK THE GRIM's blow barely grazes SLASHER_2!
+SLASHER_2 can fight no more and begs for mercy!
+SLASHER_2 must fight on, or die trying!
+
+MINUTE 5
+DROK THE GRIM stays firmly in control with no answer from SLASHER_2.
+
+ * DROK THE GRIM switches to strategy 2
+SLASHER_2 directs an attack toward DROK THE GRIM
+SLASHER_2 thrusts at DROK THE GRIM's body with her scimitar
+SLASHER_2's scimitar finds DROK THE GRIM's torso!
+   The armor absorbs most of it
+DROK THE GRIM is bleeding from the deep slash wound!
+DROK THE GRIM anxiously awaits SLASHER_2's next move
+DROK THE GRIM counters with a blow at SLASHER_2's midsection with her boar spear
+The boar spear finds its mark!
+DROK THE GRIM's boar spear thrusts into SLASHER_2's armor!
+   The resulting crunch echoes through the BLOODSPIRE!
+*** SLASHER_2 takes a gut wound that won't heal!!! ***
+SLASHER_2 doubles over in pain!
+SLASHER_2 bends double, clutching her ruined gut!!
+The SLASHER_2 is dead. The crowd erupts!!!
+
+DROK THE GRIM is declared the winner!
+
+DROK THE GRIM has trained in Skill and Skill and Skill

@@ -1,0 +1,190 @@
+Date: 03/31/2026
+Bloodspire Arena (1)
+Turn - 7
+
+The Top Teams
+
+#    CAREER STANDINGS               W   L   K      %   #    LAST 5 TURNS                   W   L   K
+====================================================================================================
+1     Grim's Reapers (9008)        24  11   4  68.6%   1     Grim's Reapers (9008)        17   8   3
+2     Vexx's Vicious (9001)        23  12   0  65.7%   2     The Learned Fists (9004)     18   7   0
+3     The Learned Fists (9004)     23  12   1  65.7%   3     Vexx's Vicious (9001)        16   9   0
+4     House Voss (9007)            22  13   0  62.9%   4     Corvina's Chosen (9010)      15  10   0
+5     Briarwood Brawlers (9006)    19  16   0  54.3%   5     House Voss (9007)            14  11   0
+6     Corvina's Chosen (9010)      19  16   0  54.3%   6     Briarwood Brawlers (9006)    13  12   0
+7     VESTIAN RAIDERS (12)         16  14   0  53.3%   7     Splitskull Syndicate (9005)  11  14   1
+8     Splitskull Syndicate (9005)  16  19   1  45.7%   8     Craw's Crushers (9002)       10  15   1
+9     NEMESISTERS (11)              8  10   1  44.4%   9     Shadows of the Pit (9011)     8  17   2
+10    The Iron Vanguard (9000)     15  20   0  42.9%   10    The Iron Vanguard (9000)      9  16   0
+11    Craw's Crushers (9002)       13  22   1  37.1%   11    The Thornwall Guard (9003)    8  17   0
+12    Shadows of the Pit (9011)    10  25   3  28.6%   12    The Quickblades (9009)        5  20   0
+13    The Thornwall Guard (9003)    9  26   0  25.7%   13    NEMESISTERS (11)              3   2   1
+14    The Quickblades (9009)        8  27   0  22.9%   14    VESTIAN RAIDERS (12)          2   3   0
+
+
+
+
+Arena Happenings
+
+Well, what are you looking at, BLOODSPIRE ARENA?  Ain't you never seen Olaf Modeen, Retired Correspondent before?  Ah, shaddup and listen to my news on Turn 7.
+
+CORVINA'S CHOSEN went 5-0-0  NEMESISTERS went 3-2-1 with 1 kill (RUM TUM TUGGER over FAENARA)  VEXX'S VICIOUS went 3-2-0  THE LEARNED FISTS went 3-2-0  SPLITSKULL SYNDICATE went 3-2-1 with 1 kill (ARDITH over BONECRUSHER)  BRIARWOOD BRAWLERS went 3-2-0  HOUSE VOSS went 3-2-0  VESTIAN RAIDERS went 2-3-0  THE IRON VANGUARD went 2-3-0  CRAW'S CRUSHERS went 2-3-0  GRIM'S REAPERS went 2-3-0  THE THORNWALL GUARD went 1-4-0  THE QUICKBLADES went 1-4-0  SHADOWS OF THE PIT went 1-4-0
+
+Among the night's winners, CORVINA'S CHOSEN stood tallest with a 5-0-0 showing.  Well done, if you can call this lot 'well done.'  A stormcloud is brewing over the THE THORNWALL GUARD guildhouse.  Rumor says any more weeks like this one's 1-4-0 may send the team to the Dark Arena.
+
+Of course, we're all terribly impressed to see RUM TUM TUGGER win a fight and put FAENARA in the ground, terribly.  Of course, we're all terribly impressed to see ARDITH win a fight and put BONECRUSHER in the ground, terribly.
+
+The longer fights of the evening: THISTLE and RONIN MEOW WOO-FOO went 11 long minutes before THISTLE finally pulled ahead; ARDITH and RAGNAR went 9 long minutes before ARDITH finally pulled ahead; MOLDRAK and GALWYN went 10 long minutes before MOLDRAK finally pulled ahead.
+
+Quick work this turn: WARFANG put down ULAELWYN in under a minute; DORIAN put down XGRAK in under a minute; AELTHARION put down RAELINDRA in under a minute.
+
+The pit ran red this turn.  Blood was spilled: RUM TUM TUGGER ended FAENARA; ARDITH ended BONECRUSHER.  Being a spy is great — other people die and you spend the rest of the day drinking to their memory.  Better tanked than dead!
+
+DORIAN of GRIM'S REAPERS holds the Championship on recognition — the crowd and the record books both agree.  The Dreaded Duelmaster got another free pass this turn.
+
+
+Until Turn 8, BLOODSPIRE ARENA bids you good fortune — the odds, as always, are against you.-- Olaf Modeen, Retired Correspondent
+
+
+
+CHAMPION
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Dorian                   5   1   2   20  Grim's Reapers (9008)
+
+ROOKIES
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Emberfist                7   0   1   23  Grim's Reapers (9008)
+Aeltharion               6   1   2   23  Shadows of the Pit (9011)
+Wendell                  7   0   0   21  House Voss (9007)
+Warfang                  6   1   1   21  Craw's Crushers (9002)
+Raelindra                6   0   1   20  The Learned Fists (9004)
+Ilaelith                 6   1   0   19  Vexx's Vicious (9001)
+Brenniel                 6   1   0   19  Vexx's Vicious (9001)
+Úravorn                  6   1   0   19  Vexx's Vicious (9001)
+Oravel                   6   1   0   19  House Voss (9007)
+Rocklock                 6   1   0   19  Corvina's Chosen (9010)
+Wardrek                  5   1   1   18  Grim's Reapers (9008)
+Oravel                   5   2   0   17  The Learned Fists (9004)
+Jawrak                   5   2   0   17  Splitskull Syndicate (9005)
+Phaedra                  5   2   0   17  Briarwood Brawlers (9006)
+Wort                     5   2   0   17  Briarwood Brawlers (9006)
+Caelan                   5   2   0   17  House Voss (9007)
+Brenna                   5   2   0   17  Grim's Reapers (9008)
+Moldrak                  5   2   0   17  Corvina's Chosen (9010)
+Urnaka                   4   3   0   15  The Iron Vanguard (9000)
+Ragnar                   4   3   0   15  The Iron Vanguard (9000)
+Kaeledrin                4   3   0   15  Vexx's Vicious (9001)
+Faenara                  4   3   0   15  The Quickblades (9009)
+Heloise                  4   3   0   15  Corvina's Chosen (9010)
+Soren                    4   2   0   14  The Iron Vanguard (9000)
+Yosef                    3   4   0   13  Craw's Crushers (9002)
+Ivar                     3   4   0   13  The Thornwall Guard (9003)
+Xgrak                    3   4   0   13  Splitskull Syndicate (9005)
+Lungrak                  3   4   0   13  Splitskull Syndicate (9005)
+Wendell                  3   4   0   13  Splitskull Syndicate (9005)
+Haelon                   3   4   0   13  House Voss (9007)
+Ondine                   2   5   0   11  The Iron Vanguard (9000)
+Yruuka                   2   5   0   11  Craw's Crushers (9002)
+Fiamma                   2   5   0   11  Craw's Crushers (9002)
+Hammerfist               2   5   0   11  The Thornwall Guard (9003)
+Emboldrek                2   5   0   11  The Thornwall Guard (9003)
+Orawyn                   2   5   0   11  The Learned Fists (9004)
+Thalassa                 2   5   0   11  Briarwood Brawlers (9006)
+Deirdre                  2   5   0   11  Briarwood Brawlers (9006)
+Malachar                 2   5   0   11  Grim's Reapers (9008)
+Olla                     2   5   0   11  The Quickblades (9009)
+Paendriel                2   5   0   11  The Quickblades (9009)
+Calista                  2   5   0   11  Corvina's Chosen (9010)
+Nereth                   2   5   0   11  Corvina's Chosen (9010)
+Xgraka                   2   5   0   11  Shadows of the Pit (9011)
+Orak                     1   6   0    9  The Iron Vanguard (9000)
+Galwyn                   1   6   0    9  Vexx's Vicious (9001)
+Stonedra                 1   6   0    9  The Thornwall Guard (9003)
+Berwyn                   1   6   0    9  The Thornwall Guard (9003)
+Ulaelwyn                 1   6   0    9  House Voss (9007)
+Orivaelith               0   7   0    7  The Quickblades (9009)
+Paenara                  0   7   0    7  Shadows of the Pit (9011)
+INELUKI                  5   1   0    3  VESTIAN RAIDERS (12)
+PROXIMA                  4   2   0    3  VESTIAN RAIDERS (12)
+JARNAUGA                 4   2   0    1  VESTIAN RAIDERS (12)
+ICKYBOD CLAY             2   4   0    1  VESTIAN RAIDERS (12)
+GRANIUS                  1   5   0    1  VESTIAN RAIDERS (12)
+
+RECRUITS
+NAME                     W   L   K  REC  TEAM
+======================================================================
+Elawyn                   5   0   0   15  The Learned Fists (9004)
+Saelwyn                  3   1   0   10  The Learned Fists (9004)
+Ardith                   1   4   1    9  Splitskull Syndicate (9005)
+Thistle                  2   1   0    7  Briarwood Brawlers (9006)
+Vilerak                  1   3   0    6  Shadows of the Pit (9011)
+RUM TUM TUGGER           1   1   1    5  NEMESISTERS (11)
+Faenara                  0   5   0    5  Shadows of the Pit (9011)
+Heather                  0   4   0    4  The Quickblades (9009)
+TITAN                    4   0   0    3  NEMESISTERS (11)
+AVERAGE JOE              1   3   0    3  NEMESISTERS (11)
+Bonecrusher              0   3   0    3  Craw's Crushers (9002)
+RONIN MEOW WOO-FOO       2   2   0    1  NEMESISTERS (11)
+POINTY-EARED FREAK       0   4   0    1  NEMESISTERS (11)
+'-' denotes a warrior who did not fight this turn.
+
+
+
+LAST TURN'S FIGHTS
+===========================================================================
+Thistle outlasted RONIN MEOW WOO-FOO in a 11 minute drawn-out rivalry fight.
+TITAN overcame Ardith in a 4 minute contested rivalry fight.
+Saelwyn vanquished POINTY-EARED FREAK in a 8 minute action-packed rivalry fight.
+AVERAGE JOE defeated Heather in a 6 minute hard-fought rivalry fight.
+RUM TUM TUGGER slew Faenara in a 4 minute contested rivalry fight.
+Soren vanquished GRANIUS in a 6 minute spirited rivalry fight.
+Wardrek overcame JARNAUGA in a 8 minute drawn-out rivalry fight.
+Urnaka outlasted Orivaelith in a 7 minute hard-fought rivalry fight.
+Úravorn outlasted Orak in a 3 minute clean rivalry fight.
+Ilaelith outlasted PROXIMA in a 5 minute spirited rivalry fight.
+Moldrak bested Galwyn in a 10 minute brutal rivalry fight.
+Brenniel defeated Ulaelwyn in a 5 minute contested rivalry fight.
+Kaeledrin overcame Ondine in a 2 minute clean rivalry fight.
+Fiamma overcame Orawyn in a 2 minute competent rivalry fight.
+Vilerak overcame Bonecrusher in a 2 minute solid rivalry fight.
+Oravel outlasted Hammerfist in a 10 minute action-packed rivalry fight.
+Dorian defeated Stonedra in a 12 minute brutal rivalry fight.
+Lungrak outlasted Wendell in a 5 minute spirited rivalry fight.
+Wendell overcame Wort in a 2 minute clean rivalry fight.
+Raelindra defeated Caelan in a 4 minute contested rivalry fight.
+Haelon outlasted Nereth in a 12 minute action-packed rivalry fight.
+Emberfist bested Faenara in a 5 minute spirited rivalry fight.
+Rocklock vanquished Brenna in a 10 minute brutal rivalry fight.
+Heloise defeated Elawyn in a 15 minute grueling rivalry fight.
+Oravel vanquished Xgraka in a 3 minute competent rivalry fight.
+Warfang vanquished Paenara in a 1 minute swift rivalry fight.
+
+
+
+                      BATTLE REPORT
+
+    MOST POPULAR RACE                 RECORD DURING THE LAST 10 TURNS
+===========================================================================
+|RACE             FIGHTS  RACE                  W -    L -    K  PERCENT|
+===========================================================================
+|Human                146  Human                69 -   77 -    3      47%|
+|Half-Orc              73  Half-Orc             35 -   38 -    1      47%|
+|Half-Elf              73  Half-Elf             40 -   33 -    1      54%|
+|Elf                   70  Elf                  33 -   37 -    3      47%|
+|Dwarf                 52  Dwarf                30 -   22 -    2      57%|
+|Halfling              27  Halfling             11 -   16 -    0      40%|
+===========================================================================
+
+
+                      TOP WARRIOR by RACE
+
+RACE          WARRIOR                      W   L  K  TEAM NAME
+===========================================================================
+Human         Wendell                      7   0  0  House Voss (9007)
+Half-Orc      Warfang                      6   1  1  Craw's Crushers (9002)
+Half-Elf      Ilaelith                     6   1  0  Vexx's Vicious (9001)
+Elf           Aeltharion                   6   1  2  Shadows of the Pit (9011)
+Dwarf         Emberfist                    7   0  1  Grim's Reapers (9008)
+Halfling      Wort                         5   2  0  Briarwood Brawlers (9006)

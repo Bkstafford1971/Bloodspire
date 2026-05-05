@@ -1,0 +1,383 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #732   Turn: 14
+  Debug team: Electron
+  Electron / AUTOBOTS   vs   The Unnamed One / Shadows of the Pit
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: BUMBLEBEE
+  ────────────────────────────────────
+    Race: Gnome  |  Gender: Male
+    STR:15  DEX:13  CON:12  INT:18  PRE:10  SIZ:3
+    Max HP: 37   Luck: 6
+    Armor: Scale   Helm: Camail
+    Primary: Hammer   Secondary: Target Shield
+    Strategies:
+      [1] Always  →  Counterstrike / Act:2 / Aim:None / Def:None
+      [2] Always  →  Total Kill / Act:6 / Aim:None / Def:None
+      [3] Always  →  Bash / Act:7 / Aim:Head / Def:Chest
+    Skills: bash:7  dodge:1  initiative:3  
+
+  ────────────────────────────────────
+  WARRIOR B: CRUSHFANG
+  ────────────────────────────────────
+    Race: Half-Orc  |  Gender: Male
+    STR:16  DEX:6  CON:17  INT:18  PRE:8  SIZ:11
+    Max HP: 61   Luck: 28
+    Armor: Leather   Helm: None
+    Primary: Great Sword   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Total Kill / Act:9 / Aim:Head / Def:None
+    Skills: feint:1  initiative:6  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — BUMBLEBEE: 5   |   CRUSHFANG: 7
+  HP    — BUMBLEBEE: 37/37 (100%)   |   CRUSHFANG: 61/61 (100%)
+  END   — BUMBLEBEE: 100.0   |   CRUSHFANG: 100.0
+  STRAT — BUMBLEBEE: [Bash / Act:7]   |   CRUSHFANG: [Total Kill / Act:9]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BUMBLEBEE               : d100[83]  init_skill_x3[+9]  luck[+6]  style_mod[-2]  activity_mod[+4] = 100
+    CRUSHFANG               : d100[31]  dex_bonus[-8]  init_skill_x3[+18]  luck[+28]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 80
+    ▶ BUMBLEBEE wins → ATTACKS
+  Attack: BUMBLEBEE → CRUSHFANG   Weapon: Hammer   Style: Bash   Aim: Head
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (BUMBLEBEE):
+    d100[37]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 47
+    − compat penalty: −7
+    Final ATK: 40
+  Defense Roll (CRUSHFANG, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[99]  luck[+28]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 33
+    Final DEF: 33
+  Margin: 40 − 33 = 7   ▶  GRAZE (margin 7, 1 HP)
+  HP Pool (CRUSHFANG):
+    Before : 61/61 (100.0%)
+    graze   : −1
+    After  : 60/61 (98.4%)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BUMBLEBEE               : d100[97]  init_skill_x3[+9]  luck[+6]  style_mod[-2]  activity_mod[+4] = 114
+    CRUSHFANG               : d100[2]  dex_bonus[-8]  init_skill_x3[+18]  luck[+28]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 51
+    ▶ BUMBLEBEE wins → ATTACKS
+  Attack: BUMBLEBEE → CRUSHFANG   Weapon: Hammer   Style: Bash   Aim: Head
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (BUMBLEBEE):
+    d100[66]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 76
+    − compat penalty: −7
+    Final ATK: 69
+  Defense Roll (CRUSHFANG, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[12]  luck[+28]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 4
+    Final DEF: 4
+  Margin: 69 − 4 = 65   ▶  HIT (margin 65)
+  Damage (BUMBLEBEE → CRUSHFANG):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      style compat penalty         ×0.70
+      bash skill bonus               +14.00
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 65/55.0)) = 1.000
+    Raw: max(1, int(19 × 1.000)) = 19
+    Favorite weapon +1 → raw = 20
+    Armor: Leather  base DEF: 2
+    Net = max(1, 20 − 2) = 18
+  ▶ FINAL DAMAGE: 18
+  HP Pool (CRUSHFANG):
+    Before : 60/61 (98.4%)
+    hit     : −18
+    After  : 42/61 (68.9%)
+  Knockdown Check (CRUSHFANG):
+    base = int(18/61 × 80) = 23   cat bonus [Hammer/Mace]: +10   final: 33%
+    Roll: 75  →  no knockdown
+  Perm Injury Check (CRUSHFANG):
+    threshold = 15% of 61 = 9   damage 18 ≥ threshold
+    chance = max(5, min(80, int(18/61×100) − 5)) = 24%
+    Roll: 65  →  no injury
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CRUSHFANG               : d100[83]  dex_bonus[-8]  init_skill_x3[+18]  luck[+28]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 132
+    BUMBLEBEE               : d100[42]  init_skill_x3[+9]  luck[+6]  style_mod[-2]  activity_mod[+4] = 59
+    ▶ CRUSHFANG wins → ATTACKS
+  Attack: CRUSHFANG → BUMBLEBEE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (CRUSHFANG):
+    d100[58]  dex_bonus[-4]  luck[+28]  style_mod[+4]  feint[+2]
+    Subtotal: 88
+    + style advantage: +6
+    Final ATK: 94
+  Defense Roll (BUMBLEBEE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[64]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 85
+    Final DEF: 85
+  Margin: 94 − 85 = 9   ▶  GRAZE (margin 9, 1 HP)
+  HP Pool (BUMBLEBEE):
+    Before : 37/37 (100.0%)
+    graze   : −1
+    After  : 36/37 (97.3%)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CRUSHFANG               : d100[85]  dex_bonus[-8]  init_skill_x3[+18]  luck[+28]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 134
+    BUMBLEBEE               : d100[28]  init_skill_x3[+9]  luck[+6]  style_mod[-2]  activity_mod[+4] = 45
+    ▶ CRUSHFANG wins → ATTACKS
+  Attack: CRUSHFANG → BUMBLEBEE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (CRUSHFANG):
+    d100[24]  dex_bonus[-4]  luck[+28]  style_mod[+4]  feint[+2]
+    Subtotal: 54
+    + style advantage: +6
+    Final ATK: 60
+  Defense Roll (BUMBLEBEE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[86]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 107
+    Final DEF: 107
+  Margin: 60 − 107 = -47   ▶  PARRY (margin -47)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CRUSHFANG               : d100[78]  dex_bonus[-8]  init_skill_x3[+18]  luck[+28]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 127
+    BUMBLEBEE               : d100[92]  init_skill_x3[+9]  luck[+6]  style_mod[-2]  activity_mod[+4] = 109
+    ▶ CRUSHFANG wins → ATTACKS
+  Attack: CRUSHFANG → BUMBLEBEE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (CRUSHFANG):
+    d100[22]  dex_bonus[-4]  luck[+28]  style_mod[+4]  feint[+2]
+    Subtotal: 52
+    + style advantage: +6
+    Final ATK: 58
+  Defense Roll (BUMBLEBEE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[17]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 38
+    Final DEF: 38
+  Margin: 58 − 38 = 20   ▶  HIT (margin 20)
+  Damage (CRUSHFANG → BUMBLEBEE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      STR bonus                    +3.60
+      two-hand multiplier          ×1.15
+      race damage net              +8.00
+      style modifier               +5.00
+      activity contrib             -1.20
+      luck ×0.15                   +4.20
+      strength underweight pen     ×0.87 (13% penalty)
+    Ceiling: 34
+    Fraction: max(0.10, min(1.0, 20/55.0)) = 0.364
+    Raw: max(1, int(34 × 0.364)) = 12
+    Armor: Scale  base DEF: 9
+    Net = max(1, 12 − 9) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (BUMBLEBEE):
+    Before : 36/37 (97.3%)
+    hit     : −3
+    After  : 33/37 (89.2%)
+  Knockdown Check (BUMBLEBEE):
+    base = int(3/37 × 80) = 6   cat bonus [Sword/Knife]: +0   final: 6%
+    Roll: 70  →  no knockdown
+  Perm Injury Check (BUMBLEBEE):
+    threshold = 15% of 37 = 5   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BUMBLEBEE               : d100[70]  init_skill_x3[+9]  luck[+6]  style_mod[-2]  activity_mod[+4] = 87
+    CRUSHFANG               : d100[19]  dex_bonus[-8]  init_skill_x3[+18]  luck[+28]  race_init[-3]  style_mod[+6]  activity_mod[+8] = 68
+    ▶ BUMBLEBEE wins → ATTACKS
+  Attack: BUMBLEBEE → CRUSHFANG   Weapon: Hammer   Style: Bash   Aim: Head
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (BUMBLEBEE):
+    d100[93]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 103
+    − compat penalty: −7
+    Final ATK: 96
+  Defense Roll (CRUSHFANG, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[24]  luck[+28]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 8
+    Final DEF: 8
+  Margin: 96 − 8 = 88   ▶  HIT (margin 88)
+  Damage (BUMBLEBEE → CRUSHFANG):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      style compat penalty         ×0.70
+      bash skill bonus               +14.00
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 88/55.0)) = 1.000
+    Raw: max(1, int(19 × 1.000)) = 19
+    Favorite weapon +1 → raw = 20
+    Armor: Leather  base DEF: 2
+    Net = max(1, 20 − 2) = 18
+  ▶ FINAL DAMAGE: 18
+  HP Pool (CRUSHFANG):
+    Before : 42/61 (68.9%)
+    hit     : −18
+    After  : 24/61 (39.3%)
+  Knockdown Check (CRUSHFANG):
+    base = int(18/61 × 80) = 23   cat bonus [Hammer/Mace]: +10   final: 33%
+    Roll: 16  →  ▶ KNOCKDOWN
+  Perm Injury Check (CRUSHFANG):
+    threshold = 15% of 61 = 9   damage 18 ≥ threshold
+    chance = max(5, min(80, int(18/61×100) − 5)) = 24%
+    Roll: 18  →  head (1 level(s))
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BUMBLEBEE               : d100[83]  init_skill_x3[+9]  luck[+6]  style_mod[-2]  activity_mod[+4] = 100
+    CRUSHFANG               : d100[93]  on_ground_halved[(÷2)] = 46
+    ▶ BUMBLEBEE wins → ATTACKS
+  Attack: BUMBLEBEE → CRUSHFANG   Weapon: Hammer   Style: Bash   Aim: Head
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (BUMBLEBEE):
+    d100[32]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 42
+    − compat penalty: −7
+    Final ATK: 35
+  Defense Roll (CRUSHFANG, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[30]  luck[+28]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 10
+    Final DEF: 10
+  Margin: 35 − 10 = 25   ▶  HIT (margin 25)
+  Damage (BUMBLEBEE → CRUSHFANG):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      style compat penalty         ×0.70
+      bash skill bonus               +14.00
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 25/55.0)) = 0.455
+    Raw: max(1, int(19 × 0.455)) = 8
+    Favorite weapon +1 → raw = 9
+    Armor: Leather  base DEF: 2
+    Net = max(1, 9 − 2) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (CRUSHFANG):
+    Before : 24/61 (39.3%)
+    hit     : −7
+    After  : 17/61 (27.9%)
+  Knockdown Check (CRUSHFANG):
+    base = int(7/61 × 80) = 9   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (CRUSHFANG):
+    threshold = 15% of 61 = 9   damage 7 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BUMBLEBEE               : d100[40]  init_skill_x3[+9]  luck[+6]  style_mod[-2]  activity_mod[+4] = 57
+    CRUSHFANG               : d100[3]  on_ground_halved[(÷2)] = 1
+    ▶ BUMBLEBEE wins → ATTACKS
+  Attack: BUMBLEBEE → CRUSHFANG   Weapon: Hammer   Style: Bash   Aim: Head
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (BUMBLEBEE):
+    d100[75]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 85
+    − compat penalty: −7
+    Final ATK: 78
+  Defense Roll (CRUSHFANG, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[44]  luck[+28]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 14
+    Final DEF: 14
+  Margin: 78 − 14 = 64   ▶  HIT (margin 64)
+  Damage (BUMBLEBEE → CRUSHFANG):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      style compat penalty         ×0.70
+      bash skill bonus               +14.00
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 64/55.0)) = 1.000
+    Raw: max(1, int(19 × 1.000)) = 19
+    Favorite weapon +1 → raw = 20
+    Armor: Leather  base DEF: 2
+    Net = max(1, 20 − 2) = 18
+  ▶ FINAL DAMAGE: 18
+  HP Pool (CRUSHFANG):
+    Before : 17/61 (27.9%)
+    hit     : −18
+    After  : -1/61 (0.0%)
+  Knockdown Check (CRUSHFANG):
+    base = int(18/61 × 80) = 23   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (CRUSHFANG):
+    threshold = 15% of 61 = 9   damage 18 ≥ threshold
+    chance = max(5, min(80, int(18/61×100) − 5)) = 24%
+    Roll: 40  →  no injury
+  Death Check (CRUSHFANG):
+    prev_hp: 17   damage: 18   new_hp: -1
+    overshoot: 1
+    death_chance = min(50.0, 0.5 + 1) = 1.5%
+    → survives (concede system takes over)
+  Concede Attempt (CRUSHFANG):
+    d100[15] + PRE_bonus[-2] + luck//2[14] = 27
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    27 < 66  →  mercy denied — fight continues
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: CRUSHFANG has uncontested action
+  Attack: CRUSHFANG → BUMBLEBEE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (CRUSHFANG):
+    d100[13]  dex_bonus[-4]  luck[+28]  style_mod[+4]  feint[+2]  hp0_pen[-30]
+    Subtotal: 13
+    + style advantage: +6
+    Final ATK: 19
+  Defense Roll (BUMBLEBEE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[91]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 112
+    Final DEF: 112
+  Margin: 19 − 112 = -93   ▶  PARRY (margin -93)
+  Concede Attempt (CRUSHFANG):
+    d100[77] + PRE_bonus[-2] + luck//2[14] = 89
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    89 ≥ 66  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: BUMBLEBEE
+==============================================================================
+  Initiative: d100=57 vs 62% — SUCCESS
+    → Initiative trained: Level 3 → Level 4 (Good Skill, 62% chance)
+  Initiative: d100=7 vs 42% — SUCCESS
+    → Initiative trained: Level 4 → Level 5 (Very Skilled, 42% chance)
+  Initiative: d100=80 vs 42% — FAIL
+    → Initiative training: no progress this session (INT 18, level 5, 42% chance).
+  [OBSERVED] Initiative: trigger d100=5/16% passed  |  skill d100=17 vs 42% — SUCCESS
+    → Initiative trained: Level 5 → Level 6 (Excellent Skill, 42% chance)
+
+==============================================================================
+  TRAINING: CRUSHFANG
+==============================================================================
+  Initiative: d100=75 vs 22% — FAIL
+    → Initiative training: no progress this session (INT 18, level 6, 22% chance).
+  Strength: d100=60 vs 35% — FAIL
+    → Strength training: no progress this session (mid tier, 35% chance).
+  INT observed learning: d100=67 vs 16% — no trigger
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : BUMBLEBEE  (89.2% HP remaining)
+  Loser  : CRUSHFANG  (survived, 0.0% HP)
+  Duration: 1 minute(s)
+==============================================================================

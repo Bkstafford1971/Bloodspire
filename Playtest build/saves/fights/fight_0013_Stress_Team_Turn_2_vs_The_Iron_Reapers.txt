@@ -1,0 +1,198 @@
+Fight #13
+Stress Team Turn 2  vs  The Iron Reapers
+============================================================================
+
+============================================================================
+ACROBAT_2 (0-0-0)   vs   BORAK BONESNAP (0-2-0)
+STRESS TEAM TURN 2 (STRESS TESTER)   vs   THE IRON REAPERS (STONE FANG)
+Elf Female   vs   Goblin Male
+============================================================================
+
+ACROBAT_2 is 4'9"
+ACROBAT_2 weighs 101 lbs.
+ACROBAT_2 Known To The Crowd.
+ACROBAT_2 enters the arena unarmored and wears no helm.
+ACROBAT_2 fights using a SHORT SWORD.
+
+BORAK BONESNAP is 5'5"
+BORAK BONESNAP weighs 155 lbs.
+BORAK BONESNAP Known To The Crowd.
+BORAK BONESNAP enters the arena in CLOTH and will wear a LEATHER CAP.
+BORAK BONESNAP fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+Dark clouds bode ill for the battle
+ACROBAT_2 steps threateningly close to the capable BORAK BONESNAP
+ACROBAT_2 thrusts at BORAK BONESNAP's midsection with her short sword
+BORAK BONESNAP turns the blow aside with skill!
+BORAK BONESNAP slices at ACROBAT_2's midsection with his short sword
+ACROBAT_2's defenses are particularly strong!
+BORAK BONESNAP drives a blow toward ACROBAT_2's body with his short sword
+BORAK BONESNAP gets past ACROBAT_2's guard!
+BORAK BONESNAP's short sword cuts into ACROBAT_2's armor!
+   The blow has real authority behind it!
+BORAK BONESNAP hacks at ACROBAT_2's body with his short sword
+BORAK BONESNAP's short sword cuts into ACROBAT_2's armor!
+   Little damage results from the strike
+Whistles and jeers rain down from the stands!
+BORAK BONESNAP thrusts at ACROBAT_2's midsection with his short sword
+BORAK BONESNAP barely gets past ACROBAT_2's defenses!
+BORAK BONESNAP's short sword slices into ACROBAT_2's torso!
+   That one will leave a mark!
+BORAK BONESNAP thrusts at ACROBAT_2's midsection with his short sword
+BORAK BONESNAP finds the opening!
+BORAK BONESNAP's short sword cuts into ACROBAT_2's torso!
+   The armor absorbs most of it
+ACROBAT_2 thrusts at BORAK BONESNAP's torso with her short sword
+BORAK BONESNAP just manages to deflect the blow!
+ACROBAT_2 directs an attack toward BORAK BONESNAP
+ACROBAT_2 cuts at BORAK BONESNAP's midsection with her short sword
+BORAK BONESNAP barely gets the parry off!
+ACROBAT_2 sizes up BORAK BONESNAP carefully
+ACROBAT_2 cuts at BORAK BONESNAP's body with her short sword
+BORAK BONESNAP makes an extraordinary effort, and parries the strike!
+ACROBAT_2 slashes at BORAK BONESNAP's torso with her short sword
+BORAK BONESNAP makes an extraordinary effort, and parries the strike!
+ACROBAT_2 waits patiently — BORAK BONESNAP's energy bleeds away
+
+MINUTE 2
+BORAK BONESNAP appears to have a slight advantage.
+
+ACROBAT_2 steps threateningly close to the powerful BORAK BONESNAP
+ACROBAT_2 slashes at BORAK BONESNAP's body with her short sword
+BORAK BONESNAP catches the weapon and deflects it cleanly!
+ACROBAT_2 steps threateningly close to the fierce BORAK BONESNAP
+ACROBAT_2 hacks at BORAK BONESNAP's torso with her short sword
+ACROBAT_2 barely gets past BORAK BONESNAP's defenses!
+ACROBAT_2's short sword slices into BORAK BONESNAP's body!
+   A minor hit!
+BORAK BONESNAP thrusts at ACROBAT_2's body with his short sword
+BORAK BONESNAP gets past ACROBAT_2's guard!
+BORAK BONESNAP's short sword cuts into ACROBAT_2's armor!
+   A telling hit!
+ACROBAT_2 cuts at BORAK BONESNAP's midsection with her short sword
+BORAK BONESNAP just manages to deflect the blow!
+The announcer's voice cracks with excitement
+ACROBAT_2 drives a blow toward BORAK BONESNAP's torso with her short sword
+ACROBAT_2's short sword slices into BORAK BONESNAP's armor!
+   Little damage results from the strike
+BORAK BONESNAP slices at ACROBAT_2's body with his short sword
+BORAK BONESNAP finds the opening!
+BORAK BONESNAP's short sword slices into ACROBAT_2's body!
+   The armor absorbs most of it
+ACROBAT_2 steps threateningly close to the powerful BORAK BONESNAP
+ACROBAT_2 cuts at BORAK BONESNAP's midsection with her short sword
+BORAK BONESNAP turns the blow aside with skill!
+BORAK BONESNAP slashes at ACROBAT_2's midsection with his short sword
+ACROBAT_2 just manages to deflect the blow!
+BORAK BONESNAP slashes at ACROBAT_2's midsection with his short sword
+BORAK BONESNAP's short sword slices into ACROBAT_2's armor!
+   The armor absorbs most of it
+BORAK BONESNAP slashes at ACROBAT_2's midsection with his short sword
+ACROBAT_2 just manages to deflect the blow!
+
+MINUTE 3
+BORAK BONESNAP is winning the fight.
+
+ACROBAT_2 directs an attack toward BORAK BONESNAP
+ACROBAT_2 slices at BORAK BONESNAP's midsection with her short sword
+ACROBAT_2 swings and misses badly
+ACROBAT_2 steps threateningly close to the tenacious BORAK BONESNAP
+ACROBAT_2 slices at BORAK BONESNAP's midsection with her short sword
+ACROBAT_2's short sword cuts into BORAK BONESNAP's body!
+   The armor does its job admirably
+BORAK BONESNAP slices at ACROBAT_2's body with his short sword
+BORAK BONESNAP's short sword finds ACROBAT_2's armor!
+   The armor absorbs most of it
+ACROBAT_2 appeals to the Blood Master for mercy!
+The crowd screams for blood — mercy is denied!
+ACROBAT_2 hacks at BORAK BONESNAP's midsection with her short sword
+ACROBAT_2's short sword cuts into BORAK BONESNAP's body!
+   Little damage results from the strike
+BORAK BONESNAP crashes to the arena floor!
+ACROBAT_2 tries to hit the mighty BORAK BONESNAP
+ACROBAT_2 drives a blow toward BORAK BONESNAP's midsection with her short sword
+ACROBAT_2's blow barely grazes BORAK BONESNAP!
+BORAK BONESNAP slices at ACROBAT_2's midsection with his short sword
+ACROBAT_2 makes a desperate last-moment parry!
+Someone boos the Elf, then sits very still hoping no one noticed
+ACROBAT_2 thrusts at BORAK BONESNAP's midsection with her short sword
+ACROBAT_2's short sword slices into BORAK BONESNAP's torso!
+   The armor does its job admirably
+BORAK BONESNAP slices at ACROBAT_2's midsection with his short sword
+BORAK BONESNAP barely gets past ACROBAT_2's defenses!
+BORAK BONESNAP's short sword bites into ACROBAT_2's armor!
+   A telling hit!
+ACROBAT_2 appeals to the Blood Master for mercy!
+The Blood Master shows no mercy today!
+BORAK BONESNAP slashes at ACROBAT_2's body with his short sword
+ACROBAT_2's defenses are particularly strong!
+BORAK BONESNAP tries to hit the mighty ACROBAT_2
+BORAK BONESNAP slices at ACROBAT_2's midsection with his short sword
+ACROBAT_2 barely gets the parry off!
+
+MINUTE 4
+The gap between the two warriors is widening rapidly.
+
+BORAK BONESNAP gets up, shaken but ready
+ACROBAT_2 slices at BORAK BONESNAP's body with her short sword
+BORAK BONESNAP makes an extraordinary effort, and parries the strike!
+ACROBAT_2 slashes at BORAK BONESNAP's midsection with her short sword
+ACROBAT_2's blow barely grazes BORAK BONESNAP!
+ACROBAT_2 directs an attack toward BORAK BONESNAP
+ACROBAT_2 slashes at BORAK BONESNAP's body with her short sword
+BORAK BONESNAP makes an extraordinary effort, and parries the strike!
+BORAK BONESNAP tries to hit the mighty ACROBAT_2
+BORAK BONESNAP slices at ACROBAT_2's midsection with his short sword
+BORAK BONESNAP finds the opening!
+BORAK BONESNAP's short sword cuts into ACROBAT_2's body!
+   A glancing blow!
+ACROBAT_2 raises a hand in surrender!
+ACROBAT_2 must fight on, or die trying!
+ACROBAT_2 steps threateningly close to the capable BORAK BONESNAP
+ACROBAT_2 drives a blow toward BORAK BONESNAP's midsection with her short sword
+BORAK BONESNAP barely gets the parry off!
+ACROBAT_2 can fight no more and begs for mercy!
+No quarter is given!
+ACROBAT_2 sizes up BORAK BONESNAP carefully
+ACROBAT_2 slashes at BORAK BONESNAP's torso with her short sword
+ACROBAT_2's accuracy is rewarded!
+ACROBAT_2's short sword bites into BORAK BONESNAP's body!
+   The blow lands without full force
+ACROBAT_2 can fight no more and begs for mercy!
+No quarter is given!
+BORAK BONESNAP slashes at ACROBAT_2's midsection with his short sword
+ACROBAT_2 barely gets the parry off!
+ACROBAT_2 can fight no more and begs for mercy!
+No quarter is given!
+The pit bell rings early — it must be a mistake
+BORAK BONESNAP sizes up ACROBAT_2 carefully
+BORAK BONESNAP drives a blow toward ACROBAT_2's torso with his short sword
+BORAK BONESNAP's short sword finds ACROBAT_2's torso!
+   Barely a scratch!
+ACROBAT_2 raises a hand in surrender!
+No quarter is given!
+BORAK BONESNAP sizes up ACROBAT_2 carefully
+BORAK BONESNAP drives a blow toward ACROBAT_2's torso with his short sword
+BORAK BONESNAP barely gets past ACROBAT_2's defenses!
+BORAK BONESNAP's short sword cuts into ACROBAT_2's body!
+   A solid blow has been struck!
+ACROBAT_2 appeals to the Blood Master for mercy!
+No quarter is given!
+BORAK BONESNAP thrusts at ACROBAT_2's midsection with his short sword
+BORAK BONESNAP's short sword bites into ACROBAT_2's body!
+   The blow glances harmlessly off!
+ACROBAT_2 calls out for quarter!
+The crowd screams for blood, but the ref steps in!
+
+BORAK BONESNAP roars in triumph over the defeated ACROBAT_2!
+
+BORAK BONESNAP has trained in nothing

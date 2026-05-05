@@ -1,0 +1,106 @@
+Fight #8
+Stress Team Turn 1  vs  The Iron Reapers
+============================================================================
+
+============================================================================
+BASHER_1 (0-0-0)   vs   BORAK BONESNAP (0-1-0)
+STRESS TEAM TURN 1 (STRESS TESTER)   vs   THE IRON REAPERS (STONE FANG)
+Dwarf Male   vs   Goblin Male
+============================================================================
+
+BASHER_1 is 4'2"
+BASHER_1 weighs 195 lbs.
+BASHER_1 Known To The Crowd.
+BASHER_1 enters the arena unarmored and wears no helm.
+BASHER_1 fights using a WAR HAMMER.
+
+BORAK BONESNAP is 5'5"
+BORAK BONESNAP weighs 155 lbs.
+BORAK BONESNAP Known To The Crowd.
+BORAK BONESNAP enters the arena in CLOTH and will wear a LEATHER CAP.
+BORAK BONESNAP fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The afternoon sun beats down on the bloodstained sand
+BORAK BONESNAP sizes up BASHER_1 carefully
+BORAK BONESNAP drives a blow toward BASHER_1's chest with his short sword
+BORAK BONESNAP's short sword finds BASHER_1's torso!
+   The blow glances harmlessly off!
+BASHER_1 bashes at BORAK BONESNAP's midsection with his war hammer
+BORAK BONESNAP just manages to deflect the blow!
+BORAK BONESNAP hacks at BASHER_1's breast with his short sword
+BASHER_1 barely gets the parry off!
+BORAK BONESNAP directs an attack toward BASHER_1
+BORAK BONESNAP drives a blow toward BASHER_1's rib cage with his short sword
+BORAK BONESNAP's accuracy is rewarded!
+BORAK BONESNAP's short sword bites into BASHER_1's ribs!
+   A glancing blow!
+BORAK BONESNAP tries to hit the mighty BASHER_1
+BORAK BONESNAP slices at BASHER_1's torso with his short sword
+BORAK BONESNAP's blow barely grazes BASHER_1!
+BORAK BONESNAP cuts at BASHER_1's sternum with his short sword
+BASHER_1 has that area well covered!
+BASHER_1 sizes up BORAK BONESNAP carefully
+BASHER_1 pounds at BORAK BONESNAP's body with his war hammer
+BASHER_1 gets past BORAK BONESNAP's guard!
+BASHER_1's war hammer crunches into BORAK BONESNAP's body!
+   A solid blow has been struck!
+BORAK BONESNAP plummets downward with great speed!!
+Three drunks in the cheap seats start a brawl
+BASHER_1 hammers at BORAK BONESNAP's midsection with his war hammer
+BORAK BONESNAP is ready for the strike, and deftly parries it!
+
+MINUTE 2
+The tide has clearly turned in favor of BASHER_1.
+
+BASHER_1 sizes up BORAK BONESNAP carefully
+BASHER_1 smashes at BORAK BONESNAP's body with his war hammer
+BORAK BONESNAP just manages to deflect the blow!
+BASHER_1 smashes at BORAK BONESNAP's midsection with his war hammer
+BASHER_1 barely gets past BORAK BONESNAP's defenses!
+BASHER_1's war hammer slams into BORAK BONESNAP's body!
+   The armor absorbs most of it
+BORAK BONESNAP steps threateningly close to the stalwart BASHER_1
+BORAK BONESNAP thrusts at BASHER_1's torso with his short sword
+BASHER_1 has that area well covered!
+BORAK BONESNAP directs an attack toward BASHER_1
+BORAK BONESNAP hacks at BASHER_1's chest with his short sword
+BASHER_1's plan is not to get hit!
+BASHER_1 bludgeons BORAK BONESNAP's body with his war hammer
+BASHER_1's war hammer smashes into BORAK BONESNAP's body!
+   The blow lands with bone-breaking force!
+
+MINUTE 3
+BASHER_1 holds firm command of the contest.
+
+BASHER_1 sizes up BORAK BONESNAP carefully
+BASHER_1 pounds at BORAK BONESNAP's midsection with his war hammer
+BORAK BONESNAP turns the blow aside with skill!
+The powerful Bash strike cleaves through the parry! BORAK BONESNAP takes 9 damage!
+BASHER_1 steps threateningly close to the fierce BORAK BONESNAP
+BASHER_1 hammers at BORAK BONESNAP's torso with his war hammer
+BASHER_1's accuracy is rewarded!
+BASHER_1's war hammer crunches into BORAK BONESNAP's armor!
+   Great gobs of gore gush from the gash!
+*** BORAK BONESNAP has been permanently injured in the chest!!! ***
+BORAK BONESNAP's chest wound bleeds freely!
+BORAK BONESNAP's breathing becomes labored!!
+BORAK BONESNAP appeals to the Blood Master for mercy!
+No quarter is given!
+BASHER_1 directs an attack toward BORAK BONESNAP
+BASHER_1 hammers at BORAK BONESNAP's body with his war hammer
+BASHER_1's blow barely grazes BORAK BONESNAP!
+BORAK BONESNAP can fight no more and begs for mercy!
+Mercy is granted — the fight is over!
+
+The Blood Master raises BASHER_1's arm in victory!
+
+BORAK BONESNAP has trained in Skill

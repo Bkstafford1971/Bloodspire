@@ -1,0 +1,696 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #238   Turn: 5
+  Debug team: Ilneval
+  Ilneval / DECEPTICONS   vs   Garrett Ironwill / The Iron Vanguard
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: RAVAGE
+  ────────────────────────────────────
+    Race: Tabaxi  |  Gender: Male
+    STR:16  DEX:16  CON:15  INT:15  PRE:9  SIZ:7
+    Max HP: 37   Luck: 20
+    Armor: Cuir Boulli   Helm: Steel Cap
+    Primary: Scimitar   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Slash / Act:8 / Aim:None / Def:Chest
+
+  ────────────────────────────────────
+  WARRIOR B: NRUUK
+  ────────────────────────────────────
+    Race: Half-Orc  |  Gender: Male
+    STR:25  DEX:11  CON:15  INT:11  PRE:10  SIZ:4
+    Max HP: 49   Luck: 3
+    Armor: Chain   Helm: None
+    Primary: Morningstar   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Counterstrike / Act:5 / Aim:Chest / Def:Chest
+    Skills: dodge:6  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — RAVAGE: 5   |   NRUUK: 2
+  HP    — RAVAGE: 37/37 (100%)   |   NRUUK: 49/49 (100%)
+  END   — RAVAGE: 100.0   |   NRUUK: 100.0
+  STRAT — RAVAGE: [Slash / Act:8]   |   NRUUK: [Counterstrike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[22]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 57
+    NRUUK                   : d100[31]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 23
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[32]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 58
+    + style advantage: -6
+    Final ATK: 52
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[38]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 60
+    Final DEF: 60
+  Margin: 52 − 60 = -8   ▶  PARRY (margin -8)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[24]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 59
+    NRUUK                   : d100[55]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 47
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[21]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 47
+    + style advantage: -6
+    Final ATK: 41
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[12]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 34
+    Final DEF: 34
+  Margin: 41 − 34 = 7   ▶  GRAZE (margin 7, 1 HP)
+  HP Pool (NRUUK):
+    Before : 49/49 (100.0%)
+    graze   : −1
+    After  : 48/49 (98.0%)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[71]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 106
+    NRUUK                   : d100[54]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 46
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[81]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 107
+    + style advantage: -6
+    Final ATK: 101
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[81]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 103
+    Final DEF: 103
+  Margin: 101 − 103 = -2   ▶  PARRY (margin -2)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    NRUUK                   : d100[82]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 74
+    RAVAGE                  : d100[4]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 39
+    ▶ NRUUK wins → ATTACKS
+  Attack: NRUUK → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (NRUUK):
+    d100[44]  dex_bonus[-1]  luck[+3]  style_mod[-4]
+    Subtotal: 42
+    + style advantage: +6
+    Final ATK: 48
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[66]  luck[+20]  str_bonus[+3]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+6]  def_point_bonus[+15]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 48 − 98 = -50   ▶  PARRY (margin -50)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[82]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 117
+    NRUUK                   : d100[73]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 65
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[27]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 53
+    + style advantage: -6
+    Final ATK: 47
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[58]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 47 − 80 = -33   ▶  PARRY (margin -33)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[72]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 107
+    NRUUK                   : d100[37]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 29
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[33]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 59
+    + style advantage: -6
+    Final ATK: 53
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[96]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 118
+    Final DEF: 118
+  Margin: 53 − 118 = -65   ▶  PARRY (margin -65)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: NRUUK has uncontested action
+  Attack: NRUUK → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (NRUUK):
+    d100[11]  dex_bonus[-1]  luck[+3]  style_mod[-4]
+    Subtotal: 9
+    + style advantage: +6
+    Final ATK: 15
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[63]  luck[+20]  str_bonus[+3]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+6]  def_point_bonus[+15]
+    Subtotal: 95
+    Final DEF: 95
+  Margin: 15 − 95 = -80   ▶  PARRY (margin -80)
+
+  ── END OF MINUTE ──
+    RAVAGE: 100.0 END − (5.90 burn × 5 actions) = 70.0
+    NRUUK: 100.0 END − (3.50 burn × 2 actions) = 93.0
+    HP POOL — RAVAGE: 21/37 (57%)
+    HP POOL — NRUUK: 48/49 (98%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — RAVAGE: 5   |   NRUUK: 2
+  HP    — RAVAGE: 21/37 (57%)   |   NRUUK: 48/49 (98%)
+  END   — RAVAGE: 70.0   |   NRUUK: 93.0
+  STRAT — RAVAGE: [Slash / Act:8]   |   NRUUK: [Counterstrike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[71]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 106
+    NRUUK                   : d100[64]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 56
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[3]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 29
+    + style advantage: -6
+    Final ATK: 23
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[32]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 54
+    Final DEF: 54
+  Margin: 23 − 54 = -31   ▶  PARRY (margin -31)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[61]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 96
+    NRUUK                   : d100[50]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 42
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[25]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 51
+    + style advantage: -6
+    Final ATK: 45
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[45]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 67
+    Final DEF: 67
+  Margin: 45 − 67 = -22   ▶  PARRY (margin -22)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[43]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 78
+    NRUUK                   : d100[34]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 26
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[32]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 58
+    + style advantage: -6
+    Final ATK: 52
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[59]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 81
+    Final DEF: 81
+  Margin: 52 − 81 = -29   ▶  PARRY (margin -29)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[66]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 101
+    NRUUK                   : d100[80]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 72
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[88]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 114
+    + style advantage: -6
+    Final ATK: 108
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[68]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 90
+    Final DEF: 90
+  Margin: 108 − 90 = 18   ▶  HIT (margin 18)
+  Damage (RAVAGE → NRUUK):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 8.75
+      STR bonus                    +3.60
+      style modifier               +4.00
+      activity contrib             -0.90
+      luck ×0.15                   +3.00
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 18/55.0)) = 0.327
+    Raw: max(1, int(18 × 0.327)) = 5
+    Favorite weapon +1 → raw = 6
+    Armor: Chain  base DEF: 6
+    Net = max(1, 6 − 6) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (NRUUK):
+    Before : 48/49 (98.0%)
+    hit     : −1
+    After  : 47/49 (95.9%)
+  Knockdown Check (NRUUK):
+    base = int(1/49 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 29  →  no knockdown
+  Perm Injury Check (NRUUK):
+    threshold = 15% of 49 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[63]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 98
+    NRUUK                   : d100[94]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 86
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[12]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 38
+    + style advantage: -6
+    Final ATK: 32
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[34]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 56
+    Final DEF: 56
+  Margin: 32 − 56 = -24   ▶  PARRY (margin -24)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: NRUUK has uncontested action
+  Attack: NRUUK → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (NRUUK):
+    d100[55]  dex_bonus[-1]  luck[+3]  style_mod[-4]
+    Subtotal: 53
+    + style advantage: +6
+    Final ATK: 59
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[3]  luck[+20]  str_bonus[+3]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+6]  def_point_bonus[+15]
+    Subtotal: 35
+    Final DEF: 35
+  Margin: 59 − 35 = 24   ▶  HIT (margin 24)
+  Damage (NRUUK → RAVAGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +9.00
+      race damage net              +8.00
+      style modifier               +2.00
+      luck ×0.15                   +0.45
+    Ceiling: 29
+    Fraction: max(0.10, min(1.0, 24/55.0)) = 0.436
+    Raw: max(1, int(29 × 0.436)) = 12
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 12 − 5) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (RAVAGE):
+    Before : 21/37 (56.8%)
+    hit     : −7
+    After  : 14/37 (37.8%)
+  Knockdown Check (RAVAGE):
+    base = int(7/37 × 80) = 15   cat bonus [Hammer/Mace]: +10   final: 25%
+    Roll: 75  →  no knockdown
+  Perm Injury Check (RAVAGE):
+    threshold = 15% of 37 = 5   damage 7 ≥ threshold
+    chance = max(5, min(80, int(7/37×100) − 5)) = 13%
+    Roll: 4  →  chest (1 level(s))
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: NRUUK has uncontested action
+  Attack: NRUUK → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (NRUUK):
+    d100[11]  dex_bonus[-1]  luck[+3]  style_mod[-4]
+    Subtotal: 9
+    + style advantage: +6
+    Final ATK: 15
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[96]  luck[+20]  str_bonus[+3]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+6]  def_point_bonus[+15]
+    Subtotal: 128
+    Final DEF: 128
+  Margin: 15 − 128 = -113   ▶  PARRY (margin -113)
+
+  ── END OF MINUTE ──
+    RAVAGE: 70.0 END − (5.90 burn × 5 actions) = 40.0
+    NRUUK: 93.0 END − (3.50 burn × 2 actions) = 86.0
+    HP POOL — RAVAGE: 14/37 (38%)
+    HP POOL — NRUUK: 47/49 (96%)
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — RAVAGE: 5   |   NRUUK: 2
+  HP    — RAVAGE: 14/37 (38%)   |   NRUUK: 47/49 (96%)
+  END   — RAVAGE: 40.0   |   NRUUK: 86.0
+  STRAT — RAVAGE: [Slash / Act:8]   |   NRUUK: [Counterstrike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[23]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 58
+    NRUUK                   : d100[1]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 1
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[1]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 27
+    + style advantage: -6
+    Final ATK: 21
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[36]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 58
+    Final DEF: 58
+  Margin: 21 − 58 = -37   ▶  PARRY (margin -37)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[51]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 86
+    NRUUK                   : d100[42]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 34
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[14]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 40
+    + style advantage: -6
+    Final ATK: 34
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[23]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 45
+    Final DEF: 45
+  Margin: 34 − 45 = -11   ▶  PARRY (margin -11)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[71]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 106
+    NRUUK                   : d100[63]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 55
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[83]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 109
+    + style advantage: -6
+    Final ATK: 103
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[98]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 120
+    Final DEF: 120
+  Margin: 103 − 120 = -17   ▶  PARRY (margin -17)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    NRUUK                   : d100[89]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 81
+    RAVAGE                  : d100[45]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 80
+    ▶ NRUUK wins → ATTACKS
+  Attack: NRUUK → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (NRUUK):
+    d100[15]  dex_bonus[-1]  luck[+3]  style_mod[-4]
+    Subtotal: 13
+    + style advantage: +6
+    Final ATK: 19
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[56]  luck[+20]  str_bonus[+3]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+6]  def_point_bonus[+15]
+    Subtotal: 88
+    Final DEF: 88
+  Margin: 19 − 88 = -69   ▶  PARRY (margin -69)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    NRUUK                   : d100[92]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 84
+    RAVAGE                  : d100[21]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 56
+    ▶ NRUUK wins → ATTACKS
+  Attack: NRUUK → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (NRUUK):
+    d100[97]  dex_bonus[-1]  luck[+3]  style_mod[-4]
+    Subtotal: 95
+    + style advantage: +6
+    Final ATK: 101
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[68]  luck[+20]  str_bonus[+3]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+6]  def_point_bonus[+15]
+    Subtotal: 100
+    Final DEF: 100
+  Margin: 101 − 100 = 1   ▶  GRAZE (margin 1, 1 HP)
+  HP Pool (RAVAGE):
+    Before : 14/37 (37.8%)
+    graze   : −1
+    After  : 13/37 (35.1%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: RAVAGE has uncontested action
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[42]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 68
+    + style advantage: -6
+    Final ATK: 62
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[17]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 39
+    Final DEF: 39
+  Margin: 62 − 39 = 23   ▶  HIT (margin 23)
+  Damage (RAVAGE → NRUUK):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 8.75
+      STR bonus                    +3.60
+      style modifier               +4.00
+      activity contrib             -0.90
+      luck ×0.15                   +3.00
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 23/55.0)) = 0.418
+    Raw: max(1, int(18 × 0.418)) = 7
+    Favorite weapon +1 → raw = 8
+    Armor: Chain  base DEF: 6
+    Net = max(1, 8 − 6) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (NRUUK):
+    Before : 47/49 (95.9%)
+    hit     : −2
+    After  : 45/49 (91.8%)
+  Knockdown Check (NRUUK):
+    base = int(2/49 × 80) = 3   cat bonus [Sword/Knife]: +0   final: 3%
+    Roll: 53  →  no knockdown
+  Perm Injury Check (NRUUK):
+    threshold = 15% of 49 = 7   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: RAVAGE has uncontested action
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[33]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 59
+    + style advantage: -6
+    Final ATK: 53
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[9]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 31
+    Final DEF: 31
+  Margin: 53 − 31 = 22   ▶  HIT (margin 22)
+  Damage (RAVAGE → NRUUK):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 8.75
+      STR bonus                    +3.60
+      style modifier               +4.00
+      activity contrib             -0.90
+      luck ×0.15                   +3.00
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 22/55.0)) = 0.400
+    Raw: max(1, int(18 × 0.400)) = 7
+    Favorite weapon +1 → raw = 8
+    Armor: Chain  base DEF: 6
+    Net = max(1, 8 − 6) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (NRUUK):
+    Before : 45/49 (91.8%)
+    hit     : −2
+    After  : 43/49 (87.8%)
+  Knockdown Check (NRUUK):
+    base = int(2/49 × 80) = 3   cat bonus [Sword/Knife]: +0   final: 3%
+    Roll: 36  →  no knockdown
+  Perm Injury Check (NRUUK):
+    threshold = 15% of 49 = 7   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    RAVAGE: 40.0 END − (5.90 burn × 5 actions) = 10.0
+    NRUUK: 86.0 END − (3.50 burn × 2 actions) = 79.0
+    HP POOL — RAVAGE: 13/37 (35%)
+    HP POOL — NRUUK: 43/49 (88%)
+
+==============================================================================
+  MINUTE 4
+==============================================================================
+  APM   — RAVAGE: 4   |   NRUUK: 2
+  HP    — RAVAGE: 13/37 (35%)   |   NRUUK: 43/49 (88%)
+  END   — RAVAGE: 10.0   |   NRUUK: 79.0
+  STRAT — RAVAGE: [Slash / Act:8]   |   NRUUK: [Counterstrike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[100]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6]  end_pen[-9] = 126
+    NRUUK                   : d100[11]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 3
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[58]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]  end_pen[-10]
+    Subtotal: 74
+    + style advantage: -6
+    Final ATK: 68
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[32]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 54
+    Final DEF: 54
+  Margin: 68 − 54 = 14   ▶  HIT (margin 14)
+  Damage (RAVAGE → NRUUK):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 8.75
+      STR bonus                    +3.60
+      style modifier               +4.00
+      activity contrib             -0.90
+      luck ×0.15                   +3.00
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 14/55.0)) = 0.255
+    Raw: max(1, int(18 × 0.255)) = 4
+    Favorite weapon +1 → raw = 5
+    Armor: Chain  base DEF: 6
+    Net = max(1, 5 − 6) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (NRUUK):
+    Before : 43/49 (87.8%)
+    hit     : −1
+    After  : 42/49 (85.7%)
+  Knockdown Check (NRUUK):
+    base = int(1/49 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 35  →  no knockdown
+  Perm Injury Check (NRUUK):
+    threshold = 15% of 49 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[76]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6]  end_pen[-9] = 102
+    NRUUK                   : d100[4]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 1
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[34]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]  end_pen[-10]
+    Subtotal: 50
+    + style advantage: -6
+    Final ATK: 44
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[90]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 112
+    Final DEF: 112
+  Margin: 44 − 112 = -68   ▶  PARRY (margin -68)
+  Death Check (RAVAGE):
+    prev_hp: 13   damage: 16   new_hp: -3
+    overshoot: 3
+    death_chance = min(50.0, 0.5 + 3) = 3.5%
+    → survives (concede system takes over)
+  Concede Attempt (RAVAGE):
+    d100[26] + PRE_bonus[-1] + luck//2[10] = 35
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    35 < 65  →  mercy denied — fight continues
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    NRUUK                   : d100[100]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 92
+    RAVAGE                  : d100[55]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6]  end_pen[-9] = 81
+    ▶ NRUUK wins → ATTACKS
+  Attack: NRUUK → RAVAGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (NRUUK):
+    d100[7]  dex_bonus[-1]  luck[+3]  style_mod[-4]
+    Subtotal: 5
+    + style advantage: +6
+    Final ATK: 11
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[3]  luck[+20]  str_bonus[+3]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+6]  def_point_bonus[+15]  hp0_pen[-30]  end_pen[-8]
+    Subtotal: 1
+    Final DEF: 1
+  Margin: 11 − 1 = 10   ▶  HIT (margin 10)
+  Damage (NRUUK → RAVAGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +9.00
+      race damage net              +8.00
+      style modifier               +2.00
+      luck ×0.15                   +0.45
+    Ceiling: 29
+    Fraction: max(0.10, min(1.0, 10/55.0)) = 0.182
+    Raw: max(1, int(29 × 0.182)) = 5
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 5 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (RAVAGE):
+    Before : -3/37 (-8.1%)
+    hit     : −1
+    After  : -4/37 (0.0%)
+  Knockdown Check (RAVAGE):
+    base = int(1/37 × 80) = 2   cat bonus [Hammer/Mace]: +10   final: 12%
+    Roll: 23  →  no knockdown
+  Perm Injury Check (RAVAGE):
+    threshold = 15% of 37 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+  Death Check (RAVAGE):
+    prev_hp: -3   damage: 1   new_hp: -4
+    overshoot: 4
+    death_chance = min(50.0, 0.5 + 4) = 4.5%
+    → survives (concede system takes over)
+  Concede Attempt (RAVAGE):
+    d100[32] + PRE_bonus[-1] + luck//2[10] = 41
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    41 < 65  →  mercy denied — fight continues
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[85]  dex_bonus[+10]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6]  end_pen[-9] = 111
+    NRUUK                   : d100[34]  dex_bonus[-2]  luck[+3]  race_init[-3]  style_mod[-6] = 26
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → NRUUK   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[41]  dex_bonus[+5]  luck[+20]  style_mod[-4]  fav_bonus[+5]  end_pen[-10]  hp0_pen[-30]
+    Subtotal: 27
+    + style advantage: -6
+    Final ATK: 21
+  Defense Roll (NRUUK, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[81]  luck[+3]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 103
+    Final DEF: 103
+  Margin: 21 − 103 = -82   ▶  PARRY (margin -82)
+  Death Check (RAVAGE):
+    prev_hp: -4   damage: 16   new_hp: -20
+    overshoot: 20
+    death_chance = min(50.0, 0.5 + 20) = 20.5%
+    → survives (concede system takes over)
+  Concede Attempt (RAVAGE):
+    d100[83] + PRE_bonus[-1] + luck//2[10] = 92
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    92 ≥ 65  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: RAVAGE
+==============================================================================
+  Strength: d100=89 vs 55% — FAIL
+    → Strength training: no progress this session (CON 15, 55% chance).
+  Dexterity: d100=55 vs 55% — SUCCESS
+    → Dexterity trained: 16 → 17 (55% chance)
+  Constitution: d100=73 vs 55% — FAIL
+    → Constitution training: no progress this session (CON 15, 55% chance).
+  INT observed learning: d100=85 vs 4% — no trigger
+
+==============================================================================
+  TRAINING: NRUUK
+==============================================================================
+  Dodge: d100=12 vs 18% — SUCCESS
+    → Dodge trained: Level 6 → Level 7 (Expert Skill, 18% chance)
+  Strength: Nruuk is as strong as they will ever be.
+  Dexterity: d100=78 vs 35% — FAIL
+    → Dexterity training: no progress this session (mid tier, 35% chance).
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : NRUUK  (85.7% HP remaining)
+  Loser  : RAVAGE  (survived, 0.0% HP)
+  Duration: 4 minute(s)
+==============================================================================

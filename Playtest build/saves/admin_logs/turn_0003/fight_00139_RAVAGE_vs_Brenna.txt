@@ -1,0 +1,841 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #139   Turn: 3
+  Debug team: Ilneval
+  Ilneval / DECEPTICONS   vs   Garrett Ironwill / The Iron Vanguard
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: RAVAGE
+  ────────────────────────────────────
+    Race: Tabaxi  |  Gender: Male
+    STR:15  DEX:14  CON:14  INT:15  PRE:9  SIZ:7
+    Max HP: 35   Luck: 20
+    Armor: Cuir Boulli   Helm: Steel Cap
+    Primary: Scimitar   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Slash / Act:8 / Aim:None / Def:Chest
+
+  ────────────────────────────────────
+  WARRIOR B: BRENNA
+  ────────────────────────────────────
+    Race: Human  |  Gender: Female
+    STR:15  DEX:10  CON:10  INT:9  PRE:19  SIZ:12
+    Max HP: 46   Luck: 17
+    Armor: Chain   Helm: None
+    Primary: Short Sword   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Counterstrike / Act:5 / Aim:Chest / Def:Chest
+    Skills: dodge:2  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — RAVAGE: 5   |   BRENNA: 3
+  HP    — RAVAGE: 35/35 (100%)   |   BRENNA: 46/46 (100%)
+  END   — RAVAGE: 100.0   |   BRENNA: 100.0
+  STRAT — RAVAGE: [Slash / Act:8]   |   BRENNA: [Counterstrike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNA                  : d100[64]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 71
+    RAVAGE                  : d100[22]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 53
+    ▶ BRENNA wins → ATTACKS
+  Attack: BRENNA → RAVAGE   Weapon: Short Sword   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRENNA):
+    d100[9]  dex_bonus[-2]  luck[+17]  style_mod[-4]
+    Subtotal: 20
+    + style advantage: +6
+    Final ATK: 26
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[93]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]
+    Subtotal: 120
+    Final DEF: 120
+  Margin: 26 − 120 = -94   ▶  PARRY (margin -94)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[97]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 128
+    BRENNA                  : d100[94]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 101
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[57]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 81
+    + style advantage: -6
+    Final ATK: 75
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[84]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 115
+    Final DEF: 115
+  Margin: 75 − 115 = -40   ▶  PARRY (margin -40)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNA                  : d100[90]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 97
+    RAVAGE                  : d100[48]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 79
+    ▶ BRENNA wins → ATTACKS
+  Attack: BRENNA → RAVAGE   Weapon: Short Sword   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRENNA):
+    d100[5]  dex_bonus[-2]  luck[+17]  style_mod[-4]
+    Subtotal: 16
+    + style advantage: +6
+    Final ATK: 22
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[44]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]
+    Subtotal: 71
+    Final DEF: 71
+  Margin: 22 − 71 = -49   ▶  PARRY (margin -49)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[79]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 110
+    BRENNA                  : d100[48]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 55
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[52]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 76
+    + style advantage: -6
+    Final ATK: 70
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[44]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 75
+    Final DEF: 75
+  Margin: 70 − 75 = -5   ▶  PARRY (margin -5)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNA                  : d100[83]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 90
+    RAVAGE                  : d100[17]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 48
+    ▶ BRENNA wins → ATTACKS
+  Attack: BRENNA → RAVAGE   Weapon: Short Sword   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRENNA):
+    d100[77]  dex_bonus[-2]  luck[+17]  style_mod[-4]
+    Subtotal: 88
+    + style advantage: +6
+    Final ATK: 94
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[66]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]
+    Subtotal: 93
+    Final DEF: 93
+  Margin: 94 − 93 = 1   ▶  GRAZE (margin 1, 1 HP)
+  HP Pool (RAVAGE):
+    Before : 35/35 (100.0%)
+    graze   : −1
+    After  : 34/35 (97.1%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: RAVAGE has uncontested action
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[97]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 121
+    + style advantage: -6
+    Final ATK: 115
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[39]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 70
+    Final DEF: 70
+  Margin: 115 − 70 = 45   ▶  HIT (margin 45)
+  Damage (RAVAGE → BRENNA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 8.75
+      STR bonus                    +3.00
+      style modifier               +4.00
+      activity contrib             -0.90
+      luck ×0.15                   +3.00
+    Ceiling: 17
+    Fraction: max(0.10, min(1.0, 45/55.0)) = 0.818
+    Raw: max(1, int(17 × 0.818)) = 13
+    Favorite weapon +1 → raw = 14
+    Armor: Chain  base DEF: 6
+    Net = max(1, 14 − 6) = 8
+  ▶ FINAL DAMAGE: 8
+  HP Pool (BRENNA):
+    Before : 46/46 (100.0%)
+    hit     : −8
+    After  : 38/46 (82.6%)
+  Knockdown Check (BRENNA):
+    base = int(8/46 × 80) = 13   cat bonus [Sword/Knife]: +0   final: 13%
+    Roll: 34  →  no knockdown
+  Perm Injury Check (BRENNA):
+    threshold = 15% of 46 = 6   damage 8 ≥ threshold
+    chance = max(5, min(80, int(8/46×100) − 5)) = 10%
+    Roll: 6  →  primary_leg (1 level(s))
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: RAVAGE has uncontested action
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[33]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 57
+    + style advantage: -6
+    Final ATK: 51
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[34]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 65
+    Final DEF: 65
+  Margin: 51 − 65 = -14   ▶  PARRY (margin -14)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: RAVAGE has uncontested action
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[82]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 106
+    + style advantage: -6
+    Final ATK: 100
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[42]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 73
+    Final DEF: 73
+  Margin: 100 − 73 = 27   ▶  HIT (margin 27)
+  Damage (RAVAGE → BRENNA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 8.75
+      STR bonus                    +3.00
+      style modifier               +4.00
+      activity contrib             -0.90
+      luck ×0.15                   +3.00
+    Ceiling: 17
+    Fraction: max(0.10, min(1.0, 27/55.0)) = 0.491
+    Raw: max(1, int(17 × 0.491)) = 8
+    Favorite weapon +1 → raw = 9
+    Armor: Chain  base DEF: 6
+    Net = max(1, 9 − 6) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (BRENNA):
+    Before : 38/46 (82.6%)
+    hit     : −3
+    After  : 35/46 (76.1%)
+  Knockdown Check (BRENNA):
+    base = int(3/46 × 80) = 5   cat bonus [Sword/Knife]: +0   final: 5%
+    Roll: 42  →  no knockdown
+  Perm Injury Check (BRENNA):
+    threshold = 15% of 46 = 6   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    RAVAGE: 100.0 END − (5.90 burn × 5 actions) = 70.0
+    BRENNA: 100.0 END − (3.50 burn × 3 actions) = 89.5
+    HP POOL — RAVAGE: 34/35 (97%)
+    HP POOL — BRENNA: 35/46 (76%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — RAVAGE: 5   |   BRENNA: 3
+  HP    — RAVAGE: 34/35 (97%)   |   BRENNA: 35/46 (76%)
+  END   — RAVAGE: 70.0   |   BRENNA: 89.5
+  STRAT — RAVAGE: [Slash / Act:8]   |   BRENNA: [Counterstrike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNA                  : d100[100]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 107
+    RAVAGE                  : d100[27]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 58
+    ▶ BRENNA wins → ATTACKS
+  Attack: BRENNA → RAVAGE   Weapon: Short Sword   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRENNA):
+    d100[48]  dex_bonus[-2]  luck[+17]  style_mod[-4]
+    Subtotal: 59
+    + style advantage: +6
+    Final ATK: 65
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[25]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]
+    Subtotal: 52
+    Final DEF: 52
+  Margin: 65 − 52 = 13   ▶  HIT (margin 13)
+  Damage (BRENNA → RAVAGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +3.00
+      style modifier               +2.00
+      luck ×0.15                   +2.55
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 13/55.0)) = 0.236
+    Raw: max(1, int(15 × 0.236)) = 3
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 3 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (RAVAGE):
+    Before : 34/35 (97.1%)
+    hit     : −1
+    After  : 33/35 (94.3%)
+  Knockdown Check (RAVAGE):
+    base = int(1/35 × 80) = 2   cat bonus [Sword/Knife]: +0   final: 2%
+    Roll: 13  →  no knockdown
+  Perm Injury Check (RAVAGE):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNA                  : d100[71]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 78
+    RAVAGE                  : d100[45]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 76
+    ▶ BRENNA wins → ATTACKS
+  Attack: BRENNA → RAVAGE   Weapon: Short Sword   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRENNA):
+    d100[21]  dex_bonus[-2]  luck[+17]  style_mod[-4]
+    Subtotal: 32
+    + style advantage: +6
+    Final ATK: 38
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[72]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]
+    Subtotal: 99
+    Final DEF: 99
+  Margin: 38 − 99 = -61   ▶  PARRY (margin -61)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNA                  : d100[51]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 58
+    RAVAGE                  : d100[5]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 36
+    ▶ BRENNA wins → ATTACKS
+  Attack: BRENNA → RAVAGE   Weapon: Short Sword   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRENNA):
+    d100[29]  dex_bonus[-2]  luck[+17]  style_mod[-4]
+    Subtotal: 40
+    + style advantage: +6
+    Final ATK: 46
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[42]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]
+    Subtotal: 69
+    Final DEF: 69
+  Margin: 46 − 69 = -23   ▶  PARRY (margin -23)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: RAVAGE has uncontested action
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[6]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 30
+    + style advantage: -6
+    Final ATK: 24
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[33]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 64
+    Final DEF: 64
+  Margin: 24 − 64 = -40   ▶  PARRY (margin -40)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: RAVAGE has uncontested action
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[32]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 56
+    + style advantage: -6
+    Final ATK: 50
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[86]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 117
+    Final DEF: 117
+  Margin: 50 − 117 = -67   ▶  PARRY (margin -67)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: RAVAGE has uncontested action
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[100]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 124
+    + style advantage: -6
+    Final ATK: 118
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[23]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 54
+    Final DEF: 54
+  Margin: 118 − 54 = 64   ▶  HIT (margin 64)
+  Damage (RAVAGE → BRENNA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 8.75
+      STR bonus                    +3.00
+      style modifier               +4.00
+      activity contrib             -0.90
+      luck ×0.15                   +3.00
+    Ceiling: 17
+    Fraction: max(0.10, min(1.0, 64/55.0)) = 1.000
+    Raw: max(1, int(17 × 1.000)) = 17
+    Favorite weapon +1 → raw = 18
+    Armor: Chain  base DEF: 6
+    Net = max(1, 18 − 6) = 12
+  ▶ FINAL DAMAGE: 12
+  HP Pool (BRENNA):
+    Before : 35/46 (76.1%)
+    hit     : −12
+    After  : 23/46 (50.0%)
+  Knockdown Check (BRENNA):
+    base = int(12/46 × 80) = 20   cat bonus [Sword/Knife]: +0   final: 20%
+    Roll: 35  →  no knockdown
+  Perm Injury Check (BRENNA):
+    threshold = 15% of 46 = 6   damage 12 ≥ threshold
+    chance = max(5, min(80, int(12/46×100) − 5)) = 17%
+    Roll: 98  →  no injury
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: RAVAGE has uncontested action
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[52]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 76
+    + style advantage: -6
+    Final ATK: 70
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[70]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 101
+    Final DEF: 101
+  Margin: 70 − 101 = -31   ▶  PARRY (margin -31)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: RAVAGE has uncontested action
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[38]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 62
+    + style advantage: -6
+    Final ATK: 56
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[1]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 32
+    Final DEF: 32
+  Margin: 56 − 32 = 24   ▶  HIT (margin 24)
+  Damage (RAVAGE → BRENNA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 8.75
+      STR bonus                    +3.00
+      style modifier               +4.00
+      activity contrib             -0.90
+      luck ×0.15                   +3.00
+    Ceiling: 17
+    Fraction: max(0.10, min(1.0, 24/55.0)) = 0.436
+    Raw: max(1, int(17 × 0.436)) = 7
+    Favorite weapon +1 → raw = 8
+    Armor: Chain  base DEF: 6
+    Net = max(1, 8 − 6) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (BRENNA):
+    Before : 23/46 (50.0%)
+    hit     : −2
+    After  : 21/46 (45.7%)
+  Knockdown Check (BRENNA):
+    base = int(2/46 × 80) = 3   cat bonus [Sword/Knife]: +0   final: 3%
+    Roll: 33  →  no knockdown
+  Perm Injury Check (BRENNA):
+    threshold = 15% of 46 = 6   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    RAVAGE: 70.0 END − (5.90 burn × 5 actions) = 40.0
+    BRENNA: 89.5 END − (3.50 burn × 3 actions) = 79.0
+    HP POOL — RAVAGE: 23/35 (66%)
+    HP POOL — BRENNA: 21/46 (46%)
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — RAVAGE: 5   |   BRENNA: 3
+  HP    — RAVAGE: 23/35 (66%)   |   BRENNA: 21/46 (46%)
+  END   — RAVAGE: 40.0   |   BRENNA: 79.0
+  STRAT — RAVAGE: [Slash / Act:8]   |   BRENNA: [Counterstrike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[47]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 78
+    BRENNA                  : d100[42]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 49
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[53]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 77
+    + style advantage: -6
+    Final ATK: 71
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[94]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 125
+    Final DEF: 125
+  Margin: 71 − 125 = -54   ▶  PARRY (margin -54)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNA                  : d100[76]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 83
+    RAVAGE                  : d100[19]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 50
+    ▶ BRENNA wins → ATTACKS
+  Attack: BRENNA → RAVAGE   Weapon: Short Sword   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRENNA):
+    d100[48]  dex_bonus[-2]  luck[+17]  style_mod[-4]
+    Subtotal: 59
+    + style advantage: +6
+    Final ATK: 65
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[20]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]
+    Subtotal: 47
+    Final DEF: 47
+  Margin: 65 − 47 = 18   ▶  HIT (margin 18)
+  Damage (BRENNA → RAVAGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +3.00
+      style modifier               +2.00
+      luck ×0.15                   +2.55
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 18/55.0)) = 0.327
+    Raw: max(1, int(15 × 0.327)) = 4
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 4 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (RAVAGE):
+    Before : 23/35 (65.7%)
+    hit     : −1
+    After  : 22/35 (62.9%)
+  Knockdown Check (RAVAGE):
+    base = int(1/35 × 80) = 2   cat bonus [Sword/Knife]: +0   final: 2%
+    Roll: 80  →  no knockdown
+  Perm Injury Check (RAVAGE):
+    threshold = 15% of 35 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[47]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 78
+    BRENNA                  : d100[55]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 62
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[54]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 78
+    + style advantage: -6
+    Final ATK: 72
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[65]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 96
+    Final DEF: 96
+  Margin: 72 − 96 = -24   ▶  PARRY (margin -24)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[30]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 61
+    BRENNA                  : d100[42]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 49
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[62]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 86
+    + style advantage: -6
+    Final ATK: 80
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[31]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 62
+    Final DEF: 62
+  Margin: 80 − 62 = 18   ▶  HIT (margin 18)
+  Damage (RAVAGE → BRENNA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 8.75
+      STR bonus                    +3.00
+      style modifier               +4.00
+      activity contrib             -0.90
+      luck ×0.15                   +3.00
+    Ceiling: 17
+    Fraction: max(0.10, min(1.0, 18/55.0)) = 0.327
+    Raw: max(1, int(17 × 0.327)) = 5
+    Favorite weapon +1 → raw = 6
+    Armor: Chain  base DEF: 6
+    Net = max(1, 6 − 6) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (BRENNA):
+    Before : 21/46 (45.7%)
+    hit     : −1
+    After  : 20/46 (43.5%)
+  Knockdown Check (BRENNA):
+    base = int(1/46 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 4  →  no knockdown
+  Perm Injury Check (BRENNA):
+    threshold = 15% of 46 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[53]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 84
+    BRENNA                  : d100[1]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 8
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[29]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 53
+    + style advantage: -6
+    Final ATK: 47
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[92]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 123
+    Final DEF: 123
+  Margin: 47 − 123 = -76   ▶  PARRY (margin -76)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[76]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6] = 107
+    BRENNA                  : d100[62]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 69
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[72]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]
+    Subtotal: 96
+    + style advantage: -6
+    Final ATK: 90
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[12]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 43
+    Final DEF: 43
+  Margin: 90 − 43 = 47   ▶  HIT (margin 47)
+  Damage (RAVAGE → BRENNA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 8.75
+      STR bonus                    +3.00
+      style modifier               +4.00
+      activity contrib             -0.90
+      luck ×0.15                   +3.00
+    Ceiling: 17
+    Fraction: max(0.10, min(1.0, 47/55.0)) = 0.855
+    Raw: max(1, int(17 × 0.855)) = 14
+    Favorite weapon +1 → raw = 15
+    Armor: Chain  base DEF: 6
+    Net = max(1, 15 − 6) = 9
+  ▶ FINAL DAMAGE: 9
+  HP Pool (BRENNA):
+    Before : 20/46 (43.5%)
+    hit     : −9
+    After  : 11/46 (23.9%)
+  Knockdown Check (BRENNA):
+    base = int(9/46 × 80) = 15   cat bonus [Sword/Knife]: +0   final: 15%
+    Roll: 91  →  no knockdown
+  Perm Injury Check (BRENNA):
+    threshold = 15% of 46 = 6   damage 9 ≥ threshold
+    chance = max(5, min(80, int(9/46×100) − 5)) = 11%
+    Roll: 53  →  no injury
+  Concede Attempt (BRENNA):
+    d100[5] + PRE_bonus[+9] + luck//2[8] = 22
+    threshold = max(40, 68 − (PRE // 3)) = 62
+    22 < 62  →  mercy denied — fight continues
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: BRENNA has uncontested action
+  Attack: BRENNA → RAVAGE   Weapon: Short Sword   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRENNA):
+    d100[13]  dex_bonus[-2]  luck[+17]  style_mod[-4]
+    Subtotal: 24
+    + style advantage: +6
+    Final ATK: 30
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[42]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]
+    Subtotal: 69
+    Final DEF: 69
+  Margin: 30 − 69 = -39   ▶  PARRY (margin -39)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: BRENNA has uncontested action
+  Attack: BRENNA → RAVAGE   Weapon: Short Sword   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRENNA):
+    d100[43]  dex_bonus[-2]  luck[+17]  style_mod[-4]
+    Subtotal: 54
+    + style advantage: +6
+    Final ATK: 60
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[45]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]
+    Subtotal: 72
+    Final DEF: 72
+  Margin: 60 − 72 = -12   ▶  PARRY (margin -12)
+
+  ── END OF MINUTE ──
+    RAVAGE: 40.0 END − (5.90 burn × 5 actions) = 10.0
+    BRENNA: 79.0 END − (3.50 burn × 3 actions) = 68.5
+    HP POOL — RAVAGE: 17/35 (49%)
+    HP POOL — BRENNA: 11/46 (24%)
+
+==============================================================================
+  MINUTE 4
+==============================================================================
+  APM   — RAVAGE: 3   |   BRENNA: 3
+  HP    — RAVAGE: 17/35 (49%)   |   BRENNA: 11/46 (24%)
+  END   — RAVAGE: 10.0   |   BRENNA: 68.5
+  STRAT — RAVAGE: [Slash / Act:8]   |   BRENNA: [Counterstrike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[43]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6]  end_pen[-9] = 65
+    BRENNA                  : d100[25]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 32
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[11]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]  end_pen[-10]
+    Subtotal: 25
+    + style advantage: -6
+    Final ATK: 19
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[56]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 87
+    Final DEF: 87
+  Margin: 19 − 87 = -68   ▶  PARRY (margin -68)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[29]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6]  end_pen[-9] = 51
+    BRENNA                  : d100[41]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 48
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[3]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]  end_pen[-10]
+    Subtotal: 17
+    + style advantage: -6
+    Final ATK: 11
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[74]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 105
+    Final DEF: 105
+  Margin: 11 − 105 = -94   ▶  PARRY (margin -94)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    RAVAGE                  : d100[59]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6]  end_pen[-9] = 81
+    BRENNA                  : d100[29]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 36
+    ▶ RAVAGE wins → ATTACKS
+  Attack: RAVAGE → BRENNA   Weapon: Scimitar   Style: Slash   Aim: None
+  Attack Roll (RAVAGE):
+    d100[28]  dex_bonus[+3]  luck[+20]  style_mod[-4]  fav_bonus[+5]  end_pen[-10]
+    Subtotal: 42
+    + style advantage: -6
+    Final ATK: 36
+  Defense Roll (BRENNA, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[33]  luck[+17]  str_bonus[+2]  style_parry[+6]  dex_trained_x2[+6]
+    Subtotal: 64
+    Final DEF: 64
+  Margin: 36 − 64 = -28   ▶  PARRY (margin -28)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: BRENNA has uncontested action
+  Attack: BRENNA → RAVAGE   Weapon: Short Sword   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRENNA):
+    d100[2]  dex_bonus[-2]  luck[+17]  style_mod[-4]
+    Subtotal: 13
+    + style advantage: +6
+    Final ATK: 19
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[7]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]  end_pen[-8]
+    Subtotal: 26
+    Final DEF: 26
+  Margin: 19 − 26 = -7   ▶  PARRY (margin -7)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: BRENNA has uncontested action
+  Attack: BRENNA → RAVAGE   Weapon: Short Sword   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRENNA):
+    d100[28]  dex_bonus[-2]  luck[+17]  style_mod[-4]
+    Subtotal: 39
+    + style advantage: +6
+    Final ATK: 45
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[19]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]  end_pen[-8]
+    Subtotal: 38
+    Final DEF: 38
+  Margin: 45 − 38 = 7   ▶  GRAZE (margin 7, 1 HP)
+  HP Pool (RAVAGE):
+    Before : 17/35 (48.6%)
+    graze   : −1
+    After  : 16/35 (45.7%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: BRENNA has uncontested action
+  Attack: BRENNA → RAVAGE   Weapon: Short Sword   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRENNA):
+    d100[43]  dex_bonus[-2]  luck[+17]  style_mod[-4]
+    Subtotal: 54
+    + style advantage: +6
+    Final ATK: 60
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[58]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]  end_pen[-8]
+    Subtotal: 77
+    Final DEF: 77
+  Margin: 60 − 77 = -17   ▶  PARRY (margin -17)
+
+  ── END OF MINUTE ──
+    RAVAGE: 10.0 END − (5.90 burn × 3 actions) = 0.0
+    BRENNA: 68.5 END − (3.50 burn × 3 actions) = 58.0
+    HP POOL — RAVAGE: 16/35 (46%)
+    HP POOL — BRENNA: 11/46 (24%)
+
+==============================================================================
+  MINUTE 5
+==============================================================================
+  APM   — RAVAGE: 3   |   BRENNA: 3
+  HP    — RAVAGE: 16/35 (46%)   |   BRENNA: 11/46 (24%)
+  END   — RAVAGE: 0.0   |   BRENNA: 58.0
+  STRAT — RAVAGE: [Slash / Act:8]   |   BRENNA: [Counterstrike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRENNA                  : d100[84]  dex_bonus[-4]  luck[+17]  style_mod[-6] = 91
+    RAVAGE                  : d100[32]  dex_bonus[+6]  luck[+20]  race_init[+5]  style_mod[-6]  activity_mod[+6]  end_pen[-12] = 51
+    ▶ BRENNA wins → ATTACKS
+  Attack: BRENNA → RAVAGE   Weapon: Short Sword   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRENNA):
+    d100[93]  dex_bonus[-2]  luck[+17]  style_mod[-4]
+    Subtotal: 104
+    + style advantage: +6
+    Final ATK: 110
+  Defense Roll (RAVAGE, PARRY — parry_bonus(-2) ≥ dodge_bonus(-3)):
+    d100[45]  luck[+20]  str_bonus[+2]  style_parry[-6]  activity_mod[-6]  dex_trained_x2[+2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 60
+    Final DEF: 60
+  Margin: 110 − 60 = 50   ▶  HIT (margin 50)
+  Damage (BRENNA → RAVAGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +3.00
+      style modifier               +2.00
+      luck ×0.15                   +2.55
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 50/55.0)) = 0.909
+    Raw: max(1, int(15 × 0.909)) = 13
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 13 − 5) = 8
+  ▶ FINAL DAMAGE: 8
+  HP Pool (RAVAGE):
+    Before : 16/35 (45.7%)
+    hit     : −8
+    After  : 8/35 (22.9%)
+  Knockdown Check (RAVAGE):
+    base = int(8/35 × 80) = 18   cat bonus [Sword/Knife]: +0   final: 18%
+    Roll: 34  →  no knockdown
+  Perm Injury Check (RAVAGE):
+    threshold = 15% of 35 = 5   damage 8 ≥ threshold
+    chance = max(5, min(80, int(8/35×100) − 5)) = 17%
+    Roll: 51  →  no injury
+  Concede Attempt (RAVAGE):
+    d100[87] + PRE_bonus[-1] + luck//2[10] = 96
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    96 ≥ 65  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: RAVAGE
+==============================================================================
+  Strength: d100=20 vs 45% — SUCCESS
+    → Strength trained: 15 → 16 (45% chance)
+  Dexterity: d100=45 vs 45% — SUCCESS
+    → Dexterity trained: 14 → 15 (45% chance)
+  Constitution: d100=69 vs 45% — FAIL
+    → Constitution training: no progress this session (CON 14, 45% chance).
+  INT observed learning: d100=39 vs 4% — no trigger
+
+==============================================================================
+  TRAINING: BRENNA
+==============================================================================
+  Dodge: d100=35 vs 52% — SUCCESS
+    → Dodge trained: Level 2 → Level 3 (Skilled, 52% chance)
+  Strength: d100=54 vs 52% — FAIL
+    → Strength training: no progress this session (CON 10, 52% chance).
+  Dexterity: d100=42 vs 52% — SUCCESS
+    → Dexterity trained: 10 → 11 (52% chance)
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : BRENNA  (23.9% HP remaining)
+  Loser  : RAVAGE  (survived, 22.9% HP)
+  Duration: 5 minute(s)
+==============================================================================

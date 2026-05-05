@@ -1,0 +1,1008 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #184   Turn: 4
+  Debug team: Ilneval
+  Ilneval / DECEPTICONS   vs   Maester Ironstone / Stonecraft Academy
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: DIRGE
+  ────────────────────────────────────
+    Race: Dwarf  |  Gender: Male
+    STR:15  DEX:16  CON:15  INT:11  PRE:9  SIZ:10
+    Max HP: 62   Luck: 6
+    Armor: Brigandine   Helm: Helm
+    Primary: Halberd   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Wall of Steel / Act:8 / Aim:Chest / Def:None
+      [2] Always  →  Bash / Act:7 / Aim:Head / Def:Chest
+
+  ────────────────────────────────────
+  WARRIOR B: DEEPVARA
+  ────────────────────────────────────
+    Race: Dwarf  |  Gender: Female
+    STR:6  DEX:14  CON:13  INT:23  PRE:6  SIZ:14
+    Max HP: 62   Luck: 2
+    Armor: Cuir Boulli   Helm: None
+    Primary: Morningstar   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Feint / Act:4 / Aim:Chest / Def:Chest
+    Skills: dodge:3  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — DIRGE: 4   |   DEEPVARA: 5
+  HP    — DIRGE: 62/62 (100%)   |   DEEPVARA: 62/62 (100%)
+  END   — DIRGE: 100.0   |   DEEPVARA: 100.0
+  STRAT — DIRGE: [Bash / Act:7]   |   DEEPVARA: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[21]  dex_bonus[+8]  luck[+6]  style_mod[-2]  activity_mod[+4] = 37
+    DEEPVARA                : d100[22]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 28
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DEEPVARA   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[12]  dex_bonus[+4]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 26
+    Final ATK: 26
+  Defense Roll (DEEPVARA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[75]  luck[+2]  str_bonus[-2]  activity_mod[+2]  dex_trained_x2[+2]  race_parry_x3[+18]
+    Subtotal: 97
+    Final DEF: 97
+  Margin: 26 − 97 = -71   ▶  PARRY (margin -71)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[82]  dex_bonus[+8]  luck[+6]  style_mod[-2]  activity_mod[+4] = 98
+    DEEPVARA                : d100[64]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 70
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DEEPVARA   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[50]  dex_bonus[+4]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 64
+    Final ATK: 64
+  Defense Roll (DEEPVARA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[45]  luck[+2]  str_bonus[-2]  activity_mod[+2]  dex_trained_x2[+2]  race_parry_x3[+18]
+    Subtotal: 67
+    Final DEF: 67
+  Margin: 64 − 67 = -3   ▶  PARRY (margin -3)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[95]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 101
+    DIRGE                   : d100[54]  dex_bonus[+8]  luck[+6]  style_mod[-2]  activity_mod[+4] = 70
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[42]  dex_bonus[+3]  luck[+2]
+    Subtotal: 47
+    Final ATK: 47
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[80]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 124
+    Final DEF: 124
+  Margin: 47 − 124 = -77   ▶  PARRY (margin -77)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[94]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 100
+    DIRGE                   : d100[58]  dex_bonus[+8]  luck[+6]  style_mod[-2]  activity_mod[+4] = 74
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[47]  dex_bonus[+3]  luck[+2]
+    Subtotal: 52
+    Final ATK: 52
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[87]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 131
+    Final DEF: 131
+  Margin: 52 − 131 = -79   ▶  PARRY (margin -79)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[71]  dex_bonus[+8]  luck[+6]  style_mod[-2]  activity_mod[+4] = 87
+    DEEPVARA                : d100[27]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 33
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DEEPVARA   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[8]  dex_bonus[+4]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 22
+    Final ATK: 22
+  Defense Roll (DEEPVARA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[71]  luck[+2]  str_bonus[-2]  activity_mod[+2]  dex_trained_x2[+2]  race_parry_x3[+18]
+    Subtotal: 93
+    Final DEF: 93
+  Margin: 22 − 93 = -71   ▶  PARRY (margin -71)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[91]  dex_bonus[+8]  luck[+6]  style_mod[-2]  activity_mod[+4] = 107
+    DEEPVARA                : d100[79]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 85
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DEEPVARA   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[14]  dex_bonus[+4]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 28
+    Final ATK: 28
+  Defense Roll (DEEPVARA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[38]  luck[+2]  str_bonus[-2]  activity_mod[+2]  dex_trained_x2[+2]  race_parry_x3[+18]
+    Subtotal: 60
+    Final DEF: 60
+  Margin: 28 − 60 = -32   ▶  PARRY (margin -32)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: DEEPVARA has uncontested action
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[84]  dex_bonus[+3]  luck[+2]
+    Subtotal: 89
+    Final ATK: 89
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[54]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 89 − 98 = -9   ▶  PARRY (margin -9)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: DEEPVARA has uncontested action
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[75]  dex_bonus[+3]  luck[+2]
+    Subtotal: 80
+    Final ATK: 80
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[16]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 60
+    Final DEF: 60
+  Margin: 80 − 60 = 20   ▶  HIT (margin 20)
+  Damage (DEEPVARA → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      race damage net              +3.00
+      activity contrib             +0.30
+      luck ×0.15                   +0.30
+      strength underweight pen     ×0.00 (100% penalty)
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 20/55.0)) = 0.364
+    Raw: max(1, int(3 × 0.364)) = 1
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 1 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 62/62 (100.0%)
+    hit     : −1
+    After  : 61/62 (98.4%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 11  →  ▶ KNOCKDOWN
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: DEEPVARA has uncontested action
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[38]  dex_bonus[+3]  luck[+2]
+    Subtotal: 43
+    Final ATK: 43
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[32]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 51
+    Final DEF: 51
+  Margin: 43 − 51 = -8   ▶  PARRY (margin -8)
+
+  ── END OF MINUTE ──
+    DIRGE: 100.0 END − (7.60 burn × 4 actions) = 68.6
+    DEEPVARA: 100.0 END − (1.70 burn × 5 actions) = 91.5
+    HP POOL — DIRGE: 61/62 (98%)
+    HP POOL — DEEPVARA: 62/62 (100%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — DIRGE: 4   |   DEEPVARA: 5
+  HP    — DIRGE: 61/62 (98%)   |   DEEPVARA: 62/62 (100%)
+  END   — DIRGE: 68.6   |   DEEPVARA: 91.5
+  STRAT — DIRGE: [Bash / Act:7]   |   DEEPVARA: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[77]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 83
+    DIRGE                   : d100[37]  dex_bonus[+8]  luck[+6]  style_mod[-2]  activity_mod[+4] = 53
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[1]  dex_bonus[+3]  luck[+2]
+    Subtotal: 6
+    Final ATK: 6
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[30]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 74
+    Final DEF: 74
+  Margin: 6 − 74 = -68   ▶  PARRY (margin -68)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[57]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 63
+    DIRGE                   : d100[16]  dex_bonus[+8]  luck[+6]  style_mod[-2]  activity_mod[+4] = 32
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[92]  dex_bonus[+3]  luck[+2]
+    Subtotal: 97
+    Final ATK: 97
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[15]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 59
+    Final DEF: 59
+  Margin: 97 − 59 = 38   ▶  HIT (margin 38)
+  Damage (DEEPVARA → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      race damage net              +3.00
+      activity contrib             +0.30
+      luck ×0.15                   +0.30
+      strength underweight pen     ×0.00 (100% penalty)
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 38/55.0)) = 0.691
+    Raw: max(1, int(3 × 0.691)) = 2
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 2 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 61/62 (98.4%)
+    hit     : −1
+    After  : 60/62 (96.8%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 8  →  ▶ KNOCKDOWN
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[44]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 50
+    DIRGE                   : d100[64]  on_ground_halved[(÷2)] = 32
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[88]  dex_bonus[+3]  luck[+2]
+    Subtotal: 93
+    Final ATK: 93
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[20]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 39
+    Final DEF: 39
+  Margin: 93 − 39 = 54   ▶  HIT (margin 54)
+  Damage (DEEPVARA → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      race damage net              +3.00
+      activity contrib             +0.30
+      luck ×0.15                   +0.30
+      strength underweight pen     ×0.00 (100% penalty)
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 54/55.0)) = 0.982
+    Raw: max(1, int(3 × 0.982)) = 2
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 2 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 60/62 (96.8%)
+    hit     : −1
+    After  : 59/62 (95.2%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[86]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 92
+    DIRGE                   : d100[94]  on_ground_halved[(÷2)] = 47
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[1]  dex_bonus[+3]  luck[+2]
+    Subtotal: 6
+    Final ATK: 6
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[32]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 51
+    Final DEF: 51
+  Margin: 6 − 51 = -45   ▶  PARRY (margin -45)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[69]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 75
+    DIRGE                   : d100[34]  on_ground_halved[(÷2)] = 17
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[68]  dex_bonus[+3]  luck[+2]
+    Subtotal: 73
+    Final ATK: 73
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[99]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 118
+    Final DEF: 118
+  Margin: 73 − 118 = -45   ▶  PARRY (margin -45)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DEEPVARA   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[63]  dex_bonus[+4]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 77
+    Final ATK: 77
+  Defense Roll (DEEPVARA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[29]  luck[+2]  str_bonus[-2]  activity_mod[+2]  dex_trained_x2[+2]  race_parry_x3[+18]
+    Subtotal: 51
+    Final DEF: 51
+  Margin: 77 − 51 = 26   ▶  HIT (margin 26)
+  Damage (DIRGE → DEEPVARA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 18.75
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      strength underweight pen     ×0.75 (25% penalty)
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 26/55.0)) = 0.473
+    Raw: max(1, int(23 × 0.473)) = 10
+    Favorite weapon +1 → raw = 11
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 11 − 3) = 8
+  ▶ FINAL DAMAGE: 8
+  HP Pool (DEEPVARA):
+    Before : 62/62 (100.0%)
+    hit     : −8
+    After  : 54/62 (87.1%)
+  Knockdown Check (DEEPVARA):
+    base = int(8/62 × 80) = 10   cat bonus [Polearm/Spear]: +5   final: 11%
+    Roll: 25  →  no knockdown
+  Perm Injury Check (DEEPVARA):
+    threshold = 15% of 62 = 9   damage 8 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DEEPVARA   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[25]  dex_bonus[+4]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 39
+    Final ATK: 39
+  Defense Roll (DEEPVARA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[7]  luck[+2]  str_bonus[-2]  activity_mod[+2]  dex_trained_x2[+2]  race_parry_x3[+18]
+    Subtotal: 29
+    Final DEF: 29
+  Margin: 39 − 29 = 10   ▶  HIT (margin 10)
+  Damage (DIRGE → DEEPVARA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 18.75
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      strength underweight pen     ×0.75 (25% penalty)
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 10/55.0)) = 0.182
+    Raw: max(1, int(23 × 0.182)) = 4
+    Favorite weapon +1 → raw = 5
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 5 − 3) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (DEEPVARA):
+    Before : 54/62 (87.1%)
+    hit     : −2
+    After  : 52/62 (83.9%)
+  Knockdown Check (DEEPVARA):
+    base = int(2/62 × 80) = 2   cat bonus [Polearm/Spear]: +5   final: 3%
+    Roll: 87  →  no knockdown
+  Perm Injury Check (DEEPVARA):
+    threshold = 15% of 62 = 9   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DEEPVARA   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[10]  dex_bonus[+4]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 24
+    Final ATK: 24
+  Defense Roll (DEEPVARA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[38]  luck[+2]  str_bonus[-2]  activity_mod[+2]  dex_trained_x2[+2]  race_parry_x3[+18]
+    Subtotal: 60
+    Final DEF: 60
+  Margin: 24 − 60 = -36   ▶  PARRY (margin -36)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DEEPVARA   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[33]  dex_bonus[+4]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 47
+    Final ATK: 47
+  Defense Roll (DEEPVARA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[97]  luck[+2]  str_bonus[-2]  activity_mod[+2]  dex_trained_x2[+2]  race_parry_x3[+18]
+    Subtotal: 119
+    Final DEF: 119
+  Margin: 47 − 119 = -72   ▶  PARRY (margin -72)
+
+  ── END OF MINUTE ──
+    DIRGE: 68.6 END − (7.60 burn × 4 actions) = 37.2
+    DEEPVARA: 91.5 END − (1.70 burn × 5 actions) = 83.0
+    HP POOL — DIRGE: 59/62 (95%)
+    HP POOL — DEEPVARA: 52/62 (84%)
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — DIRGE: 2   |   DEEPVARA: 5
+  HP    — DIRGE: 59/62 (95%)   |   DEEPVARA: 52/62 (84%)
+  END   — DIRGE: 37.2   |   DEEPVARA: 83.0
+  STRAT — DIRGE: [Bash / Act:7]   |   DEEPVARA: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[86]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 92
+    DIRGE                   : d100[36]  on_ground_halved[(÷2)] = 18
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[49]  dex_bonus[+3]  luck[+2]
+    Subtotal: 54
+    Final ATK: 54
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[11]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 30
+    Final DEF: 30
+  Margin: 54 − 30 = 24   ▶  HIT (margin 24)
+  Damage (DEEPVARA → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      race damage net              +3.00
+      activity contrib             +0.30
+      luck ×0.15                   +0.30
+      strength underweight pen     ×0.00 (100% penalty)
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 24/55.0)) = 0.436
+    Raw: max(1, int(3 × 0.436)) = 1
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 1 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 59/62 (95.2%)
+    hit     : −1
+    After  : 58/62 (93.5%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[31]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 37
+    DIRGE                   : d100[46]  on_ground_halved[(÷2)] = 23
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[26]  dex_bonus[+3]  luck[+2]
+    Subtotal: 31
+    Final ATK: 31
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[19]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 38
+    Final DEF: 38
+  Margin: 31 − 38 = -7   ▶  PARRY (margin -7)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[55]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 61
+    DIRGE                   : d100[66]  on_ground_halved[(÷2)] = 33
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[90]  dex_bonus[+3]  luck[+2]
+    Subtotal: 95
+    Final ATK: 95
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[64]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 83
+    Final DEF: 83
+  Margin: 95 − 83 = 12   ▶  HIT (margin 12)
+  Damage (DEEPVARA → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      race damage net              +3.00
+      activity contrib             +0.30
+      luck ×0.15                   +0.30
+      strength underweight pen     ×0.00 (100% penalty)
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 12/55.0)) = 0.218
+    Raw: max(1, int(3 × 0.218)) = 1
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 1 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 58/62 (93.5%)
+    hit     : −1
+    After  : 57/62 (91.9%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[41]  on_ground_halved[(÷2)] = 20
+    DEEPVARA                : d100[6]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 12
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DEEPVARA   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[34]  dex_bonus[+4]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 48
+    Final ATK: 48
+  Defense Roll (DEEPVARA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[67]  luck[+2]  str_bonus[-2]  activity_mod[+2]  dex_trained_x2[+2]  race_parry_x3[+18]
+    Subtotal: 89
+    Final DEF: 89
+  Margin: 48 − 89 = -41   ▶  PARRY (margin -41)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[100]  on_ground_halved[(÷2)] = 50
+    DEEPVARA                : d100[11]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 17
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DEEPVARA   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[38]  dex_bonus[+4]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 52
+    Final ATK: 52
+  Defense Roll (DEEPVARA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[47]  luck[+2]  str_bonus[-2]  activity_mod[+2]  dex_trained_x2[+2]  race_parry_x3[+18]
+    Subtotal: 69
+    Final DEF: 69
+  Margin: 52 − 69 = -17   ▶  PARRY (margin -17)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: DEEPVARA has uncontested action
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[3]  dex_bonus[+3]  luck[+2]
+    Subtotal: 8
+    Final ATK: 8
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[10]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 29
+    Final DEF: 29
+  Margin: 8 − 29 = -21   ▶  PARRY (margin -21)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: DEEPVARA has uncontested action
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[20]  dex_bonus[+3]  luck[+2]
+    Subtotal: 25
+    Final ATK: 25
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[25]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 44
+    Final DEF: 44
+  Margin: 25 − 44 = -19   ▶  PARRY (margin -19)
+
+  ── END OF MINUTE ──
+    DIRGE: 37.2 END − (7.60 burn × 2 actions) = 21.0
+    DEEPVARA: 83.0 END − (1.70 burn × 5 actions) = 74.5
+    HP POOL — DIRGE: 57/62 (92%)
+    HP POOL — DEEPVARA: 52/62 (84%)
+
+==============================================================================
+  MINUTE 4
+==============================================================================
+  APM   — DIRGE: 2   |   DEEPVARA: 5
+  HP    — DIRGE: 57/62 (92%)   |   DEEPVARA: 52/62 (84%)
+  END   — DIRGE: 21.0   |   DEEPVARA: 74.5
+  STRAT — DIRGE: [Bash / Act:7]   |   DEEPVARA: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[95]  on_ground_halved[(÷2)] = 47
+    DEEPVARA                : d100[16]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 22
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DEEPVARA   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[80]  dex_bonus[+4]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-4]
+    Subtotal: 90
+    Final ATK: 90
+  Defense Roll (DEEPVARA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[76]  luck[+2]  str_bonus[-2]  activity_mod[+2]  dex_trained_x2[+2]  race_parry_x3[+18]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 90 − 98 = -8   ▶  PARRY (margin -8)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[20]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 26
+    DIRGE                   : d100[31]  on_ground_halved[(÷2)] = 15
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[46]  dex_bonus[+3]  luck[+2]
+    Subtotal: 51
+    Final ATK: 51
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[99]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]  end_pen[-3]
+    Subtotal: 115
+    Final DEF: 115
+  Margin: 51 − 115 = -64   ▶  PARRY (margin -64)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[59]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 65
+    DIRGE                   : d100[86]  on_ground_halved[(÷2)] = 43
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[98]  dex_bonus[+3]  luck[+2]
+    Subtotal: 103
+    Final ATK: 103
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[24]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]  end_pen[-3]
+    Subtotal: 40
+    Final DEF: 40
+  Margin: 103 − 40 = 63   ▶  HIT (margin 63)
+  Damage (DEEPVARA → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      race damage net              +3.00
+      activity contrib             +0.30
+      luck ×0.15                   +0.30
+      strength underweight pen     ×0.00 (100% penalty)
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 63/55.0)) = 1.000
+    Raw: max(1, int(3 × 1.000)) = 3
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 3 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 57/62 (91.9%)
+    hit     : −1
+    After  : 56/62 (90.3%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[74]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 80
+    DIRGE                   : d100[41]  on_ground_halved[(÷2)] = 20
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[12]  dex_bonus[+3]  luck[+2]
+    Subtotal: 17
+    Final ATK: 17
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[93]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]  end_pen[-3]
+    Subtotal: 109
+    Final DEF: 109
+  Margin: 17 − 109 = -92   ▶  PARRY (margin -92)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[83]  on_ground_halved[(÷2)] = 41
+    DEEPVARA                : d100[33]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 39
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DEEPVARA   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[87]  dex_bonus[+4]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-4]
+    Subtotal: 97
+    Final ATK: 97
+  Defense Roll (DEEPVARA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[49]  luck[+2]  str_bonus[-2]  activity_mod[+2]  dex_trained_x2[+2]  race_parry_x3[+18]
+    Subtotal: 71
+    Final DEF: 71
+  Margin: 97 − 71 = 26   ▶  HIT (margin 26)
+  Damage (DIRGE → DEEPVARA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 18.75
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      strength underweight pen     ×0.75 (25% penalty)
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 26/55.0)) = 0.473
+    Raw: max(1, int(23 × 0.473)) = 10
+    Favorite weapon +1 → raw = 11
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 11 − 3) = 8
+  ▶ FINAL DAMAGE: 8
+  HP Pool (DEEPVARA):
+    Before : 52/62 (83.9%)
+    hit     : −8
+    After  : 44/62 (71.0%)
+  Knockdown Check (DEEPVARA):
+    base = int(8/62 × 80) = 10   cat bonus [Polearm/Spear]: +5   final: 11%
+    Roll: 63  →  no knockdown
+  Perm Injury Check (DEEPVARA):
+    threshold = 15% of 62 = 9   damage 8 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: DEEPVARA has uncontested action
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[33]  dex_bonus[+3]  luck[+2]
+    Subtotal: 38
+    Final ATK: 38
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[57]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]  end_pen[-3]
+    Subtotal: 73
+    Final DEF: 73
+  Margin: 38 − 73 = -35   ▶  PARRY (margin -35)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: DEEPVARA has uncontested action
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[68]  dex_bonus[+3]  luck[+2]
+    Subtotal: 73
+    Final ATK: 73
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[98]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]  end_pen[-3]
+    Subtotal: 114
+    Final DEF: 114
+  Margin: 73 − 114 = -41   ▶  PARRY (margin -41)
+
+  ── END OF MINUTE ──
+    DIRGE: 21.0 END − (7.60 burn × 2 actions) = 4.8
+    DEEPVARA: 74.5 END − (1.70 burn × 5 actions) = 66.0
+    HP POOL — DIRGE: 56/62 (90%)
+    HP POOL — DEEPVARA: 44/62 (71%)
+
+==============================================================================
+  MINUTE 5
+==============================================================================
+  APM   — DIRGE: 3   |   DEEPVARA: 5
+  HP    — DIRGE: 56/62 (90%)   |   DEEPVARA: 44/62 (71%)
+  END   — DIRGE: 4.8   |   DEEPVARA: 66.0
+  STRAT — DIRGE: [Bash / Act:7]   |   DEEPVARA: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[69]  dex_bonus[+8]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-10] = 75
+    DEEPVARA                : d100[59]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 65
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DEEPVARA   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[74]  dex_bonus[+4]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-12]
+    Subtotal: 76
+    Final ATK: 76
+  Defense Roll (DEEPVARA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[22]  luck[+2]  str_bonus[-2]  activity_mod[+2]  dex_trained_x2[+2]  race_parry_x3[+18]
+    Subtotal: 44
+    Final DEF: 44
+  Margin: 76 − 44 = 32   ▶  HIT (margin 32)
+  Damage (DIRGE → DEEPVARA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 18.75
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      strength underweight pen     ×0.75 (25% penalty)
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 32/55.0)) = 0.582
+    Raw: max(1, int(23 × 0.582)) = 13
+    Favorite weapon +1 → raw = 14
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 14 − 3) = 11
+  ▶ FINAL DAMAGE: 11
+  HP Pool (DEEPVARA):
+    Before : 44/62 (71.0%)
+    hit     : −11
+    After  : 33/62 (53.2%)
+  Knockdown Check (DEEPVARA):
+    base = int(11/62 × 80) = 14   cat bonus [Polearm/Spear]: +5   final: 15%
+    Roll: 97  →  no knockdown
+  Perm Injury Check (DEEPVARA):
+    threshold = 15% of 62 = 9   damage 11 ≥ threshold
+    chance = max(5, min(80, int(11/62×100) − 5)) = 12%
+    Roll: 30  →  no injury
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[52]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 58
+    DIRGE                   : d100[36]  dex_bonus[+8]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-10] = 42
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[12]  dex_bonus[+3]  luck[+2]
+    Subtotal: 17
+    Final ATK: 17
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[74]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-10]
+    Subtotal: 108
+    Final DEF: 108
+  Margin: 17 − 108 = -91   ▶  PARRY (margin -91)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[69]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 75
+    DIRGE                   : d100[48]  dex_bonus[+8]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-10] = 54
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[74]  dex_bonus[+3]  luck[+2]
+    Subtotal: 79
+    Final ATK: 79
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[48]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-10]
+    Subtotal: 82
+    Final DEF: 82
+  Margin: 79 − 82 = -3   ▶  PARRY (margin -3)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[98]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 104
+    DIRGE                   : d100[59]  dex_bonus[+8]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-10] = 65
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[60]  dex_bonus[+3]  luck[+2]
+    Subtotal: 65
+    Final ATK: 65
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[93]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-10]
+    Subtotal: 127
+    Final DEF: 127
+  Margin: 65 − 127 = -62   ▶  PARRY (margin -62)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[60]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 66
+    DIRGE                   : d100[8]  dex_bonus[+8]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-10] = 14
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[21]  dex_bonus[+3]  luck[+2]
+    Subtotal: 26
+    Final ATK: 26
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[24]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-10]
+    Subtotal: 58
+    Final DEF: 58
+  Margin: 26 − 58 = -32   ▶  PARRY (margin -32)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[84]  dex_bonus[+8]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-10] = 90
+    DEEPVARA                : d100[75]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 81
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → DEEPVARA   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[49]  dex_bonus[+4]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-12]
+    Subtotal: 51
+    Final ATK: 51
+  Defense Roll (DEEPVARA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[99]  luck[+2]  str_bonus[-2]  activity_mod[+2]  dex_trained_x2[+2]  race_parry_x3[+18]
+    Subtotal: 121
+    Final DEF: 121
+  Margin: 51 − 121 = -70   ▶  PARRY (margin -70)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DEEPVARA                : d100[62]  dex_bonus[+6]  luck[+2]  activity_mod[-2] = 68
+    DIRGE                   : d100[14]  dex_bonus[+8]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-10] = 20
+    ▶ DEEPVARA wins → ATTACKS
+  Attack: DEEPVARA → DIRGE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (DEEPVARA):
+    d100[56]  dex_bonus[+3]  luck[+2]
+    Subtotal: 61
+    Final ATK: 61
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[89]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+10]  race_parry_x3[+18]  def_point_bonus[+15]  end_pen[-10]
+    Subtotal: 123
+    Final DEF: 123
+  Margin: 61 − 123 = -62   ▶  PARRY (margin -62)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → DEEPVARA   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[98]  dex_bonus[+4]  luck[+6]  style_mod[-1]  fav_bonus[+5]  end_pen[-12]
+    Subtotal: 100
+    Final ATK: 100
+  Defense Roll (DEEPVARA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[21]  luck[+2]  str_bonus[-2]  activity_mod[+2]  dex_trained_x2[+2]  race_parry_x3[+18]
+    Subtotal: 43
+    Final DEF: 43
+  Margin: 100 − 43 = 57   ▶  HIT (margin 57)
+  Damage (DIRGE → DEEPVARA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 18.75
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      strength underweight pen     ×0.75 (25% penalty)
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 57/55.0)) = 1.000
+    Raw: max(1, int(23 × 1.000)) = 23
+    Favorite weapon +1 → raw = 24
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 24 − 3) = 21
+  ▶ FINAL DAMAGE: 21
+  HP Pool (DEEPVARA):
+    Before : 33/62 (53.2%)
+    hit     : −21
+    After  : 12/62 (19.4%)
+  Knockdown Check (DEEPVARA):
+    base = int(21/62 × 80) = 27   cat bonus [Polearm/Spear]: +5   final: 28%
+    Roll: 67  →  no knockdown
+  Perm Injury Check (DEEPVARA):
+    threshold = 15% of 62 = 9   damage 21 ≥ threshold
+    chance = max(5, min(80, int(21/62×100) − 5)) = 28%
+    Roll: 74  →  no injury
+  Concede Attempt (DEEPVARA):
+    d100[74] + PRE_bonus[-4] + luck//2[1] = 71
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    71 ≥ 66  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: DIRGE
+==============================================================================
+  Dexterity: d100=90 vs 35% — FAIL
+    → Dexterity training: no progress this session (mid tier, 35% chance).
+  Dexterity: d100=95 vs 35% — FAIL
+    → Dexterity training: no progress this session (mid tier, 35% chance).
+  Dexterity: d100=58 vs 35% — FAIL
+    → Dexterity training: no progress this session (mid tier, 35% chance).
+
+==============================================================================
+  TRAINING: DEEPVARA
+==============================================================================
+  Intelligence: d100=88 vs 29% — FAIL
+    → Intelligence training: no progress this session (mid tier, 29% chance).
+  Dexterity: d100=49 vs 45% — FAIL
+    → Dexterity training: no progress this session (CON 13, 45% chance).
+  Dodge: d100=68 vs 72% — SUCCESS
+    → Dodge trained: Level 3 → Level 4 (Good Skill, 72% chance)
+  [OBSERVED] Parry: trigger d100=24/36% passed  |  skill d100=28 vs 72% — SUCCESS
+    → Parry trained: Level 0 → Level 1 (Novice, 72% chance)
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : DIRGE  (90.3% HP remaining)
+  Loser  : DEEPVARA  (survived, 19.4% HP)
+  Duration: 5 minute(s)
+==============================================================================

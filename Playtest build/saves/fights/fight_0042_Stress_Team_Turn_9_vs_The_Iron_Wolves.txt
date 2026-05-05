@@ -1,0 +1,59 @@
+Fight #42
+Stress Team Turn 9  vs  The Iron Wolves
+============================================================================
+
+============================================================================
+STRIKER_2 (0-2-0)   vs   DROK THE GRIM (3-0-2)
+STRESS TEAM TURN 9 (STRESS TESTER)   vs   THE IRON WOLVES (SILENT CLAW)
+Half-Orc Female   vs   Dwarf Female
+============================================================================
+
+STRIKER_2 is 5'11"
+STRIKER_2 weighs 214 lbs.
+STRIKER_2 Known To The Crowd.
+STRIKER_2 enters the arena unarmored and wears no helm.
+STRIKER_2 fights using a WAR HAMMER.
+
+DROK THE GRIM is 3'9"
+DROK THE GRIM weighs 145 lbs.
+DROK THE GRIM Known To The Crowd.
+DROK THE GRIM enters the arena in LEATHER and will wear a STEEL CAP.
+DROK THE GRIM fights using a BOAR SPEAR with an off-hand BUCKLER.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+A hush falls over the arena
+STRIKER_2 bashes at DROK THE GRIM's midsection with her war hammer
+DROK THE GRIM barely gets the parry off!
+DROK THE GRIM anxiously awaits STRIKER_2's next move
+DROK THE GRIM retaliates against STRIKER_2's torso with her boar spear
+The boar spear finds its mark!
+DROK THE GRIM's boar spear punches into STRIKER_2's torso!
+   A solid blow has been struck!
+DROK THE GRIM thrusts at STRIKER_2's body with her boar spear
+DROK THE GRIM finds the opening!
+DROK THE GRIM's boar spear punches into STRIKER_2's body!
+   That one will leave a mark!
+STRIKER_2 stumbles and falls heavily!
+DROK THE GRIM waits patiently for STRIKER_2 to make a mistake
+DROK THE GRIM thrusts at STRIKER_2's midsection with her boar spear
+DROK THE GRIM gets past STRIKER_2's guard!
+DROK THE GRIM's boar spear punches into STRIKER_2's armor!
+   That one will leave a mark!
+DROK THE GRIM lunges at STRIKER_2's body with her boar spear
+The boar spear finds its mark!
+DROK THE GRIM's boar spear buries itself in STRIKER_2's torso!
+   The blow has real authority behind it!
+STRIKER_2 raises a hand in surrender!
+STRIKER_2 is spared by the grace of the Blood Master!
+
+DROK THE GRIM roars in triumph over the defeated STRIKER_2!
+
+DROK THE GRIM has trained in nothing

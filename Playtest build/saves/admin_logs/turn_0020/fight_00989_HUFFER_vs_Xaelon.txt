@@ -1,0 +1,2763 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #989   Turn: 20
+  Debug team: Electron
+  Electron / AUTOBOTS   vs   Madame Vexx / Vexx's Vicious
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: HUFFER
+  ────────────────────────────────────
+    Race: Gnome  |  Gender: Male
+    STR:15  DEX:15  CON:15  INT:18  PRE:6  SIZ:11
+    Max HP: 58   Luck: 9
+    Armor: Brigandine   Helm: Full Helm
+    Primary: Hammer   Secondary: Target Shield
+    Strategies:
+      [1] Always  →  Bash / Act:7 / Aim:Primary Arm / Def:Head
+
+  ────────────────────────────────────
+  WARRIOR B: XAELON
+  ────────────────────────────────────
+    Race: Half-Elf  |  Gender: Male
+    STR:14  DEX:15  CON:20  INT:14  PRE:11  SIZ:5
+    Max HP: 47   Luck: 23
+    Armor: Brigandine   Helm: None
+    Primary: Morningstar   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:7 / Aim:Head / Def:None
+    Skills: initiative:1  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — HUFFER: 5   |   XAELON: 6
+  HP    — HUFFER: 58/58 (100%)   |   XAELON: 47/47 (100%)
+  END   — HUFFER: 100.0   |   XAELON: 100.0
+  STRAT — HUFFER: [Bash / Act:7]   |   XAELON: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[56]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 94
+    HUFFER                  : d100[32]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4] = 47
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[49]  dex_bonus[+4]  luck[+23]
+    Subtotal: 76
+    + style advantage: -6
+    Final ATK: 70
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[42]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]
+    Subtotal: 81
+    Final DEF: 81
+  Margin: 70 − 81 = -11   ▶  PARRY (margin -11)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[88]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 126
+    HUFFER                  : d100[53]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4] = 68
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[58]  dex_bonus[+4]  luck[+23]
+    Subtotal: 85
+    + style advantage: -6
+    Final ATK: 79
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[80]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]
+    Subtotal: 119
+    Final DEF: 119
+  Margin: 79 − 119 = -40   ▶  PARRY (margin -40)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[98]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 136
+    HUFFER                  : d100[47]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4] = 62
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[42]  dex_bonus[+4]  luck[+23]
+    Subtotal: 69
+    + style advantage: -6
+    Final ATK: 63
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[63]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]
+    Subtotal: 102
+    Final DEF: 102
+  Margin: 63 − 102 = -39   ▶  PARRY (margin -39)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[70]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 108
+    HUFFER                  : d100[87]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4] = 102
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[98]  dex_bonus[+4]  luck[+23]
+    Subtotal: 125
+    + style advantage: -6
+    Final ATK: 119
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[71]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]
+    Subtotal: 110
+    Final DEF: 110
+  Margin: 119 − 110 = 9   ▶  GRAZE (margin 9, 1 HP)
+  HP Pool (HUFFER):
+    Before : 58/58 (100.0%)
+    graze   : −1
+    After  : 57/58 (98.3%)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[86]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4] = 101
+    XAELON                  : d100[16]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 54
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[82]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 97
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 96
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[25]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 46
+    Final DEF: 46
+  Margin: 96 − 46 = 50   ▶  HIT (margin 50)
+  Damage (HUFFER → XAELON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+      style compat penalty         ×0.70
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 50/55.0)) = 0.909
+    Raw: max(1, int(6 × 0.909)) = 5
+    Favorite weapon +1 → raw = 6
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 6 − 4) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (XAELON):
+    Before : 47/47 (100.0%)
+    hit     : −2
+    After  : 45/47 (95.7%)
+  Knockdown Check (XAELON):
+    base = int(2/47 × 80) = 3   cat bonus [Hammer/Mace]: +10   final: 13%
+    Roll: 73  →  no knockdown
+  Perm Injury Check (XAELON):
+    threshold = 15% of 47 = 7   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[94]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4] = 109
+    XAELON                  : d100[69]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 107
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[35]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 50
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 49
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[18]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 39
+    Final DEF: 39
+  Margin: 49 − 39 = 10   ▶  HIT (margin 10)
+  Damage (HUFFER → XAELON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+      style compat penalty         ×0.70
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 10/55.0)) = 0.182
+    Raw: max(1, int(6 × 0.182)) = 1
+    Favorite weapon +1 → raw = 2
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (XAELON):
+    Before : 45/47 (95.7%)
+    hit     : −1
+    After  : 44/47 (93.6%)
+  Knockdown Check (XAELON):
+    base = int(1/47 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 21  →  no knockdown
+  Perm Injury Check (XAELON):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[38]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 76
+    HUFFER                  : d100[55]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4] = 70
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[4]  dex_bonus[+4]  luck[+23]
+    Subtotal: 31
+    + style advantage: -6
+    Final ATK: 25
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[87]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]
+    Subtotal: 126
+    Final DEF: 126
+  Margin: 25 − 126 = -101   ▶  PARRY (margin -101)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[68]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 106
+    HUFFER                  : d100[10]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4] = 25
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[78]  dex_bonus[+4]  luck[+23]
+    Subtotal: 105
+    + style advantage: -6
+    Final ATK: 99
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[99]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]
+    Subtotal: 138
+    Final DEF: 138
+  Margin: 99 − 138 = -39   ▶  PARRY (margin -39)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[16]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 31
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 30
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[86]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 107
+    Final DEF: 107
+  Margin: 30 − 107 = -77   ▶  PARRY (margin -77)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[14]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 29
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 28
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[94]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 115
+    Final DEF: 115
+  Margin: 28 − 115 = -87   ▶  PARRY (margin -87)
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[36]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 51
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 50
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[37]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 58
+    Final DEF: 58
+  Margin: 50 − 58 = -8   ▶  PARRY (margin -8)
+
+  ── END OF MINUTE ──
+    HUFFER: 100.0 END − (7.60 burn × 5 actions) = 62.0
+    XAELON: 100.0 END − (2.60 burn × 6 actions) = 84.4
+    HP POOL — HUFFER: 57/58 (98%)
+    HP POOL — XAELON: 44/47 (94%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — HUFFER: 5   |   XAELON: 6
+  HP    — HUFFER: 57/58 (98%)   |   XAELON: 44/47 (94%)
+  END   — HUFFER: 62.0   |   XAELON: 84.4
+  STRAT — HUFFER: [Bash / Act:7]   |   XAELON: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[76]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 114
+    HUFFER                  : d100[21]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4] = 36
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[16]  dex_bonus[+4]  luck[+23]
+    Subtotal: 43
+    + style advantage: -6
+    Final ATK: 37
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[66]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]
+    Subtotal: 105
+    Final DEF: 105
+  Margin: 37 − 105 = -68   ▶  PARRY (margin -68)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[31]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 69
+    HUFFER                  : d100[20]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4] = 35
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[6]  dex_bonus[+4]  luck[+23]
+    Subtotal: 33
+    + style advantage: -6
+    Final ATK: 27
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[91]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]
+    Subtotal: 130
+    Final DEF: 130
+  Margin: 27 − 130 = -103   ▶  PARRY (margin -103)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[82]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 120
+    HUFFER                  : d100[7]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4] = 22
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[45]  dex_bonus[+4]  luck[+23]
+    Subtotal: 72
+    + style advantage: -6
+    Final ATK: 66
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[8]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]
+    Subtotal: 47
+    Final DEF: 47
+  Margin: 66 − 47 = 19   ▶  HIT (margin 19)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 19/55.0)) = 0.345
+    Raw: max(1, int(16 × 0.345)) = 5
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 5 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 57/58 (98.3%)
+    hit     : −1
+    After  : 56/58 (96.6%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 27  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[85]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 123
+    HUFFER                  : d100[64]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4] = 79
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[42]  dex_bonus[+4]  luck[+23]
+    Subtotal: 69
+    + style advantage: -6
+    Final ATK: 63
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[58]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]
+    Subtotal: 97
+    Final DEF: 97
+  Margin: 63 − 97 = -34   ▶  PARRY (margin -34)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[79]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 117
+    HUFFER                  : d100[94]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4] = 109
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[38]  dex_bonus[+4]  luck[+23]
+    Subtotal: 65
+    + style advantage: -6
+    Final ATK: 59
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[92]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]
+    Subtotal: 131
+    Final DEF: 131
+  Margin: 59 − 131 = -72   ▶  PARRY (margin -72)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[52]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 90
+    HUFFER                  : d100[1]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4] = 16
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[71]  dex_bonus[+4]  luck[+23]
+    Subtotal: 98
+    + style advantage: -6
+    Final ATK: 92
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[80]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]
+    Subtotal: 119
+    Final DEF: 119
+  Margin: 92 − 119 = -27   ▶  PARRY (margin -27)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[96]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 111
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 110
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[54]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 75
+    Final DEF: 75
+  Margin: 110 − 75 = 35   ▶  HIT (margin 35)
+  Damage (HUFFER → XAELON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+      style compat penalty         ×0.70
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 35/55.0)) = 0.636
+    Raw: max(1, int(6 × 0.636)) = 3
+    Favorite weapon +1 → raw = 4
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 4 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (XAELON):
+    Before : 44/47 (93.6%)
+    hit     : −1
+    After  : 43/47 (91.5%)
+  Knockdown Check (XAELON):
+    base = int(1/47 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 57  →  no knockdown
+  Perm Injury Check (XAELON):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[42]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 57
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 56
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[85]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 106
+    Final DEF: 106
+  Margin: 56 − 106 = -50   ▶  PARRY (margin -50)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[70]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 85
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 84
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[90]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 111
+    Final DEF: 111
+  Margin: 84 − 111 = -27   ▶  PARRY (margin -27)
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[15]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 30
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 29
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[53]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 74
+    Final DEF: 74
+  Margin: 29 − 74 = -45   ▶  PARRY (margin -45)
+
+  ── END OF MINUTE ──
+    HUFFER: 62.0 END − (7.60 burn × 5 actions) = 24.0
+    XAELON: 84.4 END − (2.60 burn × 6 actions) = 68.8
+    HP POOL — HUFFER: 56/58 (97%)
+    HP POOL — XAELON: 43/47 (91%)
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — HUFFER: 4   |   XAELON: 6
+  HP    — HUFFER: 56/58 (97%)   |   XAELON: 43/47 (91%)
+  END   — HUFFER: 24.0   |   XAELON: 68.8
+  STRAT — HUFFER: [Bash / Act:7]   |   XAELON: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[30]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 68
+    HUFFER                  : d100[7]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-4] = 18
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[73]  dex_bonus[+4]  luck[+23]
+    Subtotal: 100
+    + style advantage: -6
+    Final ATK: 94
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[43]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-2]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 94 − 80 = 14   ▶  HIT (margin 14)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 14/55.0)) = 0.255
+    Raw: max(1, int(16 × 0.255)) = 4
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 4 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 56/58 (96.6%)
+    hit     : −1
+    After  : 55/58 (94.8%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 50  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[96]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 134
+    HUFFER                  : d100[24]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-4] = 35
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[24]  dex_bonus[+4]  luck[+23]
+    Subtotal: 51
+    + style advantage: -6
+    Final ATK: 45
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[46]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-2]
+    Subtotal: 83
+    Final DEF: 83
+  Margin: 45 − 83 = -38   ▶  PARRY (margin -38)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[26]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 64
+    HUFFER                  : d100[18]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-4] = 29
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[6]  dex_bonus[+4]  luck[+23]
+    Subtotal: 33
+    + style advantage: -6
+    Final ATK: 27
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[61]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-2]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 27 − 98 = -71   ▶  PARRY (margin -71)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[76]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 114
+    HUFFER                  : d100[96]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-4] = 107
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[57]  dex_bonus[+4]  luck[+23]
+    Subtotal: 84
+    + style advantage: -6
+    Final ATK: 78
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[76]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-2]
+    Subtotal: 113
+    Final DEF: 113
+  Margin: 78 − 113 = -35   ▶  PARRY (margin -35)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[19]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 57
+    HUFFER                  : d100[10]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-4] = 21
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[45]  dex_bonus[+4]  luck[+23]
+    Subtotal: 72
+    + style advantage: -6
+    Final ATK: 66
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[64]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-2]
+    Subtotal: 101
+    Final DEF: 101
+  Margin: 66 − 101 = -35   ▶  PARRY (margin -35)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[38]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 76
+    HUFFER                  : d100[38]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-4] = 49
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[82]  dex_bonus[+4]  luck[+23]
+    Subtotal: 109
+    + style advantage: -6
+    Final ATK: 103
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[51]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-2]
+    Subtotal: 88
+    Final DEF: 88
+  Margin: 103 − 88 = 15   ▶  HIT (margin 15)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 15/55.0)) = 0.273
+    Raw: max(1, int(16 × 0.273)) = 4
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 4 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 55/58 (94.8%)
+    hit     : −1
+    After  : 54/58 (93.1%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 57  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[80]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-3]
+    Subtotal: 92
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 91
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[41]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 62
+    Final DEF: 62
+  Margin: 91 − 62 = 29   ▶  HIT (margin 29)
+  Damage (HUFFER → XAELON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+      style compat penalty         ×0.70
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 29/55.0)) = 0.527
+    Raw: max(1, int(6 × 0.527)) = 3
+    Favorite weapon +1 → raw = 4
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 4 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (XAELON):
+    Before : 43/47 (91.5%)
+    hit     : −1
+    After  : 42/47 (89.4%)
+  Knockdown Check (XAELON):
+    base = int(1/47 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 93  →  no knockdown
+  Perm Injury Check (XAELON):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[80]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-3]
+    Subtotal: 92
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 91
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[81]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 102
+    Final DEF: 102
+  Margin: 91 − 102 = -11   ▶  PARRY (margin -11)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[56]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-3]
+    Subtotal: 68
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 67
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[29]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 50
+    Final DEF: 50
+  Margin: 67 − 50 = 17   ▶  HIT (margin 17)
+  Damage (HUFFER → XAELON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+      style compat penalty         ×0.70
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 17/55.0)) = 0.309
+    Raw: max(1, int(6 × 0.309)) = 1
+    Favorite weapon +1 → raw = 2
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (XAELON):
+    Before : 42/47 (89.4%)
+    hit     : −1
+    After  : 41/47 (87.2%)
+  Knockdown Check (XAELON):
+    base = int(1/47 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 13  →  no knockdown
+  Perm Injury Check (XAELON):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[75]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-3]
+    Subtotal: 87
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 86
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[72]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 93
+    Final DEF: 93
+  Margin: 86 − 93 = -7   ▶  PARRY (margin -7)
+
+  ── END OF MINUTE ──
+    HUFFER: 24.0 END − (7.60 burn × 4 actions) = 0.0
+    XAELON: 68.8 END − (2.60 burn × 6 actions) = 53.2
+    HP POOL — HUFFER: 54/58 (93%)
+    HP POOL — XAELON: 41/47 (87%)
+
+==============================================================================
+  MINUTE 4
+==============================================================================
+  APM   — HUFFER: 3   |   XAELON: 6
+  HP    — HUFFER: 54/58 (93%)   |   XAELON: 41/47 (87%)
+  END   — HUFFER: 0.0   |   XAELON: 53.2
+  STRAT — HUFFER: [Bash / Act:7]   |   XAELON: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[19]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 57
+    HUFFER                  : d100[11]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 14
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[32]  dex_bonus[+4]  luck[+23]
+    Subtotal: 59
+    + style advantage: -6
+    Final ATK: 53
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[70]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 97
+    Final DEF: 97
+  Margin: 53 − 97 = -44   ▶  PARRY (margin -44)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[25]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 63
+    HUFFER                  : d100[12]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 15
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[57]  dex_bonus[+4]  luck[+23]
+    Subtotal: 84
+    + style advantage: -6
+    Final ATK: 78
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[75]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 102
+    Final DEF: 102
+  Margin: 78 − 102 = -24   ▶  PARRY (margin -24)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[95]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 133
+    HUFFER                  : d100[8]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 11
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[37]  dex_bonus[+4]  luck[+23]
+    Subtotal: 64
+    + style advantage: -6
+    Final ATK: 58
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[14]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 41
+    Final DEF: 41
+  Margin: 58 − 41 = 17   ▶  HIT (margin 17)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 17/55.0)) = 0.309
+    Raw: max(1, int(16 × 0.309)) = 4
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 4 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 54/58 (93.1%)
+    hit     : −1
+    After  : 53/58 (91.4%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 71  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[74]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 112
+    HUFFER                  : d100[58]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 61
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[95]  dex_bonus[+4]  luck[+23]
+    Subtotal: 122
+    + style advantage: -6
+    Final ATK: 116
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[78]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 105
+    Final DEF: 105
+  Margin: 116 − 105 = 11   ▶  HIT (margin 11)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 11/55.0)) = 0.200
+    Raw: max(1, int(16 × 0.200)) = 3
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 3 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 53/58 (91.4%)
+    hit     : −1
+    After  : 52/58 (89.7%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 77  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[63]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 101
+    HUFFER                  : d100[58]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 61
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[50]  dex_bonus[+4]  luck[+23]
+    Subtotal: 77
+    + style advantage: -6
+    Final ATK: 71
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[26]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 53
+    Final DEF: 53
+  Margin: 71 − 53 = 18   ▶  HIT (margin 18)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 18/55.0)) = 0.327
+    Raw: max(1, int(16 × 0.327)) = 5
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 5 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 52/58 (89.7%)
+    hit     : −1
+    After  : 51/58 (87.9%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 33  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[94]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 97
+    XAELON                  : d100[25]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 63
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[70]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 70
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 69
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[100]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 121
+    Final DEF: 121
+  Margin: 69 − 121 = -52   ▶  PARRY (margin -52)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[89]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 127
+    HUFFER                  : d100[1]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 4
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[76]  dex_bonus[+4]  luck[+23]
+    Subtotal: 103
+    + style advantage: -6
+    Final ATK: 97
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[50]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 77
+    Final DEF: 77
+  Margin: 97 − 77 = 20   ▶  HIT (margin 20)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 20/55.0)) = 0.364
+    Raw: max(1, int(16 × 0.364)) = 5
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 5 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 51/58 (87.9%)
+    hit     : −1
+    After  : 50/58 (86.2%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 94  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[39]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 39
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 38
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[69]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 90
+    Final DEF: 90
+  Margin: 38 − 90 = -52   ▶  PARRY (margin -52)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[76]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 76
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 75
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[81]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 102
+    Final DEF: 102
+  Margin: 75 − 102 = -27   ▶  PARRY (margin -27)
+
+  ── END OF MINUTE ──
+    HUFFER: 0.0 END − (7.60 burn × 3 actions) = 0.0
+    XAELON: 53.2 END − (2.60 burn × 6 actions) = 37.6
+    HP POOL — HUFFER: 50/58 (86%)
+    HP POOL — XAELON: 41/47 (87%)
+
+==============================================================================
+  MINUTE 5
+==============================================================================
+  APM   — HUFFER: 3   |   XAELON: 6
+  HP    — HUFFER: 50/58 (86%)   |   XAELON: 41/47 (87%)
+  END   — HUFFER: 0.0   |   XAELON: 37.6
+  STRAT — HUFFER: [Bash / Act:7]   |   XAELON: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[87]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 125
+    HUFFER                  : d100[46]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 49
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[9]  dex_bonus[+4]  luck[+23]
+    Subtotal: 36
+    + style advantage: -6
+    Final ATK: 30
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[6]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 33
+    Final DEF: 33
+  Margin: 30 − 33 = -3   ▶  PARRY (margin -3)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[77]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 115
+    HUFFER                  : d100[8]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 11
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[93]  dex_bonus[+4]  luck[+23]
+    Subtotal: 120
+    + style advantage: -6
+    Final ATK: 114
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[77]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 104
+    Final DEF: 104
+  Margin: 114 − 104 = 10   ▶  HIT (margin 10)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 10/55.0)) = 0.182
+    Raw: max(1, int(16 × 0.182)) = 2
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 2 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 50/58 (86.2%)
+    hit     : −1
+    After  : 49/58 (84.5%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 77  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[21]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 59
+    HUFFER                  : d100[16]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 19
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[48]  dex_bonus[+4]  luck[+23]
+    Subtotal: 75
+    + style advantage: -6
+    Final ATK: 69
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[63]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 90
+    Final DEF: 90
+  Margin: 69 − 90 = -21   ▶  PARRY (margin -21)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[68]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 106
+    HUFFER                  : d100[89]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 92
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[58]  dex_bonus[+4]  luck[+23]
+    Subtotal: 85
+    + style advantage: -6
+    Final ATK: 79
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[40]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 67
+    Final DEF: 67
+  Margin: 79 − 67 = 12   ▶  HIT (margin 12)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 12/55.0)) = 0.218
+    Raw: max(1, int(16 × 0.218)) = 3
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 3 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 49/58 (84.5%)
+    hit     : −1
+    After  : 48/58 (82.8%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 78  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[91]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 129
+    HUFFER                  : d100[77]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 80
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[73]  dex_bonus[+4]  luck[+23]
+    Subtotal: 100
+    + style advantage: -6
+    Final ATK: 94
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[65]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 92
+    Final DEF: 92
+  Margin: 94 − 92 = 2   ▶  GRAZE (margin 2, 1 HP)
+  HP Pool (HUFFER):
+    Before : 48/58 (82.8%)
+    graze   : −1
+    After  : 47/58 (81.0%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[97]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4] = 135
+    HUFFER                  : d100[83]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 86
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[66]  dex_bonus[+4]  luck[+23]
+    Subtotal: 93
+    + style advantage: -6
+    Final ATK: 87
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[96]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 123
+    Final DEF: 123
+  Margin: 87 − 123 = -36   ▶  PARRY (margin -36)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[76]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 76
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 75
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[75]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 96
+    Final DEF: 96
+  Margin: 75 − 96 = -21   ▶  PARRY (margin -21)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[80]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 80
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 79
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[93]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 114
+    Final DEF: 114
+  Margin: 79 − 114 = -35   ▶  PARRY (margin -35)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[51]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 51
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 50
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[55]  luck[+23]  str_bonus[+2]  activity_mod[-4]
+    Subtotal: 76
+    Final DEF: 76
+  Margin: 50 − 76 = -26   ▶  PARRY (margin -26)
+
+  ── END OF MINUTE ──
+    HUFFER: 0.0 END − (7.60 burn × 3 actions) = 0.0
+    XAELON: 37.6 END − (2.60 burn × 6 actions) = 22.0
+    HP POOL — HUFFER: 47/58 (81%)
+    HP POOL — XAELON: 41/47 (87%)
+
+==============================================================================
+  MINUTE 6
+==============================================================================
+  APM   — HUFFER: 3   |   XAELON: 6
+  HP    — HUFFER: 47/58 (81%)   |   XAELON: 41/47 (87%)
+  END   — HUFFER: 0.0   |   XAELON: 22.0
+  STRAT — HUFFER: [Bash / Act:7]   |   XAELON: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[48]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-5] = 81
+    HUFFER                  : d100[54]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 57
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[68]  dex_bonus[+4]  luck[+23]  end_pen[-3]
+    Subtotal: 92
+    + style advantage: -6
+    Final ATK: 86
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[86]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 113
+    Final DEF: 113
+  Margin: 86 − 113 = -27   ▶  PARRY (margin -27)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[94]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-5] = 127
+    HUFFER                  : d100[86]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 89
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[40]  dex_bonus[+4]  luck[+23]  end_pen[-3]
+    Subtotal: 64
+    + style advantage: -6
+    Final ATK: 58
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[83]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 110
+    Final DEF: 110
+  Margin: 58 − 110 = -52   ▶  PARRY (margin -52)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[57]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-5] = 90
+    HUFFER                  : d100[62]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 65
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[77]  dex_bonus[+4]  luck[+23]  end_pen[-3]
+    Subtotal: 101
+    + style advantage: -6
+    Final ATK: 95
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[31]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 58
+    Final DEF: 58
+  Margin: 95 − 58 = 37   ▶  HIT (margin 37)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 37/55.0)) = 0.673
+    Raw: max(1, int(16 × 0.673)) = 10
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 10 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 47/58 (81.0%)
+    hit     : −1
+    After  : 46/58 (79.3%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 81  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[62]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-5] = 95
+    HUFFER                  : d100[27]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 30
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[26]  dex_bonus[+4]  luck[+23]  end_pen[-3]
+    Subtotal: 50
+    + style advantage: -6
+    Final ATK: 44
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[93]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 120
+    Final DEF: 120
+  Margin: 44 − 120 = -76   ▶  PARRY (margin -76)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[48]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 51
+    XAELON                  : d100[3]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-5] = 36
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[87]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 87
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 86
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[80]  luck[+23]  str_bonus[+2]  activity_mod[-4]  end_pen[-3]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 86 − 98 = -12   ▶  PARRY (margin -12)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[76]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-5] = 109
+    HUFFER                  : d100[42]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 45
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[83]  dex_bonus[+4]  luck[+23]  end_pen[-3]
+    Subtotal: 107
+    + style advantage: -6
+    Final ATK: 101
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[53]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 101 − 80 = 21   ▶  HIT (margin 21)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 21/55.0)) = 0.382
+    Raw: max(1, int(16 × 0.382)) = 6
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 6 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 46/58 (79.3%)
+    hit     : −1
+    After  : 45/58 (77.6%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 53  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[72]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 72
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 71
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[28]  luck[+23]  str_bonus[+2]  activity_mod[-4]  end_pen[-3]
+    Subtotal: 46
+    Final DEF: 46
+  Margin: 71 − 46 = 25   ▶  HIT (margin 25)
+  Damage (HUFFER → XAELON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+      style compat penalty         ×0.70
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 25/55.0)) = 0.455
+    Raw: max(1, int(6 × 0.455)) = 2
+    Favorite weapon +1 → raw = 3
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 3 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (XAELON):
+    Before : 41/47 (87.2%)
+    hit     : −1
+    After  : 40/47 (85.1%)
+  Knockdown Check (XAELON):
+    base = int(1/47 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 11  →  ▶ KNOCKDOWN
+  Perm Injury Check (XAELON):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[11]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 11
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 10
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[5]  luck[+23]  str_bonus[+2]  activity_mod[-4]  ground_pen[-25]  end_pen[-3]
+    Subtotal: 1
+    Final DEF: 1
+  Margin: 10 − 1 = 9   ▶  GRAZE (margin 9, 1 HP)
+  HP Pool (XAELON):
+    Before : 40/47 (85.1%)
+    graze   : −1
+    After  : 39/47 (83.0%)
+
+  ── END OF MINUTE ──
+    HUFFER: 0.0 END − (7.60 burn × 3 actions) = 0.0
+    XAELON: 22.0 END − (2.60 burn × 6 actions) = 6.4
+    HP POOL — HUFFER: 45/58 (78%)
+    HP POOL — XAELON: 39/47 (83%)
+
+==============================================================================
+  MINUTE 7
+==============================================================================
+  APM   — HUFFER: 3   |   XAELON: 2
+  HP    — HUFFER: 45/58 (78%)   |   XAELON: 39/47 (83%)
+  END   — HUFFER: 0.0   |   XAELON: 6.4
+  STRAT — HUFFER: [Bash / Act:7]   |   XAELON: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[29]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 32
+    XAELON                  : d100[5]  on_ground_halved[(÷2)] = 2
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[38]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 38
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 37
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[65]  luck[+23]  str_bonus[+2]  activity_mod[-4]  ground_pen[-25]  end_pen[-9]
+    Subtotal: 52
+    Final DEF: 52
+  Margin: 37 − 52 = -15   ▶  PARRY (margin -15)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[27]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 30
+    XAELON                  : d100[54]  on_ground_halved[(÷2)] = 27
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[22]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 22
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 21
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[18]  luck[+23]  str_bonus[+2]  activity_mod[-4]  ground_pen[-25]  end_pen[-9]
+    Subtotal: 5
+    Final DEF: 5
+  Margin: 21 − 5 = 16   ▶  HIT (margin 16)
+  Damage (HUFFER → XAELON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+      style compat penalty         ×0.70
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 16/55.0)) = 0.291
+    Raw: max(1, int(6 × 0.291)) = 1
+    Favorite weapon +1 → raw = 2
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (XAELON):
+    Before : 39/47 (83.0%)
+    hit     : −1
+    After  : 38/47 (80.9%)
+  Knockdown Check (XAELON):
+    base = int(1/47 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (XAELON):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[69]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 72
+    XAELON                  : d100[97]  on_ground_halved[(÷2)] = 48
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[3]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 3
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 2
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[35]  luck[+23]  str_bonus[+2]  activity_mod[-4]  ground_pen[-25]  end_pen[-9]
+    Subtotal: 22
+    Final DEF: 22
+  Margin: 2 − 22 = -20   ▶  PARRY (margin -20)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: XAELON has uncontested action
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[81]  dex_bonus[+4]  luck[+23]  end_pen[-11]
+    Subtotal: 97
+    + style advantage: -6
+    Final ATK: 91
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[20]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 47
+    Final DEF: 47
+  Margin: 91 − 47 = 44   ▶  HIT (margin 44)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 44/55.0)) = 0.800
+    Raw: max(1, int(16 × 0.800)) = 12
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 12 − 9) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (HUFFER):
+    Before : 45/58 (77.6%)
+    hit     : −3
+    After  : 42/58 (72.4%)
+  Knockdown Check (HUFFER):
+    base = int(3/58 × 80) = 4   cat bonus [Hammer/Mace]: +10   final: 14%
+    Roll: 62  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: XAELON has uncontested action
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[58]  dex_bonus[+4]  luck[+23]  end_pen[-11]
+    Subtotal: 74
+    + style advantage: -6
+    Final ATK: 68
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[74]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 101
+    Final DEF: 101
+  Margin: 68 − 101 = -33   ▶  PARRY (margin -33)
+
+  ── END OF MINUTE ──
+    HUFFER: 0.0 END − (7.60 burn × 3 actions) = 0.0
+    XAELON: 6.4 END − (2.60 burn × 2 actions) = 1.2
+    HP POOL — HUFFER: 42/58 (72%)
+    HP POOL — XAELON: 38/47 (81%)
+
+==============================================================================
+  MINUTE 8
+==============================================================================
+  APM   — HUFFER: 3   |   XAELON: 2
+  HP    — HUFFER: 42/58 (72%)   |   XAELON: 38/47 (81%)
+  END   — HUFFER: 0.0   |   XAELON: 1.2
+  STRAT — HUFFER: [Bash / Act:7]   |   XAELON: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[64]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 67
+    XAELON                  : d100[98]  on_ground_halved[(÷2)] = 49
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[80]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 80
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 79
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[11]  luck[+23]  str_bonus[+2]  activity_mod[-4]  ground_pen[-25]  end_pen[-11]
+    Subtotal: 1
+    Final DEF: 1
+  Margin: 79 − 1 = 78   ▶  HIT (margin 78)
+  Damage (HUFFER → XAELON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+      style compat penalty         ×0.70
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 78/55.0)) = 1.000
+    Raw: max(1, int(6 × 1.000)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 7 − 4) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (XAELON):
+    Before : 38/47 (80.9%)
+    hit     : −3
+    After  : 35/47 (74.5%)
+  Knockdown Check (XAELON):
+    base = int(3/47 × 80) = 5   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (XAELON):
+    threshold = 15% of 47 = 7   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[100]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 103
+    XAELON                  : d100[67]  on_ground_halved[(÷2)] = 33
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[91]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 91
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 90
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[71]  luck[+23]  str_bonus[+2]  activity_mod[-4]  ground_pen[-25]  end_pen[-11]
+    Subtotal: 56
+    Final DEF: 56
+  Margin: 90 − 56 = 34   ▶  HIT (margin 34)
+  Damage (HUFFER → XAELON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+      style compat penalty         ×0.70
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 34/55.0)) = 0.618
+    Raw: max(1, int(6 × 0.618)) = 3
+    Favorite weapon +1 → raw = 4
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 4 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (XAELON):
+    Before : 35/47 (74.5%)
+    hit     : −1
+    After  : 34/47 (72.3%)
+  Knockdown Check (XAELON):
+    base = int(1/47 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (XAELON):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[23]  on_ground_halved[(÷2)] = 11
+    HUFFER                  : d100[5]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 8
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[16]  dex_bonus[+4]  luck[+23]  end_pen[-14]
+    Subtotal: 29
+    + style advantage: -6
+    Final ATK: 23
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[79]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 106
+    Final DEF: 106
+  Margin: 23 − 106 = -83   ▶  PARRY (margin -83)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[73]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 76
+    XAELON                  : d100[7]  on_ground_halved[(÷2)] = 3
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[61]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 61
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 60
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[47]  luck[+23]  str_bonus[+2]  activity_mod[-4]  ground_pen[-25]  end_pen[-11]
+    Subtotal: 32
+    Final DEF: 32
+  Margin: 60 − 32 = 28   ▶  HIT (margin 28)
+  Damage (HUFFER → XAELON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+      style compat penalty         ×0.70
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 28/55.0)) = 0.509
+    Raw: max(1, int(6 × 0.509)) = 3
+    Favorite weapon +1 → raw = 4
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 4 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (XAELON):
+    Before : 34/47 (72.3%)
+    hit     : −1
+    After  : 33/47 (70.2%)
+  Knockdown Check (XAELON):
+    base = int(1/47 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (XAELON):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: XAELON has uncontested action
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[35]  dex_bonus[+4]  luck[+23]  end_pen[-14]
+    Subtotal: 48
+    + style advantage: -6
+    Final ATK: 42
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[40]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 67
+    Final DEF: 67
+  Margin: 42 − 67 = -25   ▶  PARRY (margin -25)
+
+  ── END OF MINUTE ──
+    HUFFER: 0.0 END − (7.60 burn × 3 actions) = 0.0
+    XAELON: 1.2 END − (2.60 burn × 2 actions) = 0.0
+    HP POOL — HUFFER: 42/58 (72%)
+    HP POOL — XAELON: 33/47 (70%)
+
+==============================================================================
+  MINUTE 9
+==============================================================================
+  APM   — HUFFER: 3   |   XAELON: 5
+  HP    — HUFFER: 42/58 (72%)   |   XAELON: 33/47 (70%)
+  END   — HUFFER: 0.0   |   XAELON: 0.0
+  STRAT — HUFFER: [Bash / Act:7]   |   XAELON: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[49]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 52
+    XAELON                  : d100[7]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 33
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[28]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 28
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 27
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[10]  luck[+23]  str_bonus[+2]  activity_mod[-4]  end_pen[-12]
+    Subtotal: 19
+    Final DEF: 19
+  Margin: 27 − 19 = 8   ▶  GRAZE (margin 8, 1 HP)
+  HP Pool (XAELON):
+    Before : 33/47 (70.2%)
+    graze   : −1
+    After  : 32/47 (68.1%)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[100]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 103
+    XAELON                  : d100[7]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 33
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[93]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 93
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 92
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[10]  luck[+23]  str_bonus[+2]  activity_mod[-4]  end_pen[-12]
+    Subtotal: 19
+    Final DEF: 19
+  Margin: 92 − 19 = 73   ▶  HIT (margin 73)
+  Damage (HUFFER → XAELON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+      style compat penalty         ×0.70
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 73/55.0)) = 1.000
+    Raw: max(1, int(6 × 1.000)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 7 − 4) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (XAELON):
+    Before : 32/47 (68.1%)
+    hit     : −3
+    After  : 29/47 (61.7%)
+  Knockdown Check (XAELON):
+    base = int(3/47 × 80) = 5   cat bonus [Hammer/Mace]: +10   final: 15%
+    Roll: 28  →  no knockdown
+  Perm Injury Check (XAELON):
+    threshold = 15% of 47 = 7   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[97]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 123
+    HUFFER                  : d100[31]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 34
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[29]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 41
+    + style advantage: -6
+    Final ATK: 35
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[12]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 39
+    Final DEF: 39
+  Margin: 35 − 39 = -4   ▶  PARRY (margin -4)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HUFFER                  : d100[97]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 100
+    XAELON                  : d100[54]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 80
+    ▶ HUFFER wins → ATTACKS
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[8]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 8
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 7
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[98]  luck[+23]  str_bonus[+2]  activity_mod[-4]  end_pen[-12]
+    Subtotal: 107
+    Final DEF: 107
+  Margin: 7 − 107 = -100   ▶  PARRY (margin -100)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: XAELON has uncontested action
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[20]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 32
+    + style advantage: -6
+    Final ATK: 26
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[81]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 108
+    Final DEF: 108
+  Margin: 26 − 108 = -82   ▶  PARRY (margin -82)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: XAELON has uncontested action
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[16]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 28
+    + style advantage: -6
+    Final ATK: 22
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[78]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 105
+    Final DEF: 105
+  Margin: 22 − 105 = -83   ▶  PARRY (margin -83)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: XAELON has uncontested action
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[71]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 83
+    + style advantage: -6
+    Final ATK: 77
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[79]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 106
+    Final DEF: 106
+  Margin: 77 − 106 = -29   ▶  PARRY (margin -29)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: XAELON has uncontested action
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[21]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 33
+    + style advantage: -6
+    Final ATK: 27
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[30]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 57
+    Final DEF: 57
+  Margin: 27 − 57 = -30   ▶  PARRY (margin -30)
+
+  ── END OF MINUTE ──
+    HUFFER: 0.0 END − (7.60 burn × 3 actions) = 0.0
+    XAELON: 0.0 END − (2.60 burn × 5 actions) = 0.0
+    HP POOL — HUFFER: 42/58 (72%)
+    HP POOL — XAELON: 29/47 (62%)
+
+==============================================================================
+  MINUTE 10
+==============================================================================
+  APM   — HUFFER: 3   |   XAELON: 5
+  HP    — HUFFER: 42/58 (72%)   |   XAELON: 29/47 (62%)
+  END   — HUFFER: 0.0   |   XAELON: 0.0
+  STRAT — HUFFER: [Bash / Act:7]   |   XAELON: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[71]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 97
+    HUFFER                  : d100[46]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 49
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[75]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 87
+    + style advantage: -6
+    Final ATK: 81
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[55]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 82
+    Final DEF: 82
+  Margin: 81 − 82 = -1   ▶  PARRY (margin -1)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[25]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 51
+    HUFFER                  : d100[37]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 40
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[89]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 101
+    + style advantage: -6
+    Final ATK: 95
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[55]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 82
+    Final DEF: 82
+  Margin: 95 − 82 = 13   ▶  HIT (margin 13)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 13/55.0)) = 0.236
+    Raw: max(1, int(16 × 0.236)) = 3
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 3 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 42/58 (72.4%)
+    hit     : −1
+    After  : 41/58 (70.7%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 12  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[99]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 125
+    HUFFER                  : d100[67]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 70
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[79]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 91
+    + style advantage: -6
+    Final ATK: 85
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[41]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 68
+    Final DEF: 68
+  Margin: 85 − 68 = 17   ▶  HIT (margin 17)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 17/55.0)) = 0.309
+    Raw: max(1, int(16 × 0.309)) = 4
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 4 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 41/58 (70.7%)
+    hit     : −1
+    After  : 40/58 (69.0%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 9  →  ▶ KNOCKDOWN
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[50]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 76
+    HUFFER                  : d100[98]  on_ground_halved[(÷2)] = 49
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[96]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 108
+    + style advantage: -6
+    Final ATK: 102
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[29]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  ground_pen[-25]  end_pen[-12]
+    Subtotal: 31
+    Final DEF: 31
+  Margin: 102 − 31 = 71   ▶  HIT (margin 71)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 71/55.0)) = 1.000
+    Raw: max(1, int(16 × 1.000)) = 16
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 16 − 9) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (HUFFER):
+    Before : 40/58 (69.0%)
+    hit     : −7
+    After  : 33/58 (56.9%)
+  Knockdown Check (HUFFER):
+    base = int(7/58 × 80) = 9   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 7 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[56]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 82
+    HUFFER                  : d100[91]  on_ground_halved[(÷2)] = 45
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[8]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 20
+    + style advantage: -6
+    Final ATK: 14
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[38]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  ground_pen[-25]  end_pen[-12]
+    Subtotal: 40
+    Final DEF: 40
+  Margin: 14 − 40 = -26   ▶  PARRY (margin -26)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[58]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 58
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 57
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[48]  luck[+23]  str_bonus[+2]  activity_mod[-4]  end_pen[-12]
+    Subtotal: 57
+    Final DEF: 57
+  Margin: 57 − 57 = 0   ▶  MISS
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[68]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 68
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 67
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[5]  luck[+23]  str_bonus[+2]  activity_mod[-4]  end_pen[-12]
+    Subtotal: 14
+    Final DEF: 14
+  Margin: 67 − 14 = 53   ▶  HIT (margin 53)
+  Damage (HUFFER → XAELON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+      style compat penalty         ×0.70
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 53/55.0)) = 0.964
+    Raw: max(1, int(6 × 0.964)) = 5
+    Favorite weapon +1 → raw = 6
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 6 − 4) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (XAELON):
+    Before : 29/47 (61.7%)
+    hit     : −2
+    After  : 27/47 (57.4%)
+  Knockdown Check (XAELON):
+    base = int(2/47 × 80) = 3   cat bonus [Hammer/Mace]: +10   final: 13%
+    Roll: 5  →  ▶ KNOCKDOWN
+  Perm Injury Check (XAELON):
+    threshold = 15% of 47 = 7   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    HUFFER: 0.0 END − (7.60 burn × 3 actions) = 0.0
+    XAELON: 0.0 END − (2.60 burn × 5 actions) = 0.0
+    HP POOL — HUFFER: 33/58 (57%)
+    HP POOL — XAELON: 27/47 (57%)
+
+==============================================================================
+  MINUTE 11
+==============================================================================
+  APM   — HUFFER: 2   |   XAELON: 5
+  HP    — HUFFER: 23/58 (40%)   |   XAELON: 27/47 (57%)
+  END   — HUFFER: 0.0   |   XAELON: 0.0
+  STRAT — HUFFER: [Bash / Act:7]   |   XAELON: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[27]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 53
+    HUFFER                  : d100[63]  on_ground_halved[(÷2)] = 31
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[4]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 16
+    + style advantage: -6
+    Final ATK: 10
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[61]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  ground_pen[-25]  end_pen[-12]
+    Subtotal: 63
+    Final DEF: 63
+  Margin: 10 − 63 = -53   ▶  PARRY (margin -53)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[45]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 71
+    HUFFER                  : d100[91]  on_ground_halved[(÷2)] = 45
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[52]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 64
+    + style advantage: -6
+    Final ATK: 58
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[34]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  ground_pen[-25]  end_pen[-12]
+    Subtotal: 36
+    Final DEF: 36
+  Margin: 58 − 36 = 22   ▶  HIT (margin 22)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 22/55.0)) = 0.400
+    Raw: max(1, int(16 × 0.400)) = 6
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 6 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 23/58 (39.7%)
+    hit     : −1
+    After  : 22/58 (37.9%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[5]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 31
+    HUFFER                  : d100[11]  on_ground_halved[(÷2)] = 5
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[10]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 22
+    + style advantage: -6
+    Final ATK: 16
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[94]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  ground_pen[-25]  end_pen[-12]
+    Subtotal: 96
+    Final DEF: 96
+  Margin: 16 − 96 = -80   ▶  PARRY (margin -80)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[97]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 123
+    HUFFER                  : d100[17]  on_ground_halved[(÷2)] = 8
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[3]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 15
+    + style advantage: -6
+    Final ATK: 9
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[90]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  ground_pen[-25]  end_pen[-12]
+    Subtotal: 92
+    Final DEF: 92
+  Margin: 9 − 92 = -83   ▶  PARRY (margin -83)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[92]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 118
+    HUFFER                  : d100[40]  on_ground_halved[(÷2)] = 20
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[24]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 36
+    + style advantage: -6
+    Final ATK: 30
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[4]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  ground_pen[-25]  end_pen[-12]
+    Subtotal: 6
+    Final DEF: 6
+  Margin: 30 − 6 = 24   ▶  HIT (margin 24)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 24/55.0)) = 0.436
+    Raw: max(1, int(16 × 0.436)) = 6
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 6 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 22/58 (37.9%)
+    hit     : −1
+    After  : 21/58 (36.2%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[57]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 57
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 56
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[36]  luck[+23]  str_bonus[+2]  activity_mod[-4]  end_pen[-12]
+    Subtotal: 45
+    Final DEF: 45
+  Margin: 56 − 45 = 11   ▶  HIT (margin 11)
+  Damage (HUFFER → XAELON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+      style compat penalty         ×0.70
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 11/55.0)) = 0.200
+    Raw: max(1, int(6 × 0.200)) = 1
+    Favorite weapon +1 → raw = 2
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (XAELON):
+    Before : 27/47 (57.4%)
+    hit     : −1
+    After  : 26/47 (55.3%)
+  Knockdown Check (XAELON):
+    base = int(1/47 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 18  →  no knockdown
+  Perm Injury Check (XAELON):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[36]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 36
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 35
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[20]  luck[+23]  str_bonus[+2]  activity_mod[-4]  end_pen[-12]
+    Subtotal: 29
+    Final DEF: 29
+  Margin: 35 − 29 = 6   ▶  GRAZE (margin 6, 1 HP)
+  HP Pool (XAELON):
+    Before : 26/47 (55.3%)
+    graze   : −1
+    After  : 25/47 (53.2%)
+
+  ── END OF MINUTE ──
+    HUFFER: 0.0 END − (7.60 burn × 2 actions) = 0.0
+    XAELON: 0.0 END − (2.60 burn × 5 actions) = 0.0
+    HP POOL — HUFFER: 21/58 (36%)
+    HP POOL — XAELON: 25/47 (53%)
+
+==============================================================================
+  MINUTE 12
+==============================================================================
+  APM   — HUFFER: 2   |   XAELON: 5
+  HP    — HUFFER: 21/58 (36%)   |   XAELON: 25/47 (53%)
+  END   — HUFFER: 0.0   |   XAELON: 0.0
+  STRAT — HUFFER: [Bash / Act:7]   |   XAELON: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[8]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 34
+    HUFFER                  : d100[4]  on_ground_halved[(÷2)] = 2
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[35]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 47
+    + style advantage: -6
+    Final ATK: 41
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[20]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  ground_pen[-25]  end_pen[-12]
+    Subtotal: 22
+    Final DEF: 22
+  Margin: 41 − 22 = 19   ▶  HIT (margin 19)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 19/55.0)) = 0.345
+    Raw: max(1, int(16 × 0.345)) = 5
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 5 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 21/58 (36.2%)
+    hit     : −1
+    After  : 20/58 (34.5%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[13]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 39
+    HUFFER                  : d100[18]  on_ground_halved[(÷2)] = 9
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[72]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 84
+    + style advantage: -6
+    Final ATK: 78
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[62]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  ground_pen[-25]  end_pen[-12]
+    Subtotal: 64
+    Final DEF: 64
+  Margin: 78 − 64 = 14   ▶  HIT (margin 14)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 14/55.0)) = 0.255
+    Raw: max(1, int(16 × 0.255)) = 4
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 4 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 20/58 (34.5%)
+    hit     : −1
+    After  : 19/58 (32.8%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[95]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 121
+    HUFFER                  : d100[47]  on_ground_halved[(÷2)] = 23
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[74]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 86
+    + style advantage: -6
+    Final ATK: 80
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[55]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  ground_pen[-25]  end_pen[-12]
+    Subtotal: 57
+    Final DEF: 57
+  Margin: 80 − 57 = 23   ▶  HIT (margin 23)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 23/55.0)) = 0.418
+    Raw: max(1, int(16 × 0.418)) = 6
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 6 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 19/58 (32.8%)
+    hit     : −1
+    After  : 18/58 (31.0%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[2]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 28
+    HUFFER                  : d100[4]  on_ground_halved[(÷2)] = 2
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[37]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 49
+    + style advantage: -6
+    Final ATK: 43
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[59]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  ground_pen[-25]  end_pen[-12]
+    Subtotal: 61
+    Final DEF: 61
+  Margin: 43 − 61 = -18   ▶  PARRY (margin -18)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[77]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 103
+    HUFFER                  : d100[49]  on_ground_halved[(÷2)] = 24
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[65]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 77
+    + style advantage: -6
+    Final ATK: 71
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[85]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  ground_pen[-25]  end_pen[-12]
+    Subtotal: 87
+    Final DEF: 87
+  Margin: 71 − 87 = -16   ▶  PARRY (margin -16)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[54]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 54
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 53
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[7]  luck[+23]  str_bonus[+2]  activity_mod[-4]  end_pen[-12]
+    Subtotal: 16
+    Final DEF: 16
+  Margin: 53 − 16 = 37   ▶  HIT (margin 37)
+  Damage (HUFFER → XAELON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+      style compat penalty         ×0.70
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 37/55.0)) = 0.673
+    Raw: max(1, int(6 × 0.673)) = 4
+    Favorite weapon +1 → raw = 5
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 5 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (XAELON):
+    Before : 25/47 (53.2%)
+    hit     : −1
+    After  : 24/47 (51.1%)
+  Knockdown Check (XAELON):
+    base = int(1/47 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 97  →  no knockdown
+  Perm Injury Check (XAELON):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: HUFFER has uncontested action
+  Attack: HUFFER → XAELON   Weapon: Hammer   Style: Bash   Aim: Primary Arm
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (HUFFER):
+    d100[88]  dex_bonus[+2]  luck[+9]  style_mod[-1]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 88
+    + style advantage: +6
+    − compat penalty: −7
+    Final ATK: 87
+  Defense Roll (XAELON, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[24]  luck[+23]  str_bonus[+2]  activity_mod[-4]  end_pen[-12]
+    Subtotal: 33
+    Final DEF: 33
+  Margin: 87 − 33 = 54   ▶  HIT (margin 54)
+  Damage (HUFFER → XAELON):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +1.35
+      style compat penalty         ×0.70
+    Ceiling: 6
+    Fraction: max(0.10, min(1.0, 54/55.0)) = 0.982
+    Raw: max(1, int(6 × 0.982)) = 5
+    Favorite weapon +1 → raw = 6
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 6 − 4) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (XAELON):
+    Before : 24/47 (51.1%)
+    hit     : −2
+    After  : 22/47 (46.8%)
+  Knockdown Check (XAELON):
+    base = int(2/47 × 80) = 3   cat bonus [Hammer/Mace]: +10   final: 13%
+    Roll: 85  →  no knockdown
+  Perm Injury Check (XAELON):
+    threshold = 15% of 47 = 7   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    HUFFER: 0.0 END − (7.60 burn × 2 actions) = 0.0
+    XAELON: 0.0 END − (2.60 burn × 5 actions) = 0.0
+    HP POOL — HUFFER: 18/58 (31%)
+    HP POOL — XAELON: 22/47 (47%)
+
+==============================================================================
+  MINUTE 13
+==============================================================================
+  APM   — HUFFER: 3   |   XAELON: 5
+  HP    — HUFFER: 4/58 (7%)   |   XAELON: 22/47 (47%)
+  END   — HUFFER: 0.0   |   XAELON: 0.0
+  STRAT — HUFFER: [Bash / Act:7]   |   XAELON: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    XAELON                  : d100[48]  dex_bonus[+8]  init_skill_x3[+3]  luck[+23]  activity_mod[+4]  end_pen[-12] = 74
+    HUFFER                  : d100[68]  dex_bonus[+4]  luck[+9]  style_mod[-2]  activity_mod[+4]  end_pen[-12] = 71
+    ▶ XAELON wins → ATTACKS
+  Attack: XAELON → HUFFER   Weapon: Morningstar   Style: Strike   Aim: Head
+  Attack Roll (XAELON):
+    d100[59]  dex_bonus[+4]  luck[+23]  end_pen[-15]
+    Subtotal: 71
+    + style advantage: -6
+    Final ATK: 65
+  Defense Roll (HUFFER, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[5]  luck[+9]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  def_point_bonus[+15]  shield_bonus[+5]  end_pen[-12]
+    Subtotal: 32
+    Final DEF: 32
+  Margin: 65 − 32 = 33   ▶  HIT (margin 33)
+  Damage (XAELON → HUFFER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +2.40
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 16
+    Fraction: max(0.10, min(1.0, 33/55.0)) = 0.600
+    Raw: max(1, int(16 × 0.600)) = 9
+    Armor: Brigandine  base DEF: 9
+    Net = max(1, 9 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HUFFER):
+    Before : 4/58 (6.9%)
+    hit     : −1
+    After  : 3/58 (5.2%)
+  Knockdown Check (HUFFER):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 44  →  no knockdown
+  Perm Injury Check (HUFFER):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+  Concede Attempt (HUFFER):
+    d100[82] + PRE_bonus[-4] + luck//2[4] = 82
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    82 ≥ 66  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: HUFFER
+==============================================================================
+  Bash: d100=22 vs 62% — SUCCESS
+    → Bash trained: Level 0 → Level 1 (Novice, 62% chance)
+  Bash: d100=23 vs 62% — SUCCESS
+    → Bash trained: Level 1 → Level 2 (Some Skill, 62% chance)
+  Bash: d100=58 vs 62% — SUCCESS
+    → Bash trained: Level 2 → Level 3 (Skilled, 62% chance)
+  [OBSERVED] Feint: trigger d100=15/16% passed  |  skill d100=94 vs 62% — FAIL
+    → Feint training: no progress this session (INT 18, level 0, 62% chance).
+
+==============================================================================
+  TRAINING: XAELON
+==============================================================================
+  Initiative: d100=47 vs 45% — FAIL
+    → Initiative training: no progress this session (INT 14, level 1, 45% chance).
+  Strength: d100=59 vs 35% — FAIL
+    → Strength training: no progress this session (mid tier, 35% chance).
+  Constitution: d100=90 vs 35% — FAIL
+    → Constitution training: no progress this session (mid tier, 35% chance).
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : XAELON  (46.8% HP remaining)
+  Loser  : HUFFER  (survived, 5.2% HP)
+  Duration: 13 minute(s)
+==============================================================================

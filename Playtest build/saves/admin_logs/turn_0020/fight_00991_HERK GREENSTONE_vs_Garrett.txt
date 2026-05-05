@@ -1,0 +1,1057 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #991   Turn: 20
+  Debug team: Electron
+  Electron / SHADES OF THE PAST   vs   Wulfric the Grim / Grim's Reapers
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: HERK GREENSTONE
+  ────────────────────────────────────
+    Race: Half-Elf  |  Gender: Male
+    STR:11  DEX:15  CON:15  INT:15  PRE:9  SIZ:15
+    Max HP: 58   Luck: 5
+    Armor: Cuir Boulli   Helm: Steel Cap
+    Primary: Morningstar   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:7 / Aim:None / Def:Chest
+
+  ────────────────────────────────────
+  WARRIOR B: GARRETT
+  ────────────────────────────────────
+    Race: Human  |  Gender: Male
+    STR:25  DEX:11  CON:18  INT:9  PRE:9  SIZ:12
+    Max HP: 63   Luck: 12
+    Armor: Brigandine   Helm: None
+    Primary: Great Sword   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:7 / Aim:Head / Def:None
+    Skills: initiative:6  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — HERK GREENSTONE: 6   |   GARRETT: 5
+  HP    — HERK GREENSTONE: 58/58 (100%)   |   GARRETT: 63/63 (100%)
+  END   — HERK GREENSTONE: 100.0   |   GARRETT: 100.0
+  STRAT — HERK GREENSTONE: [Strike / Act:7]   |   GARRETT: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[90]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 124
+    HERK GREENSTONE         : d100[77]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 94
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[33]  luck[+12]
+    Subtotal: 45
+    Final ATK: 45
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[100]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]
+    Subtotal: 113
+    Final DEF: 113
+  Margin: 45 − 113 = -68   ▶  PARRY (margin -68)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[73]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 107
+    HERK GREENSTONE         : d100[77]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 94
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[7]  luck[+12]
+    Subtotal: 19
+    Final ATK: 19
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[9]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]
+    Subtotal: 22
+    Final DEF: 22
+  Margin: 19 − 22 = -3   ▶  PARRY (margin -3)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[46]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 63
+    GARRETT                 : d100[17]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 51
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[10]  dex_bonus[+4]  luck[+5]
+    Subtotal: 19
+    Final ATK: 19
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[41]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 54
+    Final DEF: 54
+  Margin: 19 − 54 = -35   ▶  PARRY (margin -35)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    HERK GREENSTONE         : d100[62]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 79
+    GARRETT                 : d100[32]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 66
+    ▶ HERK GREENSTONE wins → ATTACKS
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[85]  dex_bonus[+4]  luck[+5]
+    Subtotal: 94
+    Final ATK: 94
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[58]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 71
+    Final DEF: 71
+  Margin: 94 − 71 = 23   ▶  HIT (margin 23)
+  Damage (HERK GREENSTONE → GARRETT):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 23/55.0)) = 0.418
+    Raw: max(1, int(7 × 0.418)) = 2
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (GARRETT):
+    Before : 63/63 (100.0%)
+    hit     : −1
+    After  : 62/63 (98.4%)
+  Knockdown Check (GARRETT):
+    base = int(1/63 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 43  →  no knockdown
+  Perm Injury Check (GARRETT):
+    threshold = 15% of 63 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[56]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 90
+    HERK GREENSTONE         : d100[31]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 48
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[14]  luck[+12]
+    Subtotal: 26
+    Final ATK: 26
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[12]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]
+    Subtotal: 25
+    Final DEF: 25
+  Margin: 26 − 25 = 1   ▶  GRAZE (margin 1, 1 HP)
+  HP Pool (HERK GREENSTONE):
+    Before : 58/58 (100.0%)
+    graze   : −1
+    After  : 57/58 (98.3%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[88]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 122
+    HERK GREENSTONE         : d100[73]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 90
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[22]  luck[+12]
+    Subtotal: 34
+    Final ATK: 34
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[34]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]
+    Subtotal: 47
+    Final DEF: 47
+  Margin: 34 − 47 = -13   ▶  PARRY (margin -13)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[100]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 134
+    HERK GREENSTONE         : d100[21]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 38
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[26]  luck[+12]
+    Subtotal: 38
+    Final ATK: 38
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[97]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]
+    Subtotal: 110
+    Final DEF: 110
+  Margin: 38 − 110 = -72   ▶  PARRY (margin -72)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: HERK GREENSTONE has uncontested action
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[39]  dex_bonus[+4]  luck[+5]
+    Subtotal: 48
+    Final ATK: 48
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[15]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 28
+    Final DEF: 28
+  Margin: 48 − 28 = 20   ▶  HIT (margin 20)
+  Damage (HERK GREENSTONE → GARRETT):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 20/55.0)) = 0.364
+    Raw: max(1, int(7 × 0.364)) = 2
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (GARRETT):
+    Before : 62/63 (98.4%)
+    hit     : −1
+    After  : 61/63 (96.8%)
+  Knockdown Check (GARRETT):
+    base = int(1/63 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 63  →  no knockdown
+  Perm Injury Check (GARRETT):
+    threshold = 15% of 63 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: HERK GREENSTONE has uncontested action
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[96]  dex_bonus[+4]  luck[+5]
+    Subtotal: 105
+    Final ATK: 105
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[40]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 53
+    Final DEF: 53
+  Margin: 105 − 53 = 52   ▶  HIT (margin 52)
+  Damage (HERK GREENSTONE → GARRETT):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 52/55.0)) = 0.945
+    Raw: max(1, int(7 × 0.945)) = 6
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 6 − 4) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (GARRETT):
+    Before : 61/63 (96.8%)
+    hit     : −2
+    After  : 59/63 (93.7%)
+  Knockdown Check (GARRETT):
+    base = int(2/63 × 80) = 2   cat bonus [Hammer/Mace]: +10   final: 12%
+    Roll: 40  →  no knockdown
+  Perm Injury Check (GARRETT):
+    threshold = 15% of 63 = 9   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: HERK GREENSTONE has uncontested action
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[66]  dex_bonus[+4]  luck[+5]
+    Subtotal: 75
+    Final ATK: 75
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[79]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 92
+    Final DEF: 92
+  Margin: 75 − 92 = -17   ▶  PARRY (margin -17)
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: HERK GREENSTONE has uncontested action
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[29]  dex_bonus[+4]  luck[+5]
+    Subtotal: 38
+    Final ATK: 38
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[56]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 69
+    Final DEF: 69
+  Margin: 38 − 69 = -31   ▶  PARRY (margin -31)
+
+  ── END OF MINUTE ──
+    HERK GREENSTONE: 100.0 END − (2.60 burn × 6 actions) = 84.4
+    GARRETT: 100.0 END − (2.60 burn × 5 actions) = 87.0
+    HP POOL — HERK GREENSTONE: 57/58 (98%)
+    HP POOL — GARRETT: 59/63 (94%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — HERK GREENSTONE: 6   |   GARRETT: 5
+  HP    — HERK GREENSTONE: 57/58 (98%)   |   GARRETT: 59/63 (94%)
+  END   — HERK GREENSTONE: 84.4   |   GARRETT: 87.0
+  STRAT — HERK GREENSTONE: [Strike / Act:7]   |   GARRETT: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[99]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 133
+    HERK GREENSTONE         : d100[75]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 92
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[35]  luck[+12]
+    Subtotal: 47
+    Final ATK: 47
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[76]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]
+    Subtotal: 89
+    Final DEF: 89
+  Margin: 47 − 89 = -42   ▶  PARRY (margin -42)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[23]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 57
+    HERK GREENSTONE         : d100[27]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 44
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[35]  luck[+12]
+    Subtotal: 47
+    Final ATK: 47
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[86]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]
+    Subtotal: 99
+    Final DEF: 99
+  Margin: 47 − 99 = -52   ▶  PARRY (margin -52)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[84]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 118
+    HERK GREENSTONE         : d100[57]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 74
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[23]  luck[+12]
+    Subtotal: 35
+    Final ATK: 35
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[17]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]
+    Subtotal: 30
+    Final DEF: 30
+  Margin: 35 − 30 = 5   ▶  GRAZE (margin 5, 1 HP)
+  HP Pool (HERK GREENSTONE):
+    Before : 57/58 (98.3%)
+    graze   : −1
+    After  : 56/58 (96.6%)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[64]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 98
+    HERK GREENSTONE         : d100[3]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 20
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[93]  luck[+12]
+    Subtotal: 105
+    Final ATK: 105
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[85]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 105 − 98 = 7   ▶  GRAZE (margin 7, 1 HP)
+  HP Pool (HERK GREENSTONE):
+    Before : 56/58 (96.6%)
+    graze   : −1
+    After  : 55/58 (94.8%)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[35]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 69
+    HERK GREENSTONE         : d100[42]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 59
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[39]  luck[+12]
+    Subtotal: 51
+    Final ATK: 51
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[10]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]
+    Subtotal: 23
+    Final DEF: 23
+  Margin: 51 − 23 = 28   ▶  HIT (margin 28)
+  Damage (GARRETT → HERK GREENSTONE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      STR bonus                    +9.00
+      two-hand multiplier          ×1.15
+      activity contrib             -0.60
+      luck ×0.15                   +1.80
+    Ceiling: 31
+    Fraction: max(0.10, min(1.0, 28/55.0)) = 0.509
+    Raw: max(1, int(31 × 0.509)) = 15
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 15 − 5) = 10
+  ▶ FINAL DAMAGE: 10
+  HP Pool (HERK GREENSTONE):
+    Before : 55/58 (94.8%)
+    hit     : −10
+    After  : 45/58 (77.6%)
+  Knockdown Check (HERK GREENSTONE):
+    base = int(10/58 × 80) = 13   cat bonus [Sword/Knife]: +0   final: 7%
+    Roll: 3  →  ▶ KNOCKDOWN
+  Perm Injury Check (HERK GREENSTONE):
+    threshold = 15% of 58 = 8   damage 10 ≥ threshold
+    chance = max(5, min(80, int(10/58×100) − 5)) = 12%
+    Roll: 41  →  no injury
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: HERK GREENSTONE has uncontested action
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[60]  dex_bonus[+4]  luck[+5]
+    Subtotal: 69
+    Final ATK: 69
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[27]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 40
+    Final DEF: 40
+  Margin: 69 − 40 = 29   ▶  HIT (margin 29)
+  Damage (HERK GREENSTONE → GARRETT):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 29/55.0)) = 0.527
+    Raw: max(1, int(7 × 0.527)) = 3
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 3 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (GARRETT):
+    Before : 59/63 (93.7%)
+    hit     : −1
+    After  : 58/63 (92.1%)
+  Knockdown Check (GARRETT):
+    base = int(1/63 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 59  →  no knockdown
+  Perm Injury Check (GARRETT):
+    threshold = 15% of 63 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: HERK GREENSTONE has uncontested action
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[10]  dex_bonus[+4]  luck[+5]
+    Subtotal: 19
+    Final ATK: 19
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[26]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 39
+    Final DEF: 39
+  Margin: 19 − 39 = -20   ▶  PARRY (margin -20)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: HERK GREENSTONE has uncontested action
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[37]  dex_bonus[+4]  luck[+5]
+    Subtotal: 46
+    Final ATK: 46
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[19]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 32
+    Final DEF: 32
+  Margin: 46 − 32 = 14   ▶  HIT (margin 14)
+  Damage (HERK GREENSTONE → GARRETT):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 14/55.0)) = 0.255
+    Raw: max(1, int(7 × 0.255)) = 1
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 1 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (GARRETT):
+    Before : 58/63 (92.1%)
+    hit     : −1
+    After  : 57/63 (90.5%)
+  Knockdown Check (GARRETT):
+    base = int(1/63 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 46  →  no knockdown
+  Perm Injury Check (GARRETT):
+    threshold = 15% of 63 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: HERK GREENSTONE has uncontested action
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[77]  dex_bonus[+4]  luck[+5]
+    Subtotal: 86
+    Final ATK: 86
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[56]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 69
+    Final DEF: 69
+  Margin: 86 − 69 = 17   ▶  HIT (margin 17)
+  Damage (HERK GREENSTONE → GARRETT):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 17/55.0)) = 0.309
+    Raw: max(1, int(7 × 0.309)) = 2
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (GARRETT):
+    Before : 57/63 (90.5%)
+    hit     : −1
+    After  : 56/63 (88.9%)
+  Knockdown Check (GARRETT):
+    base = int(1/63 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 59  →  no knockdown
+  Perm Injury Check (GARRETT):
+    threshold = 15% of 63 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: HERK GREENSTONE has uncontested action
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[33]  dex_bonus[+4]  luck[+5]
+    Subtotal: 42
+    Final ATK: 42
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[52]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 65
+    Final DEF: 65
+  Margin: 42 − 65 = -23   ▶  PARRY (margin -23)
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: HERK GREENSTONE has uncontested action
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[70]  dex_bonus[+4]  luck[+5]
+    Subtotal: 79
+    Final ATK: 79
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[5]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 18
+    Final DEF: 18
+  Margin: 79 − 18 = 61   ▶  HIT (margin 61)
+  Damage (HERK GREENSTONE → GARRETT):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 61/55.0)) = 1.000
+    Raw: max(1, int(7 × 1.000)) = 7
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 7 − 4) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (GARRETT):
+    Before : 56/63 (88.9%)
+    hit     : −3
+    After  : 53/63 (84.1%)
+  Knockdown Check (GARRETT):
+    base = int(3/63 × 80) = 3   cat bonus [Hammer/Mace]: +10   final: 13%
+    Roll: 55  →  no knockdown
+  Perm Injury Check (GARRETT):
+    threshold = 15% of 63 = 9   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    HERK GREENSTONE: 84.4 END − (2.60 burn × 6 actions) = 68.8
+    GARRETT: 87.0 END − (2.60 burn × 5 actions) = 74.0
+    HP POOL — HERK GREENSTONE: 45/58 (78%)
+    HP POOL — GARRETT: 53/63 (84%)
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — HERK GREENSTONE: 6   |   GARRETT: 5
+  HP    — HERK GREENSTONE: 45/58 (78%)   |   GARRETT: 53/63 (84%)
+  END   — HERK GREENSTONE: 68.8   |   GARRETT: 74.0
+  STRAT — HERK GREENSTONE: [Strike / Act:7]   |   GARRETT: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[86]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 120
+    HERK GREENSTONE         : d100[44]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 61
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[99]  luck[+12]
+    Subtotal: 111
+    Final ATK: 111
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[37]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]
+    Subtotal: 50
+    Final DEF: 50
+  Margin: 111 − 50 = 61   ▶  HIT (margin 61)
+  Damage (GARRETT → HERK GREENSTONE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      STR bonus                    +9.00
+      two-hand multiplier          ×1.15
+      activity contrib             -0.60
+      luck ×0.15                   +1.80
+    Ceiling: 31
+    Fraction: max(0.10, min(1.0, 61/55.0)) = 1.000
+    Raw: max(1, int(31 × 1.000)) = 31
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 31 − 5) = 26
+  ▶ FINAL DAMAGE: 26
+  HP Pool (HERK GREENSTONE):
+    Before : 45/58 (77.6%)
+    hit     : −26
+    After  : 19/58 (32.8%)
+  Knockdown Check (HERK GREENSTONE):
+    base = int(26/58 × 80) = 35   cat bonus [Sword/Knife]: +0   final: 29%
+    Roll: 47  →  no knockdown
+  Perm Injury Check (HERK GREENSTONE):
+    threshold = 15% of 58 = 8   damage 26 ≥ threshold
+    chance = max(5, min(80, int(26/58×100) − 5)) = 39%
+    Roll: 70  →  no injury
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[69]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 103
+    HERK GREENSTONE         : d100[51]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 68
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[4]  luck[+12]
+    Subtotal: 16
+    Final ATK: 16
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[28]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]
+    Subtotal: 41
+    Final DEF: 41
+  Margin: 16 − 41 = -25   ▶  PARRY (margin -25)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[74]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 108
+    HERK GREENSTONE         : d100[17]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 34
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[29]  luck[+12]
+    Subtotal: 41
+    Final ATK: 41
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[11]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]
+    Subtotal: 24
+    Final DEF: 24
+  Margin: 41 − 24 = 17   ▶  HIT (margin 17)
+  Damage (GARRETT → HERK GREENSTONE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      STR bonus                    +9.00
+      two-hand multiplier          ×1.15
+      activity contrib             -0.60
+      luck ×0.15                   +1.80
+    Ceiling: 31
+    Fraction: max(0.10, min(1.0, 17/55.0)) = 0.309
+    Raw: max(1, int(31 × 0.309)) = 9
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 9 − 5) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (HERK GREENSTONE):
+    Before : 19/58 (32.8%)
+    hit     : −4
+    After  : 15/58 (25.9%)
+  Knockdown Check (HERK GREENSTONE):
+    base = int(4/58 × 80) = 5   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 19  →  no knockdown
+  Perm Injury Check (HERK GREENSTONE):
+    threshold = 15% of 58 = 8   damage 4 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[62]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 96
+    HERK GREENSTONE         : d100[46]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 63
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[89]  luck[+12]
+    Subtotal: 101
+    Final ATK: 101
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[76]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]
+    Subtotal: 89
+    Final DEF: 89
+  Margin: 101 − 89 = 12   ▶  HIT (margin 12)
+  Damage (GARRETT → HERK GREENSTONE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      STR bonus                    +9.00
+      two-hand multiplier          ×1.15
+      activity contrib             -0.60
+      luck ×0.15                   +1.80
+    Ceiling: 31
+    Fraction: max(0.10, min(1.0, 12/55.0)) = 0.218
+    Raw: max(1, int(31 × 0.218)) = 6
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 6 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (HERK GREENSTONE):
+    Before : 15/58 (25.9%)
+    hit     : −1
+    After  : 14/58 (24.1%)
+  Knockdown Check (HERK GREENSTONE):
+    base = int(1/58 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 52  →  no knockdown
+  Perm Injury Check (HERK GREENSTONE):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+  Concede Attempt (HERK GREENSTONE):
+    d100[62] + PRE_bonus[-1] + luck//2[2] = 63
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    63 < 65  →  mercy denied — fight continues
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[33]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 67
+    HERK GREENSTONE         : d100[39]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 56
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[28]  luck[+12]
+    Subtotal: 40
+    Final ATK: 40
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[59]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]
+    Subtotal: 72
+    Final DEF: 72
+  Margin: 40 − 72 = -32   ▶  PARRY (margin -32)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: HERK GREENSTONE has uncontested action
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[4]  dex_bonus[+4]  luck[+5]
+    Subtotal: 13
+    Final ATK: 13
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[55]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 68
+    Final DEF: 68
+  Margin: 13 − 68 = -55   ▶  PARRY (margin -55)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: HERK GREENSTONE has uncontested action
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[99]  dex_bonus[+4]  luck[+5]
+    Subtotal: 108
+    Final ATK: 108
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[56]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 69
+    Final DEF: 69
+  Margin: 108 − 69 = 39   ▶  HIT (margin 39)
+  Damage (HERK GREENSTONE → GARRETT):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +0.60
+      race damage net              +1.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.75
+      strength underweight pen     ×0.67 (33% penalty)
+    Ceiling: 7
+    Fraction: max(0.10, min(1.0, 39/55.0)) = 0.709
+    Raw: max(1, int(7 × 0.709)) = 4
+    Armor: Brigandine  base DEF: 4
+    Net = max(1, 4 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (GARRETT):
+    Before : 53/63 (84.1%)
+    hit     : −1
+    After  : 52/63 (82.5%)
+  Knockdown Check (GARRETT):
+    base = int(1/63 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 65  →  no knockdown
+  Perm Injury Check (GARRETT):
+    threshold = 15% of 63 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: HERK GREENSTONE has uncontested action
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[37]  dex_bonus[+4]  luck[+5]
+    Subtotal: 46
+    Final ATK: 46
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[59]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 72
+    Final DEF: 72
+  Margin: 46 − 72 = -26   ▶  PARRY (margin -26)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: HERK GREENSTONE has uncontested action
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[50]  dex_bonus[+4]  luck[+5]
+    Subtotal: 59
+    Final ATK: 59
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[71]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 84
+    Final DEF: 84
+  Margin: 59 − 84 = -25   ▶  PARRY (margin -25)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: HERK GREENSTONE has uncontested action
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[8]  dex_bonus[+4]  luck[+5]
+    Subtotal: 17
+    Final ATK: 17
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[10]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 23
+    Final DEF: 23
+  Margin: 17 − 23 = -6   ▶  PARRY (margin -6)
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: HERK GREENSTONE has uncontested action
+  Attack: HERK GREENSTONE → GARRETT   Weapon: Morningstar   Style: Strike   Aim: None
+  Attack Roll (HERK GREENSTONE):
+    d100[39]  dex_bonus[+4]  luck[+5]
+    Subtotal: 48
+    Final ATK: 48
+  Defense Roll (GARRETT, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[53]  luck[+12]  str_bonus[+5]  activity_mod[-4]
+    Subtotal: 66
+    Final DEF: 66
+  Margin: 48 − 66 = -18   ▶  PARRY (margin -18)
+
+  ── END OF MINUTE ──
+    HERK GREENSTONE: 68.8 END − (2.60 burn × 6 actions) = 53.2
+    GARRETT: 74.0 END − (2.60 burn × 5 actions) = 61.0
+    HP POOL — HERK GREENSTONE: 14/58 (24%)
+    HP POOL — GARRETT: 52/63 (83%)
+
+==============================================================================
+  MINUTE 4
+==============================================================================
+  APM   — HERK GREENSTONE: 6   |   GARRETT: 5
+  HP    — HERK GREENSTONE: 14/58 (24%)   |   GARRETT: 52/63 (83%)
+  END   — HERK GREENSTONE: 53.2   |   GARRETT: 61.0
+  STRAT — HERK GREENSTONE: [Strike / Act:7]   |   GARRETT: [Strike / Act:7]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[33]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 67
+    HERK GREENSTONE         : d100[21]  dex_bonus[+8]  luck[+5]  activity_mod[+4] = 38
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[58]  luck[+12]
+    Subtotal: 70
+    Final ATK: 70
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[14]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]
+    Subtotal: 27
+    Final DEF: 27
+  Margin: 70 − 27 = 43   ▶  HIT (margin 43)
+  Damage (GARRETT → HERK GREENSTONE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      STR bonus                    +9.00
+      two-hand multiplier          ×1.15
+      activity contrib             -0.60
+      luck ×0.15                   +1.80
+    Ceiling: 31
+    Fraction: max(0.10, min(1.0, 43/55.0)) = 0.782
+    Raw: max(1, int(31 × 0.782)) = 24
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 24 − 5) = 19
+  ▶ FINAL DAMAGE: 19
+  HP Pool (HERK GREENSTONE):
+    Before : 14/58 (24.1%)
+    hit     : −19
+    After  : -5/58 (0.0%)
+  Knockdown Check (HERK GREENSTONE):
+    base = int(19/58 × 80) = 26   cat bonus [Sword/Knife]: +0   final: 20%
+    Roll: 14  →  ▶ KNOCKDOWN
+  Perm Injury Check (HERK GREENSTONE):
+    threshold = 15% of 58 = 8   damage 19 ≥ threshold
+    chance = max(5, min(80, int(19/58×100) − 5)) = 27%
+    Roll: 52  →  no injury
+  Death Check (HERK GREENSTONE):
+    prev_hp: 14   damage: 19   new_hp: -5
+    overshoot: 5
+    death_chance = min(50.0, 0.5 + 5) = 5.5%
+    → survives (concede system takes over)
+  Concede Attempt (HERK GREENSTONE):
+    d100[17] + PRE_bonus[-1] + luck//2[2] = 18
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    18 < 65  →  mercy denied — fight continues
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[1]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 35
+    HERK GREENSTONE         : d100[9]  on_ground_halved[(÷2)] = 4
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[35]  luck[+12]
+    Subtotal: 47
+    Final ATK: 47
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[30]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]  ground_pen[-25]  hp0_pen[-30]
+    Subtotal: 1
+    Final DEF: 1
+  Margin: 47 − 1 = 46   ▶  HIT (margin 46)
+  Damage (GARRETT → HERK GREENSTONE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      STR bonus                    +9.00
+      two-hand multiplier          ×1.15
+      activity contrib             -0.60
+      luck ×0.15                   +1.80
+    Ceiling: 31
+    Fraction: max(0.10, min(1.0, 46/55.0)) = 0.836
+    Raw: max(1, int(31 × 0.836)) = 25
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 25 − 5) = 20
+  ▶ FINAL DAMAGE: 20
+  HP Pool (HERK GREENSTONE):
+    Before : -5/58 (-8.6%)
+    hit     : −20
+    After  : -25/58 (0.0%)
+  Knockdown Check (HERK GREENSTONE):
+    base = int(20/58 × 80) = 27   cat bonus [Sword/Knife]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (HERK GREENSTONE):
+    threshold = 15% of 58 = 8   damage 20 ≥ threshold
+    chance = max(5, min(80, int(20/58×100) − 5)) = 29%
+    Roll: 37  →  no injury
+  Death Check (HERK GREENSTONE):
+    prev_hp: -5   damage: 20   new_hp: -25
+    overshoot: 25
+    death_chance = min(50.0, 0.5 + 25) = 25.5%
+    → survives (concede system takes over)
+  Concede Attempt (HERK GREENSTONE):
+    d100[34] + PRE_bonus[-1] + luck//2[2] = 35
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    35 < 65  →  mercy denied — fight continues
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[72]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 106
+    HERK GREENSTONE         : d100[8]  on_ground_halved[(÷2)] = 4
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[92]  luck[+12]
+    Subtotal: 104
+    Final ATK: 104
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[11]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]  ground_pen[-25]  hp0_pen[-30]
+    Subtotal: 1
+    Final DEF: 1
+  Margin: 104 − 1 = 103   ▶  HIT (margin 103)
+  Damage (GARRETT → HERK GREENSTONE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      STR bonus                    +9.00
+      two-hand multiplier          ×1.15
+      activity contrib             -0.60
+      luck ×0.15                   +1.80
+    Ceiling: 31
+    Fraction: max(0.10, min(1.0, 103/55.0)) = 1.000
+    Raw: max(1, int(31 × 1.000)) = 31
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 31 − 5) = 26
+  ▶ FINAL DAMAGE: 26
+  HP Pool (HERK GREENSTONE):
+    Before : -25/58 (-43.1%)
+    hit     : −26
+    After  : -51/58 (0.0%)
+  Knockdown Check (HERK GREENSTONE):
+    base = int(26/58 × 80) = 35   cat bonus [Sword/Knife]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (HERK GREENSTONE):
+    threshold = 15% of 58 = 8   damage 26 ≥ threshold
+    chance = max(5, min(80, int(26/58×100) − 5)) = 39%
+    Roll: 24  →  head (2 level(s))
+  Death Check (HERK GREENSTONE):
+    prev_hp: -25   damage: 26   new_hp: -51
+    overshoot: 51
+    death_chance = min(50.0, 0.5 + 51) = 50.0%
+    → survives (concede system takes over)
+  Concede Attempt (HERK GREENSTONE):
+    d100[24] + PRE_bonus[-1] + luck//2[2] = 25
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    25 < 65  →  mercy denied — fight continues
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    GARRETT                 : d100[14]  init_skill_x3[+18]  luck[+12]  activity_mod[+4] = 48
+    HERK GREENSTONE         : d100[38]  on_ground_halved[(÷2)] = 19
+    ▶ GARRETT wins → ATTACKS
+  Attack: GARRETT → HERK GREENSTONE   Weapon: Great Sword   Style: Strike   Aim: Head
+  Attack Roll (GARRETT):
+    d100[15]  luck[+12]
+    Subtotal: 27
+    Final ATK: 27
+  Defense Roll (HERK GREENSTONE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[70]  luck[+5]  activity_mod[-4]  dex_trained_x2[+12]  ground_pen[-25]  hp0_pen[-30]
+    Subtotal: 28
+    Final DEF: 28
+  Margin: 27 − 28 = -1   ▶  PARRY (margin -1)
+  Concede Attempt (HERK GREENSTONE):
+    d100[93] + PRE_bonus[-1] + luck//2[2] = 94
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    94 ≥ 65  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: HERK GREENSTONE
+==============================================================================
+  Dexterity: d100=27 vs 22% — FAIL
+    → Dexterity training: no progress this session (late tier, 22% chance).
+  Dexterity: d100=66 vs 22% — FAIL
+    → Dexterity training: no progress this session (late tier, 22% chance).
+  Dexterity: d100=70 vs 22% — FAIL
+    → Dexterity training: no progress this session (late tier, 22% chance).
+  INT observed learning: d100=62 vs 4% — no trigger
+
+==============================================================================
+  TRAINING: GARRETT
+==============================================================================
+  Strength: Garrett is as strong as they will ever be.
+  Initiative: d100=3 vs 25% — SUCCESS
+    → Initiative trained: Level 6 → Level 7 (Expert Skill, 25% chance)
+  Constitution: d100=48 vs 29% — FAIL
+    → Constitution training: no progress this session (late tier, 29% chance).
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : GARRETT  (82.5% HP remaining)
+  Loser  : HERK GREENSTONE  (survived, 0.0% HP)
+  Duration: 4 minute(s)
+==============================================================================

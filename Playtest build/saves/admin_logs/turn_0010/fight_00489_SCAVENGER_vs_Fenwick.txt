@@ -1,0 +1,2927 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #489   Turn: 10
+  Debug team: Ilneval
+  Ilneval / DECEPTICONS   vs   Sister Thornwall / The Thornwall Guard
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: SCAVENGER
+  ────────────────────────────────────
+    Race: Tabaxi  |  Gender: Male
+    STR:11  DEX:15  CON:19  INT:15  PRE:9  SIZ:10
+    Max HP: 47   Luck: 20
+    Armor: Cuir Boulli   Helm: Leather Cap
+    Primary: Bola   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:6 / Aim:None / Def:Chest
+
+  ────────────────────────────────────
+  WARRIOR B: FENWICK
+  ────────────────────────────────────
+    Race: Human  |  Gender: Male
+    STR:9  DEX:13  CON:21  INT:16  PRE:9  SIZ:11
+    Max HP: 58   Luck: 29
+    Armor: Full Plate   Helm: None
+    Primary: Boar Spear   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Parry / Act:3 / Aim:Chest / Def:Chest
+    Skills: dodge:8  initiative:1  parry:7  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — SCAVENGER: 6   |   FENWICK: 2
+  HP    — SCAVENGER: 47/47 (100%)   |   FENWICK: 58/58 (100%)
+  END   — SCAVENGER: 100.0   |   FENWICK: 100.0
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[74]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 109
+    FENWICK                 : d100[84]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 98
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[46]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 75
+    + style advantage: +6
+    Final ATK: 81
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[32]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 110
+    Final DEF: 110
+  Margin: 81 − 110 = -29   ▶  PARRY (margin -29)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[96]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 110
+    SCAVENGER               : d100[72]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 107
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Boar Spear   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[45]  dex_bonus[-2]  luck[+29]  style_mod[-7]  fav_bonus[+5]
+    Subtotal: 70
+    + style advantage: -6
+    Final ATK: 64
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[88]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 121
+    Final DEF: 121
+  Margin: 64 − 121 = -57   ▶  PARRY (margin -57)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[98]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 112
+    SCAVENGER               : d100[10]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 45
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Boar Spear   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[22]  dex_bonus[-2]  luck[+29]  style_mod[-7]  fav_bonus[+5]
+    Subtotal: 47
+    + style advantage: -6
+    Final ATK: 41
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[67]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 100
+    Final DEF: 100
+  Margin: 41 − 100 = -59   ▶  PARRY (margin -59)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[3]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 32
+    + style advantage: +6
+    Final ATK: 38
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[5]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 83
+    Final DEF: 83
+  Margin: 38 − 83 = -45   ▶  PARRY (margin -45)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[93]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 122
+    + style advantage: +6
+    Final ATK: 128
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[59]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 137
+    Final DEF: 137
+  Margin: 128 − 137 = -9   ▶  PARRY (margin -9)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[83]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 112
+    + style advantage: +6
+    Final ATK: 118
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[2]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 118 − 80 = 38   ▶  HIT (margin 38)
+  Damage (SCAVENGER → FENWICK):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.75
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+      strength underweight pen     ×0.97 (3% penalty)
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 38/55.0)) = 0.691
+    Raw: max(1, int(10 × 0.691)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 7 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (FENWICK):
+    Before : 58/58 (100.0%)
+    hit     : −1
+    After  : 57/58 (98.3%)
+  Knockdown Check (FENWICK):
+    base = int(1/58 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 25  →  no knockdown
+  Perm Injury Check (FENWICK):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[73]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 102
+    + style advantage: +6
+    Final ATK: 108
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[50]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 128
+    Final DEF: 128
+  Margin: 108 − 128 = -20   ▶  PARRY (margin -20)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 100.0 END − (2.30 burn × 6 actions) = 86.2
+    FENWICK: 100.0 END − (0.40 burn × 2 actions) = 99.2
+    HP POOL — SCAVENGER: 47/47 (100%)
+    HP POOL — FENWICK: 57/58 (98%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — SCAVENGER: 6   |   FENWICK: 2
+  HP    — SCAVENGER: 47/47 (100%)   |   FENWICK: 57/58 (98%)
+  END   — SCAVENGER: 86.2   |   FENWICK: 99.2
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[9]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 44
+    FENWICK                 : d100[4]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 18
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[73]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 102
+    + style advantage: +6
+    Final ATK: 108
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[35]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 113
+    Final DEF: 113
+  Margin: 108 − 113 = -5   ▶  PARRY (margin -5)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[90]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 125
+    FENWICK                 : d100[83]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 97
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[31]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 60
+    + style advantage: +6
+    Final ATK: 66
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[21]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 99
+    Final DEF: 99
+  Margin: 66 − 99 = -33   ▶  PARRY (margin -33)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[36]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 71
+    FENWICK                 : d100[49]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 63
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[89]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 118
+    + style advantage: +6
+    Final ATK: 124
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[77]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 155
+    Final DEF: 155
+  Margin: 124 − 155 = -31   ▶  PARRY (margin -31)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[80]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 115
+    FENWICK                 : d100[3]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 17
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[72]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 101
+    + style advantage: +6
+    Final ATK: 107
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[51]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 129
+    Final DEF: 129
+  Margin: 107 − 129 = -22   ▶  PARRY (margin -22)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[88]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 123
+    FENWICK                 : d100[26]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 40
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[23]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 52
+    + style advantage: +6
+    Final ATK: 58
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[30]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 108
+    Final DEF: 108
+  Margin: 58 − 108 = -50   ▶  PARRY (margin -50)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[7]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 42
+    FENWICK                 : d100[10]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 24
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[51]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 80
+    + style advantage: +6
+    Final ATK: 86
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[5]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 83
+    Final DEF: 83
+  Margin: 86 − 83 = 3   ▶  GRAZE (margin 3, 1 HP)
+  HP Pool (FENWICK):
+    Before : 57/58 (98.3%)
+    graze   : −1
+    After  : 56/58 (96.6%)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: FENWICK has uncontested action
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[20]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 40
+    + style advantage: -6
+    Final ATK: 34
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[32]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 65
+    Final DEF: 65
+  Margin: 34 − 65 = -31   ▶  PARRY (margin -31)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 86.2 END − (2.30 burn × 6 actions) = 72.4
+    FENWICK: 99.2 END − (0.40 burn × 2 actions) = 98.4
+    HP POOL — SCAVENGER: 47/47 (100%)
+    HP POOL — FENWICK: 56/58 (97%)
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — SCAVENGER: 6   |   FENWICK: 2
+  HP    — SCAVENGER: 47/47 (100%)   |   FENWICK: 56/58 (97%)
+  END   — SCAVENGER: 72.4   |   FENWICK: 98.4
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[85]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 120
+    FENWICK                 : d100[6]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 20
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[50]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 79
+    + style advantage: +6
+    Final ATK: 85
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[86]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 164
+    Final DEF: 164
+  Margin: 85 − 164 = -79   ▶  PARRY (margin -79)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[26]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 61
+    FENWICK                 : d100[29]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 43
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[57]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 86
+    + style advantage: +6
+    Final ATK: 92
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[26]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 104
+    Final DEF: 104
+  Margin: 92 − 104 = -12   ▶  PARRY (margin -12)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[46]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 81
+    FENWICK                 : d100[44]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 58
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[46]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 75
+    + style advantage: +6
+    Final ATK: 81
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[71]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 149
+    Final DEF: 149
+  Margin: 81 − 149 = -68   ▶  PARRY (margin -68)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[77]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 112
+    FENWICK                 : d100[15]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 29
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[53]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 82
+    + style advantage: +6
+    Final ATK: 88
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[32]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 110
+    Final DEF: 110
+  Margin: 88 − 110 = -22   ▶  PARRY (margin -22)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[50]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 64
+    SCAVENGER               : d100[8]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 43
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[33]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 53
+    + style advantage: -6
+    Final ATK: 47
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[67]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 100
+    Final DEF: 100
+  Margin: 47 − 100 = -53   ▶  PARRY (margin -53)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[19]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 48
+    + style advantage: +6
+    Final ATK: 54
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[29]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 107
+    Final DEF: 107
+  Margin: 54 − 107 = -53   ▶  PARRY (margin -53)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[59]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 88
+    + style advantage: +6
+    Final ATK: 94
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[27]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 105
+    Final DEF: 105
+  Margin: 94 − 105 = -11   ▶  PARRY (margin -11)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 72.4 END − (2.30 burn × 6 actions) = 58.6
+    FENWICK: 98.4 END − (0.40 burn × 2 actions) = 97.6
+    HP POOL — SCAVENGER: 47/47 (100%)
+    HP POOL — FENWICK: 56/58 (97%)
+
+==============================================================================
+  MINUTE 4
+==============================================================================
+  APM   — SCAVENGER: 6   |   FENWICK: 2
+  HP    — SCAVENGER: 47/47 (100%)   |   FENWICK: 56/58 (97%)
+  END   — SCAVENGER: 58.6   |   FENWICK: 97.6
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[91]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 105
+    SCAVENGER               : d100[29]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 64
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[91]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 111
+    + style advantage: -6
+    Final ATK: 105
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[10]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 43
+    Final DEF: 43
+  Margin: 105 − 43 = 62   ▶  HIT (margin 62)
+  Damage (FENWICK → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 62/55.0)) = 1.000
+    Raw: max(1, int(3 × 1.000)) = 3
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 3 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 47/47 (100.0%)
+    hit     : −1
+    After  : 46/47 (97.9%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/47 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 24  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[56]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 91
+    FENWICK                 : d100[16]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 30
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[81]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 110
+    + style advantage: +6
+    Final ATK: 116
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[71]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 149
+    Final DEF: 149
+  Margin: 116 − 149 = -33   ▶  PARRY (margin -33)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[74]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 88
+    SCAVENGER               : d100[37]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 72
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[96]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 116
+    + style advantage: -6
+    Final ATK: 110
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[70]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 103
+    Final DEF: 103
+  Margin: 110 − 103 = 7   ▶  GRAZE (margin 7, 1 HP)
+  HP Pool (SCAVENGER):
+    Before : 46/47 (97.9%)
+    graze   : −1
+    After  : 45/47 (95.7%)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[33]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 62
+    + style advantage: +6
+    Final ATK: 68
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[29]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 107
+    Final DEF: 107
+  Margin: 68 − 107 = -39   ▶  PARRY (margin -39)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[26]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 55
+    + style advantage: +6
+    Final ATK: 61
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[99]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 177
+    Final DEF: 177
+  Margin: 61 − 177 = -116   ▶  PARRY (margin -116)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[44]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 73
+    + style advantage: +6
+    Final ATK: 79
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[65]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 143
+    Final DEF: 143
+  Margin: 79 − 143 = -64   ▶  PARRY (margin -64)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[21]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 50
+    + style advantage: +6
+    Final ATK: 56
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[11]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 89
+    Final DEF: 89
+  Margin: 56 − 89 = -33   ▶  PARRY (margin -33)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[78]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 107
+    + style advantage: +6
+    Final ATK: 113
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[92]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 170
+    Final DEF: 170
+  Margin: 113 − 170 = -57   ▶  PARRY (margin -57)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 58.6 END − (2.30 burn × 6 actions) = 44.8
+    FENWICK: 97.6 END − (0.40 burn × 2 actions) = 96.8
+    HP POOL — SCAVENGER: 45/47 (96%)
+    HP POOL — FENWICK: 56/58 (97%)
+
+==============================================================================
+  MINUTE 5
+==============================================================================
+  APM   — SCAVENGER: 6   |   FENWICK: 2
+  HP    — SCAVENGER: 45/47 (96%)   |   FENWICK: 56/58 (97%)
+  END   — SCAVENGER: 44.8   |   FENWICK: 96.8
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[69]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 104
+    FENWICK                 : d100[25]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 39
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[44]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 73
+    + style advantage: +6
+    Final ATK: 79
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[100]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 178
+    Final DEF: 178
+  Margin: 79 − 178 = -99   ▶  PARRY (margin -99)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[62]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 97
+    FENWICK                 : d100[30]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 44
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[40]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 69
+    + style advantage: +6
+    Final ATK: 75
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[86]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 164
+    Final DEF: 164
+  Margin: 75 − 164 = -89   ▶  PARRY (margin -89)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[83]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 118
+    FENWICK                 : d100[38]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 52
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[72]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 101
+    + style advantage: +6
+    Final ATK: 107
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[4]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 82
+    Final DEF: 82
+  Margin: 107 − 82 = 25   ▶  HIT (margin 25)
+  Damage (SCAVENGER → FENWICK):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.75
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+      strength underweight pen     ×0.97 (3% penalty)
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 25/55.0)) = 0.455
+    Raw: max(1, int(10 × 0.455)) = 4
+    Favorite weapon +1 → raw = 5
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 5 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (FENWICK):
+    Before : 56/58 (96.6%)
+    hit     : −1
+    After  : 55/58 (94.8%)
+  Knockdown Check (FENWICK):
+    base = int(1/58 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 89  →  no knockdown
+  Perm Injury Check (FENWICK):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[96]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 131
+    FENWICK                 : d100[85]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 99
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[26]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 55
+    + style advantage: +6
+    Final ATK: 61
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[7]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 85
+    Final DEF: 85
+  Margin: 61 − 85 = -24   ▶  PARRY (margin -24)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[83]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 118
+    FENWICK                 : d100[37]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 51
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[31]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 60
+    + style advantage: +6
+    Final ATK: 66
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[25]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 103
+    Final DEF: 103
+  Margin: 66 − 103 = -37   ▶  PARRY (margin -37)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[100]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 135
+    FENWICK                 : d100[62]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 76
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[96]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 125
+    + style advantage: +6
+    Final ATK: 131
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[3]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 81
+    Final DEF: 81
+  Margin: 131 − 81 = 50   ▶  HIT (margin 50)
+  Damage (SCAVENGER → FENWICK):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.75
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+      strength underweight pen     ×0.97 (3% penalty)
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 50/55.0)) = 0.909
+    Raw: max(1, int(10 × 0.909)) = 9
+    Favorite weapon +1 → raw = 10
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 10 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (FENWICK):
+    Before : 55/58 (94.8%)
+    hit     : −1
+    After  : 54/58 (93.1%)
+  HP Pool (FENWICK):
+    Before : 54/58 (93.1%)
+    entangle fall: −1
+    After  : 53/58 (91.4%)
+  Knockdown Check (FENWICK):
+    base = int(1/58 × 80) = 1   cat bonus [Oddball]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (FENWICK):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: FENWICK has uncontested action
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[97]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 117
+    + style advantage: -6
+    Final ATK: 111
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[15]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 48
+    Final DEF: 48
+  Margin: 111 − 48 = 63   ▶  HIT (margin 63)
+  Damage (FENWICK → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 63/55.0)) = 1.000
+    Raw: max(1, int(3 × 1.000)) = 3
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 3 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 45/47 (95.7%)
+    hit     : −1
+    After  : 44/47 (93.6%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/47 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 91  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    SCAVENGER: 44.8 END − (2.30 burn × 6 actions) = 31.0
+    FENWICK: 96.8 END − (0.40 burn × 2 actions) = 96.0
+    HP POOL — SCAVENGER: 44/47 (94%)
+    HP POOL — FENWICK: 53/58 (91%)
+
+==============================================================================
+  MINUTE 6
+==============================================================================
+  APM   — SCAVENGER: 5   |   FENWICK: 2
+  HP    — SCAVENGER: 44/47 (94%)   |   FENWICK: 53/58 (91%)
+  END   — SCAVENGER: 31.0   |   FENWICK: 96.0
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[24]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-2] = 57
+    FENWICK                 : d100[36]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 50
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[1]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 30
+    + style advantage: +6
+    Final ATK: 36
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[93]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 171
+    Final DEF: 171
+  Margin: 36 − 171 = -135   ▶  PARRY (margin -135)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[40]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-2] = 73
+    FENWICK                 : d100[3]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 17
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[99]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 128
+    + style advantage: +6
+    Final ATK: 134
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[93]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 171
+    Final DEF: 171
+  Margin: 134 − 171 = -37   ▶  PARRY (margin -37)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[47]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 61
+    SCAVENGER               : d100[23]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-2] = 56
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[5]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 25
+    + style advantage: -6
+    Final ATK: 19
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[47]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 19 − 80 = -61   ▶  PARRY (margin -61)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[85]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 99
+    SCAVENGER               : d100[10]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-2] = 43
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[48]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 68
+    + style advantage: -6
+    Final ATK: 62
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[19]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 52
+    Final DEF: 52
+  Margin: 62 − 52 = 10   ▶  HIT (margin 10)
+  Damage (FENWICK → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 10/55.0)) = 0.182
+    Raw: max(1, int(3 × 0.182)) = 1
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 1 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 44/47 (93.6%)
+    hit     : −1
+    After  : 43/47 (91.5%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/47 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 93  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[63]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 92
+    + style advantage: +6
+    Final ATK: 98
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[17]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 95
+    Final DEF: 95
+  Margin: 98 − 95 = 3   ▶  GRAZE (margin 3, 1 HP)
+  HP Pool (FENWICK):
+    Before : 53/58 (91.4%)
+    graze   : −1
+    After  : 52/58 (89.7%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[22]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 51
+    + style advantage: +6
+    Final ATK: 57
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[82]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 160
+    Final DEF: 160
+  Margin: 57 − 160 = -103   ▶  PARRY (margin -103)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[14]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 43
+    + style advantage: +6
+    Final ATK: 49
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[8]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 86
+    Final DEF: 86
+  Margin: 49 − 86 = -37   ▶  PARRY (margin -37)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 31.0 END − (2.30 burn × 5 actions) = 19.5
+    FENWICK: 96.0 END − (0.40 burn × 2 actions) = 95.2
+    HP POOL — SCAVENGER: 43/47 (91%)
+    HP POOL — FENWICK: 52/58 (90%)
+
+==============================================================================
+  MINUTE 7
+==============================================================================
+  APM   — SCAVENGER: 5   |   FENWICK: 2
+  HP    — SCAVENGER: 43/47 (91%)   |   FENWICK: 52/58 (90%)
+  END   — SCAVENGER: 19.5   |   FENWICK: 95.2
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[62]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 76
+    SCAVENGER               : d100[39]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-6] = 68
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[65]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 85
+    + style advantage: -6
+    Final ATK: 79
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[2]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-4]
+    Subtotal: 31
+    Final DEF: 31
+  Margin: 79 − 31 = 48   ▶  HIT (margin 48)
+  Damage (FENWICK → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 48/55.0)) = 0.873
+    Raw: max(1, int(3 × 0.873)) = 2
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 43/47 (91.5%)
+    hit     : −1
+    After  : 42/47 (89.4%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/47 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 79  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[69]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-6] = 98
+    FENWICK                 : d100[20]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 34
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[96]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-5]
+    Subtotal: 120
+    + style advantage: +6
+    Final ATK: 126
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[65]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 143
+    Final DEF: 143
+  Margin: 126 − 143 = -17   ▶  PARRY (margin -17)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[91]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 105
+    SCAVENGER               : d100[1]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-6] = 30
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[86]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 106
+    + style advantage: -6
+    Final ATK: 100
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[78]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-4]
+    Subtotal: 107
+    Final DEF: 107
+  Margin: 100 − 107 = -7   ▶  PARRY (margin -7)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[2]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-5]
+    Subtotal: 26
+    + style advantage: +6
+    Final ATK: 32
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[48]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 126
+    Final DEF: 126
+  Margin: 32 − 126 = -94   ▶  PARRY (margin -94)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[54]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-5]
+    Subtotal: 78
+    + style advantage: +6
+    Final ATK: 84
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[64]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 142
+    Final DEF: 142
+  Margin: 84 − 142 = -58   ▶  PARRY (margin -58)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[15]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-5]
+    Subtotal: 39
+    + style advantage: +6
+    Final ATK: 45
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[93]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 171
+    Final DEF: 171
+  Margin: 45 − 171 = -126   ▶  PARRY (margin -126)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 19.5 END − (2.30 burn × 5 actions) = 8.0
+    FENWICK: 95.2 END − (0.40 burn × 2 actions) = 94.4
+    HP POOL — SCAVENGER: 42/47 (89%)
+    HP POOL — FENWICK: 52/58 (90%)
+
+==============================================================================
+  MINUTE 8
+==============================================================================
+  APM   — SCAVENGER: 5   |   FENWICK: 2
+  HP    — SCAVENGER: 42/47 (89%)   |   FENWICK: 52/58 (90%)
+  END   — SCAVENGER: 8.0   |   FENWICK: 94.4
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[58]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 72
+    SCAVENGER               : d100[18]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-9] = 44
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[42]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 62
+    + style advantage: -6
+    Final ATK: 56
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[41]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-8]
+    Subtotal: 66
+    Final DEF: 66
+  Margin: 56 − 66 = -10   ▶  PARRY (margin -10)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[28]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-9] = 54
+    FENWICK                 : d100[22]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 36
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[11]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-10]
+    Subtotal: 30
+    + style advantage: +6
+    Final ATK: 36
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[39]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 117
+    Final DEF: 117
+  Margin: 36 − 117 = -81   ▶  PARRY (margin -81)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[75]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 89
+    SCAVENGER               : d100[22]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-9] = 48
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[100]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 120
+    + style advantage: -6
+    Final ATK: 114
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[64]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-8]
+    Subtotal: 89
+    Final DEF: 89
+  Margin: 114 − 89 = 25   ▶  HIT (margin 25)
+  Damage (FENWICK → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 25/55.0)) = 0.455
+    Raw: max(1, int(3 × 0.455)) = 1
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 1 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 42/47 (89.4%)
+    hit     : −1
+    After  : 41/47 (87.2%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/47 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 97  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[83]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-10]
+    Subtotal: 102
+    + style advantage: +6
+    Final ATK: 108
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[17]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 95
+    Final DEF: 95
+  Margin: 108 − 95 = 13   ▶  HIT (margin 13)
+  Damage (SCAVENGER → FENWICK):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.75
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+      strength underweight pen     ×0.97 (3% penalty)
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 13/55.0)) = 0.236
+    Raw: max(1, int(10 × 0.236)) = 2
+    Favorite weapon +1 → raw = 3
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 3 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (FENWICK):
+    Before : 52/58 (89.7%)
+    hit     : −1
+    After  : 51/58 (87.9%)
+  Knockdown Check (FENWICK):
+    base = int(1/58 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 58  →  no knockdown
+  Perm Injury Check (FENWICK):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[98]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-10]
+    Subtotal: 117
+    + style advantage: +6
+    Final ATK: 123
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[98]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 176
+    Final DEF: 176
+  Margin: 123 − 176 = -53   ▶  PARRY (margin -53)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[22]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-10]
+    Subtotal: 41
+    + style advantage: +6
+    Final ATK: 47
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[80]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 158
+    Final DEF: 158
+  Margin: 47 − 158 = -111   ▶  PARRY (margin -111)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[73]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-10]
+    Subtotal: 92
+    + style advantage: +6
+    Final ATK: 98
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[45]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 123
+    Final DEF: 123
+  Margin: 98 − 123 = -25   ▶  PARRY (margin -25)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 8.0 END − (2.30 burn × 5 actions) = 0.0
+    FENWICK: 94.4 END − (0.40 burn × 2 actions) = 93.6
+    HP POOL — SCAVENGER: 41/47 (87%)
+    HP POOL — FENWICK: 51/58 (88%)
+
+==============================================================================
+  MINUTE 9
+==============================================================================
+  APM   — SCAVENGER: 4   |   FENWICK: 2
+  HP    — SCAVENGER: 41/47 (87%)   |   FENWICK: 51/58 (88%)
+  END   — SCAVENGER: 0.0   |   FENWICK: 93.6
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[96]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 119
+    FENWICK                 : d100[75]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 89
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[26]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 40
+    + style advantage: +6
+    Final ATK: 46
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[14]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 92
+    Final DEF: 92
+  Margin: 46 − 92 = -46   ▶  PARRY (margin -46)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[39]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 62
+    FENWICK                 : d100[45]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 59
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[31]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 45
+    + style advantage: +6
+    Final ATK: 51
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[30]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 108
+    Final DEF: 108
+  Margin: 51 − 108 = -57   ▶  PARRY (margin -57)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[89]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 112
+    FENWICK                 : d100[84]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 98
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[22]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 36
+    + style advantage: +6
+    Final ATK: 42
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[96]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 174
+    Final DEF: 174
+  Margin: 42 − 174 = -132   ▶  PARRY (margin -132)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[50]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 73
+    FENWICK                 : d100[48]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 62
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[11]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 25
+    + style advantage: +6
+    Final ATK: 31
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[40]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 118
+    Final DEF: 118
+  Margin: 31 − 118 = -87   ▶  PARRY (margin -87)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: FENWICK has uncontested action
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[59]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 79
+    + style advantage: -6
+    Final ATK: 73
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[5]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 26
+    Final DEF: 26
+  Margin: 73 − 26 = 47   ▶  HIT (margin 47)
+  Damage (FENWICK → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 47/55.0)) = 0.855
+    Raw: max(1, int(3 × 0.855)) = 2
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 41/47 (87.2%)
+    hit     : −1
+    After  : 40/47 (85.1%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/47 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 15  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    FENWICK: 93.6 END − (0.40 burn × 2 actions) = 92.8
+    HP POOL — SCAVENGER: 40/47 (85%)
+    HP POOL — FENWICK: 51/58 (88%)
+
+==============================================================================
+  MINUTE 10
+==============================================================================
+  APM   — SCAVENGER: 4   |   FENWICK: 2
+  HP    — SCAVENGER: 40/47 (85%)   |   FENWICK: 51/58 (88%)
+  END   — SCAVENGER: 0.0   |   FENWICK: 92.8
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[55]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 78
+    FENWICK                 : d100[32]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 46
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[53]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 67
+    + style advantage: +6
+    Final ATK: 73
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[47]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 125
+    Final DEF: 125
+  Margin: 73 − 125 = -52   ▶  PARRY (margin -52)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[73]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 87
+    SCAVENGER               : d100[51]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 74
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[6]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 26
+    + style advantage: -6
+    Final ATK: 20
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[85]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 106
+    Final DEF: 106
+  Margin: 20 − 106 = -86   ▶  PARRY (margin -86)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[82]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 96
+    + style advantage: +6
+    Final ATK: 102
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[7]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 85
+    Final DEF: 85
+  Margin: 102 − 85 = 17   ▶  HIT (margin 17)
+  Damage (SCAVENGER → FENWICK):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.75
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+      strength underweight pen     ×0.97 (3% penalty)
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 17/55.0)) = 0.309
+    Raw: max(1, int(10 × 0.309)) = 3
+    Favorite weapon +1 → raw = 4
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 4 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (FENWICK):
+    Before : 51/58 (87.9%)
+    hit     : −1
+    After  : 50/58 (86.2%)
+  Knockdown Check (FENWICK):
+    base = int(1/58 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 95  →  no knockdown
+  Perm Injury Check (FENWICK):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[49]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 63
+    + style advantage: +6
+    Final ATK: 69
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[73]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 151
+    Final DEF: 151
+  Margin: 69 − 151 = -82   ▶  PARRY (margin -82)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[45]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 59
+    + style advantage: +6
+    Final ATK: 65
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[15]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 93
+    Final DEF: 93
+  Margin: 65 − 93 = -28   ▶  PARRY (margin -28)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    FENWICK: 92.8 END − (0.40 burn × 2 actions) = 92.0
+    HP POOL — SCAVENGER: 40/47 (85%)
+    HP POOL — FENWICK: 50/58 (86%)
+
+==============================================================================
+  MINUTE 11
+==============================================================================
+  APM   — SCAVENGER: 4   |   FENWICK: 2
+  HP    — SCAVENGER: 40/47 (85%)   |   FENWICK: 50/58 (86%)
+  END   — SCAVENGER: 0.0   |   FENWICK: 92.0
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[85]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 99
+    SCAVENGER               : d100[20]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 43
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[33]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 53
+    + style advantage: -6
+    Final ATK: 47
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[11]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 32
+    Final DEF: 32
+  Margin: 47 − 32 = 15   ▶  HIT (margin 15)
+  Damage (FENWICK → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 15/55.0)) = 0.273
+    Raw: max(1, int(3 × 0.273)) = 1
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 1 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 40/47 (85.1%)
+    hit     : −1
+    After  : 39/47 (83.0%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/47 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 83  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[62]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 76
+    SCAVENGER               : d100[29]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 52
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[87]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 107
+    + style advantage: -6
+    Final ATK: 101
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[28]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 49
+    Final DEF: 49
+  Margin: 101 − 49 = 52   ▶  HIT (margin 52)
+  Damage (FENWICK → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 52/55.0)) = 0.945
+    Raw: max(1, int(3 × 0.945)) = 2
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 39/47 (83.0%)
+    hit     : −1
+    After  : 38/47 (80.9%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/47 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 40  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[16]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 30
+    + style advantage: +6
+    Final ATK: 36
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[69]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 147
+    Final DEF: 147
+  Margin: 36 − 147 = -111   ▶  PARRY (margin -111)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[78]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 92
+    + style advantage: +6
+    Final ATK: 98
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[48]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 126
+    Final DEF: 126
+  Margin: 98 − 126 = -28   ▶  PARRY (margin -28)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[45]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 59
+    + style advantage: +6
+    Final ATK: 65
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[41]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 119
+    Final DEF: 119
+  Margin: 65 − 119 = -54   ▶  PARRY (margin -54)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[50]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 64
+    + style advantage: +6
+    Final ATK: 70
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[12]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 90
+    Final DEF: 90
+  Margin: 70 − 90 = -20   ▶  PARRY (margin -20)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    FENWICK: 92.0 END − (0.40 burn × 2 actions) = 91.2
+    HP POOL — SCAVENGER: 38/47 (81%)
+    HP POOL — FENWICK: 50/58 (86%)
+
+==============================================================================
+  MINUTE 12
+==============================================================================
+  APM   — SCAVENGER: 4   |   FENWICK: 2
+  HP    — SCAVENGER: 38/47 (81%)   |   FENWICK: 38/58 (66%)
+  END   — SCAVENGER: 0.0   |   FENWICK: 91.2
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[63]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 86
+    FENWICK                 : d100[35]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 49
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[58]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 72
+    + style advantage: +6
+    Final ATK: 78
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[41]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 119
+    Final DEF: 119
+  Margin: 78 − 119 = -41   ▶  PARRY (margin -41)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[36]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 59
+    FENWICK                 : d100[37]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 51
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[8]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 22
+    + style advantage: +6
+    Final ATK: 28
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[68]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 146
+    Final DEF: 146
+  Margin: 28 − 146 = -118   ▶  PARRY (margin -118)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[77]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 100
+    FENWICK                 : d100[70]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 84
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[15]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 29
+    + style advantage: +6
+    Final ATK: 35
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[28]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 106
+    Final DEF: 106
+  Margin: 35 − 106 = -71   ▶  PARRY (margin -71)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[66]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 89
+    FENWICK                 : d100[42]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 56
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[41]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 55
+    + style advantage: +6
+    Final ATK: 61
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[92]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 170
+    Final DEF: 170
+  Margin: 61 − 170 = -109   ▶  PARRY (margin -109)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: FENWICK has uncontested action
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[84]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 104
+    + style advantage: -6
+    Final ATK: 98
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[27]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 48
+    Final DEF: 48
+  Margin: 98 − 48 = 50   ▶  HIT (margin 50)
+  Damage (FENWICK → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 50/55.0)) = 0.909
+    Raw: max(1, int(3 × 0.909)) = 2
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 38/47 (80.9%)
+    hit     : −1
+    After  : 37/47 (78.7%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/47 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 56  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    FENWICK: 91.2 END − (0.40 burn × 2 actions) = 90.4
+    HP POOL — SCAVENGER: 37/47 (79%)
+    HP POOL — FENWICK: 38/58 (66%)
+
+==============================================================================
+  MINUTE 13
+==============================================================================
+  APM   — SCAVENGER: 4   |   FENWICK: 2
+  HP    — SCAVENGER: 37/47 (79%)   |   FENWICK: 38/58 (66%)
+  END   — SCAVENGER: 0.0   |   FENWICK: 90.4
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[97]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 120
+    FENWICK                 : d100[48]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 62
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[32]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 46
+    + style advantage: +6
+    Final ATK: 52
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[36]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 114
+    Final DEF: 114
+  Margin: 52 − 114 = -62   ▶  PARRY (margin -62)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[96]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 110
+    SCAVENGER               : d100[10]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 33
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[55]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 75
+    + style advantage: -6
+    Final ATK: 69
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[15]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 36
+    Final DEF: 36
+  Margin: 69 − 36 = 33   ▶  HIT (margin 33)
+  Damage (FENWICK → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 33/55.0)) = 0.600
+    Raw: max(1, int(3 × 0.600)) = 1
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 1 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 37/47 (78.7%)
+    hit     : −1
+    After  : 36/47 (76.6%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/47 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 54  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[36]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 50
+    SCAVENGER               : d100[25]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 48
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[39]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 59
+    + style advantage: -6
+    Final ATK: 53
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[70]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 91
+    Final DEF: 91
+  Margin: 53 − 91 = -38   ▶  PARRY (margin -38)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[96]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 110
+    + style advantage: +6
+    Final ATK: 116
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[87]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 165
+    Final DEF: 165
+  Margin: 116 − 165 = -49   ▶  PARRY (margin -49)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[12]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 26
+    + style advantage: +6
+    Final ATK: 32
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[2]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 32 − 80 = -48   ▶  PARRY (margin -48)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[88]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 102
+    + style advantage: +6
+    Final ATK: 108
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[36]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 114
+    Final DEF: 114
+  Margin: 108 − 114 = -6   ▶  PARRY (margin -6)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    FENWICK: 90.4 END − (0.40 burn × 2 actions) = 89.6
+    HP POOL — SCAVENGER: 36/47 (77%)
+    HP POOL — FENWICK: 38/58 (66%)
+
+==============================================================================
+  MINUTE 14
+==============================================================================
+  APM   — SCAVENGER: 4   |   FENWICK: 2
+  HP    — SCAVENGER: 36/47 (77%)   |   FENWICK: 38/58 (66%)
+  END   — SCAVENGER: 0.0   |   FENWICK: 89.6
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[67]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 81
+    SCAVENGER               : d100[50]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 73
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[96]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 116
+    + style advantage: -6
+    Final ATK: 110
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[42]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 63
+    Final DEF: 63
+  Margin: 110 − 63 = 47   ▶  HIT (margin 47)
+  Damage (FENWICK → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 47/55.0)) = 0.855
+    Raw: max(1, int(3 × 0.855)) = 2
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 36/47 (76.6%)
+    hit     : −1
+    After  : 35/47 (74.5%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/47 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 24  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[91]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 114
+    FENWICK                 : d100[48]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 62
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[35]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 49
+    + style advantage: +6
+    Final ATK: 55
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[44]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 122
+    Final DEF: 122
+  Margin: 55 − 122 = -67   ▶  PARRY (margin -67)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[40]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 63
+    FENWICK                 : d100[37]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 51
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[54]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 68
+    + style advantage: +6
+    Final ATK: 74
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[92]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 170
+    Final DEF: 170
+  Margin: 74 − 170 = -96   ▶  PARRY (margin -96)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[8]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 31
+    FENWICK                 : d100[8]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 22
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[62]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 76
+    + style advantage: +6
+    Final ATK: 82
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[61]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 139
+    Final DEF: 139
+  Margin: 82 − 139 = -57   ▶  PARRY (margin -57)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[30]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 53
+    FENWICK                 : d100[4]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 18
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[10]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 24
+    + style advantage: +6
+    Final ATK: 30
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[81]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 159
+    Final DEF: 159
+  Margin: 30 − 159 = -129   ▶  PARRY (margin -129)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    FENWICK: 89.6 END − (0.40 burn × 2 actions) = 88.8
+    HP POOL — SCAVENGER: 35/47 (74%)
+    HP POOL — FENWICK: 38/58 (66%)
+
+==============================================================================
+  MINUTE 15
+==============================================================================
+  APM   — SCAVENGER: 4   |   FENWICK: 2
+  HP    — SCAVENGER: 35/47 (74%)   |   FENWICK: 38/58 (66%)
+  END   — SCAVENGER: 0.0   |   FENWICK: 88.8
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[73]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 96
+    FENWICK                 : d100[73]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 87
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[70]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 84
+    + style advantage: +6
+    Final ATK: 90
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[77]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 155
+    Final DEF: 155
+  Margin: 90 − 155 = -65   ▶  PARRY (margin -65)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[66]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 80
+    SCAVENGER               : d100[32]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 55
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[24]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 44
+    + style advantage: -6
+    Final ATK: 38
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[10]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 31
+    Final DEF: 31
+  Margin: 38 − 31 = 7   ▶  GRAZE (margin 7, 1 HP)
+  HP Pool (SCAVENGER):
+    Before : 35/47 (74.5%)
+    graze   : −1
+    After  : 34/47 (72.3%)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[62]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 85
+    FENWICK                 : d100[6]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 20
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[7]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 21
+    + style advantage: +6
+    Final ATK: 27
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[35]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 113
+    Final DEF: 113
+  Margin: 27 − 113 = -86   ▶  PARRY (margin -86)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[77]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 100
+    FENWICK                 : d100[41]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 55
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[3]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 17
+    + style advantage: +6
+    Final ATK: 23
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[6]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 84
+    Final DEF: 84
+  Margin: 23 − 84 = -61   ▶  PARRY (margin -61)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[63]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 77
+    SCAVENGER               : d100[47]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 70
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[86]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 106
+    + style advantage: -6
+    Final ATK: 100
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[61]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 82
+    Final DEF: 82
+  Margin: 100 − 82 = 18   ▶  HIT (margin 18)
+  Damage (FENWICK → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 18/55.0)) = 0.327
+    Raw: max(1, int(3 × 0.327)) = 1
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 1 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 34/47 (72.3%)
+    hit     : −1
+    After  : 33/47 (70.2%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/47 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 43  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[19]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 33
+    + style advantage: +6
+    Final ATK: 39
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[5]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 83
+    Final DEF: 83
+  Margin: 39 − 83 = -44   ▶  PARRY (margin -44)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    FENWICK: 88.8 END − (0.40 burn × 2 actions) = 88.0
+    HP POOL — SCAVENGER: 33/47 (70%)
+    HP POOL — FENWICK: 38/58 (66%)
+
+==============================================================================
+  MINUTE 16
+==============================================================================
+  APM   — SCAVENGER: 4   |   FENWICK: 2
+  HP    — SCAVENGER: 33/47 (70%)   |   FENWICK: 38/58 (66%)
+  END   — SCAVENGER: 0.0   |   FENWICK: 88.0
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[24]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 38
+    SCAVENGER               : d100[13]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 36
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[65]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 85
+    + style advantage: -6
+    Final ATK: 79
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[87]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 108
+    Final DEF: 108
+  Margin: 79 − 108 = -29   ▶  PARRY (margin -29)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[37]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 51
+    SCAVENGER               : d100[11]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 34
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[27]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 47
+    + style advantage: -6
+    Final ATK: 41
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[57]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 78
+    Final DEF: 78
+  Margin: 41 − 78 = -37   ▶  PARRY (margin -37)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[47]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 61
+    + style advantage: +6
+    Final ATK: 67
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[37]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 115
+    Final DEF: 115
+  Margin: 67 − 115 = -48   ▶  PARRY (margin -48)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[70]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 84
+    + style advantage: +6
+    Final ATK: 90
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[13]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 91
+    Final DEF: 91
+  Margin: 90 − 91 = -1   ▶  PARRY (margin -1)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[99]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 113
+    + style advantage: +6
+    Final ATK: 119
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[10]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 88
+    Final DEF: 88
+  Margin: 119 − 88 = 31   ▶  HIT (margin 31)
+  Damage (SCAVENGER → FENWICK):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.75
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+      strength underweight pen     ×0.97 (3% penalty)
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 31/55.0)) = 0.564
+    Raw: max(1, int(10 × 0.564)) = 5
+    Favorite weapon +1 → raw = 6
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 6 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (FENWICK):
+    Before : 38/58 (65.5%)
+    hit     : −1
+    After  : 37/58 (63.8%)
+  HP Pool (FENWICK):
+    Before : 37/58 (63.8%)
+    entangle fall: −3
+    After  : 34/58 (58.6%)
+  Knockdown Check (FENWICK):
+    base = int(1/58 × 80) = 1   cat bonus [Oddball]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (FENWICK):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    FENWICK: 88.0 END − (0.40 burn × 2 actions) = 87.2
+    HP POOL — SCAVENGER: 33/47 (70%)
+    HP POOL — FENWICK: 34/58 (59%)
+
+==============================================================================
+  MINUTE 17
+==============================================================================
+  APM   — SCAVENGER: 4   |   FENWICK: 1
+  HP    — SCAVENGER: 33/47 (70%)   |   FENWICK: 34/58 (59%)
+  END   — SCAVENGER: 0.0   |   FENWICK: 87.2
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[57]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 80
+    FENWICK                 : d100[11]  on_ground_halved[(÷2)] = 5
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[12]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 26
+    + style advantage: +6
+    Final ATK: 32
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[76]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]  ground_pen[-25]
+    Subtotal: 129
+    Final DEF: 129
+  Margin: 32 − 129 = -97   ▶  PARRY (margin -97)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[62]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 85
+    FENWICK                 : d100[79]  on_ground_halved[(÷2)] = 39
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[37]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 51
+    + style advantage: +6
+    Final ATK: 57
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[63]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]  ground_pen[-25]
+    Subtotal: 116
+    Final DEF: 116
+  Margin: 57 − 116 = -59   ▶  PARRY (margin -59)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[83]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 106
+    FENWICK                 : d100[70]  on_ground_halved[(÷2)] = 35
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[75]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 89
+    + style advantage: +6
+    Final ATK: 95
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[44]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]  ground_pen[-25]
+    Subtotal: 97
+    Final DEF: 97
+  Margin: 95 − 97 = -2   ▶  PARRY (margin -2)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[18]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 41
+    FENWICK                 : d100[15]  on_ground_halved[(÷2)] = 7
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[81]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 95
+    + style advantage: +6
+    Final ATK: 101
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[71]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]  ground_pen[-25]
+    Subtotal: 124
+    Final DEF: 124
+  Margin: 101 − 124 = -23   ▶  PARRY (margin -23)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    FENWICK: 87.2 END − (0.40 burn × 1 actions) = 86.8
+    HP POOL — SCAVENGER: 33/47 (70%)
+    HP POOL — FENWICK: 34/58 (59%)
+
+==============================================================================
+  MINUTE 18
+==============================================================================
+  APM   — SCAVENGER: 4   |   FENWICK: 2
+  HP    — SCAVENGER: 33/47 (70%)   |   FENWICK: 34/58 (59%)
+  END   — SCAVENGER: 0.0   |   FENWICK: 86.8
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[74]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 97
+    FENWICK                 : d100[78]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 92
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[33]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 47
+    + style advantage: +6
+    Final ATK: 53
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[23]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 101
+    Final DEF: 101
+  Margin: 53 − 101 = -48   ▶  PARRY (margin -48)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[68]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 82
+    SCAVENGER               : d100[43]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 66
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[66]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 86
+    + style advantage: -6
+    Final ATK: 80
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[45]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 66
+    Final DEF: 66
+  Margin: 80 − 66 = 14   ▶  HIT (margin 14)
+  Damage (FENWICK → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 14/55.0)) = 0.255
+    Raw: max(1, int(3 × 0.255)) = 1
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 1 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 33/47 (70.2%)
+    hit     : −1
+    After  : 32/47 (68.1%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/47 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 66  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[74]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 88
+    + style advantage: +6
+    Final ATK: 94
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[75]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 153
+    Final DEF: 153
+  Margin: 94 − 153 = -59   ▶  PARRY (margin -59)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[79]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 93
+    + style advantage: +6
+    Final ATK: 99
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[83]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 161
+    Final DEF: 161
+  Margin: 99 − 161 = -62   ▶  PARRY (margin -62)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[20]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 34
+    + style advantage: +6
+    Final ATK: 40
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[89]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 167
+    Final DEF: 167
+  Margin: 40 − 167 = -127   ▶  PARRY (margin -127)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    FENWICK: 86.8 END − (0.40 burn × 2 actions) = 86.0
+    HP POOL — SCAVENGER: 32/47 (68%)
+    HP POOL — FENWICK: 34/58 (59%)
+
+==============================================================================
+  MINUTE 19
+==============================================================================
+  APM   — SCAVENGER: 4   |   FENWICK: 2
+  HP    — SCAVENGER: 32/47 (68%)   |   FENWICK: 8/58 (14%)
+  END   — SCAVENGER: 0.0   |   FENWICK: 86.0
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[69]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 83
+    SCAVENGER               : d100[34]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 57
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[53]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 73
+    + style advantage: -6
+    Final ATK: 67
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[21]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 42
+    Final DEF: 42
+  Margin: 67 − 42 = 25   ▶  HIT (margin 25)
+  Damage (FENWICK → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 25/55.0)) = 0.455
+    Raw: max(1, int(3 × 0.455)) = 1
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 1 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 32/47 (68.1%)
+    hit     : −1
+    After  : 31/47 (66.0%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/47 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 51  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+  Concede Attempt (FENWICK):
+    d100[25] + PRE_bonus[-1] + luck//2[14] = 38
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    38 < 65  →  mercy denied — fight continues
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[82]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 96
+    SCAVENGER               : d100[67]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 90
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[91]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 111
+    + style advantage: -6
+    Final ATK: 105
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[88]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 109
+    Final DEF: 109
+  Margin: 105 − 109 = -4   ▶  PARRY (margin -4)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[100]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 114
+    + style advantage: +6
+    Final ATK: 120
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[48]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 126
+    Final DEF: 126
+  Margin: 120 − 126 = -6   ▶  PARRY (margin -6)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[71]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 85
+    + style advantage: +6
+    Final ATK: 91
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[85]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 163
+    Final DEF: 163
+  Margin: 91 − 163 = -72   ▶  PARRY (margin -72)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[43]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 57
+    + style advantage: +6
+    Final ATK: 63
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[74]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 152
+    Final DEF: 152
+  Margin: 63 − 152 = -89   ▶  PARRY (margin -89)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[35]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 49
+    + style advantage: +6
+    Final ATK: 55
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[64]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 142
+    Final DEF: 142
+  Margin: 55 − 142 = -87   ▶  PARRY (margin -87)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    FENWICK: 86.0 END − (0.40 burn × 2 actions) = 85.2
+    HP POOL — SCAVENGER: 31/47 (66%)
+    HP POOL — FENWICK: 8/58 (14%)
+
+==============================================================================
+  MINUTE 20
+==============================================================================
+  APM   — SCAVENGER: 4   |   FENWICK: 2
+  HP    — SCAVENGER: 31/47 (66%)   |   FENWICK: 1/58 (2%)
+  END   — SCAVENGER: 0.0   |   FENWICK: 85.2
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[47]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 70
+    FENWICK                 : d100[24]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 38
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[56]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 70
+    + style advantage: +6
+    Final ATK: 76
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[12]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 90
+    Final DEF: 90
+  Margin: 76 − 90 = -14   ▶  PARRY (margin -14)
+  Concede Attempt (FENWICK):
+    d100[1] + PRE_bonus[-1] + luck//2[14] = 14
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    14 < 65  →  mercy denied — fight continues
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[10]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 33
+    FENWICK                 : d100[9]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 23
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[52]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 66
+    + style advantage: +6
+    Final ATK: 72
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[26]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 104
+    Final DEF: 104
+  Margin: 72 − 104 = -32   ▶  PARRY (margin -32)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[66]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 89
+    FENWICK                 : d100[10]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 24
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[83]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 97
+    + style advantage: +6
+    Final ATK: 103
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[94]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 172
+    Final DEF: 172
+  Margin: 103 − 172 = -69   ▶  PARRY (margin -69)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[97]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 120
+    FENWICK                 : d100[23]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 37
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[67]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 81
+    + style advantage: +6
+    Final ATK: 87
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[88]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 166
+    Final DEF: 166
+  Margin: 87 − 166 = -79   ▶  PARRY (margin -79)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: FENWICK has uncontested action
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[44]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 64
+    + style advantage: -6
+    Final ATK: 58
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[68]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 89
+    Final DEF: 89
+  Margin: 58 − 89 = -31   ▶  PARRY (margin -31)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    FENWICK: 85.2 END − (0.40 burn × 2 actions) = 84.4
+    HP POOL — SCAVENGER: 31/47 (66%)
+    HP POOL — FENWICK: 1/58 (2%)
+
+==============================================================================
+  MINUTE 21
+==============================================================================
+  APM   — SCAVENGER: 4   |   FENWICK: 2
+  HP    — SCAVENGER: 31/47 (66%)   |   FENWICK: 1/58 (2%)
+  END   — SCAVENGER: 0.0   |   FENWICK: 84.4
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[81]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 104
+    FENWICK                 : d100[63]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 77
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[79]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 93
+    + style advantage: +6
+    Final ATK: 99
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[49]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 127
+    Final DEF: 127
+  Margin: 99 − 127 = -28   ▶  PARRY (margin -28)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[66]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 89
+    FENWICK                 : d100[61]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 75
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[59]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 73
+    + style advantage: +6
+    Final ATK: 79
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[42]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 120
+    Final DEF: 120
+  Margin: 79 − 120 = -41   ▶  PARRY (margin -41)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[79]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 102
+    FENWICK                 : d100[58]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 72
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[64]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 78
+    + style advantage: +6
+    Final ATK: 84
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[29]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 107
+    Final DEF: 107
+  Margin: 84 − 107 = -23   ▶  PARRY (margin -23)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[65]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 88
+    FENWICK                 : d100[4]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 18
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[59]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 73
+    + style advantage: +6
+    Final ATK: 79
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[94]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 172
+    Final DEF: 172
+  Margin: 79 − 172 = -93   ▶  PARRY (margin -93)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    FENWICK: 84.4 END − (0.40 burn × 2 actions) = 83.6
+    HP POOL — SCAVENGER: 31/47 (66%)
+    HP POOL — FENWICK: 1/58 (2%)
+
+==============================================================================
+  MINUTE 22
+==============================================================================
+  APM   — SCAVENGER: 4   |   FENWICK: 2
+  HP    — SCAVENGER: 31/47 (66%)   |   FENWICK: 1/58 (2%)
+  END   — SCAVENGER: 0.0   |   FENWICK: 83.6
+  STRAT — SCAVENGER: [Strike / Act:6]   |   FENWICK: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    FENWICK                 : d100[82]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 96
+    SCAVENGER               : d100[52]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 75
+    ▶ FENWICK wins → ATTACKS
+  Attack: FENWICK → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (FENWICK):
+    d100[57]  dex_bonus[-2]  luck[+29]  style_mod[-7]
+    Subtotal: 77
+    + style advantage: -6
+    Final ATK: 71
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[11]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 32
+    Final DEF: 32
+  Margin: 71 − 32 = 39   ▶  HIT (margin 39)
+  Damage (FENWICK → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 39/55.0)) = 0.709
+    Raw: max(1, int(3 × 0.709)) = 2
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 31/47 (66.0%)
+    hit     : −1
+    After  : 30/47 (63.8%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/47 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 98  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 47 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[89]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 112
+    FENWICK                 : d100[62]  dex_bonus[-4]  init_skill_x3[+3]  luck[+29]  style_mod[-10]  activity_mod[-4] = 76
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[66]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 80
+    + style advantage: +6
+    Final ATK: 86
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[53]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 131
+    Final DEF: 131
+  Margin: 86 − 131 = -45   ▶  PARRY (margin -45)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[71]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 85
+    + style advantage: +6
+    Final ATK: 91
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[82]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 160
+    Final DEF: 160
+  Margin: 91 − 160 = -69   ▶  PARRY (margin -69)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[24]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 38
+    + style advantage: +6
+    Final ATK: 44
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[52]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 130
+    Final DEF: 130
+  Margin: 44 − 130 = -86   ▶  PARRY (margin -86)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → FENWICK   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[97]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 111
+    + style advantage: +6
+    Final ATK: 117
+  Defense Roll (FENWICK, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[5]  luck[+29]  str_bonus[-1]  parry_skill(lv7)x4[+28]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 83
+    Final DEF: 83
+  Margin: 117 − 83 = 34   ▶  HIT (margin 34)
+  Damage (SCAVENGER → FENWICK):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.75
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+      strength underweight pen     ×0.97 (3% penalty)
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 34/55.0)) = 0.618
+    Raw: max(1, int(10 × 0.618)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 7 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (FENWICK):
+    Before : 1/58 (1.7%)
+    hit     : −1
+    After  : 0/58 (0.0%)
+  Knockdown Check (FENWICK):
+    base = int(1/58 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 81  →  no knockdown
+  Perm Injury Check (FENWICK):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+  Death Check (FENWICK):
+    prev_hp: 1   damage: 1   new_hp: 0
+    overshoot: 0
+    death_chance = min(50.0, 0.5 + 0) = 0.5%
+    → survives (concede system takes over)
+  Concede Attempt (FENWICK):
+    d100[72] + PRE_bonus[-1] + luck//2[14] = 85
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    85 ≥ 65  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: SCAVENGER
+==============================================================================
+  Constitution: d100=56 vs 20% — FAIL
+    → Constitution training: no progress this session (mastery tier, 20% chance).
+  Constitution: d100=1 vs 20% — SUCCESS
+    → Constitution trained: 19 → 20 [mastery] (20% chance)
+  Constitution: d100=73 vs 22% — FAIL
+    → Constitution training: no progress this session (mastery tier, 22% chance).
+  INT observed learning: d100=53 vs 4% — no trigger
+
+==============================================================================
+  TRAINING: FENWICK
+==============================================================================
+  Constitution: d100=8 vs 35% — SUCCESS
+    → Constitution trained: 21 → 22 [mastery] (35% chance)
+  Dodge: d100=84 vs 23% — FAIL
+    → Dodge training: no progress this session (INT 16, level 8, 23% chance).
+  Parry: d100=63 vs 29% — FAIL
+    → Parry training: no progress this session (INT 16, level 7, 29% chance).
+  INT observed learning: d100=82 vs 8% — no trigger
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : SCAVENGER  (63.8% HP remaining)
+  Loser  : FENWICK  (survived, 0.0% HP)
+  Duration: 22 minute(s)
+==============================================================================

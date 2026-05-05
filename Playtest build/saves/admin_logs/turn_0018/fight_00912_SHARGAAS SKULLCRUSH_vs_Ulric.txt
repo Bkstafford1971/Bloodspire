@@ -1,0 +1,1319 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #912   Turn: 18
+  Debug team: Electron
+  Electron / SHADES OF THE PAST   vs   Count Aldren Voss / House Voss
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: SHARGAAS SKULLCRUSH
+  ────────────────────────────────────
+    Race: Half-Orc  |  Gender: Male
+    STR:16  DEX:8  CON:16  INT:8  PRE:7  SIZ:16
+    Max HP: 70   Luck: 13
+    Armor: Half-Plate   Helm: Full Helm
+    Primary: War Flail   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Bash / Act:4 / Aim:None / Def:None
+
+  ────────────────────────────────────
+  WARRIOR B: ULRIC
+  ────────────────────────────────────
+    Race: Human  |  Gender: Male
+    STR:14  DEX:12  CON:11  INT:16  PRE:13  SIZ:10
+    Max HP: 43   Luck: 18
+    Armor: Cuir Boulli   Helm: None
+    Primary: Short Sword   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Feint / Act:4 / Aim:Chest / Def:Chest
+    Skills: dodge:6  feint:4  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — SHARGAAS SKULLCRUSH: 2   |   ULRIC: 5
+  HP    — SHARGAAS SKULLCRUSH: 70/70 (100%)   |   ULRIC: 43/43 (100%)
+  END   — SHARGAAS SKULLCRUSH: 100.0   |   ULRIC: 100.0
+  STRAT — SHARGAAS SKULLCRUSH: [Bash / Act:4]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[99]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 117
+    SHARGAAS SKULLCRUSH     : d100[45]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 41
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[26]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 58
+    Final ATK: 58
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[12]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 27
+    Final DEF: 27
+  Margin: 58 − 27 = 31   ▶  HIT (margin 31)
+  Damage (ULRIC → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 31/55.0)) = 0.564
+    Raw: max(1, int(12 × 0.564)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 7 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 70/70 (100.0%)
+    hit     : −1
+    After  : 69/70 (98.6%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 30  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[93]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 89
+    ULRIC                   : d100[12]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 30
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → ULRIC   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[31]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 41
+    Final ATK: 41
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[60]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 92
+    Final DEF: 92
+  Margin: 41 − 92 = -51   ▶  PARRY (margin -51)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[65]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 83
+    SHARGAAS SKULLCRUSH     : d100[14]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 10
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[16]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 48
+    Final ATK: 48
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[5]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 20
+    Final DEF: 20
+  Margin: 48 − 20 = 28   ▶  HIT (margin 28)
+  Damage (ULRIC → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 28/55.0)) = 0.509
+    Raw: max(1, int(12 × 0.509)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 7 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 69/70 (98.6%)
+    hit     : −1
+    After  : 68/70 (97.1%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 81  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[96]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 114
+    SHARGAAS SKULLCRUSH     : d100[63]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 59
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[81]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 113
+    Final ATK: 113
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[70]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 85
+    Final DEF: 85
+  Margin: 113 − 85 = 28   ▶  HIT (margin 28)
+  Damage (ULRIC → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 28/55.0)) = 0.509
+    Raw: max(1, int(12 × 0.509)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 7 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 68/70 (97.1%)
+    hit     : −1
+    After  : 67/70 (95.7%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 48  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[83]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 79
+    ULRIC                   : d100[44]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 62
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → ULRIC   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[50]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 60
+    Final ATK: 60
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[1]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 33
+    Final DEF: 33
+  Margin: 60 − 33 = 27   ▶  HIT (margin 27)
+  Damage (SHARGAAS SKULLCRUSH → ULRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 12.50
+      STR bonus                    +3.60
+      flail/size bonus             +1.60
+      race damage net              +8.00
+      style modifier               +3.00
+      activity contrib             +0.30
+      luck ×0.15                   +1.95
+    Ceiling: 30
+    Fraction: max(0.10, min(1.0, 27/55.0)) = 0.491
+    Raw: max(1, int(30 × 0.491)) = 14
+    Favorite weapon +1 → raw = 15
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 15 − 3) = 12
+  ▶ FINAL DAMAGE: 12
+  HP Pool (ULRIC):
+    Before : 43/43 (100.0%)
+    hit     : −12
+    After  : 31/43 (72.1%)
+  Knockdown Check (ULRIC):
+    base = int(12/43 × 80) = 22   cat bonus [Flail]: +10   final: 32%
+    Roll: 22  →  ▶ KNOCKDOWN
+  Perm Injury Check (ULRIC):
+    threshold = 15% of 43 = 6   damage 12 ≥ threshold
+    chance = max(5, min(80, int(12/43×100) − 5)) = 18%
+    Roll: 95  →  no injury
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[75]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 107
+    Final ATK: 107
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[89]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 104
+    Final DEF: 104
+  Margin: 107 − 104 = 3   ▶  GRAZE (margin 3, 1 HP)
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 67/70 (95.7%)
+    graze   : −1
+    After  : 66/70 (94.3%)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[1]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 33
+    Final ATK: 33
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[79]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 94
+    Final DEF: 94
+  Margin: 33 − 94 = -61   ▶  PARRY (margin -61)
+
+  ── END OF MINUTE ──
+    SHARGAAS SKULLCRUSH: 100.0 END − (6.70 burn × 2 actions) = 85.6
+    ULRIC: 100.0 END − (1.70 burn × 5 actions) = 91.5
+    HP POOL — SHARGAAS SKULLCRUSH: 66/70 (94%)
+    HP POOL — ULRIC: 31/43 (72%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — SHARGAAS SKULLCRUSH: 2   |   ULRIC: 2
+  HP    — SHARGAAS SKULLCRUSH: 66/70 (94%)   |   ULRIC: 31/43 (72%)
+  END   — SHARGAAS SKULLCRUSH: 85.6   |   ULRIC: 91.5
+  STRAT — SHARGAAS SKULLCRUSH: [Bash / Act:4]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[50]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 46
+    ULRIC                   : d100[87]  on_ground_halved[(÷2)] = 43
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → ULRIC   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[95]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 105
+    Final ATK: 105
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[94]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+10]  ground_pen[-25]
+    Subtotal: 101
+    Final DEF: 101
+  Margin: 105 − 101 = 4   ▶  GRAZE (margin 4, 1 HP)
+  HP Pool (ULRIC):
+    Before : 31/43 (72.1%)
+    graze   : −1
+    After  : 30/43 (69.8%)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[42]  on_ground_halved[(÷2)] = 21
+    SHARGAAS SKULLCRUSH     : d100[13]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 9
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[48]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 80
+    Final ATK: 80
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[90]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 105
+    Final DEF: 105
+  Margin: 80 − 105 = -25   ▶  PARRY (margin -25)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[60]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 56
+    ULRIC                   : d100[95]  on_ground_halved[(÷2)] = 47
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → ULRIC   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[65]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 75
+    Final ATK: 75
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[96]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+10]  ground_pen[-25]
+    Subtotal: 103
+    Final DEF: 103
+  Margin: 75 − 103 = -28   ▶  PARRY (margin -28)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[75]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 107
+    Final ATK: 107
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[75]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 90
+    Final DEF: 90
+  Margin: 107 − 90 = 17   ▶  HIT (margin 17)
+  Damage (ULRIC → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 17/55.0)) = 0.309
+    Raw: max(1, int(12 × 0.309)) = 3
+    Favorite weapon +1 → raw = 4
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 4 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 66/70 (94.3%)
+    hit     : −1
+    After  : 65/70 (92.9%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 6  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    SHARGAAS SKULLCRUSH: 85.6 END − (6.70 burn × 2 actions) = 71.2
+    ULRIC: 91.5 END − (1.70 burn × 2 actions) = 88.1
+    HP POOL — SHARGAAS SKULLCRUSH: 65/70 (93%)
+    HP POOL — ULRIC: 30/43 (70%)
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — SHARGAAS SKULLCRUSH: 2   |   ULRIC: 5
+  HP    — SHARGAAS SKULLCRUSH: 65/70 (93%)   |   ULRIC: 30/43 (70%)
+  END   — SHARGAAS SKULLCRUSH: 71.2   |   ULRIC: 88.1
+  STRAT — SHARGAAS SKULLCRUSH: [Bash / Act:4]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[93]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 111
+    SHARGAAS SKULLCRUSH     : d100[13]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 9
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[15]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 47
+    Final ATK: 47
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[65]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 47 − 80 = -33   ▶  PARRY (margin -33)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[68]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 64
+    ULRIC                   : d100[6]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 24
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → ULRIC   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[27]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 37
+    Final ATK: 37
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[39]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 71
+    Final DEF: 71
+  Margin: 37 − 71 = -34   ▶  PARRY (margin -34)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[96]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 92
+    ULRIC                   : d100[61]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 79
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → ULRIC   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[77]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 87
+    Final ATK: 87
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[25]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 57
+    Final DEF: 57
+  Margin: 87 − 57 = 30   ▶  HIT (margin 30)
+  Damage (SHARGAAS SKULLCRUSH → ULRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 12.50
+      STR bonus                    +3.60
+      flail/size bonus             +1.60
+      race damage net              +8.00
+      style modifier               +3.00
+      activity contrib             +0.30
+      luck ×0.15                   +1.95
+    Ceiling: 30
+    Fraction: max(0.10, min(1.0, 30/55.0)) = 0.545
+    Raw: max(1, int(30 × 0.545)) = 16
+    Favorite weapon +1 → raw = 17
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 17 − 3) = 14
+  ▶ FINAL DAMAGE: 14
+  HP Pool (ULRIC):
+    Before : 30/43 (69.8%)
+    hit     : −14
+    After  : 16/43 (37.2%)
+  Knockdown Check (ULRIC):
+    base = int(14/43 × 80) = 26   cat bonus [Flail]: +10   final: 36%
+    Roll: 31  →  ▶ KNOCKDOWN
+  Perm Injury Check (ULRIC):
+    threshold = 15% of 43 = 6   damage 14 ≥ threshold
+    chance = max(5, min(80, int(14/43×100) − 5)) = 22%
+    Roll: 11  →  primary_arm (1 level(s))
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[26]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 58
+    Final ATK: 58
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[83]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 58 − 98 = -40   ▶  PARRY (margin -40)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[99]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 131
+    Final ATK: 131
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[51]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 66
+    Final DEF: 66
+  Margin: 131 − 66 = 65   ▶  HIT (margin 65)
+  Damage (ULRIC → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 65/55.0)) = 1.000
+    Raw: max(1, int(12 × 1.000)) = 12
+    Favorite weapon +1 → raw = 13
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 13 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 65/70 (92.9%)
+    hit     : −1
+    After  : 64/70 (91.4%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 16  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[5]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 37
+    Final ATK: 37
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[53]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 68
+    Final DEF: 68
+  Margin: 37 − 68 = -31   ▶  PARRY (margin -31)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[72]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 104
+    Final ATK: 104
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[88]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 103
+    Final DEF: 103
+  Margin: 104 − 103 = 1   ▶  GRAZE (margin 1, 1 HP)
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 64/70 (91.4%)
+    graze   : −1
+    After  : 63/70 (90.0%)
+
+  ── END OF MINUTE ──
+    SHARGAAS SKULLCRUSH: 71.2 END − (6.70 burn × 2 actions) = 56.8
+    ULRIC: 88.1 END − (1.70 burn × 5 actions) = 79.6
+    HP POOL — SHARGAAS SKULLCRUSH: 63/70 (90%)
+    HP POOL — ULRIC: 16/43 (37%)
+
+==============================================================================
+  MINUTE 4
+==============================================================================
+  APM   — SHARGAAS SKULLCRUSH: 2   |   ULRIC: 5
+  HP    — SHARGAAS SKULLCRUSH: 63/70 (90%)   |   ULRIC: 16/43 (37%)
+  END   — SHARGAAS SKULLCRUSH: 56.8   |   ULRIC: 79.6
+  STRAT — SHARGAAS SKULLCRUSH: [Bash / Act:4]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[31]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 49
+    SHARGAAS SKULLCRUSH     : d100[40]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 36
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[35]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 67
+    Final ATK: 67
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[98]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 113
+    Final DEF: 113
+  Margin: 67 − 113 = -46   ▶  PARRY (margin -46)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[86]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 82
+    ULRIC                   : d100[37]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 55
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → ULRIC   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[32]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 42
+    Final ATK: 42
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[26]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 58
+    Final DEF: 58
+  Margin: 42 − 58 = -16   ▶  PARRY (margin -16)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[52]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 70
+    SHARGAAS SKULLCRUSH     : d100[43]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 39
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[8]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 40
+    Final ATK: 40
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[3]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 18
+    Final DEF: 18
+  Margin: 40 − 18 = 22   ▶  HIT (margin 22)
+  Damage (ULRIC → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 22/55.0)) = 0.400
+    Raw: max(1, int(12 × 0.400)) = 4
+    Favorite weapon +1 → raw = 5
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 5 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 63/70 (90.0%)
+    hit     : −1
+    After  : 62/70 (88.6%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 7  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[72]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 68
+    ULRIC                   : d100[22]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 40
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → ULRIC   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[19]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 29
+    Final ATK: 29
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[56]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 88
+    Final DEF: 88
+  Margin: 29 − 88 = -59   ▶  PARRY (margin -59)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[72]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 104
+    Final ATK: 104
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[22]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 37
+    Final DEF: 37
+  Margin: 104 − 37 = 67   ▶  HIT (margin 67)
+  Damage (ULRIC → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 67/55.0)) = 1.000
+    Raw: max(1, int(12 × 1.000)) = 12
+    Favorite weapon +1 → raw = 13
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 13 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 62/70 (88.6%)
+    hit     : −1
+    After  : 61/70 (87.1%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 68  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[20]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 52
+    Final ATK: 52
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[92]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 107
+    Final DEF: 107
+  Margin: 52 − 107 = -55   ▶  PARRY (margin -55)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[100]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 132
+    Final ATK: 132
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[30]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 45
+    Final DEF: 45
+  Margin: 132 − 45 = 87   ▶  HIT (margin 87)
+  Damage (ULRIC → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 87/55.0)) = 1.000
+    Raw: max(1, int(12 × 1.000)) = 12
+    Favorite weapon +1 → raw = 13
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 13 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 61/70 (87.1%)
+    hit     : −1
+    After  : 60/70 (85.7%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 91  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    SHARGAAS SKULLCRUSH: 56.8 END − (6.70 burn × 2 actions) = 42.4
+    ULRIC: 79.6 END − (1.70 burn × 5 actions) = 71.1
+    HP POOL — SHARGAAS SKULLCRUSH: 60/70 (86%)
+    HP POOL — ULRIC: 16/43 (37%)
+
+==============================================================================
+  MINUTE 5
+==============================================================================
+  APM   — SHARGAAS SKULLCRUSH: 2   |   ULRIC: 5
+  HP    — SHARGAAS SKULLCRUSH: 60/70 (86%)   |   ULRIC: 16/43 (37%)
+  END   — SHARGAAS SKULLCRUSH: 42.4   |   ULRIC: 71.1
+  STRAT — SHARGAAS SKULLCRUSH: [Bash / Act:4]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[58]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 54
+    ULRIC                   : d100[1]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 19
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → ULRIC   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[87]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 97
+    Final ATK: 97
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[63]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 95
+    Final DEF: 95
+  Margin: 97 − 95 = 2   ▶  GRAZE (margin 2, 1 HP)
+  HP Pool (ULRIC):
+    Before : 16/43 (37.2%)
+    graze   : −1
+    After  : 15/43 (34.9%)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[65]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2] = 61
+    ULRIC                   : d100[41]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 59
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → ULRIC   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[14]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 24
+    Final ATK: 24
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[32]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 64
+    Final DEF: 64
+  Margin: 24 − 64 = -40   ▶  PARRY (margin -40)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[65]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 97
+    Final ATK: 97
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[29]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 44
+    Final DEF: 44
+  Margin: 97 − 44 = 53   ▶  HIT (margin 53)
+  Damage (ULRIC → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 53/55.0)) = 0.964
+    Raw: max(1, int(12 × 0.964)) = 11
+    Favorite weapon +1 → raw = 12
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 12 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 60/70 (85.7%)
+    hit     : −1
+    After  : 59/70 (84.3%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 8  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[45]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 77
+    Final ATK: 77
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[100]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 115
+    Final DEF: 115
+  Margin: 77 − 115 = -38   ▶  PARRY (margin -38)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[59]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 91
+    Final ATK: 91
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[70]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 85
+    Final DEF: 85
+  Margin: 91 − 85 = 6   ▶  GRAZE (margin 6, 1 HP)
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 59/70 (84.3%)
+    graze   : −1
+    After  : 58/70 (82.9%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[51]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 83
+    Final ATK: 83
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[39]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 54
+    Final DEF: 54
+  Margin: 83 − 54 = 29   ▶  HIT (margin 29)
+  Damage (ULRIC → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 29/55.0)) = 0.527
+    Raw: max(1, int(12 × 0.527)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 7 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 58/70 (82.9%)
+    hit     : −1
+    After  : 57/70 (81.4%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 47  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: ULRIC has uncontested action
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[14]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 46
+    Final ATK: 46
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[24]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 39
+    Final DEF: 39
+  Margin: 46 − 39 = 7   ▶  GRAZE (margin 7, 1 HP)
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 57/70 (81.4%)
+    graze   : −1
+    After  : 56/70 (80.0%)
+
+  ── END OF MINUTE ──
+    SHARGAAS SKULLCRUSH: 42.4 END − (6.70 burn × 2 actions) = 28.0
+    ULRIC: 71.1 END − (1.70 burn × 5 actions) = 62.6
+    HP POOL — SHARGAAS SKULLCRUSH: 56/70 (80%)
+    HP POOL — ULRIC: 15/43 (35%)
+
+==============================================================================
+  MINUTE 6
+==============================================================================
+  APM   — SHARGAAS SKULLCRUSH: 2   |   ULRIC: 5
+  HP    — SHARGAAS SKULLCRUSH: 56/70 (80%)   |   ULRIC: 15/43 (35%)
+  END   — SHARGAAS SKULLCRUSH: 28.0   |   ULRIC: 62.6
+  STRAT — SHARGAAS SKULLCRUSH: [Bash / Act:4]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[100]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 118
+    SHARGAAS SKULLCRUSH     : d100[60]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2]  end_pen[-3] = 53
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[3]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 35
+    Final ATK: 35
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[64]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 79
+    Final DEF: 79
+  Margin: 35 − 79 = -44   ▶  PARRY (margin -44)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[89]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 107
+    SHARGAAS SKULLCRUSH     : d100[27]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2]  end_pen[-3] = 20
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[2]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 34
+    Final ATK: 34
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[31]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 46
+    Final DEF: 46
+  Margin: 34 − 46 = -12   ▶  PARRY (margin -12)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHARGAAS SKULLCRUSH     : d100[72]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2]  end_pen[-3] = 65
+    ULRIC                   : d100[28]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 46
+    ▶ SHARGAAS SKULLCRUSH wins → ATTACKS
+  Attack: SHARGAAS SKULLCRUSH → ULRIC   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[7]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]  end_pen[-1]
+    Subtotal: 16
+    Final ATK: 16
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[74]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 106
+    Final DEF: 106
+  Margin: 16 − 106 = -90   ▶  PARRY (margin -90)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[85]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 103
+    SHARGAAS SKULLCRUSH     : d100[46]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2]  end_pen[-3] = 39
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[83]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 115
+    Final ATK: 115
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[54]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 69
+    Final DEF: 69
+  Margin: 115 − 69 = 46   ▶  HIT (margin 46)
+  Damage (ULRIC → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 46/55.0)) = 0.836
+    Raw: max(1, int(12 × 0.836)) = 10
+    Favorite weapon +1 → raw = 11
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 11 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 56/70 (80.0%)
+    hit     : −1
+    After  : 55/70 (78.6%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 47  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[89]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 107
+    SHARGAAS SKULLCRUSH     : d100[64]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2]  end_pen[-3] = 57
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[19]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 51
+    Final ATK: 51
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[83]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 51 − 98 = -47   ▶  PARRY (margin -47)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[78]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 96
+    SHARGAAS SKULLCRUSH     : d100[21]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2]  end_pen[-3] = 14
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[71]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 103
+    Final ATK: 103
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[41]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]
+    Subtotal: 56
+    Final DEF: 56
+  Margin: 103 − 56 = 47   ▶  HIT (margin 47)
+  Damage (ULRIC → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 47/55.0)) = 0.855
+    Raw: max(1, int(12 × 0.855)) = 10
+    Favorite weapon +1 → raw = 11
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 11 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 55/70 (78.6%)
+    hit     : −1
+    After  : 54/70 (77.1%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 1  →  ▶ KNOCKDOWN
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: SHARGAAS SKULLCRUSH has uncontested action
+  Attack: SHARGAAS SKULLCRUSH → ULRIC   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[16]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]  end_pen[-1]
+    Subtotal: 25
+    Final ATK: 25
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[70]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 102
+    Final DEF: 102
+  Margin: 25 − 102 = -77   ▶  PARRY (margin -77)
+
+  ── END OF MINUTE ──
+    SHARGAAS SKULLCRUSH: 28.0 END − (6.70 burn × 2 actions) = 13.6
+    ULRIC: 62.6 END − (1.70 burn × 5 actions) = 54.1
+    HP POOL — SHARGAAS SKULLCRUSH: 54/70 (77%)
+    HP POOL — ULRIC: 15/43 (35%)
+
+==============================================================================
+  MINUTE 7
+==============================================================================
+  APM   — SHARGAAS SKULLCRUSH: 2   |   ULRIC: 5
+  HP    — SHARGAAS SKULLCRUSH: 54/70 (77%)   |   ULRIC: 15/43 (35%)
+  END   — SHARGAAS SKULLCRUSH: 13.6   |   ULRIC: 54.1
+  STRAT — SHARGAAS SKULLCRUSH: [Bash / Act:4]   |   ULRIC: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[97]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 115
+    SHARGAAS SKULLCRUSH     : d100[22]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2]  end_pen[-7] = 11
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[17]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 49
+    Final ATK: 49
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[55]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]  end_pen[-6]
+    Subtotal: 64
+    Final DEF: 64
+  Margin: 49 − 64 = -15   ▶  PARRY (margin -15)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[90]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 108
+    SHARGAAS SKULLCRUSH     : d100[56]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2]  end_pen[-7] = 45
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[77]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 109
+    Final ATK: 109
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[45]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]  end_pen[-6]
+    Subtotal: 54
+    Final DEF: 54
+  Margin: 109 − 54 = 55   ▶  HIT (margin 55)
+  Damage (ULRIC → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 55/55.0)) = 1.000
+    Raw: max(1, int(12 × 1.000)) = 12
+    Favorite weapon +1 → raw = 13
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 13 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 54/70 (77.1%)
+    hit     : −1
+    After  : 53/70 (75.7%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 78  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[85]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 103
+    SHARGAAS SKULLCRUSH     : d100[77]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2]  end_pen[-7] = 66
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[28]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 60
+    Final ATK: 60
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[26]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]  end_pen[-6]
+    Subtotal: 35
+    Final DEF: 35
+  Margin: 60 − 35 = 25   ▶  HIT (margin 25)
+  Damage (ULRIC → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 25/55.0)) = 0.455
+    Raw: max(1, int(12 × 0.455)) = 5
+    Favorite weapon +1 → raw = 6
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 6 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 53/70 (75.7%)
+    hit     : −1
+    After  : 52/70 (74.3%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 25  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[61]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 79
+    SHARGAAS SKULLCRUSH     : d100[58]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2]  end_pen[-7] = 47
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[58]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 90
+    Final ATK: 90
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[23]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]  end_pen[-6]
+    Subtotal: 32
+    Final DEF: 32
+  Margin: 90 − 32 = 58   ▶  HIT (margin 58)
+  Damage (ULRIC → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 58/55.0)) = 1.000
+    Raw: max(1, int(12 × 1.000)) = 12
+    Favorite weapon +1 → raw = 13
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 13 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 52/70 (74.3%)
+    hit     : −1
+    After  : 51/70 (72.9%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 24  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ULRIC                   : d100[93]  dex_bonus[+2]  luck[+18]  activity_mod[-2] = 111
+    SHARGAAS SKULLCRUSH     : d100[81]  dex_bonus[-10]  luck[+13]  race_init[-3]  style_mod[-2]  activity_mod[-2]  end_pen[-7] = 70
+    ▶ ULRIC wins → ATTACKS
+  Attack: ULRIC → SHARGAAS SKULLCRUSH   Weapon: Short Sword   Style: Feint   Aim: Chest
+  Attack Roll (ULRIC):
+    d100[34]  dex_bonus[+1]  luck[+18]  feint[+8]  fav_bonus[+5]
+    Subtotal: 66
+    Final ATK: 66
+  Defense Roll (SHARGAAS SKULLCRUSH, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[19]  luck[+13]  str_bonus[+3]  style_parry[-3]  activity_mod[+2]  end_pen[-6]
+    Subtotal: 28
+    Final DEF: 28
+  Margin: 66 − 28 = 38   ▶  HIT (margin 38)
+  Damage (ULRIC → SHARGAAS SKULLCRUSH):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +2.40
+      activity contrib             +0.30
+      luck ×0.15                   +2.70
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 38/55.0)) = 0.691
+    Raw: max(1, int(12 × 0.691)) = 8
+    Favorite weapon +1 → raw = 9
+    Armor: Half-Plate  base DEF: 13
+    Net = max(1, 9 − 13) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHARGAAS SKULLCRUSH):
+    Before : 51/70 (72.9%)
+    hit     : −1
+    After  : 50/70 (71.4%)
+  Knockdown Check (SHARGAAS SKULLCRUSH):
+    base = int(1/70 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 100  →  no knockdown
+  Perm Injury Check (SHARGAAS SKULLCRUSH):
+    threshold = 15% of 70 = 10   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SHARGAAS SKULLCRUSH has uncontested action
+  Attack: SHARGAAS SKULLCRUSH → ULRIC   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[56]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]  end_pen[-8]
+    Subtotal: 58
+    Final ATK: 58
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[25]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 57
+    Final DEF: 57
+  Margin: 58 − 57 = 1   ▶  GRAZE (margin 1, 1 HP)
+  HP Pool (ULRIC):
+    Before : 15/43 (34.9%)
+    graze   : −1
+    After  : 14/43 (32.6%)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: SHARGAAS SKULLCRUSH has uncontested action
+  Attack: SHARGAAS SKULLCRUSH → ULRIC   Weapon: War Flail   Style: Bash   Aim: None
+  Attack Roll (SHARGAAS SKULLCRUSH):
+    d100[79]  dex_bonus[-7]  luck[+13]  style_mod[-1]  fav_bonus[+5]  end_pen[-8]
+    Subtotal: 81
+    Final ATK: 81
+  Defense Roll (ULRIC, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[5]  luck[+18]  str_bonus[+2]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 37
+    Final DEF: 37
+  Margin: 81 − 37 = 44   ▶  HIT (margin 44)
+  Damage (SHARGAAS SKULLCRUSH → ULRIC):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 12.50
+      STR bonus                    +3.60
+      flail/size bonus             +1.60
+      race damage net              +8.00
+      style modifier               +3.00
+      activity contrib             +0.30
+      luck ×0.15                   +1.95
+    Ceiling: 30
+    Fraction: max(0.10, min(1.0, 44/55.0)) = 0.800
+    Raw: max(1, int(30 × 0.800)) = 24
+    Favorite weapon +1 → raw = 25
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 25 − 3) = 22
+  ▶ FINAL DAMAGE: 22
+  HP Pool (ULRIC):
+    Before : 14/43 (32.6%)
+    hit     : −22
+    After  : -8/43 (0.0%)
+  Knockdown Check (ULRIC):
+    base = int(22/43 × 80) = 40   cat bonus [Flail]: +10   final: 50%
+    Roll: 13  →  ▶ KNOCKDOWN
+  Perm Injury Check (ULRIC):
+    threshold = 15% of 43 = 6   damage 22 ≥ threshold
+    chance = max(5, min(80, int(22/43×100) − 5)) = 39%
+    Roll: 93  →  no injury
+  Death Check (ULRIC):
+    prev_hp: 14   damage: 22   new_hp: -8
+    overshoot: 8
+    death_chance = min(50.0, 0.5 + 8) = 8.5%
+    → survives (concede system takes over)
+  Concede Attempt (ULRIC):
+    d100[60] + PRE_bonus[+3] + luck//2[9] = 72
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    72 ≥ 64  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: SHARGAAS SKULLCRUSH
+==============================================================================
+  Dexterity: d100=71 vs 55% — FAIL
+    → Dexterity training: no progress this session (CON 16, 55% chance).
+  Dexterity: d100=71 vs 55% — FAIL
+    → Dexterity training: no progress this session (CON 16, 55% chance).
+  Dexterity: d100=65 vs 55% — FAIL
+    → Dexterity training: no progress this session (CON 16, 55% chance).
+
+==============================================================================
+  TRAINING: ULRIC
+==============================================================================
+  Dodge: d100=60 vs 29% — FAIL
+    → Dodge training: no progress this session (INT 16, level 6, 29% chance).
+  Feint: d100=11 vs 42% — SUCCESS
+    → Feint trained: Level 4 → Level 5 (Very Skilled, 42% chance)
+  Dexterity: d100=76 vs 36% — FAIL
+    → Dexterity training: no progress this session (mid tier, 36% chance).
+  INT observed learning: d100=26 vs 8% — no trigger
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : SHARGAAS SKULLCRUSH  (71.4% HP remaining)
+  Loser  : ULRIC  (survived, 0.0% HP)
+  Duration: 7 minute(s)
+==============================================================================

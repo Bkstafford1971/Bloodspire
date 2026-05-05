@@ -1,0 +1,800 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #636   Turn: 12
+  Debug team: Ilneval
+  Ilneval / DECEPTICONS   vs   Penny Briarwood / Briarwood Brawlers
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: DIRGE
+  ────────────────────────────────────
+    Race: Dwarf  |  Gender: Male
+    STR:15  DEX:22  CON:15  INT:11  PRE:9  SIZ:10
+    Max HP: 62   Luck: 6
+    Armor: Brigandine   Helm: Helm
+    Primary: Halberd   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Wall of Steel / Act:8 / Aim:Chest / Def:None
+      [2] Always  →  Bash / Act:7 / Aim:Head / Def:Chest
+
+  ────────────────────────────────────
+  WARRIOR B: BRACKEN
+  ────────────────────────────────────
+    Race: Halfling  |  Gender: Male
+    STR:22  DEX:15  CON:6  INT:15  PRE:12  SIZ:12
+    Max HP: 38   Luck: 13
+    Armor: Chain   Helm: None
+    Primary: Morningstar   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Counterstrike / Act:5 / Aim:Chest / Def:Chest
+    Skills: dodge:8  feint:1  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — DIRGE: 6   |   BRACKEN: 5
+  HP    — DIRGE: 62/62 (100%)   |   BRACKEN: 38/38 (100%)
+  END   — DIRGE: 100.0   |   BRACKEN: 100.0
+  STRAT — DIRGE: [Bash / Act:7]   |   BRACKEN: [Counterstrike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[95]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 113
+    BRACKEN                 : d100[10]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 23
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → BRACKEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[51]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 69
+    + style advantage: +6
+    Final ATK: 75
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[85]  luck[+13]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 117
+    Final DEF: 117
+  Margin: 75 − 117 = -42   ▶  PARRY (margin -42)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[87]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 100
+    DIRGE                   : d100[4]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4] = 22
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → DIRGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[89]  dex_bonus[+3]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 103
+    + style advantage: +6
+    Final ATK: 109
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[1]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+22]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 57
+    Final DEF: 57
+  Margin: 109 − 57 = 52   ▶  HIT (margin 52)
+  Damage (BRACKEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +7.20
+      race damage net              -6.00
+      style modifier               +2.00
+      luck ×0.15                   +1.95
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 52/55.0)) = 0.945
+    Raw: max(1, int(15 × 0.945)) = 14
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 14 − 7) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (DIRGE):
+    Before : 62/62 (100.0%)
+    hit     : −7
+    After  : 55/62 (88.7%)
+  Knockdown Check (DIRGE):
+    base = int(7/62 × 80) = 9   cat bonus [Hammer/Mace]: +10   final: 19%
+    Roll: 18  →  ▶ KNOCKDOWN
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 7 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[37]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 50
+    DIRGE                   : d100[23]  on_ground_halved[(÷2)] = 11
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → DIRGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[32]  dex_bonus[+3]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 46
+    + style advantage: +6
+    Final ATK: 52
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[5]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+22]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 36
+    Final DEF: 36
+  Margin: 52 − 36 = 16   ▶  HIT (margin 16)
+  Damage (BRACKEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +7.20
+      race damage net              -6.00
+      style modifier               +2.00
+      luck ×0.15                   +1.95
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 16/55.0)) = 0.291
+    Raw: max(1, int(15 × 0.291)) = 4
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 4 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 55/62 (88.7%)
+    hit     : −1
+    After  : 54/62 (87.1%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[60]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 73
+    DIRGE                   : d100[48]  on_ground_halved[(÷2)] = 24
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → DIRGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[66]  dex_bonus[+3]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 80
+    + style advantage: +6
+    Final ATK: 86
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[73]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+22]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 104
+    Final DEF: 104
+  Margin: 86 − 104 = -18   ▶  PARRY (margin -18)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[94]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 107
+    DIRGE                   : d100[64]  on_ground_halved[(÷2)] = 32
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → DIRGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[70]  dex_bonus[+3]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 84
+    + style advantage: +6
+    Final ATK: 90
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[33]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+22]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 64
+    Final DEF: 64
+  Margin: 90 − 64 = 26   ▶  HIT (margin 26)
+  Damage (BRACKEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +7.20
+      race damage net              -6.00
+      style modifier               +2.00
+      luck ×0.15                   +1.95
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 26/55.0)) = 0.473
+    Raw: max(1, int(15 × 0.473)) = 7
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 7 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 54/62 (87.1%)
+    hit     : −1
+    After  : 53/62 (85.5%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[79]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 92
+    DIRGE                   : d100[66]  on_ground_halved[(÷2)] = 33
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → DIRGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[42]  dex_bonus[+3]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 56
+    + style advantage: +6
+    Final ATK: 62
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[57]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+22]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 88
+    Final DEF: 88
+  Margin: 62 − 88 = -26   ▶  PARRY (margin -26)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → BRACKEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[32]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 50
+    + style advantage: +6
+    Final ATK: 56
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[9]  luck[+13]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 41
+    Final DEF: 41
+  Margin: 56 − 41 = 15   ▶  HIT (margin 15)
+  Damage (DIRGE → BRACKEN):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 18.75
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      strength underweight pen     ×0.75 (25% penalty)
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 15/55.0)) = 0.273
+    Raw: max(1, int(23 × 0.273)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Chain  base DEF: 6
+    Net = max(1, 7 − 6) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (BRACKEN):
+    Before : 38/38 (100.0%)
+    hit     : −1
+    After  : 37/38 (97.4%)
+  Knockdown Check (BRACKEN):
+    base = int(1/38 × 80) = 2   cat bonus [Polearm/Spear]: +5   final: 7%
+    Roll: 51  →  no knockdown
+  Perm Injury Check (BRACKEN):
+    threshold = 15% of 38 = 5   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → BRACKEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[75]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 93
+    + style advantage: +6
+    Final ATK: 99
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[11]  luck[+13]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 43
+    Final DEF: 43
+  Margin: 99 − 43 = 56   ▶  HIT (margin 56)
+  Damage (DIRGE → BRACKEN):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 18.75
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      strength underweight pen     ×0.75 (25% penalty)
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 56/55.0)) = 1.000
+    Raw: max(1, int(23 × 1.000)) = 23
+    Favorite weapon +1 → raw = 24
+    Armor: Chain  base DEF: 6
+    Net = max(1, 24 − 6) = 18
+  ▶ FINAL DAMAGE: 18
+  HP Pool (BRACKEN):
+    Before : 37/38 (97.4%)
+    hit     : −18
+    After  : 19/38 (50.0%)
+  Knockdown Check (BRACKEN):
+    base = int(18/38 × 80) = 37   cat bonus [Polearm/Spear]: +5   final: 42%
+    Roll: 52  →  no knockdown
+  Perm Injury Check (BRACKEN):
+    threshold = 15% of 38 = 5   damage 18 ≥ threshold
+    chance = max(5, min(80, int(18/38×100) − 5)) = 42%
+    Roll: 85  →  no injury
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → BRACKEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[23]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 41
+    + style advantage: +6
+    Final ATK: 47
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[36]  luck[+13]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 68
+    Final DEF: 68
+  Margin: 47 − 68 = -21   ▶  PARRY (margin -21)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → BRACKEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[85]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 103
+    + style advantage: +6
+    Final ATK: 109
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[95]  luck[+13]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 127
+    Final DEF: 127
+  Margin: 109 − 127 = -18   ▶  PARRY (margin -18)
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → BRACKEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[4]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 22
+    + style advantage: +6
+    Final ATK: 28
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[19]  luck[+13]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 51
+    Final DEF: 51
+  Margin: 28 − 51 = -23   ▶  PARRY (margin -23)
+
+  ── END OF MINUTE ──
+    DIRGE: 100.0 END − (7.60 burn × 6 actions) = 53.9
+    BRACKEN: 100.0 END − (3.50 burn × 5 actions) = 82.5
+    HP POOL — DIRGE: 53/62 (85%)
+    HP POOL — BRACKEN: 19/38 (50%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — DIRGE: 3   |   BRACKEN: 5
+  HP    — DIRGE: 53/62 (85%)   |   BRACKEN: 19/38 (50%)
+  END   — DIRGE: 53.9   |   BRACKEN: 82.5
+  STRAT — DIRGE: [Bash / Act:7]   |   BRACKEN: [Counterstrike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[63]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 76
+    DIRGE                   : d100[1]  on_ground_halved[(÷2)] = 1
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → DIRGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[64]  dex_bonus[+3]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 78
+    + style advantage: +6
+    Final ATK: 84
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[25]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+22]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 56
+    Final DEF: 56
+  Margin: 84 − 56 = 28   ▶  HIT (margin 28)
+  Damage (BRACKEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +7.20
+      race damage net              -6.00
+      style modifier               +2.00
+      luck ×0.15                   +1.95
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 28/55.0)) = 0.509
+    Raw: max(1, int(15 × 0.509)) = 7
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 7 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 53/62 (85.5%)
+    hit     : −1
+    After  : 52/62 (83.9%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[77]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 90
+    DIRGE                   : d100[56]  on_ground_halved[(÷2)] = 28
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → DIRGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[17]  dex_bonus[+3]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 31
+    + style advantage: +6
+    Final ATK: 37
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[5]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+22]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 36
+    Final DEF: 36
+  Margin: 37 − 36 = 1   ▶  GRAZE (margin 1, 1 HP)
+  HP Pool (DIRGE):
+    Before : 52/62 (83.9%)
+    graze   : −1
+    After  : 51/62 (82.3%)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[59]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 72
+    DIRGE                   : d100[32]  on_ground_halved[(÷2)] = 16
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → DIRGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[8]  dex_bonus[+3]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 22
+    + style advantage: +6
+    Final ATK: 28
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[71]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+22]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 102
+    Final DEF: 102
+  Margin: 28 − 102 = -74   ▶  PARRY (margin -74)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[96]  on_ground_halved[(÷2)] = 48
+    BRACKEN                 : d100[2]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 15
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → BRACKEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[41]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 59
+    + style advantage: +6
+    Final ATK: 65
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[65]  luck[+13]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 97
+    Final DEF: 97
+  Margin: 65 − 97 = -32   ▶  PARRY (margin -32)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[77]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 90
+    DIRGE                   : d100[4]  on_ground_halved[(÷2)] = 2
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → DIRGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[47]  dex_bonus[+3]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 61
+    + style advantage: +6
+    Final ATK: 67
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[62]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+22]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 93
+    Final DEF: 93
+  Margin: 67 − 93 = -26   ▶  PARRY (margin -26)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[97]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 110
+    DIRGE                   : d100[6]  on_ground_halved[(÷2)] = 3
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → DIRGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[18]  dex_bonus[+3]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 32
+    + style advantage: +6
+    Final ATK: 38
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[50]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+22]  race_parry_x3[+18]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 81
+    Final DEF: 81
+  Margin: 38 − 81 = -43   ▶  PARRY (margin -43)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → BRACKEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[90]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 108
+    + style advantage: +6
+    Final ATK: 114
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[36]  luck[+13]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 68
+    Final DEF: 68
+  Margin: 114 − 68 = 46   ▶  HIT (margin 46)
+  Damage (DIRGE → BRACKEN):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 18.75
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      strength underweight pen     ×0.75 (25% penalty)
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 46/55.0)) = 0.836
+    Raw: max(1, int(23 × 0.836)) = 19
+    Favorite weapon +1 → raw = 20
+    Armor: Chain  base DEF: 6
+    Net = max(1, 20 − 6) = 14
+  ▶ FINAL DAMAGE: 14
+  HP Pool (BRACKEN):
+    Before : 19/38 (50.0%)
+    hit     : −14
+    After  : 5/38 (13.2%)
+  Knockdown Check (BRACKEN):
+    base = int(14/38 × 80) = 29   cat bonus [Polearm/Spear]: +5   final: 34%
+    Roll: 78  →  no knockdown
+  Perm Injury Check (BRACKEN):
+    threshold = 15% of 38 = 5   damage 14 ≥ threshold
+    chance = max(5, min(80, int(14/38×100) − 5)) = 31%
+    Roll: 7  →  head (2 level(s))
+  Concede Attempt (BRACKEN):
+    d100[42] + PRE_bonus[+2] + luck//2[6] = 50
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    50 < 64  →  mercy denied — fight continues
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: DIRGE has uncontested action
+  Attack: DIRGE → BRACKEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[54]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 72
+    + style advantage: +6
+    Final ATK: 78
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[47]  luck[+13]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 79
+    Final DEF: 79
+  Margin: 78 − 79 = -1   ▶  PARRY (margin -1)
+
+  ── END OF MINUTE ──
+    DIRGE: 53.9 END − (7.60 burn × 3 actions) = 30.6
+    BRACKEN: 82.5 END − (3.50 burn × 5 actions) = 65.0
+    HP POOL — DIRGE: 51/62 (82%)
+    HP POOL — BRACKEN: 5/38 (13%)
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — DIRGE: 5   |   BRACKEN: 5
+  HP    — DIRGE: 51/62 (82%)   |   BRACKEN: 5/38 (13%)
+  END   — DIRGE: 30.6   |   BRACKEN: 65.0
+  STRAT — DIRGE: [Bash / Act:7]   |   BRACKEN: [Counterstrike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[94]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 107
+    DIRGE                   : d100[64]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-2] = 80
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → DIRGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[75]  dex_bonus[+3]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 89
+    + style advantage: +6
+    Final ATK: 95
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[18]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+22]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 74
+    Final DEF: 74
+  Margin: 95 − 74 = 21   ▶  HIT (margin 21)
+  Damage (BRACKEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +7.20
+      race damage net              -6.00
+      style modifier               +2.00
+      luck ×0.15                   +1.95
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 21/55.0)) = 0.382
+    Raw: max(1, int(15 × 0.382)) = 5
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 5 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (DIRGE):
+    Before : 51/62 (82.3%)
+    hit     : −1
+    After  : 50/62 (80.6%)
+  Knockdown Check (DIRGE):
+    base = int(1/62 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 47  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[67]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 80
+    DIRGE                   : d100[18]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-2] = 34
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → DIRGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[9]  dex_bonus[+3]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 23
+    + style advantage: +6
+    Final ATK: 29
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[82]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+22]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 138
+    Final DEF: 138
+  Margin: 29 − 138 = -109   ▶  PARRY (margin -109)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[90]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-2] = 106
+    BRACKEN                 : d100[8]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 21
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → BRACKEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[91]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 109
+    + style advantage: +6
+    Final ATK: 115
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[100]  luck[+13]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 132
+    Final DEF: 132
+  Margin: 115 − 132 = -17   ▶  PARRY (margin -17)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[67]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 80
+    DIRGE                   : d100[59]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-2] = 75
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → DIRGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[94]  dex_bonus[+3]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 108
+    + style advantage: +6
+    Final ATK: 114
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[9]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+22]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 65
+    Final DEF: 65
+  Margin: 114 − 65 = 49   ▶  HIT (margin 49)
+  Damage (BRACKEN → DIRGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +7.20
+      race damage net              -6.00
+      style modifier               +2.00
+      luck ×0.15                   +1.95
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 49/55.0)) = 0.891
+    Raw: max(1, int(15 × 0.891)) = 13
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 13 − 7) = 6
+  ▶ FINAL DAMAGE: 6
+  HP Pool (DIRGE):
+    Before : 50/62 (80.6%)
+    hit     : −6
+    After  : 44/62 (71.0%)
+  Knockdown Check (DIRGE):
+    base = int(6/62 × 80) = 7   cat bonus [Hammer/Mace]: +10   final: 17%
+    Roll: 89  →  no knockdown
+  Perm Injury Check (DIRGE):
+    threshold = 15% of 62 = 9   damage 6 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[35]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-2] = 51
+    BRACKEN                 : d100[6]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 19
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → BRACKEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[71]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 89
+    + style advantage: +6
+    Final ATK: 95
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[98]  luck[+13]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 130
+    Final DEF: 130
+  Margin: 95 − 130 = -35   ▶  PARRY (margin -35)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BRACKEN                 : d100[33]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 46
+    DIRGE                   : d100[29]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-2] = 45
+    ▶ BRACKEN wins → ATTACKS
+  Attack: BRACKEN → DIRGE   Weapon: Morningstar   Style: Counterstrike   Aim: Chest
+  Attack Roll (BRACKEN):
+    d100[78]  dex_bonus[+3]  luck[+13]  style_mod[-4]  feint[+2]
+    Subtotal: 92
+    + style advantage: +6
+    Final ATK: 98
+  Defense Roll (DIRGE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[46]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+22]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 102
+    Final DEF: 102
+  Margin: 98 − 102 = -4   ▶  PARRY (margin -4)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[78]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-2] = 94
+    BRACKEN                 : d100[4]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 17
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → BRACKEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[26]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 44
+    + style advantage: +6
+    Final ATK: 50
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[60]  luck[+13]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 92
+    Final DEF: 92
+  Margin: 50 − 92 = -42   ▶  PARRY (margin -42)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    DIRGE                   : d100[72]  dex_bonus[+10]  luck[+6]  style_mod[-2]  activity_mod[+4]  end_pen[-2] = 88
+    BRACKEN                 : d100[66]  dex_bonus[+6]  luck[+13]  style_mod[-6] = 79
+    ▶ DIRGE wins → ATTACKS
+  Attack: DIRGE → BRACKEN   Weapon: Halberd   Style: Bash   Aim: Head
+  Attack Roll (DIRGE):
+    d100[100]  dex_bonus[+8]  luck[+6]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 118
+    + style advantage: +6
+    Final ATK: 124
+  Defense Roll (BRACKEN, PARRY — parry_bonus(2) ≥ dodge_bonus(0)):
+    d100[28]  luck[+13]  str_bonus[+5]  style_parry[+6]  dex_trained_x2[+8]
+    Subtotal: 60
+    Final DEF: 60
+  Margin: 124 − 60 = 64   ▶  HIT (margin 64)
+  Damage (DIRGE → BRACKEN):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 18.75
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      strength underweight pen     ×0.75 (25% penalty)
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 64/55.0)) = 1.000
+    Raw: max(1, int(23 × 1.000)) = 23
+    Favorite weapon +1 → raw = 24
+    Armor: Chain  base DEF: 6
+    Net = max(1, 24 − 6) = 18
+  ▶ FINAL DAMAGE: 18
+  HP Pool (BRACKEN):
+    Before : 5/38 (13.2%)
+    hit     : −18
+    After  : -13/38 (0.0%)
+  Knockdown Check (BRACKEN):
+    base = int(18/38 × 80) = 37   cat bonus [Polearm/Spear]: +5   final: 42%
+    Roll: 65  →  no knockdown
+  Perm Injury Check (BRACKEN):
+    threshold = 15% of 38 = 5   damage 18 ≥ threshold
+    chance = max(5, min(80, int(18/38×100) − 5)) = 42%
+    Roll: 87  →  no injury
+  Death Check (BRACKEN):
+    prev_hp: 5   damage: 18   new_hp: -13
+    overshoot: 13
+    death_chance = min(50.0, 0.5 + 13) = 13.5%
+    → survives (concede system takes over)
+  Concede Attempt (BRACKEN):
+    d100[78] + PRE_bonus[+2] + luck//2[6] = 86
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    86 ≥ 64  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: DIRGE
+==============================================================================
+  Dexterity: d100=47 vs 14% — FAIL
+    → Dexterity training: no progress this session (mastery tier, 14% chance).
+  Dexterity: d100=57 vs 14% — FAIL
+    → Dexterity training: no progress this session (mastery tier, 14% chance).
+  Dexterity: d100=51 vs 14% — FAIL
+    → Dexterity training: no progress this session (mastery tier, 14% chance).
+
+==============================================================================
+  TRAINING: BRACKEN
+==============================================================================
+  Strength: d100=50 vs 11% — FAIL
+    → Strength training: no progress this session (late tier, 11% chance).
+  Dexterity: d100=23 vs 18% — FAIL
+    → Dexterity training: no progress this session (mid tier, 18% chance).
+  Dodge: d100=94 vs 14% — FAIL
+    → Dodge training: no progress this session (INT 15, level 8, 14% chance).
+  INT observed learning: d100=65 vs 4% — no trigger
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : DIRGE  (66.1% HP remaining)
+  Loser  : BRACKEN  (survived, 0.0% HP)
+  Duration: 3 minute(s)
+==============================================================================

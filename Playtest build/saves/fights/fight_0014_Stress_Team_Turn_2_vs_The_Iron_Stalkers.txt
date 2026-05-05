@@ -1,0 +1,109 @@
+Fight #14
+Stress Team Turn 2  vs  The Iron Stalkers
+============================================================================
+
+============================================================================
+RIPOSTE_1 (0-0-0)   vs   BRAN SEVENFINGER (0-1-0)
+STRESS TEAM TURN 2 (STRESS TESTER)   vs   THE IRON STALKERS (DARK FIST)
+Human Male   vs   Half-Orc Female
+============================================================================
+
+RIPOSTE_1 is 5'7"
+RIPOSTE_1 weighs 165 lbs.
+RIPOSTE_1 Known To The Crowd.
+RIPOSTE_1 enters the arena unarmored and wears no helm.
+RIPOSTE_1 fights using a EPEE.
+
+BRAN SEVENFINGER is 5'9"
+BRAN SEVENFINGER weighs 216 lbs.
+BRAN SEVENFINGER Known To The Crowd.
+BRAN SEVENFINGER enters the arena in CLOTH and will wear a LEATHER CAP.
+BRAN SEVENFINGER fights using a WAR FLAIL.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+Thunder rumbles ominously in the distance
+BRAN SEVENFINGER makes an explosive assault on RIPOSTE_1's body with her war flail
+RIPOSTE_1 makes a desperate last-moment parry!
+BRAN SEVENFINGER flails at RIPOSTE_1's body with her war flail
+BRAN SEVENFINGER's war flail lashes into RIPOSTE_1's armor!
+   Barely a scratch!
+RIPOSTE_1 plummets downward with great speed!!
+BRAN SEVENFINGER drives suddenly forward, war flail whistling through the air
+BRAN SEVENFINGER whips at RIPOSTE_1's body with her war flail
+RIPOSTE_1 has a plan: don't get hit!
+BRAN SEVENFINGER lashes out at RIPOSTE_1's torso with her war flail
+BRAN SEVENFINGER gets past RIPOSTE_1's guard!
+BRAN SEVENFINGER's war flail wraps around and cracks into RIPOSTE_1's armor!
+   A devastating strike!
+BRAN SEVENFINGER tries to demolish RIPOSTE_1's midsection with her war flail
+The blow connects!
+BRAN SEVENFINGER's war flail lashes into RIPOSTE_1's armor!
+   A devastating strike!
+RIPOSTE_1 tries to hit the mighty BRAN SEVENFINGER
+RIPOSTE_1 drives a blow toward BRAN SEVENFINGER's body with his epee
+The blow connects!
+RIPOSTE_1's epee bites into BRAN SEVENFINGER's armor!
+   The armor absorbs most of it
+BRAN SEVENFINGER is knocked off her feet!
+RIPOSTE_1 cuts at BRAN SEVENFINGER's midsection with his epee
+RIPOSTE_1 barely gets past BRAN SEVENFINGER's defenses!
+RIPOSTE_1's epee bites into BRAN SEVENFINGER's torso!
+   A minor hit!
+RIPOSTE_1 directs an attack toward BRAN SEVENFINGER
+RIPOSTE_1 cuts at BRAN SEVENFINGER's midsection with his epee
+RIPOSTE_1's blow barely grazes BRAN SEVENFINGER!
+The crowd surges forward against the barriers!
+RIPOSTE_1 sizes up BRAN SEVENFINGER carefully
+RIPOSTE_1 cuts at BRAN SEVENFINGER's torso with his epee
+RIPOSTE_1 barely gets past BRAN SEVENFINGER's defenses!
+RIPOSTE_1's epee bites into BRAN SEVENFINGER's body!
+   The blow lands without full force
+RIPOSTE_1 thrusts at BRAN SEVENFINGER's torso with his epee
+RIPOSTE_1 barely gets past BRAN SEVENFINGER's defenses!
+RIPOSTE_1's epee cuts into BRAN SEVENFINGER's torso!
+   A glancing blow!
+
+MINUTE 2
+BRAN SEVENFINGER is beginning to edge ahead in the exchange.
+
+BRAN SEVENFINGER scrambles back to her feet
+BRAN SEVENFINGER makes an explosive assault on RIPOSTE_1's torso with her war flail
+The blow connects!
+BRAN SEVENFINGER's war flail lashes into RIPOSTE_1's armor!
+   Great gobs of gore gush from the gash!
+*** RIPOSTE_1 has been permanently injured in the chest!!! ***
+RIPOSTE_1 clutches at his chest!
+RIPOSTE_1 gasps for air, ribs grinding painfully!!
+RIPOSTE_1 raises a hand in surrender!
+No quarter is given!
+BRAN SEVENFINGER whips at RIPOSTE_1's body with her war flail
+BRAN SEVENFINGER finds the opening!
+BRAN SEVENFINGER's war flail wraps around and cracks into RIPOSTE_1's armor!
+   The crowd winces at the sound of that blow!
+*** RIPOSTE_1's skull takes a terrible wound!!! ***
+RIPOSTE_1's skull wound weeps blood!
+RIPOSTE_1 staggers, seeing double from the blow to his head!!
+RIPOSTE_1 calls out for quarter!
+The Blood Master shows no mercy today!
+BRAN SEVENFINGER hacks away at RIPOSTE_1's body with her war flail
+BRAN SEVENFINGER's war flail whips into RIPOSTE_1's armor!
+   The resulting crunch echoes through the BLOODSPIRE!
+RIPOSTE_1 appeals to the Blood Master for mercy!
+RIPOSTE_1 must fight on, or die trying!
+BRAN SEVENFINGER drives suddenly forward, war flail whistling through the air
+BRAN SEVENFINGER hacks away at RIPOSTE_1's midsection with her war flail
+BRAN SEVENFINGER's war flail whips into RIPOSTE_1's torso!
+   The blow lands with bone-breaking force!
+RIPOSTE_1 falls, never to rise again!!!
+
+BRAN SEVENFINGER has won this affair of honor!
+
+BRAN SEVENFINGER has trained in Skill

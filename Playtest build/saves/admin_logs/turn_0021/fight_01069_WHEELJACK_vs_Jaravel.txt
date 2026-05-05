@@ -1,0 +1,590 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #1069   Turn: 21
+  Debug team: Electron
+  Electron / AUTOBOTS   vs   Loquat the Wise / The Learned Fists
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: WHEELJACK
+  ────────────────────────────────────
+    Race: Dwarf  |  Gender: Male
+    STR:14  DEX:13  CON:15  INT:15  PRE:11  SIZ:7
+    Max HP: 55   Luck: 29
+    Armor: Chain   Helm: Full Helm
+    Primary: War Hammer   Secondary: Target Shield
+    Strategies:
+      [1] Always  →  Wall of Steel / Act:6 / Aim:None / Def:Chest
+    Skills: initiative:2  parry:7  
+
+  ────────────────────────────────────
+  WARRIOR B: JARAVEL
+  ────────────────────────────────────
+    Race: Half-Elf  |  Gender: Female
+    STR:5  DEX:15  CON:9  INT:10  PRE:17  SIZ:21
+    Max HP: 58   Luck: 9
+    Armor: Cuir Boulli   Helm: None
+    Primary: Open Hand   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Feint / Act:4 / Aim:Chest / Def:Chest
+    Skills: dodge:6  feint:9  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — WHEELJACK: 6   |   JARAVEL: 5
+  HP    — WHEELJACK: 55/55 (100%)   |   JARAVEL: 58/58 (100%)
+  END   — WHEELJACK: 100.0   |   JARAVEL: 100.0
+  STRAT — WHEELJACK: [Wall of Steel / Act:6]   |   JARAVEL: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    WHEELJACK               : d100[10]  dex_bonus[-2]  init_skill_x3[+6]  luck[+29]  style_mod[+6]  activity_mod[+2] = 51
+    JARAVEL                 : d100[12]  dex_bonus[+8]  luck[+9]  activity_mod[-2] = 27
+    ▶ WHEELJACK wins → ATTACKS
+  Attack: WHEELJACK → JARAVEL   Weapon: War Hammer   Style: Wall of Steel   Aim: None
+  Attack Roll (WHEELJACK):
+    d100[57]  dex_bonus[-1]  luck[+29]  style_mod[+4]
+    Subtotal: 89
+    Final ATK: 89
+  Defense Roll (JARAVEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[99]  luck[+9]  str_bonus[-3]  activity_mod[+2]
+    Subtotal: 107
+    Final DEF: 107
+  Margin: 89 − 107 = -18   ▶  PARRY (margin -18)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    JARAVEL                 : d100[62]  dex_bonus[+8]  luck[+9]  activity_mod[-2] = 77
+    WHEELJACK               : d100[18]  dex_bonus[-2]  init_skill_x3[+6]  luck[+29]  style_mod[+6]  activity_mod[+2] = 59
+    ▶ JARAVEL wins → ATTACKS
+  Attack: JARAVEL → WHEELJACK   Weapon: Open Hand   Style: Feint   Aim: Chest
+  Attack Roll (JARAVEL):
+    d100[10]  dex_bonus[+4]  luck[+9]  feint[+18]
+    Subtotal: 41
+    Final ATK: 41
+  Defense Roll (WHEELJACK, PARRY — parry_bonus(3) ≥ dodge_bonus(0)):
+    d100[42]  luck[+29]  str_bonus[+2]  parry_skill(lv7)x4[+28]  style_parry[+9]  activity_mod[-2]  dex_trained_x2[+8]  race_parry_x3[+18]  def_point_bonus[+15]  shield_bonus[+10]
+    Subtotal: 159
+    Final DEF: 159
+  Margin: 41 − 159 = -118   ▶  PARRY (margin -118)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    WHEELJACK               : d100[68]  dex_bonus[-2]  init_skill_x3[+6]  luck[+29]  style_mod[+6]  activity_mod[+2] = 109
+    JARAVEL                 : d100[50]  dex_bonus[+8]  luck[+9]  activity_mod[-2] = 65
+    ▶ WHEELJACK wins → ATTACKS
+  Attack: WHEELJACK → JARAVEL   Weapon: War Hammer   Style: Wall of Steel   Aim: None
+  Attack Roll (WHEELJACK):
+    d100[40]  dex_bonus[-1]  luck[+29]  style_mod[+4]
+    Subtotal: 72
+    Final ATK: 72
+  Defense Roll (JARAVEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[49]  luck[+9]  str_bonus[-3]  activity_mod[+2]
+    Subtotal: 57
+    Final DEF: 57
+  Margin: 72 − 57 = 15   ▶  HIT (margin 15)
+  Damage (WHEELJACK → JARAVEL):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +2.40
+      race damage net              +3.00
+      style modifier               -2.00
+      activity contrib             -0.30
+      luck ×0.15                   +4.35
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 15/55.0)) = 0.273
+    Raw: max(1, int(18 × 0.273)) = 4
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 4 − 3) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (JARAVEL):
+    Before : 58/58 (100.0%)
+    hit     : −1
+    After  : 57/58 (98.3%)
+  Knockdown Check (JARAVEL):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 1%
+    Roll: 56  →  no knockdown
+  Perm Injury Check (JARAVEL):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    JARAVEL                 : d100[86]  dex_bonus[+8]  luck[+9]  activity_mod[-2] = 101
+    WHEELJACK               : d100[55]  dex_bonus[-2]  init_skill_x3[+6]  luck[+29]  style_mod[+6]  activity_mod[+2] = 96
+    ▶ JARAVEL wins → ATTACKS
+  Attack: JARAVEL → WHEELJACK   Weapon: Open Hand   Style: Feint   Aim: Chest
+  Attack Roll (JARAVEL):
+    d100[52]  dex_bonus[+4]  luck[+9]  feint[+18]
+    Subtotal: 83
+    Final ATK: 83
+  Defense Roll (WHEELJACK, PARRY — parry_bonus(3) ≥ dodge_bonus(0)):
+    d100[61]  luck[+29]  str_bonus[+2]  parry_skill(lv7)x4[+28]  style_parry[+9]  activity_mod[-2]  dex_trained_x2[+8]  race_parry_x3[+18]  def_point_bonus[+15]  shield_bonus[+10]
+    Subtotal: 178
+    Final DEF: 178
+  Margin: 83 − 178 = -95   ▶  PARRY (margin -95)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    WHEELJACK               : d100[80]  dex_bonus[-2]  init_skill_x3[+6]  luck[+29]  style_mod[+6]  activity_mod[+2] = 121
+    JARAVEL                 : d100[62]  dex_bonus[+8]  luck[+9]  activity_mod[-2] = 77
+    ▶ WHEELJACK wins → ATTACKS
+  Attack: WHEELJACK → JARAVEL   Weapon: War Hammer   Style: Wall of Steel   Aim: None
+  Attack Roll (WHEELJACK):
+    d100[96]  dex_bonus[-1]  luck[+29]  style_mod[+4]
+    Subtotal: 128
+    Final ATK: 128
+  Defense Roll (JARAVEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[33]  luck[+9]  str_bonus[-3]  activity_mod[+2]
+    Subtotal: 41
+    Final DEF: 41
+  Margin: 128 − 41 = 87   ▶  HIT (margin 87)
+  Damage (WHEELJACK → JARAVEL):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +2.40
+      race damage net              +3.00
+      style modifier               -2.00
+      activity contrib             -0.30
+      luck ×0.15                   +4.35
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 87/55.0)) = 1.000
+    Raw: max(1, int(18 × 1.000)) = 18
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 18 − 3) = 15
+  ▶ FINAL DAMAGE: 15
+  HP Pool (JARAVEL):
+    Before : 57/58 (98.3%)
+    hit     : −15
+    After  : 42/58 (72.4%)
+  Knockdown Check (JARAVEL):
+    base = int(15/58 × 80) = 20   cat bonus [Hammer/Mace]: +10   final: 12%
+    Roll: 31  →  no knockdown
+  Perm Injury Check (JARAVEL):
+    threshold = 15% of 58 = 8   damage 15 ≥ threshold
+    chance = max(5, min(80, int(15/58×100) − 5)) = 20%
+    Roll: 75  →  no injury
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    WHEELJACK               : d100[45]  dex_bonus[-2]  init_skill_x3[+6]  luck[+29]  style_mod[+6]  activity_mod[+2] = 86
+    JARAVEL                 : d100[66]  dex_bonus[+8]  luck[+9]  activity_mod[-2] = 81
+    ▶ WHEELJACK wins → ATTACKS
+  Attack: WHEELJACK → JARAVEL   Weapon: War Hammer   Style: Wall of Steel   Aim: None
+  Attack Roll (WHEELJACK):
+    d100[76]  dex_bonus[-1]  luck[+29]  style_mod[+4]
+    Subtotal: 108
+    Final ATK: 108
+  Defense Roll (JARAVEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[9]  luck[+9]  str_bonus[-3]  activity_mod[+2]
+    Subtotal: 17
+    Final DEF: 17
+  Margin: 108 − 17 = 91   ▶  HIT (margin 91)
+  Damage (WHEELJACK → JARAVEL):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +2.40
+      race damage net              +3.00
+      style modifier               -2.00
+      activity contrib             -0.30
+      luck ×0.15                   +4.35
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 91/55.0)) = 1.000
+    Raw: max(1, int(18 × 1.000)) = 18
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 18 − 3) = 15
+  ▶ FINAL DAMAGE: 15
+  HP Pool (JARAVEL):
+    Before : 42/58 (72.4%)
+    hit     : −15
+    After  : 27/58 (46.6%)
+  Knockdown Check (JARAVEL):
+    base = int(15/58 × 80) = 20   cat bonus [Hammer/Mace]: +10   final: 12%
+    Roll: 75  →  no knockdown
+  Perm Injury Check (JARAVEL):
+    threshold = 15% of 58 = 8   damage 15 ≥ threshold
+    chance = max(5, min(80, int(15/58×100) − 5)) = 20%
+    Roll: 32  →  no injury
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    WHEELJACK               : d100[77]  dex_bonus[-2]  init_skill_x3[+6]  luck[+29]  style_mod[+6]  activity_mod[+2] = 118
+    JARAVEL                 : d100[51]  dex_bonus[+8]  luck[+9]  activity_mod[-2] = 66
+    ▶ WHEELJACK wins → ATTACKS
+  Attack: WHEELJACK → JARAVEL   Weapon: War Hammer   Style: Wall of Steel   Aim: None
+  Attack Roll (WHEELJACK):
+    d100[2]  dex_bonus[-1]  luck[+29]  style_mod[+4]
+    Subtotal: 34
+    Final ATK: 34
+  Defense Roll (JARAVEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[15]  luck[+9]  str_bonus[-3]  activity_mod[+2]
+    Subtotal: 23
+    Final DEF: 23
+  Margin: 34 − 23 = 11   ▶  HIT (margin 11)
+  Damage (WHEELJACK → JARAVEL):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +2.40
+      race damage net              +3.00
+      style modifier               -2.00
+      activity contrib             -0.30
+      luck ×0.15                   +4.35
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 11/55.0)) = 0.200
+    Raw: max(1, int(18 × 0.200)) = 3
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 3 − 3) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (JARAVEL):
+    Before : 27/58 (46.6%)
+    hit     : −1
+    After  : 26/58 (44.8%)
+  Knockdown Check (JARAVEL):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 1%
+    Roll: 84  →  no knockdown
+  Perm Injury Check (JARAVEL):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    WHEELJACK               : d100[38]  dex_bonus[-2]  init_skill_x3[+6]  luck[+29]  style_mod[+6]  activity_mod[+2] = 79
+    JARAVEL                 : d100[63]  dex_bonus[+8]  luck[+9]  activity_mod[-2] = 78
+    ▶ WHEELJACK wins → ATTACKS
+  Attack: WHEELJACK → JARAVEL   Weapon: War Hammer   Style: Wall of Steel   Aim: None
+  Attack Roll (WHEELJACK):
+    d100[7]  dex_bonus[-1]  luck[+29]  style_mod[+4]
+    Subtotal: 39
+    Final ATK: 39
+  Defense Roll (JARAVEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[92]  luck[+9]  str_bonus[-3]  activity_mod[+2]
+    Subtotal: 100
+    Final DEF: 100
+  Margin: 39 − 100 = -61   ▶  PARRY (margin -61)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: JARAVEL has uncontested action
+  Attack: JARAVEL → WHEELJACK   Weapon: Open Hand   Style: Feint   Aim: Chest
+  Attack Roll (JARAVEL):
+    d100[95]  dex_bonus[+4]  luck[+9]  feint[+18]
+    Subtotal: 126
+    Final ATK: 126
+  Defense Roll (WHEELJACK, PARRY — parry_bonus(3) ≥ dodge_bonus(0)):
+    d100[16]  luck[+29]  str_bonus[+2]  parry_skill(lv7)x4[+28]  style_parry[+9]  activity_mod[-2]  dex_trained_x2[+8]  race_parry_x3[+18]  def_point_bonus[+15]  shield_bonus[+10]
+    Subtotal: 133
+    Final DEF: 133
+  Margin: 126 − 133 = -7   ▶  PARRY (margin -7)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: JARAVEL has uncontested action
+  Attack: JARAVEL → WHEELJACK   Weapon: Open Hand   Style: Feint   Aim: Chest
+  Attack Roll (JARAVEL):
+    d100[6]  dex_bonus[+4]  luck[+9]  feint[+18]
+    Subtotal: 37
+    Final ATK: 37
+  Defense Roll (WHEELJACK, PARRY — parry_bonus(3) ≥ dodge_bonus(0)):
+    d100[25]  luck[+29]  str_bonus[+2]  parry_skill(lv7)x4[+28]  style_parry[+9]  activity_mod[-2]  dex_trained_x2[+8]  race_parry_x3[+18]  def_point_bonus[+15]  shield_bonus[+10]
+    Subtotal: 142
+    Final DEF: 142
+  Margin: 37 − 142 = -105   ▶  PARRY (margin -105)
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: JARAVEL has uncontested action
+  Attack: JARAVEL → WHEELJACK   Weapon: Open Hand   Style: Feint   Aim: Chest
+  Attack Roll (JARAVEL):
+    d100[33]  dex_bonus[+4]  luck[+9]  feint[+18]
+    Subtotal: 64
+    Final ATK: 64
+  Defense Roll (WHEELJACK, PARRY — parry_bonus(3) ≥ dodge_bonus(0)):
+    d100[39]  luck[+29]  str_bonus[+2]  parry_skill(lv7)x4[+28]  style_parry[+9]  activity_mod[-2]  dex_trained_x2[+8]  race_parry_x3[+18]  def_point_bonus[+15]  shield_bonus[+10]
+    Subtotal: 156
+    Final DEF: 156
+  Margin: 64 − 156 = -92   ▶  PARRY (margin -92)
+
+  ── END OF MINUTE ──
+    WHEELJACK: 100.0 END − (9.30 burn × 6 actions) = 43.2
+    JARAVEL: 100.0 END − (1.70 burn × 5 actions) = 89.5
+    HP POOL — WHEELJACK: 55/55 (100%)
+    HP POOL — JARAVEL: 26/58 (45%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — WHEELJACK: 6   |   JARAVEL: 5
+  HP    — WHEELJACK: 55/55 (100%)   |   JARAVEL: 26/58 (45%)
+  END   — WHEELJACK: 43.2   |   JARAVEL: 89.5
+  STRAT — WHEELJACK: [Wall of Steel / Act:6]   |   JARAVEL: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    WHEELJACK               : d100[93]  dex_bonus[-2]  init_skill_x3[+6]  luck[+29]  style_mod[+6]  activity_mod[+2] = 134
+    JARAVEL                 : d100[73]  dex_bonus[+8]  luck[+9]  activity_mod[-2] = 88
+    ▶ WHEELJACK wins → ATTACKS
+  Attack: WHEELJACK → JARAVEL   Weapon: War Hammer   Style: Wall of Steel   Aim: None
+  Attack Roll (WHEELJACK):
+    d100[59]  dex_bonus[-1]  luck[+29]  style_mod[+4]
+    Subtotal: 91
+    Final ATK: 91
+  Defense Roll (JARAVEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[21]  luck[+9]  str_bonus[-3]  activity_mod[+2]
+    Subtotal: 29
+    Final DEF: 29
+  Margin: 91 − 29 = 62   ▶  HIT (margin 62)
+  Damage (WHEELJACK → JARAVEL):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +2.40
+      race damage net              +3.00
+      style modifier               -2.00
+      activity contrib             -0.30
+      luck ×0.15                   +4.35
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 62/55.0)) = 1.000
+    Raw: max(1, int(18 × 1.000)) = 18
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 18 − 3) = 15
+  ▶ FINAL DAMAGE: 15
+  HP Pool (JARAVEL):
+    Before : 26/58 (44.8%)
+    hit     : −15
+    After  : 11/58 (19.0%)
+  Knockdown Check (JARAVEL):
+    base = int(15/58 × 80) = 20   cat bonus [Hammer/Mace]: +10   final: 12%
+    Roll: 17  →  no knockdown
+  Perm Injury Check (JARAVEL):
+    threshold = 15% of 58 = 8   damage 15 ≥ threshold
+    chance = max(5, min(80, int(15/58×100) − 5)) = 20%
+    Roll: 28  →  no injury
+  Concede Attempt (JARAVEL):
+    d100[15] + PRE_bonus[+7] + luck//2[4] = 26
+    threshold = max(40, 68 − (PRE // 3)) = 63
+    26 < 63  →  mercy denied — fight continues
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    WHEELJACK               : d100[77]  dex_bonus[-2]  init_skill_x3[+6]  luck[+29]  style_mod[+6]  activity_mod[+2] = 118
+    JARAVEL                 : d100[26]  dex_bonus[+8]  luck[+9]  activity_mod[-2] = 41
+    ▶ WHEELJACK wins → ATTACKS
+  Attack: WHEELJACK → JARAVEL   Weapon: War Hammer   Style: Wall of Steel   Aim: None
+  Attack Roll (WHEELJACK):
+    d100[86]  dex_bonus[-1]  luck[+29]  style_mod[+4]
+    Subtotal: 118
+    Final ATK: 118
+  Defense Roll (JARAVEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[67]  luck[+9]  str_bonus[-3]  activity_mod[+2]
+    Subtotal: 75
+    Final DEF: 75
+  Margin: 118 − 75 = 43   ▶  HIT (margin 43)
+  Damage (WHEELJACK → JARAVEL):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +2.40
+      race damage net              +3.00
+      style modifier               -2.00
+      activity contrib             -0.30
+      luck ×0.15                   +4.35
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 43/55.0)) = 0.782
+    Raw: max(1, int(18 × 0.782)) = 14
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 14 − 3) = 11
+  ▶ FINAL DAMAGE: 11
+  HP Pool (JARAVEL):
+    Before : 11/58 (19.0%)
+    hit     : −11
+    After  : 0/58 (0.0%)
+  Knockdown Check (JARAVEL):
+    base = int(11/58 × 80) = 15   cat bonus [Hammer/Mace]: +10   final: 7%
+    Roll: 96  →  no knockdown
+  Perm Injury Check (JARAVEL):
+    threshold = 15% of 58 = 8   damage 11 ≥ threshold
+    chance = max(5, min(80, int(11/58×100) − 5)) = 13%
+    Roll: 69  →  no injury
+  Death Check (JARAVEL):
+    prev_hp: 11   damage: 11   new_hp: 0
+    overshoot: 0
+    death_chance = min(50.0, 0.5 + 0) = 0.5%
+    → survives (concede system takes over)
+  Concede Attempt (JARAVEL):
+    d100[49] + PRE_bonus[+7] + luck//2[4] = 60
+    threshold = max(40, 68 − (PRE // 3)) = 63
+    60 < 63  →  mercy denied — fight continues
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    WHEELJACK               : d100[28]  dex_bonus[-2]  init_skill_x3[+6]  luck[+29]  style_mod[+6]  activity_mod[+2] = 69
+    JARAVEL                 : d100[33]  dex_bonus[+8]  luck[+9]  activity_mod[-2] = 48
+    ▶ WHEELJACK wins → ATTACKS
+  Attack: WHEELJACK → JARAVEL   Weapon: War Hammer   Style: Wall of Steel   Aim: None
+  Attack Roll (WHEELJACK):
+    d100[50]  dex_bonus[-1]  luck[+29]  style_mod[+4]
+    Subtotal: 82
+    Final ATK: 82
+  Defense Roll (JARAVEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[30]  luck[+9]  str_bonus[-3]  activity_mod[+2]  hp0_pen[-30]
+    Subtotal: 8
+    Final DEF: 8
+  Margin: 82 − 8 = 74   ▶  HIT (margin 74)
+  Damage (WHEELJACK → JARAVEL):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +2.40
+      race damage net              +3.00
+      style modifier               -2.00
+      activity contrib             -0.30
+      luck ×0.15                   +4.35
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 74/55.0)) = 1.000
+    Raw: max(1, int(18 × 1.000)) = 18
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 18 − 3) = 15
+  ▶ FINAL DAMAGE: 15
+  HP Pool (JARAVEL):
+    Before : 0/58 (0.0%)
+    hit     : −15
+    After  : -15/58 (0.0%)
+  Knockdown Check (JARAVEL):
+    base = int(15/58 × 80) = 20   cat bonus [Hammer/Mace]: +10   final: 12%
+    Roll: 91  →  no knockdown
+  Perm Injury Check (JARAVEL):
+    threshold = 15% of 58 = 8   damage 15 ≥ threshold
+    chance = max(5, min(80, int(15/58×100) − 5)) = 20%
+    Roll: 63  →  no injury
+  Death Check (JARAVEL):
+    prev_hp: 0   damage: 15   new_hp: -15
+    overshoot: 15
+    death_chance = min(50.0, 0.5 + 15) = 15.5%
+    → survives (concede system takes over)
+  Concede Attempt (JARAVEL):
+    d100[3] + PRE_bonus[+7] + luck//2[4] = 14
+    threshold = max(40, 68 − (PRE // 3)) = 63
+    14 < 63  →  mercy denied — fight continues
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    WHEELJACK               : d100[98]  dex_bonus[-2]  init_skill_x3[+6]  luck[+29]  style_mod[+6]  activity_mod[+2] = 139
+    JARAVEL                 : d100[10]  dex_bonus[+8]  luck[+9]  activity_mod[-2] = 25
+    ▶ WHEELJACK wins → ATTACKS
+  Attack: WHEELJACK → JARAVEL   Weapon: War Hammer   Style: Wall of Steel   Aim: None
+  Attack Roll (WHEELJACK):
+    d100[50]  dex_bonus[-1]  luck[+29]  style_mod[+4]
+    Subtotal: 82
+    Final ATK: 82
+  Defense Roll (JARAVEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[91]  luck[+9]  str_bonus[-3]  activity_mod[+2]  hp0_pen[-30]
+    Subtotal: 69
+    Final DEF: 69
+  Margin: 82 − 69 = 13   ▶  HIT (margin 13)
+  Damage (WHEELJACK → JARAVEL):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +2.40
+      race damage net              +3.00
+      style modifier               -2.00
+      activity contrib             -0.30
+      luck ×0.15                   +4.35
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 13/55.0)) = 0.236
+    Raw: max(1, int(18 × 0.236)) = 4
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 4 − 3) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (JARAVEL):
+    Before : -15/58 (-25.9%)
+    hit     : −1
+    After  : -16/58 (0.0%)
+  Knockdown Check (JARAVEL):
+    base = int(1/58 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 1%
+    Roll: 69  →  no knockdown
+  Perm Injury Check (JARAVEL):
+    threshold = 15% of 58 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+  Death Check (JARAVEL):
+    prev_hp: -15   damage: 1   new_hp: -16
+    overshoot: 16
+    death_chance = min(50.0, 0.5 + 16) = 16.5%
+    → survives (concede system takes over)
+  Concede Attempt (JARAVEL):
+    d100[6] + PRE_bonus[+7] + luck//2[4] = 17
+    threshold = max(40, 68 − (PRE // 3)) = 63
+    17 < 63  →  mercy denied — fight continues
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    WHEELJACK               : d100[56]  dex_bonus[-2]  init_skill_x3[+6]  luck[+29]  style_mod[+6]  activity_mod[+2] = 97
+    JARAVEL                 : d100[18]  dex_bonus[+8]  luck[+9]  activity_mod[-2] = 33
+    ▶ WHEELJACK wins → ATTACKS
+  Attack: WHEELJACK → JARAVEL   Weapon: War Hammer   Style: Wall of Steel   Aim: None
+  Attack Roll (WHEELJACK):
+    d100[81]  dex_bonus[-1]  luck[+29]  style_mod[+4]
+    Subtotal: 113
+    Final ATK: 113
+  Defense Roll (JARAVEL, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[27]  luck[+9]  str_bonus[-3]  activity_mod[+2]  hp0_pen[-30]
+    Subtotal: 5
+    Final DEF: 5
+  Margin: 113 − 5 = 108   ▶  HIT (margin 108)
+  Damage (WHEELJACK → JARAVEL):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +2.40
+      race damage net              +3.00
+      style modifier               -2.00
+      activity contrib             -0.30
+      luck ×0.15                   +4.35
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 108/55.0)) = 1.000
+    Raw: max(1, int(18 × 1.000)) = 18
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 18 − 3) = 15
+  ▶ FINAL DAMAGE: 15
+  HP Pool (JARAVEL):
+    Before : -16/58 (-27.6%)
+    hit     : −15
+    After  : -31/58 (0.0%)
+  Knockdown Check (JARAVEL):
+    base = int(15/58 × 80) = 20   cat bonus [Hammer/Mace]: +10   final: 12%
+    Roll: 65  →  no knockdown
+  Perm Injury Check (JARAVEL):
+    threshold = 15% of 58 = 8   damage 15 ≥ threshold
+    chance = max(5, min(80, int(15/58×100) − 5)) = 20%
+    Roll: 2  →  abdomen (1 level(s))
+  Death Check (JARAVEL):
+    prev_hp: -16   damage: 15   new_hp: -31
+    overshoot: 31
+    death_chance = min(50.0, 0.5 + 31) = 31.5%
+    → survives (concede system takes over)
+  Concede Attempt (JARAVEL):
+    d100[85] + PRE_bonus[+7] + luck//2[4] = 96
+    threshold = max(40, 68 − (PRE // 3)) = 63
+    96 ≥ 63  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: WHEELJACK
+==============================================================================
+  Initiative: d100=94 vs 55% — FAIL
+    → Initiative training: no progress this session (INT 15, level 2, 55% chance).
+  Initiative: d100=66 vs 55% — FAIL
+    → Initiative training: no progress this session (INT 15, level 2, 55% chance).
+  Initiative: d100=38 vs 55% — SUCCESS
+    → Initiative trained: Level 2 → Level 3 (Skilled, 55% chance)
+  INT observed learning: d100=35 vs 4% — no trigger
+
+==============================================================================
+  TRAINING: JARAVEL
+==============================================================================
+  Feint: Jaravel is already mastered in Feint.
+  Dodge: d100=42 vs 18% — FAIL
+    → Dodge training: no progress this session (INT 10, level 6, 18% chance).
+  Intelligence: d100=23 vs 18% — FAIL
+    → Intelligence training: no progress this session (late tier, 18% chance).
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : WHEELJACK  (100.0% HP remaining)
+  Loser  : JARAVEL  (survived, 0.0% HP)
+  Duration: 2 minute(s)
+==============================================================================

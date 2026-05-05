@@ -1,0 +1,420 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #993   Turn: 20
+  Debug team: Electron
+  Electron / SHADES OF THE PAST   vs   The Arena / The Peasants
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: TRIGARD
+  ────────────────────────────────────
+    Race: Dwarf  |  Gender: Male
+    STR:15  DEX:11  CON:16  INT:11  PRE:10  SIZ:11
+    Max HP: 65   Luck: 23
+    Armor: Scale   Helm: Camail
+    Primary: Battle Axe   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Bash / Act:7 / Aim:Head / Def:Chest
+    Skills: bash:9  
+
+  ────────────────────────────────────
+  WARRIOR B: WILBUR THE WEED-PULLER
+  ────────────────────────────────────
+    Race: Peasant  |  Gender: Male
+    STR:12  DEX:10  CON:12  INT:9  PRE:8  SIZ:9
+    Max HP: 42   Luck: 0
+    Armor: Cloth   Helm: None
+    Primary: Short Sword   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:5 / Aim:Chest / Def:Chest
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — TRIGARD: 4   |   WILBUR THE WEED-PULLER: 4
+  HP    — TRIGARD: 65/65 (100%)   |   WILBUR THE WEED-PULLER: 42/42 (100%)
+  END   — TRIGARD: 100.0   |   WILBUR THE WEED-PULLER: 100.0
+  STRAT — TRIGARD: [Bash / Act:7]   |   WILBUR THE WEED-PULLER: [Strike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[37]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 58
+    WILBUR THE WEED-PULLER  : d100[56] = 56
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → WILBUR THE WEED-PULLER   Weapon: Battle Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[20]  dex_bonus[-2]  luck[+23]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 45
+    + style advantage: +6
+    Final ATK: 51
+  Defense Roll (WILBUR THE WEED-PULLER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[93]  str_bonus[+1]
+    Subtotal: 94
+    Final DEF: 94
+  Margin: 51 − 94 = -43   ▶  PARRY (margin -43)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[60]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 81
+    WILBUR THE WEED-PULLER  : d100[55] = 55
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → WILBUR THE WEED-PULLER   Weapon: Battle Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[67]  dex_bonus[-2]  luck[+23]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 92
+    + style advantage: +6
+    Final ATK: 98
+  Defense Roll (WILBUR THE WEED-PULLER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[97]  str_bonus[+1]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 98 − 98 = 0   ▶  MISS
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[22]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 43
+    WILBUR THE WEED-PULLER  : d100[38] = 38
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → WILBUR THE WEED-PULLER   Weapon: Battle Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[35]  dex_bonus[-2]  luck[+23]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 60
+    + style advantage: +6
+    Final ATK: 66
+  Defense Roll (WILBUR THE WEED-PULLER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[64]  str_bonus[+1]
+    Subtotal: 65
+    Final DEF: 65
+  Margin: 66 − 65 = 1   ▶  GRAZE (margin 1, 1 HP)
+  HP Pool (WILBUR THE WEED-PULLER):
+    Before : 42/42 (100.0%)
+    graze   : −1
+    After  : 41/42 (97.6%)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    WILBUR THE WEED-PULLER  : d100[24] = 24
+    TRIGARD                 : d100[1]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 22
+    ▶ WILBUR THE WEED-PULLER wins → ATTACKS
+  Attack: WILBUR THE WEED-PULLER → TRIGARD   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (WILBUR THE WEED-PULLER):
+    d100[44]
+    Subtotal: 44
+    + style advantage: -6
+    Final ATK: 38
+  Defense Roll (TRIGARD, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[61]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+4]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 116
+    Final DEF: 116
+  Margin: 38 − 116 = -78   ▶  PARRY (margin -78)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[76]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 97
+    WILBUR THE WEED-PULLER  : d100[69] = 69
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → WILBUR THE WEED-PULLER   Weapon: Battle Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[30]  dex_bonus[-2]  luck[+23]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 55
+    + style advantage: +6
+    Final ATK: 61
+  Defense Roll (WILBUR THE WEED-PULLER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[57]  str_bonus[+1]
+    Subtotal: 58
+    Final DEF: 58
+  Margin: 61 − 58 = 3   ▶  GRAZE (margin 3, 1 HP)
+  HP Pool (WILBUR THE WEED-PULLER):
+    Before : 41/42 (97.6%)
+    graze   : −1
+    After  : 40/42 (95.2%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: WILBUR THE WEED-PULLER has uncontested action
+  Attack: WILBUR THE WEED-PULLER → TRIGARD   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (WILBUR THE WEED-PULLER):
+    d100[85]
+    Subtotal: 85
+    + style advantage: -6
+    Final ATK: 79
+  Defense Roll (TRIGARD, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[5]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+4]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 60
+    Final DEF: 60
+  Margin: 79 − 60 = 19   ▶  HIT (margin 19)
+  Damage (WILBUR THE WEED-PULLER → TRIGARD):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.50
+      STR bonus                    +1.20
+    Ceiling: 8
+    Fraction: max(0.10, min(1.0, 19/55.0)) = 0.345
+    Raw: max(1, int(8 × 0.345)) = 2
+    Armor: Scale  base DEF: 9
+    Net = max(1, 2 − 9) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (TRIGARD):
+    Before : 65/65 (100.0%)
+    hit     : −1
+    After  : 64/65 (98.5%)
+  Knockdown Check (TRIGARD):
+    base = int(1/65 × 80) = 1   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 35  →  no knockdown
+  Perm Injury Check (TRIGARD):
+    threshold = 15% of 65 = 9   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: WILBUR THE WEED-PULLER has uncontested action
+  Attack: WILBUR THE WEED-PULLER → TRIGARD   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (WILBUR THE WEED-PULLER):
+    d100[41]
+    Subtotal: 41
+    + style advantage: -6
+    Final ATK: 35
+  Defense Roll (TRIGARD, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[56]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+4]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 111
+    Final DEF: 111
+  Margin: 35 − 111 = -76   ▶  PARRY (margin -76)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: WILBUR THE WEED-PULLER has uncontested action
+  Attack: WILBUR THE WEED-PULLER → TRIGARD   Weapon: Short Sword   Style: Strike   Aim: Chest
+  Attack Roll (WILBUR THE WEED-PULLER):
+    d100[1]
+    Subtotal: 1
+    + style advantage: -6
+    Final ATK: -5
+  Defense Roll (TRIGARD, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[60]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+4]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 115
+    Final DEF: 115
+  Margin: -5 − 115 = -120   ▶  PARRY (margin -120)
+
+  ── END OF MINUTE ──
+    TRIGARD: 100.0 END − (7.60 burn × 4 actions) = 69.1
+    WILBUR THE WEED-PULLER: 100.0 END − (2.00 burn × 4 actions) = 92.0
+    HP POOL — TRIGARD: 64/65 (98%)
+    HP POOL — WILBUR THE WEED-PULLER: 40/42 (95%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — TRIGARD: 4   |   WILBUR THE WEED-PULLER: 4
+  HP    — TRIGARD: 64/65 (98%)   |   WILBUR THE WEED-PULLER: 40/42 (95%)
+  END   — TRIGARD: 69.1   |   WILBUR THE WEED-PULLER: 92.0
+  STRAT — TRIGARD: [Bash / Act:7]   |   WILBUR THE WEED-PULLER: [Strike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[36]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 57
+    WILBUR THE WEED-PULLER  : d100[6] = 6
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → WILBUR THE WEED-PULLER   Weapon: Battle Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[55]  dex_bonus[-2]  luck[+23]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 80
+    + style advantage: +6
+    Final ATK: 86
+  Defense Roll (WILBUR THE WEED-PULLER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[14]  str_bonus[+1]
+    Subtotal: 15
+    Final DEF: 15
+  Margin: 86 − 15 = 71   ▶  HIT (margin 71)
+  Damage (TRIGARD → WILBUR THE WEED-PULLER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +3.00
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 71/55.0)) = 1.000
+    Raw: max(1, int(23 × 1.000)) = 23
+    Favorite weapon +1 → raw = 24
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 24 − 1) = 23
+  ▶ FINAL DAMAGE: 23
+  HP Pool (WILBUR THE WEED-PULLER):
+    Before : 40/42 (95.2%)
+    hit     : −23
+    After  : 17/42 (40.5%)
+  Knockdown Check (WILBUR THE WEED-PULLER):
+    base = int(23/42 × 80) = 43   cat bonus [Axe/Pick]: +0   final: 43%
+    Roll: 63  →  no knockdown
+  Perm Injury Check (WILBUR THE WEED-PULLER):
+    threshold = 15% of 42 = 6   damage 23 ≥ threshold
+    chance = max(5, min(80, int(23/42×100) − 5)) = 49%
+    Roll: 84  →  no injury
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[5]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 26
+    WILBUR THE WEED-PULLER  : d100[13] = 13
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → WILBUR THE WEED-PULLER   Weapon: Battle Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[61]  dex_bonus[-2]  luck[+23]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 86
+    + style advantage: +6
+    Final ATK: 92
+  Defense Roll (WILBUR THE WEED-PULLER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[24]  str_bonus[+1]
+    Subtotal: 25
+    Final DEF: 25
+  Margin: 92 − 25 = 67   ▶  HIT (margin 67)
+  Damage (TRIGARD → WILBUR THE WEED-PULLER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +3.00
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 67/55.0)) = 1.000
+    Raw: max(1, int(23 × 1.000)) = 23
+    Favorite weapon +1 → raw = 24
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 24 − 1) = 23
+  ▶ FINAL DAMAGE: 23
+  HP Pool (WILBUR THE WEED-PULLER):
+    Before : 17/42 (40.5%)
+    hit     : −23
+    After  : -6/42 (0.0%)
+  Knockdown Check (WILBUR THE WEED-PULLER):
+    base = int(23/42 × 80) = 43   cat bonus [Axe/Pick]: +0   final: 43%
+    Roll: 60  →  no knockdown
+  Perm Injury Check (WILBUR THE WEED-PULLER):
+    threshold = 15% of 42 = 6   damage 23 ≥ threshold
+    chance = max(5, min(80, int(23/42×100) − 5)) = 49%
+    Roll: 21  →  head (3 level(s))
+  Death Check (WILBUR THE WEED-PULLER):
+    prev_hp: 17   damage: 23   new_hp: -6
+    overshoot: 6
+    death_chance = min(50.0, 0.5 + 6) = 6.5%
+    → survives (concede system takes over)
+  Concede Attempt (WILBUR THE WEED-PULLER):
+    d100[27] + PRE_bonus[-2] + luck//2[0] = 25
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    25 < 66  →  mercy denied — fight continues
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[53]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 74
+    WILBUR THE WEED-PULLER  : d100[41] = 41
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → WILBUR THE WEED-PULLER   Weapon: Battle Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[30]  dex_bonus[-2]  luck[+23]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 55
+    + style advantage: +6
+    Final ATK: 61
+  Defense Roll (WILBUR THE WEED-PULLER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[41]  str_bonus[+1]  hp0_pen[-30]
+    Subtotal: 12
+    Final DEF: 12
+  Margin: 61 − 12 = 49   ▶  HIT (margin 49)
+  Damage (TRIGARD → WILBUR THE WEED-PULLER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +3.00
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 49/55.0)) = 0.891
+    Raw: max(1, int(23 × 0.891)) = 20
+    Favorite weapon +1 → raw = 21
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 21 − 1) = 20
+  ▶ FINAL DAMAGE: 20
+  HP Pool (WILBUR THE WEED-PULLER):
+    Before : -6/42 (-14.3%)
+    hit     : −20
+    After  : -26/42 (0.0%)
+  Knockdown Check (WILBUR THE WEED-PULLER):
+    base = int(20/42 × 80) = 38   cat bonus [Axe/Pick]: +0   final: 38%
+    Roll: 16  →  ▶ KNOCKDOWN
+  Perm Injury Check (WILBUR THE WEED-PULLER):
+    threshold = 15% of 42 = 6   damage 20 ≥ threshold
+    chance = max(5, min(80, int(20/42×100) − 5)) = 42%
+    Roll: 11  →  head (2 level(s))
+  Death Check (WILBUR THE WEED-PULLER):
+    prev_hp: -6   damage: 20   new_hp: -26
+    overshoot: 26
+    death_chance = min(50.0, 0.5 + 26) = 26.5%
+    → survives (concede system takes over)
+  Concede Attempt (WILBUR THE WEED-PULLER):
+    d100[43] + PRE_bonus[-2] + luck//2[0] = 41
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    41 < 66  →  mercy denied — fight continues
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[70]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 91
+    WILBUR THE WEED-PULLER  : d100[16]  on_ground_halved[(÷2)] = 8
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → WILBUR THE WEED-PULLER   Weapon: Battle Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[38]  dex_bonus[-2]  luck[+23]  style_mod[-1]  fav_bonus[+5]
+    Subtotal: 63
+    + style advantage: +6
+    Final ATK: 69
+  Defense Roll (WILBUR THE WEED-PULLER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[93]  str_bonus[+1]  ground_pen[-25]  hp0_pen[-30]
+    Subtotal: 39
+    Final DEF: 39
+  Margin: 69 − 39 = 30   ▶  HIT (margin 30)
+  Damage (TRIGARD → WILBUR THE WEED-PULLER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 11.25
+      STR bonus                    +3.00
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 23
+    Fraction: max(0.10, min(1.0, 30/55.0)) = 0.545
+    Raw: max(1, int(23 × 0.545)) = 12
+    Favorite weapon +1 → raw = 13
+    Armor: Cloth  base DEF: 1
+    Net = max(1, 13 − 1) = 12
+  ▶ FINAL DAMAGE: 12
+  HP Pool (WILBUR THE WEED-PULLER):
+    Before : -26/42 (-61.9%)
+    hit     : −12
+    After  : -38/42 (0.0%)
+  Knockdown Check (WILBUR THE WEED-PULLER):
+    base = int(12/42 × 80) = 22   cat bonus [Axe/Pick]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (WILBUR THE WEED-PULLER):
+    threshold = 15% of 42 = 6   damage 12 ≥ threshold
+    chance = max(5, min(80, int(12/42×100) − 5)) = 23%
+    Roll: 62  →  no injury
+  Death Check (WILBUR THE WEED-PULLER):
+    prev_hp: -26   damage: 12   new_hp: -38
+    overshoot: 38
+    death_chance = min(50.0, 0.5 + 38) = 38.5%
+    → ▶ WARRIOR DIES
+
+==============================================================================
+  TRAINING: TRIGARD
+==============================================================================
+  Battle Axe: d100=13 vs 45% — SUCCESS
+    → Battle Axe trained: Level 0 → Level 1 (Novice, 45% chance)
+  Battle Axe: d100=80 vs 45% — FAIL
+    → Battle Axe training: no progress this session (INT 11, level 1, 45% chance).
+  Battle Axe: d100=64 vs 45% — FAIL
+    → Battle Axe training: no progress this session (INT 11, level 1, 45% chance).
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : TRIGARD  (98.5% HP remaining)
+  Loser  : WILBUR THE WEED-PULLER  (SLAIN, 0.0% HP)
+  Duration: 2 minute(s)
+==============================================================================

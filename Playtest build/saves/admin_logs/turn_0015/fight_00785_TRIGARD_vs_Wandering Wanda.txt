@@ -1,0 +1,276 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #785   Turn: 15
+  Debug team: Electron
+  Electron / SHADES OF THE PAST   vs   The Arena / The Peasants
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: TRIGARD
+  ────────────────────────────────────
+    Race: Dwarf  |  Gender: Male
+    STR:15  DEX:11  CON:16  INT:11  PRE:10  SIZ:11
+    Max HP: 65   Luck: 23
+    Armor: Scale   Helm: Camail
+    Primary: Pick Axe   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Bash / Act:7 / Aim:Head / Def:Chest
+    Skills: bash:7  
+
+  ────────────────────────────────────
+  WARRIOR B: WANDERING WANDA
+  ────────────────────────────────────
+    Race: Peasant  |  Gender: Female
+    STR:11  DEX:15  CON:14  INT:11  PRE:9  SIZ:13
+    Max HP: 52   Luck: 0
+    Armor: Leather   Helm: None
+    Primary: Flail   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:5 / Aim:Chest / Def:Chest
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — TRIGARD: 4   |   WANDERING WANDA: 5
+  HP    — TRIGARD: 65/65 (100%)   |   WANDERING WANDA: 52/52 (100%)
+  END   — TRIGARD: 100.0   |   WANDERING WANDA: 100.0
+  STRAT — TRIGARD: [Bash / Act:7]   |   WANDERING WANDA: [Strike / Act:5]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[72]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 93
+    WANDERING WANDA         : d100[76]  dex_bonus[+10] = 86
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → WANDERING WANDA   Weapon: Pick Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[65]  dex_bonus[-2]  luck[+23]  style_mod[-1]
+    Subtotal: 85
+    + style advantage: +6
+    Final ATK: 91
+  Defense Roll (WANDERING WANDA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[59]
+    Subtotal: 59
+    Final DEF: 59
+  Margin: 91 − 59 = 32   ▶  HIT (margin 32)
+  Damage (TRIGARD → WANDERING WANDA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 12.00
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 26
+    Fraction: max(0.10, min(1.0, 32/55.0)) = 0.582
+    Raw: max(1, int(26 × 0.582)) = 15
+    Armor: Leather  base DEF: 2
+    Net = max(1, 15 − 2) = 13
+  ▶ FINAL DAMAGE: 13
+  HP Pool (WANDERING WANDA):
+    Before : 52/52 (100.0%)
+    hit     : −13
+    After  : 39/52 (75.0%)
+  Knockdown Check (WANDERING WANDA):
+    base = int(13/52 × 80) = 20   cat bonus [Axe/Pick]: +0   final: 18%
+    Roll: 70  →  no knockdown
+  Perm Injury Check (WANDERING WANDA):
+    threshold = 15% of 52 = 7   damage 13 ≥ threshold
+    chance = max(5, min(80, int(13/52×100) − 5)) = 20%
+    Roll: 70  →  no injury
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[69]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 90
+    WANDERING WANDA         : d100[23]  dex_bonus[+10] = 33
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → WANDERING WANDA   Weapon: Pick Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[64]  dex_bonus[-2]  luck[+23]  style_mod[-1]
+    Subtotal: 84
+    + style advantage: +6
+    Final ATK: 90
+  Defense Roll (WANDERING WANDA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[4]
+    Subtotal: 4
+    Final DEF: 4
+  Margin: 90 − 4 = 86   ▶  HIT (margin 86)
+  Damage (TRIGARD → WANDERING WANDA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 12.00
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 26
+    Fraction: max(0.10, min(1.0, 86/55.0)) = 1.000
+    Raw: max(1, int(26 × 1.000)) = 26
+    Armor: Leather  base DEF: 2
+    Net = max(1, 26 − 2) = 24
+  ▶ FINAL DAMAGE: 24
+  HP Pool (WANDERING WANDA):
+    Before : 39/52 (75.0%)
+    hit     : −24
+    After  : 15/52 (28.8%)
+  Knockdown Check (WANDERING WANDA):
+    base = int(24/52 × 80) = 36   cat bonus [Axe/Pick]: +0   final: 34%
+    Roll: 65  →  no knockdown
+  Perm Injury Check (WANDERING WANDA):
+    threshold = 15% of 52 = 7   damage 24 ≥ threshold
+    chance = max(5, min(80, int(24/52×100) − 5)) = 41%
+    Roll: 58  →  no injury
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    WANDERING WANDA         : d100[57]  dex_bonus[+10] = 67
+    TRIGARD                 : d100[35]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 56
+    ▶ WANDERING WANDA wins → ATTACKS
+  Attack: WANDERING WANDA → TRIGARD   Weapon: Flail   Style: Strike   Aim: Chest
+  Attack Roll (WANDERING WANDA):
+    d100[40]  dex_bonus[+5]
+    Subtotal: 45
+    + style advantage: -6
+    Final ATK: 39
+  Defense Roll (TRIGARD, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[54]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+4]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 109
+    Final DEF: 109
+  Margin: 39 − 109 = -70   ▶  PARRY (margin -70)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    WANDERING WANDA         : d100[98]  dex_bonus[+10] = 108
+    TRIGARD                 : d100[62]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 83
+    ▶ WANDERING WANDA wins → ATTACKS
+  Attack: WANDERING WANDA → TRIGARD   Weapon: Flail   Style: Strike   Aim: Chest
+  Attack Roll (WANDERING WANDA):
+    d100[25]  dex_bonus[+5]
+    Subtotal: 30
+    + style advantage: -6
+    Final ATK: 24
+  Defense Roll (TRIGARD, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[85]  luck[+23]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  dex_trained_x2[+4]  race_parry_x3[+18]  def_point_bonus[+15]
+    Subtotal: 140
+    Final DEF: 140
+  Margin: 24 − 140 = -116   ▶  PARRY (margin -116)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[88]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 109
+    WANDERING WANDA         : d100[94]  dex_bonus[+10] = 104
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → WANDERING WANDA   Weapon: Pick Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[90]  dex_bonus[-2]  luck[+23]  style_mod[-1]
+    Subtotal: 110
+    + style advantage: +6
+    Final ATK: 116
+  Defense Roll (WANDERING WANDA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[32]
+    Subtotal: 32
+    Final DEF: 32
+  Margin: 116 − 32 = 84   ▶  HIT (margin 84)
+  Damage (TRIGARD → WANDERING WANDA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 12.00
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 26
+    Fraction: max(0.10, min(1.0, 84/55.0)) = 1.000
+    Raw: max(1, int(26 × 1.000)) = 26
+    Armor: Leather  base DEF: 2
+    Net = max(1, 26 − 2) = 24
+  ▶ FINAL DAMAGE: 24
+  HP Pool (WANDERING WANDA):
+    Before : 15/52 (28.8%)
+    hit     : −24
+    After  : -9/52 (0.0%)
+  Knockdown Check (WANDERING WANDA):
+    base = int(24/52 × 80) = 36   cat bonus [Axe/Pick]: +0   final: 34%
+    Roll: 64  →  no knockdown
+  Perm Injury Check (WANDERING WANDA):
+    threshold = 15% of 52 = 7   damage 24 ≥ threshold
+    chance = max(5, min(80, int(24/52×100) − 5)) = 41%
+    Roll: 16  →  head (2 level(s))
+  Death Check (WANDERING WANDA):
+    prev_hp: 15   damage: 24   new_hp: -9
+    overshoot: 9
+    death_chance = min(50.0, 0.5 + 9) = 9.5%
+    → survives (concede system takes over)
+  Concede Attempt (WANDERING WANDA):
+    d100[38] + PRE_bonus[-1] + luck//2[0] = 37
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    37 < 65  →  mercy denied — fight continues
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    TRIGARD                 : d100[19]  dex_bonus[-4]  luck[+23]  style_mod[-2]  activity_mod[+4] = 40
+    WANDERING WANDA         : d100[18]  dex_bonus[+10] = 28
+    ▶ TRIGARD wins → ATTACKS
+  Attack: TRIGARD → WANDERING WANDA   Weapon: Pick Axe   Style: Bash   Aim: Head
+  Attack Roll (TRIGARD):
+    d100[73]  dex_bonus[-2]  luck[+23]  style_mod[-1]
+    Subtotal: 93
+    + style advantage: +6
+    Final ATK: 99
+  Defense Roll (WANDERING WANDA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[60]  hp0_pen[-30]
+    Subtotal: 30
+    Final DEF: 30
+  Margin: 99 − 30 = 69   ▶  HIT (margin 69)
+  Damage (TRIGARD → WANDERING WANDA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 12.00
+      STR bonus                    +3.00
+      two-hand multiplier          ×1.15
+      race damage net              +3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +3.45
+    Ceiling: 26
+    Fraction: max(0.10, min(1.0, 69/55.0)) = 1.000
+    Raw: max(1, int(26 × 1.000)) = 26
+    Armor: Leather  base DEF: 2
+    Net = max(1, 26 − 2) = 24
+  ▶ FINAL DAMAGE: 24
+  HP Pool (WANDERING WANDA):
+    Before : -9/52 (-17.3%)
+    hit     : −24
+    After  : -33/52 (0.0%)
+  Knockdown Check (WANDERING WANDA):
+    base = int(24/52 × 80) = 36   cat bonus [Axe/Pick]: +0   final: 34%
+    Roll: 19  →  ▶ KNOCKDOWN
+  Perm Injury Check (WANDERING WANDA):
+    threshold = 15% of 52 = 7   damage 24 ≥ threshold
+    chance = max(5, min(80, int(24/52×100) − 5)) = 41%
+    Roll: 45  →  no injury
+  Death Check (WANDERING WANDA):
+    prev_hp: -9   damage: 24   new_hp: -33
+    overshoot: 33
+    death_chance = min(50.0, 0.5 + 33) = 33.5%
+    → ▶ WARRIOR DIES
+
+==============================================================================
+  TRAINING: TRIGARD
+==============================================================================
+  Bash: d100=22 vs 18% — FAIL
+    → Bash training: no progress this session (INT 11, level 7, 18% chance).
+  Bash: d100=36 vs 18% — FAIL
+    → Bash training: no progress this session (INT 11, level 7, 18% chance).
+  Bash: d100=14 vs 18% — SUCCESS
+    → Bash trained: Level 7 → Level 8 (Incredible Skill, 18% chance)
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : TRIGARD  (100.0% HP remaining)
+  Loser  : WANDERING WANDA  (SLAIN, 0.0% HP)
+  Duration: 1 minute(s)
+==============================================================================

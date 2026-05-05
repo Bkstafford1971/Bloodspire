@@ -1,0 +1,22 @@
+# Ignore cached Python bytecode
+__pycache__/
+
+# Ignore build and distribution artifacts
+build/
+dist/
+
+# Ignore processed turns and output data
+Output/
+saves/
+
+# Ignore testing and temporary files
+Test Files/
+text prompts/
+
+# Ignore internal tool/IDE configurations
+.claude/
+.sixth/
+.vscode/
+
+# Ignore image assets (AI doesn't need to read raw binary data)
+Images/

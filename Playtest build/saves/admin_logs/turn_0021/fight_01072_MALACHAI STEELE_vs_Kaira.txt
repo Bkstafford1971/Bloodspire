@@ -1,0 +1,1627 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #1072   Turn: 21
+  Debug team: Electron
+  Electron / SHADES OF THE PAST   vs   Loquat the Wise / The Learned Fists
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: MALACHAI STEELE
+  ────────────────────────────────────
+    Race: Human  |  Gender: Male
+    STR:14  DEX:13  CON:14  INT:15  PRE:6  SIZ:9
+    Max HP: 46   Luck: 7
+    Armor: Brigandine   Helm: Helm
+    Primary: Military Pick   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:7 / Aim:Chest / Def:Chest
+    Skills: bash:5  initiative:7  parry:4  short_sword:1  
+
+  ────────────────────────────────────
+  WARRIOR B: KAIRA
+  ────────────────────────────────────
+    Race: Human  |  Gender: Female
+    STR:13  DEX:7  CON:11  INT:23  PRE:12  SIZ:15
+    Max HP: 53   Luck: 26
+    Armor: Cuir Boulli   Helm: None
+    Primary: Boar Spear   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Feint / Act:4 / Aim:Chest / Def:Chest
+    Skills: dodge:7  feint:9  parry:1  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — MALACHAI STEELE: 5   |   KAIRA: 5
+  HP    — MALACHAI STEELE: 46/46 (100%)   |   KAIRA: 53/53 (100%)
+  END   — MALACHAI STEELE: 100.0   |   KAIRA: 100.0
+  STRAT — MALACHAI STEELE: [Strike / Act:7]   |   KAIRA: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[73]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 107
+    KAIRA                   : d100[82]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 98
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[59]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 72
+    Final ATK: 72
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[1]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 49
+    Final DEF: 49
+  Margin: 72 − 49 = 23   ▶  HIT (margin 23)
+  Damage (MALACHAI STEELE → KAIRA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 8.75
+      STR bonus                    +2.40
+      activity contrib             -0.60
+      luck ×0.15                   +1.05
+      bash skill bonus               +10.00
+    Ceiling: 17
+    Fraction: max(0.10, min(1.0, 23/55.0)) = 0.418
+    Raw: max(1, int(17 × 0.418)) = 7
+    Favorite weapon +1 → raw = 8
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 8 − 3) = 5
+  ▶ FINAL DAMAGE: 5
+  HP Pool (KAIRA):
+    Before : 53/53 (100.0%)
+    hit     : −5
+    After  : 48/53 (90.6%)
+  Knockdown Check (KAIRA):
+    base = int(5/53 × 80) = 7   cat bonus [Axe/Pick]: +0   final: 1%
+    Roll: 9  →  no knockdown
+  Perm Injury Check (KAIRA):
+    threshold = 15% of 53 = 7   damage 5 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAIRA                   : d100[75]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 91
+    MALACHAI STEELE         : d100[2]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 36
+    ▶ KAIRA wins → ATTACKS
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[57]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 97
+    Final ATK: 97
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[23]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 59
+    Final DEF: 59
+  Margin: 97 − 59 = 38   ▶  HIT (margin 38)
+  Damage (KAIRA → MALACHAI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 38/55.0)) = 0.691
+    Raw: max(1, int(15 × 0.691)) = 10
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 10 − 7) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (MALACHAI STEELE):
+    Before : 46/46 (100.0%)
+    hit     : −3
+    After  : 43/46 (93.5%)
+  Knockdown Check (MALACHAI STEELE):
+    base = int(3/46 × 80) = 5   cat bonus [Polearm/Spear]: +5   final: 10%
+    Roll: 55  →  no knockdown
+  Perm Injury Check (MALACHAI STEELE):
+    threshold = 15% of 46 = 6   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[78]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 112
+    KAIRA                   : d100[35]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 51
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[11]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 24
+    Final ATK: 24
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[96]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 144
+    Final DEF: 144
+  Margin: 24 − 144 = -120   ▶  PARRY (margin -120)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[33]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 67
+    KAIRA                   : d100[27]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 43
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[19]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 32
+    Final ATK: 32
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[39]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 87
+    Final DEF: 87
+  Margin: 32 − 87 = -55   ▶  PARRY (margin -55)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[56]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 90
+    KAIRA                   : d100[56]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 72
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[47]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 60
+    Final ATK: 60
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[74]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 122
+    Final DEF: 122
+  Margin: 60 − 122 = -62   ▶  PARRY (margin -62)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[74]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 108
+    KAIRA                   : d100[10]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 26
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[71]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 84
+    Final ATK: 84
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[28]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 76
+    Final DEF: 76
+  Margin: 84 − 76 = 8   ▶  GRAZE (margin 8, 1 HP)
+  HP Pool (KAIRA):
+    Before : 34/53 (64.2%)
+    graze   : −1
+    After  : 33/53 (62.3%)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: KAIRA has uncontested action
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[99]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 139
+    Final ATK: 139
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[75]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 111
+    Final DEF: 111
+  Margin: 139 − 111 = 28   ▶  HIT (margin 28)
+  Damage (KAIRA → MALACHAI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 28/55.0)) = 0.509
+    Raw: max(1, int(15 × 0.509)) = 7
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 7 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (MALACHAI STEELE):
+    Before : 43/46 (93.5%)
+    hit     : −1
+    After  : 42/46 (91.3%)
+  Knockdown Check (MALACHAI STEELE):
+    base = int(1/46 × 80) = 1   cat bonus [Polearm/Spear]: +5   final: 6%
+    Roll: 65  →  no knockdown
+  Perm Injury Check (MALACHAI STEELE):
+    threshold = 15% of 46 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: KAIRA has uncontested action
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[47]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 87
+    Final ATK: 87
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[94]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 130
+    Final DEF: 130
+  Margin: 87 − 130 = -43   ▶  PARRY (margin -43)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: KAIRA has uncontested action
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[19]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 59
+    Final ATK: 59
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[47]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 83
+    Final DEF: 83
+  Margin: 59 − 83 = -24   ▶  PARRY (margin -24)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: KAIRA has uncontested action
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[100]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 140
+    Final ATK: 140
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[88]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 124
+    Final DEF: 124
+  Margin: 140 − 124 = 16   ▶  HIT (margin 16)
+  Damage (KAIRA → MALACHAI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 16/55.0)) = 0.291
+    Raw: max(1, int(15 × 0.291)) = 4
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 4 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (MALACHAI STEELE):
+    Before : 42/46 (91.3%)
+    hit     : −1
+    After  : 41/46 (89.1%)
+  Knockdown Check (MALACHAI STEELE):
+    base = int(1/46 × 80) = 1   cat bonus [Polearm/Spear]: +5   final: 6%
+    Roll: 25  →  no knockdown
+  Perm Injury Check (MALACHAI STEELE):
+    threshold = 15% of 46 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    MALACHAI STEELE: 100.0 END − (2.60 burn × 5 actions) = 86.0
+    KAIRA: 100.0 END − (1.70 burn × 5 actions) = 91.5
+    HP POOL — MALACHAI STEELE: 41/46 (89%)
+    HP POOL — KAIRA: 33/53 (62%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — MALACHAI STEELE: 5   |   KAIRA: 5
+  HP    — MALACHAI STEELE: 41/46 (89%)   |   KAIRA: 33/53 (62%)
+  END   — MALACHAI STEELE: 86.0   |   KAIRA: 91.5
+  STRAT — MALACHAI STEELE: [Strike / Act:7]   |   KAIRA: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[48]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 82
+    KAIRA                   : d100[52]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 68
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[23]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 36
+    Final ATK: 36
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[52]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 100
+    Final DEF: 100
+  Margin: 36 − 100 = -64   ▶  PARRY (margin -64)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAIRA                   : d100[56]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 72
+    MALACHAI STEELE         : d100[15]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 49
+    ▶ KAIRA wins → ATTACKS
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[69]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 109
+    Final ATK: 109
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[17]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 53
+    Final DEF: 53
+  Margin: 109 − 53 = 56   ▶  HIT (margin 56)
+  Damage (KAIRA → MALACHAI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 56/55.0)) = 1.000
+    Raw: max(1, int(15 × 1.000)) = 15
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 15 − 7) = 8
+  ▶ FINAL DAMAGE: 8
+  HP Pool (MALACHAI STEELE):
+    Before : 41/46 (89.1%)
+    hit     : −8
+    After  : 33/46 (71.7%)
+  Knockdown Check (MALACHAI STEELE):
+    base = int(8/46 × 80) = 13   cat bonus [Polearm/Spear]: +5   final: 18%
+    Roll: 32  →  no knockdown
+  Perm Injury Check (MALACHAI STEELE):
+    threshold = 15% of 46 = 6   damage 8 ≥ threshold
+    chance = max(5, min(80, int(8/46×100) − 5)) = 10%
+    Roll: 61  →  no injury
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[84]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 118
+    KAIRA                   : d100[53]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 69
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[69]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 82
+    Final ATK: 82
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[12]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 60
+    Final DEF: 60
+  Margin: 82 − 60 = 22   ▶  HIT (margin 22)
+  Damage (MALACHAI STEELE → KAIRA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 8.75
+      STR bonus                    +2.40
+      activity contrib             -0.60
+      luck ×0.15                   +1.05
+      bash skill bonus               +10.00
+    Ceiling: 17
+    Fraction: max(0.10, min(1.0, 22/55.0)) = 0.400
+    Raw: max(1, int(17 × 0.400)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 7 − 3) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (KAIRA):
+    Before : 26/53 (49.1%)
+    hit     : −4
+    After  : 22/53 (41.5%)
+  Knockdown Check (KAIRA):
+    base = int(4/53 × 80) = 6   cat bonus [Axe/Pick]: +0   final: 1%
+    Roll: 63  →  no knockdown
+  Perm Injury Check (KAIRA):
+    threshold = 15% of 53 = 7   damage 4 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[37]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 71
+    KAIRA                   : d100[1]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 17
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[57]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 70
+    Final ATK: 70
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[71]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 119
+    Final DEF: 119
+  Margin: 70 − 119 = -49   ▶  PARRY (margin -49)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[28]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 62
+    KAIRA                   : d100[7]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 23
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[6]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 19
+    Final ATK: 19
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[82]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 130
+    Final DEF: 130
+  Margin: 19 − 130 = -111   ▶  PARRY (margin -111)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[26]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 60
+    KAIRA                   : d100[27]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 43
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[31]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 44
+    Final ATK: 44
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[52]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 100
+    Final DEF: 100
+  Margin: 44 − 100 = -56   ▶  PARRY (margin -56)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: KAIRA has uncontested action
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[5]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 45
+    Final ATK: 45
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[90]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 126
+    Final DEF: 126
+  Margin: 45 − 126 = -81   ▶  PARRY (margin -81)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: KAIRA has uncontested action
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[41]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 81
+    Final ATK: 81
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[15]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 51
+    Final DEF: 51
+  Margin: 81 − 51 = 30   ▶  HIT (margin 30)
+  Damage (KAIRA → MALACHAI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 30/55.0)) = 0.545
+    Raw: max(1, int(15 × 0.545)) = 8
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 8 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (MALACHAI STEELE):
+    Before : 33/46 (71.7%)
+    hit     : −1
+    After  : 32/46 (69.6%)
+  Knockdown Check (MALACHAI STEELE):
+    base = int(1/46 × 80) = 1   cat bonus [Polearm/Spear]: +5   final: 6%
+    Roll: 7  →  no knockdown
+  Perm Injury Check (MALACHAI STEELE):
+    threshold = 15% of 46 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: KAIRA has uncontested action
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[73]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 113
+    Final ATK: 113
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[99]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 135
+    Final DEF: 135
+  Margin: 113 − 135 = -22   ▶  PARRY (margin -22)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: KAIRA has uncontested action
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[95]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 135
+    Final ATK: 135
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[62]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 135 − 98 = 37   ▶  HIT (margin 37)
+  Damage (KAIRA → MALACHAI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 37/55.0)) = 0.673
+    Raw: max(1, int(15 × 0.673)) = 10
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 10 − 7) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (MALACHAI STEELE):
+    Before : 32/46 (69.6%)
+    hit     : −3
+    After  : 29/46 (63.0%)
+  Knockdown Check (MALACHAI STEELE):
+    base = int(3/46 × 80) = 5   cat bonus [Polearm/Spear]: +5   final: 10%
+    Roll: 56  →  no knockdown
+  Perm Injury Check (MALACHAI STEELE):
+    threshold = 15% of 46 = 6   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    MALACHAI STEELE: 86.0 END − (2.60 burn × 5 actions) = 72.0
+    KAIRA: 91.5 END − (1.70 burn × 5 actions) = 83.0
+    HP POOL — MALACHAI STEELE: 29/46 (63%)
+    HP POOL — KAIRA: 22/53 (42%)
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — MALACHAI STEELE: 5   |   KAIRA: 5
+  HP    — MALACHAI STEELE: 29/46 (63%)   |   KAIRA: 22/53 (42%)
+  END   — MALACHAI STEELE: 72.0   |   KAIRA: 83.0
+  STRAT — MALACHAI STEELE: [Strike / Act:7]   |   KAIRA: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[85]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 119
+    KAIRA                   : d100[24]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 40
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[65]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 78
+    Final ATK: 78
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[76]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 124
+    Final DEF: 124
+  Margin: 78 − 124 = -46   ▶  PARRY (margin -46)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAIRA                   : d100[78]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 94
+    MALACHAI STEELE         : d100[51]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 85
+    ▶ KAIRA wins → ATTACKS
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[22]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 62
+    Final ATK: 62
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[41]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 77
+    Final DEF: 77
+  Margin: 62 − 77 = -15   ▶  PARRY (margin -15)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[82]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 116
+    KAIRA                   : d100[9]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 25
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[41]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 54
+    Final ATK: 54
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[36]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 84
+    Final DEF: 84
+  Margin: 54 − 84 = -30   ▶  PARRY (margin -30)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[92]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 126
+    KAIRA                   : d100[52]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 68
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[63]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 76
+    Final ATK: 76
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[95]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 143
+    Final DEF: 143
+  Margin: 76 − 143 = -67   ▶  PARRY (margin -67)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[65]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 99
+    KAIRA                   : d100[15]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 31
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[47]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 60
+    Final ATK: 60
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[53]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 101
+    Final DEF: 101
+  Margin: 60 − 101 = -41   ▶  PARRY (margin -41)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAIRA                   : d100[86]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 102
+    MALACHAI STEELE         : d100[52]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 86
+    ▶ KAIRA wins → ATTACKS
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[21]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 61
+    Final ATK: 61
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[46]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 82
+    Final DEF: 82
+  Margin: 61 − 82 = -21   ▶  PARRY (margin -21)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: KAIRA has uncontested action
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[45]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 85
+    Final ATK: 85
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[70]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 106
+    Final DEF: 106
+  Margin: 85 − 106 = -21   ▶  PARRY (margin -21)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: KAIRA has uncontested action
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[61]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 101
+    Final ATK: 101
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[39]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 75
+    Final DEF: 75
+  Margin: 101 − 75 = 26   ▶  HIT (margin 26)
+  Damage (KAIRA → MALACHAI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 26/55.0)) = 0.473
+    Raw: max(1, int(15 × 0.473)) = 7
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 7 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (MALACHAI STEELE):
+    Before : 29/46 (63.0%)
+    hit     : −1
+    After  : 28/46 (60.9%)
+  Knockdown Check (MALACHAI STEELE):
+    base = int(1/46 × 80) = 1   cat bonus [Polearm/Spear]: +5   final: 6%
+    Roll: 30  →  no knockdown
+  Perm Injury Check (MALACHAI STEELE):
+    threshold = 15% of 46 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: KAIRA has uncontested action
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[67]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 107
+    Final ATK: 107
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[51]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 87
+    Final DEF: 87
+  Margin: 107 − 87 = 20   ▶  HIT (margin 20)
+  Damage (KAIRA → MALACHAI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 20/55.0)) = 0.364
+    Raw: max(1, int(15 × 0.364)) = 5
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 5 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (MALACHAI STEELE):
+    Before : 28/46 (60.9%)
+    hit     : −1
+    After  : 27/46 (58.7%)
+  Knockdown Check (MALACHAI STEELE):
+    base = int(1/46 × 80) = 1   cat bonus [Polearm/Spear]: +5   final: 6%
+    Roll: 80  →  no knockdown
+  Perm Injury Check (MALACHAI STEELE):
+    threshold = 15% of 46 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    MALACHAI STEELE: 72.0 END − (2.60 burn × 5 actions) = 58.0
+    KAIRA: 83.0 END − (1.70 burn × 5 actions) = 74.5
+    HP POOL — MALACHAI STEELE: 27/46 (59%)
+    HP POOL — KAIRA: 22/53 (42%)
+
+==============================================================================
+  MINUTE 4
+==============================================================================
+  APM   — MALACHAI STEELE: 5   |   KAIRA: 5
+  HP    — MALACHAI STEELE: 27/46 (59%)   |   KAIRA: 22/53 (42%)
+  END   — MALACHAI STEELE: 58.0   |   KAIRA: 74.5
+  STRAT — MALACHAI STEELE: [Strike / Act:7]   |   KAIRA: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAIRA                   : d100[100]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 116
+    MALACHAI STEELE         : d100[76]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 110
+    ▶ KAIRA wins → ATTACKS
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[55]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 95
+    Final ATK: 95
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[59]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 95
+    Final DEF: 95
+  Margin: 95 − 95 = 0   ▶  MISS
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[34]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 68
+    KAIRA                   : d100[34]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 50
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[15]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 28
+    Final ATK: 28
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[16]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 64
+    Final DEF: 64
+  Margin: 28 − 64 = -36   ▶  PARRY (margin -36)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAIRA                   : d100[75]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 91
+    MALACHAI STEELE         : d100[35]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 69
+    ▶ KAIRA wins → ATTACKS
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[82]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 122
+    Final ATK: 122
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[10]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 46
+    Final DEF: 46
+  Margin: 122 − 46 = 76   ▶  HIT (margin 76)
+  Damage (KAIRA → MALACHAI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 76/55.0)) = 1.000
+    Raw: max(1, int(15 × 1.000)) = 15
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 15 − 7) = 8
+  ▶ FINAL DAMAGE: 8
+  HP Pool (MALACHAI STEELE):
+    Before : 27/46 (58.7%)
+    hit     : −8
+    After  : 19/46 (41.3%)
+  Knockdown Check (MALACHAI STEELE):
+    base = int(8/46 × 80) = 13   cat bonus [Polearm/Spear]: +5   final: 18%
+    Roll: 5  →  ▶ KNOCKDOWN
+  Perm Injury Check (MALACHAI STEELE):
+    threshold = 15% of 46 = 6   damage 8 ≥ threshold
+    chance = max(5, min(80, int(8/46×100) − 5)) = 10%
+    Roll: 19  →  no injury
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAIRA                   : d100[36]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 52
+    MALACHAI STEELE         : d100[39]  on_ground_halved[(÷2)] = 19
+    ▶ KAIRA wins → ATTACKS
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[35]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 75
+    Final ATK: 75
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[31]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 42
+    Final DEF: 42
+  Margin: 75 − 42 = 33   ▶  HIT (margin 33)
+  Damage (KAIRA → MALACHAI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 33/55.0)) = 0.600
+    Raw: max(1, int(15 × 0.600)) = 9
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 9 − 7) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (MALACHAI STEELE):
+    Before : 19/46 (41.3%)
+    hit     : −2
+    After  : 17/46 (37.0%)
+  Knockdown Check (MALACHAI STEELE):
+    base = int(2/46 × 80) = 3   cat bonus [Polearm/Spear]: +5   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (MALACHAI STEELE):
+    threshold = 15% of 46 = 6   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAIRA                   : d100[40]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 56
+    MALACHAI STEELE         : d100[39]  on_ground_halved[(÷2)] = 19
+    ▶ KAIRA wins → ATTACKS
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[15]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 55
+    Final ATK: 55
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[22]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 33
+    Final DEF: 33
+  Margin: 55 − 33 = 22   ▶  HIT (margin 22)
+  Damage (KAIRA → MALACHAI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 22/55.0)) = 0.400
+    Raw: max(1, int(15 × 0.400)) = 6
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 6 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (MALACHAI STEELE):
+    Before : 17/46 (37.0%)
+    hit     : −1
+    After  : 16/46 (34.8%)
+  Knockdown Check (MALACHAI STEELE):
+    base = int(1/46 × 80) = 1   cat bonus [Polearm/Spear]: +5   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (MALACHAI STEELE):
+    threshold = 15% of 46 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAIRA                   : d100[32]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 48
+    MALACHAI STEELE         : d100[45]  on_ground_halved[(÷2)] = 22
+    ▶ KAIRA wins → ATTACKS
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[10]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 50
+    Final ATK: 50
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[61]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 72
+    Final DEF: 72
+  Margin: 50 − 72 = -22   ▶  PARRY (margin -22)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: MALACHAI STEELE has uncontested action
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[23]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 36
+    Final ATK: 36
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[85]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 133
+    Final DEF: 133
+  Margin: 36 − 133 = -97   ▶  PARRY (margin -97)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: MALACHAI STEELE has uncontested action
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[34]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 47
+    Final ATK: 47
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[69]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 117
+    Final DEF: 117
+  Margin: 47 − 117 = -70   ▶  PARRY (margin -70)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: MALACHAI STEELE has uncontested action
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[64]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 77
+    Final ATK: 77
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[79]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 127
+    Final DEF: 127
+  Margin: 77 − 127 = -50   ▶  PARRY (margin -50)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: MALACHAI STEELE has uncontested action
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[52]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 65
+    Final ATK: 65
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[45]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 93
+    Final DEF: 93
+  Margin: 65 − 93 = -28   ▶  PARRY (margin -28)
+
+  ── END OF MINUTE ──
+    MALACHAI STEELE: 58.0 END − (2.60 burn × 5 actions) = 44.0
+    KAIRA: 74.5 END − (1.70 burn × 5 actions) = 66.0
+    HP POOL — MALACHAI STEELE: 16/46 (35%)
+    HP POOL — KAIRA: 22/53 (42%)
+
+==============================================================================
+  MINUTE 5
+==============================================================================
+  APM   — MALACHAI STEELE: 5   |   KAIRA: 5
+  HP    — MALACHAI STEELE: 16/46 (35%)   |   KAIRA: 22/53 (42%)
+  END   — MALACHAI STEELE: 44.0   |   KAIRA: 66.0
+  STRAT — MALACHAI STEELE: [Strike / Act:7]   |   KAIRA: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[51]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 85
+    KAIRA                   : d100[19]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 35
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[16]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 29
+    Final ATK: 29
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[15]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 63
+    Final DEF: 63
+  Margin: 29 − 63 = -34   ▶  PARRY (margin -34)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[78]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 112
+    KAIRA                   : d100[69]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 85
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[41]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 54
+    Final ATK: 54
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[83]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 131
+    Final DEF: 131
+  Margin: 54 − 131 = -77   ▶  PARRY (margin -77)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[86]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 120
+    KAIRA                   : d100[81]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 97
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[68]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 81
+    Final ATK: 81
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[87]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 135
+    Final DEF: 135
+  Margin: 81 − 135 = -54   ▶  PARRY (margin -54)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[62]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 96
+    KAIRA                   : d100[79]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 95
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[78]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 91
+    Final ATK: 91
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[48]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 96
+    Final DEF: 96
+  Margin: 91 − 96 = -5   ▶  PARRY (margin -5)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAIRA                   : d100[84]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 100
+    MALACHAI STEELE         : d100[47]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 81
+    ▶ KAIRA wins → ATTACKS
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[21]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 61
+    Final ATK: 61
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[86]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 122
+    Final DEF: 122
+  Margin: 61 − 122 = -61   ▶  PARRY (margin -61)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[61]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4] = 95
+    KAIRA                   : d100[64]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 80
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[55]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 68
+    Final ATK: 68
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[4]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 52
+    Final DEF: 52
+  Margin: 68 − 52 = 16   ▶  HIT (margin 16)
+  Damage (MALACHAI STEELE → KAIRA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 8.75
+      STR bonus                    +2.40
+      activity contrib             -0.60
+      luck ×0.15                   +1.05
+      bash skill bonus               +10.00
+    Ceiling: 17
+    Fraction: max(0.10, min(1.0, 16/55.0)) = 0.291
+    Raw: max(1, int(17 × 0.291)) = 4
+    Favorite weapon +1 → raw = 5
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 5 − 3) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (KAIRA):
+    Before : 15/53 (28.3%)
+    hit     : −2
+    After  : 13/53 (24.5%)
+  Knockdown Check (KAIRA):
+    base = int(2/53 × 80) = 3   cat bonus [Axe/Pick]: +0   final: 1%
+    Roll: 57  →  no knockdown
+  Perm Injury Check (KAIRA):
+    threshold = 15% of 53 = 7   damage 2 < threshold
+    → Below threshold — no injury possible
+  Concede Attempt (KAIRA):
+    d100[44] + PRE_bonus[+2] + luck//2[13] = 59
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    59 < 64  →  mercy denied — fight continues
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: KAIRA has uncontested action
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[39]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 79
+    Final ATK: 79
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[41]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 77
+    Final DEF: 77
+  Margin: 79 − 77 = 2   ▶  GRAZE (margin 2, 1 HP)
+  HP Pool (MALACHAI STEELE):
+    Before : 16/46 (34.8%)
+    graze   : −1
+    After  : 15/46 (32.6%)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: KAIRA has uncontested action
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[41]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 81
+    Final ATK: 81
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[74]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 110
+    Final DEF: 110
+  Margin: 81 − 110 = -29   ▶  PARRY (margin -29)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: KAIRA has uncontested action
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[75]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 115
+    Final ATK: 115
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[77]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 113
+    Final DEF: 113
+  Margin: 115 − 113 = 2   ▶  GRAZE (margin 2, 1 HP)
+  HP Pool (MALACHAI STEELE):
+    Before : 15/46 (32.6%)
+    graze   : −1
+    After  : 14/46 (30.4%)
+
+  ── END OF MINUTE ──
+    MALACHAI STEELE: 44.0 END − (2.60 burn × 5 actions) = 30.0
+    KAIRA: 66.0 END − (1.70 burn × 5 actions) = 57.5
+    HP POOL — MALACHAI STEELE: 14/46 (30%)
+    HP POOL — KAIRA: 13/53 (25%)
+
+==============================================================================
+  MINUTE 6
+==============================================================================
+  APM   — MALACHAI STEELE: 5   |   KAIRA: 5
+  HP    — MALACHAI STEELE: 14/46 (30%)   |   KAIRA: 13/53 (25%)
+  END   — MALACHAI STEELE: 30.0   |   KAIRA: 57.5
+  STRAT — MALACHAI STEELE: [Strike / Act:7]   |   KAIRA: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[31]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4]  end_pen[-3] = 62
+    KAIRA                   : d100[33]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 49
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[47]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]
+    Subtotal: 60
+    Final ATK: 60
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[75]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 123
+    Final DEF: 123
+  Margin: 60 − 123 = -63   ▶  PARRY (margin -63)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAIRA                   : d100[73]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 89
+    MALACHAI STEELE         : d100[49]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4]  end_pen[-3] = 80
+    ▶ KAIRA wins → ATTACKS
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[2]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 42
+    Final ATK: 42
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[74]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 110
+    Final DEF: 110
+  Margin: 42 − 110 = -68   ▶  PARRY (margin -68)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAIRA                   : d100[72]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 88
+    MALACHAI STEELE         : d100[40]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4]  end_pen[-3] = 71
+    ▶ KAIRA wins → ATTACKS
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[76]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 116
+    Final ATK: 116
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[65]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]
+    Subtotal: 101
+    Final DEF: 101
+  Margin: 116 − 101 = 15   ▶  HIT (margin 15)
+  Damage (KAIRA → MALACHAI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 15/55.0)) = 0.273
+    Raw: max(1, int(15 × 0.273)) = 4
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 4 − 7) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (MALACHAI STEELE):
+    Before : 14/46 (30.4%)
+    hit     : −1
+    After  : 13/46 (28.3%)
+  Knockdown Check (MALACHAI STEELE):
+    base = int(1/46 × 80) = 1   cat bonus [Polearm/Spear]: +5   final: 6%
+    Roll: 5  →  ▶ KNOCKDOWN
+  Perm Injury Check (MALACHAI STEELE):
+    threshold = 15% of 46 = 6   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAIRA                   : d100[61]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 77
+    MALACHAI STEELE         : d100[58]  on_ground_halved[(÷2)] = 29
+    ▶ KAIRA wins → ATTACKS
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[79]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 119
+    Final ATK: 119
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[14]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 25
+    Final DEF: 25
+  Margin: 119 − 25 = 94   ▶  HIT (margin 94)
+  Damage (KAIRA → MALACHAI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 94/55.0)) = 1.000
+    Raw: max(1, int(15 × 1.000)) = 15
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 15 − 7) = 8
+  ▶ FINAL DAMAGE: 8
+  HP Pool (MALACHAI STEELE):
+    Before : 13/46 (28.3%)
+    hit     : −8
+    After  : 5/46 (10.9%)
+  Knockdown Check (MALACHAI STEELE):
+    base = int(8/46 × 80) = 13   cat bonus [Polearm/Spear]: +5   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (MALACHAI STEELE):
+    threshold = 15% of 46 = 6   damage 8 ≥ threshold
+    chance = max(5, min(80, int(8/46×100) − 5)) = 10%
+    Roll: 100  →  no injury
+  Concede Attempt (MALACHAI STEELE):
+    d100[66] + PRE_bonus[-4] + luck//2[3] = 65
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    65 < 66  →  mercy denied — fight continues
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAIRA                   : d100[94]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 110
+    MALACHAI STEELE         : d100[3]  on_ground_halved[(÷2)] = 1
+    ▶ KAIRA wins → ATTACKS
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[97]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 137
+    Final ATK: 137
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[72]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 83
+    Final DEF: 83
+  Margin: 137 − 83 = 54   ▶  HIT (margin 54)
+  Damage (KAIRA → MALACHAI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 54/55.0)) = 0.982
+    Raw: max(1, int(15 × 0.982)) = 14
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 14 − 7) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (MALACHAI STEELE):
+    Before : 5/46 (10.9%)
+    hit     : −7
+    After  : -2/46 (0.0%)
+  Knockdown Check (MALACHAI STEELE):
+    base = int(7/46 × 80) = 12   cat bonus [Polearm/Spear]: +5   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (MALACHAI STEELE):
+    threshold = 15% of 46 = 6   damage 7 ≥ threshold
+    chance = max(5, min(80, int(7/46×100) − 5)) = 8%
+    Roll: 87  →  no injury
+  Death Check (MALACHAI STEELE):
+    prev_hp: 5   damage: 7   new_hp: -2
+    overshoot: 2
+    death_chance = min(50.0, 0.5 + 2) = 2.5%
+    → survives (concede system takes over)
+  Concede Attempt (MALACHAI STEELE):
+    d100[59] + PRE_bonus[-4] + luck//2[3] = 58
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    58 < 66  →  mercy denied — fight continues
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAIRA                   : d100[20]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 36
+    MALACHAI STEELE         : d100[51]  on_ground_halved[(÷2)] = 25
+    ▶ KAIRA wins → ATTACKS
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[49]  dex_bonus[-4]  luck[+26]  feint[+18]
+    Subtotal: 89
+    Final ATK: 89
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[27]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]  ground_pen[-25]  hp0_pen[-30]
+    Subtotal: 8
+    Final DEF: 8
+  Margin: 89 − 8 = 81   ▶  HIT (margin 81)
+  Damage (KAIRA → MALACHAI STEELE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +1.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 81/55.0)) = 1.000
+    Raw: max(1, int(15 × 1.000)) = 15
+    Armor: Brigandine  base DEF: 7
+    Net = max(1, 15 − 7) = 8
+  ▶ FINAL DAMAGE: 8
+  HP Pool (MALACHAI STEELE):
+    Before : -2/46 (-4.3%)
+    hit     : −8
+    After  : -10/46 (0.0%)
+  Knockdown Check (MALACHAI STEELE):
+    base = int(8/46 × 80) = 13   cat bonus [Polearm/Spear]: +5   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (MALACHAI STEELE):
+    threshold = 15% of 46 = 6   damage 8 ≥ threshold
+    chance = max(5, min(80, int(8/46×100) − 5)) = 10%
+    Roll: 33  →  no injury
+  Death Check (MALACHAI STEELE):
+    prev_hp: -2   damage: 8   new_hp: -10
+    overshoot: 10
+    death_chance = min(50.0, 0.5 + 10) = 10.5%
+    → survives (concede system takes over)
+  Concede Attempt (MALACHAI STEELE):
+    d100[8] + PRE_bonus[-4] + luck//2[3] = 7
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    7 < 66  →  mercy denied — fight continues
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: MALACHAI STEELE has uncontested action
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[71]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]  hp0_pen[-30]
+    Subtotal: 54
+    Final ATK: 54
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[8]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 56
+    Final DEF: 56
+  Margin: 54 − 56 = -2   ▶  PARRY (margin -2)
+  Concede Attempt (MALACHAI STEELE):
+    d100[14] + PRE_bonus[-4] + luck//2[3] = 13
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    13 < 66  →  mercy denied — fight continues
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: MALACHAI STEELE has uncontested action
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[67]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]  hp0_pen[-30]
+    Subtotal: 50
+    Final ATK: 50
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[35]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 83
+    Final DEF: 83
+  Margin: 50 − 83 = -33   ▶  PARRY (margin -33)
+  Concede Attempt (MALACHAI STEELE):
+    d100[43] + PRE_bonus[-4] + luck//2[3] = 42
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    42 < 66  →  mercy denied — fight continues
+  Concede Attempt (KAIRA):
+    d100[42] + PRE_bonus[+2] + luck//2[13] = 57
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    57 < 64  →  mercy denied — fight continues
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: MALACHAI STEELE has uncontested action
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[9]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]  hp0_pen[-30]
+    Subtotal: 1
+    Final ATK: 1
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[88]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 136
+    Final DEF: 136
+  Margin: 1 − 136 = -135   ▶  PARRY (margin -135)
+  Concede Attempt (MALACHAI STEELE):
+    d100[11] + PRE_bonus[-4] + luck//2[3] = 10
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    10 < 66  →  mercy denied — fight continues
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: MALACHAI STEELE has uncontested action
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[30]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]  hp0_pen[-30]
+    Subtotal: 13
+    Final ATK: 13
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[3]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]
+    Subtotal: 51
+    Final DEF: 51
+  Margin: 13 − 51 = -38   ▶  PARRY (margin -38)
+  Concede Attempt (MALACHAI STEELE):
+    d100[25] + PRE_bonus[-4] + luck//2[3] = 24
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    24 < 66  →  mercy denied — fight continues
+  Concede Attempt (KAIRA):
+    d100[45] + PRE_bonus[+2] + luck//2[13] = 60
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    60 < 64  →  mercy denied — fight continues
+
+  ── END OF MINUTE ──
+    MALACHAI STEELE: 30.0 END − (2.60 burn × 5 actions) = 16.0
+    KAIRA: 57.5 END − (1.70 burn × 5 actions) = 49.0
+    HP POOL — MALACHAI STEELE: -10/46 (-22%)
+    HP POOL — KAIRA: -1/53 (-2%)
+
+==============================================================================
+  MINUTE 7
+==============================================================================
+  APM   — MALACHAI STEELE: 5   |   KAIRA: 5
+  HP    — MALACHAI STEELE: -10/46 (-22%)   |   KAIRA: -1/53 (-2%)
+  END   — MALACHAI STEELE: 16.0   |   KAIRA: 49.0
+  STRAT — MALACHAI STEELE: [Strike / Act:7]   |   KAIRA: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    KAIRA                   : d100[84]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 100
+    MALACHAI STEELE         : d100[48]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4]  end_pen[-7] = 75
+    ▶ KAIRA wins → ATTACKS
+  Attack: KAIRA → MALACHAI STEELE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (KAIRA):
+    d100[4]  dex_bonus[-4]  luck[+26]  feint[+18]  hp0_pen[-30]
+    Subtotal: 14
+    Final ATK: 14
+  Defense Roll (MALACHAI STEELE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[9]  luck[+7]  str_bonus[+2]  parry_skill(lv4)x4[+16]  activity_mod[-4]  def_point_bonus[+15]  hp0_pen[-30]  end_pen[-5]
+    Subtotal: 10
+    Final DEF: 10
+  Margin: 14 − 10 = 4   ▶  GRAZE (margin 4, 1 HP)
+  HP Pool (MALACHAI STEELE):
+    Before : -10/46 (-21.7%)
+    graze   : −1
+    After  : -11/46 (0.0%)
+  Concede Attempt (MALACHAI STEELE):
+    d100[4] + PRE_bonus[-4] + luck//2[3] = 3
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    3 < 66  →  mercy denied — fight continues
+  Concede Attempt (KAIRA):
+    d100[26] + PRE_bonus[+2] + luck//2[13] = 41
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    41 < 64  →  mercy denied — fight continues
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[88]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4]  end_pen[-7] = 115
+    KAIRA                   : d100[90]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 106
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[69]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]  end_pen[-7]  hp0_pen[-30]
+    Subtotal: 45
+    Final ATK: 45
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[94]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]  hp0_pen[-30]
+    Subtotal: 112
+    Final DEF: 112
+  Margin: 45 − 112 = -67   ▶  PARRY (margin -67)
+  Concede Attempt (MALACHAI STEELE):
+    d100[58] + PRE_bonus[-4] + luck//2[3] = 57
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    57 < 66  →  mercy denied — fight continues
+  Concede Attempt (KAIRA):
+    d100[7] + PRE_bonus[+2] + luck//2[13] = 22
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    22 < 64  →  mercy denied — fight continues
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[93]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4]  end_pen[-7] = 120
+    KAIRA                   : d100[64]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 80
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[31]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]  end_pen[-7]  hp0_pen[-30]
+    Subtotal: 7
+    Final ATK: 7
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[84]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]  hp0_pen[-30]
+    Subtotal: 102
+    Final DEF: 102
+  Margin: 7 − 102 = -95   ▶  PARRY (margin -95)
+  Concede Attempt (MALACHAI STEELE):
+    d100[66] + PRE_bonus[-4] + luck//2[3] = 65
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    65 < 66  →  mercy denied — fight continues
+  Concede Attempt (KAIRA):
+    d100[38] + PRE_bonus[+2] + luck//2[13] = 53
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    53 < 64  →  mercy denied — fight continues
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[38]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4]  end_pen[-7] = 65
+    KAIRA                   : d100[41]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 57
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[22]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]  end_pen[-7]  hp0_pen[-30]
+    Subtotal: 1
+    Final ATK: 1
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[48]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]  hp0_pen[-30]
+    Subtotal: 66
+    Final DEF: 66
+  Margin: 1 − 66 = -65   ▶  PARRY (margin -65)
+  Concede Attempt (MALACHAI STEELE):
+    d100[34] + PRE_bonus[-4] + luck//2[3] = 33
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    33 < 66  →  mercy denied — fight continues
+  Concede Attempt (KAIRA):
+    d100[28] + PRE_bonus[+2] + luck//2[13] = 43
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    43 < 64  →  mercy denied — fight continues
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[23]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4]  end_pen[-7] = 50
+    KAIRA                   : d100[17]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 33
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[64]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]  end_pen[-7]  hp0_pen[-30]
+    Subtotal: 40
+    Final ATK: 40
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[64]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]  hp0_pen[-30]
+    Subtotal: 82
+    Final DEF: 82
+  Margin: 40 − 82 = -42   ▶  PARRY (margin -42)
+  Concede Attempt (MALACHAI STEELE):
+    d100[12] + PRE_bonus[-4] + luck//2[3] = 11
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    11 < 66  →  mercy denied — fight continues
+  Concede Attempt (KAIRA):
+    d100[40] + PRE_bonus[+2] + luck//2[13] = 55
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    55 < 64  →  mercy denied — fight continues
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MALACHAI STEELE         : d100[61]  dex_bonus[+2]  init_skill_x3[+21]  luck[+7]  activity_mod[+4]  end_pen[-7] = 88
+    KAIRA                   : d100[44]  dex_bonus[-8]  luck[+26]  activity_mod[-2] = 60
+    ▶ MALACHAI STEELE wins → ATTACKS
+  Attack: MALACHAI STEELE → KAIRA   Weapon: Military Pick   Style: Strike   Aim: Chest
+  Attack Roll (MALACHAI STEELE):
+    d100[29]  dex_bonus[+1]  luck[+7]  fav_bonus[+5]  end_pen[-7]  hp0_pen[-30]
+    Subtotal: 5
+    Final ATK: 5
+  Defense Roll (KAIRA, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[16]  luck[+26]  str_bonus[+1]  parry_skill(lv1)x4[+4]  activity_mod[+2]  def_point_bonus[+15]  hp0_pen[-30]
+    Subtotal: 34
+    Final DEF: 34
+  Margin: 5 − 34 = -29   ▶  PARRY (margin -29)
+  Concede Attempt (MALACHAI STEELE):
+    d100[91] + PRE_bonus[-4] + luck//2[3] = 90
+    threshold = max(40, 68 − (PRE // 3)) = 66
+    90 ≥ 66  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: MALACHAI STEELE
+==============================================================================
+  Parry: d100=88 vs 42% — FAIL
+    → Parry training: no progress this session (INT 15, level 4, 42% chance).
+  Parry: d100=65 vs 42% — FAIL
+    → Parry training: no progress this session (INT 15, level 4, 42% chance).
+  Parry: d100=1 vs 42% — SUCCESS
+    → Parry trained: Level 4 → Level 5 (Very Skilled, 42% chance)
+  INT observed learning: d100=17 vs 4% — no trigger
+
+==============================================================================
+  TRAINING: KAIRA
+==============================================================================
+  Dodge: d100=37 vs 35% — FAIL
+    → Dodge training: no progress this session (INT 23, level 7, 35% chance).
+  Feint: Kaira is already mastered in Feint.
+  Intelligence: d100=72 vs 18% — FAIL
+    → Intelligence training: no progress this session (mastery tier, 18% chance).
+  INT observed learning: d100=100 vs 36% — no trigger
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : KAIRA  (0.0% HP remaining)
+  Loser  : MALACHAI STEELE  (survived, 0.0% HP)
+  Duration: 7 minute(s)
+==============================================================================

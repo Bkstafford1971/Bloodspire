@@ -1,0 +1,605 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #234   Turn: 5
+  Debug team: Ilneval
+  Ilneval / DECEPTICONS   vs   Maester Ironstone / Stonecraft Academy
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: SHOCKWAVE
+  ────────────────────────────────────
+    Race: Human  |  Gender: Male
+    STR:17  DEX:12  CON:17  INT:12  PRE:10  SIZ:9
+    Max HP: 52   Luck: 14
+    Armor: Cuir Boulli   Helm: Steel Cap
+    Primary: Boar Spear   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Lunge / Act:7 / Aim:None / Def:Chest
+
+  ────────────────────────────────────
+  WARRIOR B: SAOIRSE
+  ────────────────────────────────────
+    Race: Human  |  Gender: Female
+    STR:18  DEX:13  CON:11  INT:17  PRE:13  SIZ:9
+    Max HP: 43   Luck: 27
+    Armor: Cuir Boulli   Helm: None
+    Primary: Boar Spear   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Feint / Act:4 / Aim:Chest / Def:Chest
+    Skills: feint:4  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — SHOCKWAVE: 6   |   SAOIRSE: 5
+  HP    — SHOCKWAVE: 52/52 (100%)   |   SAOIRSE: 43/43 (100%)
+  END   — SHOCKWAVE: 100.0   |   SAOIRSE: 100.0
+  STRAT — SHOCKWAVE: [Lunge / Act:7]   |   SAOIRSE: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[74]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 96
+    SAOIRSE                 : d100[42]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 71
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAOIRSE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[57]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 78
+    Final ATK: 78
+  Defense Roll (SAOIRSE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[41]  luck[+27]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 84
+    Final DEF: 84
+  Margin: 78 − 84 = -6   ▶  PARRY (margin -6)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SAOIRSE                 : d100[83]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 112
+    SHOCKWAVE               : d100[30]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 52
+    ▶ SAOIRSE wins → ATTACKS
+  Attack: SAOIRSE → SHOCKWAVE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (SAOIRSE):
+    d100[100]  dex_bonus[+2]  luck[+27]  feint[+8]
+    Subtotal: 137
+    Final ATK: 137
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[10]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 52
+    Final DEF: 52
+  Margin: 137 − 52 = 85   ▶  HIT (margin 85)
+  Damage (SAOIRSE → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +4.80
+      activity contrib             +0.30
+      luck ×0.15                   +4.05
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 85/55.0)) = 1.000
+    Raw: max(1, int(18 × 1.000)) = 18
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 18 − 5) = 13
+  ▶ FINAL DAMAGE: 13
+  HP Pool (SHOCKWAVE):
+    Before : 52/52 (100.0%)
+    hit     : −13
+    After  : 39/52 (75.0%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(13/52 × 80) = 20   cat bonus [Polearm/Spear]: +5   final: 25%
+    Roll: 69  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 52 = 7   damage 13 ≥ threshold
+    chance = max(5, min(80, int(13/52×100) − 5)) = 17%
+    Roll: 38  →  no injury
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[42]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 64
+    SAOIRSE                 : d100[35]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 64
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAOIRSE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[59]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 80
+    Final ATK: 80
+  Defense Roll (SAOIRSE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[3]  luck[+27]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 46
+    Final DEF: 46
+  Margin: 80 − 46 = 34   ▶  HIT (margin 34)
+  Damage (SHOCKWAVE → SAOIRSE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +4.20
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +2.10
+    Ceiling: 14
+    Fraction: max(0.10, min(1.0, 34/55.0)) = 0.618
+    Raw: max(1, int(14 × 0.618)) = 8
+    Favorite weapon +1 → raw = 9
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 9 − 3) = 6
+  ▶ FINAL DAMAGE: 6
+  HP Pool (SAOIRSE):
+    Before : 43/43 (100.0%)
+    hit     : −6
+    After  : 37/43 (86.0%)
+  Knockdown Check (SAOIRSE):
+    base = int(6/43 × 80) = 11   cat bonus [Polearm/Spear]: +5   final: 16%
+    Roll: 91  →  no knockdown
+  Perm Injury Check (SAOIRSE):
+    threshold = 15% of 43 = 6   damage 6 ≥ threshold
+    chance = max(5, min(80, int(6/43×100) − 5)) = 0%
+    Roll: 0  →  no injury
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SAOIRSE                 : d100[29]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 58
+    SHOCKWAVE               : d100[7]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 29
+    ▶ SAOIRSE wins → ATTACKS
+  Attack: SAOIRSE → SHOCKWAVE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (SAOIRSE):
+    d100[31]  dex_bonus[+2]  luck[+27]  feint[+8]
+    Subtotal: 68
+    Final ATK: 68
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[62]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 104
+    Final DEF: 104
+  Margin: 68 − 104 = -36   ▶  DODGE (margin -36)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[88]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 110
+    SAOIRSE                 : d100[22]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 51
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAOIRSE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[93]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 114
+    Final ATK: 114
+  Defense Roll (SAOIRSE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[55]  luck[+27]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 114 − 98 = 16   ▶  HIT (margin 16)
+  Damage (SHOCKWAVE → SAOIRSE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +4.20
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +2.10
+    Ceiling: 14
+    Fraction: max(0.10, min(1.0, 16/55.0)) = 0.291
+    Raw: max(1, int(14 × 0.291)) = 4
+    Favorite weapon +1 → raw = 5
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 5 − 3) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (SAOIRSE):
+    Before : 37/43 (86.0%)
+    hit     : −2
+    After  : 35/43 (81.4%)
+  Knockdown Check (SAOIRSE):
+    base = int(2/43 × 80) = 3   cat bonus [Polearm/Spear]: +5   final: 8%
+    Roll: 41  →  no knockdown
+  Perm Injury Check (SAOIRSE):
+    threshold = 15% of 43 = 6   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[68]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 90
+    SAOIRSE                 : d100[6]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 35
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAOIRSE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[35]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 56
+    Final ATK: 56
+  Defense Roll (SAOIRSE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[37]  luck[+27]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 56 − 80 = -24   ▶  PARRY (margin -24)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SAOIRSE                 : d100[83]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 112
+    SHOCKWAVE               : d100[33]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 55
+    ▶ SAOIRSE wins → ATTACKS
+  Attack: SAOIRSE → SHOCKWAVE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (SAOIRSE):
+    d100[45]  dex_bonus[+2]  luck[+27]  feint[+8]
+    Subtotal: 82
+    Final ATK: 82
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[68]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 110
+    Final DEF: 110
+  Margin: 82 − 110 = -28   ▶  DODGE (margin -28)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[98]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 120
+    SAOIRSE                 : d100[4]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 33
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAOIRSE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[14]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 35
+    Final ATK: 35
+  Defense Roll (SAOIRSE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[39]  luck[+27]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 82
+    Final DEF: 82
+  Margin: 35 − 82 = -47   ▶  PARRY (margin -47)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SAOIRSE                 : d100[94]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 123
+    SHOCKWAVE               : d100[12]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 34
+    ▶ SAOIRSE wins → ATTACKS
+  Attack: SAOIRSE → SHOCKWAVE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (SAOIRSE):
+    d100[98]  dex_bonus[+2]  luck[+27]  feint[+8]
+    Subtotal: 135
+    Final ATK: 135
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[42]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 84
+    Final DEF: 84
+  Margin: 135 − 84 = 51   ▶  HIT (margin 51)
+  Damage (SAOIRSE → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +4.80
+      activity contrib             +0.30
+      luck ×0.15                   +4.05
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 51/55.0)) = 0.927
+    Raw: max(1, int(18 × 0.927)) = 16
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 16 − 5) = 11
+  ▶ FINAL DAMAGE: 11
+  HP Pool (SHOCKWAVE):
+    Before : 39/52 (75.0%)
+    hit     : −11
+    After  : 28/52 (53.8%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(11/52 × 80) = 16   cat bonus [Polearm/Spear]: +5   final: 21%
+    Roll: 44  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 52 = 7   damage 11 ≥ threshold
+    chance = max(5, min(80, int(11/52×100) − 5)) = 13%
+    Roll: 22  →  no injury
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[100]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 122
+    SAOIRSE                 : d100[17]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 46
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAOIRSE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[78]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 99
+    Final ATK: 99
+  Defense Roll (SAOIRSE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[74]  luck[+27]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 117
+    Final DEF: 117
+  Margin: 99 − 117 = -18   ▶  PARRY (margin -18)
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: SAOIRSE has uncontested action
+  Attack: SAOIRSE → SHOCKWAVE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (SAOIRSE):
+    d100[23]  dex_bonus[+2]  luck[+27]  feint[+8]
+    Subtotal: 60
+    Final ATK: 60
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[47]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 89
+    Final DEF: 89
+  Margin: 60 − 89 = -29   ▶  DODGE (margin -29)
+
+  ── END OF MINUTE ──
+    SHOCKWAVE: 100.0 END − (6.60 burn × 6 actions) = 59.4
+    SAOIRSE: 100.0 END − (1.70 burn × 5 actions) = 91.5
+    HP POOL — SHOCKWAVE: 28/52 (54%)
+    HP POOL — SAOIRSE: 35/43 (81%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — SHOCKWAVE: 6   |   SAOIRSE: 5
+  HP    — SHOCKWAVE: 28/52 (54%)   |   SAOIRSE: 35/43 (81%)
+  END   — SHOCKWAVE: 59.4   |   SAOIRSE: 91.5
+  STRAT — SHOCKWAVE: [Lunge / Act:7]   |   SAOIRSE: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[93]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 115
+    SAOIRSE                 : d100[11]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 40
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAOIRSE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[30]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 51
+    Final ATK: 51
+  Defense Roll (SAOIRSE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[37]  luck[+27]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 51 − 80 = -29   ▶  PARRY (margin -29)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[82]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 104
+    SAOIRSE                 : d100[41]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 70
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAOIRSE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[9]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 30
+    Final ATK: 30
+  Defense Roll (SAOIRSE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[90]  luck[+27]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 133
+    Final DEF: 133
+  Margin: 30 − 133 = -103   ▶  PARRY (margin -103)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[57]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 79
+    SAOIRSE                 : d100[33]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 62
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAOIRSE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[46]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 67
+    Final ATK: 67
+  Defense Roll (SAOIRSE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[2]  luck[+27]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 45
+    Final DEF: 45
+  Margin: 67 − 45 = 22   ▶  HIT (margin 22)
+  Damage (SHOCKWAVE → SAOIRSE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +4.20
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +2.10
+    Ceiling: 14
+    Fraction: max(0.10, min(1.0, 22/55.0)) = 0.400
+    Raw: max(1, int(14 × 0.400)) = 5
+    Favorite weapon +1 → raw = 6
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 6 − 3) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (SAOIRSE):
+    Before : 35/43 (81.4%)
+    hit     : −3
+    After  : 32/43 (74.4%)
+  Knockdown Check (SAOIRSE):
+    base = int(3/43 × 80) = 5   cat bonus [Polearm/Spear]: +5   final: 10%
+    Roll: 63  →  no knockdown
+  Perm Injury Check (SAOIRSE):
+    threshold = 15% of 43 = 6   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SAOIRSE                 : d100[38]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 67
+    SHOCKWAVE               : d100[16]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 38
+    ▶ SAOIRSE wins → ATTACKS
+  Attack: SAOIRSE → SHOCKWAVE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (SAOIRSE):
+    d100[23]  dex_bonus[+2]  luck[+27]  feint[+8]
+    Subtotal: 60
+    Final ATK: 60
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[89]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 131
+    Final DEF: 131
+  Margin: 60 − 131 = -71   ▶  DODGE (margin -71)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[66]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 88
+    SAOIRSE                 : d100[30]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 59
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAOIRSE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[16]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 37
+    Final ATK: 37
+  Defense Roll (SAOIRSE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[21]  luck[+27]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 64
+    Final DEF: 64
+  Margin: 37 − 64 = -27   ▶  PARRY (margin -27)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[11]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 33
+    SAOIRSE                 : d100[3]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 32
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → SAOIRSE   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[48]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 69
+    Final ATK: 69
+  Defense Roll (SAOIRSE, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[99]  luck[+27]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+10]
+    Subtotal: 142
+    Final DEF: 142
+  Margin: 69 − 142 = -73   ▶  PARRY (margin -73)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SAOIRSE                 : d100[49]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 78
+    SHOCKWAVE               : d100[8]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 30
+    ▶ SAOIRSE wins → ATTACKS
+  Attack: SAOIRSE → SHOCKWAVE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (SAOIRSE):
+    d100[78]  dex_bonus[+2]  luck[+27]  feint[+8]
+    Subtotal: 115
+    Final ATK: 115
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[46]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 88
+    Final DEF: 88
+  Margin: 115 − 88 = 27   ▶  HIT (margin 27)
+  Damage (SAOIRSE → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +4.80
+      activity contrib             +0.30
+      luck ×0.15                   +4.05
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 27/55.0)) = 0.491
+    Raw: max(1, int(18 × 0.491)) = 8
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 8 − 5) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (SHOCKWAVE):
+    Before : 28/52 (53.8%)
+    hit     : −3
+    After  : 25/52 (48.1%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(3/52 × 80) = 4   cat bonus [Polearm/Spear]: +5   final: 9%
+    Roll: 63  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 52 = 7   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SAOIRSE                 : d100[95]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 124
+    SHOCKWAVE               : d100[92]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 114
+    ▶ SAOIRSE wins → ATTACKS
+  Attack: SAOIRSE → SHOCKWAVE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (SAOIRSE):
+    d100[86]  dex_bonus[+2]  luck[+27]  feint[+8]
+    Subtotal: 123
+    Final ATK: 123
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[71]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 113
+    Final DEF: 113
+  Margin: 123 − 113 = 10   ▶  HIT (margin 10)
+  Damage (SAOIRSE → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +4.80
+      activity contrib             +0.30
+      luck ×0.15                   +4.05
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 10/55.0)) = 0.182
+    Raw: max(1, int(18 × 0.182)) = 3
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 3 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHOCKWAVE):
+    Before : 25/52 (48.1%)
+    hit     : −1
+    After  : 24/52 (46.2%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(1/52 × 80) = 1   cat bonus [Polearm/Spear]: +5   final: 6%
+    Roll: 10  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 52 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SAOIRSE                 : d100[41]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 70
+    SHOCKWAVE               : d100[18]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 40
+    ▶ SAOIRSE wins → ATTACKS
+  Attack: SAOIRSE → SHOCKWAVE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (SAOIRSE):
+    d100[22]  dex_bonus[+2]  luck[+27]  feint[+8]
+    Subtotal: 59
+    Final ATK: 59
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[99]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 141
+    Final DEF: 141
+  Margin: 59 − 141 = -82   ▶  DODGE (margin -82)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative:
+    SAOIRSE                 : d100[89]  dex_bonus[+4]  luck[+27]  activity_mod[-2] = 118
+    SHOCKWAVE               : d100[14]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 36
+    ▶ SAOIRSE wins → ATTACKS
+  Attack: SAOIRSE → SHOCKWAVE   Weapon: Boar Spear   Style: Feint   Aim: Chest
+  Attack Roll (SAOIRSE):
+    d100[85]  dex_bonus[+2]  luck[+27]  feint[+8]
+    Subtotal: 122
+    Final ATK: 122
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[9]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 51
+    Final DEF: 51
+  Margin: 122 − 51 = 71   ▶  HIT (margin 71)
+  Damage (SAOIRSE → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +4.80
+      activity contrib             +0.30
+      luck ×0.15                   +4.05
+    Ceiling: 18
+    Fraction: max(0.10, min(1.0, 71/55.0)) = 1.000
+    Raw: max(1, int(18 × 1.000)) = 18
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 18 − 5) = 13
+  ▶ FINAL DAMAGE: 13
+  HP Pool (SHOCKWAVE):
+    Before : 24/52 (46.2%)
+    hit     : −13
+    After  : 11/52 (21.2%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(13/52 × 80) = 20   cat bonus [Polearm/Spear]: +5   final: 25%
+    Roll: 71  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 52 = 7   damage 13 ≥ threshold
+    chance = max(5, min(80, int(13/52×100) − 5)) = 17%
+    Roll: 9  →  chest (1 level(s))
+  Concede Attempt (SHOCKWAVE):
+    d100[98] + PRE_bonus[+0] + luck//2[7] = 105
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    105 ≥ 65  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: SHOCKWAVE
+==============================================================================
+  Strength: d100=52 vs 29% — FAIL
+    → Strength training: no progress this session (late tier, 29% chance).
+  Strength: d100=9 vs 29% — SUCCESS
+    → Strength trained: 17 → 18 [late] (29% chance)
+  Strength: d100=66 vs 29% — FAIL
+    → Strength training: no progress this session (late tier, 29% chance).
+
+==============================================================================
+  TRAINING: SAOIRSE
+==============================================================================
+  Feint: d100=52 vs 42% — FAIL
+    → Feint training: no progress this session (INT 17, level 4, 42% chance).
+  Intelligence: d100=38 vs 36% — FAIL
+    → Intelligence training: no progress this session (mid tier, 36% chance).
+  Dexterity: d100=11 vs 36% — SUCCESS
+    → Dexterity trained: 13 → 14 (36% chance)
+  [OBSERVED] Dodge: trigger d100=4/12% passed  |  skill d100=45 vs 62% — SUCCESS
+    → odge trained: Level 0 → Level 1 (Novice, 62% chance)
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : SAOIRSE  (74.4% HP remaining)
+  Loser  : SHOCKWAVE  (survived, 21.2% HP)
+  Duration: 2 minute(s)
+==============================================================================

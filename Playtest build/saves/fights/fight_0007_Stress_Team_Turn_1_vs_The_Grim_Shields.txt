@@ -1,0 +1,100 @@
+Fight #7
+Stress Team Turn 1  vs  The Grim Shields
+============================================================================
+
+============================================================================
+CLEAVER_2 (0-0-0)   vs   FEN THE FEARSOME (0-0-0)
+STRESS TEAM TURN 1 (STRESS TESTER)   vs   THE GRIM SHIELDS (GRIM EYE)
+Dwarf Female   vs   Tabaxi Female
+============================================================================
+
+CLEAVER_2 is 3'10"
+CLEAVER_2 weighs 151 lbs.
+CLEAVER_2 Known To The Crowd.
+CLEAVER_2 enters the arena unarmored and wears no helm.
+CLEAVER_2 fights using a GREAT AXE.
+
+FEN THE FEARSOME is 5'3"
+FEN THE FEARSOME weighs 134 lbs.
+FEN THE FEARSOME Known To The Crowd.
+FEN THE FEARSOME enters the arena in LEATHER and will wear a STEEL CAP.
+FEN THE FEARSOME fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The Blood Master raises his fist — the fight begins!
+CLEAVER_2 chops at FEN THE FEARSOME's body with her great axe
+FEN THE FEARSOME just manages to deflect the blow!
+FEN THE FEARSOME tries to hit the mighty CLEAVER_2
+FEN THE FEARSOME slashes at CLEAVER_2's chest with her short sword
+CLEAVER_2's defenses are particularly strong!
+FEN THE FEARSOME slices at CLEAVER_2's breast with her short sword
+FEN THE FEARSOME gets past CLEAVER_2's guard!
+FEN THE FEARSOME's short sword bites into CLEAVER_2's breastplate!
+   The armor absorbs most of it
+CLEAVER_2 tries to hit the mighty FEN THE FEARSOME
+CLEAVER_2 swings at FEN THE FEARSOME's body with her great axe
+The blow connects!
+CLEAVER_2's great axe punches into FEN THE FEARSOME's armor!
+   The strike lands with flesh-splattering fury!
+CLEAVER_2 cleaves at FEN THE FEARSOME's midsection with her great axe
+FEN THE FEARSOME just manages to deflect the blow!
+The drummer loses control and tosses a drumstick away
+FEN THE FEARSOME directs an attack toward CLEAVER_2
+FEN THE FEARSOME thrusts at CLEAVER_2's torso with her short sword
+CLEAVER_2 is paying special attention to not being hit there!
+FEN THE FEARSOME thrusts at CLEAVER_2's rib cage with her short sword
+CLEAVER_2 catches the weapon and deflects it cleanly!
+
+MINUTE 2
+CLEAVER_2 is dictating the pace and flow of the fight.
+
+FEN THE FEARSOME cuts at CLEAVER_2's breast with her short sword
+CLEAVER_2 is paying special attention to not being hit there!
+FEN THE FEARSOME steps threateningly close to the fearsome CLEAVER_2
+FEN THE FEARSOME slashes at CLEAVER_2's breast with her short sword
+CLEAVER_2's plan is not to get hit!
+FEN THE FEARSOME directs an attack toward CLEAVER_2
+FEN THE FEARSOME hacks at CLEAVER_2's rib cage with her short sword
+CLEAVER_2's defenses are particularly strong!
+FEN THE FEARSOME sizes up CLEAVER_2 carefully
+FEN THE FEARSOME hacks at CLEAVER_2's chest with her short sword
+The blow connects!
+FEN THE FEARSOME's short sword slices into CLEAVER_2's chest armor!
+   A minor hit!
+Someone throws coins at the Dwarf — a tradition, apparently
+CLEAVER_2 chops at FEN THE FEARSOME's torso with her great axe
+CLEAVER_2's great axe punches into FEN THE FEARSOME's torso!
+   The blow lands with bone-breaking force!
+CLEAVER_2 sizes up FEN THE FEARSOME carefully
+CLEAVER_2 cleaves at FEN THE FEARSOME's torso with her great axe
+FEN THE FEARSOME is ready for the strike, and deftly parries it!
+CLEAVER_2 sizes up FEN THE FEARSOME carefully
+CLEAVER_2 cleaves at FEN THE FEARSOME's body with her great axe
+FEN THE FEARSOME catches the weapon and deflects it cleanly!
+The powerful Cleave strike cleaves through the parry! FEN THE FEARSOME takes 12 damage!
+FEN THE FEARSOME raises a hand in surrender!
+The Blood Master shows no mercy today!
+
+MINUTE 3
+FEN THE FEARSOME appears to be on the verge of defeat.
+
+CLEAVER_2 cleaves at FEN THE FEARSOME's midsection with her great axe
+FEN THE FEARSOME has a plan: don't get hit!
+FEN THE FEARSOME calls out for quarter!
+The Blood Master shows no mercy today!
+CLEAVER_2 chops at FEN THE FEARSOME's torso with her great axe
+CLEAVER_2 finds the opening!
+CLEAVER_2's great axe cleaves into FEN THE FEARSOME's armor!
+   Great gobs of gore gush from the gash!
+FEN THE FEARSOME stumbles and falls heavily!
+FEN THE FEARSOME breathes her last on the arena floor!!!
+
+CLEAVER_2 has won this affair of honor!

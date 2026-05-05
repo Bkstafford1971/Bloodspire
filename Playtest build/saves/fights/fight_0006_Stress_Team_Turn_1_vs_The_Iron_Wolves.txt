@@ -1,0 +1,114 @@
+Fight #6
+Stress Team Turn 1  vs  The Iron Wolves
+============================================================================
+
+============================================================================
+CLEAVER_1 (0-0-0)   vs   LIRA THE CRUSHER (0-0-0)
+STRESS TEAM TURN 1 (STRESS TESTER)   vs   THE IRON WOLVES (SILENT CLAW)
+Dwarf Male   vs   Goblin Male
+============================================================================
+
+CLEAVER_1 is 4'2"
+CLEAVER_1 weighs 195 lbs.
+CLEAVER_1 Known To The Crowd.
+CLEAVER_1 enters the arena unarmored and wears no helm.
+CLEAVER_1 fights using a BATTLE AXE.
+
+LIRA THE CRUSHER is 5'7"
+LIRA THE CRUSHER weighs 165 lbs.
+LIRA THE CRUSHER Known To The Crowd.
+LIRA THE CRUSHER enters the arena in LEATHER and will wear a STEEL CAP.
+LIRA THE CRUSHER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The torches flicker as a cold wind sweeps through the arena
+CLEAVER_1 chops at LIRA THE CRUSHER's torso with his battle axe
+CLEAVER_1 barely gets past LIRA THE CRUSHER's defenses!
+CLEAVER_1's battle axe punches into LIRA THE CRUSHER's armor!
+   The strike lands with flesh-splattering fury!
+LIRA THE CRUSHER cuts at CLEAVER_1's skull with his short sword
+The blow connects!
+LIRA THE CRUSHER's short sword bites into CLEAVER_1's skull!
+   The blow lands without full force
+CLEAVER_1 hacks at LIRA THE CRUSHER's midsection with his battle axe
+LIRA THE CRUSHER makes a desperate last-moment parry!
+LIRA THE CRUSHER directs an attack toward CLEAVER_1
+LIRA THE CRUSHER thrusts at CLEAVER_1's throat with his short sword
+CLEAVER_1 makes a desperate last-moment parry!
+LIRA THE CRUSHER slashes at CLEAVER_1's skull with his short sword
+CLEAVER_1 barely gets the parry off!
+CLEAVER_1 hacks at LIRA THE CRUSHER's midsection with his battle axe
+LIRA THE CRUSHER just manages to deflect the blow!
+LIRA THE CRUSHER directs an attack toward CLEAVER_1
+LIRA THE CRUSHER cuts at CLEAVER_1's skull with his short sword
+CLEAVER_1 makes a desperate last-moment parry!
+LIRA THE CRUSHER directs an attack toward CLEAVER_1
+LIRA THE CRUSHER hacks at CLEAVER_1's throat with his short sword
+CLEAVER_1 makes a desperate last-moment parry!
+
+MINUTE 2
+The advantage is unmistakable now, and it belongs to CLEAVER_1.
+
+CLEAVER_1 steps threateningly close to the tenacious LIRA THE CRUSHER
+CLEAVER_1 cleaves at LIRA THE CRUSHER's midsection with his battle axe
+LIRA THE CRUSHER barely gets the parry off!
+CLEAVER_1 hacks at LIRA THE CRUSHER's body with his battle axe
+LIRA THE CRUSHER turns the blow aside with skill!
+CLEAVER_1 chops at LIRA THE CRUSHER's body with his battle axe
+LIRA THE CRUSHER has a plan: don't get hit!
+LIRA THE CRUSHER slices at CLEAVER_1's head with his short sword
+LIRA THE CRUSHER's short sword finds CLEAVER_1's headgear!
+   Barely a scratch!
+LIRA THE CRUSHER tries to hit the mighty CLEAVER_1
+LIRA THE CRUSHER hacks at CLEAVER_1's throat with his short sword
+The short sword finds its mark!
+LIRA THE CRUSHER's short sword finds CLEAVER_1's headgear!
+   The blow glances harmlessly off!
+CLEAVER_1 plummets downward with great speed!!
+LIRA THE CRUSHER cuts at CLEAVER_1's face with his short sword
+LIRA THE CRUSHER finds the opening!
+LIRA THE CRUSHER's short sword cuts into CLEAVER_1's head!
+   The blow glances harmlessly off!
+LIRA THE CRUSHER slices at CLEAVER_1's throat with his short sword
+LIRA THE CRUSHER gets past CLEAVER_1's guard!
+LIRA THE CRUSHER's short sword cuts into CLEAVER_1's head!
+   Little damage results from the strike
+Children in the stands look away, then look back
+LIRA THE CRUSHER directs an attack toward CLEAVER_1
+LIRA THE CRUSHER hacks at CLEAVER_1's throat with his short sword
+CLEAVER_1 barely gets the parry off!
+
+MINUTE 3
+CLEAVER_1 remains in control, pressing their advantage.
+
+ * LIRA THE CRUSHER switches to strategy 1
+CLEAVER_1 staggers upright
+CLEAVER_1 chops at LIRA THE CRUSHER's midsection with his battle axe
+LIRA THE CRUSHER is paying special attention to not being hit there!
+LIRA THE CRUSHER sizes up CLEAVER_1 carefully
+LIRA THE CRUSHER drives a blow toward CLEAVER_1's helm with his short sword
+LIRA THE CRUSHER's short sword finds CLEAVER_1's temple!
+   Little damage results from the strike
+CLEAVER_1 sizes up LIRA THE CRUSHER carefully
+CLEAVER_1 cleaves at LIRA THE CRUSHER's torso with his battle axe
+The battle axe finds its mark!
+CLEAVER_1's battle axe punches into LIRA THE CRUSHER's body!
+   A devastating strike!
+LIRA THE CRUSHER plummets downward with great speed!!
+*** LIRA THE CRUSHER has been permanently injured in the secondary leg!!! ***
+LIRA THE CRUSHER's leg is bleeding!
+LIRA THE CRUSHER's rear leg buckles violently!!
+LIRA THE CRUSHER appeals to the Blood Master for mercy!
+The ref saves the pitiable LIRA THE CRUSHER!
+
+CLEAVER_1 stands victorious over the fallen LIRA THE CRUSHER!
+
+LIRA THE CRUSHER has trained in Skill and Skill and Skill

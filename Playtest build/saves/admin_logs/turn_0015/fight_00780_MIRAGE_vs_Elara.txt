@@ -1,0 +1,529 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #780   Turn: 15
+  Debug team: Electron
+  Electron / AUTOBOTS   vs   Drago Splitskull / Splitskull Syndicate
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: MIRAGE
+  ────────────────────────────────────
+    Race: Lizardfolk  |  Gender: Male
+    STR:13  DEX:9  CON:15  INT:13  PRE:8  SIZ:13
+    Max HP: 64   Luck: 29
+    Armor: Cloth   Helm: Steel Cap
+    Primary: Long Spear   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Lunge / Act:7 / Aim:None / Def:Chest
+    Skills: initiative:3  lunge:5  
+
+  ────────────────────────────────────
+  WARRIOR B: ELARA
+  ────────────────────────────────────
+    Race: Human  |  Gender: Female
+    STR:16  DEX:6  CON:20  INT:14  PRE:14  SIZ:12
+    Max HP: 62   Luck: 6
+    Armor: Leather   Helm: None
+    Primary: Great Sword   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Total Kill / Act:9 / Aim:Head / Def:None
+    Skills: initiative:7  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — MIRAGE: 5   |   ELARA: 7
+  HP    — MIRAGE: 64/64 (100%)   |   ELARA: 62/62 (100%)
+  END   — MIRAGE: 100.0   |   ELARA: 100.0
+  STRAT — MIRAGE: [Lunge / Act:7]   |   ELARA: [Total Kill / Act:9]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MIRAGE                  : d100[74]  dex_bonus[-2]  init_skill_x3[+9]  luck[+29]  style_mod[+2]  activity_mod[+4] = 116
+    ELARA                   : d100[34]  dex_bonus[-8]  init_skill_x3[+21]  luck[+6]  style_mod[+6]  activity_mod[+8] = 67
+    ▶ MIRAGE wins → ATTACKS
+  Attack: MIRAGE → ELARA   Weapon: Long Spear   Style: Lunge   Aim: None
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (MIRAGE):
+    d100[12]  dex_bonus[-1]  luck[+29]  style_mod[+1]  lunge[+15]
+    Subtotal: 56
+    − compat penalty: −7
+    Final ATK: 49
+  Defense Roll (ELARA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[11]  luck[+6]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 3
+    Final DEF: 3
+  Margin: 49 − 3 = 46   ▶  HIT (margin 46)
+  Damage (MIRAGE → ELARA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.50
+      STR bonus                    +1.80
+      two-hand multiplier          ×1.15
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +4.35
+      style compat penalty         ×0.70
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 46/55.0)) = 0.836
+    Raw: max(1, int(11 × 0.836)) = 9
+    Armor: Leather  base DEF: 2
+    Net = max(1, 9 − 2) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (ELARA):
+    Before : 62/62 (100.0%)
+    hit     : −7
+    After  : 55/62 (88.7%)
+  Knockdown Check (ELARA):
+    base = int(7/62 × 80) = 9   cat bonus [Polearm/Spear]: +5   final: 14%
+    Roll: 35  →  no knockdown
+  Perm Injury Check (ELARA):
+    threshold = 15% of 62 = 9   damage 7 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MIRAGE                  : d100[26]  dex_bonus[-2]  init_skill_x3[+9]  luck[+29]  style_mod[+2]  activity_mod[+4] = 68
+    ELARA                   : d100[9]  dex_bonus[-8]  init_skill_x3[+21]  luck[+6]  style_mod[+6]  activity_mod[+8] = 42
+    ▶ MIRAGE wins → ATTACKS
+  Attack: MIRAGE → ELARA   Weapon: Long Spear   Style: Lunge   Aim: None
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (MIRAGE):
+    d100[64]  dex_bonus[-1]  luck[+29]  style_mod[+1]  lunge[+15]
+    Subtotal: 108
+    − compat penalty: −7
+    Final ATK: 101
+  Defense Roll (ELARA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[32]  luck[+6]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 10
+    Final DEF: 10
+  Margin: 101 − 10 = 91   ▶  HIT (margin 91)
+  Damage (MIRAGE → ELARA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.50
+      STR bonus                    +1.80
+      two-hand multiplier          ×1.15
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +4.35
+      style compat penalty         ×0.70
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 91/55.0)) = 1.000
+    Raw: max(1, int(11 × 1.000)) = 11
+    Armor: Leather  base DEF: 2
+    Net = max(1, 11 − 2) = 9
+  ▶ FINAL DAMAGE: 9
+  HP Pool (ELARA):
+    Before : 55/62 (88.7%)
+    hit     : −9
+    After  : 46/62 (74.2%)
+  Knockdown Check (ELARA):
+    base = int(9/62 × 80) = 11   cat bonus [Polearm/Spear]: +5   final: 16%
+    Roll: 22  →  no knockdown
+  Perm Injury Check (ELARA):
+    threshold = 15% of 62 = 9   damage 9 ≥ threshold
+    chance = max(5, min(80, int(9/62×100) − 5)) = 0%
+    Roll: 0  →  no injury
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MIRAGE                  : d100[82]  dex_bonus[-2]  init_skill_x3[+9]  luck[+29]  style_mod[+2]  activity_mod[+4] = 124
+    ELARA                   : d100[89]  dex_bonus[-8]  init_skill_x3[+21]  luck[+6]  style_mod[+6]  activity_mod[+8] = 122
+    ▶ MIRAGE wins → ATTACKS
+  Attack: MIRAGE → ELARA   Weapon: Long Spear   Style: Lunge   Aim: None
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (MIRAGE):
+    d100[57]  dex_bonus[-1]  luck[+29]  style_mod[+1]  lunge[+15]
+    Subtotal: 101
+    − compat penalty: −7
+    Final ATK: 94
+  Defense Roll (ELARA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[83]  luck[+6]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 27
+    Final DEF: 27
+  Margin: 94 − 27 = 67   ▶  HIT (margin 67)
+  Damage (MIRAGE → ELARA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.50
+      STR bonus                    +1.80
+      two-hand multiplier          ×1.15
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +4.35
+      style compat penalty         ×0.70
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 67/55.0)) = 1.000
+    Raw: max(1, int(11 × 1.000)) = 11
+    Armor: Leather  base DEF: 2
+    Net = max(1, 11 − 2) = 9
+  ▶ FINAL DAMAGE: 9
+  HP Pool (ELARA):
+    Before : 46/62 (74.2%)
+    hit     : −9
+    After  : 37/62 (59.7%)
+  Knockdown Check (ELARA):
+    base = int(9/62 × 80) = 11   cat bonus [Polearm/Spear]: +5   final: 16%
+    Roll: 25  →  no knockdown
+  Perm Injury Check (ELARA):
+    threshold = 15% of 62 = 9   damage 9 ≥ threshold
+    chance = max(5, min(80, int(9/62×100) − 5)) = 0%
+    Roll: 0  →  no injury
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ELARA                   : d100[82]  dex_bonus[-8]  init_skill_x3[+21]  luck[+6]  style_mod[+6]  activity_mod[+8] = 115
+    MIRAGE                  : d100[2]  dex_bonus[-2]  init_skill_x3[+9]  luck[+29]  style_mod[+2]  activity_mod[+4] = 44
+    ▶ ELARA wins → ATTACKS
+  Attack: ELARA → MIRAGE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (ELARA):
+    d100[94]  dex_bonus[-4]  luck[+6]  style_mod[+4]
+    Subtotal: 100
+    + style advantage: -6
+    Final ATK: 94
+  Defense Roll (MIRAGE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[28]  luck[+29]  dex_bonus[-1]  style_dodge[+8]  activity_mod[+4]  race_dodge_x2[+4]
+    Subtotal: 72
+    Final DEF: 72
+  Margin: 94 − 72 = 22   ▶  HIT (margin 22)
+  Damage (ELARA → MIRAGE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      STR bonus                    +3.60
+      two-hand multiplier          ×1.15
+      style modifier               +5.00
+      activity contrib             -1.20
+      luck ×0.15                   +0.90
+      strength underweight pen     ×0.87 (13% penalty)
+    Ceiling: 24
+    Fraction: max(0.10, min(1.0, 22/55.0)) = 0.400
+    Raw: max(1, int(24 × 0.400)) = 9
+    Armor: Cloth  base DEF: 7
+    Net = max(1, 9 − 7) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (MIRAGE):
+    Before : 64/64 (100.0%)
+    hit     : −2
+    After  : 62/64 (96.9%)
+  Knockdown Check (MIRAGE):
+    base = int(2/64 × 80) = 2   cat bonus [Sword/Knife]: +0   final: 1%
+    Roll: 5  →  no knockdown
+  Perm Injury Check (MIRAGE):
+    threshold = 15% of 64 = 9   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MIRAGE                  : d100[32]  dex_bonus[-2]  init_skill_x3[+9]  luck[+29]  style_mod[+2]  activity_mod[+4] = 74
+    ELARA                   : d100[39]  dex_bonus[-8]  init_skill_x3[+21]  luck[+6]  style_mod[+6]  activity_mod[+8] = 72
+    ▶ MIRAGE wins → ATTACKS
+  Attack: MIRAGE → ELARA   Weapon: Long Spear   Style: Lunge   Aim: None
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (MIRAGE):
+    d100[28]  dex_bonus[-1]  luck[+29]  style_mod[+1]  lunge[+15]
+    Subtotal: 72
+    − compat penalty: −7
+    Final ATK: 65
+  Defense Roll (ELARA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[29]  luck[+6]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 9
+    Final DEF: 9
+  Margin: 65 − 9 = 56   ▶  HIT (margin 56)
+  Damage (MIRAGE → ELARA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.50
+      STR bonus                    +1.80
+      two-hand multiplier          ×1.15
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +4.35
+      style compat penalty         ×0.70
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 56/55.0)) = 1.000
+    Raw: max(1, int(11 × 1.000)) = 11
+    Armor: Leather  base DEF: 2
+    Net = max(1, 11 − 2) = 9
+  ▶ FINAL DAMAGE: 9
+  HP Pool (ELARA):
+    Before : 37/62 (59.7%)
+    hit     : −9
+    After  : 28/62 (45.2%)
+  Knockdown Check (ELARA):
+    base = int(9/62 × 80) = 11   cat bonus [Polearm/Spear]: +5   final: 16%
+    Roll: 68  →  no knockdown
+  Perm Injury Check (ELARA):
+    threshold = 15% of 62 = 9   damage 9 ≥ threshold
+    chance = max(5, min(80, int(9/62×100) − 5)) = 0%
+    Roll: 0  →  no injury
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ELARA                   : d100[98]  dex_bonus[-8]  init_skill_x3[+21]  luck[+6]  style_mod[+6]  activity_mod[+8] = 131
+    MIRAGE                  : d100[77]  dex_bonus[-2]  init_skill_x3[+9]  luck[+29]  style_mod[+2]  activity_mod[+4] = 119
+    ▶ ELARA wins → ATTACKS
+  Attack: ELARA → MIRAGE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (ELARA):
+    d100[39]  dex_bonus[-4]  luck[+6]  style_mod[+4]
+    Subtotal: 45
+    + style advantage: -6
+    Final ATK: 39
+  Defense Roll (MIRAGE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[64]  luck[+29]  dex_bonus[-1]  style_dodge[+8]  activity_mod[+4]  race_dodge_x2[+4]
+    Subtotal: 108
+    Final DEF: 108
+  Margin: 39 − 108 = -69   ▶  DODGE (margin -69)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ELARA                   : d100[89]  dex_bonus[-8]  init_skill_x3[+21]  luck[+6]  style_mod[+6]  activity_mod[+8] = 122
+    MIRAGE                  : d100[69]  dex_bonus[-2]  init_skill_x3[+9]  luck[+29]  style_mod[+2]  activity_mod[+4] = 111
+    ▶ ELARA wins → ATTACKS
+  Attack: ELARA → MIRAGE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (ELARA):
+    d100[84]  dex_bonus[-4]  luck[+6]  style_mod[+4]
+    Subtotal: 90
+    + style advantage: -6
+    Final ATK: 84
+  Defense Roll (MIRAGE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[32]  luck[+29]  dex_bonus[-1]  style_dodge[+8]  activity_mod[+4]  race_dodge_x2[+4]
+    Subtotal: 76
+    Final DEF: 76
+  Margin: 84 − 76 = 8   ▶  GRAZE (margin 8, 1 HP)
+  HP Pool (MIRAGE):
+    Before : 62/64 (96.9%)
+    graze   : −1
+    After  : 61/64 (95.3%)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MIRAGE                  : d100[30]  dex_bonus[-2]  init_skill_x3[+9]  luck[+29]  style_mod[+2]  activity_mod[+4] = 72
+    ELARA                   : d100[13]  dex_bonus[-8]  init_skill_x3[+21]  luck[+6]  style_mod[+6]  activity_mod[+8] = 46
+    ▶ MIRAGE wins → ATTACKS
+  Attack: MIRAGE → ELARA   Weapon: Long Spear   Style: Lunge   Aim: None
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (MIRAGE):
+    d100[81]  dex_bonus[-1]  luck[+29]  style_mod[+1]  lunge[+15]
+    Subtotal: 125
+    − compat penalty: −7
+    Final ATK: 118
+  Defense Roll (ELARA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[35]  luck[+6]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 11
+    Final DEF: 11
+  Margin: 118 − 11 = 107   ▶  HIT (margin 107)
+  Damage (MIRAGE → ELARA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.50
+      STR bonus                    +1.80
+      two-hand multiplier          ×1.15
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +4.35
+      style compat penalty         ×0.70
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 107/55.0)) = 1.000
+    Raw: max(1, int(11 × 1.000)) = 11
+    Armor: Leather  base DEF: 2
+    Net = max(1, 11 − 2) = 9
+  ▶ FINAL DAMAGE: 9
+  HP Pool (ELARA):
+    Before : 28/62 (45.2%)
+    hit     : −9
+    After  : 19/62 (30.6%)
+  Knockdown Check (ELARA):
+    base = int(9/62 × 80) = 11   cat bonus [Polearm/Spear]: +5   final: 16%
+    Roll: 88  →  no knockdown
+  Perm Injury Check (ELARA):
+    threshold = 15% of 62 = 9   damage 9 ≥ threshold
+    chance = max(5, min(80, int(9/62×100) − 5)) = 0%
+    Roll: 0  →  no injury
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: ELARA has uncontested action
+  Attack: ELARA → MIRAGE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (ELARA):
+    d100[81]  dex_bonus[-4]  luck[+6]  style_mod[+4]
+    Subtotal: 87
+    + style advantage: -6
+    Final ATK: 81
+  Defense Roll (MIRAGE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[80]  luck[+29]  dex_bonus[-1]  style_dodge[+8]  activity_mod[+4]  race_dodge_x2[+4]
+    Subtotal: 124
+    Final DEF: 124
+  Margin: 81 − 124 = -43   ▶  DODGE (margin -43)
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: ELARA has uncontested action
+  Attack: ELARA → MIRAGE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (ELARA):
+    d100[27]  dex_bonus[-4]  luck[+6]  style_mod[+4]
+    Subtotal: 33
+    + style advantage: -6
+    Final ATK: 27
+  Defense Roll (MIRAGE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[65]  luck[+29]  dex_bonus[-1]  style_dodge[+8]  activity_mod[+4]  race_dodge_x2[+4]
+    Subtotal: 109
+    Final DEF: 109
+  Margin: 27 − 109 = -82   ▶  DODGE (margin -82)
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: ELARA has uncontested action
+  Attack: ELARA → MIRAGE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (ELARA):
+    d100[13]  dex_bonus[-4]  luck[+6]  style_mod[+4]
+    Subtotal: 19
+    + style advantage: -6
+    Final ATK: 13
+  Defense Roll (MIRAGE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[14]  luck[+29]  dex_bonus[-1]  style_dodge[+8]  activity_mod[+4]  race_dodge_x2[+4]
+    Subtotal: 58
+    Final DEF: 58
+  Margin: 13 − 58 = -45   ▶  DODGE (margin -45)
+
+  ─── ACTION 12 ───────────────────────────────────────────────────────────────
+  Initiative: ELARA has uncontested action
+  Attack: ELARA → MIRAGE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (ELARA):
+    d100[11]  dex_bonus[-4]  luck[+6]  style_mod[+4]
+    Subtotal: 17
+    + style advantage: -6
+    Final ATK: 11
+  Defense Roll (MIRAGE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[99]  luck[+29]  dex_bonus[-1]  style_dodge[+8]  activity_mod[+4]  race_dodge_x2[+4]
+    Subtotal: 143
+    Final DEF: 143
+  Margin: 11 − 143 = -132   ▶  DODGE (margin -132)
+
+  ── END OF MINUTE ──
+    MIRAGE: 100.0 END − (6.60 burn × 5 actions) = 62.0
+    ELARA: 100.0 END − (11.20 burn × 7 actions) = 21.6
+    HP POOL — MIRAGE: 61/64 (95%)
+    HP POOL — ELARA: 19/62 (31%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — MIRAGE: 5   |   ELARA: 6
+  HP    — MIRAGE: 61/64 (95%)   |   ELARA: 19/62 (31%)
+  END   — MIRAGE: 62.0   |   ELARA: 21.6
+  STRAT — MIRAGE: [Lunge / Act:7]   |   ELARA: [Total Kill / Act:9]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MIRAGE                  : d100[54]  dex_bonus[-2]  init_skill_x3[+9]  luck[+29]  style_mod[+2]  activity_mod[+4] = 96
+    ELARA                   : d100[47]  dex_bonus[-8]  init_skill_x3[+21]  luck[+6]  style_mod[+6]  activity_mod[+8]  end_pen[-5] = 75
+    ▶ MIRAGE wins → ATTACKS
+  Attack: MIRAGE → ELARA   Weapon: Long Spear   Style: Lunge   Aim: None
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (MIRAGE):
+    d100[65]  dex_bonus[-1]  luck[+29]  style_mod[+1]  lunge[+15]
+    Subtotal: 109
+    − compat penalty: −7
+    Final ATK: 102
+  Defense Roll (ELARA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[27]  luck[+6]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 9
+    Final DEF: 9
+  Margin: 102 − 9 = 93   ▶  HIT (margin 93)
+  Damage (MIRAGE → ELARA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.50
+      STR bonus                    +1.80
+      two-hand multiplier          ×1.15
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +4.35
+      style compat penalty         ×0.70
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 93/55.0)) = 1.000
+    Raw: max(1, int(11 × 1.000)) = 11
+    Armor: Leather  base DEF: 2
+    Net = max(1, 11 − 2) = 9
+  ▶ FINAL DAMAGE: 9
+  HP Pool (ELARA):
+    Before : 19/62 (30.6%)
+    hit     : −9
+    After  : 10/62 (16.1%)
+  Knockdown Check (ELARA):
+    base = int(9/62 × 80) = 11   cat bonus [Polearm/Spear]: +5   final: 16%
+    Roll: 7  →  ▶ KNOCKDOWN
+  Perm Injury Check (ELARA):
+    threshold = 15% of 62 = 9   damage 9 ≥ threshold
+    chance = max(5, min(80, int(9/62×100) − 5)) = 0%
+    Roll: 0  →  no injury
+  Concede Attempt (ELARA):
+    d100[32] + PRE_bonus[+4] + luck//2[3] = 39
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    39 < 64  →  mercy denied — fight continues
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    MIRAGE                  : d100[42]  dex_bonus[-2]  init_skill_x3[+9]  luck[+29]  style_mod[+2]  activity_mod[+4] = 84
+    ELARA                   : d100[13]  on_ground_halved[(÷2)] = 6
+    ▶ MIRAGE wins → ATTACKS
+  Attack: MIRAGE → ELARA   Weapon: Long Spear   Style: Lunge   Aim: None
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (MIRAGE):
+    d100[29]  dex_bonus[-1]  luck[+29]  style_mod[+1]  lunge[+15]
+    Subtotal: 73
+    − compat penalty: −7
+    Final ATK: 66
+  Defense Roll (ELARA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[98]  luck[+6]  str_bonus[+3]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 32
+    Final DEF: 32
+  Margin: 66 − 32 = 34   ▶  HIT (margin 34)
+  Damage (MIRAGE → ELARA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.50
+      STR bonus                    +1.80
+      two-hand multiplier          ×1.15
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +4.35
+      style compat penalty         ×0.70
+    Ceiling: 11
+    Fraction: max(0.10, min(1.0, 34/55.0)) = 0.618
+    Raw: max(1, int(11 × 0.618)) = 6
+    Armor: Leather  base DEF: 2
+    Net = max(1, 6 − 2) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (ELARA):
+    Before : 10/62 (16.1%)
+    hit     : −4
+    After  : 6/62 (9.7%)
+  Knockdown Check (ELARA):
+    base = int(4/62 × 80) = 5   cat bonus [Polearm/Spear]: +5   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (ELARA):
+    threshold = 15% of 62 = 9   damage 4 < threshold
+    → Below threshold — no injury possible
+  Concede Attempt (ELARA):
+    d100[63] + PRE_bonus[+4] + luck//2[3] = 70
+    threshold = max(40, 68 − (PRE // 3)) = 64
+    70 ≥ 64  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: MIRAGE
+==============================================================================
+  Initiative: d100=83 vs 45% — FAIL
+    → Initiative training: no progress this session (INT 13, level 3, 45% chance).
+  Initiative: d100=84 vs 45% — FAIL
+    → Initiative training: no progress this session (INT 13, level 3, 45% chance).
+  Initiative: d100=75 vs 45% — FAIL
+    → Initiative training: no progress this session (INT 13, level 3, 45% chance).
+
+==============================================================================
+  TRAINING: ELARA
+==============================================================================
+  Initiative: d100=52 vs 25% — FAIL
+    → Initiative training: no progress this session (INT 14, level 7, 25% chance).
+  Strength: d100=85 vs 29% — FAIL
+    → Strength training: no progress this session (mastery tier, 29% chance).
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : MIRAGE  (95.3% HP remaining)
+  Loser  : ELARA  (survived, 9.7% HP)
+  Duration: 2 minute(s)
+==============================================================================

@@ -1,0 +1,129 @@
+Fight #38
+Stress Team Turn 7  vs  The Wild Slayers
+============================================================================
+
+============================================================================
+SLASHER_1 (0-2-0)   vs   SVEN SKULLCLEAVE (0-0-0)
+STRESS TEAM TURN 7 (STRESS TESTER)   vs   THE WILD SLAYERS (SILENT CHAMPION)
+Human Male   vs   Tabaxi Male
+============================================================================
+
+SLASHER_1 is 5'7"
+SLASHER_1 weighs 165 lbs.
+SLASHER_1 Known To The Crowd.
+SLASHER_1 enters the arena unarmored and wears no helm.
+SLASHER_1 fights using a LONG SWORD.
+
+SVEN SKULLCLEAVE is 5'5"
+SVEN SKULLCLEAVE weighs 160 lbs.
+SVEN SKULLCLEAVE Known To The Crowd.
+SVEN SKULLCLEAVE enters the arena in CLOTH and will wear a LEATHER CAP.
+SVEN SKULLCLEAVE fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The crowd jeers as the combatants approach each other
+SLASHER_1 directs an attack toward SVEN SKULLCLEAVE
+SLASHER_1 hacks at SVEN SKULLCLEAVE's torso with his long sword
+SLASHER_1's long sword slices into SVEN SKULLCLEAVE's torso!
+   The blow lands without full force
+SVEN SKULLCLEAVE slices at SLASHER_1's chest with his short sword
+SVEN SKULLCLEAVE's short sword cuts into SLASHER_1's breastplate!
+   A minor hit!
+SVEN SKULLCLEAVE hacks at SLASHER_1's sternum with his short sword
+SVEN SKULLCLEAVE's blow barely grazes SLASHER_1!
+SVEN SKULLCLEAVE steps threateningly close to the relentless SLASHER_1
+SVEN SKULLCLEAVE drives a blow toward SLASHER_1's rib cage with his short sword
+SVEN SKULLCLEAVE's accuracy is rewarded!
+SVEN SKULLCLEAVE's short sword bites into SLASHER_1's torso!
+   The armor absorbs most of it
+SVEN SKULLCLEAVE cuts at SLASHER_1's rib cage with his short sword
+SVEN SKULLCLEAVE's short sword finds SLASHER_1's ribs!
+   A minor hit!
+Whistles and jeers rain down from the stands!
+SLASHER_1 thrusts at SVEN SKULLCLEAVE's torso with his long sword
+SVEN SKULLCLEAVE just manages to deflect the blow!
+SLASHER_1 drives a blow toward SVEN SKULLCLEAVE's torso with his long sword
+SVEN SKULLCLEAVE barely gets the parry off!
+SLASHER_1 directs an attack toward SVEN SKULLCLEAVE
+SLASHER_1 cuts at SVEN SKULLCLEAVE's body with his long sword
+SLASHER_1 misses wildly
+SVEN SKULLCLEAVE waits patiently — SLASHER_1's energy bleeds away
+
+MINUTE 2
+SLASHER_1 looks marginally sharper at this stage of the fight.
+
+SLASHER_1 cuts at SVEN SKULLCLEAVE's torso with his long sword
+SLASHER_1's long sword bites into SVEN SKULLCLEAVE's torso!
+   The blow does almost nothing
+SVEN SKULLCLEAVE directs an attack toward SLASHER_1
+SVEN SKULLCLEAVE drives a blow toward SLASHER_1's rib cage with his short sword
+SVEN SKULLCLEAVE's blow barely grazes SLASHER_1!
+SLASHER_1 drives a blow toward SVEN SKULLCLEAVE's body with his long sword
+SVEN SKULLCLEAVE catches the weapon and deflects it cleanly!
+SLASHER_1 hacks at SVEN SKULLCLEAVE's body with his long sword
+SVEN SKULLCLEAVE makes a desperate last-moment parry!
+SLASHER_1 sizes up SVEN SKULLCLEAVE carefully
+SLASHER_1 drives a blow toward SVEN SKULLCLEAVE's body with his long sword
+The blow connects!
+SLASHER_1's long sword cuts into SVEN SKULLCLEAVE's body!
+   The resulting crunch echoes through the BLOODSPIRE!
+SVEN SKULLCLEAVE slashes at SLASHER_1's torso with his short sword
+SLASHER_1 just manages to deflect the blow!
+Half the crowd rises to their feet in anticipation!
+SVEN SKULLCLEAVE drives a blow toward SLASHER_1's breast with his short sword
+The blow connects!
+SVEN SKULLCLEAVE's short sword slices into SLASHER_1's ribs!
+   The armor absorbs most of it
+SVEN SKULLCLEAVE slashes at SLASHER_1's torso with his short sword
+SLASHER_1 has that area well covered!
+
+MINUTE 3
+The slight edge remains with SLASHER_1, though little has changed.
+
+SVEN SKULLCLEAVE drives a blow toward SLASHER_1's sternum with his short sword
+SVEN SKULLCLEAVE's blow barely grazes SLASHER_1!
+SLASHER_1 steps threateningly close to the formidable SVEN SKULLCLEAVE
+SLASHER_1 slices at SVEN SKULLCLEAVE's body with his long sword
+SLASHER_1's long sword cuts into SVEN SKULLCLEAVE's torso!
+   Little damage results from the strike
+SVEN SKULLCLEAVE plummets downward with great speed!!
+SLASHER_1 thrusts at SVEN SKULLCLEAVE's midsection with his long sword
+The long sword finds its mark!
+SLASHER_1's long sword cuts into SVEN SKULLCLEAVE's body!
+   Some damage is done
+SLASHER_1 slashes at SVEN SKULLCLEAVE's midsection with his long sword
+The blow connects!
+SLASHER_1's long sword cuts into SVEN SKULLCLEAVE's armor!
+   Little damage results from the strike
+SVEN SKULLCLEAVE tries to hit the mighty SLASHER_1
+SVEN SKULLCLEAVE thrusts at SLASHER_1's rib cage with his short sword
+SVEN SKULLCLEAVE's short sword cuts into SLASHER_1's torso!
+   A minor hit!
+SLASHER_1 sizes up SVEN SKULLCLEAVE carefully
+SLASHER_1 slices at SVEN SKULLCLEAVE's midsection with his long sword
+SLASHER_1 gets past SVEN SKULLCLEAVE's guard!
+SLASHER_1's long sword slices into SVEN SKULLCLEAVE's body!
+   The blow lands with bone-breaking force!
+SVEN SKULLCLEAVE thrusts at SLASHER_1's torso with his short sword
+SVEN SKULLCLEAVE barely gets past SLASHER_1's defenses!
+SVEN SKULLCLEAVE's short sword slices into SLASHER_1's breastplate!
+   A solid blow has been struck!
+Whistles and jeers rain down from the stands!
+SVEN SKULLCLEAVE tries to hit the mighty SLASHER_1
+SVEN SKULLCLEAVE hacks at SLASHER_1's torso with his short sword
+SVEN SKULLCLEAVE's short sword slices into SLASHER_1's ribs!
+   The armor absorbs most of it
+SLASHER_1 appeals to the Blood Master for mercy!
+The ref saves the pitiable SLASHER_1!
+
+SVEN SKULLCLEAVE has won this affair of honor!
+
+SVEN SKULLCLEAVE has trained in Skill

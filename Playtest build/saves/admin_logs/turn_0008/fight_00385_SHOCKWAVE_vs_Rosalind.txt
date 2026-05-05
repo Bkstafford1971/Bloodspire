@@ -1,0 +1,786 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #385   Turn: 8
+  Debug team: Ilneval
+  Ilneval / DECEPTICONS   vs   Count Aldren Voss / House Voss
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: SHOCKWAVE
+  ────────────────────────────────────
+    Race: Human  |  Gender: Male
+    STR:19  DEX:12  CON:17  INT:12  PRE:10  SIZ:9
+    Max HP: 53   Luck: 14
+    Armor: Cuir Boulli   Helm: Steel Cap
+    Primary: Boar Spear   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Lunge / Act:7 / Aim:None / Def:Chest
+
+  ────────────────────────────────────
+  WARRIOR B: ROSALIND
+  ────────────────────────────────────
+    Race: Human  |  Gender: Female
+    STR:18  DEX:19  CON:10  INT:19  PRE:9  SIZ:7
+    Max HP: 38   Luck: 26
+    Armor: Cuir Boulli   Helm: None
+    Primary: Morningstar   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Feint / Act:4 / Aim:Chest / Def:Chest
+    Skills: feint:7  initiative:1  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — SHOCKWAVE: 6   |   ROSALIND: 6
+  HP    — SHOCKWAVE: 53/53 (100%)   |   ROSALIND: 38/38 (100%)
+  END   — SHOCKWAVE: 100.0   |   ROSALIND: 100.0
+  STRAT — SHOCKWAVE: [Lunge / Act:7]   |   ROSALIND: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[83]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 105
+    ROSALIND                : d100[13]  dex_bonus[+10]  init_skill_x3[+3]  luck[+26]  activity_mod[-2] = 50
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → ROSALIND   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[47]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 68
+    Final ATK: 68
+  Defense Roll (ROSALIND, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[46]  luck[+26]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+12]
+    Subtotal: 90
+    Final DEF: 90
+  Margin: 68 − 90 = -22   ▶  PARRY (margin -22)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSALIND                : d100[38]  dex_bonus[+10]  init_skill_x3[+3]  luck[+26]  activity_mod[-2] = 75
+    SHOCKWAVE               : d100[34]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 56
+    ▶ ROSALIND wins → ATTACKS
+  Attack: ROSALIND → SHOCKWAVE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (ROSALIND):
+    d100[29]  dex_bonus[+8]  luck[+26]  feint[+14]
+    Subtotal: 77
+    Final ATK: 77
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[96]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 138
+    Final DEF: 138
+  Margin: 77 − 138 = -61   ▶  DODGE (margin -61)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[63]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 85
+    ROSALIND                : d100[32]  dex_bonus[+10]  init_skill_x3[+3]  luck[+26]  activity_mod[-2] = 69
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → ROSALIND   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[29]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 50
+    Final ATK: 50
+  Defense Roll (ROSALIND, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[34]  luck[+26]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+12]
+    Subtotal: 78
+    Final DEF: 78
+  Margin: 50 − 78 = -28   ▶  PARRY (margin -28)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSALIND                : d100[66]  dex_bonus[+10]  init_skill_x3[+3]  luck[+26]  activity_mod[-2] = 103
+    SHOCKWAVE               : d100[42]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 64
+    ▶ ROSALIND wins → ATTACKS
+  Attack: ROSALIND → SHOCKWAVE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (ROSALIND):
+    d100[45]  dex_bonus[+8]  luck[+26]  feint[+14]
+    Subtotal: 93
+    Final ATK: 93
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[86]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 128
+    Final DEF: 128
+  Margin: 93 − 128 = -35   ▶  DODGE (margin -35)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSALIND                : d100[49]  dex_bonus[+10]  init_skill_x3[+3]  luck[+26]  activity_mod[-2] = 86
+    SHOCKWAVE               : d100[43]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 65
+    ▶ ROSALIND wins → ATTACKS
+  Attack: ROSALIND → SHOCKWAVE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (ROSALIND):
+    d100[12]  dex_bonus[+8]  luck[+26]  feint[+14]
+    Subtotal: 60
+    Final ATK: 60
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[11]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 53
+    Final DEF: 53
+  Margin: 60 − 53 = 7   ▶  GRAZE (margin 7, 1 HP)
+  HP Pool (SHOCKWAVE):
+    Before : 53/53 (100.0%)
+    graze   : −1
+    After  : 52/53 (98.1%)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[51]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 73
+    ROSALIND                : d100[18]  dex_bonus[+10]  init_skill_x3[+3]  luck[+26]  activity_mod[-2] = 55
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → ROSALIND   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[87]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 108
+    Final ATK: 108
+  Defense Roll (ROSALIND, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[84]  luck[+26]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+12]
+    Subtotal: 128
+    Final DEF: 128
+  Margin: 108 − 128 = -20   ▶  PARRY (margin -20)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[60]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 82
+    ROSALIND                : d100[37]  dex_bonus[+10]  init_skill_x3[+3]  luck[+26]  activity_mod[-2] = 74
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → ROSALIND   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[34]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 55
+    Final ATK: 55
+  Defense Roll (ROSALIND, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[75]  luck[+26]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+12]
+    Subtotal: 119
+    Final DEF: 119
+  Margin: 55 − 119 = -64   ▶  PARRY (margin -64)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[97]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 119
+    ROSALIND                : d100[22]  dex_bonus[+10]  init_skill_x3[+3]  luck[+26]  activity_mod[-2] = 59
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → ROSALIND   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[29]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 50
+    Final ATK: 50
+  Defense Roll (ROSALIND, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[75]  luck[+26]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+12]
+    Subtotal: 119
+    Final DEF: 119
+  Margin: 50 − 119 = -69   ▶  PARRY (margin -69)
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[74]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 96
+    ROSALIND                : d100[20]  dex_bonus[+10]  init_skill_x3[+3]  luck[+26]  activity_mod[-2] = 57
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → ROSALIND   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[95]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 116
+    Final ATK: 116
+  Defense Roll (ROSALIND, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[21]  luck[+26]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+12]
+    Subtotal: 65
+    Final DEF: 65
+  Margin: 116 − 65 = 51   ▶  HIT (margin 51)
+  Damage (SHOCKWAVE → ROSALIND):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 9.50
+      STR bonus                    +5.40
+      style modifier               -1.00
+      activity contrib             -0.60
+      luck ×0.15                   +2.10
+    Ceiling: 15
+    Fraction: max(0.10, min(1.0, 51/55.0)) = 0.927
+    Raw: max(1, int(15 × 0.927)) = 13
+    Favorite weapon +1 → raw = 14
+    Armor: Cuir Boulli  base DEF: 3
+    Net = max(1, 14 − 3) = 11
+  ▶ FINAL DAMAGE: 11
+  HP Pool (ROSALIND):
+    Before : 38/38 (100.0%)
+    hit     : −11
+    After  : 27/38 (71.1%)
+  Knockdown Check (ROSALIND):
+    base = int(11/38 × 80) = 23   cat bonus [Polearm/Spear]: +5   final: 28%
+    Roll: 23  →  ▶ KNOCKDOWN
+  Perm Injury Check (ROSALIND):
+    threshold = 15% of 38 = 5   damage 11 ≥ threshold
+    chance = max(5, min(80, int(11/38×100) − 5)) = 19%
+    Roll: 71  →  no injury
+
+  ─── ACTION 10 ───────────────────────────────────────────────────────────────
+  Initiative: ROSALIND has uncontested action
+  Attack: ROSALIND → SHOCKWAVE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (ROSALIND):
+    d100[52]  dex_bonus[+8]  luck[+26]  feint[+14]
+    Subtotal: 100
+    Final ATK: 100
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[30]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 72
+    Final DEF: 72
+  Margin: 100 − 72 = 28   ▶  HIT (margin 28)
+  Damage (ROSALIND → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +4.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 28/55.0)) = 0.509
+    Raw: max(1, int(19 × 0.509)) = 9
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 9 − 5) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (SHOCKWAVE):
+    Before : 52/53 (98.1%)
+    hit     : −4
+    After  : 48/53 (90.6%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(4/53 × 80) = 6   cat bonus [Hammer/Mace]: +10   final: 16%
+    Roll: 21  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 53 = 7   damage 4 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 11 ───────────────────────────────────────────────────────────────
+  Initiative: ROSALIND has uncontested action
+  Attack: ROSALIND → SHOCKWAVE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (ROSALIND):
+    d100[69]  dex_bonus[+8]  luck[+26]  feint[+14]
+    Subtotal: 117
+    Final ATK: 117
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[25]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 67
+    Final DEF: 67
+  Margin: 117 − 67 = 50   ▶  HIT (margin 50)
+  Damage (ROSALIND → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +4.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 50/55.0)) = 0.909
+    Raw: max(1, int(19 × 0.909)) = 17
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 17 − 5) = 12
+  ▶ FINAL DAMAGE: 12
+  HP Pool (SHOCKWAVE):
+    Before : 48/53 (90.6%)
+    hit     : −12
+    After  : 36/53 (67.9%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(12/53 × 80) = 18   cat bonus [Hammer/Mace]: +10   final: 28%
+    Roll: 73  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 53 = 7   damage 12 ≥ threshold
+    chance = max(5, min(80, int(12/53×100) − 5)) = 14%
+    Roll: 11  →  chest (1 level(s))
+
+  ─── ACTION 12 ───────────────────────────────────────────────────────────────
+  Initiative: ROSALIND has uncontested action
+  Attack: ROSALIND → SHOCKWAVE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (ROSALIND):
+    d100[61]  dex_bonus[+8]  luck[+26]  feint[+14]
+    Subtotal: 109
+    Final ATK: 109
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[56]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 109 − 98 = 11   ▶  HIT (margin 11)
+  Damage (ROSALIND → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +4.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 11/55.0)) = 0.200
+    Raw: max(1, int(19 × 0.200)) = 3
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 3 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHOCKWAVE):
+    Before : 36/53 (67.9%)
+    hit     : −1
+    After  : 35/53 (66.0%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(1/53 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 3  →  ▶ KNOCKDOWN
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 53 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    SHOCKWAVE: 100.0 END − (6.60 burn × 6 actions) = 59.4
+    ROSALIND: 100.0 END − (1.70 burn × 6 actions) = 89.8
+    HP POOL — SHOCKWAVE: 35/53 (66%)
+    HP POOL — ROSALIND: 27/38 (71%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — SHOCKWAVE: 3   |   ROSALIND: 3
+  HP    — SHOCKWAVE: 35/53 (66%)   |   ROSALIND: 27/38 (71%)
+  END   — SHOCKWAVE: 59.4   |   ROSALIND: 89.8
+  STRAT — SHOCKWAVE: [Lunge / Act:7]   |   ROSALIND: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSALIND                : d100[63]  on_ground_halved[(÷2)] = 31
+    SHOCKWAVE               : d100[36]  on_ground_halved[(÷2)] = 18
+    ▶ ROSALIND wins → ATTACKS
+  Attack: ROSALIND → SHOCKWAVE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (ROSALIND):
+    d100[23]  dex_bonus[+8]  luck[+26]  feint[+14]
+    Subtotal: 71
+    Final ATK: 71
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[67]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 84
+    Final DEF: 84
+  Margin: 71 − 84 = -13   ▶  DODGE (margin -13)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[92]  on_ground_halved[(÷2)] = 46
+    ROSALIND                : d100[23]  on_ground_halved[(÷2)] = 11
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → ROSALIND   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[25]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 46
+    Final ATK: 46
+  Defense Roll (ROSALIND, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[23]  luck[+26]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+12]  ground_pen[-25]
+    Subtotal: 42
+    Final DEF: 42
+  Margin: 46 − 42 = 4   ▶  GRAZE (margin 4, 1 HP)
+  HP Pool (ROSALIND):
+    Before : 27/38 (71.1%)
+    graze   : −1
+    After  : 26/38 (68.4%)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSALIND                : d100[94]  on_ground_halved[(÷2)] = 47
+    SHOCKWAVE               : d100[56]  on_ground_halved[(÷2)] = 28
+    ▶ ROSALIND wins → ATTACKS
+  Attack: ROSALIND → SHOCKWAVE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (ROSALIND):
+    d100[89]  dex_bonus[+8]  luck[+26]  feint[+14]
+    Subtotal: 137
+    Final ATK: 137
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[84]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 101
+    Final DEF: 101
+  Margin: 137 − 101 = 36   ▶  HIT (margin 36)
+  Damage (ROSALIND → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +4.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 36/55.0)) = 0.655
+    Raw: max(1, int(19 × 0.655)) = 12
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 12 − 5) = 7
+  ▶ FINAL DAMAGE: 7
+  HP Pool (SHOCKWAVE):
+    Before : 35/53 (66.0%)
+    hit     : −7
+    After  : 28/53 (52.8%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(7/53 × 80) = 10   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 53 = 7   damage 7 ≥ threshold
+    chance = max(5, min(80, int(7/53×100) − 5)) = 0%
+    Roll: 0  →  no injury
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[51]  on_ground_halved[(÷2)] = 25
+    ROSALIND                : d100[47]  on_ground_halved[(÷2)] = 23
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → ROSALIND   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[24]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 45
+    Final ATK: 45
+  Defense Roll (ROSALIND, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[72]  luck[+26]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+12]  ground_pen[-25]
+    Subtotal: 91
+    Final DEF: 91
+  Margin: 45 − 91 = -46   ▶  PARRY (margin -46)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[79]  on_ground_halved[(÷2)] = 39
+    ROSALIND                : d100[76]  on_ground_halved[(÷2)] = 38
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → ROSALIND   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[49]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 70
+    Final ATK: 70
+  Defense Roll (ROSALIND, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[70]  luck[+26]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+12]  ground_pen[-25]
+    Subtotal: 89
+    Final DEF: 89
+  Margin: 70 − 89 = -19   ▶  PARRY (margin -19)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: ROSALIND has uncontested action
+  Attack: ROSALIND → SHOCKWAVE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (ROSALIND):
+    d100[81]  dex_bonus[+8]  luck[+26]  feint[+14]
+    Subtotal: 129
+    Final ATK: 129
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[79]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 96
+    Final DEF: 96
+  Margin: 129 − 96 = 33   ▶  HIT (margin 33)
+  Damage (ROSALIND → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +4.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 33/55.0)) = 0.600
+    Raw: max(1, int(19 × 0.600)) = 11
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 11 − 5) = 6
+  ▶ FINAL DAMAGE: 6
+  HP Pool (SHOCKWAVE):
+    Before : 28/53 (52.8%)
+    hit     : −6
+    After  : 22/53 (41.5%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(6/53 × 80) = 9   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 53 = 7   damage 6 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    SHOCKWAVE: 59.4 END − (6.60 burn × 3 actions) = 38.6
+    ROSALIND: 89.8 END − (1.70 burn × 3 actions) = 84.7
+    HP POOL — SHOCKWAVE: 22/53 (42%)
+    HP POOL — ROSALIND: 26/38 (68%)
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — SHOCKWAVE: 6   |   ROSALIND: 6
+  HP    — SHOCKWAVE: 22/53 (42%)   |   ROSALIND: 26/38 (68%)
+  END   — SHOCKWAVE: 38.6   |   ROSALIND: 84.7
+  STRAT — SHOCKWAVE: [Lunge / Act:7]   |   ROSALIND: [Feint / Act:4]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSALIND                : d100[60]  dex_bonus[+10]  init_skill_x3[+3]  luck[+26]  activity_mod[-2] = 97
+    SHOCKWAVE               : d100[58]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 80
+    ▶ ROSALIND wins → ATTACKS
+  Attack: ROSALIND → SHOCKWAVE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (ROSALIND):
+    d100[45]  dex_bonus[+8]  luck[+26]  feint[+14]
+    Subtotal: 93
+    Final ATK: 93
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[36]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 78
+    Final DEF: 78
+  Margin: 93 − 78 = 15   ▶  HIT (margin 15)
+  Damage (ROSALIND → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +4.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 15/55.0)) = 0.273
+    Raw: max(1, int(19 × 0.273)) = 5
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 5 − 5) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SHOCKWAVE):
+    Before : 22/53 (41.5%)
+    hit     : −1
+    After  : 21/53 (39.6%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(1/53 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 35  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 53 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SHOCKWAVE               : d100[98]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 120
+    ROSALIND                : d100[6]  dex_bonus[+10]  init_skill_x3[+3]  luck[+26]  activity_mod[-2] = 43
+    ▶ SHOCKWAVE wins → ATTACKS
+  Attack: SHOCKWAVE → ROSALIND   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[80]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]
+    Subtotal: 101
+    Final ATK: 101
+  Defense Roll (ROSALIND, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[76]  luck[+26]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+12]
+    Subtotal: 120
+    Final DEF: 120
+  Margin: 101 − 120 = -19   ▶  PARRY (margin -19)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSALIND                : d100[92]  dex_bonus[+10]  init_skill_x3[+3]  luck[+26]  activity_mod[-2] = 129
+    SHOCKWAVE               : d100[72]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 94
+    ▶ ROSALIND wins → ATTACKS
+  Attack: ROSALIND → SHOCKWAVE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (ROSALIND):
+    d100[23]  dex_bonus[+8]  luck[+26]  feint[+14]
+    Subtotal: 71
+    Final ATK: 71
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[54]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 96
+    Final DEF: 96
+  Margin: 71 − 96 = -25   ▶  DODGE (margin -25)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSALIND                : d100[14]  dex_bonus[+10]  init_skill_x3[+3]  luck[+26]  activity_mod[-2] = 51
+    SHOCKWAVE               : d100[4]  dex_bonus[+2]  luck[+14]  style_mod[+2]  activity_mod[+4] = 26
+    ▶ ROSALIND wins → ATTACKS
+  Attack: ROSALIND → SHOCKWAVE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (ROSALIND):
+    d100[20]  dex_bonus[+8]  luck[+26]  feint[+14]
+    Subtotal: 68
+    Final ATK: 68
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[5]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]
+    Subtotal: 47
+    Final DEF: 47
+  Margin: 68 − 47 = 21   ▶  HIT (margin 21)
+  Damage (ROSALIND → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +4.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 21/55.0)) = 0.382
+    Raw: max(1, int(19 × 0.382)) = 7
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 7 − 5) = 2
+  ▶ FINAL DAMAGE: 2
+  HP Pool (SHOCKWAVE):
+    Before : 21/53 (39.6%)
+    hit     : −2
+    After  : 19/53 (35.8%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(2/53 × 80) = 3   cat bonus [Hammer/Mace]: +10   final: 13%
+    Roll: 13  →  ▶ KNOCKDOWN
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 53 = 7   damage 2 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSALIND                : d100[29]  dex_bonus[+10]  init_skill_x3[+3]  luck[+26]  activity_mod[-2] = 66
+    SHOCKWAVE               : d100[82]  on_ground_halved[(÷2)] = 41
+    ▶ ROSALIND wins → ATTACKS
+  Attack: ROSALIND → SHOCKWAVE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (ROSALIND):
+    d100[80]  dex_bonus[+8]  luck[+26]  feint[+14]
+    Subtotal: 128
+    Final ATK: 128
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[81]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 128 − 98 = 30   ▶  HIT (margin 30)
+  Damage (ROSALIND → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +4.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 30/55.0)) = 0.545
+    Raw: max(1, int(19 × 0.545)) = 10
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 10 − 5) = 5
+  ▶ FINAL DAMAGE: 5
+  HP Pool (SHOCKWAVE):
+    Before : 19/53 (35.8%)
+    hit     : −5
+    After  : 14/53 (26.4%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(5/53 × 80) = 7   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 53 = 7   damage 5 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSALIND                : d100[14]  dex_bonus[+10]  init_skill_x3[+3]  luck[+26]  activity_mod[-2] = 51
+    SHOCKWAVE               : d100[93]  on_ground_halved[(÷2)] = 46
+    ▶ ROSALIND wins → ATTACKS
+  Attack: ROSALIND → SHOCKWAVE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (ROSALIND):
+    d100[1]  dex_bonus[+8]  luck[+26]  feint[+14]
+    Subtotal: 49
+    Final ATK: 49
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[2]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 19
+    Final DEF: 19
+  Margin: 49 − 19 = 30   ▶  HIT (margin 30)
+  Damage (ROSALIND → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +4.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 30/55.0)) = 0.545
+    Raw: max(1, int(19 × 0.545)) = 10
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 10 − 5) = 5
+  ▶ FINAL DAMAGE: 5
+  HP Pool (SHOCKWAVE):
+    Before : 14/53 (26.4%)
+    hit     : −5
+    After  : 9/53 (17.0%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(5/53 × 80) = 7   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 53 = 7   damage 5 < threshold
+    → Below threshold — no injury possible
+  Concede Attempt (SHOCKWAVE):
+    d100[8] + PRE_bonus[+0] + luck//2[7] = 15
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    15 < 65  →  mercy denied — fight continues
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    ROSALIND                : d100[24]  dex_bonus[+10]  init_skill_x3[+3]  luck[+26]  activity_mod[-2] = 61
+    SHOCKWAVE               : d100[17]  on_ground_halved[(÷2)] = 8
+    ▶ ROSALIND wins → ATTACKS
+  Attack: ROSALIND → SHOCKWAVE   Weapon: Morningstar   Style: Feint   Aim: Chest
+  Attack Roll (ROSALIND):
+    d100[32]  dex_bonus[+8]  luck[+26]  feint[+14]
+    Subtotal: 80
+    Final ATK: 80
+  Defense Roll (SHOCKWAVE, DODGE — dodge_bonus(4) > parry_bonus(0)):
+    d100[9]  luck[+14]  dex_bonus[+1]  style_dodge[+8]  activity_mod[+4]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 26
+    Final DEF: 26
+  Margin: 80 − 26 = 54   ▶  HIT (margin 54)
+  Damage (ROSALIND → SHOCKWAVE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +4.80
+      activity contrib             +0.30
+      luck ×0.15                   +3.90
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 54/55.0)) = 0.982
+    Raw: max(1, int(19 × 0.982)) = 18
+    Armor: Cuir Boulli  base DEF: 5
+    Net = max(1, 18 − 5) = 13
+  ▶ FINAL DAMAGE: 13
+  HP Pool (SHOCKWAVE):
+    Before : 9/53 (17.0%)
+    hit     : −13
+    After  : -4/53 (0.0%)
+  Knockdown Check (SHOCKWAVE):
+    base = int(13/53 × 80) = 19   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SHOCKWAVE):
+    threshold = 15% of 53 = 7   damage 13 ≥ threshold
+    chance = max(5, min(80, int(13/53×100) − 5)) = 16%
+    Roll: 82  →  no injury
+  Death Check (SHOCKWAVE):
+    prev_hp: 9   damage: 13   new_hp: -4
+    overshoot: 4
+    death_chance = min(50.0, 0.5 + 4) = 4.5%
+    → survives (concede system takes over)
+  Concede Attempt (SHOCKWAVE):
+    d100[19] + PRE_bonus[+0] + luck//2[7] = 26
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    26 < 65  →  mercy denied — fight continues
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: SHOCKWAVE has uncontested action
+  Attack: SHOCKWAVE → ROSALIND   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[75]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]  hp0_pen[-30]
+    Subtotal: 66
+    Final ATK: 66
+  Defense Roll (ROSALIND, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[42]  luck[+26]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+12]
+    Subtotal: 86
+    Final DEF: 86
+  Margin: 66 − 86 = -20   ▶  PARRY (margin -20)
+  Concede Attempt (SHOCKWAVE):
+    d100[8] + PRE_bonus[+0] + luck//2[7] = 15
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    15 < 65  →  mercy denied — fight continues
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: SHOCKWAVE has uncontested action
+  Attack: SHOCKWAVE → ROSALIND   Weapon: Boar Spear   Style: Lunge   Aim: None
+  Attack Roll (SHOCKWAVE):
+    d100[38]  dex_bonus[+1]  luck[+14]  style_mod[+1]  fav_bonus[+5]  hp0_pen[-30]
+    Subtotal: 29
+    Final ATK: 29
+  Defense Roll (ROSALIND, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[84]  luck[+26]  str_bonus[+4]  activity_mod[+2]  dex_trained_x2[+12]
+    Subtotal: 128
+    Final DEF: 128
+  Margin: 29 − 128 = -99   ▶  PARRY (margin -99)
+  Concede Attempt (SHOCKWAVE):
+    d100[85] + PRE_bonus[+0] + luck//2[7] = 92
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    92 ≥ 65  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: SHOCKWAVE
+==============================================================================
+  Strength: d100=56 vs 24% — FAIL
+    → Strength training: no progress this session (mastery tier, 24% chance).
+  Strength: d100=7 vs 24% — SUCCESS
+    → Strength trained: 19 → 20 [mastery] (24% chance)
+  Strength: d100=5 vs 24% — SUCCESS
+    → Strength trained: 20 → 21 [mastery] (24% chance)
+
+==============================================================================
+  TRAINING: ROSALIND
+==============================================================================
+  Dexterity: d100=5 vs 25% — SUCCESS
+    → Dexterity trained: 19 → 20 [late] (25% chance)
+  Feint: d100=3 vs 29% — SUCCESS
+    → Feint trained: Level 7 → Level 8 (Incredible Skill, 29% chance)
+  Intelligence: d100=23 vs 36% — SUCCESS
+    → Intelligence trained: 19 → 20 (36% chance)
+  INT observed learning: d100=29 vs 24% — no trigger
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : ROSALIND  (68.4% HP remaining)
+  Loser  : SHOCKWAVE  (survived, 0.0% HP)
+  Duration: 3 minute(s)
+==============================================================================

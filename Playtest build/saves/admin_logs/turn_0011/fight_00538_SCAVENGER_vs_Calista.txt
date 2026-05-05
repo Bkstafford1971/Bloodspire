@@ -1,0 +1,1931 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #538   Turn: 11
+  Debug team: Ilneval
+  Ilneval / DECEPTICONS   vs   Sister Thornwall / The Thornwall Guard
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: SCAVENGER
+  ────────────────────────────────────
+    Race: Tabaxi  |  Gender: Male
+    STR:11  DEX:15  CON:20  INT:15  PRE:9  SIZ:10
+    Max HP: 48   Luck: 20
+    Armor: Cuir Boulli   Helm: Leather Cap
+    Primary: Bola   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Strike / Act:6 / Aim:None / Def:Chest
+
+  ────────────────────────────────────
+  WARRIOR B: CALISTA
+  ────────────────────────────────────
+    Race: Human  |  Gender: Female
+    STR:13  DEX:12  CON:19  INT:13  PRE:10  SIZ:12
+    Max HP: 59   Luck: 29
+    Armor: Full Plate   Helm: None
+    Primary: Morningstar   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Parry / Act:3 / Aim:Chest / Def:Chest
+    Skills: dodge:9  parry:6  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — SCAVENGER: 6   |   CALISTA: 2
+  HP    — SCAVENGER: 48/48 (100%)   |   CALISTA: 59/59 (100%)
+  END   — SCAVENGER: 100.0   |   CALISTA: 100.0
+  STRAT — SCAVENGER: [Strike / Act:6]   |   CALISTA: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[17]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 52
+    CALISTA                 : d100[5]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 14
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[17]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 46
+    + style advantage: +6
+    Final ATK: 52
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[2]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 78
+    Final DEF: 78
+  Margin: 52 − 78 = -26   ▶  PARRY (margin -26)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[56]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 91
+    CALISTA                 : d100[62]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 71
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[32]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 61
+    + style advantage: +6
+    Final ATK: 67
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[87]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 163
+    Final DEF: 163
+  Margin: 67 − 163 = -96   ▶  PARRY (margin -96)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[55]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 90
+    CALISTA                 : d100[34]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 43
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[98]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 127
+    + style advantage: +6
+    Final ATK: 133
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[46]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 122
+    Final DEF: 122
+  Margin: 133 − 122 = 11   ▶  HIT (margin 11)
+  Damage (SCAVENGER → CALISTA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.75
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+      strength underweight pen     ×0.97 (3% penalty)
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 11/55.0)) = 0.200
+    Raw: max(1, int(10 × 0.200)) = 2
+    Favorite weapon +1 → raw = 3
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 3 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (CALISTA):
+    Before : 59/59 (100.0%)
+    hit     : −1
+    After  : 58/59 (98.3%)
+  Knockdown Check (CALISTA):
+    base = int(1/59 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 5  →  no knockdown
+  Perm Injury Check (CALISTA):
+    threshold = 15% of 59 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[30]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 65
+    CALISTA                 : d100[54]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 63
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[23]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 52
+    + style advantage: +6
+    Final ATK: 58
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[17]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 93
+    Final DEF: 93
+  Margin: 58 − 93 = -35   ▶  PARRY (margin -35)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[65]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 100
+    CALISTA                 : d100[32]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 41
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[34]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 63
+    + style advantage: +6
+    Final ATK: 69
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[14]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 90
+    Final DEF: 90
+  Margin: 69 − 90 = -21   ▶  PARRY (margin -21)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[64]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 73
+    SCAVENGER               : d100[24]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 59
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Morningstar   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[47]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 66
+    + style advantage: -6
+    Final ATK: 60
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[27]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 60
+    Final DEF: 60
+  Margin: 60 − 60 = 0   ▶  MISS
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[56]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 91
+    CALISTA                 : d100[28]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 37
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[18]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 47
+    + style advantage: +6
+    Final ATK: 53
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[89]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 165
+    Final DEF: 165
+  Margin: 53 − 165 = -112   ▶  PARRY (margin -112)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: CALISTA has uncontested action
+  Attack: CALISTA → SCAVENGER   Weapon: Morningstar   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[40]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 59
+    + style advantage: -6
+    Final ATK: 53
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[48]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 81
+    Final DEF: 81
+  Margin: 53 − 81 = -28   ▶  PARRY (margin -28)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 100.0 END − (2.30 burn × 6 actions) = 86.2
+    CALISTA: 100.0 END − (0.40 burn × 2 actions) = 99.2
+    HP POOL — SCAVENGER: 48/48 (100%)
+    HP POOL — CALISTA: 58/59 (98%)
+
+==============================================================================
+  MINUTE 2
+==============================================================================
+  APM   — SCAVENGER: 6   |   CALISTA: 2
+  HP    — SCAVENGER: 48/48 (100%)   |   CALISTA: 58/59 (98%)
+  END   — SCAVENGER: 86.2   |   CALISTA: 99.2
+  STRAT — SCAVENGER: [Strike / Act:6]   |   CALISTA: [Parry / Act:3]
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[94]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 103
+    SCAVENGER               : d100[59]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 94
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Morningstar   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[5]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 24
+    + style advantage: -6
+    Final ATK: 18
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[30]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 63
+    Final DEF: 63
+  Margin: 18 − 63 = -45   ▶  PARRY (margin -45)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[66]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 101
+    CALISTA                 : d100[45]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 54
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[14]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 43
+    + style advantage: +6
+    Final ATK: 49
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[7]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 83
+    Final DEF: 83
+  Margin: 49 − 83 = -34   ▶  PARRY (margin -34)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[94]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 129
+    CALISTA                 : d100[33]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 42
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[65]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 94
+    + style advantage: +6
+    Final ATK: 100
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[28]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 104
+    Final DEF: 104
+  Margin: 100 − 104 = -4   ▶  PARRY (margin -4)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[25]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 60
+    CALISTA                 : d100[26]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 35
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[74]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 103
+    + style advantage: +6
+    Final ATK: 109
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[48]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 124
+    Final DEF: 124
+  Margin: 109 − 124 = -15   ▶  PARRY (margin -15)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[59]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 94
+    CALISTA                 : d100[81]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 90
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[66]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 95
+    + style advantage: +6
+    Final ATK: 101
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[79]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 155
+    Final DEF: 155
+  Margin: 101 − 155 = -54   ▶  PARRY (margin -54)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[65]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 74
+    SCAVENGER               : d100[38]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 73
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Morningstar   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[60]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 79
+    + style advantage: -6
+    Final ATK: 73
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[30]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 63
+    Final DEF: 63
+  Margin: 73 − 63 = 10   ▶  HIT (margin 10)
+  Damage (CALISTA → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +1.80
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 10/55.0)) = 0.182
+    Raw: max(1, int(12 × 0.182)) = 2
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 48/48 (100.0%)
+    hit     : −1
+    After  : 47/48 (97.9%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/48 × 80) = 1   cat bonus [Hammer/Mace]: +10   final: 11%
+    Roll: 6  →  ▶ KNOCKDOWN
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 48 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[27]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 56
+    + style advantage: +6
+    Final ATK: 62
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[3]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 79
+    Final DEF: 79
+  Margin: 62 − 79 = -17   ▶  PARRY (margin -17)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 86.2 END − (2.30 burn × 6 actions) = 72.4
+    CALISTA: 99.2 END − (0.40 burn × 2 actions) = 98.4
+    HP POOL — SCAVENGER: 47/48 (98%)
+    HP POOL — CALISTA: 58/59 (98%)
+
+==============================================================================
+  MINUTE 3
+==============================================================================
+  APM   — SCAVENGER: 3   |   CALISTA: 2
+  HP    — SCAVENGER: 47/48 (98%)   |   CALISTA: 58/59 (98%)
+  END   — SCAVENGER: 72.4   |   CALISTA: 98.4
+  STRAT — SCAVENGER: [Strike / Act:6]   |   CALISTA: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[11]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 20
+    SCAVENGER               : d100[30]  on_ground_halved[(÷2)] = 15
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Morningstar   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[64]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 83
+    + style advantage: -6
+    Final ATK: 77
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[24]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 32
+    Final DEF: 32
+  Margin: 77 − 32 = 45   ▶  HIT (margin 45)
+  Damage (CALISTA → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +1.80
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 45/55.0)) = 0.818
+    Raw: max(1, int(12 × 0.818)) = 9
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 9 − 4) = 5
+  ▶ FINAL DAMAGE: 5
+  HP Pool (SCAVENGER):
+    Before : 47/48 (97.9%)
+    hit     : −5
+    After  : 42/48 (87.5%)
+  Knockdown Check (SCAVENGER):
+    base = int(5/48 × 80) = 8   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 48 = 7   damage 5 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[20]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 29
+    SCAVENGER               : d100[52]  on_ground_halved[(÷2)] = 26
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Morningstar   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[89]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 108
+    + style advantage: -6
+    Final ATK: 102
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[48]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  ground_pen[-25]
+    Subtotal: 56
+    Final DEF: 56
+  Margin: 102 − 56 = 46   ▶  HIT (margin 46)
+  Damage (CALISTA → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 10.00
+      STR bonus                    +1.80
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 12
+    Fraction: max(0.10, min(1.0, 46/55.0)) = 0.836
+    Raw: max(1, int(12 × 0.836)) = 10
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 10 − 4) = 6
+  ▶ FINAL DAMAGE: 6
+  HP Pool (SCAVENGER):
+    Before : 42/48 (87.5%)
+    hit     : −6
+    After  : 36/48 (75.0%)
+  Knockdown Check (SCAVENGER):
+    base = int(6/48 × 80) = 10   cat bonus [Hammer/Mace]: +10   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 48 = 7   damage 6 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[100]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 129
+    + style advantage: +6
+    Final ATK: 135
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[56]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 132
+    Final DEF: 132
+  Margin: 135 − 132 = 3   ▶  GRAZE (margin 3, 1 HP)
+  HP Pool (CALISTA):
+    Before : 58/59 (98.3%)
+    graze   : −1
+    After  : 57/59 (96.6%)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[7]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 36
+    + style advantage: +6
+    Final ATK: 42
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[4]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 80
+    Final DEF: 80
+  Margin: 42 − 80 = -38   ▶  PARRY (margin -38)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[41]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 70
+    + style advantage: +6
+    Final ATK: 76
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[72]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 148
+    Final DEF: 148
+  Margin: 76 − 148 = -72   ▶  PARRY (margin -72)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 72.4 END − (2.30 burn × 3 actions) = 65.5
+    CALISTA: 98.4 END − (0.40 burn × 2 actions) = 97.6
+    HP POOL — SCAVENGER: 36/48 (75%)
+    HP POOL — CALISTA: 57/59 (97%)
+
+==============================================================================
+  MINUTE 4
+==============================================================================
+  APM   — SCAVENGER: 6   |   CALISTA: 2
+  HP    — SCAVENGER: 36/48 (75%)   |   CALISTA: 57/59 (97%)
+  END   — SCAVENGER: 65.5   |   CALISTA: 97.6
+  STRAT — SCAVENGER: [Strike / Act:6]   |   CALISTA: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[85]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 94
+    SCAVENGER               : d100[16]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 51
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Morningstar   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[20]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 39
+    + style advantage: -6
+    Final ATK: 33
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[28]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 61
+    Final DEF: 61
+  Margin: 33 − 61 = -28   ▶  PARRY (margin -28)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[42]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 77
+    CALISTA                 : d100[3]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 12
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[42]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 71
+    + style advantage: +6
+    Final ATK: 77
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[37]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 113
+    Final DEF: 113
+  Margin: 77 − 113 = -36   ▶  PARRY (margin -36)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[35]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 70
+    CALISTA                 : d100[59]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 68
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[48]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 77
+    + style advantage: +6
+    Final ATK: 83
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[94]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 170
+    Final DEF: 170
+  Margin: 83 − 170 = -87   ▶  PARRY (margin -87)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[37]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 72
+    CALISTA                 : d100[27]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 36
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[56]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 85
+    + style advantage: +6
+    Final ATK: 91
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[24]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 100
+    Final DEF: 100
+  Margin: 91 − 100 = -9   ▶  PARRY (margin -9)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[96]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 131
+    CALISTA                 : d100[10]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 19
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[11]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 40
+    + style advantage: +6
+    Final ATK: 46
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[45]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 121
+    Final DEF: 121
+  Margin: 46 − 121 = -75   ▶  PARRY (margin -75)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[45]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 80
+    CALISTA                 : d100[27]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 36
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[86]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 115
+    + style advantage: +6
+    Final ATK: 121
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[82]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 158
+    Final DEF: 158
+  Margin: 121 − 158 = -37   ▶  PARRY (margin -37)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[83]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 118
+    CALISTA                 : d100[6]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 15
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[20]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 49
+    + style advantage: +6
+    Final ATK: 55
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[78]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 154
+    Final DEF: 154
+  Margin: 55 − 154 = -99   ▶  PARRY (margin -99)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 65.5 END − (2.30 burn × 6 actions) = 51.7
+    CALISTA: 97.6 END − (0.40 burn × 2 actions) = 96.8
+    HP POOL — SCAVENGER: 36/48 (75%)
+    HP POOL — CALISTA: 57/59 (97%)
+
+==============================================================================
+  MINUTE 5
+==============================================================================
+  APM   — SCAVENGER: 6   |   CALISTA: 2
+  HP    — SCAVENGER: 36/48 (75%)   |   CALISTA: 57/59 (97%)
+  END   — SCAVENGER: 51.7   |   CALISTA: 96.8
+  STRAT — SCAVENGER: [Strike / Act:6]   |   CALISTA: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[88]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 97
+    SCAVENGER               : d100[11]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 46
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Morningstar   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[33]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 52
+    + style advantage: -6
+    Final ATK: 46
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[27]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 60
+    Final DEF: 60
+  Margin: 46 − 60 = -14   ▶  PARRY (margin -14)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[97]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 132
+    CALISTA                 : d100[50]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 59
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[14]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 43
+    + style advantage: +6
+    Final ATK: 49
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[49]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 125
+    Final DEF: 125
+  Margin: 49 − 125 = -76   ▶  PARRY (margin -76)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[22]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 57
+    CALISTA                 : d100[9]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 18
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[33]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 62
+    + style advantage: +6
+    Final ATK: 68
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[7]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 83
+    Final DEF: 83
+  Margin: 68 − 83 = -15   ▶  PARRY (margin -15)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[73]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 82
+    SCAVENGER               : d100[7]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 42
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Morningstar   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[62]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 81
+    + style advantage: -6
+    Final ATK: 75
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[74]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 107
+    Final DEF: 107
+  Margin: 75 − 107 = -32   ▶  PARRY (margin -32)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[57]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 86
+    + style advantage: +6
+    Final ATK: 92
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[66]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 142
+    Final DEF: 142
+  Margin: 92 − 142 = -50   ▶  PARRY (margin -50)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[56]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 85
+    + style advantage: +6
+    Final ATK: 91
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[43]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 119
+    Final DEF: 119
+  Margin: 91 − 119 = -28   ▶  PARRY (margin -28)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[13]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 42
+    + style advantage: +6
+    Final ATK: 48
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[8]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 84
+    Final DEF: 84
+  Margin: 48 − 84 = -36   ▶  PARRY (margin -36)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[1]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 30
+    + style advantage: +6
+    Final ATK: 36
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[32]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 108
+    Final DEF: 108
+  Margin: 36 − 108 = -72   ▶  PARRY (margin -72)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 51.7 END − (2.30 burn × 6 actions) = 37.9
+    CALISTA: 96.8 END − (0.40 burn × 2 actions) = 96.0
+    HP POOL — SCAVENGER: 36/48 (75%)
+    HP POOL — CALISTA: 57/59 (97%)
+
+==============================================================================
+  MINUTE 6
+==============================================================================
+  APM   — SCAVENGER: 6   |   CALISTA: 2
+  HP    — SCAVENGER: 36/48 (75%)   |   CALISTA: 57/59 (97%)
+  END   — SCAVENGER: 37.9   |   CALISTA: 96.0
+  STRAT — SCAVENGER: [Strike / Act:6]   |   CALISTA: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[96]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 131
+    CALISTA                 : d100[5]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 14
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[40]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 69
+    + style advantage: +6
+    Final ATK: 75
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[50]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 126
+    Final DEF: 126
+  Margin: 75 − 126 = -51   ▶  PARRY (margin -51)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[94]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 129
+    CALISTA                 : d100[28]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 37
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[83]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 112
+    + style advantage: +6
+    Final ATK: 118
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[59]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 135
+    Final DEF: 135
+  Margin: 118 − 135 = -17   ▶  PARRY (margin -17)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[74]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 109
+    CALISTA                 : d100[14]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 23
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[43]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 72
+    + style advantage: +6
+    Final ATK: 78
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[18]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 94
+    Final DEF: 94
+  Margin: 78 − 94 = -16   ▶  PARRY (margin -16)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[100]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 135
+    CALISTA                 : d100[51]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 60
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[83]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 112
+    + style advantage: +6
+    Final ATK: 118
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[32]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 108
+    Final DEF: 108
+  Margin: 118 − 108 = 10   ▶  HIT (margin 10)
+  Damage (SCAVENGER → CALISTA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.75
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+      strength underweight pen     ×0.97 (3% penalty)
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 10/55.0)) = 0.182
+    Raw: max(1, int(10 × 0.182)) = 1
+    Favorite weapon +1 → raw = 2
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 2 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (CALISTA):
+    Before : 57/59 (96.6%)
+    hit     : −1
+    After  : 56/59 (94.9%)
+  Knockdown Check (CALISTA):
+    base = int(1/59 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 38  →  no knockdown
+  Perm Injury Check (CALISTA):
+    threshold = 15% of 59 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[73]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 108
+    CALISTA                 : d100[99]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 108
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[98]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 127
+    + style advantage: +6
+    Final ATK: 133
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[25]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 101
+    Final DEF: 101
+  Margin: 133 − 101 = 32   ▶  HIT (margin 32)
+  Damage (SCAVENGER → CALISTA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.75
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+      strength underweight pen     ×0.97 (3% penalty)
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 32/55.0)) = 0.582
+    Raw: max(1, int(10 × 0.582)) = 5
+    Favorite weapon +1 → raw = 6
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 6 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (CALISTA):
+    Before : 56/59 (94.9%)
+    hit     : −1
+    After  : 55/59 (93.2%)
+  Knockdown Check (CALISTA):
+    base = int(1/59 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 5  →  no knockdown
+  Perm Injury Check (CALISTA):
+    threshold = 15% of 59 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[94]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2] = 129
+    CALISTA                 : d100[58]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 67
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[28]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]
+    Subtotal: 57
+    + style advantage: +6
+    Final ATK: 63
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[18]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 94
+    Final DEF: 94
+  Margin: 63 − 94 = -31   ▶  PARRY (margin -31)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: CALISTA has uncontested action
+  Attack: CALISTA → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[54]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 73
+    + style advantage: -6
+    Final ATK: 67
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[65]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]
+    Subtotal: 98
+    Final DEF: 98
+  Margin: 67 − 98 = -31   ▶  PARRY (margin -31)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 37.9 END − (2.30 burn × 6 actions) = 24.1
+    CALISTA: 96.0 END − (0.40 burn × 2 actions) = 95.2
+    HP POOL — SCAVENGER: 36/48 (75%)
+    HP POOL — CALISTA: 55/59 (93%)
+
+==============================================================================
+  MINUTE 7
+==============================================================================
+  APM   — SCAVENGER: 5   |   CALISTA: 2
+  HP    — SCAVENGER: 36/48 (75%)   |   CALISTA: 55/59 (93%)
+  END   — SCAVENGER: 24.1   |   CALISTA: 95.2
+  STRAT — SCAVENGER: [Strike / Act:6]   |   CALISTA: [Parry / Act:3]
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[59]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-4] = 90
+    CALISTA                 : d100[50]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 59
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[23]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-2]
+    Subtotal: 50
+    + style advantage: +6
+    Final ATK: 56
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[76]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 152
+    Final DEF: 152
+  Margin: 56 − 152 = -96   ▶  PARRY (margin -96)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[81]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-4] = 112
+    CALISTA                 : d100[69]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 78
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[97]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-2]
+    Subtotal: 124
+    + style advantage: +6
+    Final ATK: 130
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[39]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 115
+    Final DEF: 115
+  Margin: 130 − 115 = 15   ▶  HIT (margin 15)
+  Damage (SCAVENGER → CALISTA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.75
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+      strength underweight pen     ×0.97 (3% penalty)
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 15/55.0)) = 0.273
+    Raw: max(1, int(10 × 0.273)) = 2
+    Favorite weapon +1 → raw = 3
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 3 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (CALISTA):
+    Before : 55/59 (93.2%)
+    hit     : −1
+    After  : 54/59 (91.5%)
+  Knockdown Check (CALISTA):
+    base = int(1/59 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 4  →  no knockdown
+  Perm Injury Check (CALISTA):
+    threshold = 15% of 59 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[98]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-4] = 129
+    CALISTA                 : d100[4]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 13
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[59]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-2]
+    Subtotal: 86
+    + style advantage: +6
+    Final ATK: 92
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[62]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 138
+    Final DEF: 138
+  Margin: 92 − 138 = -46   ▶  PARRY (margin -46)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[42]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-4] = 73
+    CALISTA                 : d100[30]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 39
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[2]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-2]
+    Subtotal: 29
+    + style advantage: +6
+    Final ATK: 35
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[82]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 158
+    Final DEF: 158
+  Margin: 35 − 158 = -123   ▶  PARRY (margin -123)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: CALISTA has uncontested action
+  Attack: CALISTA → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[76]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 95
+    + style advantage: -6
+    Final ATK: 89
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[18]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-2]
+    Subtotal: 49
+    Final DEF: 49
+  Margin: 89 − 49 = 40   ▶  HIT (margin 40)
+  Damage (CALISTA → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      STR bonus                    +1.80
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 40/55.0)) = 0.727
+    Raw: max(1, int(3 × 0.727)) = 2
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 36/48 (75.0%)
+    hit     : −1
+    After  : 35/48 (72.9%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/48 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 19  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 48 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: CALISTA has uncontested action
+  Attack: CALISTA → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[33]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 52
+    + style advantage: -6
+    Final ATK: 46
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[35]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-2]
+    Subtotal: 66
+    Final DEF: 66
+  Margin: 46 − 66 = -20   ▶  PARRY (margin -20)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 24.1 END − (2.30 burn × 5 actions) = 12.6
+    CALISTA: 95.2 END − (0.40 burn × 2 actions) = 94.4
+    HP POOL — SCAVENGER: 35/48 (73%)
+    HP POOL — CALISTA: 54/59 (92%)
+
+==============================================================================
+  MINUTE 8
+==============================================================================
+  APM   — SCAVENGER: 5   |   CALISTA: 2
+  HP    — SCAVENGER: 35/48 (73%)   |   CALISTA: 54/59 (92%)
+  END   — SCAVENGER: 12.6   |   CALISTA: 94.4
+  STRAT — SCAVENGER: [Strike / Act:6]   |   CALISTA: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[90]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 99
+    SCAVENGER               : d100[28]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-8] = 55
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[40]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 59
+    + style advantage: -6
+    Final ATK: 53
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[96]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-6]
+    Subtotal: 123
+    Final DEF: 123
+  Margin: 53 − 123 = -70   ▶  PARRY (margin -70)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[100]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 109
+    SCAVENGER               : d100[55]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-8] = 82
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[87]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 106
+    + style advantage: -6
+    Final ATK: 100
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[99]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-6]
+    Subtotal: 126
+    Final DEF: 126
+  Margin: 100 − 126 = -26   ▶  PARRY (margin -26)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[94]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-8]
+    Subtotal: 115
+    + style advantage: +6
+    Final ATK: 121
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[29]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 105
+    Final DEF: 105
+  Margin: 121 − 105 = 16   ▶  HIT (margin 16)
+  Damage (SCAVENGER → CALISTA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.75
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+      strength underweight pen     ×0.97 (3% penalty)
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 16/55.0)) = 0.291
+    Raw: max(1, int(10 × 0.291)) = 2
+    Favorite weapon +1 → raw = 3
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 3 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (CALISTA):
+    Before : 54/59 (91.5%)
+    hit     : −1
+    After  : 53/59 (89.8%)
+  HP Pool (CALISTA):
+    Before : 53/59 (89.8%)
+    entangle fall: −3
+    After  : 50/59 (84.7%)
+  Knockdown Check (CALISTA):
+    base = int(1/59 × 80) = 1   cat bonus [Oddball]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (CALISTA):
+    threshold = 15% of 59 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[34]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-8]
+    Subtotal: 55
+    + style advantage: +6
+    Final ATK: 61
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[40]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]  ground_pen[-25]
+    Subtotal: 91
+    Final DEF: 91
+  Margin: 61 − 91 = -30   ▶  PARRY (margin -30)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[40]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-8]
+    Subtotal: 61
+    + style advantage: +6
+    Final ATK: 67
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[60]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]  ground_pen[-25]
+    Subtotal: 111
+    Final DEF: 111
+  Margin: 67 − 111 = -44   ▶  PARRY (margin -44)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[68]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-8]
+    Subtotal: 89
+    + style advantage: +6
+    Final ATK: 95
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[32]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]  ground_pen[-25]
+    Subtotal: 83
+    Final DEF: 83
+  Margin: 95 − 83 = 12   ▶  HIT (margin 12)
+  Damage (SCAVENGER → CALISTA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.75
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+      strength underweight pen     ×0.97 (3% penalty)
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 12/55.0)) = 0.218
+    Raw: max(1, int(10 × 0.218)) = 2
+    Favorite weapon +1 → raw = 3
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 3 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (CALISTA):
+    Before : 50/59 (84.7%)
+    hit     : −1
+    After  : 49/59 (83.1%)
+  Knockdown Check (CALISTA):
+    base = int(1/59 × 80) = 1   cat bonus [Oddball]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (CALISTA):
+    threshold = 15% of 59 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[72]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-8]
+    Subtotal: 93
+    + style advantage: +6
+    Final ATK: 99
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[61]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]  ground_pen[-25]
+    Subtotal: 112
+    Final DEF: 112
+  Margin: 99 − 112 = -13   ▶  PARRY (margin -13)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 12.6 END − (2.30 burn × 5 actions) = 1.1
+    CALISTA: 94.4 END − (0.40 burn × 2 actions) = 93.6
+    HP POOL — SCAVENGER: 35/48 (73%)
+    HP POOL — CALISTA: 49/59 (83%)
+
+==============================================================================
+  MINUTE 9
+==============================================================================
+  APM   — SCAVENGER: 4   |   CALISTA: 2
+  HP    — SCAVENGER: 35/48 (73%)   |   CALISTA: 43/59 (73%)
+  END   — SCAVENGER: 1.1   |   CALISTA: 93.6
+  STRAT — SCAVENGER: [Strike / Act:6]   |   CALISTA: [Parry / Act:3]
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[48]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-11] = 72
+    CALISTA                 : d100[10]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 19
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[14]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-14]
+    Subtotal: 29
+    + style advantage: +6
+    Final ATK: 35
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[76]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 152
+    Final DEF: 152
+  Margin: 35 − 152 = -117   ▶  PARRY (margin -117)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[85]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 94
+    SCAVENGER               : d100[26]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-11] = 50
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[47]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 66
+    + style advantage: -6
+    Final ATK: 60
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[12]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-11]
+    Subtotal: 34
+    Final DEF: 34
+  Margin: 60 − 34 = 26   ▶  HIT (margin 26)
+  Damage (CALISTA → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      STR bonus                    +1.80
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 26/55.0)) = 0.473
+    Raw: max(1, int(3 × 0.473)) = 1
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 1 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 35/48 (72.9%)
+    hit     : −1
+    After  : 34/48 (70.8%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/48 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 92  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 48 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[75]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-14]
+    Subtotal: 90
+    + style advantage: +6
+    Final ATK: 96
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[60]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 136
+    Final DEF: 136
+  Margin: 96 − 136 = -40   ▶  PARRY (margin -40)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[57]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-14]
+    Subtotal: 72
+    + style advantage: +6
+    Final ATK: 78
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[55]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 131
+    Final DEF: 131
+  Margin: 78 − 131 = -53   ▶  PARRY (margin -53)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[53]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-14]
+    Subtotal: 68
+    + style advantage: +6
+    Final ATK: 74
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[42]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 118
+    Final DEF: 118
+  Margin: 74 − 118 = -44   ▶  PARRY (margin -44)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 1.1 END − (2.30 burn × 4 actions) = 0.0
+    CALISTA: 93.6 END − (0.40 burn × 2 actions) = 92.8
+    HP POOL — SCAVENGER: 34/48 (71%)
+    HP POOL — CALISTA: 43/59 (73%)
+
+==============================================================================
+  MINUTE 10
+==============================================================================
+  APM   — SCAVENGER: 4   |   CALISTA: 2
+  HP    — SCAVENGER: 34/48 (71%)   |   CALISTA: 43/59 (73%)
+  END   — SCAVENGER: 0.0   |   CALISTA: 92.8
+  STRAT — SCAVENGER: [Strike / Act:6]   |   CALISTA: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[75]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 84
+    SCAVENGER               : d100[27]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 50
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[32]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 51
+    + style advantage: -6
+    Final ATK: 45
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[92]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 113
+    Final DEF: 113
+  Margin: 45 − 113 = -68   ▶  PARRY (margin -68)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[97]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 120
+    CALISTA                 : d100[45]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 54
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[58]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 72
+    + style advantage: +6
+    Final ATK: 78
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[28]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 104
+    Final DEF: 104
+  Margin: 78 − 104 = -26   ▶  PARRY (margin -26)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[99]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 122
+    CALISTA                 : d100[19]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 28
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[49]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 63
+    + style advantage: +6
+    Final ATK: 69
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[11]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 87
+    Final DEF: 87
+  Margin: 69 − 87 = -18   ▶  PARRY (margin -18)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[58]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 72
+    + style advantage: +6
+    Final ATK: 78
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[15]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 91
+    Final DEF: 91
+  Margin: 78 − 91 = -13   ▶  PARRY (margin -13)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[93]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 107
+    + style advantage: +6
+    Final ATK: 113
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[1]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 77
+    Final DEF: 77
+  Margin: 113 − 77 = 36   ▶  HIT (margin 36)
+  Damage (SCAVENGER → CALISTA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.75
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+      strength underweight pen     ×0.97 (3% penalty)
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 36/55.0)) = 0.655
+    Raw: max(1, int(10 × 0.655)) = 6
+    Favorite weapon +1 → raw = 7
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 7 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (CALISTA):
+    Before : 43/59 (72.9%)
+    hit     : −1
+    After  : 42/59 (71.2%)
+  HP Pool (CALISTA):
+    Before : 42/59 (71.2%)
+    entangle fall: −2
+    After  : 40/59 (67.8%)
+  Knockdown Check (CALISTA):
+    base = int(1/59 × 80) = 1   cat bonus [Oddball]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (CALISTA):
+    threshold = 15% of 59 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    CALISTA: 92.8 END − (0.40 burn × 2 actions) = 92.0
+    HP POOL — SCAVENGER: 34/48 (71%)
+    HP POOL — CALISTA: 40/59 (68%)
+
+==============================================================================
+  MINUTE 11
+==============================================================================
+  APM   — SCAVENGER: 4   |   CALISTA: 2
+  HP    — SCAVENGER: 34/48 (71%)   |   CALISTA: 40/59 (68%)
+  END   — SCAVENGER: 0.0   |   CALISTA: 92.0
+  STRAT — SCAVENGER: [Strike / Act:6]   |   CALISTA: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[95]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 104
+    SCAVENGER               : d100[25]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 48
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[73]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 92
+    + style advantage: -6
+    Final ATK: 86
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[23]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 44
+    Final DEF: 44
+  Margin: 86 − 44 = 42   ▶  HIT (margin 42)
+  Damage (CALISTA → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      STR bonus                    +1.80
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 42/55.0)) = 0.764
+    Raw: max(1, int(3 × 0.764)) = 2
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 34/48 (70.8%)
+    hit     : −1
+    After  : 33/48 (68.8%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/48 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 76  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 48 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[38]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 61
+    CALISTA                 : d100[10]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 19
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[67]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 81
+    + style advantage: +6
+    Final ATK: 87
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[58]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 134
+    Final DEF: 134
+  Margin: 87 − 134 = -47   ▶  PARRY (margin -47)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[71]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 94
+    CALISTA                 : d100[82]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 91
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[75]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 89
+    + style advantage: +6
+    Final ATK: 95
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[30]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 106
+    Final DEF: 106
+  Margin: 95 − 106 = -11   ▶  PARRY (margin -11)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[72]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 95
+    CALISTA                 : d100[32]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 41
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[81]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 95
+    + style advantage: +6
+    Final ATK: 101
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[37]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 113
+    Final DEF: 113
+  Margin: 101 − 113 = -12   ▶  PARRY (margin -12)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[78]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 101
+    CALISTA                 : d100[9]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 18
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[47]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 61
+    + style advantage: +6
+    Final ATK: 67
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[88]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 164
+    Final DEF: 164
+  Margin: 67 − 164 = -97   ▶  PARRY (margin -97)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    CALISTA: 92.0 END − (0.40 burn × 2 actions) = 91.2
+    HP POOL — SCAVENGER: 33/48 (69%)
+    HP POOL — CALISTA: 40/59 (68%)
+
+==============================================================================
+  MINUTE 12
+==============================================================================
+  APM   — SCAVENGER: 4   |   CALISTA: 2
+  HP    — SCAVENGER: 33/48 (69%)   |   CALISTA: 28/59 (47%)
+  END   — SCAVENGER: 0.0   |   CALISTA: 91.2
+  STRAT — SCAVENGER: [Strike / Act:6]   |   CALISTA: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[81]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 90
+    SCAVENGER               : d100[47]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 70
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[10]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 29
+    + style advantage: -6
+    Final ATK: 23
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[76]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 97
+    Final DEF: 97
+  Margin: 23 − 97 = -74   ▶  PARRY (margin -74)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[89]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 98
+    SCAVENGER               : d100[8]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 31
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[19]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 38
+    + style advantage: -6
+    Final ATK: 32
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[35]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 56
+    Final DEF: 56
+  Margin: 32 − 56 = -24   ▶  PARRY (margin -24)
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[50]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 64
+    + style advantage: +6
+    Final ATK: 70
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[97]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 173
+    Final DEF: 173
+  Margin: 70 − 173 = -103   ▶  PARRY (margin -103)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[93]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 107
+    + style advantage: +6
+    Final ATK: 113
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[19]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 95
+    Final DEF: 95
+  Margin: 113 − 95 = 18   ▶  HIT (margin 18)
+  Damage (SCAVENGER → CALISTA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 7.75
+      STR bonus                    +0.60
+      activity contrib             -0.30
+      luck ×0.15                   +3.00
+      strength underweight pen     ×0.97 (3% penalty)
+    Ceiling: 10
+    Fraction: max(0.10, min(1.0, 18/55.0)) = 0.327
+    Raw: max(1, int(10 × 0.327)) = 3
+    Favorite weapon +1 → raw = 4
+    Armor: Full Plate  base DEF: 10
+    Net = max(1, 4 − 10) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (CALISTA):
+    Before : 28/59 (47.5%)
+    hit     : −1
+    After  : 27/59 (45.8%)
+  Knockdown Check (CALISTA):
+    base = int(1/59 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 14  →  no knockdown
+  Perm Injury Check (CALISTA):
+    threshold = 15% of 59 = 8   damage 1 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[31]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 45
+    + style advantage: +6
+    Final ATK: 51
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[43]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 119
+    Final DEF: 119
+  Margin: 51 − 119 = -68   ▶  PARRY (margin -68)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[87]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 101
+    + style advantage: +6
+    Final ATK: 107
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[63]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 139
+    Final DEF: 139
+  Margin: 107 − 139 = -32   ▶  PARRY (margin -32)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    CALISTA: 91.2 END − (0.40 burn × 2 actions) = 90.4
+    HP POOL — SCAVENGER: 33/48 (69%)
+    HP POOL — CALISTA: 27/59 (46%)
+
+==============================================================================
+  MINUTE 13
+==============================================================================
+  APM   — SCAVENGER: 4   |   CALISTA: 2
+  HP    — SCAVENGER: 33/48 (69%)   |   CALISTA: 13/59 (22%)
+  END   — SCAVENGER: 0.0   |   CALISTA: 90.4
+  STRAT — SCAVENGER: [Strike / Act:6]   |   CALISTA: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[40]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 63
+    CALISTA                 : d100[11]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 20
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[22]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 36
+    + style advantage: +6
+    Final ATK: 42
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[77]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 153
+    Final DEF: 153
+  Margin: 42 − 153 = -111   ▶  PARRY (margin -111)
+  Concede Attempt (CALISTA):
+    d100[35] + PRE_bonus[+0] + luck//2[14] = 49
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    49 < 65  →  mercy denied — fight continues
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    SCAVENGER               : d100[99]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 122
+    CALISTA                 : d100[69]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 78
+    ▶ SCAVENGER wins → ATTACKS
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[90]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 104
+    + style advantage: +6
+    Final ATK: 110
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[75]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 151
+    Final DEF: 151
+  Margin: 110 − 151 = -41   ▶  PARRY (margin -41)
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[93]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 102
+    SCAVENGER               : d100[42]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 65
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[37]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 56
+    + style advantage: -6
+    Final ATK: 50
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[58]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 79
+    Final DEF: 79
+  Margin: 50 − 79 = -29   ▶  PARRY (margin -29)
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[21]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 35
+    + style advantage: +6
+    Final ATK: 41
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[75]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 151
+    Final DEF: 151
+  Margin: 41 − 151 = -110   ▶  PARRY (margin -110)
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: SCAVENGER has uncontested action
+  Attack: SCAVENGER → CALISTA   Weapon: Bola   Style: Strike   Aim: None
+  Attack Roll (SCAVENGER):
+    d100[35]  dex_bonus[+4]  luck[+20]  fav_bonus[+5]  end_pen[-15]
+    Subtotal: 49
+    + style advantage: +6
+    Final ATK: 55
+  Defense Roll (CALISTA, PARRY — parry_bonus(6) ≥ dodge_bonus(2)):
+    d100[37]  luck[+29]  str_bonus[+1]  parry_skill(lv6)x4[+24]  style_parry[+18]  activity_mod[+4]
+    Subtotal: 113
+    Final DEF: 113
+  Margin: 55 − 113 = -58   ▶  PARRY (margin -58)
+
+  ── END OF MINUTE ──
+    SCAVENGER: 0.0 END − (2.30 burn × 4 actions) = 0.0
+    CALISTA: 90.4 END − (0.40 burn × 2 actions) = 89.6
+    HP POOL — SCAVENGER: 33/48 (69%)
+    HP POOL — CALISTA: 13/59 (22%)
+
+==============================================================================
+  MINUTE 14
+==============================================================================
+  APM   — SCAVENGER: 4   |   CALISTA: 2
+  HP    — SCAVENGER: 33/48 (69%)   |   CALISTA: 1/59 (2%)
+  END   — SCAVENGER: 0.0   |   CALISTA: 89.6
+  STRAT — SCAVENGER: [Strike / Act:6]   |   CALISTA: [Parry / Act:3]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    CALISTA                 : d100[80]  dex_bonus[-6]  luck[+29]  style_mod[-10]  activity_mod[-4] = 89
+    SCAVENGER               : d100[18]  dex_bonus[+8]  luck[+20]  race_init[+5]  activity_mod[+2]  end_pen[-12] = 41
+    ▶ CALISTA wins → ATTACKS
+  Attack: CALISTA → SCAVENGER   Weapon: Open Hand   Style: Parry   Aim: Chest
+  Attack Roll (CALISTA):
+    d100[52]  dex_bonus[-3]  luck[+29]  style_mod[-7]
+    Subtotal: 71
+    + style advantage: -6
+    Final ATK: 65
+  Defense Roll (SCAVENGER, PARRY — parry_bonus(0) ≥ dodge_bonus(0)):
+    d100[5]  luck[+20]  activity_mod[-2]  def_point_bonus[+15]  end_pen[-12]
+    Subtotal: 26
+    Final DEF: 26
+  Margin: 65 − 26 = 39   ▶  HIT (margin 39)
+  Damage (CALISTA → SCAVENGER):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 0.00
+      STR bonus                    +1.80
+      style modifier               -4.00
+      activity contrib             +0.60
+      luck ×0.15                   +4.35
+    Ceiling: 3
+    Fraction: max(0.10, min(1.0, 39/55.0)) = 0.709
+    Raw: max(1, int(3 × 0.709)) = 2
+    Armor: Cuir Boulli  base DEF: 4
+    Net = max(1, 2 − 4) = 1
+  ▶ FINAL DAMAGE: 1
+  HP Pool (SCAVENGER):
+    Before : 33/48 (68.8%)
+    hit     : −1
+    After  : 32/48 (66.7%)
+  Knockdown Check (SCAVENGER):
+    base = int(1/48 × 80) = 1   cat bonus [Oddball]: +0   final: 1%
+    Roll: 73  →  no knockdown
+  Perm Injury Check (SCAVENGER):
+    threshold = 15% of 48 = 7   damage 1 < threshold
+    → Below threshold — no injury possible
+  Concede Attempt (CALISTA):
+    d100[60] + PRE_bonus[+0] + luck//2[14] = 74
+    threshold = max(40, 68 − (PRE // 3)) = 65
+    74 ≥ 65  →  ▶ CONCEDE GRANTED
+
+==============================================================================
+  TRAINING: SCAVENGER
+==============================================================================
+  Constitution: d100=89 vs 22% — FAIL
+    → Constitution training: no progress this session (mastery tier, 22% chance).
+  Constitution: d100=100 vs 22% — FAIL
+    → Constitution training: no progress this session (mastery tier, 22% chance).
+  Constitution: d100=1 vs 22% — SUCCESS
+    → Constitution trained: 20 → 21 [mastery] (22% chance)
+  INT observed learning: d100=85 vs 4% — no trigger
+
+==============================================================================
+  TRAINING: CALISTA
+==============================================================================
+  Constitution: d100=66 vs 27% — FAIL
+    → Constitution training: no progress this session (mastery tier, 27% chance).
+  Dodge: Calista is already mastered in Dodge.
+  Parry: d100=19 vs 25% — SUCCESS
+    → Parry trained: Level 6 → Level 7 (Expert Skill, 25% chance)
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : SCAVENGER  (66.7% HP remaining)
+  Loser  : CALISTA  (survived, 1.7% HP)
+  Duration: 14 minute(s)
+==============================================================================

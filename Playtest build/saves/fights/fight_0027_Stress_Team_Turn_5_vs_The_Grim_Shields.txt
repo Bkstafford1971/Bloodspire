@@ -1,0 +1,76 @@
+Fight #27
+Stress Team Turn 5  vs  The Grim Shields
+============================================================================
+
+============================================================================
+ACROBAT_2 (0-1-0)   vs   FEN THE CRUSHER (3-0-0)
+STRESS TEAM TURN 5 (STRESS TESTER)   vs   THE GRIM SHIELDS (GRIM EYE)
+Elf Female   vs   Tabaxi Female
+============================================================================
+
+ACROBAT_2 is 4'9"
+ACROBAT_2 weighs 101 lbs.
+ACROBAT_2 Known To The Crowd.
+ACROBAT_2 enters the arena unarmored and wears no helm.
+ACROBAT_2 fights using a SHORT SWORD.
+
+FEN THE CRUSHER is 5'3"
+FEN THE CRUSHER weighs 134 lbs.
+FEN THE CRUSHER Known To The Crowd.
+FEN THE CRUSHER enters the arena in LEATHER and will wear a STEEL CAP.
+FEN THE CRUSHER fights using a SHORT SWORD.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+An eerie silence settles over the BLOODSPIRE
+ACROBAT_2 slices at FEN THE CRUSHER's midsection with her short sword
+FEN THE CRUSHER has a plan: don't get hit!
+ACROBAT_2 slashes at FEN THE CRUSHER's body with her short sword
+FEN THE CRUSHER barely gets the parry off!
+ACROBAT_2 tries to hit the mighty FEN THE CRUSHER
+ACROBAT_2 thrusts at FEN THE CRUSHER's body with her short sword
+ACROBAT_2 barely gets past FEN THE CRUSHER's defenses!
+ACROBAT_2's short sword cuts into FEN THE CRUSHER's body!
+   The armor does its job admirably
+ACROBAT_2 directs an attack toward FEN THE CRUSHER
+ACROBAT_2 slices at FEN THE CRUSHER's midsection with her short sword
+ACROBAT_2's short sword slices into FEN THE CRUSHER's armor!
+   The blow glances harmlessly off!
+FEN THE CRUSHER directs an attack toward ACROBAT_2
+FEN THE CRUSHER hacks at ACROBAT_2's torso with her short sword
+FEN THE CRUSHER's short sword slices into ACROBAT_2's breastplate!
+   A glancing blow!
+FEN THE CRUSHER directs an attack toward ACROBAT_2
+FEN THE CRUSHER slices at ACROBAT_2's rib cage with her short sword
+FEN THE CRUSHER's blow barely grazes ACROBAT_2!
+The Elf fans in the crowd begin an unsettling melodic chant
+FEN THE CRUSHER drives a blow toward ACROBAT_2's sternum with her short sword
+ACROBAT_2 has that area well covered!
+ACROBAT_2 hacks at FEN THE CRUSHER's midsection with her short sword
+FEN THE CRUSHER has a plan: don't get hit!
+FEN THE CRUSHER drives a blow toward ACROBAT_2's sternum with her short sword
+FEN THE CRUSHER gets past ACROBAT_2's guard!
+FEN THE CRUSHER's short sword finds ACROBAT_2's chest armor!
+   Blood sprays through the air!
+ACROBAT_2 goes crashing to the ground!
+*** ACROBAT_2's chest is grievously wounded!!! ***
+ACROBAT_2's chest wound bleeds freely!
+ACROBAT_2's breathing becomes labored!!
+FEN THE CRUSHER directs an attack toward ACROBAT_2
+FEN THE CRUSHER slices at ACROBAT_2's sternum with her short sword
+FEN THE CRUSHER gets past ACROBAT_2's guard!
+FEN THE CRUSHER's short sword finds ACROBAT_2's torso!
+   The wound delivers terrible agony!
+ACROBAT_2 appeals to the Blood Master for mercy!
+Mercy is granted — the fight is over!
+
+FEN THE CRUSHER roars in triumph over the defeated ACROBAT_2!
+
+FEN THE CRUSHER has trained in nothing

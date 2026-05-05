@@ -1,0 +1,120 @@
+Fight #29
+Stress Team Turn 6  vs  The Iron Wolves
+============================================================================
+
+============================================================================
+STRIKER_1 (1-0-0)   vs   DROK THE GRIM (1-0-1)
+STRESS TEAM TURN 6 (STRESS TESTER)   vs   THE IRON WOLVES (SILENT CLAW)
+Half-Orc Male   vs   Dwarf Female
+============================================================================
+
+STRIKER_1 is 6'4"
+STRIKER_1 weighs 266 lbs.
+STRIKER_1 Popular With The Kids.
+STRIKER_1 enters the arena unarmored and wears no helm.
+STRIKER_1 fights using a WAR HAMMER.
+
+DROK THE GRIM is 3'9"
+DROK THE GRIM weighs 145 lbs.
+DROK THE GRIM Known To The Crowd.
+DROK THE GRIM enters the arena in LEATHER and will wear a STEEL CAP.
+DROK THE GRIM fights using a BOAR SPEAR with an off-hand BUCKLER.
+
+
+TRIGGER                         FIGHTING STYLE      LEVEL  AIMING POINT    DEFENSE POINT
+----------------------------------------------------------------------------------------
+D: Always                       Strike                  5  None            Chest
+
+============================================================================
+
+
+MINUTE 1
+The Blood Master raises his fist — the fight begins!
+DROK THE GRIM drives a blow toward STRIKER_1's chest with her boar spear
+STRIKER_1 turns the blow aside with skill!
+DROK THE GRIM retaliates against STRIKER_1's chest with her boar spear
+DROK THE GRIM's accuracy is rewarded!
+DROK THE GRIM's boar spear punches into STRIKER_1's chest armor!
+   The blow has real authority behind it!
+STRIKER_1 pounds at DROK THE GRIM's body with his war hammer
+DROK THE GRIM turns the blow aside with skill!
+DROK THE GRIM turns the parry into an immediate counter!
+DROK THE GRIM barely gets past STRIKER_1's defenses!
+DROK THE GRIM's boar spear drives into STRIKER_1's chest!
+   The blow lands without full force
+STRIKER_1 tries to hit the mighty DROK THE GRIM
+STRIKER_1 bashes at DROK THE GRIM's body with his war hammer
+DROK THE GRIM's defenses are particularly strong!
+DROK THE GRIM holds ground, watching STRIKER_1 like a hawk
+DROK THE GRIM retaliates against STRIKER_1's rib cage with her boar spear
+The blow connects!
+DROK THE GRIM's boar spear thrusts into STRIKER_1's breastplate!
+   Barely a scratch!
+Whistles and jeers rain down from the stands!
+STRIKER_1 sizes up DROK THE GRIM carefully
+STRIKER_1 smashes at DROK THE GRIM's torso with his war hammer
+DROK THE GRIM's guard holds firm!
+DROK THE GRIM makes STRIKER_1 pay for the reckless attack!
+DROK THE GRIM's accuracy is rewarded!
+DROK THE GRIM's boar spear punches into STRIKER_1's breastplate!
+   The armor absorbs most of it
+DROK THE GRIM anxiously awaits STRIKER_1's next move
+DROK THE GRIM drives a blow toward STRIKER_1's rib cage with her boar spear
+The blow connects!
+DROK THE GRIM's boar spear punches into STRIKER_1's chest!
+   The resulting crunch echoes through the BLOODSPIRE!
+STRIKER_1 plummets downward with great speed!!
+
+MINUTE 2
+DROK THE GRIM is firmly in control of the action.
+
+ * DROK THE GRIM switches to strategy 1
+STRIKER_1 smashes at DROK THE GRIM's torso with his war hammer
+DROK THE GRIM makes an extraordinary effort, and parries the strike!
+DROK THE GRIM retaliates against STRIKER_1's helm with her boar spear
+The blow connects!
+DROK THE GRIM's boar spear buries itself in STRIKER_1's skull!
+   The resulting crunch echoes through the BLOODSPIRE!
+STRIKER_1 can fight no more and begs for mercy!
+STRIKER_1 must fight on, or die trying!
+DROK THE GRIM anxiously awaits STRIKER_1's next move
+DROK THE GRIM jabs at STRIKER_1's throat with her boar spear
+DROK THE GRIM's blow barely grazes STRIKER_1!
+STRIKER_1 can fight no more and begs for mercy!
+The Blood Master shows no mercy today!
+DROK THE GRIM fires back at STRIKER_1's throat with her boar spear
+STRIKER_1 barely gets the parry off!
+The torchbearers scramble to keep up with the action
+DROK THE GRIM holds ground, watching STRIKER_1 like a hawk
+DROK THE GRIM fires back at STRIKER_1's throat with her boar spear
+DROK THE GRIM's boar spear punches into STRIKER_1's temple!
+   The blow does almost nothing
+STRIKER_1 raises a hand in surrender!
+No quarter is given!
+DROK THE GRIM fires back at STRIKER_1's throat with her boar spear
+The boar spear finds its mark!
+DROK THE GRIM's boar spear drives into STRIKER_1's head!
+   That one will leave a mark!
+STRIKER_1 raises a hand in surrender!
+No quarter is given!
+
+MINUTE 3
+The contest has turned brutal, with DROK THE GRIM firmly on top.
+
+DROK THE GRIM anxiously awaits STRIKER_1's next move
+DROK THE GRIM drives a blow toward STRIKER_1's head with her boar spear
+The boar spear finds its mark!
+DROK THE GRIM's boar spear buries itself in STRIKER_1's helm!
+   Some damage is done
+STRIKER_1 appeals to the Blood Master for mercy!
+The crowd screams for blood — mercy is denied!
+DROK THE GRIM waits patiently for STRIKER_1 to make a mistake
+DROK THE GRIM thrusts at STRIKER_1's skull with her boar spear
+The blow connects!
+DROK THE GRIM's boar spear drives into STRIKER_1's temple!
+   The blow has real authority behind it!
+STRIKER_1 has perished in the BLOODSPIRE!!!
+
+DROK THE GRIM roars in triumph over the defeated STRIKER_1!
+
+DROK THE GRIM has trained in Skill

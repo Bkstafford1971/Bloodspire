@@ -1,0 +1,363 @@
+==============================================================================
+  BLOODSPIRE — ADMIN COMBAT LOG
+  Fight #986   Turn: 20
+  Debug team: Electron
+  Electron / AUTOBOTS   vs   Drago Splitskull / Splitskull Syndicate
+==============================================================================
+
+  ────────────────────────────────────
+  WARRIOR A: BUMBLEBEE
+  ────────────────────────────────────
+    Race: Gnome  |  Gender: Male
+    STR:15  DEX:13  CON:12  INT:18  PRE:10  SIZ:3
+    Max HP: 37   Luck: 6
+    Armor: Scale   Helm: Camail
+    Primary: Hammer   Secondary: Target Shield
+    Strategies:
+      [1] Always  →  Counterstrike / Act:2 / Aim:None / Def:None
+      [2] Always  →  Total Kill / Act:6 / Aim:None / Def:None
+      [3] Always  →  Bash / Act:7 / Aim:Head / Def:Chest
+    Skills: bash:7  dodge:1  feint:1  initiative:9  
+
+  ────────────────────────────────────
+  WARRIOR B: ELARA
+  ────────────────────────────────────
+    Race: Human  |  Gender: Female
+    STR:18  DEX:6  CON:20  INT:14  PRE:14  SIZ:12
+    Max HP: 63   Luck: 6
+    Armor: Leather   Helm: None
+    Primary: Great Sword   Secondary: Open Hand
+    Strategies:
+      [1] Always  →  Total Kill / Act:9 / Aim:Head / Def:None
+    Skills: initiative:8  
+
+
+==============================================================================
+  MINUTE 1
+==============================================================================
+  APM   — BUMBLEBEE: 5   |   ELARA: 7
+  HP    — BUMBLEBEE: 37/37 (100%)   |   ELARA: 63/63 (100%)
+  END   — BUMBLEBEE: 100.0   |   ELARA: 100.0
+  STRAT — BUMBLEBEE: [Bash / Act:7]   |   ELARA: [Total Kill / Act:9]
+
+  ─── ACTION 1 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BUMBLEBEE               : d100[87]  init_skill_x3[+27]  luck[+6]  style_mod[-2]  activity_mod[+4] = 122
+    ELARA                   : d100[35]  dex_bonus[-8]  init_skill_x3[+24]  luck[+6]  style_mod[+6]  activity_mod[+8] = 71
+    ▶ BUMBLEBEE wins → ATTACKS
+  Attack: BUMBLEBEE → ELARA   Weapon: Hammer   Style: Bash   Aim: Head
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (BUMBLEBEE):
+    d100[19]  luck[+6]  style_mod[-1]  feint[+2]  fav_bonus[+5]
+    Subtotal: 31
+    − compat penalty: −7
+    Final ATK: 24
+  Defense Roll (ELARA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[79]  luck[+6]  str_bonus[+4]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 26
+    Final DEF: 26
+  Margin: 24 − 26 = -2   ▶  PARRY (margin -2)
+
+  ─── ACTION 2 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BUMBLEBEE               : d100[40]  init_skill_x3[+27]  luck[+6]  style_mod[-2]  activity_mod[+4] = 75
+    ELARA                   : d100[2]  dex_bonus[-8]  init_skill_x3[+24]  luck[+6]  style_mod[+6]  activity_mod[+8] = 38
+    ▶ BUMBLEBEE wins → ATTACKS
+  Attack: BUMBLEBEE → ELARA   Weapon: Hammer   Style: Bash   Aim: Head
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (BUMBLEBEE):
+    d100[39]  luck[+6]  style_mod[-1]  feint[+2]  fav_bonus[+5]
+    Subtotal: 51
+    − compat penalty: −7
+    Final ATK: 44
+  Defense Roll (ELARA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[95]  luck[+6]  str_bonus[+4]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 31
+    Final DEF: 31
+  Margin: 44 − 31 = 13   ▶  HIT (margin 13)
+  Damage (BUMBLEBEE → ELARA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      style compat penalty         ×0.70
+      bash skill bonus               +14.00
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 13/55.0)) = 0.236
+    Raw: max(1, int(19 × 0.236)) = 4
+    Favorite weapon +1 → raw = 5
+    Armor: Leather  base DEF: 2
+    Net = max(1, 5 − 2) = 3
+  ▶ FINAL DAMAGE: 3
+  HP Pool (ELARA):
+    Before : 63/63 (100.0%)
+    hit     : −3
+    After  : 60/63 (95.2%)
+  Knockdown Check (ELARA):
+    base = int(3/63 × 80) = 3   cat bonus [Hammer/Mace]: +10   final: 13%
+    Roll: 71  →  no knockdown
+  Perm Injury Check (ELARA):
+    threshold = 15% of 63 = 9   damage 3 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 3 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BUMBLEBEE               : d100[67]  init_skill_x3[+27]  luck[+6]  style_mod[-2]  activity_mod[+4] = 102
+    ELARA                   : d100[19]  dex_bonus[-8]  init_skill_x3[+24]  luck[+6]  style_mod[+6]  activity_mod[+8] = 55
+    ▶ BUMBLEBEE wins → ATTACKS
+  Attack: BUMBLEBEE → ELARA   Weapon: Hammer   Style: Bash   Aim: Head
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (BUMBLEBEE):
+    d100[84]  luck[+6]  style_mod[-1]  feint[+2]  fav_bonus[+5]
+    Subtotal: 96
+    − compat penalty: −7
+    Final ATK: 89
+  Defense Roll (ELARA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[31]  luck[+6]  str_bonus[+4]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 10
+    Final DEF: 10
+  Margin: 89 − 10 = 79   ▶  HIT (margin 79)
+  Damage (BUMBLEBEE → ELARA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      style compat penalty         ×0.70
+      bash skill bonus               +14.00
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 79/55.0)) = 1.000
+    Raw: max(1, int(19 × 1.000)) = 19
+    Favorite weapon +1 → raw = 20
+    Armor: Leather  base DEF: 2
+    Net = max(1, 20 − 2) = 18
+  ▶ FINAL DAMAGE: 18
+  HP Pool (ELARA):
+    Before : 60/63 (95.2%)
+    hit     : −18
+    After  : 42/63 (66.7%)
+  Knockdown Check (ELARA):
+    base = int(18/63 × 80) = 22   cat bonus [Hammer/Mace]: +10   final: 32%
+    Roll: 40  →  no knockdown
+  Perm Injury Check (ELARA):
+    threshold = 15% of 63 = 9   damage 18 ≥ threshold
+    chance = max(5, min(80, int(18/63×100) − 5)) = 19%
+    Roll: 13  →  head (1 level(s))
+
+  ─── ACTION 4 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BUMBLEBEE               : d100[94]  init_skill_x3[+27]  luck[+6]  style_mod[-2]  activity_mod[+4] = 129
+    ELARA                   : d100[17]  dex_bonus[-8]  init_skill_x3[+24]  luck[+6]  style_mod[+6]  activity_mod[+8] = 53
+    ▶ BUMBLEBEE wins → ATTACKS
+  Attack: BUMBLEBEE → ELARA   Weapon: Hammer   Style: Bash   Aim: Head
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (BUMBLEBEE):
+    d100[52]  luck[+6]  style_mod[-1]  feint[+2]  fav_bonus[+5]
+    Subtotal: 64
+    − compat penalty: −7
+    Final ATK: 57
+  Defense Roll (ELARA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[86]  luck[+6]  str_bonus[+4]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 28
+    Final DEF: 28
+  Margin: 57 − 28 = 29   ▶  HIT (margin 29)
+  Damage (BUMBLEBEE → ELARA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      style compat penalty         ×0.70
+      bash skill bonus               +14.00
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 29/55.0)) = 0.527
+    Raw: max(1, int(19 × 0.527)) = 10
+    Favorite weapon +1 → raw = 11
+    Armor: Leather  base DEF: 2
+    Net = max(1, 11 − 2) = 9
+  ▶ FINAL DAMAGE: 9
+  HP Pool (ELARA):
+    Before : 42/63 (66.7%)
+    hit     : −9
+    After  : 33/63 (52.4%)
+  Knockdown Check (ELARA):
+    base = int(9/63 × 80) = 11   cat bonus [Hammer/Mace]: +10   final: 21%
+    Roll: 100  →  no knockdown
+  Perm Injury Check (ELARA):
+    threshold = 15% of 63 = 9   damage 9 ≥ threshold
+    chance = max(5, min(80, int(9/63×100) − 5)) = 0%
+    Roll: 0  →  no injury
+
+  ─── ACTION 5 ────────────────────────────────────────────────────────────────
+  Initiative:
+    BUMBLEBEE               : d100[84]  init_skill_x3[+27]  luck[+6]  style_mod[-2]  activity_mod[+4] = 119
+    ELARA                   : d100[49]  dex_bonus[-8]  init_skill_x3[+24]  luck[+6]  style_mod[+6]  activity_mod[+8] = 85
+    ▶ BUMBLEBEE wins → ATTACKS
+  Attack: BUMBLEBEE → ELARA   Weapon: Hammer   Style: Bash   Aim: Head
+  ⚠ Weapon/style INCOMPATIBLE — penalty ×0.70 (−7 to attack roll)
+  Attack Roll (BUMBLEBEE):
+    d100[40]  luck[+6]  style_mod[-1]  feint[+2]  fav_bonus[+5]
+    Subtotal: 52
+    − compat penalty: −7
+    Final ATK: 45
+  Defense Roll (ELARA, PARRY — parry_bonus(-8) ≥ dodge_bonus(-8)):
+    d100[92]  luck[+6]  str_bonus[+4]  style_parry[-24]  activity_mod[-8]
+    Subtotal: 30
+    Final DEF: 30
+  Margin: 45 − 30 = 15   ▶  HIT (margin 15)
+  Damage (BUMBLEBEE → ELARA):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 5.00
+      STR bonus                    +3.00
+      race damage net              -3.00
+      style modifier               +3.00
+      activity contrib             -0.60
+      luck ×0.15                   +0.90
+      style compat penalty         ×0.70
+      bash skill bonus               +14.00
+    Ceiling: 19
+    Fraction: max(0.10, min(1.0, 15/55.0)) = 0.273
+    Raw: max(1, int(19 × 0.273)) = 5
+    Favorite weapon +1 → raw = 6
+    Armor: Leather  base DEF: 2
+    Net = max(1, 6 − 2) = 4
+  ▶ FINAL DAMAGE: 4
+  HP Pool (ELARA):
+    Before : 33/63 (52.4%)
+    hit     : −4
+    After  : 29/63 (46.0%)
+  Knockdown Check (ELARA):
+    base = int(4/63 × 80) = 5   cat bonus [Hammer/Mace]: +10   final: 15%
+    Roll: 83  →  no knockdown
+  Perm Injury Check (ELARA):
+    threshold = 15% of 63 = 9   damage 4 < threshold
+    → Below threshold — no injury possible
+
+  ─── ACTION 6 ────────────────────────────────────────────────────────────────
+  Initiative: ELARA has uncontested action
+  Attack: ELARA → BUMBLEBEE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (ELARA):
+    d100[61]  dex_bonus[-4]  luck[+6]  style_mod[+4]
+    Subtotal: 67
+    + style advantage: +6
+    Final ATK: 73
+  Defense Roll (BUMBLEBEE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[62]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 83
+    Final DEF: 83
+  Margin: 73 − 83 = -10   ▶  PARRY (margin -10)
+
+  ─── ACTION 7 ────────────────────────────────────────────────────────────────
+  Initiative: ELARA has uncontested action
+  Attack: ELARA → BUMBLEBEE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (ELARA):
+    d100[88]  dex_bonus[-4]  luck[+6]  style_mod[+4]
+    Subtotal: 94
+    + style advantage: +6
+    Final ATK: 100
+  Defense Roll (BUMBLEBEE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[86]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 107
+    Final DEF: 107
+  Margin: 100 − 107 = -7   ▶  PARRY (margin -7)
+
+  ─── ACTION 8 ────────────────────────────────────────────────────────────────
+  Initiative: ELARA has uncontested action
+  Attack: ELARA → BUMBLEBEE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (ELARA):
+    d100[88]  dex_bonus[-4]  luck[+6]  style_mod[+4]
+    Subtotal: 94
+    + style advantage: +6
+    Final ATK: 100
+  Defense Roll (BUMBLEBEE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[37]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]
+    Subtotal: 58
+    Final DEF: 58
+  Margin: 100 − 58 = 42   ▶  HIT (margin 42)
+  Damage (ELARA → BUMBLEBEE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      STR bonus                    +4.80
+      two-hand multiplier          ×1.15
+      style modifier               +5.00
+      activity contrib             -1.20
+      luck ×0.15                   +0.90
+    Ceiling: 29
+    Fraction: max(0.10, min(1.0, 42/55.0)) = 0.764
+    Raw: max(1, int(29 × 0.764)) = 22
+    Armor: Scale  base DEF: 9
+    Net = max(1, 22 − 9) = 13
+  ▶ FINAL DAMAGE: 13
+  HP Pool (BUMBLEBEE):
+    Before : 37/37 (100.0%)
+    hit     : −13
+    After  : 24/37 (64.9%)
+  Knockdown Check (BUMBLEBEE):
+    base = int(13/37 × 80) = 28   cat bonus [Sword/Knife]: +0   final: 28%
+    Roll: 25  →  ▶ KNOCKDOWN
+  Perm Injury Check (BUMBLEBEE):
+    threshold = 15% of 37 = 5   damage 13 ≥ threshold
+    chance = max(5, min(80, int(13/37×100) − 5)) = 30%
+    Roll: 74  →  no injury
+
+  ─── ACTION 9 ────────────────────────────────────────────────────────────────
+  Initiative: ELARA has uncontested action
+  Attack: ELARA → BUMBLEBEE   Weapon: Great Sword   Style: Total Kill   Aim: Head
+  Attack Roll (ELARA):
+    d100[56]  dex_bonus[-4]  luck[+6]  style_mod[+4]
+    Subtotal: 62
+    + style advantage: +6
+    Final ATK: 68
+  Defense Roll (BUMBLEBEE, PARRY — parry_bonus(-1) ≥ dodge_bonus(-2)):
+    d100[1]  luck[+6]  str_bonus[+2]  style_parry[-3]  activity_mod[-4]  race_parry_x3[+15]  shield_bonus[+5]  ground_pen[-25]
+    Subtotal: 1
+    Final DEF: 1
+  Margin: 68 − 1 = 67   ▶  HIT (margin 67)
+  Damage (ELARA → BUMBLEBEE):
+    ── Ceiling breakdown ──
+      weapon base (wt × 2.5)       = 17.00
+      STR bonus                    +4.80
+      two-hand multiplier          ×1.15
+      style modifier               +5.00
+      activity contrib             -1.20
+      luck ×0.15                   +0.90
+    Ceiling: 29
+    Fraction: max(0.10, min(1.0, 67/55.0)) = 1.000
+    Raw: max(1, int(29 × 1.000)) = 29
+    Armor: Scale  base DEF: 9
+    Net = max(1, 29 − 9) = 20
+  ▶ FINAL DAMAGE: 20
+  HP Pool (BUMBLEBEE):
+    Before : 24/37 (64.9%)
+    hit     : −20
+    After  : 4/37 (10.8%)
+  Knockdown Check (BUMBLEBEE):
+    base = int(20/37 × 80) = 43   cat bonus [Sword/Knife]: +0   final: 0%
+    Roll: 0  →  no knockdown
+  Perm Injury Check (BUMBLEBEE):
+    threshold = 15% of 37 = 5   damage 20 ≥ threshold
+    chance = max(5, min(80, int(20/37×100) − 5)) = 49%
+    Roll: 45  →  head (3 level(s))
+
+==============================================================================
+  TRAINING: ELARA
+==============================================================================
+  Initiative: d100=100 vs 18% — FAIL
+    → Initiative training: no progress this session (INT 14, level 8, 18% chance).
+  Strength: d100=67 vs 29% — FAIL
+    → Strength training: no progress this session (mastery tier, 29% chance).
+
+==============================================================================
+  FIGHT RESULT
+==============================================================================
+  Winner : ELARA  (46.0% HP remaining)
+  Loser  : BUMBLEBEE  (SLAIN, 10.8% HP)
+  Duration: 1 minute(s)
+==============================================================================
