@@ -1,4 +1,4 @@
-﻿# =============================================================================
+# =============================================================================
 # warrior.py — BLOODSPIRE Warrior Class
 # =============================================================================
 # Defines the Warrior dataclass along with:
@@ -799,7 +799,7 @@ class Warrior:
         """
         self.shown_max_messages = set()
 
-    def train_skill(self, skill: str) -> str:
+    def train_skill(self, skill: str, verbose: bool = False):
         """
         Apply one training session to a skill or attribute.
         Returns a human-readable result message (success OR no-progress).
@@ -807,14 +807,14 @@ class Warrior:
 
         GRADUATED LEARNING CURVE — two-factor formula:
           1. Base chance from governing stat (INT for skills, CON for attributes):
-               stat  3-8  -> 38%    stat  9-14 -> 65%
-               stat 15-20 -> 82%    stat 21-25 -> 94%
+               stat  3-8  -> 28%    stat  9-14 -> 45%
+               stat 15-20 -> 55%    stat 21-25 -> 72%
           2. Difficulty multiplier from current level / gains so far:
                0-3 : x1.00   4-5 : x0.65   6-7 : x0.40   8+ : x0.25
           3. Mastery bonus (level/gains >= 8, stat >= 15): +(stat-14)*1.5
-          4. Racial bonus (Humans & Gnomes): +7 to chance after multiply, capped 94.
+          4. Racial bonus (Humans & Gnomes): +7 to chance after multiply, capped 90.
              Applies to BOTH skill and attribute training.
-          Final chance clamped 5%-96%.
+          Final chance clamped 5%-90%.
 
         SKILL training (weapon skills + non-weapon skills):
           Governed by Intelligence. gains = current skill level (0-based).
@@ -826,10 +826,10 @@ class Warrior:
 
         # Shared helper: base chance from stat band
         def _base_chance(stat: int) -> int:
-            if stat <= 8:   return 38
-            if stat <= 14:  return 65
-            if stat <= 20:  return 82
-            return 94
+            if stat <= 8:   return 28
+            if stat <= 14:  return 45
+            if stat <= 20:  return 55
+            return 72
 
         # Shared helper: difficulty multiplier from gains
         def _multiplier(gains: int) -> float:
@@ -841,29 +841,31 @@ class Warrior:
         # --- Attribute training ---
         if key in ATTRIBUTES:
             if key == "size":
-                return "SIZE cannot be trained — it is fixed at warrior creation."
+                msg = "SIZE cannot be trained — it is fixed at warrior creation."
+                return (msg, 0, 0) if verbose else msg
 
             current_val = self.get_attr(key)
             if current_val >= STAT_MAX:
                 # Only show max-level message once per training turn
                 if key in self.shown_max_messages:
-                    return ""  # Already shown this message this turn
-                
+                    return ("", 0, 0) if verbose else ""
+
                 self.shown_max_messages.add(key)
-                
+
                 # Attribute-specific max-level messages
                 if key == "strength":
-                    return f"{self.name} is as strong as they will ever be."
+                    msg = f"{self.name} is as strong as they will ever be."
                 elif key == "dexterity":
-                    return f"{self.name} is as nimble and agile as humanly possible."
+                    msg = f"{self.name} is as nimble and agile as humanly possible."
                 elif key == "constitution":
-                    return f"{self.name} is as tough and durable as anyone can get."
+                    msg = f"{self.name} is as tough and durable as anyone can get."
                 elif key == "intelligence":
-                    return f"{self.name} is as intelligent as they can possibly be."
+                    msg = f"{self.name} is as intelligent as they can possibly be."
                 elif key == "presence":
-                    return f"{self.name} has achieved maximum influence and presence."
+                    msg = f"{self.name} has achieved maximum influence and presence."
                 else:
-                    return f"{key.capitalize()} is already at maximum ({STAT_MAX})."
+                    msg = f"{key.capitalize()} is already at maximum ({STAT_MAX})."
+                return (msg, 0, 0) if verbose else msg
 
             gains = self.attribute_gains.get(key, 0)
             stat  = self.constitution
@@ -876,27 +878,25 @@ class Warrior:
 
             # Racial bonus (Humans & Gnomes) — applies to attributes
             if self.race.modifiers.trains_stats_faster:
-                chance = min(94, chance + 7)
+                chance = min(90, chance + 7)
 
-            chance = max(5, min(96, chance))
+            chance = max(5, min(90, chance))
 
-            if random.randint(1, 100) > chance:
+            _roll = random.randint(1, 100)
+            if _roll > chance:
                 tier_label = (
                     "mastery tier" if gains >= 8 else
                     "late tier"    if gains >= 6 else
                     "mid tier"     if gains >= 4 else
                     f"CON {stat}"
                 )
-                return (
+                msg = (
                     f"{skill.capitalize()} training: no progress this session "
                     f"({tier_label}, {chance}% chance)."
                 )
+                return (msg, _roll, chance) if verbose else msg
 
             new_val = min(STAT_MAX, current_val + 1)
-            self.set_attr(key, new_val)
-            self.attribute_gains[key] = gains + 1
-            tier_note = " [mastery]" if gains >= 8 else (" [late]" if gains >= 6 else "")
-
             # --- Attribute-specific side effects ---
             if key == "strength":
                 # +2-3 lbs per STR point gained
@@ -906,14 +906,19 @@ class Warrior:
                 # +5-7 lbs per CON point gained; HP recalc handled by recalculate_derived
                 wt = random.randint(5, 7)
                 self.training_weight_bonus = getattr(self, "training_weight_bonus", 0) + wt
+
+            self.set_attr(key, new_val)
+            self.attribute_gains[key] = gains + 1
+            tier_note = " [mastery]" if gains >= 8 else (" [late]" if gains >= 6 else "")
             # DEX bonus (+2.5% dodge, +2% parry) and INT bonus (4th train) are applied
             # in combat.py — they are derived live from the current stat value.
             # Presence hesitation chance is also derived live.
 
-            return (
+            msg = (
                 f"{skill.capitalize()} trained: {current_val} → {new_val}"
                 f"{tier_note} ({chance}% chance)"
             )
+            return (msg, _roll, chance) if verbose else msg
 
         # --- Skill training ---
         elif key in ALL_SKILLS:
@@ -921,11 +926,12 @@ class Warrior:
             if current_level >= 9:
                 # Only show max-level message once per training turn
                 if key in self.shown_max_messages:
-                    return ""  # Already shown this message this turn
-                
+                    return ("", 0, 0) if verbose else ""
+
                 self.shown_max_messages.add(key)
                 skill_name = skill.replace('_', ' ').title()
-                return f"{self.name} is already mastered in {skill_name}."
+                msg = f"{self.name} is already mastered in {skill_name}."
+                return (msg, 0, 0) if verbose else msg
 
             gains = current_level          # skill level == number of increases so far
             stat  = self.intelligence
@@ -938,24 +944,28 @@ class Warrior:
 
             # Racial bonus (Humans & Gnomes) — now applies to skills too
             if self.race.modifiers.trains_stats_faster:
-                chance = min(94, chance + 7)
+                chance = min(90, chance + 7)
 
-            chance = max(5, min(96, chance))
+            chance = max(5, min(90, chance))
 
-            if random.randint(1, 100) > chance:
-                return (
+            _roll = random.randint(1, 100)
+            if _roll > chance:
+                msg = (
                     f"{skill.replace('_',' ').title()} training: no progress this session "
                     f"(INT {stat}, level {current_level}, {chance}% chance)."
                 )
+                return (msg, _roll, chance) if verbose else msg
 
             self.skills[key] = current_level + 1
             new_name = SKILL_LEVEL_NAMES[self.skills[key]]
-            return (
+            msg = (
                 f"{skill.replace('_',' ').title()} trained: "
                 f"Level {current_level} → Level {self.skills[key]} ({new_name}, {chance}% chance)"
             )
+            return (msg, _roll, chance) if verbose else msg
         else:
-            return f"Unknown skill or attribute: '{skill}'"
+            msg = f"Unknown skill or attribute: '{skill}'"
+            return (msg, 0, 0) if verbose else msg
 
     # =========================================================================
     # RECOGNITION
@@ -1223,8 +1233,47 @@ class Warrior:
     # SERIALIZATION
     # =========================================================================
 
+    _INJURY_DISPLAY = {
+        1: "Annoying",   2: "Bothersome",    3: "Irritating",
+        4: "Troublesome", 5: "Painful",      6: "Dreadful",
+        7: "Incapacitating", 8: "Devastating", 9: "Fatal",
+    }
+    _INJURY_LOCS = ["head", "chest", "abdomen", "primary_arm",
+                    "secondary_arm", "primary_leg", "secondary_leg"]
+
+    def _build_injuries_text(self) -> list:
+        """Return a formatted list of active injuries for UI display."""
+        lines = []
+        for loc in self._INJURY_LOCS:
+            level = self.injuries.get(loc)
+            if level > 0:
+                display_loc  = loc.replace("_", " ").title()
+                desc = self._INJURY_DISPLAY.get(level, f"level {level}")
+                article = "an" if desc[0].lower() in "aeiou" else "a"
+                lines.append(f"Has {article} {desc} ({level}) wound to the {display_loc}")
+        return lines
+
     def to_dict(self) -> dict:
         """Serialize the warrior to a JSON-compatible dictionary."""
+        # Build formatted skills list for UI display
+        _skill_templates = {
+            1: "Has Novice Skill ({n}) in {s}",
+            2: "Has Some Skill ({n}) in {s}",
+            3: "Is Skilled ({n}) in {s}",
+            4: "Has Good Skill ({n}) in {s}",
+            5: "Is Very Skilled ({n}) in {s}",
+            6: "Has Excellent Skill ({n}) in {s}",
+            7: "Has Expert Skill ({n}) in {s}",
+            8: "Has Incredible Skill ({n}) in {s}",
+            9: "Is a Master ({n}) in {s}",
+        }
+        skills_text = [
+            _skill_templates.get(level, "Has skill level {n} in {s}").format(
+                n=level, s=skill_name.replace("_", " ").title()
+            )
+            for skill_name, level in sorted(self.skills.items())
+            if level > 0
+        ]
         return {
             "name":            self.name,
             "race":            self.race.name,
@@ -1235,6 +1284,9 @@ class Warrior:
             "intelligence":    self.intelligence,
             "presence":        self.presence,
             "size":            self.size,
+            "max_hp":          self.max_hp,
+            "height_in":       self.height_in,
+            "weight_lbs":      self.weight_lbs,
             "wins":            self.wins,
             "losses":          self.losses,
             "kills":           self.kills,
@@ -1246,7 +1298,9 @@ class Warrior:
             "secondary_weapon":self.secondary_weapon,
             "backup_weapon":   self.backup_weapon,
             "skills":          self.skills,
+            "skills_text":     skills_text,
             "injuries":        self.injuries.to_dict(),
+            "injuries_text":   self._build_injuries_text(),
             "strategies": [s.to_dict() for s in self.strategies],
             "trains":          self.trains,
             "blood_cry":       self.blood_cry,
@@ -1294,7 +1348,10 @@ class Warrior:
         w.secondary_weapon = data.get("secondary_weapon", "Open Hand")
         w.backup_weapon    = data.get("backup_weapon")
 
-        w.skills     = data.get("skills", {skill: 0 for skill in ALL_SKILLS})
+        # Ensure all skills are present, initializing missing ones to 0
+        w.skills = {skill: 0 for skill in ALL_SKILLS}
+        if "skills" in data and isinstance(data["skills"], dict):
+            w.skills.update(data["skills"])
         w.blood_cry    = data.get("blood_cry",  "")
         w.luck         = data.get("luck", random.randint(1, 30))  # retroactively assign if missing
         w.attribute_gains = data.get("attribute_gains", {"strength":0,"dexterity":0,"constitution":0,"intelligence":0,"presence":0})
@@ -1319,6 +1376,8 @@ class Warrior:
         w.fight_history  = data.get("fight_history", [])
         w.trains     = data.get("trains",     [])
         w.favorite_weapon = data.get("favorite_weapon", "")
+        if not w.favorite_weapon:
+            assign_favorite_weapon(w)
 
         # Load injuries
         inj_data = data.get("injuries", {})

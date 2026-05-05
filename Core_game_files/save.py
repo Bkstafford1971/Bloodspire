@@ -1,4 +1,4 @@
-﻿# =============================================================================
+﻿﻿# =============================================================================
 # save.py — BLOODSPIRE Save & Load System
 # =============================================================================
 # All data is stored as JSON files under the saves/ directory.
@@ -24,6 +24,9 @@
 
 import json
 import os
+import zipfile
+from file_protection import save_json_protected, load_json_protected, make_file_readonly, make_file_writable, protect_existing_file
+import io
 from typing import Optional, List, Dict
 from team import Team
 
@@ -37,13 +40,22 @@ TEAMS_DIR      = os.path.join(SAVES_DIR, "teams")
 FIGHTS_DIR     = os.path.join(SAVES_DIR, "fights")
 LOGS_DIR       = os.path.join(SAVES_DIR, "logs")
 GAME_STATE_FILE= os.path.join(SAVES_DIR, "game_state.json")
+EXPORTS_DIR    = os.path.join(BASE_DIR, "exports")
+RECORDS_DIR    = os.path.join(BASE_DIR, "arena_records")
 SCOUTING_FILE  = os.path.join(SAVES_DIR, "scouting.json")
 MONSTER_TEAM_FILE = os.path.join(SAVES_DIR, "monster_team.json")
+GRAVEYARD_DIR  = os.path.join(SAVES_DIR, "graveyard")
+# Legacy local-accounts file from the retired gui_server. Kept as a path
+# constant so reset routines can still wipe it if it lingers on disk.
+ACCOUNTS_FILE  = os.path.join(SAVES_DIR, "accounts.json")
+# Central manager registry owned by league_server.py — the source of truth
+# for manager names now that the local accounts.py has been removed.
+LEAGUE_MANAGERS_FILE = os.path.join(SAVES_DIR, "league", "managers.json")
 
 
 def _ensure_dirs():
     """Create save directories if they don't already exist."""
-    for path in (SAVES_DIR, TEAMS_DIR, FIGHTS_DIR, LOGS_DIR):
+    for path in (SAVES_DIR, TEAMS_DIR, FIGHTS_DIR, LOGS_DIR, GRAVEYARD_DIR):
         os.makedirs(path, exist_ok=True)
 
 
@@ -62,12 +74,12 @@ def load_monster_team() -> Optional[Team]:
     if not os.path.exists(MONSTER_TEAM_FILE):
         return None
     try:
-        with open(MONSTER_TEAM_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
+        data = load_json_protected(MONSTER_TEAM_FILE)
         return Team.from_dict(data)
-    except (json.JSONDecodeError, IOError, KeyError) as e:
+    except (FileNotFoundError, ValueError, json.JSONDecodeError, IOError, KeyError) as e:
         print(f"  WARNING: Could not load monster_team.json ({e}). Using hardcoded roster.")
         return None
+
 
 
 def save_monster_team(team: Team):
@@ -77,7 +89,7 @@ def save_monster_team(team: Team):
         with open(MONSTER_TEAM_FILE, "w", encoding="utf-8") as f:
             json.dump(team.to_dict(), f, indent=2)
     except IOError as e:
-        print(f"  ERROR: Could not save monster_team.json: {e}")
+        print(f"  ERROR: Could not save monster_team.json: {e}") # This will be replaced by save_json_protected
 
 
 # ---------------------------------------------------------------------------
@@ -97,13 +109,12 @@ def load_game_state() -> dict:
     if not os.path.exists(GAME_STATE_FILE):
         return DEFAULT_GAME_STATE.copy()
     try:
-        with open(GAME_STATE_FILE, "r", encoding="utf-8") as f:
-            state = json.load(f)
+        state = load_json_protected(GAME_STATE_FILE)
         # Fill in any missing keys with defaults (handles version upgrades)
         for k, v in DEFAULT_GAME_STATE.items():
             state.setdefault(k, v)
         return state
-    except (json.JSONDecodeError, IOError) as e:
+    except (FileNotFoundError, ValueError, json.JSONDecodeError, IOError) as e:
         print(f"  WARNING: Could not load game_state.json ({e}). Using defaults.")
         return DEFAULT_GAME_STATE.copy()
 
@@ -112,8 +123,7 @@ def save_game_state(state: dict):
     """Persist global game state to disk."""
     _ensure_dirs()
     try:
-        with open(GAME_STATE_FILE, "w", encoding="utf-8") as f:
-            json.dump(state, f, indent=2)
+        save_json_protected(GAME_STATE_FILE, state)
     except IOError as e:
         print(f"  ERROR: Could not save game_state.json: {e}")
 
@@ -171,8 +181,7 @@ def save_team(team: Team) -> str:
 
     filepath = _team_filepath(team.team_id)
     try:
-        with open(filepath, "w", encoding="utf-8") as f:
-            json.dump(team.to_dict(), f, indent=2)
+        save_json_protected(filepath, team.to_dict())
         return filepath
     except IOError as e:
         raise IOError(f"Could not save team '{team.team_name}': {e}")
@@ -187,9 +196,9 @@ def load_team(team_id: int) -> Team:
     filepath = _team_filepath(team_id)
     if not os.path.exists(filepath):
         raise FileNotFoundError(f"No save file found for team ID {team_id} ({filepath}).")
+    
     try:
-        with open(filepath, "r", encoding="utf-8") as f:
-            data = json.load(f)
+        data = load_json_protected(filepath)
         return Team.from_dict(data)
     except json.JSONDecodeError as e:
         raise ValueError(f"Corrupted save file for team {team_id}: {e}")
@@ -210,7 +219,7 @@ def load_all_teams() -> List[Team]:
             id_str  = filename.replace("team_", "").replace(".json", "")
             team_id = int(id_str)
             team    = load_team(team_id)
-            teams.append(team)
+            teams.append(team) # This will raise ValueError if tampered
         except (ValueError, FileNotFoundError) as e:
             print(f"  WARNING: Skipping '{filename}': {e}")
     return teams
@@ -222,8 +231,10 @@ def delete_team(team_id: int) -> bool:
     Returns True if deleted, False if the file didn't exist.
     """
     filepath = _team_filepath(team_id)
+    checksum_filepath = filepath.replace('.json', '.checksum')
     if os.path.exists(filepath):
         os.remove(filepath)
+        if os.path.exists(checksum_filepath): os.remove(checksum_filepath)
         return True
     return False
 
@@ -241,9 +252,8 @@ def list_saved_teams() -> List[dict]:
         if not filename.startswith("team_") or not filename.endswith(".json"):
             continue
         filepath = os.path.join(TEAMS_DIR, filename)
-        try:
-            with open(filepath, "r", encoding="utf-8") as f:
-                data = json.load(f)
+        try: # Use load_json_protected to ensure integrity check
+            data = load_json_protected(filepath)
             summaries.append({
                 "team_id"     : data.get("team_id",      0),
                 "team_name"   : data.get("team_name",    "Unknown"),
@@ -279,7 +289,9 @@ def save_fight_log(narrative_text: str, team_a_name: str, team_b_name: str) -> t
             f.write(f"{team_a_name}  vs  {team_b_name}\n")
             f.write("=" * 76 + "\n\n")
             f.write(narrative_text)
+        make_file_readonly(filepath) # Make text files read-only
         return filepath, fight_id
+
     except IOError as e:
         raise IOError(f"Could not save fight log: {e}")
 
@@ -292,10 +304,57 @@ def load_fight_log(fight_id: int) -> str:
     _ensure_dirs()
     for filename in os.listdir(FIGHTS_DIR):
         if filename.startswith(f"fight_{fight_id:04d}_"):
-            filepath = os.path.join(FIGHTS_DIR, filename)
-            with open(filepath, "r", encoding="utf-8") as f:
+            filepath = os.path.join(FIGHTS_DIR, filename) # This is a text file, not JSON
+            # Temporarily make writable to read, then set back to read-only
+            make_file_writable(filepath)
+            with open(filepath, "r", encoding="utf-8") as f: # No checksum for text files
                 return f.read()
     raise FileNotFoundError(f"No fight log found with ID {fight_id}.")
+
+
+def archive_warrior_history(team_name: str, warrior):
+    """
+    Export the entire career narrative of a warrior to a single legacy file.
+    Called at death time so all fight logs are still available on disk.
+    """
+    _ensure_dirs()
+    safe_team = str(team_name).replace(" ", "_")
+    safe_name = str(warrior.name).replace(" ", "_")
+    filename = f"{safe_team}_{safe_name}_legacy.txt"
+    filepath = os.path.join(GRAVEYARD_DIR, filename)
+    
+    try:
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write("=" * 76 + "\n")
+            f.write(f" GLADIATOR LEGACY: {warrior.name.upper()}\n")
+            f.write(f" TEAM:             {team_name.upper()}\n")
+            f.write(f" FINAL RECORD:     {getattr(warrior, 'record_str', '0-0-0')}\n")
+            f.write("=" * 76 + "\n\n")
+            
+            history = getattr(warrior, "fight_history", [])
+            if not history:
+                f.write("No recorded fight history found.\n")
+                return filepath
+                
+            for entry in history:
+                turn = entry.get("turn", "?")
+                opp  = entry.get("opponent_name", "Unknown")
+                res  = str(entry.get("result", "loss")).upper()
+                fid  = entry.get("fight_id")
+                
+                f.write(f"--- TURN {turn} vs {opp} [{res}] ---\n")
+                if fid:
+                    try:
+                        narrative = load_fight_log(fid)
+                        # Remove the redundant file header from the individual log
+                        f.write(narrative.split("=" * 76 + "\n\n")[-1])
+                    except Exception:
+                        f.write("[Narrative log file not found or inaccessible]\n")
+                f.write("\n\n")
+        return filepath
+    except Exception as e:
+        print(f"  WARNING: Could not create legacy file for {warrior.name}: {e}") # This will be replaced by save_json_protected
+        return ""
 
 
 def list_fight_logs() -> List[dict]:
@@ -318,6 +377,168 @@ def list_fight_logs() -> List[dict]:
 
 
 # ---------------------------------------------------------------------------
+# STATIC ARCHIVE GENERATOR (The "Better System")
+# ---------------------------------------------------------------------------
+
+def generate_static_dashboard():
+    """
+    Generates a full set of HTML files in /arena_records/ that can be opened
+    directly in a browser without a server.
+    """
+    os.makedirs(RECORDS_DIR, exist_ok=True)
+    teams = load_all_teams()
+    state = load_game_state()
+    
+    # 1. Generate Master Index (Dashboard)
+    index_path = os.path.join(RECORDS_DIR, "index.html")
+    
+    team_rows = ""
+    for t in teams:
+        w_list = ", ".join([w.name for w in t.active_warriors])
+        team_rows += f"""
+        <tr>
+            <td><a href="team_{t.team_id}.html"><b>{t.team_name}</b></a></td>
+            <td>{t.manager_name}</td>
+            <td>{t.record_str}</td>
+            <td>{w_list}</td>
+        </tr>"""
+
+    html_content = f"""
+    <html>
+    <head>
+        <title>BLOODSPIRE Arena Records</title>
+        <style>
+            body {{ background: #111; color: #ccc; font-family: sans-serif; padding: 20px; }}
+            h1 {{ color: #c80; border-bottom: 2px solid #444; }}
+            table {{ width: 100%; border-collapse: collapse; margin-top: 20px; }}
+            th {{ background: #222; text-align: left; padding: 10px; color: #888; }}
+            td {{ padding: 10px; border-bottom: 1px solid #333; }}
+            a {{ color: #4af; text-decoration: none; }}
+            a:hover {{ text-decoration: underline; }}
+            .stats {{ color: #aaa; font-size: 0.9em; }}
+        </style>
+    </head>
+    <body>
+        <h1>⚔ BLOODSPIRE ARENA RECORDS</h1>
+        <p class="stats">Current Turn: {state['turn_number']} | Teams: {len(teams)}</p>
+        <table>
+            <tr><th>Team Name</th><th>Manager</th><th>Record (W-L-K)</th><th>Active Roster</th></tr>
+            {team_rows}
+        </table>
+        <br>
+        <h3>Latest Newsletters</h3>
+        <ul>
+            {" ".join([f'<li><a href="../saves/newsletters/turn_{n:04d}.txt">Turn {n} Newsletter (Text)</a></li>' for n in list_newsletters()[-5:]])}
+        </ul>
+    </body>
+    </html>
+    """
+    
+    with open(index_path, "w", encoding="utf-8") as f:
+        f.write(html_content)
+    make_file_readonly(index_path)
+    # 2. Generate Individual Team Pages
+    for t in teams:
+        _generate_team_page(t)
+
+    return index_path
+
+def _generate_team_page(team: Team):
+    """Internal helper to create a detailed HTML page for a specific team."""
+    path = os.path.join(RECORDS_DIR, f"team_{team.team_id}.html")
+    
+    warrior_blocks = ""
+    for w in team.active_warriors:
+        warrior_blocks += f"""
+        <div style="background:#1a1a1a; padding:15px; margin-bottom:20px; border-left:4px solid #c80;">
+            <h2 style="margin-top:0;">{w.name} <small style="color:#666">({w.race.name} {w.gender})</small></h2>
+            <p><b>Record:</b> {w.record_str} | <b>HP:</b> {w.max_hp} | <b>Popularity:</b> {w.popularity}</p>
+            <pre style="color:#999; background:#000; padding:10px;">{w.stat_block()}</pre>
+        </div>"""
+
+    html = f"""
+    <html>
+    <head>
+        <title>{team.team_name} - Bloodspire</title>
+        <style>
+            body {{ background: #111; color: #ccc; font-family: sans-serif; padding: 20px; }}
+            h1 {{ color: #c80; }}
+            .back {{ margin-bottom: 20px; display: block; color: #4af; }}
+        </style>
+    </head>
+    <body>
+        <a href="index.html" class="back">← Back to Dashboard</a>
+        <h1>TEAM: {team.team_name}</h1>
+        <p>Manager: {team.manager_name} | ID: {team.team_id}</p>
+        <hr style="border:1px solid #333">
+        {warrior_blocks}
+    </body>
+    </html>
+    """
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(html)
+    make_file_readonly(path)
+
+# ---------------------------------------------------------------------------
+# ARCHIVE & EXPORT
+# ---------------------------------------------------------------------------
+
+def export_team_text(team: Team) -> str:
+    """Save a human-readable .txt summary of the team to the exports folder."""
+    os.makedirs(EXPORTS_DIR, exist_ok=True)
+    filename = f"team_{team.team_id:04d}_{team.team_name.replace(' ', '_')}.txt"
+    filepath = os.path.join(EXPORTS_DIR, filename)
+    
+    try:
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(team.full_roster())
+        return filepath
+    except IOError as e: # This will be replaced by save_json_protected
+        raise IOError(f"Could not export team text: {e}")
+
+
+def create_backup_zip() -> bytes:
+    """
+    Zip up all local saves, fights, and newsletters into a single archive.
+    Returns the ZIP data as bytes.
+    """
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+        # 1. Team JSONs
+        if os.path.exists(TEAMS_DIR):
+            for f in os.listdir(TEAMS_DIR):
+                if f.endswith(".json") or f.endswith(".checksum"):
+                    # Temporarily make writable to read, then set back to read-only
+                    fpath = os.path.join(TEAMS_DIR, f)
+                    make_file_writable(fpath)
+                    zf.write(fpath, os.path.join("teams", f))
+                    make_file_readonly(fpath)
+        # 2. Fight Narratives
+        if os.path.exists(FIGHTS_DIR):
+            for f in os.listdir(FIGHTS_DIR):
+                if f.endswith(".txt"):
+                    fpath = os.path.join(FIGHTS_DIR, f)
+                    make_file_writable(fpath)
+                    zf.write(fpath, os.path.join("fights", f))
+                    make_file_readonly(fpath)
+        # 3. Newsletters
+        if os.path.exists(NEWSLETTERS_DIR):
+            for f in os.listdir(NEWSLETTERS_DIR):
+                if f.endswith(".txt"):
+                    fpath = os.path.join(NEWSLETTERS_DIR, f) # No checksum for text files
+                    make_file_writable(fpath)
+                    zf.write(fpath, os.path.join("newsletters", f))
+                    make_file_readonly(fpath)
+        # 4. Critical State Files
+        for f in ["game_state.json", "scouting.json", "monster_team.json", "champion.json"]:
+            fpath = os.path.join(SAVES_DIR, f)
+            if os.path.exists(fpath):
+                zf.write(fpath, f)
+            
+    return buf.getvalue()
+
+ 
+# ---------------------------------------------------------------------------
 # UTILITY: QUICK SAVE & LOAD ALL
 # ---------------------------------------------------------------------------
 
@@ -337,11 +558,13 @@ def backup_all_saves(backup_suffix: str = "bak") -> int:
     """
     import shutil
     count = 0
-    for filename in os.listdir(TEAMS_DIR):
-        if filename.endswith(".json"):
-            src = os.path.join(TEAMS_DIR, filename)
-            dst = src.replace(".json", f".{backup_suffix}")
+    for filename in os.listdir(TEAMS_DIR): # This will be replaced by save_json_protected
+        if filename.endswith(".json"): # This will be replaced by save_json_protected
+            src = os.path.join(TEAMS_DIR, filename) # This will be replaced by save_json_protected
+            dst = src.replace(".json", f".{backup_suffix}") # This will be replaced by save_json_protected
+            make_file_writable(src) # Ensure file is writable before copying
             shutil.copy2(src, dst)
+            make_file_readonly(src) # Set back to read-only
             count += 1
     return count
 
@@ -609,7 +832,6 @@ def reset_arena_complete():
       - newsletter_settings.json (voice preferences — app config, not arena data)
     """
     import shutil
-    from accounts import ACCOUNTS_FILE
     _ensure_dirs()
 
     def _rm_dir(d):
@@ -629,6 +851,7 @@ def reset_arena_complete():
     _rm_dir(LOGS_DIR)
     _rm_dir(NEWSLETTERS_DIR)
     _rm_dir(TEAM_ARCHIVES_DIR)
+    _rm_dir(GRAVEYARD_DIR)
 
     _rm_file(ACCOUNTS_FILE)
     _rm_file(SCOUTING_FILE)
@@ -720,7 +943,6 @@ def reset_arena_season():
             w.want_retire        = False
         save_team(team)
 
-    from accounts import ACCOUNTS_FILE
     if os.path.exists(ACCOUNTS_FILE):
         try:
             with open(ACCOUNTS_FILE, "r", encoding="utf-8") as f:
@@ -753,6 +975,7 @@ def save_newsletter(turn_num: int, text: str):
     path = os.path.join(NEWSLETTERS_DIR, f"turn_{turn_num:04d}.txt")
     with open(path, "w", encoding="utf-8") as f:
         f.write(text)
+    make_file_readonly(path) # Make text files read-only
     return path
 
 
@@ -761,7 +984,9 @@ def load_newsletter(turn_num: int) -> Optional[str]:
     path = os.path.join(NEWSLETTERS_DIR, f"turn_{turn_num:04d}.txt")
     if not os.path.exists(path):
         return None
-    with open(path, "r", encoding="utf-8") as f:
+    # Temporarily make writable to read, then set back to read-only
+    make_file_writable(path)
+    with open(path, "r", encoding="utf-8") as f: # No checksum for text files
         return f.read()
 
 
@@ -784,8 +1009,7 @@ def load_champion_state() -> dict:
     if not os.path.exists(CHAMPION_FILE):
         return {}
     try:
-        with open(CHAMPION_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
+        data = load_json_protected(CHAMPION_FILE)
     except Exception:
         return {}
     # Defensive: an older bug wrote the (state, is_new) tuple as a JSON list.
@@ -801,8 +1025,7 @@ def load_champion_state() -> dict:
 def save_champion_state(state: dict):
     """Persist champion state."""
     _ensure_dirs()
-    with open(CHAMPION_FILE, "w", encoding="utf-8") as f:
-        json.dump(state, f, indent=2)
+    save_json_protected(CHAMPION_FILE, state)
 
 
 def load_newsletter_voice() -> str:
@@ -817,8 +1040,7 @@ def load_newsletter_voice() -> str:
 def save_newsletter_voice(voice: str):
     """Persist voice preference."""
     _ensure_dirs()
-    with open(VOICE_SETTINGS_FILE, "w", encoding="utf-8") as f:
-        json.dump({"voice": voice}, f)
+    save_json_protected(VOICE_SETTINGS_FILE, {"voice": voice})
 
 
 # ---------------------------------------------------------------------------
@@ -833,8 +1055,7 @@ def load_scouting() -> dict:
     if not os.path.exists(SCOUTING_FILE):
         return {}
     try:
-        with open(SCOUTING_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
+        return load_json_protected(SCOUTING_FILE)
     except Exception:
         return {}
 
@@ -842,8 +1063,7 @@ def load_scouting() -> dict:
 def save_scouting(data: dict) -> None:
     """Persist scouting selections."""
     _ensure_dirs()
-    with open(SCOUTING_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2)
+    save_json_protected(SCOUTING_FILE, data)
 
 
 def get_manager_scouting(manager_id: int, current_turn: int) -> list:
@@ -966,14 +1186,21 @@ def get_all_scouted_warriors(current_turn: int) -> dict:
     Return a mapping of warrior_name → [manager_name, ...] for the current turn.
     Only includes confirmed scouts. Used during fight resolution to inject scout-attendance flavor text.
     """
-    from accounts import get_account  # avoid circular import at module level
+    # Read the league server's manager registry directly — the old accounts.py
+    # local store is gone; manager records live at saves/league/managers.json.
+    mgrs = {}
+    try:
+        if os.path.exists(LEAGUE_MANAGERS_FILE):
+            mgrs = load_json_protected(LEAGUE_MANAGERS_FILE) or {}
+    except (IOError, json.JSONDecodeError):
+        mgrs = {}
     data   = load_scouting()
     result = {}
     for mid_str, entry in data.items():
         if entry.get("turn") != current_turn:
             continue
         try:
-            acc = get_account(mid_str)
+            acc = mgrs.get(str(mid_str))
             mname = acc.get("manager_name", f"Manager {mid_str}") if acc else f"Manager {mid_str}"
         except Exception:
             mname = f"Manager {mid_str}"
@@ -1004,9 +1231,9 @@ def save_session(manager_name: str, password: str = ""):
     _ensure_dirs()
     import base64 as _b64
     pw_stored = _b64.b64encode(password.encode()).decode() if password else ""
-    try:
-        with open(SESSION_FILE, "w", encoding="utf-8") as f:
-            json.dump({"manager_name": manager_name, "pw_stored": pw_stored}, f)
+    try: # Session file is not protected, as it's client-side convenience
+        with open(SESSION_FILE, "w", encoding="utf-8") as f: 
+            json.dump({"manager_name": manager_name, "pw_stored": pw_stored}, f, indent=2)
     except IOError:
         pass
 
@@ -1017,8 +1244,8 @@ def load_session() -> dict:
     pw_stored is base64-encoded; decode with base64.b64decode().
     """
     try:
-        with open(SESSION_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
+        with open(SESSION_FILE, "r", encoding="utf-8") as f: # Session file is not protected
+            return json.load(f) 
     except Exception:
         return {}
 
@@ -1046,6 +1273,5 @@ def archive_replaced_team(team, reason: str = "replaced") -> str:
 
     fname = f"team_{team.team_id:04d}_turn{current_turn():04d}.json"
     path  = os.path.join(TEAM_ARCHIVES_DIR, fname)
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(snap, f, indent=2, default=str)
+    save_json_protected(path, snap)
     return path
