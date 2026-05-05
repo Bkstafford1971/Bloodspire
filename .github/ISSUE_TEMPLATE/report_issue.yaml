@@ -4,17 +4,33 @@ title: "[REPORT]: "
 labels: ["playtest"]
 body:
   - type: input
-    id: manager_info
+    id: manager_name
     attributes:
-      label: Manager & Team Info
-      placeholder: "e.g., Manager: Valerius | Team: The Iron Suns"
+      label: Manager Name
+      placeholder: "Enter your manager name"
     validations:
       required: true
   - type: input
-    id: turn_warrior
+    id: team_name
     attributes:
-      label: Turn # and Warrior Name
-      placeholder: "e.g., Turn 14 | Warrior: Theron"
+      label: Team Name
+      placeholder: "e.g., The Iron Suns"
+    validations:
+      required: true
+  - type: input
+    id: warrior_names
+    attributes:
+      label: Warrior Name(s)
+      placeholder: "e.g., Theron, Valerius"
+    validations:
+      required: true
+  - type: input
+    id: turn_number
+    attributes:
+      label: "Turn #"
+      placeholder: "e.g., 14"
+    validations:
+      required: true
   - type: dropdown
     id: type
     attributes:
@@ -27,13 +43,21 @@ body:
   - type: textarea
     id: description
     attributes:
-      label: Description of Bug/Request
-      description: Describe what happened or what you'd like to see.
-      placeholder: "The combat log didn't update after the killing blow..."
+      label: Description
+      description: Describe what happened or what you would like to see added.
+      placeholder: "The combat log stopped updating..."
     validations:
       required: true
   - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: "The warrior should have taken 5 damage and the log should show 'Hit'..."
+    validations:
+      required: false
+  - type: textarea
     id: files
     attributes:
-      label: Screenshots or Files
-      description: You can drag and drop images here or paste them directly.
+      label: Screenshot/File Upload
+      description: You can drag and drop images here or paste them directly from your clipboard.
