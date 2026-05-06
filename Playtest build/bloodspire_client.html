@@ -374,54 +374,86 @@ async function fsaGetOrPickFolder() {
 }
 
 async function fsaWriteJSON(relPath, obj) {
-  const fullPath = `${baseDir}/${relPath}`;
-  const result = await window.electronAPI.writeJson(fullPath, obj);
-  if (!result.success) {
-    console.error("Save failed:", result.error);
-    throw new Error(result.error);
+  if (window.electronAPI) {
+    const fullPath = `${baseDir}/${relPath}`;
+    const result = await window.electronAPI.writeJson(fullPath, obj);
+    if (!result.success) { console.error("Save failed:", result.error); throw new Error(result.error); }
+    return;
   }
+  const resp = await fetch('/api/local/write', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({path: relPath, data: obj}),
+  }).then(r => r.json()).catch(() => ({success: false, error: 'network error'}));
+  if (!resp.success) throw new Error(resp.error || 'Write failed');
 }
 
 async function fsaWriteText(relPath, text) {
-  const fullPath = `${baseDir}/${relPath}`;
-  const result = await window.electronAPI.writeText(fullPath, text);
-  if (!result.success) throw new Error(result.error || 'Write failed');
+  if (window.electronAPI) {
+    const fullPath = `${baseDir}/${relPath}`;
+    const result = await window.electronAPI.writeText(fullPath, text);
+    if (!result.success) throw new Error(result.error || 'Write failed');
+    return;
+  }
+  const resp = await fetch('/api/local/write', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({path: relPath, text}),
+  }).then(r => r.json()).catch(() => ({success: false, error: 'network error'}));
+  if (!resp.success) throw new Error(resp.error || 'Write failed');
 }
 
 async function fsaReadJSON(relPath) {
-  const fullPath = `${baseDir}/${relPath}`;
-  const result = await window.electronAPI.readJson(fullPath);
-  return result.success ? result.data : null;
+  if (window.electronAPI) {
+    const fullPath = `${baseDir}/${relPath}`;
+    const result = await window.electronAPI.readJson(fullPath);
+    return result.success ? result.data : null;
+  }
+  const resp = await fetch(`/api/local/read?path=${encodeURIComponent(relPath)}`)
+    .then(r => r.json()).catch(() => ({success: false}));
+  return resp.success ? resp.data : null;
 }
 
 async function fsaReadText(relPath) {
-  const fullPath = `${baseDir}/${relPath}`;
-  const result = await window.electronAPI.readText(fullPath);
-  return result.success ? result.text : null;
+  if (window.electronAPI) {
+    const fullPath = `${baseDir}/${relPath}`;
+    const result = await window.electronAPI.readText(fullPath);
+    return result.success ? result.text : null;
+  }
+  const resp = await fetch(`/api/local/read?path=${encodeURIComponent(relPath)}`)
+    .then(r => r.json()).catch(() => ({success: false}));
+  return resp.success ? resp.text : null;
 }
 
 async function fsaDeleteFile(relPath) {
-  const fullPath = `${baseDir}/${relPath}`;
-  await window.electronAPI.deleteFile(fullPath);
+  if (window.electronAPI) {
+    const fullPath = `${baseDir}/${relPath}`;
+    await window.electronAPI.deleteFile(fullPath);
+    return;
+  }
+  await fetch('/api/local/delete', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({path: relPath}),
+  }).catch(() => {});
 }
 
 async function fsaListDir(relPath) {
-  const fullPath = `${baseDir}/${relPath}`;
-  const result = await window.electronAPI.listDir(fullPath);
-  return result.success ? result.files : [];
+  if (window.electronAPI) {
+    const fullPath = `${baseDir}/${relPath}`;
+    const result = await window.electronAPI.listDir(fullPath);
+    return result.success ? result.files : [];
+  }
+  const resp = await fetch(`/api/local/list?path=${encodeURIComponent(relPath)}`)
+    .then(r => r.json()).catch(() => ({success: false, files: []}));
+  return resp.success ? resp.files : [];
 }
 
 async function fsaEnsureDir(relPath) {
-  if (!relPath || relPath === '') {
-    // Just verify the base directory exists
-    const fullPath = baseDir;
+  if (window.electronAPI) {
+    const fullPath = relPath ? `${baseDir}/${relPath}` : baseDir;
     const result = await window.electronAPI.ensureDir(fullPath);
     if (!result.success) throw new Error(result.error);
     return;
   }
-  const fullPath = `${baseDir}/${relPath}`;
-  const result = await window.electronAPI.ensureDir(fullPath);
-  if (!result.success) throw new Error(result.error);
+  // Browser mode: the server auto-creates directories on write — no-op here
 }
 
 /* ============================================================
@@ -3378,7 +3410,7 @@ async function addChallenge(warriorName, targetName) {
     team_id: teamId, warrior_name: warriorName, target_name: targetName, action: 'add',
   });
   if (r.success) {
-    S.teams[teamId].challenges = r.challenges;
+    S.teams[teamId] = r.team;
     render();
   } else {
     alert('Could not add challenge: ' + r.error);
@@ -3392,7 +3424,7 @@ async function removeChallenge(warriorName, targetName) {
     team_id: teamId, warrior_name: warriorName, target_name: targetName, action: 'remove',
   });
   if (r.success) {
-    S.teams[teamId].challenges = r.challenges;
+    S.teams[teamId] = r.team;
     render();
   } else {
     alert('Could not remove challenge: ' + r.error);
@@ -3407,8 +3439,7 @@ async function selectBloodChallengeChampion(targetName, challengerName) {
       team_id: teamId, target_name: targetName, challenger_name: challengerName,
     });
     if (r.success) {
-      const team = S.teams[teamId];
-      if (team) team.blood_challenges = r.blood_challenges;
+      if (r.team) S.teams[teamId] = r.team;
       refreshContent();
     } else {
       alert('Could not set blood challenge champion: ' + r.error);
@@ -3433,8 +3464,7 @@ async function addAvoidManager(managerName) {
       team_id: teamId, manager_name: managerName, action: 'add',
     });
     if (r.success) {
-      const team = S.teams[teamId];
-      if (team) team.avoid_managers = r.avoid_managers;
+      if (r.team) S.teams[teamId] = r.team;
       render();
     } else {
       alert('Could not add manager to avoid list: ' + r.error);
@@ -3453,8 +3483,7 @@ async function removeAvoidManager(managerName) {
       team_id: teamId, manager_name: managerName, action: 'remove',
     });
     if (r.success) {
-      const team = S.teams[teamId];
-      if (team) team.avoid_managers = r.avoid_managers;
+      if (r.team) S.teams[teamId] = r.team;
       render();
     } else {
       alert('Could not remove manager from avoid list: ' + r.error);
@@ -3479,16 +3508,7 @@ async function addAvoid(warriorName, avoidWarriorName) {
       team_id: teamId, warrior_name: warriorName, avoid_warrior_name: avoidWarriorName, action: 'add',
     });
     if (r.success) {
-      const team = S.teams[teamId];
-      if (team && team.warriors) {
-        // Find the warrior in the team
-        for (let i = 0; i < team.warriors.length; i++) {
-          if (team.warriors[i] && team.warriors[i].name === warriorName) {
-            team.warriors[i].avoid_warriors = r.avoid_warriors;
-            break;
-          }
-        }
-      }
+      if (r.team) S.teams[teamId] = r.team;
       refreshContent();
     } else {
       alert('Could not add to avoid list: ' + r.error);
@@ -3507,16 +3527,7 @@ async function removeAvoid(warriorName, avoidWarriorName) {
       team_id: teamId, warrior_name: warriorName, avoid_warrior_name: avoidWarriorName, action: 'remove',
     });
     if (r.success) {
-      const team = S.teams[teamId];
-      if (team && team.warriors) {
-        // Find the warrior in the team
-        for (let i = 0; i < team.warriors.length; i++) {
-          if (team.warriors[i] && team.warriors[i].name === warriorName) {
-            team.warriors[i].avoid_warriors = r.avoid_warriors;
-            break;
-          }
-        }
-      }
+      if (r.team) S.teams[teamId] = r.team;
       refreshContent();
     } else {
       alert('Could not remove from avoid list: ' + r.error);
