@@ -1,8 +1,8 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v1.2</title>
+<title>BLOODSPIRE Client - v1.2.1</title>
 <style>
 /* ============================================================
    WINDOWS CLASSIC — REFINED
@@ -248,6 +248,8 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
+const CLIENT_VERSION = "1.2.1";
+
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
 const DEFAULT_SERVER_URL = "http://bloodspirearena.dpdns.org";
@@ -322,42 +324,109 @@ let baseDir = localStorage.getItem('bloodspire_base_dir') || "";
 async function doPickFolder(forceNew) {
   try {
     console.log('Opening folder picker...');
-    const folderPath = await window.electronAPI.selectFolder();
-    
-    if (folderPath) {
-      console.log('Folder selected:', folderPath);
-      baseDir = folderPath; 
-      localStorage.setItem('bloodspire_base_dir', folderPath);
-      
-      // Tell main process about this folder
-      try {
-        const result = await window.electronAPI.setBaseDir(folderPath);
-        if (result.success) {
-          console.log('Main process baseDir set successfully');
-        } else {
-          console.error('Failed to set main process baseDir:', result.error);
+    let folderPath;
+
+    // Try Electron API first (native app)
+    if (window.electronAPI) {
+      console.log('Using Electron folder picker...');
+      folderPath = await window.electronAPI.selectFolder();
+
+      if (folderPath) {
+        console.log('Electron folder selected:', folderPath);
+        baseDir = folderPath;
+        localStorage.setItem('bloodspire_base_dir', folderPath);
+
+        // Tell main process about this folder
+        try {
+          const result = await window.electronAPI.setBaseDir(folderPath);
+          if (result.success) {
+            console.log('Main process baseDir set successfully');
+          } else {
+            console.error('Failed to set main process baseDir:', result.error);
+          }
+        } catch (err) {
+          console.error('Error setting base dir in main process:', err);
         }
-      } catch (err) {
-        console.error('Error setting base dir in main process:', err);
+      } else {
+        console.log('Folder selection cancelled');
+        return;
       }
-      
-      S.folderReady = true;
-      S.msg = ''; 
-      
-      // Bootstrap from the folder
-      await _bootstrapFromFolder();
     } else {
-      console.log('Folder selection cancelled');
+      // Browser mode: use File System Access API
+      console.log('Using FSA folder picker (browser mode)...');
+      try {
+        folderPath = await fsaPickFolder();
+        if (!folderPath) {
+          console.log('FSA folder selection cancelled');
+          return;
+        }
+        baseDir = folderPath;
+        localStorage.setItem('bloodspire_base_dir', folderPath);
+        console.log('FSA folder selected:', folderPath);
+      } catch (e) {
+        if (e.name === 'AbortError') {
+          return;
+        }
+        throw e;
+      }
     }
+
+    S.folderReady = true;
+    S.msg = '';
+
+    // Bootstrap from the folder
+    await _bootstrapFromFolder();
   } catch (e) {
     console.error('Folder pick error:', e);
-    if (e && e.name === 'AbortError') { 
-      S.msg = ''; 
-      render(); 
-      return; 
+    if (e && e.name === 'AbortError') {
+      S.msg = '';
+      render();
+      return;
     }
-    setMsg('Could not open folder: ' + (e.message || e), 'err'); 
+    setMsg('Could not open folder: ' + (e.message || e), 'err');
     render();
+  }
+}
+
+async function resetSaveFolder() {
+  if (!confirm('Reset save folder? This will clear your saved folder path.\n\nYou will need to select a new folder on next launch.')) {
+    return;
+  }
+
+  // Clear saved folder path and related data
+  baseDir = '';
+  S.folderReady = false;
+  localStorage.removeItem('bloodspire_base_dir');
+  localStorage.removeItem('bloodspire_fsa_handle');
+  window._fsaDirHandle = null;
+
+  // Clear session data
+  S.account = null;
+  S.teams = {};
+  S.sel = { type: null };
+  S.savedPassword = null;
+  S.savedManagerName = null;
+  try { localStorage.removeItem(_ROLLUP_KEY); } catch (_) {}
+
+  alert('Save folder has been reset. The folder picker will appear on next launch.');
+  S.view = 'login';
+  S.msg = '';
+  render();
+}
+
+// Browser mode: use File System Access API to pick a folder
+async function fsaPickFolder() {
+  if (!window.showDirectoryPicker) {
+    throw new Error('File System Access API not available. Use Chrome, Edge, or Brave.');
+  }
+  try {
+    const dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+    localStorage.setItem('bloodspire_fsa_handle', JSON.stringify({ name: dirHandle.name }));
+    window._fsaDirHandle = dirHandle;
+    return dirHandle.name;
+  } catch (e) {
+    if (e.name === 'AbortError') return null;
+    throw e;
   }
 }
 
@@ -709,12 +778,12 @@ const S = {
   newsletters:     null,  // cached list of newsletter turn numbers
   newsletterTurn:  null,  // currently viewed turn
   newsletterText:  null,  // cached newsletter text
-  newsletterVoice: null,  // 'snide' | 'neutral'
   savedManagerName: null, // last-used manager name for login auto-fill
   savedPassword:    null, // saved password for auto-login (from session)
   savedRememberMe:  true, // whether Remember Me was checked last time
   challengeTargets: null, // null = not loaded; [] = loaded list of warriors
   // runNextTurn:     {},    // {team_id: bool} per-team run flags - now handled by team.auto_upload_enabled
+  hideRecord:      localStorage.getItem('bp_hide_record') === 'true',
   replacingTeam:   null,  // {old_team_id, manager_id} when replacing
   legacyTeams:     null,  // cached list of archived/replaced teams
   league: {               // league server connection settings
@@ -1016,14 +1085,6 @@ const LocalAPI = {
     if (path === '/api/newsletter/save') {
       const turn = parseInt(body.turn || 0, 10);
       await Store.writeNewsletter(turn, body.text || '');
-      return { success: true };
-    }
-
-    // ── Newsletter voice preference ──────────────────────────────────────
-    if (path === '/api/newsletter/voice') {
-      const s = await Store.readSettings();
-      s.narrator_voice = body.voice || 'neutral';
-      await Store.writeSettings(s);
       return { success: true };
     }
 
@@ -1417,6 +1478,11 @@ function opts(items, val, blankLabel) {
 }
 
 function fmtRecord(w) { return `${w.wins||0}-${w.losses||0}-${w.kills||0}`; }  // W-L-K
+function toggleHideRecord(val) {
+  S.hideRecord = val;
+  localStorage.setItem('bp_hide_record', val ? 'true' : 'false');
+  render();
+}
 
 function hasFiveActiveWarriors(team) {
   if (!team || !team.warriors || team.warriors.length !== 5) {
@@ -1619,7 +1685,7 @@ function buildLogin() {
 <div style="background:#d4d0c8; width:100vw; height:100vh; display:flex; align-items:flex-start; justify-content:center; padding-top:80px;">
   <div id="login-dialog">
     <div class="title-bar">
-      <span>BLOODSPIRE Client - v1.2</span>
+      <span>BLOODSPIRE Client - v${CLIENT_VERSION}</span>
       <div class="title-bar-btns">
         <button class="title-btn">_</button>
         <button class="title-btn">□</button>
@@ -1719,7 +1785,22 @@ function buildMenuBar() {
 <div id="menu-bar" style="position:relative;">
   <span class="menu-item">File</span>
   <span class="menu-item">Edit</span>
-  <span class="menu-item">Preferences</span>
+  <span class="menu-item" id="menu-prefs" style="position:relative;">Preferences
+    <div id="prefs-dropdown" style="display:none; position:absolute; top:100%; left:0;
+         background:var(--bg); border:2px solid; border-color:var(--mid) var(--white) var(--white) var(--mid);
+         min-width:210px; z-index:999; box-shadow:2px 2px 0 var(--dark);">
+      <label class="menu-item" style="padding:4px 12px; display:flex; align-items:center; gap:6px; cursor:pointer; user-select:none;"
+             onclick="event.stopPropagation()">
+        <input type="checkbox" id="pref-hide-record" ${S.hideRecord ? 'checked' : ''}
+               onchange="toggleHideRecord(this.checked)">
+        Hide W-L-K Record
+      </label>
+      <div style="border-top:1px solid var(--mid); margin:2px 0;"></div>
+      <div class="menu-item" onclick="resetSaveFolder()" style="padding:4px 12px; color:#800;">
+        Reset Save Folder...
+      </div>
+    </div>
+  </span>
   <span class="menu-item" id="menu-action" style="position:relative;">Action
     <div id="action-dropdown" style="display:none; position:absolute; top:100%; left:0;
          background:var(--bg); border:2px solid; border-color:var(--mid) var(--white) var(--white) var(--mid);
@@ -1747,7 +1828,7 @@ function buildMenuBar() {
       </div>
     </div>
   </span>
-  <span style="flex:1;"></span>
+  <span style="flex:1; text-align:right; padding-right:12px; font-size:10px; color:#666; align-self:center;">v${CLIENT_VERSION}</span>
   <span class="menu-item" id="menu-logout">Logout</span>
   <span class="menu-item">Help</span>
 </div>`;
@@ -1811,11 +1892,11 @@ function buildTree() {
           : '';
 
         const deadStyle  = isDead ? 'opacity:0.55; font-style:italic;' : '';
-        const deadIcon   = isAscended ? '👹' : (isDead ? '💀' : '👤');
+        const deadIcon   = isAscended ? '👹' : (isDead && !S.hideRecord ? '💀' : '👤');
         const deadBadge  = isAscended
           ? `<span title="Ascended to Monsterdom on The Monsters roster — replacement needed"
                style="color:#844;font-size:10px;margin-left:4px;">👹 ASCENDED</span>`
-          : isDead
+          : (isDead && !S.hideRecord)
           ? `<span title="Slain by ${esc(w.killed_by||'unknown')} — replacement needed"
                style="color:#800;font-size:10px;margin-left:4px;">✝</span>`
           : '';
@@ -1963,7 +2044,7 @@ function buildManagerPanel() {
       <td style="padding:4px 8px; width:110px;">Name</td>
       <td><input type="text" class="ro" value="${esc(acc.manager_name||'')}" style="width:360px;" readonly></td>
       <td style="padding:4px 16px; width:80px;">Record</td>
-      <td><input type="text" class="ro" value="${esc(record)}" style="width:160px;" readonly></td>
+      <td><input type="text" class="ro" value="${S.hideRecord ? '—' : esc(record)}" style="width:160px;" readonly></td>
     </tr>
     <tr>
       <td style="padding:4px 8px;">Last Upload</td>
@@ -2017,7 +2098,6 @@ function buildManagerPanel() {
     const turns = S.newsletters || [];
     const cur   = S.newsletterTurn;
     const text  = S.newsletterText;
-    const voice = S.newsletterVoice || 'snide';
     if (!turns.length && S.newsletters === null) {
       // Initial load state, content will be populated by _ensureNewsletterContentLoadedForMgrTab
       body = '<div style="padding:20px; color:#666;">Loading newsletters...</div>';
@@ -2052,11 +2132,6 @@ function buildManagerPanel() {
               display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
     <b style="font-size:11px;">Turn:</b>
     <select onchange="loadNewsletterTurn(parseInt(this.value))" style="font-size:11px;">${opts}</select>
-    <span style="font-size:11px; margin-left:8px;">Voice:</span>
-    <select onchange="setNewsletterVoice(this.value)" style="font-size:11px;">
-      <option value="snide"   ${voice==='snide'  ?'selected':''}>Snide Clemens</option>
-      <option value="neutral" ${voice==='neutral'?'selected':''}>Neutral</option>
-    </select>
   </div>
   <div style="flex:1; overflow:auto;">
     ${text !== null
@@ -2272,6 +2347,7 @@ function buildScoutingTab() {
       w.name.toLowerCase().includes(filter) ||
       w.team_name.toLowerCase().includes(filter)
     );
+    visible.sort((a, b) => b.total_fights - a.total_fights);
     let trows = '';
     visible.forEach(w => {
       const queued = already.has(w.name);
@@ -2288,14 +2364,15 @@ function buildScoutingTab() {
       <tr style="border-bottom:1px solid #eee;">
         <td style="padding:3px 8px;">${esc(w.name)}</td>
         <td style="padding:3px 8px; color:#555;">${esc(w.team_name)}</td>
+        <td style="padding:3px 8px; color:#555;">${esc(w.manager_name||'—')}</td>
         <td style="padding:3px 8px; color:#555;">${esc(w.race)} ${esc(w.gender)}</td>
-        <td style="padding:3px 8px; text-align:center;">${w.wins}-${w.losses}-${w.kills}</td>
+        <td style="padding:3px 8px; text-align:center;">${S.hideRecord ? '—' : `${w.wins}-${w.losses}-${w.kills}`}</td>
         <td style="padding:3px 8px; text-align:center;">${w.total_fights}</td>
         <td style="padding:3px 8px;">${btn}</td>
       </tr>`;
     });
     if (!trows) {
-      trows = `<tr><td colspan="6" style="padding:8px; color:#888; font-style:italic;">
+      trows = `<tr><td colspan="7" style="padding:8px; color:#888; font-style:italic;">
         No warriors match the search filter.</td></tr>`;
     }
     targetsHtml = `
@@ -2310,6 +2387,7 @@ function buildScoutingTab() {
         <tr style="border-bottom:2px solid #ccc; color:#666; font-size:11px;">
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Name</th>
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Team</th>
+          <th style="padding:4px 8px; text-align:left; font-weight:600;">Manager</th>
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Race</th>
           <th style="padding:4px 8px; text-align:center; font-weight:600;">Record (W-L-K)</th>
           <th style="padding:4px 8px; text-align:center; font-weight:600;">Fights</th>
@@ -2661,7 +2739,7 @@ function buildTeamPanel(team) {
     </tr>
     <tr>
       <td style="padding:3px 8px;">Record</td>
-      <td><input type="text" class="ro" value="${esc(totalW+'-'+totalL+'-'+totalD)}" style="width:320px;" readonly></td>
+      <td><input type="text" class="ro" value="${S.hideRecord ? '—' : esc(totalW+'-'+totalL+'-'+totalD)}" style="width:320px;" readonly></td>
       <td style="padding:3px 8px; text-align:right;">Run This Turn</td>
       <td>
         <input type="checkbox" id="cb-rnt-${tid}" ${rnt?'checked':''}
@@ -2831,7 +2909,7 @@ function buildStatsTab(team, w, wIdx) {
   </tr>
   <tr>
     <td style="padding:2px 4px;">Record</td>
-    <td><input type="text" class="ro" value="${esc(fmtRecord(w))}" style="width:240px;" readonly></td>
+    <td><input type="text" class="ro" value="${S.hideRecord ? '—' : esc(fmtRecord(w))}" style="width:240px;" readonly></td>
     <td style="padding:2px 12px 2px 8px;">Gender</td>
     <td><input type="text" class="ro" value="${esc(w.gender)}" style="width:80px;" readonly></td>
     <td style="padding:2px 8px;">Weight</td>
@@ -3036,15 +3114,15 @@ function buildFightsTab(w) {
     return `<div style="padding:10px;">
       <b>Fight History</b><br><br>
       <span style="color:#666;">${esc(w.name)} has not fought yet.</span>
-      <br><br>Record: ${esc(fmtRecord(w))} (${w.total_fights||0} fights)
+      ${S.hideRecord ? '' : `<br><br>Record: ${esc(fmtRecord(w))} (${w.total_fights||0} fights)`}
     </div>`;
   }
   let rows = '';
   history.forEach((h, i) => {
-    const res = h.result ? h.result.toUpperCase() : '—';
-    const resColor = res==='WIN' ? '#060' : res==='LOSS' ? '#800' : '#444';
-    const slainNote  = h.warrior_slain  ? ' <b style="color:#800">(SLAIN)</b>'  : '';
-    const killedNote = h.opponent_slain ? ' <b style="color:#060">(KILLED)</b>' : '';
+    const res = S.hideRecord ? '—' : (h.result ? h.result.toUpperCase() : '—');
+    const resColor = S.hideRecord ? '#444' : (res==='WIN' ? '#060' : res==='LOSS' ? '#800' : '#444');
+    const slainNote  = (!S.hideRecord && h.warrior_slain)  ? ' <b style="color:#800">(SLAIN)</b>'  : '';
+    const killedNote = (!S.hideRecord && h.opponent_slain) ? ' <b style="color:#060">(KILLED)</b>' : '';
     const fid = h.fight_id;
     const viewBtn = fid
       ? `<button class="sm" onclick="openNarrative(${fid},${h.turn||0})">View Fight</button>`
@@ -3053,10 +3131,11 @@ function buildFightsTab(w) {
     // Special styling for champion fights
     const isChampFight = h.fight_type === 'champion';
     const champStyle = isChampFight ? 'background:#fff8f0; border-left:3px solid #c60;' : `${i%2===0?'background:#f5f4f0;':''}`;
-    const opponentDisplay = isChampFight && res === 'WIN'
+    const killMark = !S.hideRecord && h.is_kill ? '<b style="color:#060">☠</b>' : '';
+    const opponentDisplay = (!S.hideRecord && isChampFight && h.result === 'WIN')
       ? `${esc(w.name)} defeated ${esc(h.opponent_name)} in an actionpacked ${h.minutes} minute Champion Fight${killedNote}`
       : `${esc(h.opponent_name)}${killedNote}`;
-    
+
     if (isChampFight) {
       // Champion fights get special row formatting
       rows += `<tr style="${champStyle} font-weight:bold;">
@@ -3064,7 +3143,7 @@ function buildFightsTab(w) {
         <td style="padding:2px 6px; color:#c60;">★ CHAMPION FIGHT ★</td>
         <td style="padding:2px 6px;">${opponentDisplay}${slainNote}</td>
         <td style="padding:2px 6px; text-align:center; color:${resColor}; font-weight:bold;">${res}</td>
-        <td style="padding:2px 6px; text-align:center;">${h.is_kill?'<b style="color:#060">☠</b>':''}</td>
+        <td style="padding:2px 6px; text-align:center;">${killMark}</td>
         <td style="padding:2px 6px; text-align:center;">${h.minutes||'—'} min</td>
         <td style="padding:2px 6px;">${viewBtn}</td>
       </tr>`;
@@ -3075,7 +3154,7 @@ function buildFightsTab(w) {
         <td style="padding:2px 6px;">${esc(h.opponent_name)}</td>
         <td style="padding:2px 6px; text-align:center;">${esc(h.opponent_race||'')}</td>
         <td style="padding:2px 6px; text-align:center; color:${resColor}; font-weight:bold;">${res}${slainNote}</td>
-        <td style="padding:2px 6px; text-align:center;">${h.is_kill?'<b style="color:#060">☠</b>':''}</td>
+        <td style="padding:2px 6px; text-align:center;">${killMark}</td>
         <td style="padding:2px 6px; text-align:center;">${h.minutes||'—'} min</td>
         <td style="padding:2px 6px;">${viewBtn}</td>
       </tr>`;
@@ -3084,7 +3163,7 @@ function buildFightsTab(w) {
   return `
 <div style="padding:6px;">
   <div style="font-weight:bold; margin-bottom:6px;">Fight History — ${esc(w.name)}</div>
-  <div style="color:#555; margin-bottom:6px;">Record: ${esc(fmtRecord(w))} — ${w.total_fights||0} fights (W-L-K)</div>
+  ${S.hideRecord ? '' : `<div style="color:#555; margin-bottom:6px;">Record: ${esc(fmtRecord(w))} — ${w.total_fights||0} fights (W-L-K)</div>`}
   <div style="overflow-x:auto;">
   <table class="grid" style="font-size:11px;">
     <thead>
@@ -3135,13 +3214,14 @@ function buildChallengesTab(team, w) {
       opponents.push({
         name     : ow.name,
         teamName : ow.team_name,
+        managerName : ow.manager_name || '—',
         race     : ow.race || '—',
-        record   : `${ow.wins||0}-${ow.losses||0}-${ow.kills||0}`,
+        record   : S.hideRecord ? '—' : `${ow.wins||0}-${ow.losses||0}-${ow.kills||0}`,
         fights   : owFights,
       });
     }
   }
-  opponents.sort((a, b) => a.fights - b.fights || a.name.localeCompare(b.name));
+  opponents.sort((a, b) => b.fights - a.fights || a.name.localeCompare(b.name));
 
   // ── Pending challenges rows ──────────────────────────────────────────────
   let pendingRows = '';
@@ -3192,6 +3272,7 @@ function buildChallengesTab(team, w) {
       <tr style="border-bottom:1px solid #eee;">
         <td style="padding:3px 8px;">${esc(op.name)}</td>
         <td style="padding:3px 8px; color:#555;">${esc(op.teamName)}</td>
+        <td style="padding:3px 8px; color:#555;">${esc(op.managerName)}</td>
         <td style="padding:3px 8px; color:#555;">${esc(op.race)}</td>
         <td style="padding:3px 8px; text-align:center;">${esc(op.record)}</td>
         <td style="padding:3px 8px; text-align:center;">${op.fights}</td>
@@ -3199,7 +3280,7 @@ function buildChallengesTab(team, w) {
       </tr>`;
     });
   } else {
-    oppRows = `<tr><td colspan="6" style="padding:10px; color:#888; text-align:center; font-style:italic;">
+    oppRows = `<tr><td colspan="7" style="padding:10px; color:#888; text-align:center; font-style:italic;">
       No warriors from other teams fall within this warrior's challenge range.</td></tr>`;
   }
 
@@ -3389,6 +3470,7 @@ function buildChallengesTab(team, w) {
         <tr style="border-bottom:2px solid #ccc; color:#666; font-size:11px;">
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Name</th>
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Team</th>
+          <th style="padding:4px 8px; text-align:left; font-weight:600;">Manager</th>
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Race</th>
           <th style="padding:4px 8px; text-align:center; font-weight:600;">Record</th>
           <th style="padding:4px 8px; text-align:center; font-weight:600;">Fights</th>
@@ -4013,6 +4095,12 @@ function attachEvents() {
     S.view = 'login'; S.loginTab = 'new'; S.msg = '';
     render();
   });
+  bind('menu-prefs', (e) => {
+    e.stopPropagation();
+    const dd = el('prefs-dropdown');
+    if (!dd) return;
+    dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+  });
   bind('menu-action', (e) => {
     e.stopPropagation();
     const dd = el('action-dropdown');
@@ -4133,15 +4221,26 @@ async function doLogin() {
 
     // If local auth fails and a server URL is set, try authenticating against
     // the league server so users can recover their account on a new machine.
-    if (!r.success && S.serverUrl) {
+    // Also try window.location.origin as a fallback — remote players connecting
+    // via HTTP may have S.serverUrl set to localhost if it wasn't corrected.
+    if (!r.success) {
+      const candidateUrls = [...new Set([
+        S.serverUrl,
+        (window.location.protocol !== 'file:' ? window.location.origin : null),
+      ].filter(Boolean))];
+      if (!candidateUrls.length) { setMsg(r.error || 'Login failed.', 'err'); render(); return; }
       setMsg('No local account found — checking league server...', ''); render();
       try {
-        const base = S.serverUrl.replace(/\/+$/, '');
+        let serverReg = null, base = '';
+        for (const candidate of candidateUrls) {
+          base = candidate.replace(/\/+$/, '');
+          serverReg = await fetch(base + '/api/register', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ manager_name: name, password: pass }),
+          }).then(res => res.json()).catch(() => null);
+          if (serverReg?.success) { S.serverUrl = base; break; }
+        }
         // /api/register returns the existing manager_id when name+password match
-        const serverReg = await fetch(base + '/api/register', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ manager_name: name, password: pass }),
-        }).then(res => res.json()).catch(() => null);
 
         if (!serverReg?.success) {
           setMsg(serverReg?.error || r.error || 'Login failed.', 'err'); render(); return;
@@ -5120,16 +5219,10 @@ async function loadNewsletterTurn(turn) {
   refreshContent();
 }
 
-async function setNewsletterVoice(voice) {
-  S.newsletterVoice = voice;
-  await API.post('/api/newsletter/voice', {voice});
-}
-
 function buildNewsletterPanel() {
   const turns = S.newsletters || [];
   const cur   = S.newsletterTurn;
   const text  = S.newsletterText;
-  const voice = S.newsletterVoice || 'snide';
 
   // Turn selector
   const opts = turns.map(t =>
@@ -5694,6 +5787,7 @@ async function doLeagueDownloadAll() {
         team_id: localTid, result,
       });
       if (app.success) {
+        console.log(`Successfully applied results for team ${localTid}`);
         S.teams[localTid] = app.team;
         applied.push({ team_id: localTid, team_name: result.team_name || '?',
                        bouts: app.bouts, team: app.team });
@@ -6304,6 +6398,11 @@ window.uploadAllTeams = uploadAllTeams;
    INITIALISATION
    ============================================================ */
 async function init() {
+  // Check browser compatibility for non-Electron users
+  if (!window.electronAPI && !isChromiumWithFSA()) {
+    renderChromiumError();
+    return;
+  }
   console.log('Initializing Bloodspire Client...');
   
   // ============================================================
@@ -6321,7 +6420,10 @@ async function init() {
       console.log('Running in local backend mode');
       S.isLocalBackend = true;
       S.folderReady = true;
-      S.localBaseUrl = localCheck.server_url || 'http://localhost:8766';
+      // Prefer the URL the page was actually served from so remote players
+      // get the host's Tailscale/LAN IP, not a hardcoded localhost.
+      const pageOrigin = (window.location.protocol !== 'file:') ? window.location.origin : null;
+      S.localBaseUrl = pageOrigin || localCheck.server_url || 'http://localhost:8766';
       if (!S.serverUrl || S.serverUrl === DEFAULT_SERVER_URL) S.serverUrl = S.localBaseUrl;
       
       const localAcc = await LocalAPI.get('/api/account');
@@ -6467,6 +6569,8 @@ document.addEventListener('click', (e) => {
   // 1. Close dropdowns
   const dd = el('action-dropdown');
   if (dd) dd.style.display = 'none';
+  const pd = el('prefs-dropdown');
+  if (pd) pd.style.display = 'none';
 
   // 2. Handle Stat Spinners
   const btn = e.target.closest('.stat-spin button');
