@@ -1,8 +1,8 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v1.2</title>
+<title>BLOODSPIRE Client - v1.2.1</title>
 <style>
 /* ============================================================
    WINDOWS CLASSIC — REFINED
@@ -248,6 +248,8 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
+const CLIENT_VERSION = "1.2.1";
+
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
 const DEFAULT_SERVER_URL = "http://bloodspirearena.dpdns.org";
@@ -715,6 +717,7 @@ const S = {
   savedRememberMe:  true, // whether Remember Me was checked last time
   challengeTargets: null, // null = not loaded; [] = loaded list of warriors
   // runNextTurn:     {},    // {team_id: bool} per-team run flags - now handled by team.auto_upload_enabled
+  hideRecord:      localStorage.getItem('bp_hide_record') === 'true',
   replacingTeam:   null,  // {old_team_id, manager_id} when replacing
   legacyTeams:     null,  // cached list of archived/replaced teams
   league: {               // league server connection settings
@@ -1417,6 +1420,11 @@ function opts(items, val, blankLabel) {
 }
 
 function fmtRecord(w) { return `${w.wins||0}-${w.losses||0}-${w.kills||0}`; }  // W-L-K
+function toggleHideRecord(val) {
+  S.hideRecord = val;
+  localStorage.setItem('bp_hide_record', val ? 'true' : 'false');
+  render();
+}
 
 function hasFiveActiveWarriors(team) {
   if (!team || !team.warriors || team.warriors.length !== 5) {
@@ -1619,7 +1627,7 @@ function buildLogin() {
 <div style="background:#d4d0c8; width:100vw; height:100vh; display:flex; align-items:flex-start; justify-content:center; padding-top:80px;">
   <div id="login-dialog">
     <div class="title-bar">
-      <span>BLOODSPIRE Client - v1.2</span>
+      <span>BLOODSPIRE Client - v${CLIENT_VERSION}</span>
       <div class="title-bar-btns">
         <button class="title-btn">_</button>
         <button class="title-btn">□</button>
@@ -1719,7 +1727,18 @@ function buildMenuBar() {
 <div id="menu-bar" style="position:relative;">
   <span class="menu-item">File</span>
   <span class="menu-item">Edit</span>
-  <span class="menu-item">Preferences</span>
+  <span class="menu-item" id="menu-prefs" style="position:relative;">Preferences
+    <div id="prefs-dropdown" style="display:none; position:absolute; top:100%; left:0;
+         background:var(--bg); border:2px solid; border-color:var(--mid) var(--white) var(--white) var(--mid);
+         min-width:210px; z-index:999; box-shadow:2px 2px 0 var(--dark);">
+      <label class="menu-item" style="padding:4px 12px; display:flex; align-items:center; gap:6px; cursor:pointer; user-select:none;"
+             onclick="event.stopPropagation()">
+        <input type="checkbox" id="pref-hide-record" ${S.hideRecord ? 'checked' : ''}
+               onchange="toggleHideRecord(this.checked)">
+        Hide W-L-K Record
+      </label>
+    </div>
+  </span>
   <span class="menu-item" id="menu-action" style="position:relative;">Action
     <div id="action-dropdown" style="display:none; position:absolute; top:100%; left:0;
          background:var(--bg); border:2px solid; border-color:var(--mid) var(--white) var(--white) var(--mid);
@@ -1747,7 +1766,7 @@ function buildMenuBar() {
       </div>
     </div>
   </span>
-  <span style="flex:1;"></span>
+  <span style="flex:1; text-align:right; padding-right:12px; font-size:10px; color:#666; align-self:center;">v${CLIENT_VERSION}</span>
   <span class="menu-item" id="menu-logout">Logout</span>
   <span class="menu-item">Help</span>
 </div>`;
@@ -1811,11 +1830,11 @@ function buildTree() {
           : '';
 
         const deadStyle  = isDead ? 'opacity:0.55; font-style:italic;' : '';
-        const deadIcon   = isAscended ? '👹' : (isDead ? '💀' : '👤');
+        const deadIcon   = isAscended ? '👹' : (isDead && !S.hideRecord ? '💀' : '👤');
         const deadBadge  = isAscended
           ? `<span title="Ascended to Monsterdom on The Monsters roster — replacement needed"
                style="color:#844;font-size:10px;margin-left:4px;">👹 ASCENDED</span>`
-          : isDead
+          : (isDead && !S.hideRecord)
           ? `<span title="Slain by ${esc(w.killed_by||'unknown')} — replacement needed"
                style="color:#800;font-size:10px;margin-left:4px;">✝</span>`
           : '';
@@ -1963,7 +1982,7 @@ function buildManagerPanel() {
       <td style="padding:4px 8px; width:110px;">Name</td>
       <td><input type="text" class="ro" value="${esc(acc.manager_name||'')}" style="width:360px;" readonly></td>
       <td style="padding:4px 16px; width:80px;">Record</td>
-      <td><input type="text" class="ro" value="${esc(record)}" style="width:160px;" readonly></td>
+      <td><input type="text" class="ro" value="${S.hideRecord ? '—' : esc(record)}" style="width:160px;" readonly></td>
     </tr>
     <tr>
       <td style="padding:4px 8px;">Last Upload</td>
@@ -2289,7 +2308,7 @@ function buildScoutingTab() {
         <td style="padding:3px 8px;">${esc(w.name)}</td>
         <td style="padding:3px 8px; color:#555;">${esc(w.team_name)}</td>
         <td style="padding:3px 8px; color:#555;">${esc(w.race)} ${esc(w.gender)}</td>
-        <td style="padding:3px 8px; text-align:center;">${w.wins}-${w.losses}-${w.kills}</td>
+        <td style="padding:3px 8px; text-align:center;">${S.hideRecord ? '—' : `${w.wins}-${w.losses}-${w.kills}`}</td>
         <td style="padding:3px 8px; text-align:center;">${w.total_fights}</td>
         <td style="padding:3px 8px;">${btn}</td>
       </tr>`;
@@ -2661,7 +2680,7 @@ function buildTeamPanel(team) {
     </tr>
     <tr>
       <td style="padding:3px 8px;">Record</td>
-      <td><input type="text" class="ro" value="${esc(totalW+'-'+totalL+'-'+totalD)}" style="width:320px;" readonly></td>
+      <td><input type="text" class="ro" value="${S.hideRecord ? '—' : esc(totalW+'-'+totalL+'-'+totalD)}" style="width:320px;" readonly></td>
       <td style="padding:3px 8px; text-align:right;">Run This Turn</td>
       <td>
         <input type="checkbox" id="cb-rnt-${tid}" ${rnt?'checked':''}
@@ -2831,7 +2850,7 @@ function buildStatsTab(team, w, wIdx) {
   </tr>
   <tr>
     <td style="padding:2px 4px;">Record</td>
-    <td><input type="text" class="ro" value="${esc(fmtRecord(w))}" style="width:240px;" readonly></td>
+    <td><input type="text" class="ro" value="${S.hideRecord ? '—' : esc(fmtRecord(w))}" style="width:240px;" readonly></td>
     <td style="padding:2px 12px 2px 8px;">Gender</td>
     <td><input type="text" class="ro" value="${esc(w.gender)}" style="width:80px;" readonly></td>
     <td style="padding:2px 8px;">Weight</td>
@@ -3036,15 +3055,15 @@ function buildFightsTab(w) {
     return `<div style="padding:10px;">
       <b>Fight History</b><br><br>
       <span style="color:#666;">${esc(w.name)} has not fought yet.</span>
-      <br><br>Record: ${esc(fmtRecord(w))} (${w.total_fights||0} fights)
+      ${S.hideRecord ? '' : `<br><br>Record: ${esc(fmtRecord(w))} (${w.total_fights||0} fights)`}
     </div>`;
   }
   let rows = '';
   history.forEach((h, i) => {
-    const res = h.result ? h.result.toUpperCase() : '—';
-    const resColor = res==='WIN' ? '#060' : res==='LOSS' ? '#800' : '#444';
-    const slainNote  = h.warrior_slain  ? ' <b style="color:#800">(SLAIN)</b>'  : '';
-    const killedNote = h.opponent_slain ? ' <b style="color:#060">(KILLED)</b>' : '';
+    const res = S.hideRecord ? '—' : (h.result ? h.result.toUpperCase() : '—');
+    const resColor = S.hideRecord ? '#444' : (res==='WIN' ? '#060' : res==='LOSS' ? '#800' : '#444');
+    const slainNote  = (!S.hideRecord && h.warrior_slain)  ? ' <b style="color:#800">(SLAIN)</b>'  : '';
+    const killedNote = (!S.hideRecord && h.opponent_slain) ? ' <b style="color:#060">(KILLED)</b>' : '';
     const fid = h.fight_id;
     const viewBtn = fid
       ? `<button class="sm" onclick="openNarrative(${fid},${h.turn||0})">View Fight</button>`
@@ -3053,10 +3072,11 @@ function buildFightsTab(w) {
     // Special styling for champion fights
     const isChampFight = h.fight_type === 'champion';
     const champStyle = isChampFight ? 'background:#fff8f0; border-left:3px solid #c60;' : `${i%2===0?'background:#f5f4f0;':''}`;
-    const opponentDisplay = isChampFight && res === 'WIN'
+    const killMark = !S.hideRecord && h.is_kill ? '<b style="color:#060">☠</b>' : '';
+    const opponentDisplay = (!S.hideRecord && isChampFight && h.result === 'WIN')
       ? `${esc(w.name)} defeated ${esc(h.opponent_name)} in an actionpacked ${h.minutes} minute Champion Fight${killedNote}`
       : `${esc(h.opponent_name)}${killedNote}`;
-    
+
     if (isChampFight) {
       // Champion fights get special row formatting
       rows += `<tr style="${champStyle} font-weight:bold;">
@@ -3064,7 +3084,7 @@ function buildFightsTab(w) {
         <td style="padding:2px 6px; color:#c60;">★ CHAMPION FIGHT ★</td>
         <td style="padding:2px 6px;">${opponentDisplay}${slainNote}</td>
         <td style="padding:2px 6px; text-align:center; color:${resColor}; font-weight:bold;">${res}</td>
-        <td style="padding:2px 6px; text-align:center;">${h.is_kill?'<b style="color:#060">☠</b>':''}</td>
+        <td style="padding:2px 6px; text-align:center;">${killMark}</td>
         <td style="padding:2px 6px; text-align:center;">${h.minutes||'—'} min</td>
         <td style="padding:2px 6px;">${viewBtn}</td>
       </tr>`;
@@ -3075,7 +3095,7 @@ function buildFightsTab(w) {
         <td style="padding:2px 6px;">${esc(h.opponent_name)}</td>
         <td style="padding:2px 6px; text-align:center;">${esc(h.opponent_race||'')}</td>
         <td style="padding:2px 6px; text-align:center; color:${resColor}; font-weight:bold;">${res}${slainNote}</td>
-        <td style="padding:2px 6px; text-align:center;">${h.is_kill?'<b style="color:#060">☠</b>':''}</td>
+        <td style="padding:2px 6px; text-align:center;">${killMark}</td>
         <td style="padding:2px 6px; text-align:center;">${h.minutes||'—'} min</td>
         <td style="padding:2px 6px;">${viewBtn}</td>
       </tr>`;
@@ -3084,7 +3104,7 @@ function buildFightsTab(w) {
   return `
 <div style="padding:6px;">
   <div style="font-weight:bold; margin-bottom:6px;">Fight History — ${esc(w.name)}</div>
-  <div style="color:#555; margin-bottom:6px;">Record: ${esc(fmtRecord(w))} — ${w.total_fights||0} fights (W-L-K)</div>
+  ${S.hideRecord ? '' : `<div style="color:#555; margin-bottom:6px;">Record: ${esc(fmtRecord(w))} — ${w.total_fights||0} fights (W-L-K)</div>`}
   <div style="overflow-x:auto;">
   <table class="grid" style="font-size:11px;">
     <thead>
@@ -3136,7 +3156,7 @@ function buildChallengesTab(team, w) {
         name     : ow.name,
         teamName : ow.team_name,
         race     : ow.race || '—',
-        record   : `${ow.wins||0}-${ow.losses||0}-${ow.kills||0}`,
+        record   : S.hideRecord ? '—' : `${ow.wins||0}-${ow.losses||0}-${ow.kills||0}`,
         fights   : owFights,
       });
     }
@@ -4012,6 +4032,12 @@ function attachEvents() {
     try { localStorage.removeItem(_ROLLUP_KEY); } catch(_) {}
     S.view = 'login'; S.loginTab = 'new'; S.msg = '';
     render();
+  });
+  bind('menu-prefs', (e) => {
+    e.stopPropagation();
+    const dd = el('prefs-dropdown');
+    if (!dd) return;
+    dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
   });
   bind('menu-action', (e) => {
     e.stopPropagation();
@@ -6467,6 +6493,8 @@ document.addEventListener('click', (e) => {
   // 1. Close dropdowns
   const dd = el('action-dropdown');
   if (dd) dd.style.display = 'none';
+  const pd = el('prefs-dropdown');
+  if (pd) pd.style.display = 'none';
 
   // 2. Handle Stat Spinners
   const btn = e.target.closest('.stat-spin button');
