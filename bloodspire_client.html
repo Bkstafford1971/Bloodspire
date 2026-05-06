@@ -3410,7 +3410,7 @@ async function addChallenge(warriorName, targetName) {
     team_id: teamId, warrior_name: warriorName, target_name: targetName, action: 'add',
   });
   if (r.success) {
-    S.teams[teamId].challenges = r.challenges;
+    S.teams[teamId] = r.team;
     render();
   } else {
     alert('Could not add challenge: ' + r.error);
@@ -3424,7 +3424,7 @@ async function removeChallenge(warriorName, targetName) {
     team_id: teamId, warrior_name: warriorName, target_name: targetName, action: 'remove',
   });
   if (r.success) {
-    S.teams[teamId].challenges = r.challenges;
+    S.teams[teamId] = r.team;
     render();
   } else {
     alert('Could not remove challenge: ' + r.error);
@@ -3439,8 +3439,7 @@ async function selectBloodChallengeChampion(targetName, challengerName) {
       team_id: teamId, target_name: targetName, challenger_name: challengerName,
     });
     if (r.success) {
-      const team = S.teams[teamId];
-      if (team) team.blood_challenges = r.blood_challenges;
+      if (r.team) S.teams[teamId] = r.team;
       refreshContent();
     } else {
       alert('Could not set blood challenge champion: ' + r.error);
@@ -3465,8 +3464,7 @@ async function addAvoidManager(managerName) {
       team_id: teamId, manager_name: managerName, action: 'add',
     });
     if (r.success) {
-      const team = S.teams[teamId];
-      if (team) team.avoid_managers = r.avoid_managers;
+      if (r.team) S.teams[teamId] = r.team;
       render();
     } else {
       alert('Could not add manager to avoid list: ' + r.error);
@@ -3485,8 +3483,7 @@ async function removeAvoidManager(managerName) {
       team_id: teamId, manager_name: managerName, action: 'remove',
     });
     if (r.success) {
-      const team = S.teams[teamId];
-      if (team) team.avoid_managers = r.avoid_managers;
+      if (r.team) S.teams[teamId] = r.team;
       render();
     } else {
       alert('Could not remove manager from avoid list: ' + r.error);
@@ -3511,16 +3508,7 @@ async function addAvoid(warriorName, avoidWarriorName) {
       team_id: teamId, warrior_name: warriorName, avoid_warrior_name: avoidWarriorName, action: 'add',
     });
     if (r.success) {
-      const team = S.teams[teamId];
-      if (team && team.warriors) {
-        // Find the warrior in the team
-        for (let i = 0; i < team.warriors.length; i++) {
-          if (team.warriors[i] && team.warriors[i].name === warriorName) {
-            team.warriors[i].avoid_warriors = r.avoid_warriors;
-            break;
-          }
-        }
-      }
+      if (r.team) S.teams[teamId] = r.team;
       refreshContent();
     } else {
       alert('Could not add to avoid list: ' + r.error);
@@ -3539,16 +3527,7 @@ async function removeAvoid(warriorName, avoidWarriorName) {
       team_id: teamId, warrior_name: warriorName, avoid_warrior_name: avoidWarriorName, action: 'remove',
     });
     if (r.success) {
-      const team = S.teams[teamId];
-      if (team && team.warriors) {
-        // Find the warrior in the team
-        for (let i = 0; i < team.warriors.length; i++) {
-          if (team.warriors[i] && team.warriors[i].name === warriorName) {
-            team.warriors[i].avoid_warriors = r.avoid_warriors;
-            break;
-          }
-        }
-      }
+      if (r.team) S.teams[teamId] = r.team;
       refreshContent();
     } else {
       alert('Could not remove from avoid list: ' + r.error);
