@@ -4159,15 +4159,26 @@ async function doLogin() {
 
     // If local auth fails and a server URL is set, try authenticating against
     // the league server so users can recover their account on a new machine.
-    if (!r.success && S.serverUrl) {
+    // Also try window.location.origin as a fallback — remote players connecting
+    // via HTTP may have S.serverUrl set to localhost if it wasn't corrected.
+    if (!r.success) {
+      const candidateUrls = [...new Set([
+        S.serverUrl,
+        (window.location.protocol !== 'file:' ? window.location.origin : null),
+      ].filter(Boolean))];
+      if (!candidateUrls.length) { setMsg(r.error || 'Login failed.', 'err'); render(); return; }
       setMsg('No local account found — checking league server...', ''); render();
       try {
-        const base = S.serverUrl.replace(/\/+$/, '');
+        let serverReg = null, base = '';
+        for (const candidate of candidateUrls) {
+          base = candidate.replace(/\/+$/, '');
+          serverReg = await fetch(base + '/api/register', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ manager_name: name, password: pass }),
+          }).then(res => res.json()).catch(() => null);
+          if (serverReg?.success) { S.serverUrl = base; break; }
+        }
         // /api/register returns the existing manager_id when name+password match
-        const serverReg = await fetch(base + '/api/register', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ manager_name: name, password: pass }),
-        }).then(res => res.json()).catch(() => null);
 
         if (!serverReg?.success) {
           setMsg(serverReg?.error || r.error || 'Login failed.', 'err'); render(); return;
@@ -6347,7 +6358,10 @@ async function init() {
       console.log('Running in local backend mode');
       S.isLocalBackend = true;
       S.folderReady = true;
-      S.localBaseUrl = localCheck.server_url || 'http://localhost:8766';
+      // Prefer the URL the page was actually served from so remote players
+      // get the host's Tailscale/LAN IP, not a hardcoded localhost.
+      const pageOrigin = (window.location.protocol !== 'file:') ? window.location.origin : null;
+      S.localBaseUrl = pageOrigin || localCheck.server_url || 'http://localhost:8766';
       if (!S.serverUrl || S.serverUrl === DEFAULT_SERVER_URL) S.serverUrl = S.localBaseUrl;
       
       const localAcc = await LocalAPI.get('/api/account');

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # =============================================================================
-# league_server.py — BLOODSPIRE League Server
+# league_server.py — THE AGONY AMPHITHEATRE League Server
 # =============================================================================
 # The host runs this alongside their normal client.
 # All other players connect to http://HOST_IP:8766 to upload teams and
@@ -26,6 +26,8 @@ import shutil
 from file_protection import save_json_protected, load_json_protected, make_file_readonly, make_file_writable
 import webbrowser
 from typing import Optional
+
+SERVER_VERSION = "1.2.1"
 
 BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
 LEAGUE_DIR   = os.path.join(BASE_DIR, "saves", "league")
@@ -321,6 +323,44 @@ def _run_turn(request_password, rerun_turn=None):
               f"fav_wpn={_turn_start_flags.get('show_favorite_weapon')} "
               f"luck={_turn_start_flags.get('show_luck_factor')} "
               f"max_hp={_turn_start_flags.get('show_max_hp')}")
+
+        # Pre-pass cleanup: If this is a re-run or if old files exist in the 
+        # target turn directory, wipe existing results and the newsletter
+        # to ensure the folder only contains data from the latest execution.
+        td_clean = _turn_dir(turn_num)
+        if os.path.exists(td_clean):
+            for fn in os.listdir(td_clean):
+                if (fn.startswith("result_") and fn.endswith(".json")) or fn == "newsletter.txt":
+                    fpath = os.path.join(td_clean, fn)
+                    try:
+                        make_file_writable(fpath)
+                        os.remove(fpath)
+                        # Also clear matching checksum
+                        if fn.endswith(".json"):
+                            cf = fpath.replace(".json", ".checksum")
+                            if os.path.exists(cf):
+                                make_file_writable(cf)
+                                os.remove(cf)
+                    except Exception as e:
+                        print(f"  WARNING: Cleanup failed for {fn}: {e}")
+
+        # Also clear admin debug logs for this turn if they exist
+        dbg_dir = os.path.join(BASE_DIR, "saves", "admin_logs", f"turn_{turn_num:04d}")
+        if os.path.exists(dbg_dir):
+            try:
+                shutil.rmtree(dbg_dir)
+            except Exception as e:
+                print(f"  WARNING: Admin log cleanup failed: {e}")
+
+        # Also clear scout narratives for this specific turn from the global store
+        sn_path = os.path.join(LEAGUE_DIR, "scout_narratives.json")
+        if os.path.exists(sn_path):
+            sn_data = _load_json(sn_path, {})
+            to_del = [wn for wn, d in sn_data.items() if d.get("turn") == turn_num]
+            if to_del:
+                for wn in to_del: del sn_data[wn]
+                _save_json(sn_path, sn_data)
+
         cfg["turn_state"] = "processing"
         import datetime as _dt2
         cfg["processing_started_at"] = _dt2.datetime.now().isoformat()
@@ -1631,7 +1671,7 @@ def _admin_page():
 
     return f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BLOODSPIRE League — Admin</title>
+<title>The Agony Amphitheatre League — Admin v{SERVER_VERSION}</title>
 <style>
  body{{font:13px Tahoma,Arial,sans-serif;background:#d4d0c8;margin:0}}
  .bar{{background:#000080;color:#fff;padding:6px 14px;font-weight:bold;font-size:15px;
@@ -1658,7 +1698,7 @@ def _admin_page():
  .prog-lbl{{position:absolute;top:0;left:0;right:0;text-align:center;font-size:11px;
             line-height:18px;color:#fff;mix-blend-mode:difference}}
 </style></head><body>
-<div class="bar">⚔ BLOODSPIRE League — Admin
+<div class="bar">⚔ THE AGONY AMPHITHEATRE — Admin <span style="margin-left:8px; opacity:0.7;">v{SERVER_VERSION}</span>
  <span>Turn {turn}</span>
  <span class="state">{state_display}</span>
  <span id="sched-top-badge" style="display:none;background:#060;color:#fff;padding:2px 8px;border-radius:3px;font-size:10px;margin-left:8px;vertical-align:middle;border:1px solid #0a0">AUTO-SCHEDULE ON</span>
@@ -2321,6 +2361,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 "uploaded"        : [ups[m]["manager_name"] for m in ups],
                 "not_uploaded"    : [mgrs[m]["manager_name"] for m in mgrs if m not in ups],
                 "reset_count"     : cfg.get("reset_count", 0),
+                "server_version"  : SERVER_VERSION,
             }); return
 
         if path == "/api/newsletter":
@@ -2650,6 +2691,51 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 "uploads":{m:{"manager_name":u["manager_name"],"uploaded_at":u.get("uploaded_at")} for m,u in ups.items()},
                 "standings":_load_standings(),
             }); return
+
+        # ── Browser-mode local file API (GET-safe endpoints) ─────────────
+        # These mirror the do_POST /api/local/* handlers so that browsers
+        # using plain fetch() (default GET) can reach them without Electron.
+        def _safe_path_get(rel_path):
+            if not rel_path: return None
+            clean = os.path.normpath(rel_path).lstrip(os.sep + (os.altsep or ''))
+            if clean.startswith('..'): return None
+            return os.path.join(BASE_DIR, "saves", "client", clean)
+
+        if path == "/api/local/status":
+            # Return the Host header so remote players get the correct server URL,
+            # not a hardcoded "localhost" that only works on the server machine.
+            host = self.headers.get("Host", f"localhost:{args.port}")
+            self.send_json({
+                "success": True,
+                "is_local_backend": True,
+                "server_url": f"http://{host}",
+            }); return
+
+        if path == "/api/local/read":
+            q = self.qs()
+            fpath = _safe_path_get(q.get("path"))
+            if not fpath or not os.path.exists(fpath):
+                self.send_json({"success": False, "error": "File not found"}, 404); return
+            try:
+                if fpath.endswith(".json"):
+                    # load_json_protected returns a dict, not a string — send directly
+                    content = load_json_protected(fpath)
+                    self.send_json({"success": True, "data": content})
+                else:
+                    with open(fpath, "r", encoding="utf-8") as f:
+                        content = f.read()
+                    self.send_json({"success": True, "text": content})
+            except Exception as e:
+                self.send_json({"success": False, "error": str(e)}, 500)
+            return
+
+        if path == "/api/local/list":
+            q = self.qs()
+            dpath = _safe_path_get(q.get("path"))
+            if not dpath or not os.path.isdir(dpath):
+                self.send_json({"success": True, "files": []}); return
+            files = [f for f in os.listdir(dpath) if os.path.isfile(os.path.join(dpath, f))]
+            self.send_json({"success": True, "files": sorted(files)}); return
 
         self.send_json({"error":"Not found."}, 404)
 
@@ -3155,10 +3241,13 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             return os.path.join(BASE_DIR, "saves", "client", clean)
 
         if path == "/api/local/status":
+            # Return the Host header so remote players get the correct server URL,
+            # not a hardcoded "localhost" that only works on the server machine.
+            host = self.headers.get("Host", f"localhost:{args.port}")
             self.send_json({
                 "success": True,
                 "is_local_backend": True,
-                "server_url": f"http://localhost:{args.port}"
+                "server_url": f"http://{host}",
             }); return
 
         if path == "/api/local/read":
@@ -3166,15 +3255,14 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             fpath = _safe_path(q.get("path"))
             if not fpath or not os.path.exists(fpath):
                 self.send_json({"success": False, "error": "File not found"}, 404); return
-            try: # Use protected load for JSON, regular for text
-                if fpath.endswith(".json"): # Protected
+            try:
+                if fpath.endswith(".json"):
+                    # load_json_protected returns a dict, not a string — send directly
                     content = load_json_protected(fpath)
-                else: # Not protected
+                    self.send_json({"success": True, "data": content})
+                else:
                     with open(fpath, "r", encoding="utf-8") as f:
                         content = f.read()
-                if fpath.endswith(".json"): # Return JSON object if it was JSON
-                    self.send_json({"success": True, "data": json.loads(content)})
-                else:
                     self.send_json({"success": True, "text": content})
             except Exception as e:
                 self.send_json({"success": False, "error": str(e)}, 500); return
@@ -3435,7 +3523,7 @@ def main():
 
     print()
     print("  ╔══════════════════════════════════════════════╗")
-    print("  ║     BLOODSPIRE LEAGUE SERVER                 ║")
+    print(f"  ║     THE AGONY AMPHITHEATRE SERVER v{SERVER_VERSION:<10}║")
     print("  ╚══════════════════════════════════════════════╝")
     print(f"\n  Admin panel :  {url}/admin")
     print(f"  Player URL  :  http://YOUR_LAN_IP:{args.port}")
