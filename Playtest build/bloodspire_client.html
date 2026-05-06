@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1769,6 +1769,10 @@ function buildMenuBar() {
                onchange="toggleHideRecord(this.checked)">
         Hide W-L-K Record
       </label>
+      <div style="border-top:1px solid var(--mid); margin:2px 0;"></div>
+      <div class="menu-item" onclick="resetSaveFolder()" style="padding:4px 12px; color:#800;">
+        Reset Save Folder...
+      </div>
     </div>
   </span>
   <span class="menu-item" id="menu-action" style="position:relative;">Action
@@ -5733,8 +5737,8 @@ async function doLeagueDownloadAll() {
 
     // Build local name→id map from known teams
     const nameToId = {};
-    Object.values(S.teams || {}).forEach(t => { // Iterate over all loaded teams
-      if (t && t.team_name) nameToId[t.team_name.toLowerCase()] = t.team_id; // Correctly map team name to team ID
+    Object.values(S.teams || {}).forEach(t => {
+      if (t && t.team_name) nameToId[t.team_name.toLowerCase()] = t.team_id;
     });
 
     for (const result of teamResults) {
@@ -5757,6 +5761,7 @@ async function doLeagueDownloadAll() {
         team_id: localTid, result,
       });
       if (app.success) {
+        console.log(`Successfully applied results for team ${localTid}`);
         S.teams[localTid] = app.team;
         applied.push({ team_id: localTid, team_name: result.team_name || '?',
                        bouts: app.bouts, team: app.team });
