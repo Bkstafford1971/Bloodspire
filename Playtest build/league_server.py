@@ -1338,7 +1338,7 @@ def _run_turn(request_password, rerun_turn=None):
     try:
         import sys as _sys; _sys.path.insert(0, BASE_DIR)
         from newsletter import generate_newsletter, _update_champion
-        from save import load_champion_state, save_champion_state, load_newsletter_voice
+        from save import load_champion_state, save_champion_state
         import datetime as _dt
 
         # Build team objects from result data (non-AI only for newsletter)
@@ -1478,7 +1478,6 @@ def _run_turn(request_password, rerun_turn=None):
                                                          prev_champion_name=prev_champion_name)
         save_champion_state(champ_state)
 
-        voice = load_newsletter_voice()
         date_str = _dt.date.today().strftime("%m/%d/%Y")
         newsletter_text = generate_newsletter(
             turn_num           = turn_num,
@@ -1486,7 +1485,6 @@ def _run_turn(request_password, rerun_turn=None):
             teams              = nl_teams,
             deaths             = deaths_nl,
             champion_state     = champ_state,
-            voice              = voice,
             processed_date     = date_str,
             is_new_champion    = is_new_champion,
         )
@@ -2599,12 +2597,14 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 if tid in own_team_ids: continue
                 if exclude_tid and tid == exclude_tid: continue
                 team_name = tdata.get("team_name", "?")
+                manager_name = tdata.get("manager_name", "?")
                 for w in tdata.get("warriors", []):
                     if not w or w.get("is_dead"): continue
                     warriors.append({
                         "name"        : w.get("name", "?"),
                         "team_name"   : team_name,
                         "team_id"     : tid,
+                        "manager_name": manager_name,
                         "race"        : w.get("race", "?"),
                         "gender"      : w.get("gender", "?"),
                         "wins"        : w.get("wins", 0),

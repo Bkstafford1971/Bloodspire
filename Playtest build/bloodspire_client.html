@@ -2276,6 +2276,7 @@ function buildScoutingTab() {
       w.name.toLowerCase().includes(filter) ||
       w.team_name.toLowerCase().includes(filter)
     );
+    visible.sort((a, b) => b.total_fights - a.total_fights);
     let trows = '';
     visible.forEach(w => {
       const queued = already.has(w.name);
@@ -2292,6 +2293,7 @@ function buildScoutingTab() {
       <tr style="border-bottom:1px solid #eee;">
         <td style="padding:3px 8px;">${esc(w.name)}</td>
         <td style="padding:3px 8px; color:#555;">${esc(w.team_name)}</td>
+        <td style="padding:3px 8px; color:#555;">${esc(w.manager_name||'—')}</td>
         <td style="padding:3px 8px; color:#555;">${esc(w.race)} ${esc(w.gender)}</td>
         <td style="padding:3px 8px; text-align:center;">${S.hideRecord ? '—' : `${w.wins}-${w.losses}-${w.kills}`}</td>
         <td style="padding:3px 8px; text-align:center;">${w.total_fights}</td>
@@ -2299,7 +2301,7 @@ function buildScoutingTab() {
       </tr>`;
     });
     if (!trows) {
-      trows = `<tr><td colspan="6" style="padding:8px; color:#888; font-style:italic;">
+      trows = `<tr><td colspan="7" style="padding:8px; color:#888; font-style:italic;">
         No warriors match the search filter.</td></tr>`;
     }
     targetsHtml = `
@@ -2314,6 +2316,7 @@ function buildScoutingTab() {
         <tr style="border-bottom:2px solid #ccc; color:#666; font-size:11px;">
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Name</th>
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Team</th>
+          <th style="padding:4px 8px; text-align:left; font-weight:600;">Manager</th>
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Race</th>
           <th style="padding:4px 8px; text-align:center; font-weight:600;">Record (W-L-K)</th>
           <th style="padding:4px 8px; text-align:center; font-weight:600;">Fights</th>
@@ -3140,13 +3143,14 @@ function buildChallengesTab(team, w) {
       opponents.push({
         name     : ow.name,
         teamName : ow.team_name,
+        managerName : ow.manager_name || '—',
         race     : ow.race || '—',
         record   : S.hideRecord ? '—' : `${ow.wins||0}-${ow.losses||0}-${ow.kills||0}`,
         fights   : owFights,
       });
     }
   }
-  opponents.sort((a, b) => a.fights - b.fights || a.name.localeCompare(b.name));
+  opponents.sort((a, b) => b.fights - a.fights || a.name.localeCompare(b.name));
 
   // ── Pending challenges rows ──────────────────────────────────────────────
   let pendingRows = '';
@@ -3197,6 +3201,7 @@ function buildChallengesTab(team, w) {
       <tr style="border-bottom:1px solid #eee;">
         <td style="padding:3px 8px;">${esc(op.name)}</td>
         <td style="padding:3px 8px; color:#555;">${esc(op.teamName)}</td>
+        <td style="padding:3px 8px; color:#555;">${esc(op.managerName)}</td>
         <td style="padding:3px 8px; color:#555;">${esc(op.race)}</td>
         <td style="padding:3px 8px; text-align:center;">${esc(op.record)}</td>
         <td style="padding:3px 8px; text-align:center;">${op.fights}</td>
@@ -3204,7 +3209,7 @@ function buildChallengesTab(team, w) {
       </tr>`;
     });
   } else {
-    oppRows = `<tr><td colspan="6" style="padding:10px; color:#888; text-align:center; font-style:italic;">
+    oppRows = `<tr><td colspan="7" style="padding:10px; color:#888; text-align:center; font-style:italic;">
       No warriors from other teams fall within this warrior's challenge range.</td></tr>`;
   }
 
@@ -3394,6 +3399,7 @@ function buildChallengesTab(team, w) {
         <tr style="border-bottom:2px solid #ccc; color:#666; font-size:11px;">
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Name</th>
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Team</th>
+          <th style="padding:4px 8px; text-align:left; font-weight:600;">Manager</th>
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Race</th>
           <th style="padding:4px 8px; text-align:center; font-weight:600;">Record</th>
           <th style="padding:4px 8px; text-align:center; font-weight:600;">Fights</th>
