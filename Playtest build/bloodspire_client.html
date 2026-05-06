@@ -388,6 +388,32 @@ async function doPickFolder(forceNew) {
   }
 }
 
+async function resetSaveFolder() {
+  if (!confirm('Reset save folder? This will clear your saved folder path.\n\nYou will need to select a new folder on next launch.')) {
+    return;
+  }
+
+  // Clear saved folder path and related data
+  baseDir = '';
+  S.folderReady = false;
+  localStorage.removeItem('bloodspire_base_dir');
+  localStorage.removeItem('bloodspire_fsa_handle');
+  window._fsaDirHandle = null;
+
+  // Clear session data
+  S.account = null;
+  S.teams = {};
+  S.sel = { type: null };
+  S.savedPassword = null;
+  S.savedManagerName = null;
+  try { localStorage.removeItem(_ROLLUP_KEY); } catch (_) {}
+
+  alert('Save folder has been reset. The folder picker will appear on next launch.');
+  S.view = 'login';
+  S.msg = '';
+  render();
+}
+
 // Browser mode: use File System Access API to pick a folder
 async function fsaPickFolder() {
   if (!window.showDirectoryPicker) {
