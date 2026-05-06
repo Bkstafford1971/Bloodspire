@@ -1,4 +1,4 @@
-﻿# =============================================================================
+# =============================================================================
 # matchmaking.py — BLOODSPIRE Turn Matchmaking Engine
 # =============================================================================
 # Builds the list of fights for a turn:
@@ -335,6 +335,7 @@ def _absorb_into_monsters(
         warrior,
         killed_by     = "The Monsters",
         killer_fights = 999,
+        fight_type    = "monster",   # ascension — no blood challenge against monsters
     )
 
 
@@ -465,15 +466,19 @@ def build_fight_card(
     matched_teams   : set = set()         # opponent team IDs already used this card
 
     def _schedule(fight: ScheduledFight):
-        """Add a fight to the card and mark both warriors as used globally."""
+        """Add a fight to the card and mark the player warrior as used globally."""
         card.append(fight)
         global_used.add(fight.player_warrior.name)
-        if fight.fight_type not in ("monster", "peasant"):
-            global_used.add(fight.opponent.name)
+        # Opponents are NOT added to global_used here.
+        # Adding them caused opponent warriors to be excluded from active_players
+        # when their own team's card was built in the same pre-pass, resulting in
+        # entire teams getting 0 fights. Player-vs-player conflicts are resolved
+        # by the P-vs-P dedup pass in league_server._run_turn(); AI opponent
+        # duplicates are resolved by the AI dedup pass there.
 
     # Hard rule: every warrior fights at most once per turn, so any warrior
-    # already scheduled elsewhere (as someone else's opponent) is excluded
-    # from this team's pw pool.  Since team size = 5, this also caps every
+    # already scheduled elsewhere (as someone else's pw) is excluded from
+    # this team's pw pool.  Since team size = 5, this also caps every
     # team at 5 fights/turn — a rule with no exceptions.
     active_players = [w for w in player_team.active_warriors
                       if w.name not in global_used]
@@ -970,6 +975,7 @@ def run_turn(
                 pw,
                 killed_by     = ow.name,
                 killer_fights = ow.total_fights,
+                fight_type    = fight_type_for_record,
             )
             try:
                 from save import archive_warrior_history
@@ -992,7 +998,9 @@ def run_turn(
             elif bout.fight_type == "peasant":
                 pass   # Peasants have no persistent team — nothing to update
             else:
-                bout.opponent_team.kill_warrior(ow)
+                bout.opponent_team.kill_warrior(ow, killed_by=pw.name,
+                                                killer_fights=pw.total_fights,
+                                                fight_type=bout.fight_type)
 
         # Handle blood challenge victory
         if bout.fight_type == "blood_challenge" and pw_won:

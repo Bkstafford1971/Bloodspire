@@ -619,6 +619,24 @@ function mergeResults(localTeam, serverResult) {
     }
   }
 
+  // Blood challenges — server is authoritative (creates them on kills, decrements
+  // turns_remaining each turn). Preserve any locally-set challenger_name selections
+  // so the manager's pick survives the download.
+  if (Array.isArray(serverTeam.blood_challenges)) {
+    const localBCs = out.blood_challenges || [];
+    out.blood_challenges = serverTeam.blood_challenges.map(sbc => {
+      const local = localBCs.find(l =>
+        l.target_name === sbc.target_name &&
+        l.dead_warrior_name === sbc.dead_warrior_name
+      );
+      // Keep locally-chosen challenger if the server hasn't set one yet
+      if (local && local.challenger_name && !sbc.challenger_name) {
+        return { ...sbc, challenger_name: local.challenger_name };
+      }
+      return sbc;
+    });
+  }
+
   return out;
 }
 
@@ -677,6 +695,9 @@ const S = {
     flags: { show_favorite_weapon: false, show_luck_factor: false, show_max_hp: false },
   },
 };
+
+// localStorage key for persisting pending team-creation rollup across reloads
+const _ROLLUP_KEY = 'bp_pending_rollup';
 
 /* ============================================================
    API — dual-layer router
@@ -3977,6 +3998,7 @@ function attachEvents() {
     S.challengeTargets = null;
     S.newsletters = null; S.newsletterText = null;
     S.ct = null;
+    try { localStorage.removeItem(_ROLLUP_KEY); } catch(_) {}
     S.view = 'login'; S.loginTab = 'new'; S.msg = '';
     render();
   });
@@ -4043,12 +4065,13 @@ function attachEvents() {
   // Warrior changes auto-save via scheduleAutoSave()
 
   // --- Create team events ---
-  bind('btn-ct-cancel', () => { 
-  S.view = 'main'; 
-  S.ct = null;
+  bind('btn-ct-cancel', () => {
+  S.view = 'main';
+  // S.ct is intentionally NOT cleared here — cancelling should not allow
+  // a fresh set of stat rolls. The same rollup is shown if the user re-enters.
   S.replacingTeam = null;
-  S.msg = ''; 
-  render(); 
+  S.msg = '';
+  render();
 });
 bind('btn-tr-back', () => { S.view='main'; S.turnResults=null; render(); });
 bind('btn-ct-save', doSaveTeam);
@@ -4421,6 +4444,15 @@ async function initCreateTeam(isReplacing) {
       const r = await API.get('/api/game_data'); 
       if (r && !r.error) S.gd = r; 
     }
+    // Restore from localStorage if in-memory state was lost (e.g. page reload).
+    // This prevents players from refreshing the page to get a new set of stat rolls.
+    if (!S.ct) {
+      try {
+        const stored = localStorage.getItem(_ROLLUP_KEY);
+        if (stored) S.ct = JSON.parse(stored);
+      } catch(_) {}
+    }
+
     if (!S.ct) {
       const r = await API.get('/api/rollup');
       if (!r || r.error || !r.rolls) {
@@ -4437,6 +4469,8 @@ async function initCreateTeam(isReplacing) {
         adds     : r.rolls.map(() => ({ strength:0, dexterity:0, constitution:0, intelligence:0, presence:0, size:0 })),
         saved    : [false, false, false, false, false],
       };
+      // Persist so cancel + page reload doesn't allow a fresh re-roll
+      try { localStorage.setItem(_ROLLUP_KEY, JSON.stringify(S.ct)); } catch(_) {}
     }
     S.msg  = '';
   } catch (err) {
@@ -4592,6 +4626,7 @@ async function doSaveTeam() {
     
     S.view = 'main';
     S.ct = null;
+    try { localStorage.removeItem(_ROLLUP_KEY); } catch(_) {}
 
     let successMsg = 'Team created and saved locally.';
     if (S.league.managerId) {
@@ -5742,7 +5777,8 @@ async function confirmReplaceTeam(teamId) {
   
   setMsg('Preparing replacement slot...', 'ok'); 
   render();
-  S.ct = null; // Clear creation state so replacement gets fresh rollups
+  S.ct = null;
+  try { localStorage.removeItem(_ROLLUP_KEY); } catch(_) {} // force fresh rollups for replacement
   
   const r = await API.post('/api/team/replace', {
     manager_id: S.account.id,

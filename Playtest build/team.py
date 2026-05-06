@@ -1,4 +1,4 @@
-﻿# =============================================================================
+# =============================================================================
 # team.py — BLOODSPIRE Team Class
 # =============================================================================
 # A team always has exactly 5 warriors.
@@ -172,6 +172,7 @@ class Team:
         warrior: Warrior,
         killed_by: str = "Unknown",
         killer_fights: int = 0,
+        fight_type: str = "",
     ) -> int:
         """
         Mark a warrior as dead but keep them in their roster slot until the
@@ -198,11 +199,16 @@ class Team:
             "slot_idx"     : idx,
         })
 
-        if killer_fights >= 5:
+        # Create a blood challenge whenever killed by a real warrior (not a
+        # peasant or monster fodder).  The old killer_fights >= 5 gate blocked
+        # every first-turn kill since no warrior has 5 fights yet.  We now
+        # check fight_type instead: only real P-vs-P fights deserve a vendetta.
+        _no_bc_types = {"peasant", "monster"}
+        if fight_type not in _no_bc_types and killed_by and killed_by != "Unknown":
             self.blood_challenges.append({
                 "dead_warrior_name": warrior.name,
                 "target_name": killed_by,
-                "challenger_name": None,  # Manager can select later
+                "challenger_name": None,  # Manager selects later
                 "turns_remaining": 3,
                 "status": "active",
             })

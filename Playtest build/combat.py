@@ -1,4 +1,4 @@
-﻿# =============================================================================
+# =============================================================================
 # combat.py, BLOODSPIRE Combat Engine v2
 # =============================================================================
 # CORE MECHANICS:
@@ -1716,6 +1716,8 @@ class CombatEngine:
 
         rem_a = apm_a;  rem_b = apm_b
         act_a = act_b = crowd = 0
+        old_end_a = self.state_a.endurance
+        old_end_b = self.state_b.endurance
 
         while rem_a > 0 or rem_b > 0:
             end = self._check_fatal_injury()

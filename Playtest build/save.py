@@ -109,7 +109,8 @@ def load_game_state() -> dict:
     if not os.path.exists(GAME_STATE_FILE):
         return DEFAULT_GAME_STATE.copy()
     try:
-        state = load_json_protected(GAME_STATE_FILE)
+        # allow_tampered=True to allow the game to recover its turn/ID counters if the file is out of sync
+        state = load_json_protected(GAME_STATE_FILE, allow_tampered=True)
         # Fill in any missing keys with defaults (handles version upgrades)
         for k, v in DEFAULT_GAME_STATE.items():
             state.setdefault(k, v)

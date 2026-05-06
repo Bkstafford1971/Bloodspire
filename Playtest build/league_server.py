@@ -44,15 +44,15 @@ _global_server = None  # Reference for graceful shutdown from request handlers
 def _ensure_dirs():
     os.makedirs(LEAGUE_DIR, exist_ok=True)
 
-def _load_json(path, default, protected=True):
+def _load_json(path, default, protected=True, allow_tampered=False):
     try:
         if protected:
-            return load_json_protected(path)
+            return load_json_protected(path, allow_tampered=allow_tampered)
         else:
             with open(path, "r", encoding="utf-8") as f:
                 return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError, ValueError) as e:
-        if protected and isinstance(e, ValueError):
+        if protected and isinstance(e, ValueError) and not allow_tampered:
             print(f"  WARNING: Tampered file detected: {path} - {e}")
         return default
 
@@ -73,12 +73,13 @@ def _managers_path(): return os.path.join(LEAGUE_DIR, "managers.json")
 def _standings_path():return os.path.join(LEAGUE_DIR, "standings.json")
 
 def _turn_dir(turn_num):
-    d = os.path.join(LEAGUE_DIR, f"turn_{turn_num:04d}")
+    d = os.path.join(LEAGUE_DIR, f"turn_{int(turn_num):04d}")
     os.makedirs(d, exist_ok=True)
     return d
 
 def _load_config():
-    cfg = _load_json(_config_path(), { # Protected
+    # allow_tampered=True for config.json to allow the server to boot and fix its own checksum
+    cfg = _load_json(_config_path(), {
         "current_turn": 1,
         "turn_state": "open",
         "host_password_hash": "", # This will be set on first run
@@ -92,7 +93,7 @@ def _load_config():
         "ai_teams_enabled": True,
         "schedule_enabled": False,
         "schedule_slots": [],
-    })
+    }, allow_tampered=True)
     # Ensure new flags exist in old configs
     for key, default in [
         ("show_favorite_weapon", False),
@@ -845,7 +846,8 @@ def _run_turn(request_password, rerun_turn=None):
                     "fight_type": fight_type_to_record,
                 })
                 if slain:
-                    player_team.kill_warrior(pw, killed_by=opp_name, killer_fights=opp_tf)
+                    player_team.kill_warrior(pw, killed_by=opp_name, killer_fights=opp_tf,
+                                             fight_type=fight_type_to_record)
                     player_team.auto_upload_enabled = False
                     # Archive history for slain warrior in pre-fought PvP
                     try:
@@ -970,7 +972,8 @@ def _run_turn(request_password, rerun_turn=None):
                 "fight_type": fight_type_to_record,
             })
             if slain:
-                player_team.kill_warrior(pw, killed_by=ow.name, killer_fights=ow.total_fights)
+                player_team.kill_warrior(pw, killed_by=ow.name, killer_fights=ow.total_fights,
+                                         fight_type=fight_type_to_record)
                 player_team.auto_upload_enabled = False
                 try:
                     from save import archive_warrior_history
@@ -1472,9 +1475,10 @@ def _filter_warrior_for_client(warrior_dict: dict, cfg: dict) -> dict:
     # Remove luck factor if flag is off
     if not cfg.get("show_luck_factor", False):
         w.pop("luck", None)
-    # Remove favorite weapon if flag is off  
-    if not cfg.get("show_favorite_weapon", False):
-        w.pop("favorite_weapon", None)
+    # favorite_weapon is intentionally NOT stripped here.
+    # Stripping it caused the field to be absent from client uploads, triggering
+    # assign_favorite_weapon() on every turn re-load — changing the weapon each turn.
+    # The client UI already conditionally hides it via S.league.flags.show_favorite_weapon.
     return w
 
 
