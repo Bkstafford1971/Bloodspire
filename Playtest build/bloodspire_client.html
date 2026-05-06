@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -711,7 +711,6 @@ const S = {
   newsletters:     null,  // cached list of newsletter turn numbers
   newsletterTurn:  null,  // currently viewed turn
   newsletterText:  null,  // cached newsletter text
-  newsletterVoice: null,  // 'snide' | 'neutral'
   savedManagerName: null, // last-used manager name for login auto-fill
   savedPassword:    null, // saved password for auto-login (from session)
   savedRememberMe:  true, // whether Remember Me was checked last time
@@ -1019,14 +1018,6 @@ const LocalAPI = {
     if (path === '/api/newsletter/save') {
       const turn = parseInt(body.turn || 0, 10);
       await Store.writeNewsletter(turn, body.text || '');
-      return { success: true };
-    }
-
-    // ── Newsletter voice preference ──────────────────────────────────────
-    if (path === '/api/newsletter/voice') {
-      const s = await Store.readSettings();
-      s.narrator_voice = body.voice || 'neutral';
-      await Store.writeSettings(s);
       return { success: true };
     }
 
@@ -2036,7 +2027,6 @@ function buildManagerPanel() {
     const turns = S.newsletters || [];
     const cur   = S.newsletterTurn;
     const text  = S.newsletterText;
-    const voice = S.newsletterVoice || 'snide';
     if (!turns.length && S.newsletters === null) {
       // Initial load state, content will be populated by _ensureNewsletterContentLoadedForMgrTab
       body = '<div style="padding:20px; color:#666;">Loading newsletters...</div>';
@@ -2071,11 +2061,6 @@ function buildManagerPanel() {
               display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
     <b style="font-size:11px;">Turn:</b>
     <select onchange="loadNewsletterTurn(parseInt(this.value))" style="font-size:11px;">${opts}</select>
-    <span style="font-size:11px; margin-left:8px;">Voice:</span>
-    <select onchange="setNewsletterVoice(this.value)" style="font-size:11px;">
-      <option value="snide"   ${voice==='snide'  ?'selected':''}>Snide Clemens</option>
-      <option value="neutral" ${voice==='neutral'?'selected':''}>Neutral</option>
-    </select>
   </div>
   <div style="flex:1; overflow:auto;">
     ${text !== null
@@ -5157,16 +5142,10 @@ async function loadNewsletterTurn(turn) {
   refreshContent();
 }
 
-async function setNewsletterVoice(voice) {
-  S.newsletterVoice = voice;
-  await API.post('/api/newsletter/voice', {voice});
-}
-
 function buildNewsletterPanel() {
   const turns = S.newsletters || [];
   const cur   = S.newsletterTurn;
   const text  = S.newsletterText;
-  const voice = S.newsletterVoice || 'snide';
 
   // Turn selector
   const opts = turns.map(t =>
