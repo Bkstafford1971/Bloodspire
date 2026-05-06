@@ -1775,7 +1775,7 @@ def _admin_page():
  <div class="panel" style="min-width:300px;">
   <h3 style="color:#c00;">Delete Manager (DANGER ZONE)</h3>
   <p style="color:#c00;font-size:12px;margin-bottom:10px;">
-   ⚠ This will permanently delete the selected manager and all their uploaded data for the current turn.
+   ⚠ This will delete the selected manager's account and their uploads for the current turn. Their teams will remain in the system and can be accessed if they re-register.
   </p>
   <div style="margin-bottom:10px;">
    <label style="display:block;margin-bottom:4px;">Select Manager:</label>
@@ -1808,6 +1808,23 @@ def _admin_page():
   </div>
   <button onclick="renameSelectedManager()" style="width:100%;padding:8px;font-size:13px;">
    RENAME MANAGER
+  </button>
+ </div>
+ <!-- ====================== DOWNLOAD MANAGER FILES PANEL ====================== -->
+ <div class="panel" style="min-width:300px;">
+  <h3>Download Manager Files</h3>
+  <p style="font-size:12px;margin-bottom:10px;color:#555;">
+   Download a manager's team files and turn results as a ZIP. Use this to manually send files to a manager who isn't receiving them.
+  </p>
+  <div style="margin-bottom:8px;">
+   <label style="display:block;margin-bottom:4px;">Select Manager:</label>
+   <select id="download-manager-select" style="width:100%;padding:5px;border:2px inset #808080;font-size:13px;">
+    <option value="">-- Select a manager --</option>
+    {manager_options}
+   </select>
+  </div>
+  <button onclick="downloadManagerFiles()" style="width:100%;padding:8px;font-size:13px;">
+   DOWNLOAD FILES AS ZIP
   </button>
  </div>
  <!-- ====================== RENAME TEAM PANEL ====================== -->
@@ -2064,7 +2081,7 @@ async function deleteSelectedManager() {{
     const managerName = fullText.split(" (ID:")[0];   // Clean name for display
 
     // First safety confirmation
-    if (!confirm(`⚠ DANGER ZONE ⚠\n\nYou are about to PERMANENTLY delete:\n\n${{managerName}}\n\nAll their teams and results for the current turn will be removed.\n\nThis action CANNOT be undone.\n\nContinue?`)) {{
+    if (!confirm(`⚠ DANGER ZONE ⚠\n\nYou are about to delete the manager account:\n\n${{managerName}}\n\nTheir account and current turn uploads will be removed, but their teams will remain in the system and can be accessed if they re-register.\n\nThis action CANNOT be undone.\n\nContinue?`)) {{
         return;
     }}
 
@@ -2137,6 +2154,48 @@ async function renameSelectedManager() {{
         }}
     }} catch(e) {{
         show('Connection error: ' + e.message, 'err');
+    }}
+}}
+// =====================================================================
+
+async function downloadManagerFiles() {{
+    const select = document.getElementById('download-manager-select');
+    const mid = select.value;
+    if (!mid) {{
+        alert('Please select a manager.');
+        return;
+    }}
+
+    const managerName = select.options[select.selectedIndex].text.split(' (ID:')[0];
+    const pw = pw_val() || prompt('Enter host password:');
+    if (!pw) {{ show('Download cancelled — no password provided.', 'err'); return; }}
+    const hp = document.getElementById('hp'); if (hp) hp.value = pw;
+
+    try {{
+        const r = await fetch('/api/admin/download_manager_files', {{
+            method: 'POST',
+            headers: {{'Content-Type': 'application/json'}},
+            body: JSON.stringify({{ host_password: pw, manager_id: mid }})
+        }});
+
+        if (!r.ok) {{
+            const d = await r.json();
+            show('Download failed: ' + (d.error || 'Unknown error'), 'err');
+            return;
+        }}
+
+        const blob = await r.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `manager_${{mid}}_files.zip`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        show(`Downloaded files for ${{managerName}}`, 'ok');
+    }} catch(e) {{
+        show('Download error: ' + e.message, 'err');
     }}
 }}
 // =====================================================================
@@ -3486,6 +3545,54 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             cfg["admin_debug_manager_id"] = mid
             _save_config(cfg)
             self.send_json({"success": True, "manager_name": mname}); return
+
+        if path == "/api/admin/download_manager_files":
+            import zipfile
+            cfg = _load_config()
+            if not _check_host_pw(cfg, b.get("host_password", "")):
+                self.send_json({"success": False, "error": "Not authorised."}, 401); return
+
+            mid = str(b.get("manager_id") or "").strip()
+            if not mid:
+                self.send_json({"success": False, "error": "manager_id required."}); return
+
+            managers = _load_managers()
+            if mid not in managers:
+                self.send_json({"success": False, "error": "Manager not found."}); return
+
+            mname = managers[mid]["manager_name"]
+
+            # Create ZIP with all manager's files
+            from io import BytesIO
+            zip_buffer = BytesIO()
+            with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
+                # Add all team files for this manager
+                mgr_teams = set(int(t) for t in managers[mid].get("team_ids", []) if isinstance(t,(int,str)) and str(t).isdigit())
+                from save import TEAMS_DIR
+                for team_id in mgr_teams:
+                    team_file = os.path.join(TEAMS_DIR, f"team_{int(team_id):04d}.json")
+                    if os.path.exists(team_file):
+                        zf.write(team_file, arcname=f"team_{int(team_id):04d}.json")
+
+                # Add all result files for this manager across all turns
+                league_dir = os.path.dirname(_config_path())
+                for fname in os.listdir(league_dir):
+                    if fname.startswith("turn_") and os.path.isdir(os.path.join(league_dir, fname)):
+                        turn_path = os.path.join(league_dir, fname)
+                        for result_file in os.listdir(turn_path):
+                            if result_file.startswith(f"result_{mid}_") and result_file.endswith(".json"):
+                                full_path = os.path.join(turn_path, result_file)
+                                zf.write(full_path, arcname=f"{fname}/{result_file}")
+
+            zip_buffer.seek(0)
+            self.send_response(200)
+            self.send_header("Content-Type", "application/zip")
+            filename = f"manager_{mid}_files.zip"
+            self.send_header("Content-Disposition", f"attachment; filename={filename}")
+            self.send_header("Content-Length", len(zip_buffer.getvalue()))
+            self.end_headers()
+            self.wfile.write(zip_buffer.getvalue())
+            return
 
         if path == "/api/shutdown":
             self.send_json({"success": True, "message": "Shutting down..."})

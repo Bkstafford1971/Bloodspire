@@ -324,42 +324,83 @@ let baseDir = localStorage.getItem('bloodspire_base_dir') || "";
 async function doPickFolder(forceNew) {
   try {
     console.log('Opening folder picker...');
-    const folderPath = await window.electronAPI.selectFolder();
-    
-    if (folderPath) {
-      console.log('Folder selected:', folderPath);
-      baseDir = folderPath; 
-      localStorage.setItem('bloodspire_base_dir', folderPath);
-      
-      // Tell main process about this folder
-      try {
-        const result = await window.electronAPI.setBaseDir(folderPath);
-        if (result.success) {
-          console.log('Main process baseDir set successfully');
-        } else {
-          console.error('Failed to set main process baseDir:', result.error);
+    let folderPath;
+
+    // Try Electron API first (native app)
+    if (window.electronAPI) {
+      console.log('Using Electron folder picker...');
+      folderPath = await window.electronAPI.selectFolder();
+
+      if (folderPath) {
+        console.log('Electron folder selected:', folderPath);
+        baseDir = folderPath;
+        localStorage.setItem('bloodspire_base_dir', folderPath);
+
+        // Tell main process about this folder
+        try {
+          const result = await window.electronAPI.setBaseDir(folderPath);
+          if (result.success) {
+            console.log('Main process baseDir set successfully');
+          } else {
+            console.error('Failed to set main process baseDir:', result.error);
+          }
+        } catch (err) {
+          console.error('Error setting base dir in main process:', err);
         }
-      } catch (err) {
-        console.error('Error setting base dir in main process:', err);
+      } else {
+        console.log('Folder selection cancelled');
+        return;
       }
-      
-      S.folderReady = true;
-      S.msg = ''; 
-      
-      // Bootstrap from the folder
-      await _bootstrapFromFolder();
     } else {
-      console.log('Folder selection cancelled');
+      // Browser mode: use File System Access API
+      console.log('Using FSA folder picker (browser mode)...');
+      try {
+        folderPath = await fsaPickFolder();
+        if (!folderPath) {
+          console.log('FSA folder selection cancelled');
+          return;
+        }
+        baseDir = folderPath;
+        localStorage.setItem('bloodspire_base_dir', folderPath);
+        console.log('FSA folder selected:', folderPath);
+      } catch (e) {
+        if (e.name === 'AbortError') {
+          return;
+        }
+        throw e;
+      }
     }
+
+    S.folderReady = true;
+    S.msg = '';
+
+    // Bootstrap from the folder
+    await _bootstrapFromFolder();
   } catch (e) {
     console.error('Folder pick error:', e);
-    if (e && e.name === 'AbortError') { 
-      S.msg = ''; 
-      render(); 
-      return; 
+    if (e && e.name === 'AbortError') {
+      S.msg = '';
+      render();
+      return;
     }
-    setMsg('Could not open folder: ' + (e.message || e), 'err'); 
+    setMsg('Could not open folder: ' + (e.message || e), 'err');
     render();
+  }
+}
+
+// Browser mode: use File System Access API to pick a folder
+async function fsaPickFolder() {
+  if (!window.showDirectoryPicker) {
+    throw new Error('File System Access API not available. Use Chrome, Edge, or Brave.');
+  }
+  try {
+    const dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+    localStorage.setItem('bloodspire_fsa_handle', JSON.stringify({ name: dirHandle.name }));
+    window._fsaDirHandle = dirHandle;
+    return dirHandle.name;
+  } catch (e) {
+    if (e.name === 'AbortError') return null;
+    throw e;
   }
 }
 
@@ -6326,6 +6367,11 @@ window.uploadAllTeams = uploadAllTeams;
    INITIALISATION
    ============================================================ */
 async function init() {
+  // Check browser compatibility for non-Electron users
+  if (!window.electronAPI && !isChromiumWithFSA()) {
+    renderChromiumError();
+    return;
+  }
   console.log('Initializing Bloodspire Client...');
   
   // ============================================================
