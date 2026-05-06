@@ -5733,8 +5733,8 @@ async function doLeagueDownloadAll() {
 
     // Build local name→id map from known teams
     const nameToId = {};
-    Object.values(S.teams || {}).forEach(t => {
-      if (t && t.team_name) nameToId[t.team_name.toLowerCase()] = t.team_id;
+    Object.values(S.teams || {}).forEach(t => { // Iterate over all loaded teams
+      if (t && t.team_name) nameToId[t.team_name.toLowerCase()] = t.team_id; // Correctly map team name to team ID
     });
 
     for (const result of teamResults) {
