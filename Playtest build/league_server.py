@@ -45,6 +45,27 @@ _global_server = None  # Reference for graceful shutdown from request handlers
 
 def _ensure_dirs():
     os.makedirs(LEAGUE_DIR, exist_ok=True)
+    os.makedirs(os.path.join(LEAGUE_DIR, "activity_logs"), exist_ok=True)
+
+def _log_activity(action, manager_id, manager_name, details=""):
+    """Log user activity (uploads/downloads) to activity log."""
+    try:
+        log_dir = os.path.join(LEAGUE_DIR, "activity_logs")
+        os.makedirs(log_dir, exist_ok=True)
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+        log_entry = {
+            "timestamp": timestamp,
+            "action": action,
+            "manager_id": manager_id,
+            "manager_name": manager_name,
+            "details": details,
+        }
+        # Append to activity log file (not protected, just text)
+        log_file = os.path.join(log_dir, "activity.jsonl")
+        with open(log_file, "a", encoding="utf-8") as f:
+            f.write(json.dumps(log_entry) + "\n")
+    except Exception as e:
+        print(f"  ERROR writing activity log: {e}")
 
 def _load_json(path, default, protected=True, allow_tampered=False):
     try:
@@ -1849,6 +1870,27 @@ def _admin_page():
    RENAME TEAM
   </button>
  </div>
+ <!-- ====================== ACTIVITY LOG ====================== -->
+ <div class="panel" style="min-width:400px;max-width:600px">
+  <h3>Activity Log</h3>
+  <p style="font-size:11px;margin:0 0 8px;color:#555">
+   View upload and download activity from managers.
+  </p>
+  <div style="margin-bottom:8px;display:flex;gap:8px;font-size:11px">
+   <label>Filter by action:</label>
+   <select id="activity-action-filter" style="width:120px;padding:2px;font-size:11px">
+    <option value="">(all)</option>
+    <option value="upload">Upload</option>
+    <option value="download">Download</option>
+   </select>
+   <label style="margin-left:8px;">Entries:</label>
+   <input type="number" id="activity-limit" value="50" min="10" max="500" style="width:50px;padding:2px;font-size:11px">
+   <button onclick="loadActivityLog()" style="padding:2px 8px;font-size:11px">Load</button>
+  </div>
+  <div id="activity-log-container" style="border:1px solid #ccc;height:250px;overflow-y:auto;background:#f9f9f9;font-size:10px;font-family:monospace;">
+   <div style="padding:8px;color:#999;">Loading...</div>
+  </div>
+ </div>
  <!-- ====================== COMBAT DEBUG LOGGING ====================== -->
  <div class="panel" style="min-width:260px;max-width:340px">
   <h3>Combat Debug Logging</h3>
@@ -2228,6 +2270,45 @@ async function renameSelectedTeam() {{
     }} catch(e) {{ alert('Connection error: ' + e.message); }}
 }}
 
+async function loadActivityLog() {{
+ const pw = pw_val();
+ if (!pw) {{ show('Enter the host password first.', 'err'); return; }}
+ const limit = document.getElementById('activity-limit').value || '50';
+ const action = document.getElementById('activity-action-filter').value || '';
+ const container = document.getElementById('activity-log-container');
+ container.innerHTML = '<div style="padding:8px;color:#999;">Loading...</div>';
+ try {{
+  const url = new URL('/api/admin/activity_log', window.location.origin);
+  url.searchParams.append('limit', limit);
+  if (action) url.searchParams.append('action', action);
+  const r = await fetch(url, {{
+   method: 'POST',
+   headers: {{'Content-Type': 'application/json'}},
+   body: JSON.stringify({{host_password: pw}})
+  }});
+  const d = await r.json();
+  if (d.success) {{
+   if (!d.entries || d.entries.length === 0) {{
+    container.innerHTML = '<div style="padding:8px;color:#999;">No activity logged yet.</div>';
+    return;
+   }}
+   let html = '';
+   d.entries.forEach(entry => {{
+    const action = entry.action || '';
+    const color = action.includes('upload') ? '#080' : action.includes('download') ? '#08d' : '#666';
+    html += `<div style="padding:4px 8px;border-bottom:1px solid #ddd;color:${{color}};">
+     <strong>${{entry.timestamp}}</strong> | ${{entry.action}} | ${{entry.manager_name}} (#${{entry.manager_id}})
+     <br><span style="color:#666;font-size:9px;">${{entry.details}}</span></div>`;
+   }});
+   container.innerHTML = html;
+  }} else {{
+   container.innerHTML = `<div style="padding:8px;color:#c00;">Error: ${{d.error}}</div>`;
+  }}
+ }} catch(e) {{
+  container.innerHTML = `<div style="padding:8px;color:#c00;">Error: ${{e.message}}</div>`;
+ }}
+}}
+
 async function setDebugTeam() {{
  const sel = document.getElementById('debug-team-select');
  const mid = sel.value;
@@ -2562,8 +2643,10 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             pw = q.get("password","")
             mgrs = _load_managers()
             if mid not in mgrs:
+                _log_activity("download_failed", mid, "?", "Manager not found")
                 self.send_json({"success":False,"error":"Manager not found. Register first."}, 404); return
             if not _check_mgr_pw(mgrs[mid], pw):
+                _log_activity("download_failed", mid, mgrs[mid]["manager_name"], "Wrong password")
                 self.send_json({"success":False,"error":"Wrong password."}, 401); return
             cfg = _load_config()
             res_turn = cfg["current_turn"] - 1
@@ -2605,6 +2688,12 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             team_results = _filter_results_for_client(team_results, cfg)
             # Newsletter is served separately via /api/newsletter?turn=N
             # to keep /api/results payload small and avoid Windows socket aborts
+
+            # Log the download
+            team_count = len(team_results)
+            _log_activity("download_success", mid, mgrs[mid]["manager_name"],
+                        f"Downloaded {team_count} team result(s) for turn {res_turn}, has_newsletter={bool(nl_text)}")
+
             self.send_json({"success":True,"results":team_results,
                             "turn":res_turn,"has_newsletter":bool(nl_text)}); return
 
@@ -2961,12 +3050,15 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             pw = str(b.get("password") or "").strip()
             team = b.get("team")
             if not all([mid, pw, team]):
+                _log_activity("upload_failed", mid, "?", "Missing required parameters")
                 self.send_json({"success":False,"error":"manager_id, password and team required."}); return
             with _lock:
                 mgrs = _load_managers()
                 if mid not in mgrs:
+                    _log_activity("upload_failed", mid, "?", "Manager not found")
                     self.send_json({"success":False,"error":"Manager not found. Register first."}); return
                 if not _check_mgr_pw(mgrs[mid], pw):
+                    _log_activity("upload_failed", mid, mgrs[mid]["manager_name"], "Wrong password")
                     self.send_json({"success":False,"error":"Wrong password."}); return
                 cfg = _load_config()
                 if cfg["turn_state"] == "processing":
@@ -3005,6 +3097,8 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     # Update manager activity timestamp to reflect the request
                     mgrs[mid]["last_upload_timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S")
                     _save_managers(mgrs)
+                    _log_activity("upload_removed", mid, mgrs[mid]["manager_name"],
+                                f"Team {team_id} removed from turn {turn_num}")
                     self.send_json({"success":True,"turn":turn_num,
                                     "message":f"Team removed from turn {turn_num} queue."}); return
 
@@ -3052,6 +3146,9 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                                             make_file_writable(cf)
                                             os.remove(cf)
                                     except Exception: pass
+            team_name = team.get("team_name", "?") if isinstance(team, dict) else "?"
+            _log_activity("upload_success", mid, mgrs[mid]["manager_name"],
+                        f"Team {team_name} (ID:{team_id}) uploaded for turn {turn_num}")
             self.send_json({"success":True,"turn":turn_num,
                             "message":f"Team uploaded for turn {turn_num}."}); return
 
@@ -3562,9 +3659,11 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
 
             mname = managers[mid]["manager_name"]
 
-            # Create ZIP with all manager's files
+            # Create ZIP with all manager's files in proper directory structure
             from io import BytesIO
             zip_buffer = BytesIO()
+            manifest = []  # Track files and their target locations
+
             with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
                 # Add all team files for this manager
                 mgr_teams = set(int(t) for t in managers[mid].get("team_ids", []) if isinstance(t,(int,str)) and str(t).isdigit())
@@ -3572,7 +3671,14 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 for team_id in mgr_teams:
                     team_file = os.path.join(TEAMS_DIR, f"team_{int(team_id):04d}.json")
                     if os.path.exists(team_file):
-                        zf.write(team_file, arcname=f"team_{int(team_id):04d}.json")
+                        # Store in teams/ subdirectory in ZIP
+                        arcname = f"teams/team_{int(team_id):04d}.json"
+                        zf.write(team_file, arcname=arcname)
+                        manifest.append({
+                            "source": arcname,
+                            "target": f"teams/team_{int(team_id):04d}.json",
+                            "type": "team"
+                        })
 
                 # Add all result files for this manager across all turns
                 league_dir = os.path.dirname(_config_path())
@@ -3582,7 +3688,43 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                         for result_file in os.listdir(turn_path):
                             if result_file.startswith(f"result_{mid}_") and result_file.endswith(".json"):
                                 full_path = os.path.join(turn_path, result_file)
-                                zf.write(full_path, arcname=f"{fname}/{result_file}")
+                                # Store in league structure in ZIP
+                                arcname = f"league/{fname}/{result_file}"
+                                zf.write(full_path, arcname=arcname)
+                                manifest.append({
+                                    "source": arcname,
+                                    "target": f"league/{fname}/{result_file}",
+                                    "type": "result",
+                                    "turn": int(fname.split("_")[1])
+                                })
+
+                # Add manifest file
+                manifest_json = json.dumps(manifest, indent=2)
+                zf.writestr("MANIFEST.json", manifest_json)
+
+                # Add README with instructions
+                readme = f"""BLOODSPIRE Restore Package
+Manager: {mname} (ID: {mid})
+Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}
+
+CONTENTS:
+- teams/: Team data files
+- league/: Turn results organized by turn number
+- MANIFEST.json: File location mapping
+
+TO RESTORE:
+1. Download this ZIP file
+2. In the BLOODSPIRE client, go to Preferences → Reset Save Folder
+3. Select your save folder location
+4. Go to Preferences → Restore from ZIP
+5. Select this ZIP file
+6. Files will be automatically extracted to the correct locations
+
+Or manually:
+- Extract teams/*.json to your save folder's teams/ directory
+- Extract league/turn_*/result_*.json to your save folder's league/turn_*/ directory
+"""
+                zf.writestr("README.txt", readme)
 
             zip_buffer.seek(0)
             self.send_response(200)
@@ -3593,6 +3735,43 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(zip_buffer.getvalue())
             return
+
+        if path == "/api/admin/activity_log":
+            cfg = _load_config()
+            if not _check_host_pw(cfg, b.get("host_password", "")):
+                self.send_json({"success": False, "error": "Not authorised."}, 401); return
+
+            # Get query parameters for filtering
+            q = self.qs()
+            limit = int(q.get("limit", "100"))
+            action_filter = q.get("action", "")  # e.g., "upload", "download"
+            manager_filter = q.get("manager_id", "")  # filter by manager ID
+
+            try:
+                log_file = os.path.join(LEAGUE_DIR, "activity_logs", "activity.jsonl")
+                entries = []
+                if os.path.exists(log_file):
+                    with open(log_file, "r", encoding="utf-8") as f:
+                        for line in f:
+                            if not line.strip():
+                                continue
+                            try:
+                                entry = json.loads(line.strip())
+                                # Apply filters
+                                if action_filter and action_filter not in entry.get("action", ""):
+                                    continue
+                                if manager_filter and manager_filter != entry.get("manager_id", ""):
+                                    continue
+                                entries.append(entry)
+                            except json.JSONDecodeError:
+                                continue
+                    # Return last N entries (most recent first)
+                    entries = entries[-limit:]
+                    entries.reverse()
+
+                self.send_json({"success": True, "entries": entries, "total": len(entries)}); return
+            except Exception as e:
+                self.send_json({"success": False, "error": str(e)}); return
 
         if path == "/api/shutdown":
             self.send_json({"success": True, "message": "Shutting down..."})

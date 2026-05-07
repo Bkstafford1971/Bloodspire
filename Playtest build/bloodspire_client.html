@@ -388,6 +388,137 @@ async function doPickFolder(forceNew) {
   }
 }
 
+function triggerRestoreFromZip() {
+  if (!baseDir) {
+    alert('Please select a save folder first.');
+    return;
+  }
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.zip';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      restoreFromZip(file);
+    }
+  };
+  input.click();
+}
+
+async function restoreFromZip(zipFile) {
+  try {
+    // Show loading message
+    setMsg('Extracting files from ZIP...', 'ok');
+    render();
+
+    // Load zip.js library or use a simple approach
+    const arrayBuffer = await zipFile.arrayBuffer();
+
+    // Simple ZIP extraction - we'll need to add a ZIP library
+    // For now, try using a CDN-loaded library
+    if (!window.JSZip) {
+      // Load JSZip library from CDN
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+      script.onload = () => extractZipFiles(arrayBuffer);
+      script.onerror = () => {
+        setMsg('Error: Could not load ZIP extraction library. Check your internet connection.', 'err');
+        render();
+      };
+      document.head.appendChild(script);
+    } else {
+      extractZipFiles(arrayBuffer);
+    }
+  } catch (e) {
+    setMsg('Error reading ZIP file: ' + e.message, 'err');
+    render();
+  }
+}
+
+async function extractZipFiles(arrayBuffer) {
+  try {
+    const zip = new JSZip();
+    const loaded = await zip.loadAsync(arrayBuffer);
+
+    // Read manifest
+    let manifest = [];
+    const manifestFile = loaded.file('MANIFEST.json');
+    if (manifestFile) {
+      const manifestText = await manifestFile.async('string');
+      manifest = JSON.parse(manifestText);
+    }
+
+    if (!manifest || manifest.length === 0) {
+      setMsg('Error: ZIP file is missing MANIFEST.json', 'err');
+      render();
+      return;
+    }
+
+    let extracted = 0;
+    let failed = [];
+
+    // Extract each file according to manifest
+    for (const entry of manifest) {
+      try {
+        const sourceFile = loaded.file(entry.source);
+        if (!sourceFile) {
+          failed.push(`${entry.source} not found in ZIP`);
+          continue;
+        }
+
+        const content = await sourceFile.async('arraybuffer');
+        const pathParts = entry.target.split('/');
+        const filename = pathParts.pop();
+        const dirPath = pathParts.join('/');
+
+        // Write file using FSA
+        if (window.electronAPI) {
+          // Electron mode
+          const fullPath = `${baseDir}/${entry.target}`;
+          if (entry.type === 'team') {
+            const result = await window.electronAPI.writeJson(fullPath, JSON.parse(new TextDecoder().decode(content)));
+            if (!result.success) failed.push(filename);
+            else extracted++;
+          } else if (entry.type === 'result') {
+            const result = await window.electronAPI.writeJson(fullPath, JSON.parse(new TextDecoder().decode(content)));
+            if (!result.success) failed.push(filename);
+            else extracted++;
+          }
+        } else {
+          // Browser mode - use API to write files
+          const result = await fetch('/api/local/write', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              path: entry.target,
+              data: JSON.parse(new TextDecoder().decode(content))
+            })
+          }).then(r => r.json());
+          if (result.success) extracted++;
+          else failed.push(filename);
+        }
+      } catch (e) {
+        failed.push(`${entry.source}: ${e.message}`);
+      }
+    }
+
+    let msg = `✓ Extracted ${extracted} file(s)`;
+    if (failed.length > 0) {
+      msg += ` (${failed.length} failed: ${failed.slice(0, 3).join(', ')}${failed.length > 3 ? '...' : ''})`;
+    }
+    setMsg(msg, failed.length > 0 ? 'err' : 'ok');
+    render();
+
+    // Reload data after restore
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
+  } catch (e) {
+    setMsg('Error extracting ZIP: ' + e.message, 'err');
+    render();
+  }
+}
+
 async function resetSaveFolder() {
   if (!confirm('Reset save folder? This will clear your saved folder path.\n\nYou will need to select a new folder on next launch.')) {
     return;
@@ -1796,6 +1927,9 @@ function buildMenuBar() {
         Hide W-L-K Record
       </label>
       <div style="border-top:1px solid var(--mid); margin:2px 0;"></div>
+      <div class="menu-item" onclick="triggerRestoreFromZip()" style="padding:4px 12px; color:#080;">
+        📦 Restore from ZIP...
+      </div>
       <div class="menu-item" onclick="resetSaveFolder()" style="padding:4px 12px; color:#800;">
         Reset Save Folder...
       </div>
