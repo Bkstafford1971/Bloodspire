@@ -220,17 +220,20 @@ def _make_mirror_narrative(
     training_results : dict,
     a_name           : str,
     b_name           : str,
+    warrior_a        : 'Warrior' = None,
+    warrior_b        : 'Warrior' = None,
 ) -> str:
     """
     Return a version of the fight narrative from warrior_b's manager's perspective:
       - warrior_b's training shows the actual skills/stats learned
       - warrior_a's training shows "Skill" or "Stat" (generic)
+      - warrior_b's strategy table replaces warrior_a's strategy table
 
     The narrative is identical up to the training section at the end.  We
     reconstruct that section with the `is_opponent` flags swapped, then
     replace it via a suffix match so the fight body is never touched.
     """
-    from narrative import training_summary as _ts
+    from narrative import training_summary as _ts, _strategy_table
 
     a_res = training_results.get("warrior_a", [])
     b_res = training_results.get("warrior_b", [])
@@ -249,19 +252,37 @@ def _make_mirror_narrative(
     if a_res:
         mir_parts.append(_ts(a_name, a_res, is_opponent=True))
 
+    result = narrative
+
+    # Swap strategy tables if both warriors are provided
+    if warrior_a and warrior_b:
+        try:
+            # Build both strategy tables
+            a_strat_lines = _strategy_table(warrior_a)
+            b_strat_lines = _strategy_table(warrior_b)
+
+            if a_strat_lines and b_strat_lines:
+                # Find and replace warrior_a's strategy with warrior_b's
+                a_strat_text = "\n".join(a_strat_lines)
+                b_strat_text = "\n".join(b_strat_lines)
+                result = result.replace(a_strat_text, b_strat_text)
+        except Exception as e:
+            # If strategy swap fails, just continue with training swap
+            print(f"  WARNING: Could not swap strategies in narrative: {e}")
+
     if not fwd_parts and not mir_parts:
-        return narrative  # nothing to swap
+        return result  # nothing to swap
 
     # The training block is appended as: "\n" (blank-line join) + "\n".join(parts)
     # which in the joined narrative looks like "\n\n<line1>\n<line2>..."
     fwd_block = "\n\n" + "\n".join(fwd_parts)
     mir_block = "\n\n" + "\n".join(mir_parts)
 
-    if narrative.endswith(fwd_block):
-        return narrative[: -len(fwd_block)] + mir_block
+    if result.endswith(fwd_block):
+        return result[: -len(fwd_block)] + mir_block
 
     # Fallback: couldn't find the expected suffix — return unchanged
-    return narrative
+    return result
 
 
 def _store_scout_narrative(warrior_name: str, narrative: str, turn_num: int) -> None:

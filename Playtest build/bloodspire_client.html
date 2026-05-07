@@ -2025,7 +2025,7 @@ function buildTree() {
           ? `<span title="Retirement pending" style="font-size:10px;margin-left:3px;">🏆</span>`
           : '';
 
-        const deadStyle  = isDead ? 'opacity:0.55; font-style:italic;' : '';
+        const deadStyle  = (isDead && !S.hideRecord) ? 'opacity:0.55; font-style:italic;' : '';
         const deadIcon   = isAscended ? '👹' : (isDead && !S.hideRecord ? '💀' : '👤');
         const deadBadge  = isAscended
           ? `<span title="Ascended to Monsterdom on The Monsters roster — replacement needed"

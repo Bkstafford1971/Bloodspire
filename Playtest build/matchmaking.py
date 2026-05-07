@@ -1,5 +1,5 @@
 # =============================================================================
-# matchmaking.py — BLOODSPIRE Turn Matchmaking Engine
+# matchmaking.py — THE AGONY AMPHITHEATRE Turn Matchmaking Engine
 # =============================================================================
 # Builds the list of fights for a turn:
 #   1. Resolve blood challenges (highest priority).
@@ -201,9 +201,17 @@ def _find_opponent(
     player_fights = player_warrior.total_fights
     _used = global_used or set()
 
+    bracket_lower = int(player_fights * BRACKET_LOWER)
+    bracket_upper = int(player_fights * BRACKET_UPPER)
+
     def _available_warriors(t):
         """Active warriors on this team not yet used globally."""
         return [w for w in t.active_warriors if w.name not in _used]
+
+    # Debug: log what we're looking for
+    print(f"    [MATCHMAKING] Finding opponent for {player_warrior.name} ({player_fights} fights, rating {player_rating:.2f})")
+    print(f"    [MATCHMAKING]   Bracket range: {bracket_lower}-{bracket_upper} fights")
+    print(f"    [MATCHMAKING]   Available opponent teams: {len(opponent_teams)}")
 
     candidates = [
         t for t in opponent_teams
@@ -212,7 +220,26 @@ def _find_opponent(
                 for w in _available_warriors(t))
     ]
 
+    # Debug: log exclusions
+    excluded = []
+    for t in opponent_teams:
+        if t.team_id in already_matched:
+            excluded.append(f"{t.team_name} (already matched)")
+        else:
+            avail = _available_warriors(t)
+            in_bracket_count = sum(1 for w in avail if _in_bracket(player_fights, w.total_fights))
+            if in_bracket_count == 0 and avail:
+                excluded.append(f"{t.team_name} (0 in-bracket of {len(avail)} avail)")
+            elif not avail:
+                excluded.append(f"{t.team_name} (no available warriors)")
+
+    print(f"    [MATCHMAKING]   Candidate teams: {len(candidates)}")
+    if excluded and len(excluded) <= 5:
+        for ex in excluded:
+            print(f"      - Excluded: {ex}")
+
     if not candidates:
+        print(f"    [MATCHMAKING]   NO CANDIDATES → PEASANT FALLBACK")
         return None
 
     # Sort by closeness of team average rating (using only available warriors)
@@ -230,7 +257,9 @@ def _find_opponent(
                       if _in_bracket(player_warrior.total_fights, w.total_fights)]
         pool = in_bracket or avail
         pool.sort(key=lambda w: abs(_warrior_rating(w) - player_rating))
-        return pool[0], best_team
+        selected = pool[0]
+        print(f"    [MATCHMAKING]   Selected {best_team.team_name}: {selected.name} ({selected.total_fights} fights)")
+        return selected, best_team
 
     return None
 
@@ -782,7 +811,10 @@ def build_fight_card(
     remaining = [w for w in active_players if w.name not in matched_players]
 
     for player_warrior in remaining:
-        result = _find_opponent(player_warrior, opponent_teams, matched_teams, global_used)
+        # For standard matching, don't restrict by matched_teams.
+        # This allows multiple warriors to fight the same opponent team,
+        # ensuring we maximize warrior-vs-warrior matches (peasants are fallback only).
+        result = _find_opponent(player_warrior, opponent_teams, set(), global_used)
         if result:
             opponent, opp_team = result
             _schedule(ScheduledFight(
@@ -794,7 +826,8 @@ def build_fight_card(
                 fight_type       = "standard",
             ))
             matched_players.add(player_warrior.name)
-            matched_teams.add(opp_team.team_id)
+            # Don't add to matched_teams for standard matches — allow multiple warriors
+            # to fight the same opponent team. Only challenges (exclusive) use matched_teams.
 
     # ------------------------------------------------------------------
     # STEP 4: FILL UNMATCHED WITH PEASANTS
@@ -1056,7 +1089,7 @@ def run_turn(
             print(f"    - {v['team']}: {v['fight_count']} fights (expected max {v['max_allowed']})")
 
     # Write turn logs (HTML + plain text matchmaking log)
-    from save import write_turn_logs, save_newsletter, load_champion_state, save_champion_state, load_newsletter_voice
+    from save import write_turn_logs, save_newsletter, load_champion_state, save_champion_state
     turn = current_turn()
     write_turn_logs(turn, card, player_team.team_name)
 
@@ -1129,14 +1162,12 @@ def run_turn(
     )
     save_champion_state(champion_state)
 
-    voice = load_newsletter_voice()
     newsletter_text = generate_newsletter(
         turn_num           = turn,
         card               = card,
         teams              = all_teams_for_nl,
         deaths             = deaths_this_turn,
         champion_state     = champion_state,
-        voice              = voice,
         processed_date     = processed_date,
         is_new_champion    = is_new_champion,
     )
