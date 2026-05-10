@@ -287,18 +287,42 @@
 		</div>
 	</div>
 
+	<section id="updates">
+                <h3>Announcements</h3>
+                <div class="content-box">
+					<p style="text-align: center; margin-top: 20px;">
+						<a href="#" id="viewAnnouncement" style="color: #d4af37; font-size: 1.1rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif;">
+							RE-VIEW THE MAY 9TH ARENA RESET ANNOUNCEMENT
+						</a>
+					</p>
+                    <p><strong>Status Update:</strong> I am currently investigating a logic conflict occurring when two teams share the same name. This has caused rendering issues where fights occurred but results failed to display. I am working on a fix to ensure the Combat and Newsletter engines use unique Team IDs to differentiate them.</p>
+                    
+                    <p><strong>I worked on fixing several issues that cam up from the first turn.  Most importantly, the strategies display was messed up.  It was displaying random strategies that the backend server was making up.  That has been fixed, but it created a new issue.  I will be removing the results from turn 1 completely and re-running turn 1 again on Saturday.</strong></p> 
+                    <p><strong>- I will be rerunning the first turn a few times in order to fix a few bugs that came up.  Namely, incomplete fight files and improper cache clearing.  I will post again when the turn is ready for download.</strong></p>
+                </div>
+            </section>
+            
+        </main>
+    </div>
+
+	<div id="announcementModal" class="modal-overlay">
+		<div class="modal-content">
+			<h2 id="modalTitle">Important Announcement</h2>
+			<div id="modalBody">This is where your latest update or news goes!</div>
+			<button id="closeModal">Dismiss</button>
+		</div>
+	</div>
+
 	<script>
         window.addEventListener('DOMContentLoaded', (event) => {
             const modal = document.getElementById('announcementModal');
             const closeBtn = document.getElementById('closeModal');
-            const modalBody = modal.querySelector('p');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
 			const reOpenLink = document.getElementById('viewAnnouncement');
 
-			reOpenLink.onclick = function(e) {
-				e.preventDefault(); // Prevents the page from jumping to the top
-				modal.style.display = 'block';
-			}
-            modalBody.innerHTML = `
+            // content for the May 9th Reset
+            const contentResetMay9 = `
                 Due to a few bugs with corrupt files and an issue with strategy display, I have decided to revert us back to turn 1. 
                 If you were uploaded for turn 1, you are still set to run the first turn. 
                 <br><br>
@@ -320,19 +344,56 @@
                 <em style="display: block; text-align: right;">-ILNEVAL-</em>
             `;
 
-            if (!localStorage.getItem('bloodspire_reset_may9')) {
+            // content for the Team Name Logic Issue
+            const contentLogicIssue = `
+                There is currently a logic issue occurring when two teams have the same name. Because of this, the rendering logic was confused and several fights were performed, but no results were sent to display. 
+                <br><br>
+                I am working now to fix that issue. I will be using team name and team ID going forward to help the Combat engine, Newsletter engine and server logic differentiate. I had the logic in place to eliminate the ability to have identical manager names, but didn't put anything in place for team names. Sorry for the glitch. 
+                <br><br>
+                Once I have the fix in place, I will revert back to turn 0 and re-run the turn. Hopefully tonight still and then I will post when the results are available again. 
+                <br><br>
+                <strong>When you log back in to the client next time, you should get an arena reset message and a clear records button again.</strong> 
+                <br><br>
+                Thank you for your patience with this.
+                <br><br>
+                <em style="display: block; text-align: right;">-ILNEVAL-</em>
+            `;
+
+            // Function to show specific content
+            function showModal(content) {
+                modalBody.innerHTML = content;
                 modal.style.display = 'block';
             }
 
-            closeBtn.onclick = function() {
-                modal.style.display = 'none';
-                localStorage.setItem('bloodspire_reset_may9', 'true');
+			reOpenLink.onclick = function(e) {
+				e.preventDefault();
+				showModal(contentResetMay9);
+			}
+
+            // AUTO-SHOW LOGIC: Priority to the new Logic Issue popup
+            if (!localStorage.getItem('bloodspire_logic_fix_may9')) {
+                showModal(contentLogicIssue);
+                // When they close this new one, mark it as seen
+                closeBtn.onclick = function() {
+                    modal.style.display = 'none';
+                    localStorage.setItem('bloodspire_logic_fix_may9', 'true');
+                }
+            } else if (!localStorage.getItem('bloodspire_reset_may9')) {
+                // If they haven't seen the original reset one yet, show that
+                showModal(contentResetMay9);
+                closeBtn.onclick = function() {
+                    modal.style.display = 'none';
+                    localStorage.setItem('bloodspire_reset_may9', 'true');
+                }
             }
 
             window.onclick = function(event) {
                 if (event.target == modal) {
                     modal.style.display = "none";
-                    localStorage.setItem('bloodspire_reset_may9', 'true');
+                    // If the logic issue was what was showing, mark it seen
+                    if (!localStorage.getItem('bloodspire_logic_fix_may9')) {
+                        localStorage.setItem('bloodspire_logic_fix_may9', 'true');
+                    }
                 }
             }
         });
