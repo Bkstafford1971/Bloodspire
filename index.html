@@ -282,6 +282,20 @@
             const modalBody = document.getElementById('modalBody');
             const reOpenLink = document.getElementById('viewAnnouncement');
 
+            const contentUpdateV21 = `
+                <strong>Update:</strong> Due to an issue with multiple duplicate names and how the matching was being performed, I made several updates to the logic and to the client. There is a more complete list of the bugs that were fixed under the 
+                <a href="updates.html" style="color: #a31616; text-decoration: underline;">Bug Fixes & Updates</a> section. 
+                <br><br>
+                <strong>You will need to download the latest version of the client (V2.1).</strong>
+                <br><br>
+                I certainly want to thank you all for everything you have done to help me play test this game. I am sorry that we have had as many issues as we have. I feel better now that I think I have the naming issue under control, that we will have a much smoother turn 2 on Tuesday evening.
+                <br><br>
+                As a thank you to those of you that have agreed to help with this, I am giving each of you the opportunity to submit a name for a peasant that will forever remain a part of this game. If you have a specific persona for your peasant, I would love to hear it. You can submit those names through the 
+                <a href="report-an-issue.html" style="color: #a31616; text-decoration: underline;">Report an issue</a> (as an enhancement).
+                <br><br>
+                <em style="display: block; text-align: right;">-ILNEVAL-</em>
+            `;
+
             const contentResetMay9 = `
                 Due to a few bugs with corrupt files and an issue with strategy display, I have decided to revert us back to turn 1. 
                 If you were uploaded for turn 1, you are still set to run the first turn. 
@@ -308,8 +322,16 @@
                 <em style="display: block; text-align: right;">-ILNEVAL-</em>
             `;
 
-            // Logic to handle which popup to show automatically
-            if (!localStorage.getItem('bloodspire_logic_issue_fix')) {
+            // Logic to handle which popup to show automatically (Newest first)
+            if (!localStorage.getItem('bloodspire_duplicate_fix_v21')) {
+                modalBody.innerHTML = contentUpdateV21;
+                modal.style.display = 'block';
+                
+                closeBtn.onclick = function() {
+                    modal.style.display = 'none';
+                    localStorage.setItem('bloodspire_duplicate_fix_v21', 'true');
+                }
+            } else if (!localStorage.getItem('bloodspire_logic_issue_fix')) {
                 modalBody.innerHTML = contentLogicIssue;
                 modal.style.display = 'block';
                 
@@ -338,8 +360,9 @@
             window.onclick = function(event) {
                 if (event.target == modal) {
                     modal.style.display = "none";
-                    if (!localStorage.getItem('bloodspire_logic_issue_fix')) {
-                        localStorage.setItem('bloodspire_logic_issue_fix', 'true');
+                    // If they click outside the box, we mark the currently displayed newest one as seen
+                    if (!localStorage.getItem('bloodspire_duplicate_fix_v21')) {
+                        localStorage.setItem('bloodspire_duplicate_fix_v21', 'true');
                     }
                 }
             }
