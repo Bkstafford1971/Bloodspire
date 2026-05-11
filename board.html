@@ -52,7 +52,8 @@
 </div>
 
 <script>
-    // 1. IMMEDIATELY reset the viewed timestamp as soon as the script runs
+    // --- MANDATORY CLEAR ---
+    // We update this immediately so that if the user hits "back" quickly, the indicator is already dead.
     localStorage.setItem('last_board_view', new Date().toISOString());
 
     const SUPABASE_URL = 'https://ngjjnlpmisgwhktdfveq.supabase.co';
@@ -86,6 +87,9 @@
             </div>
         `).join('');
         display.scrollTop = display.scrollHeight;
+        
+        // Final update to catch any messages that arrived while loading
+        localStorage.setItem('last_board_view', new Date().toISOString());
     }
 
     async function send() {
@@ -112,11 +116,10 @@
         if (!error) {
             contentInput.value = '';
             keyInput.value = '';
-            // Update timestamp again after posting our own message
+            // After sending, we are up to date
             localStorage.setItem('last_board_view', new Date().toISOString());
             loadMessages();
         } else {
-            console.error("Post error:", error.message);
             alert("The Arena guards blocked your message: " + error.message);
         }
     }
