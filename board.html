@@ -63,7 +63,7 @@
     const { createClient } = supabase;
     const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Formatter for Central Time
+    // Add this formatter at the top of your <script> section
     const timeFormatter = new Intl.DateTimeFormat('en-US', {
         timeZone: 'America/Chicago',
         year: 'numeric',
@@ -71,28 +71,25 @@
         day: 'numeric',
         hour: 'numeric',
         minute: 'numeric',
-        second: 'numeric'
+        second: 'numeric',
+        hour12: true
     });
     
     async function loadMessages() {
         const { data, error } = await _supabase
             .from('messages')
-            .select('author, content, is_admin, created_at')
+            .select('*')
             .order('created_at', { ascending: true })
             .limit(100);
-
-        if (error) {
-            console.error("Fetch error:", error.message);
-            document.getElementById('display').innerHTML = "The arena guards have blocked access: " + error.message;
-            return;
-        }
-
+    
+        if (error) return;
+    
         const display = document.getElementById('display');
         display.innerHTML = data.map(m => `
             <div class="msg ${m.is_admin ? 'admin-msg' : ''}">
                 <div class="author">
                     ${m.is_admin ? '⚜ ' : ''}${m.author} 
-                    <span class="time">${new Date(m.created_at).toLocaleString()}</span>
+                    <span class="time">${timeFormatter.format(new Date(m.created_at))}</span>
                 </div>
                 <div class="content">${m.content}</div>
             </div>
