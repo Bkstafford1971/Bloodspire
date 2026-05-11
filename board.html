@@ -52,6 +52,9 @@
 </div>
 
 <script>
+    // 1. IMMEDIATELY reset the viewed timestamp as soon as the script runs
+    localStorage.setItem('last_board_view', new Date().toISOString());
+
     const SUPABASE_URL = 'https://ngjjnlpmisgwhktdfveq.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nampubHBtaXNnd2hrdGRmdmVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTU3MjQsImV4cCI6MjA5NDA5MTcyNH0.mjqx_G_asJUPOTQAJodxbh4VMTgNpsfYsgYQ8_FrGrc';
     const SECRET_ADMIN_KEY = 'BloodspireAdmin';
@@ -71,9 +74,6 @@
             document.getElementById('display').innerHTML = "The arena guards have blocked access: " + error.message;
             return;
         }
-
-        // --- NEW: Reset the indicator by marking now as the last viewed time ---
-        localStorage.setItem('last_board_view', new Date().toISOString());
 
         const display = document.getElementById('display');
         display.innerHTML = data.map(m => `
@@ -112,6 +112,8 @@
         if (!error) {
             contentInput.value = '';
             keyInput.value = '';
+            // Update timestamp again after posting our own message
+            localStorage.setItem('last_board_view', new Date().toISOString());
             loadMessages();
         } else {
             console.error("Post error:", error.message);
