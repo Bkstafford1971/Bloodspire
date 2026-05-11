@@ -227,11 +227,37 @@
                 <a href="download.html">Download</a> | 
                 <a href="#guide">User Guide</a> | 
                 <a href="contact.html">Contact</a> |
-				<a href="board.html">Message Board</a> |
+				<a href="board.html" id="nav-board">Message Board</a> |
                 <a href="report-an-issue.html">Report an Issue</a> |
                 <a href="updates.html">Bug Fixes & Updates</a>
             </nav>
 
+			<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+			<script>
+			    const SUPABASE_URL = 'https://ngjjnlpmisgwhktdfveq.supabase.co';
+			    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nampubHBtaXNnd2hrdGRmdmVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTU3MjQsImV4cCI6MjA5NDA5MTcyNH0.mjqx_G_asJUPOTQAJodxbh4VMTgNpsfYsgYQ8_FrGrc';
+			    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+			
+			    async function checkNewMessages() {
+			        // 1. Get the last time the user viewed the board from their browser storage
+			        const lastViewed = localStorage.getItem('last_board_view') || new Date(0).toISOString();
+			
+			        // 2. Count how many messages have a 'created_at' newer than that date
+			        const { count, error } = await _supabase
+			            .from('messages')
+			            .select('*', { count: 'exact', head: true })
+			            .gt('created_at', lastViewed);
+			
+			        if (!error && count > 0) {
+			            const navLink = document.getElementById('nav-board');
+			            // 3. Update the link text to show the number of waiting messages
+			            navLink.innerHTML = `Message Board <span style="color: #ffcc00; background: #a31616; padding: 2px 6px; border-radius: 50%; font-size: 0.7rem;">${count}</span>`;
+			        }
+			    }
+			
+			    checkNewMessages();
+			</script>
+			
             <section class="arena-header">
                 <h1>BLOODSPIRE</h1>
                 <h2>A Game of Gladiatorial Combat</h2>
