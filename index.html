@@ -6,209 +6,30 @@
     <title>Bloodspire | A Game of Gladiatorial Combat</title>
     <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: #000;
-            color: #d1d1d1;
-            font-family: 'Open Sans', sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center; /* Centers the entire layout */
-            min-height: 100vh;
-        }
-
-        /* Container to keep the sections from drifting too far apart on wide screens */
-        .page-wrapper {
-            display: flex;
-            width: 100%;
-            max-width: 1600px; /* Limits spread on ultrawide monitors */
-        }
-
-        /* 40/60 Split Layout */
-        .sidebar {
-            flex: 0 0 40%; /* Exactly 40% width */
-            background-color: #050505;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            box-sizing: border-box;
-            position: sticky;
-            top: 0;
-            height: 100vh;
-        }
-
-        .main-content {
-            flex: 0 0 60%; /* Exactly 60% width */
-            padding: 40px 60px; /* Extra horizontal padding for readability */
-            background-color: #000;
-            box-sizing: border-box;
-        }
-
-        /* Sidebar Images */
-        .sidebar-logo, .sidebar-combat-img {
-            width: 100%;
-            max-width: 550px;
-            margin-bottom: 25px;
-            height: auto;
-        }
-
-        /* Gold Navigation Links */
-        nav.top-nav {
-            text-align: center;
-            padding-bottom: 50px;
-            font-family: 'Cinzel', serif;
-            font-size: .9rem;
-            font-weight: bold;
-        }
-
-        nav.top-nav a {
-            color: #d4af37; 
-            text-decoration: none;
-            padding: 0 12px;
-            text-transform: uppercase;
-            white-space: nowrap; /* Prevents links from breaking weirdly */
-        }
-
+        body { background-color: #000; color: #d1d1d1; font-family: 'Open Sans', sans-serif; margin: 0; display: flex; justify-content: center; min-height: 100vh; }
+        .page-wrapper { display: flex; width: 100%; max-width: 1600px; }
+        .sidebar { flex: 0 0 40%; background-color: #050505; padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; box-sizing: border-box; position: sticky; top: 0; height: 100vh; }
+        .main-content { flex: 0 0 60%; padding: 40px 60px; background-color: #000; box-sizing: border-box; }
+        .sidebar-logo, .sidebar-combat-img { width: 100%; max-width: 550px; margin-bottom: 25px; height: auto; }
+        nav.top-nav { text-align: center; padding-bottom: 50px; font-family: 'Cinzel', serif; font-size: .9rem; font-weight: bold; }
+        nav.top-nav a { color: #d4af37; text-decoration: none; padding: 0 12px; text-transform: uppercase; white-space: nowrap; }
         nav.top-nav a:hover { color: #fff2cc; }
-
-        /* Muted Chiseled Title */
-        .arena-header {
-            text-align: center;
-            margin-top: 2px;
-            margin-bottom: 8px;
-        }
-
-        .arena-header h1 {
-            font-family: 'Metal Mania', cursive;
-            font-size: 70px;
-            margin: 0;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            background: linear-gradient(to bottom, #3a0000 0%, #8b1a1a 40%, #a31616 60%, #2a0000 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
-            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.8));
-        }
-
-        .arena-header h2 {
-            font-family: 'Cinzel', serif;
-            font-size: 1.35rem;
-            color: #e0e0e0;
-            margin: 10px 0;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-        }
-
-        .status-yellow {
-            color: #ffcc00;
-            font-style: italic;
-            font-size: 1.1rem;
-            margin-top: 5px !important;
-            margin-bottom: 2px !important;
-        }
-
-        /* Centered & Italicized Intro */
-        #introduction {
-            text-align: center;
-            margin-bottom: 35px;
-        }
-
-        .intro-text {
-            font-style: italic;
-            line-height: 1.0;
-            font-size: .9rem;
-            color: #b0b0b0;
-            max-width: 90%;
-            margin: 0 auto;
-        }
-
-        /* Large Drop Cap */
-        .intro-text p:first-of-type::first-letter {
-            font-family: 'Cinzel', serif;
-            font-size: 3.5rem;
-            float: left;
-            margin-right: 10px;
-            line-height: 0.8;
-            color: #a31616;
-            font-weight: bold;
-        }
-
-        h3 {
-            font-family: 'Cinzel', serif;
-            color: #a31616;
-            text-transform: uppercase;
-            font-size: 1.3rem;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-		.modal-overlay {
-			display: none; /* Hidden by default */
-			position: fixed;
-			z-index: 1000;
-			left: 0;
-			top: 0;
-			width: 100%;
-			height: 100%;
-			background-color: rgba(0,0,0,0.7); /* Dim background */
-		}
-
-		.modal-content {
-			background-color: #f4e4bc; /* Classic parchment tan */
-			background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png"); /* Subtle paper texture */
-			color: #1a1a1a; /* Dark text for high contrast on light background */
-			margin: 5% auto;
-			padding: 30px;
-			border: 3px double #8b1a1a; /* Chiseled blood-red border */
-			border-radius: 2px;
-			width: 70%;
-			max-width: 650px;
-			text-align: left; /* Easier to read long text */
-			box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-			font-family: 'Open Sans', sans-serif;
-		}
-
-		.modal-content h2 {
-			font-family: 'Cinzel', serif;
-			color: #a31616;
-			text-align: center;
-			border-bottom: 1px solid #8b1a1a;
-			padding-bottom: 10px;
-		}
-
-		button#closeModal {
-			display: block;
-			margin: 20px auto 0;
-			padding: 10px 30px;
-			background-color: #a31616;
-			color: #fff;
-			font-family: 'Cinzel', serif;
-			font-weight: bold;
-			border: none;
-			cursor: pointer;
-			text-transform: uppercase;
-		}
-
-		button#closeModal:hover {
-			background-color: #3a0000;
-		}
-
-        .content-box {
-            background: #080808;
-            font-style: italic;
-            line-height: 1.0;
-            font-size: .85rem;
-            margin-bottom: 30px;
-            padding: 10px 0;
-        }
-
-        @media (max-width: 1100px) {
-            .page-wrapper { flex-direction: column; }
-            .sidebar, .main-content { flex: 0 0 100%; width: 100%; padding: 20px; }
-        }
+        .arena-header { text-align: center; margin-top: 2px; margin-bottom: 8px; }
+        .arena-header h1 { font-family: 'Metal Mania', cursive; font-size: 70px; margin: 0; letter-spacing: 3px; text-transform: uppercase; background: linear-gradient(to bottom, #3a0000 0%, #8b1a1a 40%, #a31616 60%, #2a0000 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.8)); }
+        .arena-header h2 { font-family: 'Cinzel', serif; font-size: 1.35rem; color: #e0e0e0; margin: 10px 0; margin-bottom: 5px; letter-spacing: 1px; }
+        .status-yellow { color: #ffcc00; font-style: italic; font-size: 1.1rem; margin-top: 5px !important; margin-bottom: 2px !important; }
+        #introduction { text-align: center; margin-bottom: 35px; }
+        .intro-text { font-style: italic; line-height: 1.0; font-size: .9rem; color: #b0b0b0; max-width: 90%; margin: 0 auto; }
+        .intro-text p:first-of-type::first-letter { font-family: 'Cinzel', serif; font-size: 3.5rem; float: left; margin-right: 10px; line-height: 0.8; color: #a31616; font-weight: bold; }
+        h3 { font-family: 'Cinzel', serif; color: #a31616; text-transform: uppercase; font-size: 1.3rem; margin-top: 20px; margin-bottom: 10px; text-align: center; }
+        .modal-overlay { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); }
+        .modal-content { background-color: #f4e4bc; background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png"); color: #1a1a1a; margin: 5% auto; padding: 30px; border: 3px double #8b1a1a; border-radius: 2px; width: 70%; max-width: 650px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.8); font-family: 'Open Sans', sans-serif; }
+        .modal-content h2 { font-family: 'Cinzel', serif; color: #a31616; text-align: center; border-bottom: 1px solid #8b1a1a; padding-bottom: 10px; }
+        button#closeModal { display: block; margin: 20px auto 0; padding: 10px 30px; background-color: #a31616; color: #fff; font-family: 'Cinzel', serif; font-weight: bold; border: none; cursor: pointer; text-transform: uppercase; }
+        button#closeModal:hover { background-color: #3a0000; }
+        .content-box { background: #080808; font-style: italic; line-height: 1.0; font-size: .85rem; margin-bottom: 30px; padding: 10px 0; }
+        .notification-badge { color: #ffcc00; background: #a31616; padding: 2px 6px; border-radius: 50%; font-size: 0.7rem; margin-left: 4px; }
+        @media (max-width: 1100px) { .page-wrapper { flex-direction: column; } .sidebar, .main-content { flex: 0 0 100%; width: 100%; padding: 20px; } }
     </style>
 </head>
 <body>
@@ -220,44 +41,17 @@
         </aside>
 
         <main class="main-content">
-            
             <nav class="top-nav">
                 <a href="about.html">About</a> | 
                 <a href="players.html">Players Connection</a> | 
                 <a href="download.html">Download</a> | 
                 <a href="#guide">User Guide</a> | 
                 <a href="contact.html">Contact</a> |
-				<a href="board.html" id="nav-board">Message Board</a> |
                 <a href="report-an-issue.html">Report an Issue</a> |
+                <a href="board.html" id="nav-board">Message Board</a> |
                 <a href="updates.html">Bug Fixes & Updates</a>
             </nav>
 
-			<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-			<script>
-			    const SUPABASE_URL = 'https://ngjjnlpmisgwhktdfveq.supabase.co';
-			    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nampubHBtaXNnd2hrdGRmdmVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTU3MjQsImV4cCI6MjA5NDA5MTcyNH0.mjqx_G_asJUPOTQAJodxbh4VMTgNpsfYsgYQ8_FrGrc';
-			    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-			
-			    async function checkNewMessages() {
-			        // 1. Get the last time the user viewed the board from their browser storage
-			        const lastViewed = localStorage.getItem('last_board_view') || new Date(0).toISOString();
-			
-			        // 2. Count how many messages have a 'created_at' newer than that date
-			        const { count, error } = await _supabase
-			            .from('messages')
-			            .select('*', { count: 'exact', head: true })
-			            .gt('created_at', lastViewed);
-			
-			        if (!error && count > 0) {
-			            const navLink = document.getElementById('nav-board');
-			            // 3. Update the link text to show the number of waiting messages
-			            navLink.innerHTML = `Message Board <span style="color: #ffcc00; background: #a31616; padding: 2px 6px; border-radius: 50%; font-size: 0.7rem;">${count}</span>`;
-			        }
-			    }
-			
-			    checkNewMessages();
-			</script>
-			
             <section class="arena-header">
                 <h1>BLOODSPIRE</h1>
                 <h2>A Game of Gladiatorial Combat</h2>
@@ -268,130 +62,55 @@
             <section id="introduction">
                 <h3>Welcome to Bloodspire</h3>
                 <div class="intro-text">
-                    <p>A bloodthirsty crowd roars as the gladiators enter the arena. Nervous but hardheaded team managers watch from their battle crested pavilions. Will months of training and patiently rehearsed strategy pay off with an arena victory? Or will all be lost on the jagged blade of an opponent's sword?</p>
-                    
-                    <p>Apart, on the throne of honor, the arena Champion looks on, a body of knotted muscles and scars, a testimony to his own brutal rise. His visage is impassive but his thoughts boil. How long before some young warrior's sword finds his heart, perhaps one of those he now watches? He shakes himself, casting aside dark thoughts.</p>
-                    
-                    <p>For the moment, he is the Champion, the best of the arena. His smoldering eyes scan the bloodstained sand where the warriors assume their fighting stances. He raises his clenched fist.</p>
-                    
-                    <p>The gladiators leap forward. Victory, disgrace, or death awaits on the open sand.</p>
+                    <p>A bloodthirsty crowd roars as the gladiators enter the arena. Nervous but hardheaded team managers watch from their battle crested pavilions...</p>
                 </div>
             </section>
-            
-            <section id="updates">
-                <h3>Announcements</h3>
-                <div class="content-box">
-                    <p style="text-align: center; margin-top: 20px;">
-                        <a href="#" id="viewAnnouncement" style="color: #d4af37; font-size: 1.1rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif;">
-                            RE-VIEW THE MAY 9TH ARENA RESET ANNOUNCEMENT
-                        </a>
-                    </p>
-                    <p><strong>Note:</strong> I am currently addressing a logic bug regarding duplicate team names. The Combat Engine is being updated to utilize unique Team IDs to prevent rendering errors. Turn 1 will be re-run shortly.</p>
-                </div>
-            </section>
-            
         </main>
     </div>
 
     <div id="announcementModal" class="modal-overlay">
         <div class="modal-content">
             <h2 id="modalTitle">Important Announcement</h2>
-            <div id="modalBody">
-                </div>
+            <div id="modalBody"></div>
             <button id="closeModal">Dismiss</button>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        const SUPABASE_URL = 'https://ngjjnlpmisgwhktdfveq.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nampubHBtaXNnd2hrdGRmdmVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTU3MjQsImV4cCI6MjA5NDA5MTcyNH0.mjqx_G_asJUPOTQAJodxbh4VMTgNpsfYsgYQ8_FrGrc';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function checkNewMessages() {
+            const lastViewed = localStorage.getItem('last_board_view') || new Date(0).toISOString();
+            const { count, error } = await _supabase
+                .from('messages')
+                .select('*', { count: 'exact', head: true })
+                .gt('created_at', lastViewed);
+
+            if (!error && count > 0) {
+                const navLink = document.getElementById('nav-board');
+                navLink.innerHTML = `Message Board <span class="notification-badge">${count}</span>`;
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', (event) => {
+            checkNewMessages();
+
+            // Clear badge manually if the link is clicked
+            document.getElementById('nav-board').onclick = function() {
+                localStorage.setItem('last_board_view', new Date().toISOString());
+            };
+
             const modal = document.getElementById('announcementModal');
             const closeBtn = document.getElementById('closeModal');
             const modalBody = document.getElementById('modalBody');
-            const reOpenLink = document.getElementById('viewAnnouncement');
 
-            const contentUpdateV21 = `
-                <strong>Update:</strong> Due to an issue with multiple duplicate names and how the matching was being performed, I made several updates to the logic and to the client. There is a more complete list of the bugs that were fixed under the 
-                <a href="updates.html" style="color: #a31616; text-decoration: underline;">Bug Fixes & Updates</a> section. 
-                <br><br>
-                <strong>You will need to download the latest version of the client (V2.1).</strong>
-                <br><br>
-                I certainly want to thank you all for everything you have done to help me play test this game. I am sorry that we have had as many issues as we have. I feel better now that I think I have the naming issue under control, that we will have a much smoother turn 2 on Tuesday evening.
-                <br><br>
-                As a thank you to those of you that have agreed to help with this, I am giving each of you the opportunity to submit a name for a peasant that will forever remain a part of this game. If you have a specific persona for your peasant, I would love to hear it. You can submit those names through the 
-                <a href="report-an-issue.html" style="color: #a31616; text-decoration: underline;">Report an issue</a> (as an enhancement).
-                <br><br>
-                <em style="display: block; text-align: right;">-ILNEVAL-</em>
-            `;
-
-            const contentResetMay9 = `
-                Due to a few bugs with corrupt files and an issue with strategy display, I have decided to revert us back to turn 1. 
-                If you were uploaded for turn 1, you are still set to run the first turn. 
-                <br><br>
-                <strong>You will need to download the newest version of the Bloodspire installer found on the 
-                <a href="download.html" style="color: #a31616; text-decoration: underline;">Download page</a>.</strong> 
-                <br><br>
-                <strong>Turn 1 is now scheduled to run on Saturday, May 9th at 9:00 PM cst.</strong> 
-                <br><br>
-                <em style="display: block; text-align: right;">-ILNEVAL-</em>
-            `;
-
-            const contentLogicIssue = `
-                There is a logic issue when 2 teams have the same name. Because of this, the rendering logic was confused and several fights were done, but no results were sent to display. 
-                <br><br>
-                I am working now to fix that issue. Will be using team name and team ID going forward to help the Combat engine, Newsletter engine and server logic differentiate. I had the logic in place to eliminate the ability to have identical manager names, but didn't put anything in place for team names. Sorry for the glitch. 
-                <br><br>
-                Once I have the fix in place, I will revert back to turn 0 and re-run the turn. Hopefully tonight still and then I will post when the results are available again. 
-                <br><br>
-                <strong>When you log back in to the client next time, you should get an arena reset message and a clear records button again.</strong> 
-                <br><br>
-                Thank you for your patience with this.
-                <br><br>
-                <em style="display: block; text-align: right;">-ILNEVAL-</em>
-            `;
-
-            // Logic to handle which popup to show automatically (Newest first)
             if (!localStorage.getItem('bloodspire_duplicate_fix_v21')) {
-                modalBody.innerHTML = contentUpdateV21;
+                modalBody.innerHTML = "<strong>Update:</strong> Logic bugs fixed. Please download V2.1.";
                 modal.style.display = 'block';
-                
-                closeBtn.onclick = function() {
-                    modal.style.display = 'none';
-                    localStorage.setItem('bloodspire_duplicate_fix_v21', 'true');
-                }
-            } else if (!localStorage.getItem('bloodspire_logic_issue_fix')) {
-                modalBody.innerHTML = contentLogicIssue;
-                modal.style.display = 'block';
-                
-                closeBtn.onclick = function() {
-                    modal.style.display = 'none';
-                    localStorage.setItem('bloodspire_logic_issue_fix', 'true');
-                }
-            } else if (!localStorage.getItem('bloodspire_reset_may9')) {
-                modalBody.innerHTML = contentResetMay9;
-                modal.style.display = 'block';
-
-                closeBtn.onclick = function() {
-                    modal.style.display = 'none';
-                    localStorage.setItem('bloodspire_reset_may9', 'true');
-                }
-            }
-
-            // Manual trigger for the older announcement
-            reOpenLink.onclick = function(e) {
-                e.preventDefault();
-                modalBody.innerHTML = contentResetMay9;
-                modal.style.display = 'block';
-                closeBtn.onclick = () => modal.style.display = 'none';
-            }
-
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                    // If they click outside the box, we mark the currently displayed newest one as seen
-                    if (!localStorage.getItem('bloodspire_duplicate_fix_v21')) {
-                        localStorage.setItem('bloodspire_duplicate_fix_v21', 'true');
-                    }
-                }
+                closeBtn.onclick = () => { modal.style.display = 'none'; localStorage.setItem('bloodspire_duplicate_fix_v21', 'true'); }
             }
         });
     </script>
