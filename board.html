@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bloodspire | Player Correspondence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { background-color: #121212; color: #e0e0e0; font-family: 'Open Sans', sans-serif; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: #1c1c1c; border: 1px solid #333; padding: 30px; border-radius: 4px; }
+        h1 { font-family: 'Cinzel', serif; color: #d4af37; text-align: center; border-bottom: 2px solid #d4af37; }
+        #display { height: 400px; overflow-y: auto; background: #0a0a0a; border: 1px solid #444; padding: 15px; margin: 20px 0; display: flex; flex-direction: column; }
+        .msg { padding: 10px; border-bottom: 1px solid #222; }
+        .admin-msg { border-left: 4px solid #d4af37; background: #2a2415; }
+        .author { color: #d4af37; font-weight: bold; font-size: 0.9em; }
+        .time { color: #666; font-size: 0.7em; margin-left: 10px; }
+        .inputs { display: flex; flex-direction: column; gap: 10px; }
+        input, textarea { background: #2a2a2a; border: 1px solid #444; color: white; padding: 10px; }
+        button { background: #d4af37; color: black; font-weight: bold; padding: 10px; cursor: pointer; border: none; font-family: 'Cinzel'; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Scroll of Correspondence</h1>
+    <div id="display"></div>
+    <div class="inputs">
+        <input type="text" id="username" placeholder="Character Name">
+        <textarea id="message" placeholder="Type your message..."></textarea>
+        <button onclick="send()">Post Message</button>
+    </div>
+</div>
+
+<script>
+    // --- CONFIGURATION ---
+    const SUPABASE_URL = 'https://ngjjnlpmisgwhktdfveq.supabase.co/messages';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nampubHBtaXNnd2hrdGRmdmVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTU3MjQsImV4cCI6MjA5NDA5MTcyNH0.mjqx_G_asJUPOTQAJodxbh4VMTgNpsfYsgYQ8_FrGrc';
+    const supabase = lib.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function loadMessages() {
+        const { data, error } = await supabase
+            .from('messages')
+            .select('*')
+            .order('created_at', { ascending: true })
+            .limit(50);
+
+        const display = document.getElementById('display');
+        display.innerHTML = data.map(m => `
+            <div class="msg ${m.is_admin ? 'admin-msg' : ''}">
+                <div class="author">${m.is_admin ? '⚜ ' : ''}${m.author} <span class="time">${new Date(m.created_at).toLocaleString()}</span></div>
+                <div>${m.content}</div>
+            </div>
+        `).join('');
+        display.scrollTop = display.scrollHeight;
+    }
+
+    async function send() {
+        const author = document.getElementById('username').value || "Anonymous";
+        const content = document.getElementById('message').value;
+        
+        await supabase.from('messages').insert([{ author, content }]);
+        document.getElementById('message').value = '';
+        loadMessages();
+    }
+
+    // Load initially and refresh every 30s
+    loadMessages();
+    setInterval(loadMessages, 30000);
+</script>
+</body>
+</html>
