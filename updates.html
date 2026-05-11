@@ -13,6 +13,7 @@
             --accent-blue: #3b82f6;
             --accent-green: #10b981;
             --accent-purple: #8b5cf6;
+            --accent-red: #ef4444;
             --border-color: #2e2e38;
         }
 
@@ -97,6 +98,7 @@
         .section-title.gameplay { border-bottom-color: var(--accent-purple); }
         .section-title.ui { border-bottom-color: var(--accent-green); }
         .section-title.compatibility { border-bottom-color: var(--accent-blue); }
+        .section-title.roadmap { border-bottom-color: var(--accent-red); }
 
         ul {
             list-style: none;
@@ -130,6 +132,15 @@
             color: var(--text-secondary);
             margin-top: 4px;
         }
+
+        .date-header {
+            color: var(--accent-blue);
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -139,59 +150,93 @@
         <a href="index.html" class="back-link">← Back to Main Page</a>
         <h1>System Updates & Bug Fixes</h1>
         <p class="subtitle">Latest stability improvements, gameplay adjustments, and engine fixes.</p>
-        <span class="version-badge">v1.1.0 Changelog</span>
+        <span class="version-badge">v2.1.0 Changelog</span>
     </header>
 
     <main>
-        <!-- Gameplay Adjustments -->
         <section class="section">
-            <h2 class="section-title gameplay">Combat & Gameplay Balance</h2>
+            <span class="date-header">May 10, 2026</span>
+            <h2 class="section-title compatibility">Naming Collision & Server Logic Fixes</h2>
+            <ul>
+                <li>
+                    <strong>Duplicate Name Collision Resolved</strong>
+                    <span class="details">Fixed an issue where teams or warriors sharing names caused logic failures. Previously, this caused some warriors to miss fights or incorrectly match against normal players instead of monsters.</span>
+                </li>
+                <li>
+                    <strong>Unique ID Implementation</strong>
+                    <span class="details">Added Unique ID strings to all teams and warriors, implementing backend indices for precise identification regardless of shared names.</span>
+                </li>
+                <li>
+                    <strong>Admin Team Deletion</strong>
+                    <span class="details">Implemented backend functionality allowing admins to remove teams at manager request, triggering an API call to clear stale data from the client.</span>
+                </li>
+                <li>
+                    <strong>Locked Text Field Rendering</strong>
+                    <span class="details">Resolved a client-side bug in the "Create New Team" and "Create Replacement Warrior" screens where name fields appeared uneditable until the window was minimized and restored.</span>
+                </li>
+                <li>
+                    <strong>"Run Next Turn" Upload Logic</strong>
+                    <span class="details">Fixed a bug where uploading with the "Run Next Turn" box unchecked would lock the team out of the turn list. The server now allows re-uploads to correctly register the team once the checkbox is selected.</span>
+                </li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title roadmap">Next Planned Updates</h2>
+            <ul>
+                <li>
+                    <strong>Stat Formula Reworks</strong>
+                    <span class="details">Adjusting Endurance and HP formulas to address combat length issues (currently too many fights exceeding 10 minutes).</span>
+                </li>
+                <li>
+                    <strong>Weapon Damage Scaling</strong>
+                    <span class="details">Increasing damage for small finesse and medium-sized weapons to make them more competitive.</span>
+                </li>
+                <li>
+                    <strong>Critical System & Narratives</strong>
+                    <span class="details">Introducing Critical Hits and Critical Parry/Dodge formulas along with associated immersive narrative lines.</span>
+                </li>
+                <li>
+                    <strong>Combat Consistency</strong>
+                    <span class="details">Tweaking the random disarm frequency and refining the "Arena Happenings" report to reduce repetitive statements.</span>
+                </li>
+                <li>
+                    <strong>Newsletter Enhancements</strong>
+                    <span class="details">Updating the "Top Managers" section for a more natural visual flow.</span>
+                </li>
+            </ul>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 40px 0;">
+
+        <section class="section">
+            <h2 class="section-title gameplay">Combat & Gameplay Balance (v1.1.0)</h2>
             <ul>
                 <li>
                     <strong>Finesse Weapon Scaling</strong>
-                    <span class="details">Adjusted damage calculations for finesse weapons. Previously, finesse weapons were too ineffective in combat scales compared to strength-based gear. They now scale appropriately to match alternative playstyles.</span>
+                    <span class="details">Adjusted damage calculations for finesse weapons to match alternative playstyles.</span>
                 </li>
                 <li>
                     <strong>Blood Challenge Logic</strong>
-                    <span class="details">Updated and refined the triggers and scaling backend for Blood Challenges to ensure they execute consistently.</span>
+                    <span class="details">Updated triggers and scaling backend for Blood Challenges.</span>
                 </li>
                 <li>
                     <strong>Challenge Selection Save State</strong>
-                    <span class="details">Fixed a critical interface bug where selected challenges failed to commit to saving. Selected challenge details are now correctly retained in local storage.</span>
+                    <span class="details">Fixed interface bug where selected challenges failed to commit to local storage.</span>
                 </li>
             </ul>
         </section>
 
-        <!-- UI & User Experience -->
         <section class="section">
-            <h2 class="section-title ui">Interface & User Experience</h2>
+            <h2 class="section-title ui">Interface & User Experience (v1.1.0)</h2>
             <ul>
                 <li>
                     <strong>Record Privacy Option</strong>
-                    <span class="details">Added the ability to hide your Win-Loss-Kill (W-L-K) record, accessible directly under the Preferences tab.</span>
-                </li>
-                <li>
-                    <strong>Newsletter Subscription Form Clean-up</strong>
-                    <span class="details">Removed the "voice" dropdown menu from the newsletter tab to streamline the interface.</span>
+                    <span class="details">Added the ability to hide Win-Loss-Kill (W-L-K) records in Preferences.</span>
                 </li>
                 <li>
                     <strong>Arena Rebranding</strong>
-                    <span class="details">Formally updated all references of the primary combat grounds to <strong>The Agony Amphitheatre</strong>.</span>
-                </li>
-            </ul>
-        </section>
-
-        <!-- System & Compatibility -->
-        <section class="section">
-            <h2 class="section-title compatibility">System Compatibility & Web Standards</h2>
-            <ul>
-                <li>
-                    <strong>Multi-Browser Compatibility Support</strong>
-                    <span class="details">Expanded engine rendering configurations. Previously, Google Chrome was designated as the hardcoded default rendering platform, causing structural and display errors on workstations running alternative browsers.</span>
-                </li>
-                <li>
-                    <strong>Microsoft Edge Rendering Alignment</strong>
-                    <span class="details">Resolved structural restrictions where security settings native to Microsoft Edge blocked team data from rendering properly. Team displays now align seamlessly across Edge and Safari platforms.</span>
+                    <span class="details">Formally updated all references to <strong>The Agony Amphitheatre</strong>.</span>
                 </li>
             </ul>
         </section>
