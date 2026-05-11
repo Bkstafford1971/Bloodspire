@@ -7,92 +7,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body {
-            background-color: #000;
-            color: #d1d1d1;
-            font-family: 'Open Sans', sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-        }
-        .container {
-            width: 100%;
-            max-width: 900px;
-            padding: 40px;
-            background-color: #050505;
-            border-left: 1px solid #333;
-            border-right: 1px solid #333;
-        }
-        h1 {
-            font-family: 'Cinzel', serif;
-            color: #a31616;
-            text-align: center;
-            text-transform: uppercase;
-            border-bottom: 2px solid #a31616;
-            padding-bottom: 10px;
-            margin-bottom: 5px;
-        }
-        #display {
-            height: 500px;
-            overflow-y: auto;
-            background: #000;
-            border: 1px solid #444;
-            padding: 15px;
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-        .msg {
-            padding: 10px;
-            border-bottom: 1px solid #222;
-            margin-bottom: 10px;
-        }
-        .admin-msg {
-            border-left: 4px solid #d4af37;
-            background: #1a1500;
-        }
-        .author {
-            color: #d4af37;
-            font-family: 'Cinzel', serif;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-        .time {
-            color: #666;
-            font-size: 0.7rem;
-            margin-left: 10px;
-        }
+        body { background-color: #000; color: #d1d1d1; font-family: 'Open Sans', sans-serif; margin: 0; display: flex; justify-content: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 900px; padding: 40px; background-color: #050505; border-left: 1px solid #333; border-right: 1px solid #333; }
+        h1 { font-family: 'Cinzel', serif; color: #a31616; text-align: center; text-transform: uppercase; border-bottom: 2px solid #a31616; padding-bottom: 10px; margin-bottom: 5px; }
+        #display { height: 500px; overflow-y: auto; background: #000; border: 1px solid #444; padding: 15px; margin-bottom: 20px; display: flex; flex-direction: column; }
+        .msg { padding: 10px; border-bottom: 1px solid #222; margin-bottom: 10px; }
+        .admin-msg { border-left: 4px solid #d4af37; background: #1a1500; }
+        .author { color: #d4af37; font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.9rem; }
+        .time { color: #666; font-size: 0.7rem; margin-left: 10px; }
         .content { margin-top: 5px; line-height: 1.4; }
         .inputs { display: flex; flex-direction: column; gap: 10px; }
-        input, textarea {
-            background: #111;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 12px;
-            font-family: inherit;
-        }
-        button {
-            background: #a31616;
-            color: white;
-            font-weight: bold;
-            padding: 12px;
-            cursor: pointer;
-            border: none;
-            font-family: 'Cinzel', serif;
-            text-transform: uppercase;
-        }
+        input, textarea { background: #111; border: 1px solid #444; color: #fff; padding: 12px; font-family: inherit; }
+        button { background: #a31616; color: white; font-weight: bold; padding: 12px; cursor: pointer; border: none; font-family: 'Cinzel', serif; text-transform: uppercase; }
         button:hover { background: #8b1a1a; }
-        .admin-auth {
-            margin-top: 15px;
-            font-size: 0.7rem;
-            color: #444;
-        }
-        .admin-auth input {
-            padding: 4px;
-            width: 100px;
-            font-size: 0.7rem;
-        }
+        .admin-auth { margin-top: 15px; font-size: 0.7rem; color: #444; }
+        .admin-auth input { padding: 4px; width: 100px; font-size: 0.7rem; }
         .back-link { text-align: center; margin-top: 20px; }
         .back-link a { color: #d4af37; text-decoration: none; font-family: 'Cinzel'; font-size: 0.8rem; }
     </style>
@@ -101,7 +30,6 @@
 
 <div class="container">
     <h1>Scroll of Correspondence</h1>
-    
     <p style="font-size: 0.8rem; color: #888; text-align: center; font-style: italic; margin-top: 0; margin-bottom: 15px;">
         Managers, share your insights or report sightings of arena foul play here.
     </p>
@@ -124,8 +52,6 @@
 </div>
 
 <script>
-    // --- CONFIGURATION ---
-    // Make sure to put your actual Supabase details here
     const SUPABASE_URL = 'https://ngjjnlpmisgwhktdfveq.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nampubHBtaXNnd2hrdGRmdmVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTU3MjQsImV4cCI6MjA5NDA5MTcyNH0.mjqx_G_asJUPOTQAJodxbh4VMTgNpsfYsgYQ8_FrGrc';
     const SECRET_ADMIN_KEY = 'BloodspireAdmin';
@@ -136,11 +62,18 @@
     async function loadMessages() {
         const { data, error } = await _supabase
             .from('messages')
-            .select('*')
+            .select('author, content, is_admin, created_at')
             .order('created_at', { ascending: true })
             .limit(100);
 
-        if (error) return;
+        if (error) {
+            console.error("Fetch error:", error.message);
+            document.getElementById('display').innerHTML = "The arena guards have blocked access: " + error.message;
+            return;
+        }
+
+        // --- NEW: Reset the indicator by marking now as the last viewed time ---
+        localStorage.setItem('last_board_view', new Date().toISOString());
 
         const display = document.getElementById('display');
         display.innerHTML = data.map(m => `
@@ -159,7 +92,6 @@
         const authorInput = document.getElementById('username');
         const contentInput = document.getElementById('message');
         const keyInput = document.getElementById('admin_key');
-
         const content = contentInput.value;
         const enteredKey = keyInput.value;
         
@@ -181,11 +113,14 @@
             contentInput.value = '';
             keyInput.value = '';
             loadMessages();
+        } else {
+            console.error("Post error:", error.message);
+            alert("The Arena guards blocked your message: " + error.message);
         }
     }
 
     loadMessages();
-    setInterval(loadMessages, 15000); // Refreshes every 30 seconds
+    setInterval(loadMessages, 15000);
 </script>
 </body>
 </html>
