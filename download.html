@@ -225,21 +225,24 @@
             <section class="download-action">
                 <h2>CHOOSE YOUR REALM</h2>
                 <div class="download-grid">
-                    <!-- Windows Build -->
                     <div class="platform-card">
                         <p>Version 2.2 - Windows Build</p>
                         <a href="https://mega.nz/file/tuQQyQTa#nVRPCy2ioucgvJs8a_eSuG5WLVYbWUGLGUHQ45JZbvk" 
                            class="download-btn" 
-                           id="windows-download">
+                           id="windows-download"
+                           target="_blank"
+                           rel="noopener noreferrer">
                             WINDOWS (.EXE)
                         </a>
                         <p class="platform-meta">Secure installer for official league play.</p>
                     </div>
 
-                    <!-- macOS Build -->
                     <div class="platform-card">
                         <p>Version 1.2.0 - macOS Build</p>
-                        <a href="https://mega.nz/file/56p2HZJZ#c0H2WSQWuEa2zIGbrr8PIn7_XsmIh4JICkkZzvXVtW0" class="download-btn">
+                        <a href="https://mega.nz/file/56p2HZJZ#c0H2WSQWuEa2zIGbrr8PIn7_XsmIh4JICkkZzvXVtW0" 
+                           class="download-btn"
+                           target="_blank"
+                           rel="noopener noreferrer">
                             macOS (.ZIP)
                         </a>
                         <p class="platform-meta">Compatible with Intel and Apple Silicon.</p>
@@ -288,7 +291,6 @@
                 </div>
             </section>
 
-                        <!-- DOWNLOAD COUNTER -->
             <div class="download-counter">
                 <p style="margin: 5px 0 8px 0; color: #888; font-size: 0.95rem;">WINDOWS DOWNLOADS</p>
                 <span id="win-count" class="counter-number">0</span>
@@ -306,23 +308,26 @@
             countElement.textContent = winCount.toLocaleString();
         }
 
+        // Initialize display from localStorage
         updateCounter();
 
-        // Improved click handler - uses mousedown + small delay to ensure it counts
-        winLink.addEventListener('mousedown', function() {
+        // Handle the download action securely
+        function handleDownload(e) {
+            // Prevent the browser from instantly firing the link navigation
+            e.preventDefault();
+            
+            // Increment and save data local to this browser session
             winCount++;
             localStorage.setItem('bloodspireWinDownloads', winCount);
             updateCounter();
-        });
 
-        // Also support keyboard activation (Enter/Space)
-        winLink.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                winCount++;
-                localStorage.setItem('bloodspireWinDownloads', winCount);
-                updateCounter();
-            }
-        });
+            // Safely open the download URL in a new tab/window after state is saved
+            const downloadUrl = winLink.getAttribute('href');
+            window.open(downloadUrl, '_blank');
+        }
+
+        // Use standard click event listener instead of mousedown to ensure stability
+        winLink.addEventListener('click', handleDownload);
     </script>
 </body>
 </html>
