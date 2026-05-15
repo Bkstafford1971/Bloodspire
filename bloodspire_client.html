@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v2.1</title>
+<title>BLOODSPIRE Client - v2.2</title>
 <style>
 /* ============================================================
    WINDOWS CLASSIC — REFINED
@@ -246,7 +246,7 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
-const CLIENT_VERSION = "2.1";
+const CLIENT_VERSION = "2.2";
 
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
@@ -858,11 +858,6 @@ function mergeResults(localTeam, serverResult, opts = {}) {
   if (serverTeam.auto_upload_enabled !== undefined) {
     out.auto_upload_enabled = serverTeam.auto_upload_enabled;
   }
-  if (serverTeam.run_next_turn !== undefined) {
-    out.run_next_turn = serverTeam.run_next_turn;
-  } else if (out.run_next_turn === undefined) {
-    out.run_next_turn = true;  // Default to true if not set
-  }
 
   // Team turn_history — on re-run replace the existing entry for this turn;
   // on a normal download only append new entries.
@@ -1410,10 +1405,10 @@ const LocalAPI = {
     if (!acc) return { success: false, error: 'No account loaded.' };
 
     if (path === '/api/team/run_next_turn') {
-      // Update the team's run_next_turn flag (whether team participates in next turn)
+      // This API call is now handled by directly updating the team's auto_upload_enabled flag
       const team = await Store.readTeam(parseInt(body.team_id, 10));
       if (!team) return { success: false, error: 'Team not found.' };
-      team.run_next_turn = !!body.value;
+      team.auto_upload_enabled = !!body.value;
       await Store.writeTeam(team);
       return { success: true, team };
     }
@@ -2905,7 +2900,7 @@ function buildTeamPanel(team) {
   const totalD = team.warriors.reduce((a,w)=>a+(w?w.kills||0:0),0)
               + (team.archived_warriors||[]).reduce((a,w)=>a+(w?w.kills||0:0),0); // K = kills
   const tid    = team.team_id;
-  const rnt    = team.run_next_turn !== false;  // Default to true if not set
+  const rnt    = team.auto_upload_enabled;
   const canRun = hasFiveActiveWarriors(team);
   return `
 <div style="padding:4px;">
@@ -3329,8 +3324,11 @@ function buildFightsTab(w) {
       // Champion fights get special row formatting
       rows += `<tr style="${champStyle} font-weight:bold;">
         <td style="padding:2px 6px; text-align:center;">${h.turn||'—'}</td>
-        <td style="padding:2px 6px; color:#c60;">★ CHAMPION FIGHT ★</td>
-        <td style="padding:2px 6px;">${opponentDisplay}${slainNote}</td>
+        <td style="padding:2px 6px; color:#c60;">
+          ★ CHAMPION FIGHT ★<br>${opponentDisplay}${slainNote}
+        </td>
+        <td style="padding:2px 6px; color:#555;">${esc(h.opponent_manager_name||'—')}</td>
+        <td style="padding:2px 6px; text-align:center;">${esc(h.opponent_race||'')}</td>
         <td style="padding:2px 6px; text-align:center; color:${resColor}; font-weight:bold;">${res}</td>
         <td style="padding:2px 6px; text-align:center;">${killMark}</td>
         <td style="padding:2px 6px; text-align:center;">${h.minutes||'—'} min</td>
@@ -3341,6 +3339,7 @@ function buildFightsTab(w) {
       rows += `<tr style="${champStyle}">
         <td style="padding:2px 6px; text-align:center;">${h.turn||'—'}</td>
         <td style="padding:2px 6px;">${esc(h.opponent_name)}</td>
+        <td style="padding:2px 6px; color:#555;">${esc(h.opponent_manager_name||'—')}</td>
         <td style="padding:2px 6px; text-align:center;">${esc(h.opponent_race||'')}</td>
         <td style="padding:2px 6px; text-align:center; color:${resColor}; font-weight:bold;">${res}${slainNote}</td>
         <td style="padding:2px 6px; text-align:center;">${killMark}</td>
@@ -3359,6 +3358,7 @@ function buildFightsTab(w) {
       <tr>
         <th style="width:40px;">Turn</th>
         <th style="min-width:140px;">Opponent</th>
+        <th style="width:120px;">Manager</th>
         <th style="width:80px;">Race</th>
         <th style="width:60px;">Result</th>
         <th style="width:45px;">Kill</th>
@@ -5908,7 +5908,7 @@ function _showDownloadProgress(steps, currentIdx, error) {
   </div>
   <div style="text-align:center;padding:8px 0 4px;">
     ${footer}
-    ${showOk ? `<button onclick="document.getElementById('dl-progress-modal').remove()"
+    ${showOk ? `<button onclick="${allDone ? `setMgrTab('account');` : ''}document.getElementById('dl-progress-modal').remove()"
                  style="min-width:80px;margin-top:4px;">OK</button>` : ''}
   </div>
 </div>`;
