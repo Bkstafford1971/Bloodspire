@@ -1,8 +1,8 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v1.2.1</title>
+<title>BLOODSPIRE Client - v2.1</title>
 <style>
 /* ============================================================
    WINDOWS CLASSIC — REFINED
@@ -32,8 +32,6 @@ input:not([readonly]), textarea, select {
   -webkit-user-select: auto !important;
   pointer-events: auto !important;
   cursor: text;
-  /* Force Electron/Chromium into text-editing mode */
-  -webkit-user-modify: read-write !important;
 }
 select { cursor: default; }
 #app { width:100%; height:100%; display:flex; flex-direction:column; }
@@ -248,7 +246,7 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
-const CLIENT_VERSION = "1.2.1";
+const CLIENT_VERSION = "2.1";
 
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
@@ -384,6 +382,137 @@ async function doPickFolder(forceNew) {
       return;
     }
     setMsg('Could not open folder: ' + (e.message || e), 'err');
+    render();
+  }
+}
+
+function triggerRestoreFromZip() {
+  if (!baseDir) {
+    alert('Please select a save folder first.');
+    return;
+  }
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.zip';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      restoreFromZip(file);
+    }
+  };
+  input.click();
+}
+
+async function restoreFromZip(zipFile) {
+  try {
+    // Show loading message
+    setMsg('Extracting files from ZIP...', 'ok');
+    render();
+
+    // Load zip.js library or use a simple approach
+    const arrayBuffer = await zipFile.arrayBuffer();
+
+    // Simple ZIP extraction - we'll need to add a ZIP library
+    // For now, try using a CDN-loaded library
+    if (!window.JSZip) {
+      // Load JSZip library from CDN
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+      script.onload = () => extractZipFiles(arrayBuffer);
+      script.onerror = () => {
+        setMsg('Error: Could not load ZIP extraction library. Check your internet connection.', 'err');
+        render();
+      };
+      document.head.appendChild(script);
+    } else {
+      extractZipFiles(arrayBuffer);
+    }
+  } catch (e) {
+    setMsg('Error reading ZIP file: ' + e.message, 'err');
+    render();
+  }
+}
+
+async function extractZipFiles(arrayBuffer) {
+  try {
+    const zip = new JSZip();
+    const loaded = await zip.loadAsync(arrayBuffer);
+
+    // Read manifest
+    let manifest = [];
+    const manifestFile = loaded.file('MANIFEST.json');
+    if (manifestFile) {
+      const manifestText = await manifestFile.async('string');
+      manifest = JSON.parse(manifestText);
+    }
+
+    if (!manifest || manifest.length === 0) {
+      setMsg('Error: ZIP file is missing MANIFEST.json', 'err');
+      render();
+      return;
+    }
+
+    let extracted = 0;
+    let failed = [];
+
+    // Extract each file according to manifest
+    for (const entry of manifest) {
+      try {
+        const sourceFile = loaded.file(entry.source);
+        if (!sourceFile) {
+          failed.push(`${entry.source} not found in ZIP`);
+          continue;
+        }
+
+        const content = await sourceFile.async('arraybuffer');
+        const pathParts = entry.target.split('/');
+        const filename = pathParts.pop();
+        const dirPath = pathParts.join('/');
+
+        // Write file using FSA
+        if (window.electronAPI) {
+          // Electron mode
+          const fullPath = `${baseDir}/${entry.target}`;
+          if (entry.type === 'team') {
+            const result = await window.electronAPI.writeJson(fullPath, JSON.parse(new TextDecoder().decode(content)));
+            if (!result.success) failed.push(filename);
+            else extracted++;
+          } else if (entry.type === 'result') {
+            const result = await window.electronAPI.writeJson(fullPath, JSON.parse(new TextDecoder().decode(content)));
+            if (!result.success) failed.push(filename);
+            else extracted++;
+          }
+        } else {
+          // Browser mode - use API to write files
+          const result = await fetch('/api/local/write', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              path: entry.target,
+              data: JSON.parse(new TextDecoder().decode(content))
+            })
+          }).then(r => r.json());
+          if (result.success) extracted++;
+          else failed.push(filename);
+        }
+      } catch (e) {
+        failed.push(`${entry.source}: ${e.message}`);
+      }
+    }
+
+    let msg = `✓ Extracted ${extracted} file(s)`;
+    if (failed.length > 0) {
+      msg += ` (${failed.length} failed: ${failed.slice(0, 3).join(', ')}${failed.length > 3 ? '...' : ''})`;
+    }
+    setMsg(msg, failed.length > 0 ? 'err' : 'ok');
+    render();
+
+    // Reload data after restore
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
+  } catch (e) {
+    setMsg('Error extracting ZIP: ' + e.message, 'err');
     render();
   }
 }
@@ -604,6 +733,13 @@ const Store = {
     }
     return ids.sort((a, b) => a - b);
   },
+  async clearNewsletters() {
+    const names = await fsaListDir('newsletters');
+    for (const n of names) {
+      if (/^turn_\d+\.txt$/.test(n))
+        await fsaDeleteFile(`newsletters/${n}`).catch(() => {});
+    }
+  },
   async listNewsletterTurns() {
     const names = await fsaListDir('newsletters');
     const turns = [];
@@ -650,10 +786,11 @@ function randomHex(nBytes) {
 /* ============================================================
    MERGE RESULTS — port of gui_server._apply_league_results (JS)
    ============================================================ */
-function mergeResults(localTeam, serverResult) {
+function mergeResults(localTeam, serverResult, opts = {}) {
   const serverTeam     = serverResult.team || {};
   const serverWarriors = serverTeam.warriors || [];
   const out = JSON.parse(JSON.stringify(localTeam));
+  const rerun = !!opts.rerun;
 
   for (let idx = 0; idx < serverWarriors.length && idx < out.warriors.length; idx++) {
     const sw = serverWarriors[idx];
@@ -672,24 +809,36 @@ function mergeResults(localTeam, serverResult) {
     lw.streak        = sw.streak        ?? lw.streak;
     lw.turns_active  = sw.turns_active  ?? lw.turns_active;
     lw.injuries      = sw.injuries      ?? lw.injuries;
-    lw.is_dead       = sw.is_dead       ?? lw.is_dead;
-    lw.killed_by     = sw.killed_by     ?? lw.killed_by;
+    // Only take is_dead/killed_by from server if there was actual turn processing
+    // (i.e., server has fight results). Otherwise preserve local replacement status.
+    if (sw.fight_history && sw.fight_history.length > 0) {
+      lw.is_dead = sw.is_dead ?? lw.is_dead;
+      lw.killed_by = sw.killed_by ?? lw.killed_by;
+    }
     lw.ascended_to_monster = sw.ascended_to_monster ?? lw.ascended_to_monster ?? false;
     lw.monster_kills = sw.monster_kills ?? lw.monster_kills ?? 0;
     if (sw.favorite_weapon) lw.favorite_weapon = sw.favorite_weapon;
 
-    // Skills — max-merge so local gains aren't lost
-    lw.skills = lw.skills || {};
-    for (const [k, v] of Object.entries(sw.skills || {})) {
-      if ((v||0) > (lw.skills[k]||0)) lw.skills[k] = v;
-    }
-
-    // Attribute gains — server-authoritative (training ran there)
-    lw.attribute_gains = sw.attribute_gains ?? lw.attribute_gains;
-
-    // Raw attributes — take server value if higher (training raised them)
-    for (const attr of ['strength','dexterity','constitution','intelligence','presence']) {
-      if (sw[attr] != null && sw[attr] > (lw[attr]||0)) lw[attr] = sw[attr];
+    if (rerun) {
+      // Re-run: server is fully authoritative — replace skills and attributes
+      // so that removed gains (e.g. fewer skills learned on re-run) are applied.
+      lw.skills = Object.assign({}, sw.skills || {});
+      lw.attribute_gains = sw.attribute_gains ?? lw.attribute_gains;
+      for (const attr of ['strength','dexterity','constitution','intelligence','presence']) {
+        if (sw[attr] != null) lw[attr] = sw[attr];
+      }
+    } else {
+      // Normal download: max-merge skills so local gains aren't discarded.
+      lw.skills = lw.skills || {};
+      for (const [k, v] of Object.entries(sw.skills || {})) {
+        if ((v||0) > (lw.skills[k]||0)) lw.skills[k] = v;
+      }
+      // Attribute gains — server-authoritative (training ran there)
+      lw.attribute_gains = sw.attribute_gains ?? lw.attribute_gains;
+      // Raw attributes — take server value if higher (training raised them)
+      for (const attr of ['strength','dexterity','constitution','intelligence','presence']) {
+        if (sw[attr] != null && sw[attr] > (lw[attr]||0)) lw[attr] = sw[attr];
+      }
     }
 
     // Fight history — replace any local entries for turns the server ran
@@ -709,14 +858,26 @@ function mergeResults(localTeam, serverResult) {
   if (serverTeam.auto_upload_enabled !== undefined) {
     out.auto_upload_enabled = serverTeam.auto_upload_enabled;
   }
+  if (serverTeam.run_next_turn !== undefined) {
+    out.run_next_turn = serverTeam.run_next_turn;
+  } else if (out.run_next_turn === undefined) {
+    out.run_next_turn = true;  // Default to true if not set
+  }
 
-  // Team turn_history — append any new entries by turn number
+  // Team turn_history — on re-run replace the existing entry for this turn;
+  // on a normal download only append new entries.
   out.turn_history = out.turn_history || [];
-  const known = new Set(out.turn_history.map(e => e.turn));
-  for (const entry of (serverTeam.turn_history || [])) {
-    if (entry.turn && !known.has(entry.turn)) {
-      out.turn_history.push(entry);
-      known.add(entry.turn);
+  if (rerun) {
+    const serverTurns = new Set((serverTeam.turn_history || []).map(e => e.turn).filter(Boolean));
+    out.turn_history = out.turn_history.filter(e => !serverTurns.has(e.turn));
+    out.turn_history.push(...(serverTeam.turn_history || []));
+  } else {
+    const known = new Set(out.turn_history.map(e => e.turn));
+    for (const entry of (serverTeam.turn_history || [])) {
+      if (entry.turn && !known.has(entry.turn)) {
+        out.turn_history.push(entry);
+        known.add(entry.turn);
+      }
     }
   }
 
@@ -814,7 +975,7 @@ const _ROLLUP_KEY = 'bp_pending_rollup';
 // Paths that are still served by the league server (remote). Everything
 // else routed through API.* is handled locally via LocalAPI.
 const REMOTE_GETS  = new Set([
-  '/api/game_data',
+  // '/api/game_data' is handled by LocalAPI (cache-first, remote fallback)
   '/api/flags',
   '/api/status',
   '/api/standings',
@@ -836,6 +997,8 @@ const REMOTE_POSTS = new Set([
   '/api/team/create',
   '/api/upload',
   '/api/team/withdraw',
+  '/api/league/check_reset',
+  '/api/league/acknowledge_reset',
 ]);
 
 function _splitPath(pathWithQs) {
@@ -1072,7 +1235,7 @@ const LocalAPI = {
       const result = body.result || {};
       const local  = await Store.readTeam(tid);
       if (!local) return { success: false, error: 'Local team not found.' };
-      const merged = mergeResults(local, result);
+      const merged = mergeResults(local, result, { rerun: !!body.rerun });
       await Store.writeTeam(merged);
       // Also persist the raw result for audit.
       if (result.turn) await Store.writeTurnResult(result.turn, result);
@@ -1247,10 +1410,10 @@ const LocalAPI = {
     if (!acc) return { success: false, error: 'No account loaded.' };
 
     if (path === '/api/team/run_next_turn') {
-      // This API call is now handled by directly updating the team's auto_upload_enabled flag
+      // Update the team's run_next_turn flag (whether team participates in next turn)
       const team = await Store.readTeam(parseInt(body.team_id, 10));
       if (!team) return { success: false, error: 'Team not found.' };
-      team.auto_upload_enabled = !!body.value;
+      team.run_next_turn = !!body.value;
       await Store.writeTeam(team);
       return { success: true, team };
     }
@@ -1304,13 +1467,11 @@ const LocalAPI = {
       const team = await Store.readTeam(parseInt(body.team_id, 10));
       if (!team) return { success: false, error: 'Team not found.' };
       team.blood_challenges = team.blood_challenges || [];
-      team.blood_challenges.push({
-        dead_warrior_name: body.dead_warrior_name,
-        target_name:       body.target_name,
-        challenger_name:   body.challenger_name || null,
-        turns_remaining:   body.turns_remaining || 3,
-        status:            'active',
-      });
+      const bc = team.blood_challenges.find(c =>
+        c.target_name === body.target_name && c.status === 'active'
+      );
+      if (!bc) return { success: false, error: 'Blood challenge not found.' };
+      bc.challenger_name = body.challenger_name || null;
       await Store.writeTeam(team);
       return { success: true, team };
     }
@@ -1604,6 +1765,21 @@ function getSelWarrior() {
 /* ============================================================
    RENDER DISPATCHER
    ============================================================ */
+
+// autofocus on innerHTML-injected elements is silently ignored by Electron/Chromium.
+// The IPC call triggers a blur→focus cycle in the main process so Windows sends
+// WM_SETFOCUS (establishing OS keyboard routing), then resolves so we can safely
+// call element.focus() knowing keystrokes will actually reach it.
+function _focusAutofocusEl() {
+  const target = document.querySelector('[autofocus]');
+  if (!target) return;
+  if (window.electronAPI?.focusWindow) {
+    window.electronAPI.focusWindow().then(() => target.focus());
+  } else {
+    target.focus();
+  }
+}
+
 function render() {
   const app = el('app');
   clearTimeout(_saveTimer);
@@ -1615,6 +1791,7 @@ function render() {
   // Narrative overlay is appended on top, not a full re-render
   if (S.narrative) showNarrativeOverlay(); else hideNarrativeOverlay();
   attachEvents();
+  _focusAutofocusEl();
 }
 
 /* ============================================================
@@ -1796,6 +1973,9 @@ function buildMenuBar() {
         Hide W-L-K Record
       </label>
       <div style="border-top:1px solid var(--mid); margin:2px 0;"></div>
+      <div class="menu-item" onclick="triggerRestoreFromZip()" style="padding:4px 12px; color:#080;">
+        📦 Restore from ZIP...
+      </div>
       <div class="menu-item" onclick="resetSaveFolder()" style="padding:4px 12px; color:#800;">
         Reset Save Folder...
       </div>
@@ -1878,7 +2058,7 @@ function buildTree() {
 
         // Streak badge
         const streak = w.streak || 0;
-        const streakBadge = streak >= 3
+        const streakBadge = S.hideRecord ? '' : streak >= 3
           ? `<span style="color:#060;font-size:9px;margin-left:3px;">W${streak}🔥</span>`
           : streak <= -3
           ? `<span style="color:#800;font-size:9px;margin-left:3px;">L${Math.abs(streak)}❄</span>`
@@ -1891,7 +2071,7 @@ function buildTree() {
           ? `<span title="Retirement pending" style="font-size:10px;margin-left:3px;">🏆</span>`
           : '';
 
-        const deadStyle  = isDead ? 'opacity:0.55; font-style:italic;' : '';
+        const deadStyle  = (isDead && !S.hideRecord) ? 'opacity:0.55; font-style:italic;' : '';
         const deadIcon   = isAscended ? '👹' : (isDead && !S.hideRecord ? '💀' : '👤');
         const deadBadge  = isAscended
           ? `<span title="Ascended to Monsterdom on The Monsters roster — replacement needed"
@@ -2725,7 +2905,7 @@ function buildTeamPanel(team) {
   const totalD = team.warriors.reduce((a,w)=>a+(w?w.kills||0:0),0)
               + (team.archived_warriors||[]).reduce((a,w)=>a+(w?w.kills||0:0),0); // K = kills
   const tid    = team.team_id;
-  const rnt    = team.auto_upload_enabled;
+  const rnt    = team.run_next_turn !== false;  // Default to true if not set
   const canRun = hasFiveActiveWarriors(team);
   return `
 <div style="padding:4px;">
@@ -2795,7 +2975,16 @@ function buildStatsTab(team, w, wIdx) {
   // Guard: if game data hasn't loaded yet return a placeholder.
   // This prevents empty selects from firing scheduleAutoSave() on render
   // and overwriting the warrior's saved armor/weapons/trains/strategies.
-  if (!S.gd) return '<div style="padding:20px;color:#555;">Loading game data...</div>';
+  if (!S.gd) {
+    if (!S._loadingGd) {
+      S._loadingGd = true;
+      API.get('/api/game_data').then(gd => {
+        S._loadingGd = false;
+        if (gd && !gd.error) { S.gd = gd; render(); }
+      }).catch(() => { S._loadingGd = false; });
+    }
+    return '<div style="padding:20px;color:#555;">Loading game data...</div>';
+  }
   const gd = S.gd;
   const { height: _hin, weight: _wlbs } = calcMeasurements(w.race, w.gender, w.size, w.training_weight_bonus);
   const ft = Math.floor(_hin / 12), ins = _hin % 12;
@@ -3198,9 +3387,9 @@ function buildChallengesTab(team, w) {
     bc.status === "active" && bc.turns_remaining > 0
   );
 
-  // Blood challenges where this warrior is the selected challenger
+  // Blood challenges this warrior has already been assigned to carry
   const bloodList = (team.blood_challenges || []).filter(bc =>
-    bc.status === "active" && (bc.challenger_name === w.name || bc.challenger_name === null)
+    bc.status === "active" && bc.challenger_name === w.name
   );
 
   // Collect eligible opponents from the server-provided target list (includes AI teams)
@@ -3246,11 +3435,21 @@ function buildChallengesTab(team, w) {
     </tr>`;
   });
   bloodList.forEach(bc => {
+    const bcTarget = bc.target_name || '?';
+    const bcDead   = bc.dead_warrior_name || '?';
+    const bcTurns  = bc.turns_remaining || 0;
     pendingRows += `
     <tr style="background:#ffe8e8;">
-      <td style="padding:4px 8px; font-weight:bold;">${esc(bc.target_name || '?')}</td>
-      <td style="padding:4px 8px; color:#800; font-size:11px;">Blood Challenge for ${esc(bc.dead_warrior_name || '?')} — ${bc.turns_remaining || 0} turn${(bc.turns_remaining||0) === 1 ? '' : 's'} left</td>
-      <td></td>
+      <td style="padding:4px 8px; font-weight:bold;">${esc(bcTarget)}</td>
+      <td style="padding:4px 8px; color:#800; font-size:11px;">
+        Blood Challenge (avenge ${esc(bcDead)}) &mdash; ${bcTurns} turn${bcTurns === 1 ? '' : 's'} left
+      </td>
+      <td style="padding:4px 8px;">
+        <button onclick="selectBloodChallengeChampion(${jsq(bcTarget)}, '')"
+                style="color:#800; font-size:11px; padding:1px 6px; border-color:#f88 #800 #800 #f88;">
+          ✕ Clear
+        </button>
+      </td>
     </tr>`;
   });
 
@@ -3296,51 +3495,37 @@ function buildChallengesTab(team, w) {
     </table>
   </div>` : '';
 
-  // Build blood challenges section
+  // Blood challenges not yet assigned — this warrior can volunteer to carry one
+  const availableBloodChallenges = activeBloodChallenges.filter(bc => !bc.challenger_name);
+
   let bloodChallengesSection = '';
-  if (activeBloodChallenges.length > 0) {
-    let bcRows = '';
-    activeBloodChallenges.forEach(bc => {
+  if (availableBloodChallenges.length > 0) {
+    let bcItems = '';
+    availableBloodChallenges.forEach(bc => {
       const targetName = bc.target_name || '?';
-      const deadName = bc.dead_warrior_name || '?';
-      const challenger = bc.challenger_name || '(unset)';
-      const turnsLeft = bc.turns_remaining || 0;
-      const statusStyle = bc.challenger_name ? 'background:#e8f5e9;' : 'background:#fff3e0;';
-      
-      bcRows += `
-      <tr style="${statusStyle} border-bottom:1px solid #eee;">
-        <td style="padding:4px 8px; font-weight:bold;">${esc(targetName)}</td>
-        <td style="padding:4px 8px; color:#555; font-size:11px;">${esc(deadName)} killed — ${turnsLeft} turn${turnsLeft === 1 ? '' : 's'} left</td>
-        <td style="padding:4px 8px;">
-          <select onchange="selectBloodChallengeChampion(${jsq(targetName)}, this.value)" 
-                  style="font-size:11px; width:140px;">
-            <option value="">(unset)</option>
-            ${(team.warriors || []).map(w => w && w.name ? 
-              `<option value="${esc(w.name)}" ${w.name === bc.challenger_name ? 'selected' : ''}>${esc(w.name)}</option>` 
-              : '').join('')}
-          </select>
-        </td>
-      </tr>`;
+      const deadName   = bc.dead_warrior_name || '?';
+      const turnsLeft  = bc.turns_remaining || 0;
+      bcItems += `
+      <div style="display:flex; align-items:center; justify-content:space-between;
+                  padding:6px 10px; border-bottom:1px solid #e8c8c8; background:#fff3f3;">
+        <div>
+          <span style="font-weight:bold; font-size:13px;">${esc(targetName)}</span>
+          <span style="color:#800; font-size:11px; margin-left:10px;">
+            killed ${esc(deadName)} &mdash; ${turnsLeft} turn${turnsLeft === 1 ? '' : 's'} left
+          </span>
+        </div>
+        <button onclick="selectBloodChallengeChampion(${jsq(targetName)}, ${jsq(w.name)})"
+                style="background:#8b0000; color:#fff; font-size:11px; font-weight:bold;
+                       padding:4px 12px; border:1px solid #500; cursor:pointer; white-space:nowrap;">
+          Blood Challenge
+        </button>
+      </div>`;
     });
-    
+
     bloodChallengesSection = `
   <div class="group" style="margin:0 0 12px;">
-    <span class="group-label">Blood Challenges — ${activeBloodChallenges.length} Active</span>
-    <p style="font-size:11px; color:#555; margin:4px 0 8px;">
-      Select a warrior to respond to each blood challenge. The selected warrior will automatically fight the killer when matched.
-    </p>
-    <table style="border-collapse:collapse; width:100%; font-size:12px;">
-      <thead>
-        <tr style="border-bottom:2px solid #ccc;">
-          <th style="padding:4px 8px; text-align:left; font-weight:600; width:120px;">Killer</th>
-          <th style="padding:4px 8px; text-align:left; font-weight:600;">Info</th>
-          <th style="padding:4px 8px; text-align:left; font-weight:600;">Selected Challenger</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${bcRows}
-      </tbody>
-    </table>
+    <span class="group-label" style="color:#8b0000;">Blood Challenges</span>
+    ${bcItems}
   </div>`;
   }
 
@@ -3755,7 +3940,7 @@ function buildReplacementTab(w) {
       <table style="border-collapse:collapse; margin-bottom:10px;">
         <tr>
           <td style="padding:3px 8px; text-align:right; width:70px;">Name</td>
-          <td><input type="text" id="rp-name" value="${esc(rs.name||'')}" style="width:200px;" placeholder="Warrior name" autocomplete="off" tabindex="0" oninput="if(S.replacement) S.replacement.name = this.value.toUpperCase();"></td>
+          <td><input type="text" id="rp-name" value="${esc(rs.name||'')}" style="width:200px;" placeholder="Warrior name" autocomplete="off" autofocus oninput="if(S.replacement) S.replacement.name = this.value.toUpperCase();"></td>
         </tr>
         <tr>
           <td style="padding:3px 8px; text-align:right;">Race</td>
@@ -3914,7 +4099,7 @@ function buildCreateTeam() {
     const indStyle  = mark ? 'color:#080; font-weight:bold;' : 'color:#aaa;';
     gridRows += `<tr class="${sel}" id="ct-row-${i}" style="cursor:pointer;">
 	  <td style="padding:2px 4px; text-align:center; width:20px; ${indStyle}">${indicator}</td>
-	  <td style="padding:2px 8px;"><input type="text" id="ct-name-${i}" value="${esc(w.name||'')}" style="width:140px;" placeholder="Warrior name" autocomplete="off" tabindex="0" oninput="updateWarriorName(${i}, this.value)"></td>
+	  <td style="padding:2px 8px;"><input type="text" id="ct-name-${i}" value="${esc(w.name||'')}" style="width:140px;" placeholder="Warrior name" autocomplete="off" tabindex="0" maxlength="20" oninput="updateWarriorName(${i}, this.value)"></td>
       <td style="padding:2px 4px; text-align:center;">${esc(w.race||'Human')}</td>
       <td style="padding:2px 4px; text-align:center;">${esc(w.gender||'Male')}</td>
       ${ATTR_KEYS.map(k => `<td style="padding:2px 4px; text-align:right;">${final(ct, i, k)}</td>`).join('')}
@@ -3977,6 +4162,7 @@ function buildCreateTeam() {
     <span>Team Name</span>
     <input type="text" id="ct-team-name" value="${esc(ct.teamName||'')}"
            oninput="if(S.ct) S.ct.teamName = this.value"
+           maxlength="20"
            style="width:280px;" placeholder="Enter team name">
     <div style="flex:1;"></div>
     <button id="btn-ct-save" class="wide" ${allSaved ? '' : 'disabled'}>
@@ -4000,7 +4186,7 @@ function buildCreateTeam() {
 	    <table style="border-collapse:collapse; margin-bottom:8px;">
 		  <tr>
 		    <td style="padding:3px 8px; text-align:right; width:70px;">Name</td>
-		    <td><input type="text" id="ct-wname" value="${esc(sw.name||'')}" style="width:200px;" placeholder="Warrior name" autocomplete="off" tabindex="0" oninput="updateCurrentWarriorName(this.value)"></td>
+		    <td><input type="text" id="ct-wname" value="${esc(sw.name||'')}" style="width:200px;" placeholder="Warrior name" autocomplete="off" autofocus maxlength="20" oninput="updateCurrentWarriorName(this.value)"></td>
 		  </tr>
           <tr>
             <td style="padding:3px 8px; text-align:right;">Race</td>
@@ -4084,15 +4270,16 @@ function attachEvents() {
 
   // --- Menu ---
   bind('menu-logout', async () => {
-    // Clear saved session so auto-login doesn't fire on reload
-    S.savedPassword = null;
-    try { await API.post('/api/session/save', { manager_name: S.savedManagerName || '', password: '' }); } catch(e) {}
+    if (!S.savedRememberMe) {
+      S.savedPassword = null;
+      try { await API.post('/api/session/save', { manager_name: S.savedManagerName || '', password: '' }); } catch(e) {}
+    }
     S.account = null; S.teams = {}; S.sel = {type:null};
     S.challengeTargets = null;
     S.newsletters = null; S.newsletterText = null;
     S.ct = null;
     try { localStorage.removeItem(_ROLLUP_KEY); } catch(_) {}
-    S.view = 'login'; S.loginTab = 'new'; S.msg = '';
+    S.view = 'login'; S.loginTab = 'login'; S.msg = '';
     render();
   });
   bind('menu-prefs', (e) => {
@@ -4185,7 +4372,7 @@ function refreshTree() {
   if (wrap) { wrap.innerHTML = buildTree(); }
   // No tree-wrap = not on main screen, nothing to do
 }
-function refreshContent() { const c = el('content'); if (c) c.innerHTML = buildContent(); }
+function refreshContent() { const c = el('content'); if (c) { c.innerHTML = buildContent(); _focusAutofocusEl(); } }
 
 /* ============================================================
    LOGIN ACTIONS
@@ -4290,7 +4477,7 @@ async function doLogin() {
         S.league.password    = pass;
    S.league.lastTurnRan = 0; // Reset for new account
 
-        await idbUpdateMeta({ managerName: name, serverUrl: S.serverUrl,
+        await idbUpdateMeta({ managerName: name, serverUrl: S.serverUrl, // This will be replaced by _persistAccount
                               rememberMe: remember, password: remember ? pass : '' });
 
    // S.account.run_next_turn is deprecated, remove it
@@ -4304,8 +4491,10 @@ async function doLogin() {
         setMsg(`Account recovered from server. ${teamMsg}`, 'ok');
         S.view = 'main';
         await loadTeams();
-        await loadLeagueSettings();
+        await loadLeagueSettings(); // This will refresh S.league.managerId etc.
+        await processDeletedTeams(serverReg.deleted_teams, serverReg.manager_id);
         render();
+        await checkLeagueResetOnLogin();
         return;
       } catch (srvErr) {
         setMsg(r.error || 'Login failed.', 'err'); render(); return;
@@ -4320,7 +4509,7 @@ async function doLogin() {
       email:        r.email || '',
       team_ids:     [...new Set(r.team_ids)],
     }
-    S.savedRememberMe = remember;
+    S.savedRememberMe = remember; // This will be replaced by _persistAccount
 
     // Persist remember-me choice to account.json
     const acc = await _ensureAccountLoaded();
@@ -4329,7 +4518,7 @@ async function doLogin() {
       acc.password_plaintext = remember ? pass : '';
       await _persistAccount(acc);
     }
-    // Update client metadata in IDB (survives browser restart)
+    // Update client metadata in IDB (survives browser restart) // This will be replaced by _persistAccount
     await idbUpdateMeta({
       managerName: name,
       serverUrl: S.serverUrl,
@@ -4349,7 +4538,7 @@ async function doLogin() {
     await loadTeams();
     await loadLeagueSettings();
     await _loadLegacyTeams();
-    // Sync S.account.id with the league manager ID if they differ — the league
+    // Sync S.account.id with the league manager ID if they differ — the league // This will be replaced by _persistAccount
     // settings ID is server-authoritative; the local account.json may be stale.
     if (S.league.managerId && S.account && S.account.id !== S.league.managerId) {
       S.account.id = S.league.managerId;
@@ -4357,9 +4546,75 @@ async function doLogin() {
       if (_syncAcc) { _syncAcc.id = S.league.managerId; await _persistAccount(_syncAcc); }
     }
     render();
+    await checkLeagueResetOnLogin(); // This will refresh S.league.managerId etc.
+    // r.deleted_teams is never set by the local login handler — fetch from the
+    // league server instead so admin-deleted teams are cleaned up on login.
+    if (!S.league.password) S.league.password = pass;
+    {
+      const mid = S.league.managerId || r.id;
+      let pendingDeleted = r.deleted_teams;
+      if (mid && S.serverUrl && !pendingDeleted?.length) {
+        try {
+          const base = S.serverUrl.replace(/\/+$/, '');
+          const delResp = await fetch(base + '/api/check_deleted_teams', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ manager_id: String(mid) }),
+          }).then(res => res.json()).catch(() => null);
+          if (delResp?.success) pendingDeleted = delResp.deleted_teams;
+        } catch (_) {}
+      }
+      await processDeletedTeams(pendingDeleted, mid);
+    }
   } catch (err) {
     setMsg('Error: ' + (err.message || err), 'err'); render();
   }
+}
+
+async function processDeletedTeams(deletedTeams, managerId) {
+  if (!deletedTeams || deletedTeams.length === 0) return;
+
+  // Only process teams that are still present in the local account.
+  // If the team was already removed (e.g. handled on a previous login), skip
+  // the alert but still acknowledge so the server clears its entries.
+  const localIds = (S.account?.team_ids || []).map(Number);
+  const pending = deletedTeams.filter(d => localIds.includes(Number(d.team_id)));
+
+  if (!pending.length) {
+    API.post('/api/acknowledge_deleted_teams', { manager_id: managerId, password: S.league.password }).catch(() => {});
+    return;
+  }
+
+  let message = "The following teams have been deleted by the host:\n";
+  const deletedIds = [];
+
+  for (const deleted of pending) {
+    const tid = deleted.team_id;
+    const tname = deleted.team_name || `Team ${tid}`;
+    message += `- ${tname} (ID: ${tid})\n`;
+    deletedIds.push(tid);
+
+    // Delete local team file
+    try {
+      await Store.deleteTeam(tid);
+      console.log(`Client: Deleted local file for team ${tid}`);
+    } catch (e) {
+      console.error(`Client: Failed to delete local team file ${tid}:`, e);
+    }
+  }
+
+  // Update S.account.team_ids and persist
+  if (S.account && S.account.team_ids) {
+    S.account.team_ids = S.account.team_ids.filter(id => !deletedIds.includes(id));
+    await _persistAccount(S.account);
+  }
+
+  alert(message + "\nYour client will now be updated.");
+
+  // Acknowledge deletion with the server
+  await API.post('/api/acknowledge_deleted_teams', { manager_id: managerId, password: S.league.password });
+
+  await loadTeams(); // This will refresh S.teams based on S.account.team_ids
+  render();
 }
 
 async function doCreateAccount() {
@@ -4649,12 +4904,18 @@ async function doSaveTeam() {
 
   const tName = (ct.teamName || '').trim();
   if (!tName) { setMsg('Please enter a team name.', 'err'); render(); return; }
+  if (tName.length > 20) { setMsg('Team name must be 20 characters or fewer.', 'err'); render(); return; }
 
   for (let i = 0; i < 5; i++) {
     const nm = (ct.warriors[i].name||'').trim();
     if (!nm) {
       setMsg(`Warrior ${i+1} needs a name. Click that row and enter one.`, 'err');
-      S.ct.sel = i; 
+      S.ct.sel = i;
+      render(); return;
+    }
+    if (nm.length > 20) {
+      setMsg(`Warrior ${i+1}'s name must be 20 characters or fewer.`, 'err');
+      S.ct.sel = i;
       render(); return;
     }
   }
@@ -5266,9 +5527,18 @@ function buildNewsletterPanel() {
 
 async function loadLeagueSettings() {
   try {
-    const name = S.account?.manager_name || '';
-    const r = await API.get('/api/league_settings?manager_name=' + encodeURIComponent(name));
-    if (r.success && r.settings) Object.assign(S.league, r.settings);
+    const r = await API.get('/api/league_settings');
+    // LocalAPI returns a flat object {url, managerId, managerName, password, ...}
+    // (no success/settings wrapper) — update S.league field-by-field.
+    if (r) {
+      if (r.url)          S.league.url         = r.url;
+      if (r.managerId)    S.league.managerId   = r.managerId;
+      if (r.managerName)  S.league.managerName = r.managerName;
+      if (r.password)     S.league.password    = r.password;
+      if (r.lastUpload)   S.league.lastUpload  = r.lastUpload;
+      if (r.lastDownload) S.league.lastDownload = r.lastDownload;
+      if (r.lastTurnRan)  S.league.lastTurnRan  = r.lastTurnRan;
+    }
     
     // Fetch feature flags and last upload timestamp from league server if connected
     if (S.league.url && S.league.managerId) {
@@ -5344,6 +5614,7 @@ function showLeagueSettings() {
       : '<div style="font-size:10px;color:#555;padding:4px 8px;">Not yet registered. Clicking Register will register you with the server.</div>'}
     <div style="margin-top:10px;display:flex;gap:6px;justify-content:flex-end;">
       ${lg.managerId ? `<button id="btn-league-rereg" onclick="doReRegisterLeague()" title="Use this if the server was reset and no longer recognizes your manager">Re-register</button>` : ''}
+      ${lg.managerId ? `<button onclick="checkLeagueReset()" title="Check server for reset or rerun notifications">Sync Records</button>` : ''}
       <button id="btn-league-save" onclick="doSaveLeagueSettings()">
         ${lg.managerId ? 'Save Settings' : 'Register &amp; Save'}
       </button>
@@ -5352,6 +5623,9 @@ function showLeagueSettings() {
   </div>
 </div>`;
   document.body.appendChild(modal);
+  // Check for server reset / rerun as soon as League Settings opens so the
+  // user doesn't have to navigate to the account tab first.
+  if (S.league.managerId && S.league.url) checkLeagueReset();
 }
 
 function _leagueMsg(text, cls) {
@@ -5566,7 +5840,7 @@ async function doLeagueGetResults() {
     if (!d.success) { setMsg('Error: ' + d.error, 'err'); render(); return; }
     const teamId = S.sel.teamId || S.account?.team_ids?.[0];
     if (!teamId) { setMsg('Select your team first.', 'err'); render(); return; }
-    const applied = await API.post('/api/apply_league_results', {team_id: teamId, result: d.result || (d.results&&d.results[0])});
+    const applied = await API.post('/api/apply_league_results', {team_id: teamId, result: d.result || (d.results&&d.results[0]), rerun: !!S._pendingRerun});
     if (!applied.success) { setMsg('Error applying results: ' + applied.error, 'err'); render(); return; }
     S.teams[teamId] = applied.team;
     S.turnResults   = {turn_number: applied.turn_number, bouts: applied.bouts, team: applied.team};
@@ -5784,7 +6058,7 @@ async function doLeagueDownloadAll() {
       }
 
       const app = await API.post('/api/apply_league_results', {
-        team_id: localTid, result,
+        team_id: localTid, result, rerun: !!S._pendingRerun,
       });
       if (app.success) {
         console.log(`Successfully applied results for team ${localTid}`);
@@ -5852,6 +6126,7 @@ async function doLeagueDownloadAll() {
     if (applied.length >= 1) {
       S.sel  = {type: 'team', teamId: applied[0].team_id};
       S.wTab = 'fights';
+      await processDeletedTeams(resultsResp.deleted_teams, lg.managerId);
     }
     render();
 
@@ -5972,36 +6247,61 @@ async function runAllTeams() {
    LEAGUE RESET DETECTION
    ============================================================ */
 
-async function checkLeagueReset() {
+async function checkLeagueResetOnLogin() {
   if (!S.league.managerId || !S.league.url) return;
-  if (document.getElementById('league-reset-modal')) return; // already showing
+  if (document.getElementById('league-reset-modal') || document.getElementById('league-rerun-modal')) return;
   try {
-    const r = await API.post('/api/league/check_reset', {});
-    if (r.success && r.reset_detected) {
-      _showLeagueResetModal(r.server_reset_count);
+    const r = await API.post('/api/league/check_reset', { manager_id: S.league.managerId });
+    if (!r.success) return; // silent on error — don't block login
+    if (r.reset_detected) {
+      _showLeagueResetModal(r.server_reset_count, { blocking: true });
+    } else if (r.rerun_detected) {
+      _showLeagueRerunModal(r.rerun_turn, r.rerun_count);
     }
-  } catch(e) { /* silent — don't interrupt the user if the check fails */ }
+  } catch(e) { /* silent — server may be unreachable */ }
 }
 
-function _showLeagueResetModal(serverResetCount) {
+async function checkLeagueReset() {
+  if (!S.league.managerId || !S.league.url) return;
+  if (document.getElementById('league-reset-modal') || document.getElementById('league-rerun-modal')) return;
+  try {
+    const r = await API.post('/api/league/check_reset', { manager_id: S.league.managerId });
+    if (!r.success) {
+      _leagueMsg('Reset check: ' + (r.error || 'unknown error'), 'err');
+      return;
+    }
+    if (r.reset_detected) {
+      _showLeagueResetModal(r.server_reset_count, { blocking: true });
+    } else if (r.rerun_detected) {
+      _showLeagueRerunModal(r.rerun_turn, r.rerun_count);
+    } else {
+      _leagueMsg('Server sync OK — no reset or rerun pending.', 'ok');
+      setTimeout(() => { const m = el('lm-msg'); if (m) m.style.display = 'none'; }, 3000);
+    }
+  } catch(e) {
+    _leagueMsg('Reset check failed: ' + e.message, 'err');
+  }
+}
+
+function _showLeagueResetModal(serverResetCount, opts = {}) {
+  const blocking = opts.blocking || false;
   const modal = document.createElement('div');
   modal.id = 'league-reset-modal';
-  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:8500;display:flex;align-items:center;justify-content:center;';
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:8500;display:flex;align-items:center;justify-content:center;';
   modal.innerHTML = `
     <div style="background:var(--bg);border:2px solid #c60;border-radius:6px;padding:20px;min-width:360px;max-width:480px;box-shadow:0 4px 20px rgba(0,0,0,.5);">
-      <div style="font-weight:bold;font-size:14px;color:#c60;margin-bottom:12px;">⚠ League Arena Has Been Reset to Turn 1</div>
+      <div style="font-weight:bold;font-size:14px;color:#c60;margin-bottom:12px;">&#9888; League Arena Has Been Reset to Turn 1</div>
       <div style="font-size:12px;color:#444;margin-bottom:6px;line-height:1.6;">
-        The league server has been reset to start a new season. Your local records need to be cleared to match.
+        The league server has been reset to start a new season. You must sync your local records before continuing.
       </div>
       <div style="font-size:11px;background:#fff8f0;border:1px solid #e8c080;border-radius:4px;padding:8px 10px;margin-bottom:14px;line-height:1.7;">
-        <strong>Will be cleared:</strong> wins, losses, kills, fight history, injuries, fallen warriors<br>
-        <strong>Will be kept:</strong> your warriors, their stats, gear, and strategies<br>
-        <strong>Note:</strong> After clearing, re-open League Settings and click Register before uploading.
+        <strong>Will be reverted:</strong> wins, losses, kills, fight history, skills, attribute gains, injuries<br>
+        <strong>Will be kept:</strong> your warriors (at their Turn 1 stats), gear, and strategies
       </div>
       <div style="display:flex;gap:8px;justify-content:flex-end;">
-        <button onclick="document.getElementById('league-reset-modal').remove()">Dismiss</button>
+        ${!blocking ? `<button onclick="document.getElementById('league-reset-modal').remove()">Dismiss</button>` : ''}
         <button id="btn-apply-reset" onclick="applyLeagueReset(${serverResetCount})"
-                style="background:#c60;color:#fff;border-color:#a50;">Clear My Records</button>
+                style="background:#c60;color:#fff;border-color:#a50;">Clear My Records &amp; Sync</button>
       </div>
     </div>`;
   document.body.appendChild(modal);
@@ -6010,12 +6310,80 @@ function _showLeagueResetModal(serverResetCount) {
 async function applyLeagueReset(serverResetCount) {
   const btn = document.getElementById('btn-apply-reset');
   if (btn) { btn.disabled = true; btn.textContent = 'Resetting...'; }
-  const r = await API.post('/api/league/acknowledge_reset', { server_reset_count: serverResetCount });
+  const pw = S.league.password || '';
+  const r = await API.post('/api/league/acknowledge_reset', {
+    manager_id: S.league.managerId,
+    password: pw,
+    server_reset_count: serverResetCount,
+    type: 'reset',
+  });
   document.getElementById('league-reset-modal')?.remove();
   if (!r.success) { setMsg('Reset error: ' + r.error, 'err'); render(); return; }
-  setMsg('Records cleared — ready for the new season!', 'ok');
-  await loadAccount();
+
+  // Clear stale newsletter cache — server only has current-season newsletters
+  await Store.clearNewsletters().catch(() => {});
+  S.newsletters = null; S.newsletterText = null; S.newsletterTurn = null;
+
+  if (r.full_reset) {
+    // Full wipe: manager no longer exists on server — clear local league identity
+    S.league.managerId   = null;
+    S.league.managerName = null;
+    await API.post('/api/league_settings', { managerId: '', managerName: '' });
+    // Close League Settings modal so when the user reopens it they see "Register & Save"
+    el('league-modal')?.remove();
+    setMsg('Arena fully reset. Open League Settings and click Register & Save to rejoin.', 'ok');
+  } else {
+    // Progress reset: apply the server-reverted team state locally
+    if (Array.isArray(r.teams) && r.teams.length) {
+      for (const { team_id, team } of r.teams) {
+        await Store.writeTeam(team);
+        if (S.teams) S.teams[team_id] = team;
+      }
+    }
+    setMsg('Records reverted to Turn 1 — ready to fight! Download results to get the new newsletter.', 'ok');
+  }
   render();
+}
+
+function _showLeagueRerunModal(rerunTurn, rerunCount) {
+  const modal = document.createElement('div');
+  modal.id = 'league-rerun-modal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:8500;display:flex;align-items:center;justify-content:center;';
+  modal.innerHTML = `
+    <div style="background:var(--bg);border:2px solid #06a;border-radius:6px;padding:20px;min-width:360px;max-width:480px;box-shadow:0 4px 20px rgba(0,0,0,.5);">
+      <div style="font-weight:bold;font-size:14px;color:#06a;margin-bottom:12px;">↺ Turn ${rerunTurn} Was Re-Run</div>
+      <div style="font-size:12px;color:#444;margin-bottom:6px;line-height:1.6;">
+        The host re-ran turn ${rerunTurn}. Fight outcomes and training results may differ from the initial run.
+      </div>
+      <div style="font-size:11px;background:#f0f6ff;border:1px solid #80b0e0;border-radius:4px;padding:8px 10px;margin-bottom:14px;line-height:1.7;">
+        <strong>What changed:</strong> fight results, skills learned, and attribute gains for turn ${rerunTurn} have been recalculated.<br>
+        <strong>Action needed:</strong> Download your updated results to apply the correct post-turn state.
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button onclick="document.getElementById('league-rerun-modal').remove()">Dismiss</button>
+        <button id="btn-apply-rerun" onclick="applyLeagueRerun(${rerunTurn}, ${rerunCount})"
+                style="background:#06a;color:#fff;border-color:#048;">Download New Results</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+async function applyLeagueRerun(rerunTurn, rerunCount) {
+  const btn = document.getElementById('btn-apply-rerun');
+  if (btn) { btn.disabled = true; btn.textContent = 'Acknowledging...'; }
+  const pw = S.league.password || '';
+  const r  = await API.post('/api/league/acknowledge_reset', {
+    manager_id:  S.league.managerId,
+    password:    pw,
+    type:        'rerun',
+    rerun_count: rerunCount,
+  });
+  document.getElementById('league-rerun-modal')?.remove();
+  if (!r.success) { setMsg('Error: ' + r.error, 'err'); render(); return; }
+  // Download results with rerun flag so skills/attrs are server-authoritative
+  S._pendingRerun = true;
+  await doLeagueDownloadAll();
+  S._pendingRerun = false;
 }
 
 /* ============================================================
@@ -6433,7 +6801,16 @@ async function init() {
         S.savedPassword = localAcc.account.password_plaintext || '';
         S.loginTab = 'login';
       }
-      
+
+      // Load persisted league settings (manager_id etc.) from server-side client store
+      await loadLeagueSettings();
+
+      // Pre-load game data so Stats/Strats tab is ready immediately after login
+      try {
+        const gd = await API.get('/api/game_data');
+        if (gd && !gd.error) S.gd = gd;
+      } catch(e) {}
+
       S.view = 'login';
       render();
       return;
@@ -6607,9 +6984,9 @@ document.addEventListener('click', (e) => {
           }
         }
       }
-      // For same-row clicks on inputs, just let the browser focus them naturally.
+      // Row changed, we handled it
+      return;
     }
-    return;
   }
 
   // 4. For inputs/selects/textareas outside the grid, just let them get focus normally.
