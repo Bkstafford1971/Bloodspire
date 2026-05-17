@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v2.1</title>
+<title>BLOODSPIRE Client - v2.3</title>
 <style>
 /* ============================================================
    WINDOWS CLASSIC — REFINED
@@ -246,7 +246,7 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
-const CLIENT_VERSION = "2.1";
+const CLIENT_VERSION = "2.3";
 
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
@@ -711,6 +711,13 @@ const Store = {
   async deleteTeam(tid) { 
     return await fsaDeleteFile(_teamPath(tid)); 
   },
+  async readFightLog(fightId) {
+    const names = await fsaListDir('fights');
+    const needle = `fight_${String(fightId).padStart(4, '0')}_`;
+    const filename = names.find(n => n.startsWith(needle));
+    if (!filename) return null;
+    return await fsaReadText(`fights/${filename}`);
+  },
 
   // Turn results and Newsletters
   async writeTurnResult(turn, obj) { 
@@ -1161,6 +1168,14 @@ const LocalAPI = {
       };
     }
 
+    if (path === '/api/fight/narrative') {
+      const fightId = parseInt(qs.id || '0', 10);
+      if (!fightId) return { success: false, error: 'Fight id required.' };
+      const narrative = await Store.readFightLog(fightId);
+      if (!narrative) return { success: false, error: 'Fight log not found.' };
+      return { success: true, narrative, fight_id: fightId };
+    }
+
     // ── Scout / Challenge targets — forwarded to the league server, with
     //    the current manager's password auto-injected from league settings.
     if (path === '/api/scout/status') {
@@ -1326,6 +1341,20 @@ const LocalAPI = {
         const timer = setTimeout(() => ctrl.abort(), 15000);
         let r;
         try {
+          // Ensure all warriors have equipment defaults before uploading
+          if (team.warriors && Array.isArray(team.warriors)) {
+            team.warriors = team.warriors.map(w => {
+              if (!w) return w;
+              return {
+                ...w,
+                armor: w.armor || 'None',
+                helm: w.helm || 'None',
+                primary_weapon: w.primary_weapon || 'Open Hand',
+                secondary_weapon: w.secondary_weapon || 'Open Hand',
+                backup_weapon: w.backup_weapon || null,
+              };
+            });
+          }
           r = await fetch(url + '/api/upload', {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
@@ -3324,8 +3353,11 @@ function buildFightsTab(w) {
       // Champion fights get special row formatting
       rows += `<tr style="${champStyle} font-weight:bold;">
         <td style="padding:2px 6px; text-align:center;">${h.turn||'—'}</td>
-        <td style="padding:2px 6px; color:#c60;">★ CHAMPION FIGHT ★</td>
-        <td style="padding:2px 6px;">${opponentDisplay}${slainNote}</td>
+        <td style="padding:2px 6px; color:#c60;">
+          ★ CHAMPION FIGHT ★<br>${opponentDisplay}${slainNote}
+        </td>
+        <td style="padding:2px 6px; color:#555;">${esc(h.opponent_manager_name||'—')}</td>
+        <td style="padding:2px 6px; text-align:center;">${esc(h.opponent_race||'')}</td>
         <td style="padding:2px 6px; text-align:center; color:${resColor}; font-weight:bold;">${res}</td>
         <td style="padding:2px 6px; text-align:center;">${killMark}</td>
         <td style="padding:2px 6px; text-align:center;">${h.minutes||'—'} min</td>
@@ -3336,6 +3368,7 @@ function buildFightsTab(w) {
       rows += `<tr style="${champStyle}">
         <td style="padding:2px 6px; text-align:center;">${h.turn||'—'}</td>
         <td style="padding:2px 6px;">${esc(h.opponent_name)}</td>
+        <td style="padding:2px 6px; color:#555;">${esc(h.opponent_manager_name||'—')}</td>
         <td style="padding:2px 6px; text-align:center;">${esc(h.opponent_race||'')}</td>
         <td style="padding:2px 6px; text-align:center; color:${resColor}; font-weight:bold;">${res}${slainNote}</td>
         <td style="padding:2px 6px; text-align:center;">${killMark}</td>
@@ -3354,6 +3387,7 @@ function buildFightsTab(w) {
       <tr>
         <th style="width:40px;">Turn</th>
         <th style="min-width:140px;">Opponent</th>
+        <th style="width:120px;">Manager</th>
         <th style="width:80px;">Race</th>
         <th style="width:60px;">Result</th>
         <th style="width:45px;">Kill</th>
@@ -4927,6 +4961,11 @@ async function doSaveTeam() {
       intelligence: w.base.intelligence+ (a.intelligence||0),
       presence    : w.base.presence    + (a.presence||0),
       size        : w.base.size        + (a.size||0),
+      armor           : w.armor || 'None',
+      helm            : w.helm || 'None',
+      primary_weapon  : w.primary_weapon || 'Open Hand',
+      secondary_weapon: w.secondary_weapon || 'Open Hand',
+      backup_weapon   : w.backup_weapon || null,
     };
   });
 
@@ -5241,7 +5280,7 @@ function narrativeToHtml(text) {
       }
 
       // Prose lines — bold warrior name prefix + any ALL-CAPS items (armor, weapons)
-      const pm = ln.match(/^([A-Z][A-Z ']{2,}?)(\s+(?:is |weighs |Has |enters |fights |has ))/);
+      const pm = ln.match(/^([A-Z][A-Z ']{2,}?)(\s+(?:is |weighs |Has |enters |fights |has |wears |carries ))/);
       if (pm) {
         const name = pm[1];
         const rest = ln.slice(name.length);
@@ -5903,7 +5942,7 @@ function _showDownloadProgress(steps, currentIdx, error) {
   </div>
   <div style="text-align:center;padding:8px 0 4px;">
     ${footer}
-    ${showOk ? `<button onclick="document.getElementById('dl-progress-modal').remove()"
+    ${showOk ? `<button onclick="${allDone ? `setMgrTab('account');` : ''}document.getElementById('dl-progress-modal').remove()"
                  style="min-width:80px;margin-top:4px;">OK</button>` : ''}
   </div>
 </div>`;
