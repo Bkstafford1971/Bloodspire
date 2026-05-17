@@ -603,12 +603,16 @@ class Warrior:
         # --- Height range table (inches, male) ---
         # Keys match race names; (min_in, max_in) at SIZE 3 and SIZE 25.
         HEIGHT_RANGES = {
-            "Halfling" : (37, 61),
+            "Halfling" : (37, 54),   # 3'01" -> 4'06"
             "Elf"      : (56, 71),
             "Half-Elf" : (60, 72),
             "Human"    : (62, 76),
             "Dwarf"    : (42, 62),
             "Half-Orc" : (65, 90),
+            "Gnome"    : (37, 54),   # Same as Halfling
+            "Goblin"   : (48, 60),   # 4'00" -> 5'00"
+            "Lizardfolk": (69, 81),  # 5'09" -> 6'09"
+            "Tabaxi"   : (66, 76),   # 5'06" -> 6'04"
             # NPC races use Human proportions as fallback
             "Monster"  : (72, 108),   # Enormous
             "Peasant"  : (62, 76),
@@ -617,12 +621,16 @@ class Warrior:
         # --- Weight density table (lbs = height_in^2 * factor, male) ---
         # Dwarves are proportionally much denser/heavier than other races.
         DENSITY = {
-            "Halfling" : 0.0434,   # Calibrated: 4'3"/51" = ~113 lbs
+            "Halfling" : 0.0434,   # Calibrated: 4'6"/54" = ~127 lbs
             "Elf"      : 0.0338,
             "Half-Elf" : 0.0354,
             "Human"    : 0.0368,
             "Dwarf"    : 0.0780,   # Notably heavier by proportion
             "Half-Orc" : 0.0462,
+            "Gnome"    : 0.0434,
+            "Goblin"   : 0.0255,   # Light frame: 5'0"/60" = ~92 lbs
+            "Lizardfolk": 0.0400,  # Muscular: 6'9"/81" = ~260 lbs
+            "Tabaxi"   : 0.0315,   # Lean: 6'4"/76" = ~182 lbs
             "Monster"  : 0.0420,
             "Peasant"  : 0.0368,
         }

@@ -3218,6 +3218,17 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     "uploaded_at" : upload_time,
                     "auto_upload_enabled": True, # Manual upload re-enables auto-upload
                 })
+
+                # --- FIX: Update persistent team file immediately ---
+                # This ensures that a subsequent download/sync gets the version with the replacement
+                from team import Team
+                from save import save_team
+                try:
+                    t_obj = Team.from_dict(team)
+                    save_team(t_obj)
+                    print(f"  Persistent team file updated for team {team_id} (replacement sync).")
+                except Exception as e:
+                    print(f"  WARNING: Could not update persistent team file during upload: {e}")
                 
                 # Clear any existing result data for this manager/team to prevent
                 # replacement warriors from being marked dead by stale results
@@ -3231,7 +3242,8 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                                 try:
                                     result_path = os.path.join(td_path, fn)
                                     result_data = _load_json(result_path, None)
-                                    if result_data and result_data.get("team_id") == team_id:
+                                    # Use string comparison to avoid int/str mismatch
+                                    if result_data and str(result_data.get("team_id")) == str(team_id):
                                         make_file_writable(result_path)
                                         os.remove(result_path)
                                         # Also remove checksum file

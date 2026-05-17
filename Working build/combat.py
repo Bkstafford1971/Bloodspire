@@ -840,7 +840,7 @@ def _calc_damage_hybrid(
         weapon = OPEN_HAND
 
     two_handed = (attacker.secondary_weapon == "Open Hand" and weapon.two_hand)
-    is_small   = weapon.weight < 3.0
+    is_small   = weapon.weight < 4.0
     wpn_key = weapon_name.lower().replace(" ", "_").replace("&", "and")
     wpn_skill = attacker.skills.get(wpn_key, 0)
 
@@ -963,7 +963,7 @@ def _calc_damage_hybrid(
     
     # Precision damage bonus for small weapons on successful hits
     if is_small and margin >= 10:
-        raw += 2
+        raw += wpn_skill
     
     # Favorite weapon bonus: +1 damage when using favorite weapon
     if attacker.favorite_weapon and weapon_name == attacker.favorite_weapon:
@@ -1186,7 +1186,7 @@ def _calc_damage_verbose(
         weapon = OPEN_HAND
 
     two_handed = (attacker.secondary_weapon == "Open Hand" and weapon.two_hand)
-    is_small   = weapon.weight < 3.0
+    is_small   = weapon.weight < 4.0
     wpn_key = weapon_name.lower().replace(" ", "_").replace("&", "and")
     wpn_skill = attacker.skills.get(wpn_key, 0)
     steps: dict = {}
@@ -1353,8 +1353,8 @@ def _calc_damage_verbose(
 
     prec_b = 0
     if is_small and margin >= 10:
-        raw += 2
-        prec_b = 2
+        raw += wpn_skill
+        prec_b = wpn_skill
 
     fav_b = 0
     if attacker.favorite_weapon and weapon_name == attacker.favorite_weapon:
