@@ -5296,7 +5296,7 @@ function narrativeToHtml(text) {
     if (sepCount >= 3) {
       if (/^\*\*\*.*\*\*\*$/.test(ln))                                         { out.push(`<div class="nar-event">${esc(ln)}</div>`);   continue; }
       if (/^MINUTE\s+\d+/.test(ln.trim()))                                      { out.push(`<div class="nar-minute">${esc(ln)}</div>`);  continue; }
-      if (/SLAIN/.test(ln) || /collapses/i.test(ln) || /\bfalls\b/i.test(ln)) { out.push(`<div class="nar-death">${esc(ln)}</div>`);   continue; }
+      if (/SLAIN/.test(ln) || /collapses/i.test(ln)) { out.push(`<div class="nar-death">${esc(ln)}</div>`);   continue; }
       if (/wins/i.test(ln) && (/judge/i.test(ln) || /victory/i.test(ln)))      { out.push(`<div class="nar-win">${esc(ln)}</div>`);     continue; }
       if (/trained/i.test(ln) || /observed/i.test(ln))                         { out.push(`<div class="nar-training">${esc(ln)}</div>`); continue; }
       if (/^\s+HP/.test(ln) || /HP:/.test(ln) || /damage/i.test(ln))           { out.push(`<div class="nar-hp">${esc(ln)}</div>`);      continue; }
