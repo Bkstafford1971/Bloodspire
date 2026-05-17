@@ -27,7 +27,7 @@ from file_protection import save_json_protected, load_json_protected, make_file_
 import webbrowser
 from typing import Optional
 
-SERVER_VERSION = "1.2.1"
+SERVER_VERSION = "2.3"
 
 BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
 LEAGUE_DIR   = os.path.join(BASE_DIR, "saves", "league")
@@ -281,20 +281,24 @@ def _make_mirror_narrative(
                 hdr = f"{'TRIGGER':<42}{'FIGHTING STYLE':<20}{'LEVEL':>5}  {'AIMING POINT':<16}{'DEFENSE POINT'}"
                 if hdr in result:
                     hdr_idx = result.find(hdr)
-                    # Find the separator line before the header
-                    sep_start = result.rfind("\n", 0, hdr_idx - 50)
+                    # Find the blank line (double newline) BEFORE the strategy header
+                    # Search backwards from the header to find the blank line that precedes it
+                    sep_start = result.rfind("\n\n", 0, hdr_idx)
                     if sep_start < 0:
-                        sep_start = 0
+                        # If no double newline found, fall back to finding the last single newline before the header
+                        sep_start = result.rfind("\n", 0, hdr_idx)
+                        if sep_start < 0:
+                            sep_start = 0
+                        else:
+                            sep_start += 1
                     else:
-                        sep_start += 1
+                        # Found double newline, move past it
+                        sep_start += 2
 
                     # Find the end of the strategy table (next double newline)
                     strat_end = result.find("\n\n", hdr_idx)
                     if strat_end < 0:
                         strat_end = len(result)
-
-                    # Extract the old strategy section
-                    old_strat = result[sep_start:strat_end]
 
                     # Build new strategy section for warrior B
                     new_strat = "\n".join(b_strat_lines)
@@ -348,9 +352,19 @@ def _store_scout_narrative(team_id: int, warrior_name: str, narrative: str, turn
 
 def _run_turn(request_password, rerun_turn=None):
     """Run all fights for the current (or re-run) turn using GLOBAL POOL MATCHMAKING.
-    
+
     This ensures every warrior fights exactly ONCE per turn, no exceptions.
     """
+    # Clear Python cache to ensure fresh weapon/gear data loads
+    import shutil
+    project_dir = os.path.dirname(os.path.abspath(__file__))
+    for root, dirs, files in os.walk(project_dir):
+        if '__pycache__' in dirs:
+            try:
+                shutil.rmtree(os.path.join(root, '__pycache__'))
+            except Exception:
+                pass
+
     global _turn_progress
     with _lock:
         cfg = _load_config()
@@ -518,6 +532,15 @@ def _run_turn(request_password, rerun_turn=None):
     # Track team objects for updating
     team_by_id = {t.team_id: t for t in all_player_teams}
 
+    # CRITICAL: Preserve original backup_weapon values
+    # Combat may clear backup_weapon if used, but we want to save the original values
+    backup_weapon_backup = {}
+    for team in all_player_teams:
+        backup_weapon_backup[team.team_id] = {}
+        for w in team.active_warriors:
+            if w:
+                backup_weapon_backup[team.team_id][w.name] = w.backup_weapon
+
     # For progress tracking
     total_fights = len(global_card)
     fights_completed = 0
@@ -594,6 +617,7 @@ def _run_turn(request_password, rerun_turn=None):
             "opponent_race": fight.opponent.race.name,
             "opponent_team": fight.opponent_team.team_name,
             "opponent_team_id": fight.opponent_team.team_id,
+            "opponent_manager_name": getattr(fight.opponent_team, "manager_name", "") or '',
             "result": "win" if pw_won else "loss",
             "minutes": result.minutes_elapsed,
             "fight_id": fid,
@@ -630,6 +654,7 @@ def _run_turn(request_password, rerun_turn=None):
                 "opponent_race": fight.player_warrior.race.name,
                 "opponent_team": fight.player_team.team_name,
                 "opponent_team_id": fight.player_team.team_id,
+                "opponent_manager_name": getattr(fight.player_team, "manager_name", "") or '',
                 "result": "win" if opp_won else "loss",
                 "minutes": result.minutes_elapsed,
                 "fight_id": fid,
@@ -688,6 +713,9 @@ def _run_turn(request_password, rerun_turn=None):
             "warrior_slain": slain,
             "opponent_slain": killed,
             "ascension": ascended,
+            "wins": fight.player_warrior.wins,
+            "losses": fight.player_warrior.losses,
+            "kills": fight.player_warrior.kills,
             "opponent_wins": fight.opponent.wins,
             "opponent_losses": fight.opponent.losses,
             "opponent_kills": fight.opponent.kills,
@@ -725,6 +753,9 @@ def _run_turn(request_password, rerun_turn=None):
                 "warrior_slain": opp_slain,
                 "opponent_slain": opp_killed,
                 "ascension": False,
+                "wins": fight.opponent.wins,
+                "losses": fight.opponent.losses,
+                "kills": fight.opponent.kills,
                 "opponent_wins": fight.player_warrior.wins,
                 "opponent_losses": fight.player_warrior.losses,
                 "opponent_kills": fight.player_warrior.kills,
@@ -757,16 +788,43 @@ def _run_turn(request_password, rerun_turn=None):
         else:
             print(f"  Result: DRAW after {result.minutes_elapsed} minutes")
 
+    # CRITICAL: Restore original backup_weapon values before saving teams
+    # Combat clears backup_weapon if used, but we want to preserve the original
+    for team in all_player_teams:
+        team_id = team.team_id
+        if team_id in backup_weapon_backup:
+            for w in team.active_warriors:
+                if w and w.name in backup_weapon_backup[team_id]:
+                    w.backup_weapon = backup_weapon_backup[team_id][w.name]
+
     # ===================================================================
     # STEP 4: Save all results and update standings
     # ===================================================================
     print(f"\n  Saving results for {len(all_results)} managers...")
+    from save import save_team
 
     for manager_id, res in all_results.items():
-        # REFRESH TEAM STATE: The res["team"] dict captured during the execution loop 
+        # REFRESH TEAM STATE: The res["team"] dict captured during the execution loop
         # was a premature snapshot. We now use the final updated state from memory.
         if manager_id in team_map:
-            res["team"] = team_map[manager_id].to_dict()
+            team = team_map[manager_id]
+            # Update persistent metadata so inactive teams remain eligible for
+            # newsletter retention across subsequent turns.
+            team.last_turn_ran = turn_num
+            if not hasattr(team, "turn_history"):
+                team.turn_history = []
+            team.turn_history = [
+                e for e in team.turn_history
+                if e.get("turn") != turn_num
+            ]
+            team.turn_history.append({
+                "turn": turn_num,
+                "w": sum(1 for b in res["bouts"] if b.get("result") == "WIN"),
+                "l": sum(1 for b in res["bouts"] if b.get("result") == "LOSS"),
+                "k": sum(1 for b in res["bouts"] if b.get("opponent_slain")),
+            })
+            save_team(team)
+            res["team"] = team.to_dict()
 
         # Create team for client (with fight_history preserved)
         team_for_client = res["team"]
@@ -927,18 +985,20 @@ def _run_turn(request_password, rerun_turn=None):
     # ===================================================================
     newsletter_text = ""
     try:
-        from newsletter import generate_newsletter, _update_champion
-        from save import save_champion_state
+        from newsletter import generate_newsletter, _update_champion, _is_npc_team
+        from save import save_champion_state, load_all_teams
         import datetime as _dt
 
         # Build team list for newsletter
         nl_teams = []
+        team_ids = set()
         for mid, res in all_results.items():
             if mid.startswith("ai_"):
                 continue
             try:
                 t = Team.from_dict(res["team"])
                 nl_teams.append(t)
+                team_ids.add(getattr(t, "team_id", 0))
             except Exception:
                 pass
 
@@ -948,9 +1008,36 @@ def _run_turn(request_password, rerun_turn=None):
             for at in (load_ai_teams() or []):
                 try:
                     t = Team.from_dict(at)
-                    nl_teams.append(t)
+                    if getattr(t, "team_id", 0) not in team_ids:
+                        nl_teams.append(t)
+                        team_ids.add(getattr(t, "team_id", 0))
                 except Exception:
                     pass
+        except Exception:
+            pass
+
+        # Keep recently active saved teams for up to 3 turns of inactivity.
+        try:
+            for saved_team in load_all_teams():
+                saved_id = getattr(saved_team, "team_id", 0)
+                if saved_id in team_ids:
+                    continue
+                if _is_npc_team(saved_team):
+                    continue
+
+                last_run = getattr(saved_team, "last_turn_ran", 0)
+                if last_run > 0 and last_run >= turn_num - 3:
+                    nl_teams.append(saved_team)
+                    team_ids.add(saved_id)
+                    continue
+
+                hist = getattr(saved_team, "turn_history", [])
+                if not hist:
+                    continue
+                last_turn = max((entry.get("turn", 0) for entry in hist), default=0)
+                if last_turn >= turn_num - 3:
+                    nl_teams.append(saved_team)
+                    team_ids.add(saved_id)
         except Exception:
             pass
 
@@ -1012,7 +1099,8 @@ def _run_turn(request_password, rerun_turn=None):
             nl_teams, champ_state, deaths_nl,
             champion_beaten_by=_champ_beaten_by,
             champion_beaten_team=_champ_beaten_team,
-            prev_champion_name=prev_champion_name
+            prev_champion_name=prev_champion_name,
+            card=fake_card  # Add this line - pass the card data
         )
         save_champion_state(champ_state)
 
@@ -2965,6 +3053,11 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     )
                     w.luck = _rand.randint(1, 30)
                     w.initial_stats = {attr: int(wd[attr]) for attr in ATTRIBUTES}
+                    w.armor = wd.get("armor", "None") or "None"
+                    w.helm = wd.get("helm", "None") or "None"
+                    w.primary_weapon = wd.get("primary_weapon", "Open Hand") or "Open Hand"
+                    w.secondary_weapon = wd.get("secondary_weapon", "Open Hand") or "Open Hand"
+                    w.backup_weapon = wd.get("backup_weapon")
                     team.add_warrior(w)
                 save_team(team) # Protected
             except Exception as e:
@@ -3457,11 +3550,16 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     for fn in os.listdir(TEAMS_DIR):
                         if fn.startswith("team_") and fn.endswith(".json"):
                             try:
-                                tid_str = fn.replace("team_", "").replace(".json", "")
-                                tid = int(tid_str)
-                                team = load_team(tid)
+                                fpath = os.path.join(TEAMS_DIR, fn)
+                                # Load directly to avoid brittle ID-padding lookups
+                                from team import Team
+                                tdata = load_json_protected(fpath, allow_tampered=True)
+                                team = Team.from_dict(tdata)
                                 team.revert_all_progress()
-                                save_team(team)
+                                # Explicitly clear archived history that contributes to career totals
+                                team.archived_warriors = []
+                                team.turn_history = []
+                                save_json_protected(fpath, team.to_dict())
                             except Exception as e:
                                 print(f"  ERROR reverting team {fn}: {e}")
                 
@@ -3475,12 +3573,21 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                         for ad in ai_teams_data:
                             t = Team.from_dict(ad)
                             t.revert_all_progress()
+                            # Clear history for AI teams as well
+                            t.archived_warriors = []
+                            t.turn_history = []
                             reverted_ai.append(t.to_dict())
                         _save_json(ai_teams_path, reverted_ai)
                 
                 # 3. Clear standings
                 _save_standings({})
                 
+                # 4. Clear manager registries to force reset-notification and fresh login state
+                mgrs = _load_managers()
+                for mid in mgrs:
+                    mgrs[mid]["acknowledged_reset_count"] = 0
+                _save_managers(mgrs)
+
                 # 4. Wipe turn directories
                 for entry in os.listdir(LEAGUE_DIR):
                     full = os.path.join(LEAGUE_DIR, entry)
@@ -3496,6 +3603,9 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                                         if udata and "team" in udata:
                                             t_obj = Team.from_dict(udata["team"])
                                             t_obj.revert_all_progress()
+                                            # Clear history for any turn 1 participation files
+                                            t_obj.archived_warriors = []
+                                            t_obj.turn_history = []
                                             udata["team"] = t_obj.to_dict()
                                             _save_json(fpath, udata)
                                     except Exception: pass
@@ -3516,7 +3626,18 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 cfg["turn_state"] = "open"
                 cfg["fight_counter"] = 0
                 cfg["reset_count"] = cfg.get("reset_count", 0) + 1
+
+                # Clear out any stale deletion notifications
+                keys_to_del = [k for k in cfg.keys() if k.startswith("deleted_team_")]
+                for k in keys_to_del:
+                    del cfg[k]
+
                 _save_config(cfg)
+
+                # Clear scout narratives
+                scout_narr_path = os.path.join(LEAGUE_DIR, "scout_narratives.json")
+                if os.path.exists(scout_narr_path):
+                    _save_json(scout_narr_path, {})
                 
                 _turn_progress = {"running": False, "done": 0, "total": 0, "message": "Progress reset complete"}
             

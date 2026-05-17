@@ -47,27 +47,13 @@ def popularity_desc(score: int) -> str:
     return "KNOWN TO THE CROWD"
 
 
-# =============================================================================
-# IMPROVED _backup_weapon_description function
-# Replace lines 50-143 in narrative.py with this improved version
-# =============================================================================
-
 def _backup_weapon_description(weapon_name: str, gender: str) -> str:
     """
     Generate a thematic, location-specific description of a backup weapon.
     Returns a string (without period) describing where/how it's carried.
-    
-    Logic prioritizes realism:
-    - Small blades (daggers, knives) → hip, waist, belt
-    - Medium swords → hip or side
-    - Large swords → back
-    - Maces, hammers, clubs → belt or back
-    - Axes → belt loop or back
-    - Polearms/spears → back or planted at side
-    - Shields → arm, shoulder, or back
     """
     pronoun = "his" if gender == "Male" else "her"
-    weapon_lower = weapon_name.lower()
+    weapon_lower = weapon_name.lower().replace(" ", "_").replace("&", "and")
     
     try:
         weapon = get_weapon(weapon_name)
@@ -76,100 +62,52 @@ def _backup_weapon_description(weapon_name: str, gender: str) -> str:
         return f"has a spare {weapon_name.upper()} strapped to {pronoun} side"
     
     wpn_display = weapon.display.upper()
-    weight = weapon.weight
+    is_light = weapon.weight < 2.5
+    is_small = weapon.weight < 2.0
+    is_heavy = weapon.weight >= 5.0
     is_two_hand = weapon.two_hand
     is_shield = weapon.is_shield
     is_throwable = weapon.throwable
-    category = weapon.category
-    
-    # Helper to check if weapon name contains keyword
-    def contains(keyword):
-        return keyword in weapon_lower
+    is_polearm = weapon.category == "Polearm/Spear"
     
     # Shield-specific descriptions
     if is_shield:
         shield_desc = [
             f"has {_article(wpn_display)} {wpn_display} buckled to {pronoun} arm",
-            f"carries {_article(wpn_display)} {wpn_display} slung on {pronoun} shoulder",
+            f"carries {_article(wpn_display)} {wpn_display} on {pronoun} shoulder",
             f"has {_article(wpn_display)} {wpn_display} strapped across {pronoun} back",
         ]
         return random.choice(shield_desc)
     
-    # Small daggers and knives - ALWAYS at hip/waist/belt, NEVER on back
-    if contains("dagger") or contains("knife") or contains("stiletto"):
-        small_blade_desc = [
-            f"has {_article(wpn_display)} {wpn_display} sheathed at {pronoun} hip",
+    # Small daggers/knives - thrust into waistband
+    if is_small and weapon_lower in ("dagger", "knife", "stiletto"):
+        small_desc = [
+            f"has {_article(wpn_display)} {wpn_display} thrust into {pronoun} waistband",
             f"carries {_article(wpn_display)} {wpn_display} tucked into {pronoun} belt",
-            f"has {_article(wpn_display)} {wpn_display} at {pronoun} waist",
+            f"has {_article(wpn_display)} {wpn_display} sheathed at {pronoun} hip",
         ]
-        return random.choice(small_blade_desc)
+        return random.choice(small_desc)
     
     # Polearms and spears - carried upright or across back
-    if category == "Polearm/Spear" or contains("spear") or contains("pike") or contains("lance"):
+    if is_polearm:
         polearm_desc = [
             f"has {_article(wpn_display)} {wpn_display} strapped to {pronoun} back",
             f"carries {_article(wpn_display)} {wpn_display} planted at {pronoun} side",
-            f"has {_article(wpn_display)} {wpn_display} leaning against {pronoun} shoulder",
+            f"wears {_article(wpn_display)} {wpn_display} across {pronoun} back",
         ]
         return random.choice(polearm_desc)
     
-    # Short swords and medium blades - hip or side, not back
-    if contains("short") and contains("sword"):
-        short_sword_desc = [
-            f"has {_article(wpn_display)} {wpn_display} sheathed at {pronoun} hip",
-            f"wears {_article(wpn_display)} {wpn_display} at {pronoun} side",
-            f"carries {_article(wpn_display)} {wpn_display} on {pronoun} hip",
+    # Light one-handed weapons - various options
+    if is_light and not is_two_hand:
+        light_desc = [
+            f"has {_article(wpn_display)} {wpn_display} slung across {pronoun} back",
+            f"carries {_article(wpn_display)} {wpn_display} strapped to {pronoun} hip",
+            f"has {_article(wpn_display)} {wpn_display} sheathed at {pronoun} side",
+            f"wears {_article(wpn_display)} {wpn_display} across {pronoun} back",
         ]
-        return random.choice(short_sword_desc)
+        return random.choice(light_desc)
     
-    # Large two-handed swords - must be on back
-    if is_two_hand and contains("sword"):
-        large_sword_desc = [
-            f"has {_article(wpn_display)} {wpn_display} strapped across {pronoun} back",
-            f"wears {_article(wpn_display)} {wpn_display} slung across {pronoun} back",
-            f"carries {_article(wpn_display)} {wpn_display} lashed to {pronoun} back",
-        ]
-        return random.choice(large_sword_desc)
-    
-    # Medium swords (long sword, broad sword, bastard sword) - hip or back
-    if contains("sword"):
-        if weight >= 4.0:  # Heavier swords more likely on back
-            medium_sword_desc = [
-                f"has {_article(wpn_display)} {wpn_display} strapped across {pronoun} back",
-                f"wears {_article(wpn_display)} {wpn_display} slung at {pronoun} side",
-            ]
-        else:  # Lighter swords at hip
-            medium_sword_desc = [
-                f"has {_article(wpn_display)} {wpn_display} sheathed at {pronoun} hip",
-                f"wears {_article(wpn_display)} {wpn_display} at {pronoun} side",
-            ]
-        return random.choice(medium_sword_desc)
-    
-    # Maces, hammers, clubs - belt loop or back
-    if contains("mace") or contains("hammer") or contains("club") or contains("flail"):
-        blunt_desc = [
-            f"has {_article(wpn_display)} {wpn_display} hanging from {pronoun} belt",
-            f"carries {_article(wpn_display)} {wpn_display} looped at {pronoun} hip",
-            f"has {_article(wpn_display)} {wpn_display} strapped to {pronoun} back",
-        ]
-        return random.choice(blunt_desc)
-    
-    # Axes - belt loop for smaller, back for larger
-    if contains("axe"):
-        if weight >= 4.0 or is_two_hand:  # Large axes on back
-            axe_desc = [
-                f"has {_article(wpn_display)} {wpn_display} strapped across {pronoun} back",
-                f"carries {_article(wpn_display)} {wpn_display} slung over {pronoun} shoulder",
-            ]
-        else:  # Smaller axes at belt
-            axe_desc = [
-                f"has {_article(wpn_display)} {wpn_display} hanging from {pronoun} belt",
-                f"carries {_article(wpn_display)} {wpn_display} looped at {pronoun} hip",
-                f"has {_article(wpn_display)} {wpn_display} tucked in {pronoun} belt",
-            ]
-        return random.choice(axe_desc)
-    
-    # Two-handed weapons (catch-all) - strapped/slung across back
+    # Two-handed weapons - strapped/slung across back
     if is_two_hand:
         heavy_desc = [
             f"has {_article(wpn_display)} {wpn_display} strapped to {pronoun} back",
@@ -178,29 +116,32 @@ def _backup_weapon_description(weapon_name: str, gender: str) -> str:
         ]
         return random.choice(heavy_desc)
     
-    # Throwable weapons - quiver, bundle, or bandolier
-    if is_throwable:
+    # Heavy one-handed weapons - shoulder or back
+    if is_heavy:
+        heavy_1h_desc = [
+            f"has {_article(wpn_display)} {wpn_display} resting on {pronoun} shoulder",
+            f"carries {_article(wpn_display)} {wpn_display} strapped to {pronoun} back",
+            f"wears {_article(wpn_display)} {wpn_display} across {pronoun} back",
+        ]
+        return random.choice(heavy_1h_desc)
+    
+    # Other throwable weapons (axes, etc) - quiver, bundle, or bandolier
+    if is_throwable and weapon_lower not in ("dagger", "knife", "stiletto"):
         throw_desc = [
+            f"has {_article(wpn_display)} {wpn_display} bundled and strapped to {pronoun} back",
+            f"carries {_article(wpn_display)} {wpn_display} across {pronoun} shoulder",
             f"has {_article(wpn_display)} {wpn_display} at {pronoun} side",
-            f"carries {_article(wpn_display)} {wpn_display} secured at {pronoun} hip",
-            f"has {_article(wpn_display)} {wpn_display} tucked in {pronoun} belt",
         ]
         return random.choice(throw_desc)
     
-    # Default for medium one-handed weapons - prefer hip/side over back
-    if weight < 3.5:  # Lighter weapons at hip
-        default_desc = [
-            f"has {_article(wpn_display)} {wpn_display} sheathed at {pronoun} hip",
-            f"carries {_article(wpn_display)} {wpn_display} at {pronoun} side",
-            f"wears {_article(wpn_display)} {wpn_display} on {pronoun} hip",
-        ]
-    else:  # Heavier one-handed weapons on back or shoulder
-        default_desc = [
-            f"has {_article(wpn_display)} {wpn_display} strapped to {pronoun} back",
-            f"carries {_article(wpn_display)} {wpn_display} over {pronoun} shoulder",
-            f"has {_article(wpn_display)} {wpn_display} slung across {pronoun} back",
-        ]
+    # Default for medium weapons
+    default_desc = [
+        f"has {_article(wpn_display)} {wpn_display} strapped to {pronoun} side",
+        f"carries {_article(wpn_display)} {wpn_display} sheathed at {pronoun} hip",
+        f"wears {_article(wpn_display)} {wpn_display} across {pronoun} back",
+    ]
     return random.choice(default_desc)
+
 
 # ---------------------------------------------------------------------------
 # FIGHT HEADER
@@ -219,9 +160,8 @@ def _left_col(text: str, width: int) -> str:
 
 
 # =============================================================================
-# EXTRA DEFENSIVE VERSION of _warrior_report_block function
-# This version has additional debug output and defensive checks
-# Replace lines 162-207 in narrative.py with this version
+# CORRECTED VERSION of _warrior_report_block function
+# Replace lines 162-207 in your narrative.py file with this corrected version
 # =============================================================================
 
 def _warrior_report_block(w: Warrior) -> list:
@@ -238,77 +178,30 @@ def _warrior_report_block(w: Warrior) -> list:
     lines.append(f"{w.name.upper()} weighs {w.weight_lbs} lbs.")
     lines.append(f"{w.name.upper()} {popularity_desc(w.popularity).title()}.")
 
-    # Safely handle armor and helm (convert to string if not already)
-    armor_val = w.armor
-    helm_val = w.helm
-    if armor_val:
-        armor_val = str(armor_val).strip()
-        armor_part = f"in {armor_val.upper()}" if armor_val and armor_val.lower() != "none" else "unarmored"
-    else:
-        armor_part = "unarmored"
-
-    if helm_val:
-        helm_val = str(helm_val).strip()
-        helm_part = f"and will wear a {helm_val.upper()}" if helm_val and helm_val.lower() != "none" else "and wears no helm"
-    else:
-        helm_part = "and wears no helm"
-
+    armor_part = f"in {w.armor.upper()}" if w.armor else "unarmored"
+    helm_part  = f"and will wear a {w.helm.upper()}" if w.helm else "and wears no helm"
     lines.append(f"{w.name.upper()} enters the arena {armor_part} {helm_part}.")
 
-    # CRITICAL: Get weapon attributes with multiple fallback levels
-    # This ensures weapons are ALWAYS retrieved, even from dictionaries or corrupted objects
-
-    # Method 1: Try as object attribute
-    main_weapon = None
-    off_weapon = None
-    bak_weapon = None
-
-    try:
-        # Try getattr first (best for objects)
-        main_weapon = getattr(w, 'primary_weapon', None)
-        off_weapon = getattr(w, 'secondary_weapon', None)
-        bak_weapon = getattr(w, 'backup_weapon', None)
-    except:
-        pass
-
-    # Method 2: If warrior is a dict-like object, try dict access
-    if main_weapon is None and hasattr(w, '__getitem__'):
-        try:
-            main_weapon = w.get('primary_weapon') if hasattr(w, 'get') else w['primary_weapon']
-        except:
-            pass
-
-    if off_weapon is None and hasattr(w, '__getitem__'):
-        try:
-            off_weapon = w.get('secondary_weapon') if hasattr(w, 'get') else w['secondary_weapon']
-        except:
-            pass
-
-    # Convert weapons to strings BEFORE checking/applying defaults
-    if main_weapon is not None:
-        main_weapon = str(main_weapon).strip()
-    if off_weapon is not None:
-        off_weapon = str(off_weapon).strip()
-    if bak_weapon is not None:
-        bak_weapon = str(bak_weapon).strip()
-
-    # Apply defaults for None or empty strings
-    if not main_weapon or main_weapon.lower() in ("", "none"):
-        main_weapon = "Open Hand"
-    if not off_weapon or off_weapon.lower() in ("", "none"):
-        off_weapon = "Open Hand"
-
+    # Get weapon attributes - these are always initialized in Warrior.__init__
+    # Use getattr with defaults as a safety fallback
+    main_weapon = getattr(w, 'primary_weapon', "Open Hand") or "Open Hand"
+    off_weapon = getattr(w, 'secondary_weapon', "Open Hand") or "Open Hand"
+    bak_weapon = getattr(w, 'backup_weapon', None)
+    
     # Convert to uppercase for display
     main = main_weapon.upper()
     off = off_weapon.upper()
+    bak_raw = bak_weapon
 
     # Normalize backup weapon: handle null, empty string, "None", etc
-    if bak_weapon and bak_weapon.lower() not in ("none", ""):
-        bak = bak_weapon
+    if bak_raw and isinstance(bak_raw, str):
+        bak = bak_raw.strip()
+        if bak.lower() in ("none", ""):
+            bak = None
     else:
-        bak = None
+        bak = bak_raw
 
-    # ALWAYS add weapon description line - this should NEVER be skipped
+    # Always add weapon description line
     if off and off != "OPEN HAND":
         lines.append(f"{w.name.upper()} fights using {_article(main)} {main} with an off-hand {off.lower()}.")
     else:
@@ -316,11 +209,13 @@ def _warrior_report_block(w: Warrior) -> list:
 
     # Show backup weapon if it exists and is not "None" or "Open Hand"
     if bak:
-        try:
-            backup_desc = _backup_weapon_description(bak, w.gender)
-            lines.append(f"{w.name.upper()} {backup_desc}.")
-        except Exception:
-            lines.append(f"{w.name.upper()} carries a spare {bak.upper()} as backup.")
+        bak_str = str(bak).strip().lower()
+        if bak_str and bak_str not in ("none", "open hand", ""):
+            try:
+                backup_desc = _backup_weapon_description(str(bak), w.gender)
+                lines.append(f"{w.name.upper()} {backup_desc}.")
+            except Exception:
+                lines.append(f"{w.name.upper()} carries a spare {str(bak).upper()} as backup.")
 
     return lines
 
@@ -376,7 +271,7 @@ def build_fight_header(
 
     lines = [SEP]
 
-    # Matchup title - warrior names with contextual separator
+    # Matchup title — warrior names with contextual separator
     left  = f"{warrior_a.name.upper()} ({warrior_a.record_str})"
     right = f"{warrior_b.name.upper()} ({warrior_b.record_str})"
 
@@ -1951,13 +1846,13 @@ DECOY_FEINT_SUCCESS_LINES = [
     "{attacker}'s misdirection pulls {foe}'s attention the wrong way!",
     "{attacker} feigns an attack to one flank, baiting {foe} to commit!",
     "{attacker}'s ruse opens a seam in {foe}'s defense!",
-    "{attacker} sells the feint -{foe} lunges to block a blow that isn't coming!",
+    "{attacker} sells the feint — {foe} lunges to block a blow that isn't coming!",
     "{attacker} dips a shoulder and {foe} bites on the bluff!",
 ]
 
 DECOY_FEINT_READ_LINES = [
     "{foe} reads the feint and holds position, unshaken!",
-    "{foe} isn't fooled -the ruse falls flat!",
+    "{foe} isn't fooled — the ruse falls flat!",
     "{foe} sees through {attacker}'s misdirection!",
 ]
 
@@ -1977,7 +1872,7 @@ def decoy_feint_read_line(attacker_name: str, foe_name: str) -> str:
 # ---------------------------------------------------------------------------
 # CALCULATED ATTACK LINES
 # ---------------------------------------------------------------------------
-# Fires when a Calculated Attack strike lands a precision hit -the attacker
+# Fires when a Calculated Attack strike lands a precision hit — the attacker
 # threads the blow through a seam in the defender's guard or armor. Lines
 # are keyed by target body location so the narrative calls out the weak
 # point being exploited.
@@ -2018,7 +1913,7 @@ CALCULATED_PRECISION_LINES = {
 CALCULATED_PROBE_LINES = [
     "{attacker} probes methodically for an opening, but {foe}'s guard holds!",
     "{attacker} studies {foe}'s defense, waiting for a seam that never comes!",
-    "{attacker} measures a strike and thinks better of it -{foe} is too disciplined!",
+    "{attacker} measures a strike and thinks better of it — {foe} is too disciplined!",
     "{attacker}'s calculating eye finds no gap in {foe}'s guard this pass!",
     "{attacker} circles, searching for a weakness, but {foe} stays tight!",
 ]
@@ -2189,56 +2084,56 @@ def weapon_drop_lines(warrior_name: str, weapon_name: str, gender: str, is_fumbl
             f"The sudden surge of pain causes {n} to drop {pronoun} {wpn}!",
             f"{n}'s grip fails as {pronoun} arm spasms, sending the {wpn} to the sand!",
             f"Agony wracks {n}'s arm and the {wpn} slips from {pronoun} numb fingers!",
-            f"A sharp intake of breath -{n} fumbles the {wpn}, unable to maintain {pronoun} hold!",
+            f"A sharp intake of breath — {n} fumbles the {wpn}, unable to maintain {pronoun} hold!",
             f"The wound takes its toll. {n}'s {wpn} tumbles free from {pronoun} failing grip!",
-            f"{n}'s fingers betray {pronoun} as the pain overwhelms -the {wpn} hits the dirt!",
+            f"{n}'s fingers betray {pronoun} as the pain overwhelms — the {wpn} hits the dirt!",
             f"The injury flares at the worst moment and {n} cannot hold the {wpn}!",
             f"{n} clenches {pronoun} teeth but the {wpn} falls regardless, {pronoun} arm refusing to obey!",
-            f"Pain shoots through {n}'s arm -the {wpn} clatters to the sand before {pronoun} can stop it!",
+            f"Pain shoots through {n}'s arm — the {wpn} clatters to the sand before {pronoun} can stop it!",
             f"The arm gives out. {n}'s {wpn} drops to the arena floor with a dull thud!",
         ]
     elif is_forceful:
         pools = [
             f"The force of the blow wrenches the {wpn} from {n}'s hands! It clatters to the sand!",
-            f"The impact is too much -{n}'s {wpn} is ripped away by the sheer power of the strike!",
+            f"The impact is too much — {n}'s {wpn} is ripped away by the sheer power of the strike!",
             f"A bone-jarring blow jars the {wpn} loose from {n}'s grasp!",
             f"The brutal weight of the attack hammers the {wpn} from {n}'s numbed fingers!",
             f"The sheer violence of the blow sends the {wpn} spinning from {n}'s grip!",
-            f"A thunderous strike rattles {n}'s arms -the {wpn} goes flying to the sand!",
+            f"A thunderous strike rattles {n}'s arms — the {wpn} goes flying to the sand!",
             f"The impact travels straight up {n}'s arms and the {wpn} is torn free!",
-            f"Strength against strength -{n} loses, the {wpn} ripped away and crashing to the ground!",
+            f"Strength against strength — {n} loses, the {wpn} ripped away and crashing to the ground!",
             f"The {wpn} is blasted clean from {n}'s hands by the ferocity of the blow!",
-            f"{n} staggers from the impact -the {wpn} clatters across the arena floor!",
+            f"{n} staggers from the impact — the {wpn} clatters across the arena floor!",
         ]
     else:
         pools = [
             f"{n} loses {pronoun} grip and the {wpn} falls to the ground!",
             f"The {wpn} slips from {n}'s hands and hits the sand with a heavy thud!",
             f"In the chaos, {n} drops {pronoun} {wpn}!",
-            f"A clumsy moment -{n}'s {wpn} tumbles free to the arena floor!",
+            f"A clumsy moment — {n}'s {wpn} tumbles free to the arena floor!",
             f"The {wpn} slips from sweat-slicked fingers and crashes to the sand!",
-            f"{n} can't maintain {pronoun} grip -the {wpn} clatters away!",
-            f"Footing lost, focus lost -{n}'s {wpn} lands in the dirt!",
+            f"{n} can't maintain {pronoun} grip — the {wpn} clatters away!",
+            f"Footing lost, focus lost — {n}'s {wpn} lands in the dirt!",
             f"The {wpn} tears loose and skids across the sand!",
         ]
-    return "   " + random.choice(pools)
+    return ">> " + random.choice(pools)
 
 
 def unarmed_impact_lines(warrior_name: str, gender: str) -> str:
-    """Lines for a heavy blow landing on an unarmed fighter (Open Hand or Cestus) -no disarm possible."""
+    """Lines for a heavy blow landing on an unarmed fighter (Open Hand or Cestus) — no disarm possible."""
     pronoun = "his" if gender == "Male" else "her"
     n = warrior_name.upper()
     pools = [
         f"The thunderous blow sends a wave of numbness through {n}'s arm!",
         f"The force hammers into {n}'s guard, leaving {pronoun} arm momentarily leaden!",
-        f"{n}'s arm goes numb from the sheer impact -{pronoun} fists still clenched!",
+        f"{n}'s arm goes numb from the sheer impact — {pronoun} fists still clenched!",
         f"The brutal strike jars {n}'s arm savagely!",
-        f"The blow rattles {n}'s guard -{pronoun} knuckles absorb the brunt and hold!",
+        f"The blow rattles {n}'s guard — {pronoun} knuckles absorb the brunt and hold!",
         f"{n} reels from the impact, {pronoun} arm tingling with bone-deep force!",
         f"The impact staggers {n}, {pronoun} arm dead with numbness for a heartbeat!",
-        f"A savage blow -{n}'s arm goes briefly numb!",
+        f"A savage blow — {n}'s arm goes briefly numb!",
     ]
-    return "   " + random.choice(pools)
+    return ">> " + random.choice(pools)
 
 
 # ---------------------------------------------------------------------------
@@ -2261,7 +2156,7 @@ EXHAUSTED_LINES = [
 
 SECOND_WIND_LINES = [
     "{warrior} breathes through the pain, letting technique carry {him}",
-    "{warrior} strips away the noise -every motion deliberate, nothing wasted",
+    "{warrior} strips away the noise — every motion deliberate, nothing wasted",
     "{warrior} slows {his} breathing, drawing on hard-won discipline",
     "{warrior} narrows to pure fundamentals as the body screams to stop",
 ]
@@ -2321,33 +2216,33 @@ def get_damage_type(weapon_skill_key: str) -> str:
 
 
 CRITICAL_HIT_SLASHING = [
-    "{attacker}'s {weapon} catches an opening in {defender}'s guard and drives through -the cut is deep enough to change the fight instantly.",
+    "{attacker}'s {weapon} catches an opening in {defender}'s guard and drives through — the cut is deep enough to change the fight instantly.",
     "With a fluid change of angle, {attacker} pulls the blade across {defender}'s torso in a precise draw cut that opens a wound that won't close easily.",
-    "{attacker} finds the gap between {defender}'s armor plates and commits fully -the edge bites deep, past leather and cloth and flesh.",
+    "{attacker} finds the gap between {defender}'s armor plates and commits fully — the edge bites deep, past leather and cloth and flesh.",
     "The attack looks ordinary until the final moment, when {attacker} hooks the blade and opens a jagged line across {defender}'s ribs.",
-    "A controlled slash from {attacker} lands at the exact juncture of armor and skin -the kind of cut that changes the math of a fight.",
-    "{attacker}'s {weapon} describes a clean arc and catches {defender} exactly wrong -a blow driven home with everything behind it.",
+    "A controlled slash from {attacker} lands at the exact juncture of armor and skin — the kind of cut that changes the math of a fight.",
+    "{attacker}'s {weapon} describes a clean arc and catches {defender} exactly wrong — a blow driven home with everything behind it.",
     "{attacker} reads the stance perfectly and strikes into the step, the blade finding the crease at {defender}'s side with ugly precision.",
 ]
 
 CRITICAL_HIT_PIERCING = [
-    "{attacker}'s {weapon} threads through {defender}'s defense with a patience that looks almost gentle -then buries itself somewhere vital.",
+    "{attacker}'s {weapon} threads through {defender}'s defense with a patience that looks almost gentle — then buries itself somewhere vital.",
     "A blindingly fast thrust from {attacker} catches {defender} in transition, the point driving home before the defense can close.",
     "{attacker} turns the weapon at the last instant, threading the point past iron and bone to find something soft and critical inside {defender}'s guard.",
-    "The attack looks like a probe until it isn't -{attacker}'s {weapon} sinks to striking depth before {defender} can react.",
-    "{attacker} waits for the opening and when it comes, drives the weapon through with mechanical precision -the point finding a vital junction of sinew and armor.",
+    "The attack looks like a probe until it isn't — {attacker}'s {weapon} sinks to striking depth before {defender} can react.",
+    "{attacker} waits for the opening and when it comes, drives the weapon through with mechanical precision — the point finding a vital junction of sinew and armor.",
     "One perfectly timed thrust from {attacker} catches {defender} at the worst possible moment, the point driving home into a critical area.",
-    "{attacker} moves the weapon on a line that looks impossible until it arrives -threading through the guard to find the soft tissue beyond.",
+    "{attacker} moves the weapon on a line that looks impossible until it arrives — threading through the guard to find the soft tissue beyond.",
 ]
 
 CRITICAL_HIT_CRUSHING = [
-    "{attacker}'s {weapon} arrives with the force of total commitment -{defender}'s attempt to block fails completely, and the blow lands with structural finality.",
+    "{attacker}'s {weapon} arrives with the force of total commitment — {defender}'s attempt to block fails completely, and the blow lands with structural finality.",
     "The strike from {attacker} arrives at a spot {defender}'s defense simply didn't cover, carrying momentum enough that the impact reverberates across the pit.",
-    "{attacker} swings from an angle {defender}'s guard wasn't set to absorb -the blow lands flush and the sound of it draws a collective wince from the crowd.",
-    "An overhead from {attacker} crashes through {defender}'s raised guard and connects with everything behind it -{defender}'s knees shake from the pure force.",
+    "{attacker} swings from an angle {defender}'s guard wasn't set to absorb — the blow lands flush and the sound of it draws a collective wince from the crowd.",
+    "An overhead from {attacker} crashes through {defender}'s raised guard and connects with everything behind it — {defender}'s knees shake from the pure force.",
     "{attacker}'s {weapon} finds {defender} fully extended and off-balance, the crushing impact landing at the worst possible moment.",
     "The blow is textbook in its execution: {attacker} drops the weapon into a gap {defender} couldn't close in time, and it lands with bone-rattling finality.",
-    "{attacker}'s {weapon} hammers into {defender} with the weight of full commitment -the kind of impact that makes armor feel like a kindness.",
+    "{attacker}'s {weapon} hammers into {defender} with the weight of full commitment — the kind of impact that makes armor feel like a kindness.",
 ]
 
 CRITICAL_HIT_LINES: dict[str, list[str]] = {
@@ -2357,39 +2252,39 @@ CRITICAL_HIT_LINES: dict[str, list[str]] = {
 }
 
 CRITICAL_PARRY_LINES = [
-    "{defender} catches {attacker}'s strike at the perfect angle and redirects it completely -a parry executed with precision that draws a murmur from the crowd.",
-    "With something approaching artistry, {defender} meets the blow dead-center and folds it harmlessly aside -textbook form under the worst conditions.",
-    "{defender}'s weapon intercepts the attack and sends it wide, the motion fluid where it should be desperate -a parry drilled ten thousand times, finally counting.",
+    "{defender} catches {attacker}'s strike at the perfect angle and redirects it completely — a parry executed with precision that draws a murmur from the crowd.",
+    "With something approaching artistry, {defender} meets the blow dead-center and folds it harmlessly aside — textbook form under the worst conditions.",
+    "{defender}'s weapon intercepts the attack and sends it wide, the motion fluid where it should be desperate — a parry drilled ten thousand times, finally counting.",
     "The parry from {defender} is unhurried and exact, catching the incoming blow and neutralizing it with minimal effort.",
-    "{defender} reads {attacker}'s angle a breath early and has the counter waiting -the clash rings out sharp and clean, and the attack finds nothing.",
-    "An almost contemptuous parry from {defender} turns the blow aside -not merely deflected, but answered with the poise of someone already planning the next step.",
+    "{defender} reads {attacker}'s angle a breath early and has the counter waiting — the clash rings out sharp and clean, and the attack finds nothing.",
+    "An almost contemptuous parry from {defender} turns the blow aside — not merely deflected, but answered with the poise of someone already planning the next step.",
 ]
 
 CRITICAL_DODGE_LINES = [
-    "{defender} is no longer where the blow lands -the movement looks effortless from outside, but the timing is everything.",
+    "{defender} is no longer where the blow lands — the movement looks effortless from outside, but the timing is everything.",
     "The attack passes through space that {defender} vacated a half-second earlier, the move so clean the crowd takes a moment to register it.",
-    "{defender} rotates offline at the last instant with no apparent hurry -the blow grazes nothing as it passes through empty air.",
+    "{defender} rotates offline at the last instant with no apparent hurry — the blow grazes nothing as it passes through empty air.",
     "An impossible read: {defender} begins moving before {attacker}'s commitment is visible, leaving the attack with nothing to find.",
     "{defender} slips the blow with unhurried economy that looks like instinct and takes years to learn.",
-    "Not a dodge so much as an erasure -{defender} is simply not where {attacker} aimed, and there's nothing lucky about it.",
+    "Not a dodge so much as an erasure — {defender} is simply not where {attacker} aimed, and there's nothing lucky about it.",
 ]
 
 CRITICAL_DISARM_LINES = [
-    "The parry catches {attacker}'s {weapon} at exactly the wrong angle -{defender} twists on contact, and the weapon wrenches free, spinning into the sand!",
-    "{defender} redirects the blow and seizes the leverage immediately, a sharp rotation sending {attacker}'s {weapon} tumbling from the grip -the crowd erupts!",
-    "The parry traps the blade and {defender} presses home -{attacker}'s {weapon} flies free with a sound like a broken lock, and the pit falls momentarily silent.",
+    "The parry catches {attacker}'s {weapon} at exactly the wrong angle — {defender} twists on contact, and the weapon wrenches free, spinning into the sand!",
+    "{defender} redirects the blow and seizes the leverage immediately, a sharp rotation sending {attacker}'s {weapon} tumbling from the grip — the crowd erupts!",
+    "The parry traps the blade and {defender} presses home — {attacker}'s {weapon} flies free with a sound like a broken lock, and the pit falls momentarily silent.",
 ]
 
 CRITICAL_BREAK_LINES = [
-    "{attacker}'s {weapon} meets a perfectly braced parry and something in the metal gives -a crack, then another, and the weapon fails completely.",
-    "The {weapon} shatters against {defender}'s guard -a sound like a gunshot cuts across the crowd noise, followed by fragments scattering across the sand.",
-    "Against the flawless parry, {attacker}'s {weapon} does something weapons shouldn't: it breaks. The crowd goes silent -then roars.",
+    "{attacker}'s {weapon} meets a perfectly braced parry and something in the metal gives — a crack, then another, and the weapon fails completely.",
+    "The {weapon} shatters against {defender}'s guard — a sound like a gunshot cuts across the crowd noise, followed by fragments scattering across the sand.",
+    "Against the flawless parry, {attacker}'s {weapon} does something weapons shouldn't: it breaks. The crowd goes silent — then roars.",
 ]
 
 CRITICAL_DOUBLE_COUNTER_LINES = [
-    "{defender} flows out of the dodge directly into the attack -two strikes, no pause, moving like water downhill.",
+    "{defender} flows out of the dodge directly into the attack — two strikes, no pause, moving like water downhill.",
     "The dodge becomes the offense before {attacker} can recover: {defender} is already inside the guard, already moving, two fluid strikes delivered in the blink of an eye.",
-    "Slipping the blow opens something and {defender} takes it immediately -one motion into another, two swift strikes before the window closes.",
+    "Slipping the blow opens something and {defender} takes it immediately — one motion into another, two swift strikes before the window closes.",
 ]
 
 
@@ -2469,51 +2364,6 @@ DEATH_LINES = [
     "{warrior} falls, never to rise again!!!",
 ]
 
-ELF_DUAL_STRIKE_LINES = [
-    "{attacker} draws upon {his} inherent Elvish heritage and brings {his} {secondary} across in a lightning quick strike!",
-    "{attacker}'s grace becomes evident as {secondary_subject} flashes forth with supernatural speed!",
-    "With movements too quick to follow, {attacker} spins and drives {his} {secondary} home!",
-    "{attacker}'s {secondary} whips around in a blur of motion, finding {defender} again!",
-    "The Elf's natural dexterity shines as {secondary_subject} strikes with deadly precision!",
-    "{attacker} pivots fluidly and delivers a follow-up strike with {his} {secondary}!",
-    "In a display of dual-blade mastery, {attacker} brings {his} {secondary} around for another attack!",
-    "{attacker}'s {secondary} glints in the light as {subject} presses the advantage with uncanny speed!",
-    "Moving with elvish fluidity, {attacker} finds an opening and {secondary_subject} finds its mark!",
-]
-
-HALFLING_MARTIAL_STRIKE_LINES = [
-    "{attacker} darts in with a flurry of rapid strikes, exploiting openings with preternatural quickness!",
-    "In a blur of motion, {attacker} weaves and strikes again, fists moving faster than the eye can follow!",
-    "{attacker} presses the advantage with a barrage of nimble punches and kicks!",
-    "Quick as lightning, {attacker} finds an opening and delivers another strike with perfect timing!",
-    "{attacker} flows from one strike to another, a whirlwind of precise martial technique!",
-    "With halfling speed and grace, {attacker} unleashes a follow-up strike before {defender} can react!",
-    "{attacker} dances around {defender} and drives another fist home with deadly accuracy!",
-    "In a display of halfling martial prowess, {attacker} chains strikes together with fluid precision!",
-]
-
-LIZARDFOLK_MARTIAL_STRIKE_LINES = [
-    "{attacker} lashes out with primal fury, claws raking across in a second devastating strike!",
-    "Instinct takes over as {attacker} follows with a vicious counterattack, tail whipping around!",
-    "{attacker}'s natural reflexes drive another ferocious strike, pure power behind it!",
-    "Driven by inhuman speed, {attacker} unleashes another blow before {defender} can recover!",
-    "{attacker} roars and presses forward, claws slashing in a relentless assault!",
-    "With the grace of a natural predator, {attacker} strikes again, movements efficient and deadly!",
-    "{attacker} demonstrates the lethal martial prowess of the Lizardfolk, striking in quick succession!",
-    "Battle instinct guides {attacker} as {subject_pronoun} unleashes another ferocious attack!",
-]
-
-TABAXI_FRENZY_INTRO_LINES = [
-    "Backed into a corner, {attacker} unleashes primal fury in a savage assault!",
-    "{attacker} moves with impossible speed, claws flashing in a desperate barrage!",
-    "Instinct takes over, and {attacker} becomes a whirlwind of claws and desperation!",
-    "Survival instinct awakens - {attacker} lashes out with ferocious precision!",
-    "{attacker}'s natural predator instincts ignite, driving a vicious flurry of strikes!",
-    "Eyes ablaze with feline rage, {attacker} unleashes a devastating combination!",
-    "{attacker} moves like a creature possessed, delivering a blur of attacks!",
-    "The cornered hunter strikes back - {attacker} bursts forward in a frenzied assault!",
-]
-
 VICTORY_LINES = [
     "{winner} has won this affair of honor!",
     "{winner} stands victorious over the fallen {loser}!",
@@ -2540,51 +2390,6 @@ def death_line(warrior_name: str, gender: str) -> str:
 def victory_line(winner_name: str, loser_name: str) -> str:
     return random.choice(VICTORY_LINES).format(
         winner=winner_name.upper(), loser=loser_name.upper()
-    )
-
-
-def elf_dual_strike_line(attacker_name: str, defender_name: str, secondary_weapon: str, gender: str) -> str:
-    """Generate narrative for an Elf's extra attack from dual-wielding."""
-    pronoun = "his" if gender == "Male" else "her"
-    subject = "he" if gender == "Male" else "she"
-    secondary_subject = f"{subject} swiftly" if random.random() < 0.5 else f"{secondary_weapon.lower()}"
-
-    return random.choice(ELF_DUAL_STRIKE_LINES).format(
-        attacker=attacker_name.upper(),
-        defender=defender_name.upper(),
-        his=pronoun,
-        secondary=secondary_weapon.lower(),
-        subject=subject,
-        secondary_subject=secondary_subject,
-    )
-
-
-def halfling_martial_strike_line(attacker_name: str, defender_name: str, gender: str) -> str:
-    """Generate narrative for a Halfling's extra martial combat attack."""
-    pronoun = "his" if gender == "Male" else "her"
-    return random.choice(HALFLING_MARTIAL_STRIKE_LINES).format(
-        attacker=attacker_name.upper(),
-        defender=defender_name.upper(),
-        his=pronoun,
-    )
-
-
-def lizardfolk_martial_strike_line(attacker_name: str, defender_name: str, gender: str) -> str:
-    """Generate narrative for a Lizardfolk's extra martial combat attack."""
-    pronoun = "his" if gender == "Male" else "her"
-    subject_pronoun = "he" if gender == "Male" else "she"
-    return random.choice(LIZARDFOLK_MARTIAL_STRIKE_LINES).format(
-        attacker=attacker_name.upper(),
-        defender=defender_name.upper(),
-        his=pronoun,
-        subject_pronoun=subject_pronoun,
-    )
-
-
-def tabaxi_frenzy_intro_line(attacker_name: str) -> str:
-    """Generate narrative for the opening of a Tabaxi frenzy ability."""
-    return random.choice(TABAXI_FRENZY_INTRO_LINES).format(
-        attacker=attacker_name.upper(),
     )
 
 

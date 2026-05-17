@@ -101,6 +101,7 @@ class Team:
             race   = random.choice(races)
             gender = random.choice(["Male", "Female"])
             w = create_warrior_ai(race_name=race, gender=gender)
+            w.slot_index = len(self.warriors)
             self.warriors.append(w)
 
         # Replace any None slots too
@@ -108,7 +109,9 @@ class Team:
             if slot is None:
                 race   = random.choice(races)
                 gender = random.choice(["Male", "Female"])
-                self.warriors[i] = create_warrior_ai(race_name=race, gender=gender)
+                replacement = create_warrior_ai(race_name=race, gender=gender)
+                replacement.slot_index = i
+                self.warriors[i] = replacement
 
     def warrior_by_name(self, name: str) -> Optional[Warrior]:
         """Return a warrior by name (case-insensitive), or None."""
@@ -505,6 +508,15 @@ class Team:
             if w is not None:
                 wobj = Warrior.from_dict(w)
                 wobj.slot_index = i
+                # Ensure all warriors have equipment even if not saved (backwards compatibility)
+                if not wobj.armor:
+                    wobj.armor = "None"
+                if not wobj.helm:
+                    wobj.helm = "None"
+                if not wobj.primary_weapon:
+                    wobj.primary_weapon = "Open Hand"
+                if not wobj.secondary_weapon:
+                    wobj.secondary_weapon = "Open Hand"
                 team.warriors.append(wobj)
             else:
                 team.warriors.append(None)

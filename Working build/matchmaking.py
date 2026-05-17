@@ -18,7 +18,7 @@ from typing import List, Optional, Tuple, Dict
 from warrior   import Warrior
 from team      import Team, create_peasant_team, create_monster_team
 from combat    import run_fight, FightResult
-from save      import save_team, save_fight_log
+from save      import save_team, save_fight_log, load_all_teams
 
 
 # ---------------------------------------------------------------------------
@@ -1096,21 +1096,28 @@ def run_turn(
                 max_minutes=60 if getattr(bout, "is_monster_fight", False) else 30,
                 opponent_total_fights=ow.total_fights,
             )
+            # Update wins/losses/kills/total_fights for both warriors
+            pw.record_result(pw_result, killed_opponent=result.loser_died and pw_won)
+            ow.record_result("loss" if pw_won else "win", killed_opponent=result.loser_died and not pw_won)
+            print(f"  [DEBUG] {pw.name}: {pw.wins}-{pw.losses}-{pw.kills} after record_result")
+            print(f"  [DEBUG] {ow.name}: {ow.wins}-{ow.losses}-{ow.kills} after record_result")
+
             from save import current_turn
-            # Determine fight type: if opponent is champion, mark as 'champion'  
+            # Determine fight type: if opponent is champion, mark as 'champion'
             fight_type_for_record = "champion" if (current_champion and ow.name == current_champion) else bout.fight_type
             pw.fight_history.append({
-                "turn"           : current_turn(),
-                "opponent_name"  : ow.name,
-                "opponent_race"  : ow.race.name,
-                "opponent_team"  : bout.opponent_team.team_name,
-                "result"         : pw_result,
-                "minutes"        : result.minutes_elapsed,
-                "fight_id"       : fight_id,
-                "warrior_slain"  : result.loser_died and result.loser is pw,
-                "opponent_slain" : result.loser_died and (result.winner is not None)
-                                   and result.winner.name == pw.name,
-                "fight_type"     : fight_type_for_record,
+                "turn"                 : current_turn(),
+                "opponent_name"        : ow.name,
+                "opponent_race"        : ow.race.name,
+                "opponent_team"        : bout.opponent_team.team_name,
+                "opponent_manager_name": getattr(bout.opponent_team, "manager_name", "") or '',
+                "result"               : pw_result,
+                "minutes"              : result.minutes_elapsed,
+                "fight_id"             : fight_id,
+                "warrior_slain"        : result.loser_died and result.loser is pw,
+                "opponent_slain"       : result.loser_died and (result.winner is not None)
+                                          and result.winner.name == pw.name,
+                "fight_type"           : fight_type_for_record,
             })
 
             # Also record this fight in the opponent warrior's history so
@@ -1120,16 +1127,17 @@ def run_turn(
                 # Determine fight type: if player_warrior is champion, mark as 'champion'
                 fight_type_for_opp = "champion" if (current_champion and pw.name == current_champion) else bout.fight_type
                 ow.fight_history.append({
-                    "turn"           : current_turn(),
-                    "opponent_name"  : pw.name,
-                    "opponent_race"  : pw.race.name if hasattr(pw.race, "name") else str(pw.race),
-                    "opponent_team"  : player_team.team_name,
-                    "result"         : ow_result,
-                    "minutes"        : result.minutes_elapsed,
-                    "fight_id"       : fight_id,
-                    "warrior_slain"  : result.loser_died and result.loser is ow,
-                    "opponent_slain" : result.loser_died and result.loser is pw,
-                    "fight_type"     : fight_type_for_opp,
+                    "turn"                 : current_turn(),
+                    "opponent_name"        : pw.name,
+                    "opponent_race"        : pw.race.name if hasattr(pw.race, "name") else str(pw.race),
+                    "opponent_team"        : player_team.team_name,
+                    "opponent_manager_name": getattr(player_team, "manager_name", "") or '',
+                    "result"               : ow_result,
+                    "minutes"              : result.minutes_elapsed,
+                    "fight_id"             : fight_id,
+                    "warrior_slain"        : result.loser_died and result.loser is ow,
+                    "opponent_slain"       : result.loser_died and result.loser is pw,
+                    "fight_type"           : fight_type_for_opp,
                 })
 
         # Handle player warrior death
@@ -1198,12 +1206,56 @@ def run_turn(
     for w in player_team.active_warriors:
         w.turns_active = getattr(w, 'turns_active', 0) + 1
 
+    from save import current_turn
+    turn = current_turn()
+
     # Update last_turn_ran for the team
     player_team.last_turn_ran = turn
 
-
-    # Save everything
+    # Save the player team
     save_team(player_team)
+
+    # Update opponent teams that fought this turn so they remain eligible for
+    # newsletter retention when they later miss a turn or two.
+    opponent_results = {}
+    for b in card:
+        if not b.opponent_team:
+            continue
+        if b.opponent_team.team_name in {"The Monsters", "The Peasants"}:
+            continue
+        ot = b.opponent_team
+        key = (getattr(ot, 'team_id', 0), id(ot))
+        if key not in opponent_results:
+            opponent_results[key] = {"team": ot, "w": 0, "l": 0, "k": 0}
+        if not b.result:
+            continue
+        pw_won = b.result.winner and b.result.winner.name == b.player_warrior.name
+        if pw_won:
+            opponent_results[key]["l"] += 1
+        else:
+            opponent_results[key]["w"] += 1
+            if b.result.loser_died:
+                opponent_results[key]["k"] += 1
+
+    saved_opponent_teams = set()
+    for result in opponent_results.values():
+        ot = result["team"]
+        ot.turn_history.append({"turn": turn,
+                                "w": result["w"],
+                                "l": result["l"],
+                                "k": result["k"]})
+        ot.last_turn_ran = turn
+        save_team(ot)
+        saved_opponent_teams.add(getattr(ot, 'team_id', 0))
+
+    # Save any other opponent teams that were present but had no result object,
+    # or that were not included in the result summary above.
+    for b in card:
+        if b.opponent_team and b.opponent_team.team_name not in {"The Monsters", "The Peasants"}:
+            tid = getattr(b.opponent_team, 'team_id', 0)
+            if tid not in saved_opponent_teams:
+                save_team(b.opponent_team)
+                saved_opponent_teams.add(tid)
 
     # VALIDATION: Check for fight frequency violations
     warrior_violations = validate_warrior_fight_frequency(card)
@@ -1247,7 +1299,7 @@ def run_turn(
                 loser_team = b.player_team
             else:
                 loser_team = b.opponent_team
-            
+
             deaths_this_turn.append({
                 "name"    : loser.name,
                 "team"    : loser_team.team_name,
@@ -1255,14 +1307,42 @@ def run_turn(
                 "w"       : loser.wins, "l": loser.losses, "k": loser.kills,
                 "killed_by": b.result.winner.name,
             })
+            print(f"  [DEATH] {loser.name} ({loser_team.team_name}): {loser.wins}-{loser.losses}-{loser.kills}")
 
-    # Build full team list: player team + opponent teams (skip Monsters/Peasants)
+    # Build full team list: player team + opponent teams + recently active saved teams.
     _NPC = {"The Monsters", "The Peasants"}
     print(f"  [nl_prep] {player_team.team_name} archived_warriors={len(getattr(player_team,'archived_warriors',[]))}")
     all_teams_for_nl = [player_team]
+    team_ids = {getattr(player_team, 'team_id', 0)}
     for ot in opponent_teams:
         if ot.team_name not in _NPC:
             all_teams_for_nl.append(ot)
+            team_ids.add(getattr(ot, 'team_id', 0))
+
+    # Keep recently active saved teams for up to 3 turns of inactivity.
+    try:
+        for saved_team in load_all_teams():
+            saved_id = getattr(saved_team, 'team_id', 0)
+            if saved_id in team_ids:
+                continue
+            if saved_team.team_name in _NPC:
+                continue
+
+            last_run = getattr(saved_team, 'last_turn_ran', 0)
+            if last_run > 0 and last_run >= turn - 3:
+                all_teams_for_nl.append(saved_team)
+                team_ids.add(saved_id)
+                continue
+
+            hist = getattr(saved_team, 'turn_history', [])
+            if not hist:
+                continue
+            last_turn = max((entry.get('turn', 0) for entry in hist), default=0)
+            if last_turn >= turn - 3:
+                all_teams_for_nl.append(saved_team)
+                team_ids.add(saved_id)
+    except Exception:
+        pass
 
     champion_state = load_champion_state()
 
@@ -1296,6 +1376,7 @@ def run_turn(
         champion_beaten_team=_champ_beaten_team,
         champion_beaten_team_id=_champ_beaten_team_id,
         prev_champion_name=prev_champion_name,
+        card=card  # Add this line - pass the card data
     )
     save_champion_state(champion_state)
 
