@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 # =============================================================================
 # main.py — BLOODSPIRE Main Menu & Game Loop
 # =============================================================================
@@ -175,8 +175,14 @@ def _create_new_team(gs: GameState):
     manager_name = prompt("Manager name: ")
     if not manager_name:
         return
+    if len(manager_name) > 20:
+        print("  Manager name must be 20 characters or fewer.")
+        return
     team_name = prompt("Team name: ")
     if not team_name:
+        return
+    if len(team_name) > 20:
+        print("  Team name must be 20 characters or fewer.")
         return
 
     team = Team(team_name=team_name, manager_name=manager_name)

@@ -1,4 +1,4 @@
-﻿# =============================================================================
+# =============================================================================
 # races.py — BLOODSPIRE Race Definitions
 # =============================================================================
 # Contains all 10 playable races and 2 NPC races with their modifiers.
@@ -10,6 +10,7 @@
 #   - No "super race" — all are viable but require different playstyles
 # =============================================================================
 
+import math
 from dataclasses import dataclass, field
 from typing import List, Optional
 
@@ -99,6 +100,14 @@ class Race:
     # The guide says: "discovering this is part of the fun for a new player."
     favored_enemy_race: Optional[str] = None
     weak_against_race: Optional[str] = None
+
+    def calculate_max_hp(self, strength: int, constitution: int, size: int) -> int:
+        """
+        Calculates the maximum hit points for a warrior of this race.
+        Formula: ceil(SIZ + STR + CON * 2.5) + racial_hp_bonus.
+        """
+        base_hp = math.ceil(size + strength + (constitution * 2.5))
+        return base_hp + self.modifiers.hp_bonus
 
 
 # ---------------------------------------------------------------------------

@@ -343,7 +343,11 @@ def build_ai_team(manager_idx: int, global_used_names: set = None) -> dict:
     name, team_name, style, races, tier = AI_MANAGER_ROSTER[manager_idx]
     manager_id  = f"ai_{manager_idx:02d}"
     used_names  = set(global_used_names) if global_used_names else set()
-    warriors    = [_build_ai_warrior(style, races, used_names) for _ in range(5)]
+    warriors    = []
+    for i in range(5):
+        w = _build_ai_warrior(style, races, used_names)
+        w["slot_index"] = i
+        warriors.append(w)
     return {
         "manager_id"  : manager_id,
         "manager_name": name,
@@ -353,6 +357,7 @@ def build_ai_team(manager_idx: int, global_used_names: set = None) -> dict:
         "style"       : style,
         "tier"        : tier,
         "turn_history": [],
+        "last_turn_ran": 0,
     }
 
 
@@ -435,12 +440,13 @@ def evolve_ai_teams(teams: List[dict], turn_results: dict) -> List[dict]:
         style  = team.get("style", "balanced")
         races  = [w.get("race", "Human") for w in updated if w] or ["Human"]
 
-        for wd in updated:
+        for i, wd in enumerate(updated):
             if not wd:
                 new_warriors.append(None)
                 continue
             try:
                 w = Warrior.from_dict(wd)
+                w.slot_index = i
                 if getattr(w, "is_dead", False):
                     # Archive the dead warrior before replacing (cumulative record)
                     snapshot = w.to_dict()
@@ -450,6 +456,7 @@ def evolve_ai_teams(teams: List[dict], turn_results: dict) -> List[dict]:
                     # Replace with a fresh named warrior
                     used_names.discard(w.name)
                     replacement = _build_ai_warrior(style, races, used_names)
+                    replacement["slot_index"] = i
                     used_names.add(replacement["name"])
                     print(f"  AI replacement: {w.name} ({team['team_name']}) → {replacement['name']}")
                     new_warriors.append(replacement)
@@ -466,6 +473,9 @@ def evolve_ai_teams(teams: List[dict], turn_results: dict) -> List[dict]:
 
         team["warriors"] = new_warriors
 
+        # Track participation for the newsletter inactivity logic
+        team["last_turn_ran"] = res.get("turn", 0)
+
         # Update turn history on the team
         bouts = res.get("bouts", [])
         if bouts:
@@ -479,5 +489,3 @@ def evolve_ai_teams(teams: List[dict], turn_results: dict) -> List[dict]:
 
     save_ai_teams(teams)
     return teams
-
-

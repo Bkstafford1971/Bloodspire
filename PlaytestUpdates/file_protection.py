@@ -75,20 +75,26 @@ def verify_checksum(json_filepath: str, data: Dict[Any, Any]) -> bool:
 def make_file_readonly(filepath: str):
     """Set file to read-only on Windows/Linux/Mac."""
     try:
-        # Remove write permissions, keep read
-        current_permissions = stat.S_IMODE(os.stat(filepath).st_mode)
-        # R + R + R (user, group, other) = 0o444
-        os.chmod(filepath, stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
-    except (OSError, IOError) as e:
+        if os.name == 'nt':
+            # Windows: use S_IREAD specifically to toggle the read-only attribute
+            os.chmod(filepath, stat.S_IREAD)
+        else:
+            # Unix/Mac: R + R + R = 0o444
+            os.chmod(filepath, stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
+    except Exception as e:
         print(f"  WARNING: Could not set {os.path.basename(filepath)} to read-only: {e}")
 
 
 def make_file_writable(filepath: str):
     """Temporarily make file writable (for game updates only)."""
     try:
-        # R+W + R + R (user, group, other)
-        os.chmod(filepath, stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH)
-    except (OSError, IOError) as e:
+        if os.name == 'nt':
+            # Windows: use S_IWRITE specifically to remove the read-only attribute
+            os.chmod(filepath, stat.S_IWRITE)
+        else:
+            # Unix/Mac: R+W + R + R = 0o644
+            os.chmod(filepath, stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH)
+    except Exception as e:
         print(f"  WARNING: Could not make {os.path.basename(filepath)} writable: {e}")
 
 
@@ -122,13 +128,14 @@ def save_json_protected(filepath: str, data: Dict[Any, Any]):
     make_file_readonly(filepath)
 
 
-def load_json_protected(filepath: str) -> Dict[Any, Any]:
+def load_json_protected(filepath: str, allow_tampered: bool = False) -> Dict[Any, Any]:
     """
     Load JSON data and verify integrity.
     
     Args:
         filepath: Path to JSON file to load
-        
+        allow_tampered: If True, return the data even if checksum fails (for repair)
+
     Returns:
         Dictionary with loaded data
         
@@ -147,12 +154,15 @@ def load_json_protected(filepath: str) -> Dict[Any, Any]:
     
     # Verify checksum if it exists
     if not verify_checksum(filepath, data):
-        filename = os.path.basename(filepath)
-        raise ValueError(
-            f"SECURITY: File '{filename}' was tampered with! "
-            f"The checksum does not match. This save cannot be loaded. "
-            f"Do not manually edit save files."
-        )
+        if not allow_tampered:
+            filename = os.path.basename(filepath)
+            raise ValueError(
+                f"SECURITY: File '{filename}' was tampered with! "
+                f"The checksum does not match. This save cannot be loaded. "
+                f"Do not manually edit save files."
+            )
+        else:
+            print(f"  WARNING: Integrity check failed for {os.path.basename(filepath)}, loading in REPAIR MODE.")
     
     return data
 

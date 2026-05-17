@@ -1,4 +1,4 @@
-﻿# =============================================================================
+# =============================================================================
 # team.py — BLOODSPIRE Team Class
 # =============================================================================
 # A team always has exactly 5 warriors.
@@ -55,8 +55,8 @@ class Team:
         # Contains manager names to avoid challenges from any warrior on that manager's team (25-30% success)
         self.avoid_managers: List[str] = []
 
-        # Pending challenges: {warrior_name: [challenge_target, ...]}
-        self.challenges: Dict[str, List[str]] = {}
+        # Pending challenges: {slot_index: [challenge_target, ...]}
+        self.challenges: Dict[int, List[str]] = {}
 
         # Archived warriors — dead warriors stored as stat snapshots after replacement
         self.archived_warriors: List[dict] = []
@@ -80,11 +80,13 @@ class Team:
         Returns True if added, False if the team is already full.
         """
         if len(self.warriors) < TEAM_SIZE:
+            warrior.slot_index = len(self.warriors)
             self.warriors.append(warrior)
             return True
         # Fill a None slot if one exists
         for i, slot in enumerate(self.warriors):
             if slot is None:
+                warrior.slot_index = i
                 self.warriors[i] = warrior
                 return True
         return False   # Team is full
@@ -99,6 +101,7 @@ class Team:
             race   = random.choice(races)
             gender = random.choice(["Male", "Female"])
             w = create_warrior_ai(race_name=race, gender=gender)
+            w.slot_index = len(self.warriors)
             self.warriors.append(w)
 
         # Replace any None slots too
@@ -106,7 +109,9 @@ class Team:
             if slot is None:
                 race   = random.choice(races)
                 gender = random.choice(["Male", "Female"])
-                self.warriors[i] = create_warrior_ai(race_name=race, gender=gender)
+                replacement = create_warrior_ai(race_name=race, gender=gender)
+                replacement.slot_index = i
+                self.warriors[i] = replacement
 
     def warrior_by_name(self, name: str) -> Optional[Warrior]:
         """Return a warrior by name (case-insensitive), or None."""
@@ -119,6 +124,13 @@ class Team:
         """Return roster index for a warrior by name, or -1."""
         for i, w in enumerate(self.warriors):
             if w and w.name.lower() == name.lower():
+                return i
+        return -1
+
+    def warrior_index_by_obj(self, warrior: Warrior) -> int:
+        """Return roster index for a warrior by object identity, or -1."""
+        for i, w in enumerate(self.warriors):
+            if w is warrior:
                 return i
         return -1
 
@@ -172,6 +184,7 @@ class Team:
         warrior: Warrior,
         killed_by: str = "Unknown",
         killer_fights: int = 0,
+        fight_type: str = "",
     ) -> int:
         """
         Mark a warrior as dead but keep them in their roster slot until the
@@ -184,9 +197,11 @@ class Team:
         saves the replacement, confirm_replacement() archives the dead warrior
         and places the new one in the slot.
         """
-        idx = self.warrior_index(warrior.name)
+        idx = getattr(warrior, "slot_index", -1)
         if idx == -1:
-            raise ValueError(f"Warrior '{warrior.name}' not found on team '{self.team_name}'.")
+            idx = self.warrior_index_by_obj(warrior)
+        if idx == -1:
+            raise ValueError(f"Warrior object not found on team '{self.team_name}'.")
 
         warrior.is_dead   = True
         warrior.killed_by = killed_by
@@ -198,11 +213,16 @@ class Team:
             "slot_idx"     : idx,
         })
 
-        if killer_fights >= 5:
+        # Create a blood challenge whenever killed by a real warrior (not a
+        # peasant or monster fodder).  The old killer_fights >= 5 gate blocked
+        # every first-turn kill since no warrior has 5 fights yet.  We now
+        # check fight_type instead: only real P-vs-P fights deserve a vendetta.
+        _no_bc_types = {"peasant", "monster"}
+        if fight_type not in _no_bc_types and killed_by and killed_by != "Unknown":
             self.blood_challenges.append({
                 "dead_warrior_name": warrior.name,
                 "target_name": killed_by,
-                "challenger_name": None,  # Manager can select later
+                "challenger_name": None,  # Manager selects later
                 "turns_remaining": 3,
                 "status": "active",
             })
@@ -264,12 +284,28 @@ class Team:
         self.archived_warriors.append(snapshot)
 
         # Place the replacement
+        new_warrior.slot_index = slot_idx
         self.warriors[slot_idx] = new_warrior
         if slot_idx in self.pending_replacements:
             del self.pending_replacements[slot_idx]
 
         print(f"  {dead.name} archived. {new_warrior.name} joins as replacement.")
         return True
+
+    def revert_all_progress(self):
+        """Revert all warriors on the team to their initial state and clear team records."""
+        # Ensure we strictly reset to 5 slots to prevent "phantom" warrior growth
+        self.warriors = self.warriors[:TEAM_SIZE]
+        for w in self.warriors:
+            if w:
+                w.revert_to_initial()
+        self.fallen_warriors = []
+        self.blood_challenges = []
+        self.archived_warriors = []
+        self.challenges = {}
+        self.turn_history = []
+        self.last_turn_ran = 0
+        self.pending_replacements = {}
 
     def retire_warrior(self, warrior: Warrior) -> Optional[Warrior]:
         """
@@ -302,19 +338,19 @@ class Team:
     # CHALLENGES
     # =========================================================================
 
-    def add_challenge(self, challenger_name: str, target: str):
+    def add_challenge(self, slot_idx: int, target: str):
         """
         Add a challenge for a warrior (up to 3 per warrior per turn).
         target is a manager name, team name, or individual warrior name.
         """
-        if challenger_name not in self.challenges:
-            self.challenges[challenger_name] = []
-        existing = self.challenges[challenger_name]
+        if slot_idx not in self.challenges:
+            self.challenges[slot_idx] = []
+        existing = self.challenges[slot_idx]
         if len(existing) >= 3:
-            print(f"  {challenger_name} already has 3 challenges queued.")
+            print(f"  Slot {slot_idx} already has 3 challenges queued.")
             return
         existing.append(target)
-        print(f"  Challenge added: {challenger_name} → {target}")
+        print(f"  Challenge added: slot {slot_idx} → {target}")
 
     def clear_challenges(self):
         """Clear all pending challenges (called after each turn is processed)."""
@@ -450,7 +486,7 @@ class Team:
             "fallen_warriors"     : self.fallen_warriors,
             "blood_challenges"    : self.blood_challenges,
             "avoid_managers"      : self.avoid_managers,
-            "challenges"          : self.challenges,
+            "challenges"          : {str(k): v for k, v in self.challenges.items()},
             "archived_warriors"   : self.archived_warriors,
             "pending_replacements": {str(k): v for k, v in self.pending_replacements.items()},
             "turn_history"         : self.turn_history[-20:],  # keep last 20 turns
@@ -463,13 +499,27 @@ class Team:
         team = cls(
             team_name    = data["team_name"],
             manager_name = data["manager_name"],
-            team_id      = data.get("team_id", 0),
+            team_id      = int(data.get("team_id", 0)),
         )
         raw_warriors = data.get("warriors", [])
-        team.warriors = [
-            Warrior.from_dict(w) if w is not None else None
-            for w in raw_warriors
-        ]
+        # Strictly enforce roster size on load to prevent phantom warrior issues
+        team.warriors = []
+        for i, w in enumerate(raw_warriors[:TEAM_SIZE]):
+            if w is not None:
+                wobj = Warrior.from_dict(w)
+                wobj.slot_index = i
+                # Ensure all warriors have equipment even if not saved (backwards compatibility)
+                if not wobj.armor:
+                    wobj.armor = "None"
+                if not wobj.helm:
+                    wobj.helm = "None"
+                if not wobj.primary_weapon:
+                    wobj.primary_weapon = "Open Hand"
+                if not wobj.secondary_weapon:
+                    wobj.secondary_weapon = "Open Hand"
+                team.warriors.append(wobj)
+            else:
+                team.warriors.append(None)
         team.fallen_warriors     = data.get("fallen_warriors", [])
         
         # Handle blood_challenges — migrate from old tuple format to new dict format
@@ -490,7 +540,7 @@ class Team:
                 })
         
         team.avoid_managers      = data.get("avoid_managers", [])
-        team.challenges          = data.get("challenges", {})
+        team.challenges          = {int(k): v for k, v in data.get("challenges", {}).items()}
         team.archived_warriors   = data.get("archived_warriors", [])
         team.pending_replacements= {int(k): v for k, v in data.get("pending_replacements", {}).items()}
         team.turn_history        = data.get("turn_history", [])

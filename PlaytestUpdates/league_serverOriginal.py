@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # =============================================================================
-# league_server.py — BLOODSPIRE League Server
+# league_server.py — THE AGONY AMPHITHEATRE League Server
 # =============================================================================
 # The host runs this alongside their normal client.
 # All other players connect to http://HOST_IP:8766 to upload teams and
@@ -22,9 +22,12 @@ import socketserver
 import sys
 import threading
 import time
+import shutil
 from file_protection import save_json_protected, load_json_protected, make_file_readonly, make_file_writable
 import webbrowser
 from typing import Optional
+
+SERVER_VERSION = "1.2.1"
 
 BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
 LEAGUE_DIR   = os.path.join(BASE_DIR, "saves", "league")
@@ -34,6 +37,7 @@ sys.path.insert(0, BASE_DIR)
 _lock          = threading.Lock()
 _turn_progress = {"running": False, "done": 0, "total": 0, "message": ""}
 _global_server = None  # Reference for graceful shutdown from request handlers
+_server_port   = DEFAULT_PORT  # Set by main() once args are parsed
 
 
 # =============================================================================
@@ -42,16 +46,37 @@ _global_server = None  # Reference for graceful shutdown from request handlers
 
 def _ensure_dirs():
     os.makedirs(LEAGUE_DIR, exist_ok=True)
+    os.makedirs(os.path.join(LEAGUE_DIR, "activity_logs"), exist_ok=True)
 
-def _load_json(path, default, protected=True):
+def _log_activity(action, manager_id, manager_name, details=""):
+    """Log user activity (uploads/downloads) to activity log."""
+    try:
+        log_dir = os.path.join(LEAGUE_DIR, "activity_logs")
+        os.makedirs(log_dir, exist_ok=True)
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+        log_entry = {
+            "timestamp": timestamp,
+            "action": action,
+            "manager_id": manager_id,
+            "manager_name": manager_name,
+            "details": details,
+        }
+        # Append to activity log file (not protected, just text)
+        log_file = os.path.join(log_dir, "activity.jsonl")
+        with open(log_file, "a", encoding="utf-8") as f:
+            f.write(json.dumps(log_entry) + "\n")
+    except Exception as e:
+        print(f"  ERROR writing activity log: {e}")
+
+def _load_json(path, default, protected=True, allow_tampered=False):
     try:
         if protected:
-            return load_json_protected(path)
+            return load_json_protected(path, allow_tampered=allow_tampered)
         else:
             with open(path, "r", encoding="utf-8") as f:
                 return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError, ValueError) as e:
-        if protected and isinstance(e, ValueError):
+        if protected and isinstance(e, ValueError) and not allow_tampered:
             print(f"  WARNING: Tampered file detected: {path} - {e}")
         return default
 
@@ -72,12 +97,13 @@ def _managers_path(): return os.path.join(LEAGUE_DIR, "managers.json")
 def _standings_path():return os.path.join(LEAGUE_DIR, "standings.json")
 
 def _turn_dir(turn_num):
-    d = os.path.join(LEAGUE_DIR, f"turn_{turn_num:04d}")
+    d = os.path.join(LEAGUE_DIR, f"turn_{int(turn_num):04d}")
     os.makedirs(d, exist_ok=True)
     return d
 
 def _load_config():
-    cfg = _load_json(_config_path(), { # Protected
+    # allow_tampered=True for config.json to allow the server to boot and fix its own checksum
+    cfg = _load_json(_config_path(), {
         "current_turn": 1,
         "turn_state": "open",
         "host_password_hash": "", # This will be set on first run
@@ -91,7 +117,7 @@ def _load_config():
         "ai_teams_enabled": True,
         "schedule_enabled": False,
         "schedule_slots": [],
-    })
+    }, allow_tampered=True)
     # Ensure new flags exist in old configs
     for key, default in [
         ("show_favorite_weapon", False),
@@ -100,6 +126,8 @@ def _load_config():
         ("ai_teams_enabled", True),
         ("schedule_enabled", False),
         ("admin_debug_manager_id", ""),
+        ("rerun_count", 0),
+        ("rerun_turn", 0),
     ]:
         if key not in cfg:
             cfg[key] = default
@@ -124,6 +152,12 @@ def _save_standings(s):  _save_json(_standings_path(), s) # Protected
 def _load_uploads(turn_num):
     td = _turn_dir(turn_num) # This directory contains protected files
     if not os.path.exists(td): return {}
+
+    # Load manager registry to verify team ownership. This prevents 'ghost'
+    # uploads from teams that were replaced or withdrawn but the file lingered
+    # (e.g. from an auto-carry).
+    mgrs = _load_managers()
+
     uploads = {}
     for fname in sorted(os.listdir(td)):
         if not (fname.startswith("upload_") and fname.endswith(".json")):
@@ -131,8 +165,12 @@ def _load_uploads(turn_num):
         data = _load_json(os.path.join(td, fname), None)
         if not data:
             continue # If tampered, _load_json returns None, so it's skipped
-        mid     = data.get("manager_id") or ""
+        mid     = str(data.get("manager_id") or "")
         team_id = data.get("team_id") or (data.get("team") or {}).get("team_id", "")
+
+        # Verify that this manager exists in the registry.
+        if mid not in mgrs: continue
+
         # Key by manager_id+team_id so multiple teams from same manager coexist
         key = f"{mid}_team{team_id}" if team_id else mid
         uploads[key] = data
@@ -158,6 +196,31 @@ def _save_result(turn_num, manager_id, data):
         fname = f"result_{manager_id}.json"
     _save_json(os.path.join(_turn_dir(turn_num), fname), data) # Protected
 
+def _write_execution_log(turn_num, exec_log):
+    """Write a human-readable table of turn execution status for all warriors."""
+    exec_log_path = os.path.join(_turn_dir(turn_num), "execution_log.txt")
+    try:
+        with open(exec_log_path, "w", encoding="utf-8") as f:
+            f.write(f"TURN {turn_num} EXECUTION LOG\n")
+            f.write(f"Started: {exec_log.get('started_at', 'Unknown')}\n")
+            f.write(f"Finished: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write("="*110 + "\n")
+            f.write(f"{'MANAGER':<20} {'TEAM':<20} {'WARRIOR':<20} {'STATUS':<25} {'OPPONENT':<20}\n")
+            f.write("-"*110 + "\n")
+            
+            # Sort warriors by manager then team then name
+            sorted_warriors = sorted(exec_log["warriors"].values(), 
+                                     key=lambda x: (x["manager"], x["team"], x["name"]))
+            
+            for w in sorted_warriors:
+                f.write(f"{w['manager'][:19]:<20} {w['team'][:19]:<20} {w['name'][:19]:<20} "
+                        f"{w['status']:<25} {(w['opponent'] or 'None')[:19]:<20}\n")
+                if w.get("error"):
+                    f.write(f"  ! ERROR: {w['error']}\n")
+        print(f"  Execution log written: {exec_log_path}")
+    except Exception as e:
+        print(f"  WARNING: Could not write execution log: {e}")
+
 
 # =============================================================================
 # AUTH HELPERS
@@ -182,27 +245,22 @@ def _make_mirror_narrative(
     training_results : dict,
     a_name           : str,
     b_name           : str,
+    warrior_a        : 'Warrior' = None,
+    warrior_b        : 'Warrior' = None,
 ) -> str:
     """
     Return a version of the fight narrative from warrior_b's manager's perspective:
+      - warrior_b is listed first (so their strategy is shown first)
       - warrior_b's training shows the actual skills/stats learned
       - warrior_a's training shows "Skill" or "Stat" (generic)
-
-    The narrative is identical up to the training section at the end.  We
-    reconstruct that section with the `is_opponent` flags swapped, then
-    replace it via a suffix match so the fight body is never touched.
+      - warrior_b's strategy table is shown
     """
-    from narrative import training_summary as _ts
+    from narrative import training_summary as _ts, _strategy_table
 
     a_res = training_results.get("warrior_a", [])
-    b_res = training_results.get("warrior_b", [])
-
-    # Compute what the FORWARD training block looks like (warrior_a perspective)
-    fwd_parts = []
-    if a_res:
-        fwd_parts.append(_ts(a_name, a_res, is_opponent=False))
-    if b_res:
-        fwd_parts.append(_ts(b_name, b_res, is_opponent=True))
+    b_res = training_results.get("warrior_b", {})
+    if isinstance(b_res, dict):
+        b_res = []  # Handle case where training_results might be structured differently
 
     # Compute the MIRROR training block (warrior_b perspective)
     mir_parts = []
@@ -211,22 +269,64 @@ def _make_mirror_narrative(
     if a_res:
         mir_parts.append(_ts(a_name, a_res, is_opponent=True))
 
-    if not fwd_parts and not mir_parts:
-        return narrative  # nothing to swap
+    result = narrative
 
-    # The training block is appended as: "\n" (blank-line join) + "\n".join(parts)
+    # Replace warrior A's strategy table with warrior B's
+    if warrior_a and warrior_b:
+        try:
+            from narrative import _strategy_table
+            b_strat_lines = _strategy_table(warrior_b)
+            if b_strat_lines:
+                # Find the strategy table section in the narrative (look for the header)
+                hdr = f"{'TRIGGER':<42}{'FIGHTING STYLE':<20}{'LEVEL':>5}  {'AIMING POINT':<16}{'DEFENSE POINT'}"
+                if hdr in result:
+                    hdr_idx = result.find(hdr)
+                    # Find the separator line before the header
+                    sep_start = result.rfind("\n", 0, hdr_idx - 50)
+                    if sep_start < 0:
+                        sep_start = 0
+                    else:
+                        sep_start += 1
+
+                    # Find the end of the strategy table (next double newline)
+                    strat_end = result.find("\n\n", hdr_idx)
+                    if strat_end < 0:
+                        strat_end = len(result)
+
+                    # Extract the old strategy section
+                    old_strat = result[sep_start:strat_end]
+
+                    # Build new strategy section for warrior B
+                    new_strat = "\n".join(b_strat_lines)
+
+                    # Replace it
+                    result = result[:sep_start] + new_strat + result[strat_end:]
+        except Exception:
+            pass  # Silently continue if strategy replacement fails
+
+    if not mir_parts:
+        return result
+
+    # Compute the FORWARD training block (warrior_a perspective) so we can replace it
+    fwd_parts = []
+    if a_res:
+        fwd_parts.append(_ts(a_name, a_res, is_opponent=False))
+    if b_res:
+        fwd_parts.append(_ts(b_name, b_res, is_opponent=True))
+
+    # The training block is appended as: "\n\n" + "\n".join(parts)
     # which in the joined narrative looks like "\n\n<line1>\n<line2>..."
-    fwd_block = "\n\n" + "\n".join(fwd_parts)
+    fwd_block = "\n\n" + "\n".join(fwd_parts) if fwd_parts else ""
     mir_block = "\n\n" + "\n".join(mir_parts)
 
-    if narrative.endswith(fwd_block):
-        return narrative[: -len(fwd_block)] + mir_block
+    if fwd_block and result.endswith(fwd_block):
+        return result[: -len(fwd_block)] + mir_block
 
     # Fallback: couldn't find the expected suffix — return unchanged
-    return narrative
+    return result
 
 
-def _store_scout_narrative(warrior_name: str, narrative: str, turn_num: int) -> None:
+def _store_scout_narrative(team_id: int, warrior_name: str, narrative: str, turn_num: int) -> None:
     """
     Persist the fight narrative for a scouted warrior so the client can
     retrieve it via the scout report without needing to chase fight_ids.
@@ -235,7 +335,8 @@ def _store_scout_narrative(warrior_name: str, narrative: str, turn_num: int) -> 
     path = os.path.join(LEAGUE_DIR, "scout_narratives.json")
     try:
         data = _load_json(path, {})
-        data[warrior_name] = {"narrative": narrative, "turn": turn_num}
+        key = f"{team_id}:{warrior_name}"
+        data[key] = {"narrative": narrative, "turn": turn_num}
         _save_json(path, data)
     except Exception:
         pass
@@ -283,6 +384,24 @@ def _run_turn(request_password, rerun_turn=None):
                 ai_teams = get_or_create_ai_teams()
                 for ai_team in ai_teams:
                     mid = ai_team["manager_id"]
+
+                    # RE-RUN LOGIC: If re-running turn N, AI teams must start from their 
+                    # state at the end of turn N-1 to correctly replace results.
+                    if rerun_turn:
+                        from team import Team
+                        prev_turn = rerun_turn - 1
+                        if prev_turn >= 1:
+                            td_prev = _turn_dir(prev_turn)
+                            res_file = os.path.join(td_prev, f"result_{mid}.json")
+                            if os.path.exists(res_file):
+                                prev_res = _load_json(res_file, None)
+                                if prev_res and prev_res.get("team"):
+                                    ai_team.clear(); ai_team.update(prev_res["team"])
+                        elif rerun_turn == 1:
+                            t_obj = Team.from_dict(ai_team)
+                            t_obj.revert_all_progress()
+                            ai_team.clear(); ai_team.update(t_obj.to_dict())
+
                     if mid not in uploads:
                         uploads[mid] = {
                             "manager_id"  : mid,
@@ -306,6 +425,44 @@ def _run_turn(request_password, rerun_turn=None):
               f"fav_wpn={_turn_start_flags.get('show_favorite_weapon')} "
               f"luck={_turn_start_flags.get('show_luck_factor')} "
               f"max_hp={_turn_start_flags.get('show_max_hp')}")
+
+        # Pre-pass cleanup: If this is a re-run or if old files exist in the 
+        # target turn directory, wipe existing results and the newsletter
+        # to ensure the folder only contains data from the latest execution.
+        td_clean = _turn_dir(turn_num)
+        if os.path.exists(td_clean):
+            for fn in os.listdir(td_clean):
+                if (fn.startswith("result_") and fn.endswith(".json")) or fn == "newsletter.txt":
+                    fpath = os.path.join(td_clean, fn)
+                    try:
+                        make_file_writable(fpath)
+                        os.remove(fpath)
+                        # Also clear matching checksum
+                        if fn.endswith(".json"):
+                            cf = fpath.replace(".json", ".checksum")
+                            if os.path.exists(cf):
+                                make_file_writable(cf)
+                                os.remove(cf)
+                    except Exception as e:
+                        print(f"  WARNING: Cleanup failed for {fn}: {e}")
+
+        # Also clear admin debug logs for this turn if they exist
+        dbg_dir = os.path.join(BASE_DIR, "saves", "admin_logs", f"turn_{turn_num:04d}")
+        if os.path.exists(dbg_dir):
+            try:
+                shutil.rmtree(dbg_dir)
+            except Exception as e:
+                print(f"  WARNING: Admin log cleanup failed: {e}")
+
+        # Also clear scout narratives for this specific turn from the global store
+        sn_path = os.path.join(LEAGUE_DIR, "scout_narratives.json")
+        if os.path.exists(sn_path):
+            sn_data = _load_json(sn_path, {})
+            to_del = [wn for wn, d in sn_data.items() if d.get("turn") == turn_num]
+            if to_del:
+                for wn in to_del: del sn_data[wn]
+                _save_json(sn_path, sn_data)
+
         cfg["turn_state"] = "processing"
         import datetime as _dt2
         cfg["processing_started_at"] = _dt2.datetime.now().isoformat()
@@ -351,8 +508,26 @@ def _run_turn(request_password, rerun_turn=None):
             team.manager_name = upload["manager_name"]
             team_map[mid] = team
             real_mid_map[mid] = upload.get("manager_id", mid)
+            # Debug: log warrior names for re-run verification
+            warrior_names = [w.name for w in team.warriors if w]
+            if rerun_turn and warrior_names:
+                print(f"  [RE-RUN] Team {mid}: warriors = {', '.join(warrior_names)}")
         except Exception as e:
             print(f"  WARN: could not load team for {upload.get('manager_name','?')}: {e}")
+
+    # [Advanced Logging] Initialize execution tracking
+    exec_log = {
+        "turn": turn_num,
+        "started_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "warriors": {} # (tid, slot) -> {name, team, manager, status, error, opponent, type, fid}
+    }
+    for team in team_map.values():
+        for w in team.warriors:
+            if w:
+                exec_log["warriors"][(int(team.team_id), w.slot_index)] = {
+                    "name": w.name, "team": team.team_name, "manager": team.manager_name,
+                    "status": "QUEUED", "error": None, "opponent": None, "type": None, "fid": None
+                }
 
     cfg         = _load_config()
     all_results = {}
@@ -392,6 +567,7 @@ def _run_turn(request_password, rerun_turn=None):
     # since team size is exactly 5, this also caps every team at 5 fights/turn —
     # a hard rule with no exceptions.
     _global_used    = set()
+    _global_matched_opponent_warriors = set()  # Opponent warriors matched across all teams this turn
 
     # Belt-and-suspenders: per-turn fight count per TEAM NAME.  Incremented each
     # time a bout is accepted into the final fight stream.  Monsters/Peasants are
@@ -414,13 +590,14 @@ def _run_turn(request_password, rerun_turn=None):
     _ai_mirror_bouts = {}   # mid -> list of bout dicts (mirrored perspective)
 
     try:
-        # warrior_name -> manager_id for all non-AI player warriors
+        # (team_id, slot_index) -> manager_id for all non-AI player warriors
         player_warrior_to_mid = {}
         for _mid, _upl in uploads.items():
             if not _mid.startswith("ai_"):
+                _tid = int(_upl.get("team_id") or _upl["team"].get("team_id", 0))
                 for _wd in (_upl["team"].get("warriors") or []):
-                    if _wd and _wd.get("name"):
-                        player_warrior_to_mid[_wd["name"]] = _mid
+                    if _wd and "slot_index" in _wd:
+                        player_warrior_to_mid[(_tid, _wd["slot_index"])] = _mid
 
         # Pre-build non-AI fight cards
         for _mid, _upl in uploads.items():
@@ -439,7 +616,8 @@ def _run_turn(request_password, rerun_turn=None):
                     if mid2 != _mid and real_mid_map.get(mid2, mid2) != _this_real
                 ]
                 _fc = build_fight_card(_pt, _opp_list, champion_state=champ_state,
-                                       global_used=_global_used)
+                                       global_used=_global_used,
+                                       global_matched_opponent_warriors=_global_matched_opponent_warriors)
                 _fight_cards[_mid] = (_pt, _fc)
             except Exception as _fce:
                 print(f"  PRE-PASS WARN: build_fight_card failed for {_upl.get('manager_name','?')}: {_fce}")
@@ -464,7 +642,8 @@ def _run_turn(request_password, rerun_turn=None):
                 for _b_ai in _card_ai:
                     _ow_ai = _b_ai.opponent
                     # Player warriors → P-vs-P logic handles them; fodder → always OK
-                    if (player_warrior_to_mid.get(_ow_ai.name) is not None
+                    _is_player = player_warrior_to_mid.get((_b_ai.opponent_team.team_id, _ow_ai.slot_index)) is not None
+                    if (_is_player
                             or getattr(_ow_ai.race, "name", "") in _fodder_races):
                         _new_card.append(_b_ai)
                         continue
@@ -498,10 +677,10 @@ def _run_turn(request_password, rerun_turn=None):
             for _bout in _card:
                 _pw  = _bout.player_warrior
                 _ow  = _bout.opponent
-                if player_warrior_to_mid.get(_ow.name) is None:
+                if player_warrior_to_mid.get((_bout.opponent_team.team_id, _ow.slot_index)) is None:
                     continue  # ow is not a player warrior
                 # Skip if either warrior is already assigned to a pre-fought match
-                if _pw.name in _pvp_by_warrior or _ow.name in _pvp_by_warrior:
+                if (int(_pt.team_id), _pw.slot_index) in _pvp_by_warrior or (int(_bout.opponent_team.team_id), _ow.slot_index) in _pvp_by_warrior:
                     continue
                 try:
                     # Pre-assign fight ID so both managers share the same narrative ID
@@ -520,6 +699,7 @@ def _run_turn(request_password, rerun_turn=None):
                         manager_a_name = _mname,
                         manager_b_name = _bout.opponent_manager,
                         is_monster_fight = False,
+                        fight_type       = _bout.fight_type,
                         challenger_name = getattr(_bout, 'challenger_name', None),
                         debug_logger   = _pre_dbg,
                     )
@@ -551,17 +731,24 @@ def _run_turn(request_password, rerun_turn=None):
                             )
                         # Persist scout narrative
                         for _ww in (_pw, _ow):
-                            if _ww.name in _scouted:
-                                _store_scout_narrative(_ww.name, _result.narrative, turn_num)
+                            _tid_sn = _pt.team_id if _ww is _pw else _bout.opponent_team.team_id
+                            if (_tid_sn, _ww.name) in _scouted:
+                                _store_scout_narrative(_tid_sn, _ww.name, _result.narrative, turn_num)
                     except Exception:
                         pass
                     _pvp_data = {
                         "result"         : _result,
                         "fid"            : _pre_fid,
                         "canonical_pw"   : _pw.name,
+                        "canonical_pw_tid": int(_pt.team_id),
+                        "canonical_pw_slot": _pw.slot_index,
                         "canonical_ow"   : _ow.name,
+                        "canonical_ow_tid": int(_bout.opponent_team.team_id),
+                        "canonical_ow_slot": _ow.slot_index,
                         "pw_team"        : _pt.team_name,
+                        "pw_team_id"     : _pt.team_id,
                         "ow_team"        : _bout.opponent_team.team_name,
+                        "ow_team_id"     : _bout.opponent_team.team_id,
                         "pw_manager"     : _mname,
                         "ow_manager"     : _bout.opponent_manager,
                         "fight_type"     : _bout.fight_type,
@@ -570,14 +757,28 @@ def _run_turn(request_password, rerun_turn=None):
                         "pw_trained_dict": _pw.to_dict(),
                         "ow_trained_dict": _ow.to_dict(),
                     }
-                    _pvp_by_warrior[_pw.name] = _pvp_data
-                    _pvp_by_warrior[_ow.name] = _pvp_data
+                    _pvp_by_warrior[(int(_pt.team_id), _pw.slot_index)] = _pvp_data
+                    _pvp_by_warrior[(int(_bout.opponent_team.team_id), _ow.slot_index)] = _pvp_data
+                    
+                    # [Advanced Logging] Update tracking for both warriors in PvP match
+                    for k, opp_name in [((int(_pt.team_id), _pw.slot_index), _ow.name), 
+                                        ((int(_bout.opponent_team.team_id), _ow.slot_index), _pw.name)]:
+                        if k in exec_log["warriors"]:
+                            exec_log["warriors"][k].update({
+                                "status": "PROCESSED (Pre-pass PvP)",
+                                "opponent": opp_name, "type": _bout.fight_type, "fid": _pre_fid
+                            })
+
                     print(f"  PRE-FIGHT (P-vs-P): {_pw.name} vs {_ow.name} — fid={_pre_fid}")
                 except Exception as _pvp_err:
                     print(f"  PRE-FIGHT WARN: P-vs-P fight {_pw.name} vs {_ow.name} failed: {_pvp_err}; will fight normally")
+                    # [Advanced Logging] Record pre-pass failure
+                    for k in [(int(_pt.team_id), _pw.slot_index), (int(_bout.opponent_team.team_id), _ow.slot_index)]:
+                        if k in exec_log["warriors"]:
+                            exec_log["warriors"][k].update({"status": "FAILED (Pre-pass PvP)", "error": str(_pvp_err)})
                     # Remove partial entries so both warriors fight fresh in main loop
-                    _pvp_by_warrior.pop(_pw.name, None)
-                    _pvp_by_warrior.pop(_ow.name, None)
+                    _pvp_by_warrior.pop((int(_pt.team_id), _pw.slot_index), None)
+                    _pvp_by_warrior.pop((int(_bout.opponent_team.team_id), _ow.slot_index), None)
 
         # ------------------------------------------------------------------
         # Final cleanup pass: any card bout where ow is a player warrior
@@ -600,9 +801,9 @@ def _run_turn(request_password, rerun_turn=None):
                     # Only substitute when:
                     #   • pw is NOT pre-fought (it will fall through to run_fight)
                     #   • ow IS booked as the other side of a P-vs-P fight
-                    if (_pw_cl.name not in _pvp_by_warrior
-                            and _ow_cl.name in _pvp_by_warrior
-                            and player_warrior_to_mid.get(_ow_cl.name) is not None):
+                    if ((int(_pt_cl.team_id), _pw_cl.slot_index) not in _pvp_by_warrior
+                            and (int(_b_cl.opponent_team.team_id), _ow_cl.slot_index) in _pvp_by_warrior
+                            and player_warrior_to_mid.get((_b_cl.opponent_team.team_id, _ow_cl.slot_index)) is not None):
                         try:
                             _pt_sub  = _cpt2()
                             _p_sub   = _rnd2.choice(_pt_sub.active_warriors)
@@ -662,7 +863,8 @@ def _run_turn(request_password, rerun_turn=None):
                     if mid != manager_id and mid.startswith("ai_")
                 ]
                 card = build_fight_card(player_team, opp_list, champion_state=champ_state,
-                                        global_used=_global_used)
+                                        global_used=_global_used,
+                                        global_matched_opponent_warriors=_global_matched_opponent_warriors)
             else:
                 # Non-AI: remap pre-built card so player_warrior objects point into
                 # the fresh player_team (ensures all in-place updates land on the
@@ -671,7 +873,7 @@ def _run_turn(request_password, rerun_turn=None):
                 _pre_pt, _pre_card = _fight_cards.get(manager_id, (None, []))
                 card = []
                 for _b in _pre_card:
-                    _fresh_pw = player_team.warrior_by_name(_b.player_warrior.name)
+                    _fresh_pw = player_team.warriors[_b.player_warrior.slot_index]
                     if _fresh_pw is None:
                         continue
                     card.append(_SF(
@@ -681,6 +883,7 @@ def _run_turn(request_password, rerun_turn=None):
                         opponent_team    = _b.opponent_team,
                         opponent_manager = _b.opponent_manager,
                         fight_type       = _b.fight_type,
+                        challenger_name  = _b.challenger_name,
                     ))
                 if not card:
                     # Fallback: build fresh card
@@ -690,7 +893,8 @@ def _run_turn(request_password, rerun_turn=None):
                         and real_mid_map.get(mid, mid) != this_real_mid
                     ]
                     card = build_fight_card(player_team, opp_list, champion_state=champ_state,
-                                            global_used=_global_used)
+                                            global_used=_global_used,
+                                            global_matched_opponent_warriors=_global_matched_opponent_warriors)
         except Exception as _card_err:
             import traceback; traceback.print_exc()
             print(f"  ERROR building fight card for {mname}: {_card_err} — skipping manager")
@@ -707,53 +911,60 @@ def _run_turn(request_password, rerun_turn=None):
         # reflects real fights, not double-counted perspectives.
         _capped_card = []
         for _bout in card:
-            _pw_team = getattr(_bout.player_team, "team_name", "?")
-            _ow_team = getattr(_bout.opponent_team, "team_name", "?")
+            # Use team_id instead of team_name to handle duplicate team names correctly
+            _pw_team_id = getattr(_bout.player_team, "team_id", 0)
+            _ow_team_id = getattr(_bout.opponent_team, "team_id", 0)
+            _pw_team_name = getattr(_bout.player_team, "team_name", "?")
+            _ow_team_name = getattr(_bout.opponent_team, "team_name", "?")
             _pw_name = _bout.player_warrior.name
             _ow_name = _bout.opponent.name
-            _pvp_rec = _pvp_by_warrior.get(_pw_name)
+            _pvp_rec = _pvp_by_warrior.get((int(player_team.team_id), _bout.player_warrior.slot_index))
             _is_pvp_mirror = (_pvp_rec is not None
-                              and _pvp_rec.get("canonical_pw") != _pw_name)
+                              and (_pvp_rec.get("canonical_pw_tid"), _pvp_rec.get("canonical_pw_slot")) != (int(player_team.team_id), _bout.player_warrior.slot_index))
             if _is_pvp_mirror:
                 # Mirror view of a P-vs-P already counted on the canonical side.
                 # Keep the bout (the result gets injected downstream) but do not
                 # increment team counts again.
                 _capped_card.append(_bout)
                 continue
-            _pw_count = _team_fight_count.get(_pw_team, 0)
-            _ow_count = _team_fight_count.get(_ow_team, 0)
-            _pw_would_cap = (_pw_team not in _FODDER_TEAMS and _pw_count >= 5)
-            _ow_would_cap = (_ow_team not in _FODDER_TEAMS and _ow_count >= 5)
+            _pw_count = _team_fight_count.get(_pw_team_id, 0)
+            _ow_count = _team_fight_count.get(_ow_team_id, 0)
+            _pw_is_npc = (_pw_team_id < 0)
+            _ow_is_npc = (_ow_team_id < 0)
+            _pw_would_cap = (not _pw_is_npc and _pw_count >= 5)
+            _ow_would_cap = (not _ow_is_npc and _ow_count >= 5)
             if _pw_would_cap or _ow_would_cap:
-                _who = _pw_team if _pw_would_cap else _ow_team
+                _who = _pw_team_name if _pw_would_cap else _ow_team_name
                 print(f"  5-FIGHT CAP: dropping {_pw_name} vs {_ow_name} "
                       f"— {_who} already at 5 fights")
                 continue
-            if _pw_team not in _FODDER_TEAMS:
-                _team_fight_count[_pw_team] = _pw_count + 1
-            if _ow_team not in _FODDER_TEAMS:
-                _team_fight_count[_ow_team] = _ow_count + 1
+            if not _pw_is_npc:
+                _team_fight_count[_pw_team_id] = _pw_count + 1
+            if not _ow_is_npc:
+                _team_fight_count[_ow_team_id] = _ow_count + 1
             _capped_card.append(_bout)
         card = _capped_card
 
         fight_logs, bouts = {}, []
         for bout in card:
-            pw  = bout.player_warrior
-            ow  = bout.opponent
+            pw    = bout.player_warrior
+            ow    = bout.opponent
+            w_key = (int(player_team.team_id), pw.slot_index)
 
             # ------------------------------------------------------------------
             # P-vs-P INJECTION: if pw was pre-fought in the pre-pass, inject
             # the stored result rather than running a second fight.
             # ------------------------------------------------------------------
-            _pvp = _pvp_by_warrior.get(pw.name)
+            _pvp = _pvp_by_warrior.get((int(player_team.team_id), pw.slot_index))
             if _pvp is not None:
                 result = _pvp["result"]
                 fid    = _pvp["fid"]
-                _is_canonical_pw = (pw.name == _pvp["canonical_pw"])
+                _is_canonical_pw = ((int(player_team.team_id), pw.slot_index) == (_pvp["canonical_pw_tid"], _pvp["canonical_pw_slot"]))
                 if _is_canonical_pw:
                     opp_name    = _pvp["canonical_ow"]
                     opp_race    = _pvp["ow_race"]
                     opp_team    = _pvp["ow_team"]
+                    opp_team_id = _pvp["ow_team_id"]
                     opp_manager = _pvp["ow_manager"]
                     opp_tf      = _pvp["ow_trained_dict"]["total_fights"]
                     trained_d   = _pvp["pw_trained_dict"]
@@ -762,6 +973,7 @@ def _run_turn(request_password, rerun_turn=None):
                     opp_name    = _pvp["canonical_pw"]
                     opp_race    = _pvp["pw_race"]
                     opp_team    = _pvp["pw_team"]
+                    opp_team_id = _pvp["pw_team_id"]
                     opp_manager = _pvp["pw_manager"]
                     opp_tf      = _pvp["pw_trained_dict"]["total_fights"]
                     trained_d   = _pvp["ow_trained_dict"]
@@ -799,15 +1011,20 @@ def _run_turn(request_password, rerun_turn=None):
                 # Store the correct perspective for each manager.
                 # canonical_pw is warrior_a — their manager gets the forward narrative
                 # (own training shown specifically, opponent shown as "Skill").
-                # The opposing manager (canonical_ow) needs the mirror narrative.
+                # The opposing manager (canonical_ow) needs the mirror narrative WITH the
+                # opponent's strategy swapped in.
                 if _is_canonical_pw:
                     fight_logs[str(fid)] = result.narrative
                 else:
+                    # When pw is the canonical_ow, pw is from the opponent's team and ow is from the player's team.
+                    # So: warrior_a (canonical_pw) = ow, warrior_b (canonical_ow) = pw
                     fight_logs[str(fid)] = _make_mirror_narrative(
                         result.narrative,
                         result.training_results,
                         _pvp["canonical_pw"],
                         _pvp["canonical_ow"],
+                        warrior_a=ow,
+                        warrior_b=pw,
                     )
 
                 pw.update_popularity(won=pw_won)
@@ -826,17 +1043,29 @@ def _run_turn(request_password, rerun_turn=None):
                 pw.fight_history.append({
                     "turn": turn_num, "opponent_name": opp_name,
                     "opponent_race": opp_race, "opponent_team": opp_team,
+                    "opponent_team_id": opp_team_id,
                     "result": pwr, "minutes": result.minutes_elapsed, "fight_id": fid,
                     "warrior_slain": slain, "opponent_slain": killed, "is_kill": killed,
                     "fight_type": fight_type_to_record,
                 })
                 if slain:
-                    player_team.kill_warrior(pw, killed_by=opp_name, killer_fights=opp_tf)
+                    player_team.kill_warrior(pw, killed_by=opp_name, killer_fights=opp_tf,
+                                             fight_type=fight_type_to_record)
                     player_team.auto_upload_enabled = False
+                    # Archive history for slain warrior in pre-fought PvP
+                    try:
+                        from save import archive_warrior_history
+                        archive_warrior_history(player_team.team_name, pw)
+                        print(f"  Graveyard file written for {pw.name} (pre-fought PvP).")
+                    except Exception as _ge:
+                        print(f"  WARNING: Could not write graveyard file for {pw.name} (pre-fought PvP): {_ge}")
                 opp_trained_d = _pvp["ow_trained_dict"] if _is_canonical_pw else _pvp["pw_trained_dict"]
+                if rerun_turn:
+                    print(f"  [RE-RUN PVP] {pw.name} vs {opp_name} (pre-fought, result={pwr})")
                 bouts.append({
                     "warrior_name": pw.name, "opponent_name": opp_name,
                     "opponent_race": opp_race, "opponent_team": opp_team,
+                    "opponent_team_id": opp_team_id,
                     "opponent_manager": opp_manager, "fight_type": fight_type_to_record,
                     "result": pwr.upper(), "minutes": result.minutes_elapsed, "fight_id": fid,
                     "warrior_slain": slain, "opponent_slain": killed,
@@ -845,7 +1074,11 @@ def _run_turn(request_password, rerun_turn=None):
                     "opponent_losses": opp_trained_d.get("losses", 0),
                     "opponent_kills":  opp_trained_d.get("kills",  0),
                     "training": result.training_results.get(training_key, []),
+                    "challenger_name": getattr(bout, 'challenger_name', None),
                 })
+                # [Advanced Logging] Update tracking status to reflect successful injection
+                if w_key in exec_log["warriors"]:
+                    exec_log["warriors"][w_key]["status"] = "PROCESSED (Injected PvP)"
                 continue  # skip the normal run_fight path below
 
             _dbg_logger = None
@@ -857,16 +1090,31 @@ def _run_turn(request_password, rerun_turn=None):
                 _dbg_logger.fight_id   = fid
                 _dbg_logger.turn_num   = turn_num
                 _dbg_logger.debug_team = _dbg_mgr_name
-            result = run_fight(
-                pw, ow,
-                team_a_name    = player_team.team_name,
-                team_b_name    = bout.opponent_team.team_name,
-                manager_a_name = mname,
-                manager_b_name = bout.opponent_manager,
-                is_monster_fight=(bout.opponent_team.team_name == "The Monsters"),
-                challenger_name = getattr(bout, 'challenger_name', None),
-                debug_logger   = _dbg_logger,
-            )
+            try:
+                result = run_fight(
+                    pw, ow,
+                    team_a_name    = player_team.team_name,
+                    team_b_name    = bout.opponent_team.team_name,
+                    manager_a_name = mname,
+                    manager_b_name = bout.opponent_manager,
+                    is_monster_fight=(getattr(bout.opponent_team, "team_id", 0) == -1),
+                    fight_type      = bout.fight_type,
+                    challenger_name = getattr(bout, 'challenger_name', None),
+                    debug_logger   = _dbg_logger,
+                )
+            except Exception as _run_err:
+                print(f"  ERROR: run_fight failed for {pw.name} vs {ow.name}: {_run_err}")
+                if w_key in exec_log["warriors"]:
+                    exec_log["warriors"][w_key].update({"status": "FAILED", "error": str(_run_err)})
+                continue
+
+            # [Advanced Logging] Update tracking status for fresh fight
+            if w_key in exec_log["warriors"]:
+                exec_log["warriors"][w_key].update({
+                    "status": "PROCESSED", "type": bout.fight_type,
+                    "opponent": ow.name, "fid": fid or "?"
+                })
+
             # Inject scout-attendance flavor text if any manager is watching either warrior
             try:
                 from save import get_all_scouted_warriors
@@ -896,13 +1144,18 @@ def _run_turn(request_password, rerun_turn=None):
             # Persist fight narrative for any scouted warrior in this bout
             try:
                 for _w in (pw, ow):
-                    if _w.name in scouted:
-                        _store_scout_narrative(_w.name, result.narrative, turn_num)
+                    _tid_sn = player_team.team_id if _w is pw else bout.opponent_team.team_id
+                    if (_tid_sn, _w.name) in scouted:
+                        _store_scout_narrative(_tid_sn, _w.name, result.narrative, turn_num)
             except Exception:
                 pass
 
             if fid is None:
                 fid = _next_fid(cfg)
+            
+            # [Advanced Logging] Ensure fid is recorded
+            if w_key in exec_log["warriors"]:
+                exec_log["warriors"][w_key]["fid"] = fid
             if _dbg_logger and _dbg_turn_dir:
                 _log_path = os.path.join(_dbg_turn_dir, f"fight_{fid:05d}_{pw.name}_vs_{ow.name}.txt")
                 try:
@@ -944,13 +1197,21 @@ def _run_turn(request_password, rerun_turn=None):
             pw.fight_history.append({
                 "turn": turn_num, "opponent_name": ow.name,
                 "opponent_race": ow.race.name, "opponent_team": bout.opponent_team.team_name,
+                "opponent_team_id": bout.opponent_team.team_id,
                 "result": pwr, "minutes": result.minutes_elapsed, "fight_id": fid,
                 "warrior_slain": slain, "opponent_slain": killed, "is_kill": killed,
                 "fight_type": fight_type_to_record,
             })
             if slain:
-                player_team.kill_warrior(pw, killed_by=ow.name, killer_fights=ow.total_fights)
+                player_team.kill_warrior(pw, killed_by=ow.name, killer_fights=ow.total_fights,
+                                         fight_type=fight_type_to_record)
                 player_team.auto_upload_enabled = False
+                try:
+                    from save import archive_warrior_history
+                    archive_warrior_history(player_team.team_name, pw)
+                    print(f"  Graveyard file written for {pw.name}.")
+                except Exception as _ge:
+                    print(f"  WARNING: Could not write graveyard file for {pw.name}: {_ge}")
 
             # Monster ascension: if the player warrior slew a monster, they
             # are absorbed into The Monsters roster (replacing the fallen
@@ -965,9 +1226,12 @@ def _run_turn(request_password, rerun_turn=None):
                 ascended = True
                 print(f"  !!! {pw.name} has SLAIN a monster and joins The Monsters! !!!")
 
+            if rerun_turn and bout.fight_type == "standard":
+                print(f"  [RE-RUN FIGHT] {pw.name} vs {ow.name} (fresh fight, result={pwr})")
             bouts.append({
                 "warrior_name": pw.name, "opponent_name": ow.name,
                 "opponent_race": ow.race.name, "opponent_team": bout.opponent_team.team_name,
+                "opponent_team_id": bout.opponent_team.team_id,
                 "opponent_manager": bout.opponent_manager, "fight_type": fight_type_to_record,
                 "result": pwr.upper(), "minutes": result.minutes_elapsed, "fight_id": fid,
                 "warrior_slain": slain, "opponent_slain": killed,
@@ -976,6 +1240,7 @@ def _run_turn(request_password, rerun_turn=None):
                 "opponent_losses": ow.losses,
                 "opponent_kills":  ow.kills,
                 "training": result.training_results.get("warrior_a", []),
+                "challenger_name": getattr(bout, 'challenger_name', None),
             })
 
             # MIRROR BOUT: when ow belongs to a different AI team, register
@@ -994,6 +1259,7 @@ def _run_turn(request_password, rerun_turn=None):
                         "opponent_name":    pw.name,
                         "opponent_race":    pw.race.name,
                         "opponent_team":    player_team.team_name,
+                        "opponent_team_id": player_team.team_id,
                         "opponent_manager": mname,
                         "fight_type":       fight_type_to_record,
                         "result":           "LOSS" if pw_won else "WIN",
@@ -1006,12 +1272,14 @@ def _run_turn(request_password, rerun_turn=None):
                         "opponent_losses":  pw.losses,
                         "opponent_kills":   pw.kills,
                         "training":         result.training_results.get("warrior_b", []),
+                        "challenger_name":  getattr(bout, 'challenger_name', None),
                         "_fight_log":       _ow_narr,
                     }
                     _ai_mirror_bouts.setdefault(_ow_mid, []).append(_mirror)
                     ow.fight_history.append({
                         "turn": turn_num, "opponent_name": pw.name,
                         "opponent_race": pw.race.name, "opponent_team": player_team.team_name,
+                        "opponent_team_id": player_team.team_id,
                         "result": "loss" if pw_won else "win",
                         "minutes": result.minutes_elapsed, "fight_id": fid,
                         "warrior_slain": killed, "opponent_slain": slain, "is_kill": slain,
@@ -1022,6 +1290,19 @@ def _run_turn(request_password, rerun_turn=None):
 
         # Track the last turn this team actively participated in
         player_team.last_turn_ran = turn_num
+
+        # REGISTRY SYNC: Ensure this team ID is officially in the manager's
+        # manifest. This fixes cases where registry data was lost or out of sync.
+        if not manager_id.startswith("ai_"):
+            _real_mid = upload.get("manager_id", manager_id.split("_team")[0])
+            with _lock:
+                _m_live = _load_managers()
+                if _real_mid in _m_live:
+                    _t_ids = _m_live[_real_mid].setdefault("team_ids", [])
+                    _tid_raw = player_team.team_id
+                    if _tid_raw and str(_tid_raw) not in [str(x) for x in _t_ids]:
+                        _t_ids.append(int(_tid_raw) if str(_tid_raw).isdigit() else _tid_raw)
+                        _save_managers(_m_live)
 
         # Create two versions:
         # 1. team_slim: for server-side storage (strip fight_history to save space)
@@ -1185,6 +1466,8 @@ def _run_turn(request_password, rerun_turn=None):
             cfg["current_turn"] = turn_num + 1
         else:
             cfg["turn_state"] = "results_ready"
+            cfg["rerun_count"] = cfg.get("rerun_count", 0) + 1
+            cfg["rerun_turn"]  = rerun_turn
         import datetime as _dt3
         _completed_at = _dt3.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if cfg.get("schedule_last_run_turn") == turn_num:
@@ -1263,12 +1546,18 @@ def _run_turn(request_password, rerun_turn=None):
                 "auto_uploaded": True,
             })
 
+    # [Advanced Logging] Finalize and save execution tracking log
+    for k, info in exec_log["warriors"].items():
+        if info["status"] == "QUEUED":
+            info["status"] = "SKIPPED (No Match)"
+    _write_execution_log(turn_num, exec_log)
+
     # Generate arena newsletter for this turn
     newsletter_text = ""
     try:
         import sys as _sys; _sys.path.insert(0, BASE_DIR)
         from newsletter import generate_newsletter, _update_champion
-        from save import load_champion_state, save_champion_state, load_newsletter_voice
+        from save import load_champion_state, save_champion_state
         import datetime as _dt
 
         # Build team objects from result data (non-AI only for newsletter)
@@ -1315,6 +1604,7 @@ def _run_turn(request_password, rerun_turn=None):
                     deaths_nl.append({
                         "name"     : wname,
                         "team"     : res.get("team_name","?"),
+                        "team_id"  : res.get("team_id", 0),
                         "w"        : wd.get("wins",  b.get("wins",  0)),
                         "l"        : wd.get("losses", b.get("losses", 0)),
                         "k"        : wd.get("kills",  b.get("kills",  0)),
@@ -1331,6 +1621,7 @@ def _run_turn(request_password, rerun_turn=None):
                     deaths_nl.append({
                         "name"     : oname,
                         "team"     : b.get("opponent_team", "?"),
+                        "team_id"  : b.get("opponent_team_id", 0),
                         "w"        : b.get("opponent_wins",   0),
                         "l"        : b.get("opponent_losses", 0),
                         "k"        : b.get("opponent_kills",  0),
@@ -1352,9 +1643,10 @@ def _run_turn(request_password, rerun_turn=None):
                     )
                     bout.opponent       = type("W",(),{"name":b.get("opponent_name","?"),"race":type("R",(),{"name":"Human"})()})()
                     bout.player_team    = t
-                    bout.opponent_team  = type("T",(),{"team_name":b.get("opponent_team","?"),"team_id":0})()
+                    bout.opponent_team  = type("T",(),{"team_name":b.get("opponent_team","?"),"team_id":b.get("opponent_team_id", 0)})()
                     bout.opponent_manager = b.get("opponent_manager","?")
                     bout.fight_type     = b.get("fight_type","rivalry")
+                    bout.challenger_name = b.get("challenger_name")
                     pw_won = b.get("result","LOSS")=="WIN"
                     bout.result         = type("R",(),{
                         "winner"       : bout.player_warrior if pw_won else bout.opponent,
@@ -1408,7 +1700,6 @@ def _run_turn(request_password, rerun_turn=None):
                                                          prev_champion_name=prev_champion_name)
         save_champion_state(champ_state)
 
-        voice = load_newsletter_voice()
         date_str = _dt.date.today().strftime("%m/%d/%Y")
         newsletter_text = generate_newsletter(
             turn_num           = turn_num,
@@ -1416,7 +1707,6 @@ def _run_turn(request_password, rerun_turn=None):
             teams              = nl_teams,
             deaths             = deaths_nl,
             champion_state     = champ_state,
-            voice              = voice,
             processed_date     = date_str,
             is_new_champion    = is_new_champion,
         )
@@ -1445,9 +1735,10 @@ def _filter_warrior_for_client(warrior_dict: dict, cfg: dict) -> dict:
     # Remove luck factor if flag is off
     if not cfg.get("show_luck_factor", False):
         w.pop("luck", None)
-    # Remove favorite weapon if flag is off  
-    if not cfg.get("show_favorite_weapon", False):
-        w.pop("favorite_weapon", None)
+    # favorite_weapon is intentionally NOT stripped here.
+    # Stripping it caused the field to be absent from client uploads, triggering
+    # assign_favorite_weapon() on every turn re-load — changing the weapon each turn.
+    # The client UI already conditionally hides it via S.league.flags.show_favorite_weapon.
     return w
 
 
@@ -1584,17 +1875,27 @@ def _admin_page():
         )
     else:
         rerun_section = ""
-    # Manager options for delete dropdown
+
+    # Dropdown options for Admin actions
     manager_options = ""
     for mid, mgr in managers.items():
         manager_options += f'<option value="{mid}">{mgr["manager_name"]} (ID: {mid})</option>'
+
+    from save import list_saved_teams
+    # Create name -> ID map for filtering teams in JS
+    name_to_id = {m["manager_name"]: mid for mid, m in managers.items()}
+    team_options = ""
+    for t in sorted(list_saved_teams(), key=lambda x: x["team_id"]):
+        mid = name_to_id.get(t["manager_name"], "Unknown")
+        team_options += f'<option value="{t["team_id"]}" data-mid="{mid}">{t["team_name"]} (ID: {t["team_id"]}, Manager: {t["manager_name"]})</option>'
+    team_options_json = json.dumps(team_options)
 
     _dbg_mid = cfg.get("admin_debug_manager_id", "")
     _dbg_display = managers.get(_dbg_mid, {}).get("manager_name", "None (disabled)") if _dbg_mid else "None (disabled)"
 
     return f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BLOODSPIRE League — Admin</title>
+<title>The Agony Amphitheatre League — Admin v{SERVER_VERSION}</title>
 <style>
  body{{font:13px Tahoma,Arial,sans-serif;background:#d4d0c8;margin:0}}
  .bar{{background:#000080;color:#fff;padding:6px 14px;font-weight:bold;font-size:15px;
@@ -1620,8 +1921,33 @@ def _admin_page():
  .prog-bar{{background:#000080;height:100%;transition:width .4s}}
  .prog-lbl{{position:absolute;top:0;left:0;right:0;text-align:center;font-size:11px;
             line-height:18px;color:#fff;mix-blend-mode:difference}}
+ .tabs{{display:flex;background:#d4d0c8;padding:5px 10px 0;border-bottom:1px solid #808080;gap:2px}}
+ .tab-btn{{background:#d4d0c8;border:2px solid;border-color:#fff #808080 #808080 #fff;
+          border-bottom:none;padding:6px 16px;font-weight:bold;cursor:pointer;border-radius:4px 4px 0 0;font-size:11px}}
+ .tab-btn.active{{background:#fff;border-bottom:2px solid #fff;margin-bottom:-2px;z-index:10}}
+ .tab-content{{display:none;padding:10px;flex-wrap:wrap;gap:10px}}
+ .tab-content.active{{display:flex}}
 </style></head><body>
-<div class="bar">⚔ BLOODSPIRE League — Admin
+<script>
+function openTab(evt, tabId) {{
+  const contents = document.getElementsByClassName("tab-content");
+  for (let i = 0; i < contents.length; i++) {{
+    contents[i].classList.remove("active");
+  }}
+  const buttons = document.getElementsByClassName("tab-btn");
+  for (let i = 0; i < buttons.length; i++) {{
+    buttons[i].classList.remove("active");
+  }}
+  const tabElement = document.getElementById(tabId);
+  if (tabElement) {{
+    tabElement.classList.add("active");
+  }}
+  if (evt && evt.target) {{
+    evt.target.classList.add("active");
+  }}
+}}
+</script>
+<div class="bar">⚔ THE AGONY AMPHITHEATRE — Admin <span style="margin-left:8px; opacity:0.7;">v{SERVER_VERSION}</span>
  <span>Turn {turn}</span>
  <span class="state">{state_display}</span>
  <span id="sched-top-badge" style="display:none;background:#060;color:#fff;padding:2px 8px;border-radius:3px;font-size:10px;margin-left:8px;vertical-align:middle;border:1px solid #0a0">AUTO-SCHEDULE ON</span>
@@ -1629,9 +1955,18 @@ def _admin_page():
 </div>
 <div id="msg"></div>
 {'<div style="background:#0a3;color:#fff;padding:10px 18px;font-size:13px;border-bottom:2px solid #080;display:flex;align-items:center;gap:12px"><span style="font-size:18px">✓</span><span><strong>Auto-scheduled turn ' + str(last_sched_turn) + ' completed</strong> — ' + last_sched_result.replace("Completed at ","") + '</span></div>' if auto_completed else ''}
-<div class="wrap">
+
+<div class="tabs">
+ <button class="tab-btn active" onclick="openTab(event, 'tab-ops')">⚔ OPERATIONS</button>
+ <button class="tab-btn" onclick="openTab(event, 'tab-mgmt')">👥 MANAGEMENT</button>
+ <button class="tab-btn" onclick="openTab(event, 'tab-reports')">📊 REPORTS</button>
+ <button class="tab-btn" onclick="openTab(event, 'tab-maint')">🔧 MAINTENANCE</button>
+</div>
+
+<!-- ====================== OPERATIONS TAB ====================== -->
+<div id="tab-ops" class="tab-content active">
  <div class="panel" style="min-width:260px;max-width:340px">
-  <h3>Run Turn {turn}</h3>
+  <h3>▶ Run Turn {turn}</h3>
   <p style="font-size:11px;color:#555;margin:0 0 6px">
    {len(uploads)} of {len(managers)} players uploaded.<br>
    {ai_count} AI teams auto-included. Players who haven't uploaded are skipped.
@@ -1650,17 +1985,199 @@ def _admin_page():
   <h3>Upload Status — Turn {turn}</h3>
   <table><tr><th>Manager</th><th>Status</th></tr>{urows}</table>
  </div>
- <div class="panel" style="min-width:220px;max-width:280px">
-  <h3>Arena Reset</h3>
-  <p style="font-size:11px;color:#800;margin:0 0 8px">
-   ⚠ Full wipe: deletes ALL turn history, fight records, standings,<br>
-   manager registrations, and teams. AI teams are regenerated.<br>
-   Every player will need to re-register after this.
+ <div class="panel" style="min-width:260px;max-width:380px">
+  <h3>📅 Turn Schedule</h3>
+  <p style="font-size:11px;margin:0 0 8px;color:#555">
+   Automatically run turns up to 7 times per week.<br>
+   Add one slot per desired run day. You can still run turns manually at any time.
   </p>
-  <button class="danger" onclick="resetArena()">🗑 Reset Arena to Turn 1</button>
+  <label style="display:block;margin:6px 0">
+   <input type="checkbox" id="sched-enabled" onchange="toggleSchedule()" style="cursor:pointer" {'checked' if cfg.get('schedule_enabled') else ''}>
+   <span style="cursor:pointer;user-select:none">Enable auto-schedule</span>
+  </label>
+  <div id="sched-details" style="margin-top:10px;padding-left:2px">
+   <div id="sched-slots" style="display:flex;flex-direction:column;gap:5px">
+{_render_schedule_slots(cfg.get('schedule_slots', []))}   </div>
+   <button id="sched-add-btn" onclick="addSchedSlot()" style="margin-top:6px;font-size:11px;padding:2px 8px" {'disabled' if len(cfg.get('schedule_slots',[])) >= 7 else ''}>+ Add time slot</button>
+   <div style="margin-top:8px;font-size:10px;color:#888" id="sched-next"></div>
+  </div>
  </div>
+</div>
+
+<!-- ====================== MANAGEMENT TAB ====================== -->
+<div id="tab-mgmt" class="tab-content">
+ <div class="panel" style="min-width:300px;">
+  <h3 style="color:#c00;">🗑 Delete Manager</h3>
+  <p style="color:#c00;font-size:12px;margin-bottom:10px;">
+   ⚠ This will delete the selected manager's account and their uploads for the current turn. Their teams will remain in the system and can be accessed if they re-register.
+  </p>
+  <div style="margin-bottom:10px;">
+   <label style="display:block;margin-bottom:4px;">Select Manager:</label>
+   <select id="delete-manager-select" style="width:100%;padding:5px;border:2px inset #808080;font-size:13px;">
+    <option value="">-- Select a manager to delete --</option>
+    {manager_options}
+   </select>
+  </div>
+  <button onclick="deleteSelectedManager()" class="danger" style="width:100%;padding:10px;font-size:13px;">
+   DELETE SELECTED MANAGER
+  </button>
+ </div>
+ <div class="panel" style="min-width:300px;">
+  <h3>✎ Rename Manager</h3>
+  <p style="font-size:12px;margin-bottom:10px;color:#555;">
+   Correct a manager's display name without deleting their account, teams, or standings.
+  </p>
+  <div style="margin-bottom:8px;">
+   <label style="display:block;margin-bottom:4px;">Select Manager:</label>
+   <select id="rename-manager-select" style="width:100%;padding:5px;border:2px inset #808080;font-size:13px;">
+    <option value="">-- Select a manager --</option>
+    {manager_options}
+   </select>
+  </div>
+  <div style="margin-bottom:10px;">
+   <label style="display:block;margin-bottom:4px;">New Name:</label>
+   <input type="text" id="rename-manager-name" placeholder="Enter new manager name"
+          style="width:100%;padding:5px;box-sizing:border-box;border:2px inset #808080;font-size:13px;">
+  </div>
+  <button onclick="renameSelectedManager()" style="width:100%;padding:8px;font-size:13px;">
+   RENAME MANAGER
+  </button>
+ </div>
+ <div class="panel" style="min-width:300px;">
+  <h3>💾 Download Manager Files</h3>
+  <p style="font-size:12px;margin-bottom:10px;color:#555;">
+   Download a manager's team files and turn results as a ZIP. Use this to manually send files to a manager who isn't receiving them.
+  </p>
+  <div style="margin-bottom:8px;">
+   <label style="display:block;margin-bottom:4px;">Select Manager:</label>
+   <select id="download-manager-select" style="width:100%;padding:5px;border:2px inset #808080;font-size:13px;">
+    <option value="">-- Select a manager --</option>
+    {manager_options}
+   </select>
+  </div>
+  <button onclick="downloadManagerFiles()" style="width:100%;padding:8px;font-size:13px;">
+   DOWNLOAD FILES AS ZIP
+  </button>
+ </div>
+ <div class="panel" style="min-width:300px;">
+  <h3 style="color:#c00;">🗑 Delete Team</h3>
+  <p style="color:#c00;font-size:12px;margin-bottom:10px;">
+   ⚠ Permanently delete a team from the server. The manager will be notified on next login and the team will be removed from their client.
+  </p>
+  <div style="margin-bottom:8px;">
+   <label style="display:block;margin-bottom:4px;">Select Manager:</label>
+   <select id="delete-team-manager-select" style="width:100%;padding:5px;border:2px inset #808080;font-size:13px;" onchange="updateDeleteTeamOptions()">
+    <option value="">-- Select a manager --</option>
+    {manager_options}
+   </select>
+  </div>
+  <div style="margin-bottom:10px;">
+   <label style="display:block;margin-bottom:4px;">Select Team:</label>
+   <select id="delete-team-select" style="width:100%;padding:5px;border:2px inset #808080;font-size:13px;">
+    <option value="">-- Select a team --</option>
+   </select>
+  </div>
+  <button onclick="deleteSelectedTeam()" class="danger" style="width:100%;padding:10px;font-size:13px;">
+   DELETE TEAM PERMANENTLY
+  </button>
+ </div>
+ <div class="panel" style="min-width:300px;">
+  <h3>✎ Rename Team</h3>
+  <p style="font-size:12px;margin-bottom:10px;color:#555;">
+   Change a team's name. Useful for fixing duplicate name conflicts or typos.
+  </p>
+  <div style="margin-bottom:8px;">
+   <label style="display:block;margin-bottom:4px;">Select Team:</label>
+   <select id="rename-team-select" style="width:100%;padding:5px;border:2px inset #808080;font-size:13px;">
+    <option value="">-- Select a team --</option>
+    {team_options}
+   </select>
+  </div>
+  <div style="margin-bottom:10px;">
+   <label style="display:block;margin-bottom:4px;">New Name:</label>
+   <input type="text" id="rename-team-name" placeholder="Enter new team name"
+          style="width:100%;padding:5px;box-sizing:border-box;border:2px inset #808080;font-size:13px;">
+  </div>
+  <button onclick="renameSelectedTeam()" style="width:100%;padding:8px;font-size:13px;">
+   RENAME TEAM
+  </button>
+ </div>
+</div>
+
+<!-- ====================== REPORTS TAB ====================== -->
+<div id="tab-reports" class="tab-content">
+ <div class="panel" style="min-width:400px;max-width:800px">
+  <h3>📋 Warriors Report</h3>
+  <p style="font-size:11px;margin:0 0 8px;color:#555">
+   Complete report of all warriors, their teams, managers, IDs, and roster positions.
+  </p>
+  <button onclick="loadWarriorsReport()" style="margin-bottom:8px">📋 Generate Warriors Report</button>
+  <div style="margin-bottom:8px;display:flex;gap:8px;font-size:11px">
+   <label>Export as:</label>
+   <button onclick="exportWarriorsAsCSV()" style="padding:2px 8px;font-size:11px" id="csv-export-btn" disabled>CSV</button>
+   <button onclick="exportWarriorsAsJSON()" style="padding:2px 8px;font-size:11px" id="json-export-btn" disabled>JSON</button>
+  </div>
+  <div id="warriors-container" style="border:1px solid #ccc;height:300px;overflow-y:auto;background:#f9f9f9;font-size:10px;font-family:monospace;">
+   <div style="padding:8px;color:#999;">Click "Generate Warriors Report" to load...</div>
+  </div>
+ </div>
+ <div class="panel" style="min-width:400px;max-width:900px">
+  <h3>📥 Uploaded Warriors by Manager</h3>
+  <p style="font-size:11px;margin:0 0 8px;color:#555">
+   View warriors currently uploaded for this turn, organized by manager. Filter by manager or view all at once.
+  </p>
+  <div style="margin-bottom:8px;display:flex;gap:8px;font-size:11px">
+   <label style="display:flex;align-items:center;">Manager:</label>
+   <select id="manager-filter-select" style="padding:4px;border:2px inset #808080;font-size:12px;flex:1;max-width:300px">
+    <option value="ALL">-- All Managers --</option>
+   </select>
+   <button onclick="loadUploadedWarriors()" style="padding:4px 8px;font-size:11px">📥 Load</button>
+  </div>
+  <div style="margin-bottom:8px;display:flex;gap:8px;font-size:11px">
+   <label>Export as:</label>
+   <button onclick="exportUploadedAsCSV()" style="padding:2px 8px;font-size:11px" id="uploaded-csv-btn" disabled>CSV</button>
+   <button onclick="exportUploadedAsJSON()" style="padding:2px 8px;font-size:11px" id="uploaded-json-btn" disabled>JSON</button>
+  </div>
+  <div id="uploaded-warriors-container" style="border:1px solid #ccc;height:300px;overflow-y:auto;background:#f9f9f9;font-size:10px;font-family:monospace;">
+   <div style="padding:8px;color:#999;">Select a manager and click "Load" to view their uploaded warriors...</div>
+  </div>
+ </div>
+ <div class="panel" style="min-width:400px;max-width:600px">
+  <h3>📊 Activity Log</h3>
+  <p style="font-size:11px;margin:0 0 8px;color:#555">
+   View upload and download activity from managers.
+  </p>
+  <div style="margin-bottom:8px;display:flex;gap:8px;font-size:11px">
+   <label>Filter by action:</label>
+   <select id="activity-action-filter" style="width:120px;padding:2px;font-size:11px">
+    <option value="">(all)</option>
+    <option value="upload">Upload</option>
+    <option value="download">Download</option>
+   </select>
+   <label style="margin-left:8px;">Entries:</label>
+   <input type="number" id="activity-limit" value="50" min="10" max="500" style="width:50px;padding:2px;font-size:11px">
+   <button onclick="loadActivityLog()" style="padding:2px 8px;font-size:11px">Load</button>
+  </div>
+  <div id="activity-log-container" style="border:1px solid #ccc;height:250px;overflow-y:auto;background:#f9f9f9;font-size:10px;font-family:monospace;">
+   <div style="padding:8px;color:#999;">Loading...</div>
+  </div>
+ </div>
+ <div class="panel" style="min-width:300px;max-width:500px">
+  <h3>🔍 Team Validation Scan</h3>
+  <p style="font-size:11px;margin:0 0 8px;color:#555">
+   Checks every team file on disk for "phantom" warriors (roster size != 5).
+  </p>
+  <button onclick="validateTeams()">🔍 Scan All Teams</button>
+  <div id="validation-results" style="margin-top:10px;border:1px solid #ccc;height:200px;overflow-y:auto;background:#f9f9f9;font-size:11px;font-family:monospace;">
+   <div style="padding:8px;color:#999;">Ready to scan...</div>
+  </div>
+ </div>
+</div>
+
+<!-- ====================== MAINTENANCE TAB ====================== -->
+<div id="tab-maint" class="tab-content">
  <div class="panel" style="min-width:220px;max-width:320px">
-  <h3>Feature Flags (Testing)</h3>
+  <h3>⚙️ Feature Flags (Testing)</h3>
   <p style="font-size:11px;margin:0 0 10px;color:#555">Enable debug visibility for testing mechanics (hidden by default).</p>
   <label style="display:block;margin:6px 0"><input type="checkbox" id="fav-wpn" data-flag="show_favorite_weapon" style="cursor:pointer" {'checked' if cfg.get('show_favorite_weapon') else ''}>
    <span style="cursor:pointer;user-select:none">Show favorite weapon flavor</span></label>
@@ -1679,43 +2196,8 @@ def _admin_page():
    Changes apply on next turn run.
   </div>
  </div>
- <div class="panel" style="min-width:260px;max-width:380px">
-  <h3>Turn Schedule</h3>
-  <p style="font-size:11px;margin:0 0 8px;color:#555">
-   Automatically run turns up to 7 times per week.<br>
-   Add one slot per desired run day. You can still run turns manually at any time.
-  </p>
-  <label style="display:block;margin:6px 0">
-   <input type="checkbox" id="sched-enabled" onchange="toggleSchedule()" style="cursor:pointer" {'checked' if cfg.get('schedule_enabled') else ''}>
-   <span style="cursor:pointer;user-select:none">Enable auto-schedule</span>
-  </label>
-  <div id="sched-details" style="margin-top:10px;padding-left:2px">
-   <div id="sched-slots" style="display:flex;flex-direction:column;gap:5px">
-{_render_schedule_slots(cfg.get('schedule_slots', []))}   </div>
-   <button id="sched-add-btn" onclick="addSchedSlot()" style="margin-top:6px;font-size:11px;padding:2px 8px" {'disabled' if len(cfg.get('schedule_slots',[])) >= 7 else ''}>+ Add time slot</button>
-   <div style="margin-top:8px;font-size:10px;color:#888" id="sched-next"></div>
-  </div>
- </div>
- <!-- ====================== DELETE MANAGER PANEL ====================== -->
- <div class="panel" style="min-width:300px;">
-  <h3 style="color:#c00;">Delete Manager (DANGER ZONE)</h3>
-  <p style="color:#c00;font-size:12px;margin-bottom:10px;">
-   ⚠ This will permanently delete the selected manager and all their uploaded data for the current turn.
-  </p>
-  <div style="margin-bottom:10px;">
-   <label style="display:block;margin-bottom:4px;">Select Manager:</label>
-   <select id="delete-manager-select" style="width:100%;padding:5px;border:2px inset #808080;font-size:13px;">
-    <option value="">-- Select a manager to delete --</option>
-    {manager_options}
-   </select>
-  </div>
-  <button onclick="deleteSelectedManager()" class="danger" style="width:100%;padding:10px;font-size:13px;">
-   DELETE SELECTED MANAGER
-  </button>
- </div>
- <!-- ====================== COMBAT DEBUG LOGGING ====================== -->
  <div class="panel" style="min-width:260px;max-width:340px">
-  <h3>Combat Debug Logging</h3>
+  <h3>🔍 Combat Debug Logging</h3>
   <p style="font-size:11px;margin:0 0 8px;color:#555">
    Select a manager's team to generate verbose fight logs.<br>
    Every fight involving their warriors produces a detailed breakdown<br>
@@ -1731,6 +2213,22 @@ def _admin_page():
   </select><br>
   <button onclick="setDebugTeam()" style="margin-top:6px">💾 Set Debug Team</button>
  </div>
+ <div class="panel" style="min-width:220px;max-width:280px">
+  <h3>⚠️ Arena Reset</h3>
+  <p style="font-size:11px;color:#800;margin:0 0 8px">
+   ⚠ Full wipe: deletes ALL turn history, fight records, standings,<br>
+   manager registrations, and teams. AI teams are regenerated.<br>
+   Every player will need to re-register after this.
+  </p>
+  <button class="danger" onclick="resetArena()">🗑 Reset Arena to Turn 1</button>
+  <div style="margin-top:12px;border-top:1px solid #ccc;padding-top:8px">
+   <p style="font-size:11px;color:#840;margin:0 0 8px">
+    Revert Progress: keeps accounts and teams but resets all records,<br>
+    skills, and attribute gains back to Turn 1 baseline.
+   </p>
+   <button onclick="resetProgress()" style="color:#840;border-color:#840">↺ Revert All to Turn 1</button>
+  </div>
+ </div>
 </div>
 
 <script>
@@ -1738,7 +2236,15 @@ let _pollTimer=null;
 let _isNavigating=false;  // prevents beforeunload from killing server on auto-reload
 let _seenRunning=false;   // ensures poll only fires completion after turn actually started
 
-// Existing functions (runTurn, rerunTurn, resetArena, etc.)
+// Tab switching function is defined in an inline script tag near the top of the body
+
+function _abortPoll(msg){{
+ stopPoll();
+ document.getElementById('prog-wrap').style.display='none';
+ const hint=msg.toLowerCase().includes('already')
+  ?' — Click 🔓 to unlock if the previous run crashed.':'';
+ show('Error: '+msg+hint,'err');
+}}
 async function runTurn(){{
  const pw=pw_val();
  if(!pw){{show('Enter the host password first.','err');return;}}
@@ -1749,8 +2255,9 @@ async function runTurn(){{
    headers:{{'Content-Type':'application/json'}},
    body:JSON.stringify({{host_password:pw}})}});
   const d=await r.json();
-  if(!d.success){{show('Error: '+d.error,'err');stopPoll();}}
- }}catch(e){{show('Connection error: '+e.message,'err');stopPoll();}}
+  if(!d.success){{_abortPoll(d.error);return;}}
+  _seenRunning=true;
+ }}catch(e){{_abortPoll('Connection error: '+e.message);}}
 }}
 async function rerunTurn(t){{
  const pw=pw_val();
@@ -1763,8 +2270,9 @@ async function rerunTurn(t){{
    headers:{{'Content-Type':'application/json'}},
    body:JSON.stringify({{host_password:pw,rerun_turn:t}})}});
   const d=await r.json();
-  if(!d.success){{show('Error: '+d.error,'err');stopPoll();}}
- }}catch(e){{show('Connection error: '+e.message,'err');stopPoll();}}
+  if(!d.success){{_abortPoll(d.error);return;}}
+  _seenRunning=true;
+ }}catch(e){{_abortPoll('Connection error: '+e.message);}}
 }}
 async function resetArena(){{
  const pw=pw_val();
@@ -1777,6 +2285,21 @@ async function resetArena(){{
   const d=await r.json();
   if(d.success){{show('Arena reset. Reloading...','ok');setTimeout(()=>{{_isNavigating=true;location.href='/admin?t='+Date.now();}},1500);}}
   else show('Error: '+d.error,'err');
+ }}catch(e){{show('Connection error: '+e.message,'err');}}
+}}
+async function resetProgress(){{
+ const pw=pw_val();
+ if(!pw){{show('Enter the host password first.','err');return;}}
+ if(!confirm('Revert all progress to Turn 1?\\n\\nThis will keep all accounts and teams, but will reset all win/loss records, skills, and attribute gains to their initial values.\\n\\nThis cannot be undone.'))return;
+ try{{
+  const r=await fetch('/api/arena/reset_progress',{{method:'POST',
+   headers:{{'Content-Type':'application/json'}},
+   body:JSON.stringify({{host_password:pw}})}});
+  const d=await r.json();
+  if(d.success){{
+   show('All progress reverted. Reloading...','ok');
+   setTimeout(()=>{{_isNavigating=true;location.reload();}},1500);
+  }} else show('Error: '+d.error,'err');
  }}catch(e){{show('Connection error: '+e.message,'err');}}
 }}
 async function unlockTurn(){{
@@ -1936,7 +2459,7 @@ async function deleteSelectedManager() {{
     const managerName = fullText.split(" (ID:")[0];   // Clean name for display
 
     // First safety confirmation
-    if (!confirm(`⚠ DANGER ZONE ⚠\n\nYou are about to PERMANENTLY delete:\n\n${{managerName}}\n\nAll their teams and results for the current turn will be removed.\n\nThis action CANNOT be undone.\n\nContinue?`)) {{
+    if (!confirm(`⚠ DANGER ZONE ⚠\n\nYou are about to delete the manager account:\n\n${{managerName}}\n\nTheir account and current turn uploads will be removed, but their teams will remain in the system and can be accessed if they re-register.\n\nThis action CANNOT be undone.\n\nContinue?`)) {{
         return;
     }}
 
@@ -1978,6 +2501,216 @@ async function deleteSelectedManager() {{
 }}
 // =====================================================================
 
+async function renameSelectedManager() {{
+    const select = document.getElementById('rename-manager-select');
+    const mid = select.value;
+    const newName = document.getElementById('rename-manager-name').value.trim();
+    if (!mid) {{ alert('Please select a manager to rename.'); return; }}
+    if (!newName) {{ alert('Please enter a new name.'); return; }}
+
+    const oldLabel = select.options[select.selectedIndex].text;
+    const oldName  = oldLabel.split(' (ID:')[0];
+
+    if (!confirm(`Rename "${{oldName}}" to "${{newName}}"?\n\nThis will update their manager name in all teams and standings.`)) return;
+
+    const pw = pw_val() || prompt('Enter host password:');
+    if (!pw) {{ show('Rename cancelled — no password provided.', 'err'); return; }}
+    const hp = document.getElementById('hp'); if (hp) hp.value = pw;
+
+    try {{
+        const r = await fetch('/api/admin/rename_manager', {{
+            method: 'POST',
+            headers: {{'Content-Type': 'application/json'}},
+            body: JSON.stringify({{ host_password: pw, manager_id: mid, new_name: newName }})
+        }});
+        const d = await r.json();
+        if (d.success) {{
+            alert(d.message || `Manager renamed successfully.`);
+            _isNavigating = true; location.reload();
+        }} else {{
+            show('Rename failed: ' + (d.error || 'Unknown error'), 'err');
+        }}
+    }} catch(e) {{
+        show('Connection error: ' + e.message, 'err');
+    }}
+}}
+// =====================================================================
+
+async function deleteSelectedTeam() {{
+    const select = document.getElementById('delete-team-select');
+    const tid = select.value;
+    if (!tid) {{ alert('Please select a team to delete.'); return; }}
+
+    const oldLabel = select.options[select.selectedIndex].text;
+    const teamName  = oldLabel.split(' (ID:')[0];
+
+    if (!confirm(`⚠ DANGER ⚠\\n\\nDelete team "${{teamName}}" (ID: ${{tid}})?\\n\\nThis will remove it from the server and notify the manager to delete it locally.`)) return;
+    
+    const pw = pw_val() || prompt('Enter host password:');
+    if (!pw) return;
+
+    try {{
+        const r = await fetch('/api/admin/delete_team', {{
+            method: 'POST',
+            headers: {{'Content-Type': 'application/json'}},
+            body: JSON.stringify({{ host_password: pw, team_id: tid }})
+        }});
+        const d = await r.json();
+        if (d.success) {{
+            alert(d.message); _isNavigating = true; location.reload();
+        }} else {{ alert('Error: ' + d.error); }}
+    }} catch(e) {{ alert('Connection error: ' + e.message); }}
+}}
+
+async function downloadManagerFiles() {{
+    const select = document.getElementById('download-manager-select');
+    const mid = select.value;
+    if (!mid) {{
+        alert('Please select a manager.');
+        return;
+    }}
+
+    const managerName = select.options[select.selectedIndex].text.split(' (ID:')[0];
+    const pw = pw_val() || prompt('Enter host password:');
+    if (!pw) {{ show('Download cancelled — no password provided.', 'err'); return; }}
+    const hp = document.getElementById('hp'); if (hp) hp.value = pw;
+
+    try {{
+        const r = await fetch('/api/admin/download_manager_files', {{
+            method: 'POST',
+            headers: {{'Content-Type': 'application/json'}},
+            body: JSON.stringify({{ host_password: pw, manager_id: mid }})
+        }});
+
+        if (!r.ok) {{ const d = await r.json(); show('Download failed: ' + (d.error || 'Unknown error'), 'err'); return; }}
+
+        const blob = await r.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `manager_${{mid}}_files.zip`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        show(`Downloaded files for ${{managerName}}`, 'ok');
+    }} catch(e) {{ show('Download error: ' + e.message, 'err'); }}
+}}
+// =====================================================================
+
+async function renameSelectedTeam() {{
+    const select = document.getElementById('rename-team-select');
+    const tid = select.value;
+    const newName = document.getElementById('rename-team-name').value.trim();
+    if (!tid) {{ alert('Please select a team to rename.'); return; }}
+    if (!newName) {{ alert('Please enter a new name.'); return; }}
+
+    const oldLabel = select.options[select.selectedIndex].text;
+    const oldName  = oldLabel.split(' (ID:')[0];
+
+    if (!confirm(`Rename team "${{oldName}}" to "${{newName.toUpperCase()}}"?`)) return;
+
+    const pw = pw_val() || prompt('Enter host password:');
+    if (!pw) return;
+
+    try {{
+        const r = await fetch('/api/admin/rename_team', {{
+            method: 'POST',
+            headers: {{'Content-Type': 'application/json'}},
+            body: JSON.stringify({{ host_password: pw, team_id: tid, new_name: newName }})
+        }});
+        const d = await r.json();
+        if (d.success) {{
+            alert(d.message); _isNavigating = true; location.reload();
+        }} else {{ alert('Error: ' + d.error); }}
+    }} catch(e) {{ alert('Connection error: ' + e.message); }}
+}}
+
+function updateDeleteTeamOptions() {{
+ const managerId = document.getElementById('delete-team-manager-select').value;
+ const teamSelect = document.getElementById('delete-team-select');
+ teamSelect.innerHTML = '<option value="">-- Select a team --</option>';
+ if (!managerId) return;
+ const allTeams = {team_options_json};
+ const parser = new DOMParser();
+ const doc = parser.parseFromString('<div>' + allTeams + '</div>', 'text/html');
+ const options = doc.querySelectorAll('option');
+ options.forEach(opt => {{
+  if (opt.getAttribute('data-mid') === managerId) {{
+   const newOpt = document.createElement('option');
+   newOpt.value = opt.value;
+   newOpt.textContent = opt.textContent;
+   teamSelect.appendChild(newOpt);
+  }}
+ }});
+}}
+
+async function deleteSelectedTeam() {{
+ const managerId = document.getElementById('delete-team-manager-select').value;
+ const teamId = document.getElementById('delete-team-select').value;
+ if (!managerId) {{ show('Select a manager first', 'err'); return; }}
+ if (!teamId) {{ show('Select a team first', 'err'); return; }}
+ const teamLabel = document.getElementById('delete-team-select').options[document.getElementById('delete-team-select').selectedIndex].text;
+ if (!confirm('⚠️  PERMANENT DELETE CONFIRMATION\\n\\nAre you ABSOLUTELY SURE you want to permanently delete this team?\\n\\nTeam: ' + teamLabel + '\\n\\nThe manager will be notified on next login and the team will be completely removed from their client.')) return;
+ const pw = pw_val();
+ if (!pw) {{ show('Enter the host password first.', 'err'); return; }}
+ try {{
+  const r = await fetch('/api/admin/delete_team', {{
+   method: 'POST',
+   headers: {{'Content-Type': 'application/json'}},
+   body: JSON.stringify({{host_password: pw, team_id: parseInt(teamId)}})
+  }});
+  const d = await r.json();
+  if (d.success) {{
+   show(d.message, 'ok');
+   document.getElementById('delete-team-manager-select').value = '';
+   document.getElementById('delete-team-select').value = '';
+   document.getElementById('delete-team-select').innerHTML = '<option value="">-- Select a team --</option>';
+  }} else {{
+   show('Error: ' + d.error, 'err');
+  }}
+ }} catch(e) {{ show('Connection error: ' + e.message, 'err'); }}
+}}
+
+async function loadActivityLog() {{
+ const pw = pw_val();
+ if (!pw) {{ show('Enter the host password first.', 'err'); return; }}
+ const limit = document.getElementById('activity-limit').value || '50';
+ const action = document.getElementById('activity-action-filter').value || '';
+ const container = document.getElementById('activity-log-container');
+ container.innerHTML = '<div style="padding:8px;color:#999;">Loading...</div>';
+ try {{
+  const url = new URL('/api/admin/activity_log', window.location.origin);
+  url.searchParams.append('limit', limit);
+  if (action) url.searchParams.append('action', action);
+  const r = await fetch(url, {{
+   method: 'POST',
+   headers: {{'Content-Type': 'application/json'}},
+   body: JSON.stringify({{host_password: pw}})
+  }});
+  const d = await r.json();
+  if (d.success) {{
+   if (!d.entries || d.entries.length === 0) {{
+    container.innerHTML = '<div style="padding:8px;color:#999;">No activity logged yet.</div>';
+    return;
+   }}
+   let html = '';
+   d.entries.forEach(entry => {{
+    const action = entry.action || '';
+    const color = action.includes('upload') ? '#080' : action.includes('download') ? '#08d' : '#666';
+    html += `<div style="padding:4px 8px;border-bottom:1px solid #ddd;color:${{color}};">
+     <strong>${{entry.timestamp}}</strong> | ${{entry.action}} | ${{entry.manager_name}} (#${{entry.manager_id}})
+     <br><span style="color:#666;font-size:9px;">${{entry.details}}</span></div>`;
+   }});
+   container.innerHTML = html;
+  }} else {{
+   container.innerHTML = `<div style="padding:8px;color:#c00;">Error: ${{d.error}}</div>`;
+  }}
+ }} catch(e) {{
+  container.innerHTML = `<div style="padding:8px;color:#c00;">Error: ${{e.message}}</div>`;
+ }}
+}}
+
 async function setDebugTeam() {{
  const sel = document.getElementById('debug-team-select');
  const mid = sel.value;
@@ -1997,9 +2730,221 @@ async function setDebugTeam() {{
   }} else show('Error: ' + (d.error || 'update failed'), 'err');
  }} catch(e) {{ show('Connection error: ' + e.message, 'err'); }}
 }}
+
+async function validateTeams() {{
+ const pw = pw_val();
+ if (!pw) {{ show('Enter the host password first.', 'err'); return; }}
+ const container = document.getElementById('validation-results');
+ container.innerHTML = '<div style="padding:8px;color:#999;">Scanning...</div>';
+ try {{
+  const r = await fetch('/api/admin/validate_teams', {{
+   method: 'POST',
+   headers: {{'Content-Type': 'application/json'}},
+   body: JSON.stringify({{host_password: pw}})
+  }});
+  const d = await r.json();
+  if (d.success) {{
+   if (!d.teams || d.teams.length === 0) {{
+    container.innerHTML = '<div style="padding:8px;color:#999;">No teams found.</div>';
+    return;
+   }}
+   let html = '<table style="width:100%;border-collapse:collapse;">';
+   html += '<tr style="background:#eee"><th>ID</th><th>Team Name</th><th>Cnt</th><th>Status</th></tr>';
+   d.teams.forEach(t => {{
+    const statusColor = t.is_valid ? '#060' : '#c00';
+    const statusTxt = t.is_valid ? 'OK' : '⚠ PHANTOM';
+    const rowBg = t.is_valid ? '' : 'style="background:#fee;"';
+    html += `<tr ${{rowBg}} style="border-bottom:1px solid #ddd">
+     <td>${{t.team_id}}</td>
+     <td title="Warriors: ${{t.warriors.join(', ')}}\">${{t.team_name}}</td>
+     <td style="text-align:center">${{t.warrior_count}}</td>
+     <td style="color:${{statusColor}};font-weight:bold">${{statusTxt}}</td>
+    </tr>`;
+   }});
+   html += '</table>';
+   container.innerHTML = html;
+  }} else {{
+   container.innerHTML = `<div style="padding:8px;color:#c00;">Error: ${{d.error}}</div>`;
+  }}
+ }} catch(e) {{ container.innerHTML = `<div style="padding:8px;color:#c00;">Error: ${{e.message}}</div>`; }}
+}}
+
+let _warriorsData = null;
+
+async function loadWarriorsReport() {{
+ const pw = pw_val();
+ if (!pw) {{ show('Enter the host password first.', 'err'); return; }}
+ const container = document.getElementById('warriors-container');
+ container.innerHTML = '<div style="padding:8px;color:#999;">Loading...</div>';
+ try {{
+  const r = await fetch('/api/admin/warriors_report', {{
+   method: 'POST',
+   headers: {{'Content-Type': 'application/json'}},
+   body: JSON.stringify({{host_password: pw}})
+  }});
+  const d = await r.json();
+  if (d.success) {{
+   _warriorsData = d.warriors;
+   if (!d.warriors || d.warriors.length === 0) {{
+    container.innerHTML = '<div style="padding:8px;color:#999;">No warriors found.</div>';
+    return;
+   }}
+   document.getElementById('csv-export-btn').disabled = false;
+   document.getElementById('json-export-btn').disabled = false;
+   let html = '<table style="width:100%;border-collapse:collapse;font-size:11px;">';
+   html += '<tr style="background:#eee;position:sticky;top:0;"><th style="padding:4px;text-align:left;border:1px solid #999;">Warrior Name</th><th style="padding:4px;text-align:center;border:1px solid #999;">Team ID</th><th style="padding:4px;text-align:left;border:1px solid #999;">Team Name</th><th style="padding:4px;text-align:left;border:1px solid #999;">Manager</th><th style="padding:4px;text-align:center;border:1px solid #999;">Slot</th><th style="padding:4px;text-align:center;border:1px solid #999;">W-L-K</th></tr>';
+   d.warriors.forEach(w => {{
+    const wlk = `${{w.wins}}-${{w.losses}}-${{w.kills}}`;
+    const deadMark = w.is_dead ? '†' : '';
+    const bgColor = w.is_dead ? 'background:#fee;' : '';
+    html += `<tr style="border-bottom:1px solid #ddd;${{bgColor}}"><td style="padding:4px;border:1px solid #ddd;"><span title="${{w.is_dead ? 'DEAD' : 'Active'}}">${{deadMark}}</span> ${{w.warrior_name}}</td><td style="padding:4px;border:1px solid #ddd;text-align:center;">${{w.team_id}}</td><td style="padding:4px;border:1px solid #ddd;">${{w.team_name}}</td><td style="padding:4px;border:1px solid #ddd;">${{w.manager_name}}</td><td style="padding:4px;border:1px solid #ddd;text-align:center;">${{w.slot_index}}</td><td style="padding:4px;border:1px solid #ddd;text-align:center;">${{wlk}}</td></tr>`;
+   }});
+   html += '</table>';
+   container.innerHTML = html;
+  }} else {{
+   container.innerHTML = `<div style="padding:8px;color:#c00;">Error: ${{d.error}}</div>`;
+  }}
+ }} catch(e) {{ container.innerHTML = `<div style="padding:8px;color:#c00;">Error: ${{e.message}}</div>`; }}
+}}
+
+function exportWarriorsAsCSV() {{
+ if (!_warriorsData || _warriorsData.length === 0) {{
+  show('No warriors data loaded.', 'err');
+  return;
+ }}
+ let csv = 'Warrior Name,Team ID,Team Name,Manager,Slot Index,Wins,Losses,Kills,Total Fights,Is Dead\\n';
+ _warriorsData.forEach(w => {{
+  const isDeadStr = w.is_dead ? 'Yes' : 'No';
+  csv += `"${{w.warrior_name}}","${{w.team_id}}","${{w.team_name}}","${{w.manager_name}}","${{w.slot_index}}","${{w.wins}}","${{w.losses}}","${{w.kills}}","${{w.total_fights}}","${{isDeadStr}}"\\n`;
+ }});
+ const blob = new Blob([csv], {{type: 'text/csv;charset=utf-8;'}});
+ const link = document.createElement('a');
+ link.href = URL.createObjectURL(blob);
+ link.download = 'warriors_report.csv';
+ link.click();
+ show('Warriors report exported as CSV', 'ok');
+}}
+
+function exportWarriorsAsJSON() {{
+ if (!_warriorsData || _warriorsData.length === 0) {{
+  show('No warriors data loaded.', 'err');
+  return;
+ }}
+ const json = JSON.stringify(_warriorsData, null, 2);
+ const blob = new Blob([json], {{type: 'application/json;charset=utf-8;'}});
+ const link = document.createElement('a');
+ link.href = URL.createObjectURL(blob);
+ link.download = 'warriors_report.json';
+ link.click();
+ show('Warriors report exported as JSON', 'ok');
+}}
+
+let _uploadedWarriorsData = null;
+let _uploadedManagersList = [];
+
+async function initUploadedWarriorsDropdown() {{
+ const pw = pw_val();
+ if (!pw) return;
+ try {{
+  const r = await fetch('/api/admin/uploaded_warriors', {{
+   method: 'POST',
+   headers: {{'Content-Type': 'application/json'}},
+   body: JSON.stringify({{host_password: pw}})
+  }});
+  const d = await r.json();
+  if (d.success && d.managers) {{
+   _uploadedManagersList = Object.keys(d.managers).sort();
+   const sel = document.getElementById('manager-filter-select');
+   _uploadedManagersList.forEach(mgr => {{
+    const opt = document.createElement('option');
+    opt.value = mgr;
+    opt.textContent = mgr;
+    sel.appendChild(opt);
+   }});
+  }}
+ }} catch(e) {{}}
+}}
+
+async function loadUploadedWarriors() {{
+ const pw = pw_val();
+ if (!pw) {{ show('Enter the host password first.', 'err'); return; }}
+ const selectedMgr = document.getElementById('manager-filter-select').value;
+ const container = document.getElementById('uploaded-warriors-container');
+ container.innerHTML = '<div style="padding:8px;color:#999;">Loading...</div>';
+ try {{
+  const r = await fetch('/api/admin/uploaded_warriors', {{
+   method: 'POST',
+   headers: {{'Content-Type': 'application/json'}},
+   body: JSON.stringify({{host_password: pw}})
+  }});
+  const d = await r.json();
+  if (d.success && d.managers) {{
+   let filteredWarriors = [];
+   Object.entries(d.managers).forEach(([mgr, mgr_data]) => {{
+    if (selectedMgr === 'ALL' || mgr === selectedMgr) {{
+     mgr_data.warriors.forEach(w => {{
+      filteredWarriors.push(w);
+     }});
+    }}
+   }});
+   _uploadedWarriorsData = filteredWarriors;
+   if (filteredWarriors.length === 0) {{
+    container.innerHTML = '<div style="padding:8px;color:#999;">No warriors found for selected manager.</div>';
+    return;
+   }}
+   document.getElementById('uploaded-csv-btn').disabled = false;
+   document.getElementById('uploaded-json-btn').disabled = false;
+   let html = '<table style="width:100%;border-collapse:collapse;font-size:11px;">';
+   html += '<tr style="background:#eee;position:sticky;top:0;"><th style="padding:4px;border:1px solid #999;text-align:left;">Warrior Name</th><th style="padding:4px;border:1px solid #999;text-align:left;">Manager</th><th style="padding:4px;border:1px solid #999;text-align:left;">Team</th><th style="padding:4px;border:1px solid #999;text-align:center;">Slot</th><th style="padding:4px;border:1px solid #999;text-align:center;">Wins</th><th style="padding:4px;border:1px solid #999;text-align:center;">Losses</th><th style="padding:4px;border:1px solid #999;text-align:center;">Kills</th><th style="padding:4px;border:1px solid #999;text-align:center;">Total Fights</th><th style="padding:4px;border:1px solid #999;text-align:left;">Uploaded</th></tr>';
+   filteredWarriors.forEach(w => {{
+    const deadMark = w.is_dead ? '† ' : '';
+    const deadBg = w.is_dead ? 'background:#fee;' : '';
+    html += `<tr style="border-bottom:1px solid #ddd;${{deadBg}}"><td style="padding:4px;border:1px solid #ddd;">${{deadMark}}${{w.warrior_name}}</td><td style="padding:4px;border:1px solid #ddd;">${{w.manager_name}}</td><td style="padding:4px;border:1px solid #ddd;">${{w.team_name}}</td><td style="padding:4px;border:1px solid #ddd;text-align:center;">${{w.slot_index}}</td><td style="padding:4px;border:1px solid #ddd;text-align:center;">${{w.wins}}</td><td style="padding:4px;border:1px solid #ddd;text-align:center;">${{w.losses}}</td><td style="padding:4px;border:1px solid #ddd;text-align:center;">${{w.kills}}</td><td style="padding:4px;border:1px solid #ddd;text-align:center;">${{w.total_fights}}</td><td style="padding:4px;border:1px solid #ddd;font-size:9px;">${{w.uploaded_at}}</td></tr>`;
+   }});
+   html += '</table>';
+   container.innerHTML = html;
+  }} else {{
+   container.innerHTML = `<div style="padding:8px;color:#c00;">Error: ${{d.error}}</div>`;
+  }}
+ }} catch(e) {{ container.innerHTML = `<div style="padding:8px;color:#c00;">Error: ${{e.message}}</div>`; }}
+}}
+
+function exportUploadedAsCSV() {{
+ if (!_uploadedWarriorsData || _uploadedWarriorsData.length === 0) {{
+  show('No warriors data loaded.', 'err');
+  return;
+ }}
+ let csv = 'Warrior Name,Manager,Team,Slot,Wins,Losses,Kills,Total Fights,Is Dead,Uploaded At\\n';
+ _uploadedWarriorsData.forEach(w => {{
+  const isDeadStr = w.is_dead ? 'Yes' : 'No';
+  csv += `"${{w.warrior_name}}","${{w.manager_name}}","${{w.team_name}}","${{w.slot_index}}","${{w.wins}}","${{w.losses}}","${{w.kills}}","${{w.total_fights}}","${{isDeadStr}}","${{w.uploaded_at}}"\\n`;
+ }});
+ const blob = new Blob([csv], {{type: 'text/csv;charset=utf-8;'}});
+ const link = document.createElement('a');
+ link.href = URL.createObjectURL(blob);
+ link.download = 'uploaded_warriors.csv';
+ link.click();
+ show('Uploaded warriors exported as CSV', 'ok');
+}}
+
+function exportUploadedAsJSON() {{
+ if (!_uploadedWarriorsData || _uploadedWarriorsData.length === 0) {{
+  show('No warriors data loaded.', 'err');
+  return;
+ }}
+ const json = JSON.stringify(_uploadedWarriorsData, null, 2);
+ const blob = new Blob([json], {{type: 'application/json;charset=utf-8;'}});
+ const link = document.createElement('a');
+ link.href = URL.createObjectURL(blob);
+ link.download = 'uploaded_warriors.json';
+ link.click();
+ show('Uploaded warriors exported as JSON', 'ok');
+}}
+
 // =====================================================================
 
 document.addEventListener('DOMContentLoaded',()=>{{
+ initUploadedWarriorsDropdown();
  // Wire feature-flag checkboxes via JS so no inline onchange globals needed
  document.querySelectorAll('input[data-flag]').forEach(el=>{{
   el.addEventListener('change', async function(){{
@@ -2078,8 +3023,17 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
         self.wfile.flush()
 
     def body(self):
-        n = int(self.headers.get("Content-Length", 0))
-        return json.loads(self.rfile.read(n)) if n else {}
+        n = int(self.headers.get("Content-Length") or 0)
+        if not n:
+            return {}
+        raw = self.rfile.read(n)
+        if not raw:
+            return {}
+        try:
+            return json.loads(raw)
+        except (json.JSONDecodeError, ValueError):
+            print(f"  WARNING: Malformed JSON body from {self.client_address[0]} ({len(raw)} bytes): {raw[:120]!r}")
+            return {}
 
     def qs(self):
         from urllib.parse import parse_qsl
@@ -2159,6 +3113,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 "uploaded"        : [ups[m]["manager_name"] for m in ups],
                 "not_uploaded"    : [mgrs[m]["manager_name"] for m in mgrs if m not in ups],
                 "reset_count"     : cfg.get("reset_count", 0),
+                "server_version"  : SERVER_VERSION,
             }); return
 
         if path == "/api/newsletter":
@@ -2302,8 +3257,10 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             pw = q.get("password","")
             mgrs = _load_managers()
             if mid not in mgrs:
+                _log_activity("download_failed", mid, "?", "Manager not found")
                 self.send_json({"success":False,"error":"Manager not found. Register first."}, 404); return
             if not _check_mgr_pw(mgrs[mid], pw):
+                _log_activity("download_failed", mid, mgrs[mid]["manager_name"], "Wrong password")
                 self.send_json({"success":False,"error":"Wrong password."}, 401); return
             cfg = _load_config()
             res_turn = cfg["current_turn"] - 1
@@ -2317,6 +3274,14 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     if fname.startswith(f"result_{mid}") and fname.endswith(".json"):
                         r = _load_json(os.path.join(td, fname), None)
                         if r:
+                            # Verify ownership: only show results for teams the
+                            # manager still officially owns.
+                            tid = r.get("team_id")
+                            tids = [str(t) for t in mgrs[mid].get("team_ids", [])]
+                            if tids:
+                                if not tid or str(tid) not in tids:
+                                    continue # Result for an old/replaced team
+
                             # Strip only fight_logs (large narratives ~7KB each).
                             # Keep fight_history on warriors (~230 bytes/entry) --
                             # the client needs it for the Fights tab and View Fight.
@@ -2335,10 +3300,23 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 self.send_json({"success":False,"error":"No results found for your manager this turn."}); return
             # Filter results based on feature flags
             team_results = _filter_results_for_client(team_results, cfg)
-            # Newsletter is served separately via /api/newsletter?turn=N
-            # to keep /api/results payload small and avoid Windows socket aborts
-            self.send_json({"success":True,"results":team_results,
-                            "turn":res_turn,"has_newsletter":bool(nl_text)}); return
+
+            # Include any pending deletions for this manager
+            deleted_teams_list = []
+            for key, val in cfg.items():
+                if key.startswith("deleted_team_") and str(val.get("manager_id")) == str(mid):
+                    deleted_teams_list.append(val)
+
+            # Log the download
+            team_count = len(team_results)
+            _log_activity("download_success", mid, mgrs[mid]["manager_name"],
+                        f"Downloaded {team_count} team result(s) for turn {res_turn}, has_newsletter={bool(nl_text)}")
+
+            self.send_json({
+                "success": True, "results": team_results,
+                "turn": res_turn, "has_newsletter": bool(nl_text),
+                "deleted_teams": deleted_teams_list
+            }); return
 
         if path == "/api/scout/status":
             q = self.qs()
@@ -2388,12 +3366,14 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 if tid in own_team_ids: continue
                 if exclude_tid and tid == exclude_tid: continue
                 team_name = tdata.get("team_name", "?")
+                manager_name = tdata.get("manager_name", "?")
                 for w in tdata.get("warriors", []):
                     if not w or w.get("is_dead"): continue
                     warriors.append({
                         "name"        : w.get("name", "?"),
                         "team_name"   : team_name,
                         "team_id"     : tid,
+                        "manager_name": manager_name,
                         "race"        : w.get("race", "?"),
                         "gender"      : w.get("gender", "?"),
                         "wins"        : w.get("wins", 0),
@@ -2481,6 +3461,51 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 "standings":_load_standings(),
             }); return
 
+        # ── Browser-mode local file API (GET-safe endpoints) ─────────────
+        # These mirror the do_POST /api/local/* handlers so that browsers
+        # using plain fetch() (default GET) can reach them without Electron.
+        def _safe_path_get(rel_path):
+            if not rel_path: return None
+            clean = os.path.normpath(rel_path).lstrip(os.sep + (os.altsep or ''))
+            if clean.startswith('..'): return None
+            return os.path.join(BASE_DIR, "saves", "client", clean)
+
+        if path == "/api/local/status":
+            # Return the Host header so remote players get the correct server URL,
+            # not a hardcoded "localhost" that only works on the server machine.
+            host = self.headers.get("Host", f"localhost:{_server_port}")
+            self.send_json({
+                "success": True,
+                "is_local_backend": True,
+                "server_url": f"http://{host}",
+            }); return
+
+        if path == "/api/local/read":
+            q = self.qs()
+            fpath = _safe_path_get(q.get("path"))
+            if not fpath or not os.path.exists(fpath):
+                self.send_json({"success": False, "error": "File not found"}, 404); return
+            try:
+                if fpath.endswith(".json"):
+                    # load_json_protected returns a dict, not a string — send directly
+                    content = load_json_protected(fpath)
+                    self.send_json({"success": True, "data": content})
+                else:
+                    with open(fpath, "r", encoding="utf-8") as f:
+                        content = f.read()
+                    self.send_json({"success": True, "text": content})
+            except Exception as e:
+                self.send_json({"success": False, "error": str(e)}, 500)
+            return
+
+        if path == "/api/local/list":
+            q = self.qs()
+            dpath = _safe_path_get(q.get("path"))
+            if not dpath or not os.path.isdir(dpath):
+                self.send_json({"success": True, "files": []}); return
+            files = [f for f in os.listdir(dpath) if os.path.isfile(os.path.join(dpath, f))]
+            self.send_json({"success": True, "files": sorted(files)}); return
+
         self.send_json({"error":"Not found."}, 404)
 
     # ── POST ──────────────────────────────────────────────────────────────
@@ -2489,19 +3514,34 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
         b = self.body()
 
         if path == "/api/register":
-            mname = (b.get("manager_name") or "").strip()
-            pw = (b.get("password") or "").strip()
+            mname = str(b.get("manager_name") or "").strip()
+            pw = str(b.get("password") or "").strip()
             if not mname or not pw:
                 self.send_json({"success":False,"error":"manager_name and password required."}); return
             if len(pw) < 4:
                 self.send_json({"success":False,"error":"Password must be at least 4 characters."}); return
             with _lock:
+                cfg  = _load_config()
                 mgrs = _load_managers()
+                current_reset_count = cfg.get("reset_count", 0)
                 for existing_mid, m in mgrs.items():
                     if m["manager_name"].lower() == mname.lower():
                         if _check_mgr_pw(m, pw):
-                            self.send_json({"success":True,"manager_id":existing_mid,"manager_name":m["manager_name"]}); return
-                        self.send_json({"success":False,"error":"Manager name already taken."}); return
+                            # Do NOT stamp acknowledged_reset_count here — an existing
+                            # manager reconnecting after a reset should still see the
+                            # reset modal. The check_reset default handles new-to-feature
+                            # managers. Only new registrations get the ack stamp.
+                            # Check for pending deletions for this manager
+                            deleted_teams_list = [v for k, v in cfg.items() 
+                                                 if k.startswith("deleted_team_") and str(v.get("manager_id")) == str(existing_mid)]
+                            self.send_json({
+                                "success": True, "manager_id": existing_mid,
+                                "manager_name": m["manager_name"],
+                                "reset_count": current_reset_count,
+                                "deleted_teams": deleted_teams_list,
+                                "team_ids": m.get("team_ids", [])
+                            }); return
+                        self.send_json({"success":False,"error":"Manager name already registered — use your original password to reconnect."}); return
                 # Numeric IDs, starting at 20 and incrementing. Legacy non-numeric
                 # IDs (hex uuids from older builds) are skipped so they don't
                 # poison the sequence.
@@ -2510,12 +3550,14 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 salt = secrets.token_hex(16)
                 mgrs[mid] = {"manager_name":mname,"salt":salt,
                              "password_hash":_hash_pw(pw,salt),
-                             "registered_at":time.strftime("%Y-%m-%d %H:%M:%S")}
+                             "registered_at":time.strftime("%Y-%m-%d %H:%M:%S"),
+                             "acknowledged_reset_count": current_reset_count}
                 _save_managers(mgrs)
-            self.send_json({"success":True,"manager_id":mid,"manager_name":mname}); return
+            self.send_json({"success":True,"manager_id":mid,"manager_name":mname,
+                            "reset_count": current_reset_count}); return
 
         if path == "/api/check_manager_name":
-            mname = (b.get("manager_name") or "").strip()
+            mname = str(b.get("manager_name") or "").strip()
             if not mname:
                 self.send_json({"available": False, "error": "manager_name required."}); return
             with _lock:
@@ -2539,9 +3581,9 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             # a unique team_id, build+save the Team server-side (as the host's
             # backup copy), and return the full team dict for the client to
             # save in its own folder via the File System Access API.
-            mid = (b.get("manager_id") or "").strip()
-            pw  = (b.get("password")   or "").strip()
-            team_name     = (b.get("team_name") or "").strip()
+            mid = str(b.get("manager_id") or "").strip()
+            pw  = str(b.get("password")   or "").strip()
+            team_name     = str(b.get("team_name") or "").strip()
             warriors_data = b.get("warriors", [])
             if not mid or not pw:
                 self.send_json({"success":False,"error":"manager_id and password required."}); return
@@ -2553,6 +3595,8 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     self.send_json({"success":False,"error":"Manager not found. Register first."}); return
                 if not _check_mgr_pw(mgrs[mid], pw):
                     self.send_json({"success":False,"error":"Wrong password."}); return
+                if len(mgrs[mid].get("team_ids", [])) >= 5:
+                    self.send_json({"success":False,"error":"Maximum of 5 teams allowed per manager."}); return
                 manager_name = mgrs[mid]["manager_name"]
             from team    import Team, TEAM_SIZE # This will be replaced by save_json_protected
             from warrior import Warrior, ATTRIBUTES
@@ -2567,7 +3611,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 )
                 import random as _rand
                 for wd in warriors_data:
-                    name = (wd.get("name") or "").strip()
+                    name = str(wd.get("name") or "").strip()
                     if not name:
                         self.send_json({"success":False,"error":"All warriors must have a name."}); return
                     w = Warrior(
@@ -2598,11 +3642,32 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     _save_managers(mgrs)
             self.send_json({"success":True,"team_id":team.team_id,"team":team.to_dict()}); return
 
+        if path == "/api/acknowledge_deleted_teams":
+            mid = str(b.get("manager_id") or "").strip()
+            pw  = str(b.get("password")   or "").strip()
+            if not mid or not pw:
+                self.send_json({"success":False,"error":"manager_id and password required."}); return
+            with _lock:
+                cfg = _load_config()
+                mgrs = _load_managers()
+                if mid in mgrs and _check_mgr_pw(mgrs[mid], pw):
+                    # Clear deletion notification flags in config.json
+                    keys_to_del = [k for k, v in cfg.items() if k.startswith("deleted_team_") and str(v.get("manager_id")) == mid]
+                    for k in keys_to_del:
+                        del cfg[k]
+                    _save_config(cfg)
+                    # Clear legacy field
+                    mgrs[mid]["deleted_teams_notifs"] = []
+                    _save_managers(mgrs)
+                    self.send_json({"success":True}); return
+                else:
+                    self.send_json({"success":False,"error":"Not authorised."}, 401); return
+
         if path == "/api/scout/select":
-            mid   = (b.get("manager_id")   or "").strip()
-            pw    = (b.get("password")     or "").strip()
-            wname = (b.get("warrior_name") or "").strip()
-            tname = (b.get("team_name")    or "").strip()
+            mid   = str(b.get("manager_id")   or "").strip()
+            pw    = str(b.get("password")     or "").strip()
+            wname = str(b.get("warrior_name") or "").strip()
+            tname = str(b.get("team_name")    or "").strip()
             try:    tid = int(b.get("team_id", 0) or 0)
             except: tid = 0
             with _lock:
@@ -2622,9 +3687,9 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             }); return
 
         if path == "/api/scout/remove":
-            mid   = (b.get("manager_id")   or "").strip()
-            pw    = (b.get("password")     or "").strip()
-            wname = (b.get("warrior_name") or "").strip()
+            mid   = str(b.get("manager_id")   or "").strip()
+            pw    = str(b.get("password")     or "").strip()
+            wname = str(b.get("warrior_name") or "").strip()
             with _lock:
                 mgrs = _load_managers()
                 if mid not in mgrs or not _check_mgr_pw(mgrs[mid], pw):
@@ -2642,16 +3707,19 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             }); return
 
         if path == "/api/upload":
-            mid = (b.get("manager_id") or "").strip()
-            pw = (b.get("password") or "").strip()
+            mid = str(b.get("manager_id") or "").strip()
+            pw = str(b.get("password") or "").strip()
             team = b.get("team")
             if not all([mid, pw, team]):
+                _log_activity("upload_failed", mid, "?", "Missing required parameters")
                 self.send_json({"success":False,"error":"manager_id, password and team required."}); return
             with _lock:
                 mgrs = _load_managers()
                 if mid not in mgrs:
+                    _log_activity("upload_failed", mid, "?", "Manager not found")
                     self.send_json({"success":False,"error":"Manager not found. Register first."}); return
                 if not _check_mgr_pw(mgrs[mid], pw):
+                    _log_activity("upload_failed", mid, mgrs[mid]["manager_name"], "Wrong password")
                     self.send_json({"success":False,"error":"Wrong password."}); return
                 cfg = _load_config()
                 if cfg["turn_state"] == "processing":
@@ -2672,6 +3740,44 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     cfg["turn_state"] = "open"; _save_config(cfg)
                 turn_num = cfg["current_turn"]
                 team_id = team.get("team_id", "") if isinstance(team, dict) else "" # This will be replaced by save_json_protected
+
+                # REGISTRY SYNC: Ensure this team ID is officially in the manager's
+                # manifest. This fixes cases where registry data was lost or out of sync.
+                if team_id:
+                    tids = mgrs[mid].setdefault("team_ids", [])
+                    _norm_tid = int(team_id) if str(team_id).isdigit() else team_id
+                    if str(_norm_tid) not in [str(x) for x in tids]:
+                        tids.append(_norm_tid)
+                        # Save happens below after last_upload_timestamp update
+
+                    # RESTORE SYNC: If this team was previously deleted via Admin Panel,
+                    # clear the deletion record so the client stops thinking it's gone.
+                    del_key = f"deleted_team_{_norm_tid}"
+                    if del_key in cfg:
+                        del cfg[del_key]; _save_config(cfg)
+
+                # Check if the user unchecked 'Run This Turn'. If so, remove the 
+                # participation file for this specific team from the upcoming turn.
+                if isinstance(team, dict) and not team.get("auto_upload_enabled", True):
+                    fname = f"upload_{mid}_team{team_id}.json" if team_id else f"upload_{mid}.json"
+                    fpath = os.path.join(_turn_dir(turn_num), fname)
+                    if os.path.exists(fpath):
+                        try:
+                            make_file_writable(fpath)
+                            os.remove(fpath)
+                            cf = fpath.replace(".json", ".checksum")
+                            if os.path.exists(cf):
+                                make_file_writable(cf)
+                                os.remove(cf)
+                        except Exception: pass
+                    # Update manager activity timestamp to reflect the request
+                    mgrs[mid]["last_upload_timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S")
+                    _save_managers(mgrs)
+                    _log_activity("upload_removed", mid, mgrs[mid]["manager_name"],
+                                f"Team {team_id} removed from turn {turn_num}")
+                    self.send_json({"success":True,"turn":turn_num,
+                                    "message":f"Team removed from turn {turn_num} queue."}); return
+
                 upload_time = time.strftime("%Y-%m-%d %H:%M:%S")
                 _save_upload(turn_num, mid, {
                     "manager_id" : mid,
@@ -2683,6 +3789,45 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 })
                 mgrs[mid]["last_upload_timestamp"] = upload_time # This will be replaced by save_json_protected
                 _save_managers(mgrs)
+
+                # Proactive cleanup: remove any other upload files for this manager
+                # in the current turn directory that are no longer in their official
+                # team_ids list, including the no-ID legacy file if they use IDs now.
+                # Normalize registry for comparison (handle ints/strs/padding)
+                tids_norm = [str(int(t)) if str(t).isdigit() else str(t) for t in mgrs[mid].get("team_ids", [])]
+                td_path = _turn_dir(turn_num)
+                if os.path.exists(td_path):
+                    for fn in os.listdir(td_path):
+                        is_match = False
+                        chk_tid  = None
+                        # Check if file belongs to this manager
+                        if fn == f"upload_{mid}.json":
+                            is_match = True
+                        elif fn.startswith(f"upload_{mid}_team") and fn.endswith(".json"):
+                            is_match = True
+                            try: chk_tid = fn.split("_team")[-1].split(".")[0]
+                            except: pass
+
+                        if is_match:
+                            # Skip the file we just saved (normalize to handle padding)
+                            _cur_tid_str = str(int(team_id)) if str(team_id).isdigit() else str(team_id)
+                            _chk_tid_str = str(int(chk_tid)) if chk_tid and chk_tid.isdigit() else chk_tid
+                            if _chk_tid_str == _cur_tid_str: continue
+
+                            if tids_norm: # If using IDs, check ID match; no-ID file is stale
+                                if not _chk_tid_str or _chk_tid_str not in tids_norm:
+                                    fpath = os.path.join(td_path, fn)
+                                    try:
+                                        make_file_writable(fpath)
+                                        os.remove(fpath)
+                                        cf = fpath.replace(".json", ".checksum")
+                                        if os.path.exists(cf):
+                                            make_file_writable(cf)
+                                            os.remove(cf)
+                                    except Exception: pass
+            team_name = team.get("team_name", "?") if isinstance(team, dict) else "?"
+            _log_activity("upload_success", mid, mgrs[mid]["manager_name"],
+                        f"Team {team_name} (ID:{team_id}) uploaded for turn {turn_num}")
             self.send_json({"success":True,"turn":turn_num,
                             "message":f"Team uploaded for turn {turn_num}."}); return
 
@@ -2690,8 +3835,8 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             # Remove a team's upload from the current turn and from the
             # manager's team_ids registry. Called when a client replaces a team
             # so the old team stops being auto-carried by the server.
-            mid     = (b.get("manager_id") or "").strip()
-            pw      = (b.get("password")   or "").strip()
+            mid     = str(b.get("manager_id") or "").strip()
+            pw      = str(b.get("password")   or "").strip()
             team_id = b.get("team_id")
             if not all([mid, pw, team_id]):
                 self.send_json({"success": False, "error": "manager_id, password and team_id required."}); return
@@ -2710,12 +3855,14 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 fpath  = os.path.join(_turn_dir(turn_num), fname)
                 removed_upload = False
                 if os.path.exists(fpath):
+                    make_file_writable(fpath)
                     os.remove(fpath)
                     removed_upload = True
                 # Remove the team from the manager's server-side team_ids list.
                 tids = mgrs[mid].get("team_ids", [])
                 checksum_fpath = os.path.join(_turn_dir(turn_num), checksum_fname)
                 if os.path.exists(checksum_fpath):
+                    make_file_writable(checksum_fpath)
                     os.remove(checksum_fpath)
                 try:
                     int_tid = int(team_id)
@@ -2731,8 +3878,8 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                                      rerun_turn=int(rerun) if rerun else None)); return
 
         if path == "/api/team/get_my_team":
-            mid = (b.get("manager_id") or "").strip()
-            pw  = (b.get("password")   or "").strip()
+            mid = str(b.get("manager_id") or "").strip()
+            pw  = str(b.get("password")   or "").strip()
             team_id = b.get("team_id") # Optional: if manager has multiple teams, specify which one
             if not all([mid, pw]):
                 self.send_json({"success":False,"error":"manager_id and password required."}); return
@@ -2783,24 +3930,97 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
 
                 self.send_json({"success":True,"teams":filtered_teams}); return
 
+        if path == "/api/league/check_reset":
+            mid = str(b.get("manager_id") or "").strip()
+            cfg  = _load_config()
+            mgrs = _load_managers()
+
+            server_reset_count = cfg.get("reset_count", 0)
+            server_rerun_count = cfg.get("rerun_count", 0)
+            server_rerun_turn  = cfg.get("rerun_turn",  0)
+
+            manager_exists = mid in mgrs
+            # Default to (server_count - 1) so managers who predate this feature
+            # still get notified about the most recent reset/rerun event.
+            mgr_ack_reset  = mgrs[mid].get("acknowledged_reset_count", max(0, server_reset_count - 1)) if manager_exists else 0
+            reset_detected = (not manager_exists) or (server_reset_count > mgr_ack_reset)
+
+            rerun_detected = False
+            if manager_exists and not reset_detected and server_rerun_count > 0:
+                mgr_ack_rerun  = mgrs[mid].get("acknowledged_rerun_count", max(0, server_rerun_count - 1))
+                rerun_detected = server_rerun_count > mgr_ack_rerun
+
+            self.send_json({
+                "success":            True,
+                "reset_detected":     reset_detected,
+                "server_reset_count": server_reset_count,
+                "rerun_detected":     rerun_detected,
+                "rerun_turn":         server_rerun_turn if rerun_detected else 0,
+                "rerun_count":        server_rerun_count,
+            }); return
+
+        if path == "/api/league/acknowledge_reset":
+            mid      = str(b.get("manager_id") or "").strip()
+            pw       = str(b.get("password")   or "").strip()
+            ack_type = str(b.get("type", "reset")).strip()  # "reset" or "rerun"
+
+            mgrs = _load_managers()
+
+            if ack_type == "rerun":
+                if mid not in mgrs:
+                    self.send_json({"success":False,"error":"Manager not found."}); return
+                if not _check_mgr_pw(mgrs[mid], pw):
+                    self.send_json({"success":False,"error":"Wrong password."}); return
+                mgrs[mid]["acknowledged_rerun_count"] = int(b.get("rerun_count", 0))
+                _save_managers(mgrs)
+                self.send_json({"success": True}); return
+            else:
+                # "reset" acknowledgment
+                server_reset_count = int(b.get("server_reset_count", 0))
+                teams_out = []
+                if mid in mgrs:
+                    if not _check_mgr_pw(mgrs[mid], pw):
+                        self.send_json({"success":False,"error":"Wrong password."}); return
+                    mgrs[mid]["acknowledged_reset_count"] = server_reset_count
+                    # Return each reverted team so the client can apply them locally
+                    from save import load_team
+                    for tid in mgrs[mid].get("team_ids", []):
+                        try:
+                            team = load_team(int(tid))
+                            teams_out.append({"team_id": int(tid), "team": team.to_dict()})
+                        except Exception:
+                            pass
+                    _save_managers(mgrs)
+                    self.send_json({"success": True, "teams": teams_out, "full_reset": False}); return
+                else:
+                    # Manager no longer exists (full reset) — just acknowledge
+                    self.send_json({"success": True, "teams": [], "full_reset": True}); return
+
         if path == "/api/arena/reset":
             cfg = _load_config()
             if not _check_host_pw(cfg, b.get("host_password","")):
                 self.send_json({"success":False,"error":"Not authorised."}); return
-            import shutil
+
+            def _rm_error(func, path, _):
+                make_file_writable(path)
+                func(path)
+
             # Remove protected files and their checksums
             for entry in os.listdir(LEAGUE_DIR):
                 full = os.path.join(LEAGUE_DIR, entry)
                 if entry.startswith("turn_") and os.path.isdir(full):
-                    shutil.rmtree(full)
+                    shutil.rmtree(full, onerror=_rm_error)
+
             # Remove individual protected files and their checksums
             for fname in ("ai_teams.json", "managers.json", "standings.json",
                           "scout_narratives.json", "scouting.json"):
                 fpath = os.path.join(LEAGUE_DIR, fname)
                 checksum_fpath = fpath.replace('.json', '.checksum')
                 if os.path.exists(checksum_fpath):
+                    make_file_writable(checksum_fpath)
                     os.remove(checksum_fpath)
                 if os.path.exists(fpath):
+                    make_file_writable(fpath)
                     os.remove(fpath)
 
             # The live scouting store is actually saves/scouting.json, so clear
@@ -2810,34 +4030,49 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             # Remove protected files and their checksums
             for fpath in (SCOUTING_FILE,):
                 if os.path.exists(fpath):
+                    make_file_writable(fpath)
                     os.remove(fpath)
                     checksum_fpath = fpath.replace('.json', '.checksum')
                     if os.path.exists(checksum_fpath):
+                        make_file_writable(checksum_fpath)
                         os.remove(checksum_fpath)
 
             # Clean up global teams, graveyard and reset champion state
             if os.path.exists(TEAMS_DIR):
                 for f in os.listdir(TEAMS_DIR):
                     if f.startswith("team_") and f.endswith(".json"): # These are protected files
-                        try: os.remove(os.path.join(TEAMS_DIR, f))
+                        fpath = os.path.join(TEAMS_DIR, f)
+                        make_file_writable(fpath)
+                        try: os.remove(fpath)
                         except: pass
-                        try: os.remove(os.path.join(TEAMS_DIR, f.replace('.json', '.checksum')))
-                        except: pass
+                        cfpath = fpath.replace('.json', '.checksum')
+                        if os.path.exists(cfpath):
+                            make_file_writable(cfpath)
+                            try: os.remove(cfpath)
+                            except: pass
             if os.path.exists(GRAVEYARD_DIR):
                 for f in os.listdir(GRAVEYARD_DIR):
                     if f.endswith(".json") or f.endswith(".checksum"): # These are protected files
-                        try: os.remove(os.path.join(GRAVEYARD_DIR, f))
+                        fpath = os.path.join(GRAVEYARD_DIR, f)
+                        make_file_writable(fpath)
+                        try: os.remove(fpath)
                         except: pass
-                    elif f.endswith(".txt"): # These are text files, just remove
-                        try: os.remove(os.path.join(GRAVEYARD_DIR, f))
+                    elif f.endswith(".txt"):
+                        try:
+                            fp = os.path.join(GRAVEYARD_DIR, f)
+                            make_file_writable(fp)
+                            os.remove(fp)
                         except: pass
             try:
                 save_champion_state({})
             except Exception:
                 pass
 
+            _turn_progress = {"running": False, "done": 0, "total": 0, "message": "Reset complete"}
+
             cfg["current_turn"] = 1; cfg["turn_state"] = "open"; cfg["fight_counter"] = 0
             cfg["schedule_last_run_at"] = "" # This will be replaced by save_json_protected
+            cfg["processing_started_at"] = ""
             cfg["schedule_last_run_turn"] = 0
             cfg["schedule_last_run_result"] = ""
             for _sl in cfg.get("schedule_slots", []):
@@ -2846,6 +4081,84 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             _save_config(cfg)
             self.send_json({"success":True,
                             "message":"League fully reset to turn 1. All manager registrations and standings cleared."}); return
+
+        if path == "/api/arena/reset_progress":
+            # Reset progress but keep managers and teams
+            cfg = _load_config()
+            if not _check_host_pw(cfg, b.get("host_password","")):
+                self.send_json({"success":False,"error":"Not authorised."}, 401); return
+            
+            with _lock:
+                # 1. Revert all player teams on disk
+                from save import TEAMS_DIR, load_team, save_team
+                if os.path.exists(TEAMS_DIR):
+                    for fn in os.listdir(TEAMS_DIR):
+                        if fn.startswith("team_") and fn.endswith(".json"):
+                            try:
+                                tid_str = fn.replace("team_", "").replace(".json", "")
+                                tid = int(tid_str)
+                                team = load_team(tid)
+                                team.revert_all_progress()
+                                save_team(team)
+                            except Exception as e:
+                                print(f"  ERROR reverting team {fn}: {e}")
+                
+                # 2. Revert AI teams
+                ai_teams_path = os.path.join(LEAGUE_DIR, "ai_teams.json")
+                if os.path.exists(ai_teams_path):
+                    ai_teams_data = _load_json(ai_teams_path, [])
+                    if ai_teams_data:
+                        from team import Team
+                        reverted_ai = []
+                        for ad in ai_teams_data:
+                            t = Team.from_dict(ad)
+                            t.revert_all_progress()
+                            reverted_ai.append(t.to_dict())
+                        _save_json(ai_teams_path, reverted_ai)
+                
+                # 3. Clear standings
+                _save_standings({})
+                
+                # 4. Wipe turn directories
+                for entry in os.listdir(LEAGUE_DIR):
+                    full = os.path.join(LEAGUE_DIR, entry)
+                    if entry.startswith("turn_") and os.path.isdir(full):
+                        if entry == "turn_0001":
+                            # Keep turn_0001 directory but revert data inside uploads
+                            from team import Team
+                            for fn in os.listdir(full):
+                                if fn.startswith("upload_") and fn.endswith(".json"):
+                                    fpath = os.path.join(full, fn)
+                                    try:
+                                        udata = _load_json(fpath, None)
+                                        if udata and "team" in udata:
+                                            t_obj = Team.from_dict(udata["team"])
+                                            t_obj.revert_all_progress()
+                                            udata["team"] = t_obj.to_dict()
+                                            _save_json(fpath, udata)
+                                    except Exception: pass
+                                if not fn.startswith("upload_"):
+                                    fpath = os.path.join(full, fn)
+                                    try:
+                                        if os.path.isdir(fpath):
+                                            shutil.rmtree(fpath, onerror=lambda func, p, _: (make_file_writable(p), func(p)))
+                                        else:
+                                            make_file_writable(fpath)
+                                            os.remove(fpath)
+                                    except Exception: pass
+                        else:
+                            shutil.rmtree(full, onerror=lambda func, path, _: (make_file_writable(path), func(path)))
+                
+                # 5. Reset config
+                cfg["current_turn"] = 1
+                cfg["turn_state"] = "open"
+                cfg["fight_counter"] = 0
+                cfg["reset_count"] = cfg.get("reset_count", 0) + 1
+                _save_config(cfg)
+                
+                _turn_progress = {"running": False, "done": 0, "total": 0, "message": "Progress reset complete"}
+            
+            self.send_json({"success":True, "message":"All progress reverted to Turn 1 baseline. Accounts and teams preserved."}); return
 
         if path == "/api/admin/update":
             cfg = _load_config()
@@ -2892,7 +4205,6 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 self.send_json({"success":False,"error":"Not authorised."}, 401); return
             cfg["turn_state"] = "open"
             _save_config(cfg)
-            global _turn_progress
             _turn_progress = {"running": False, "done": 0, "total": 0, "message": "Unlocked manually"}
             self.send_json({"success":True,"message":"Turn state reset to OPEN."}); return
 
@@ -2907,10 +4219,13 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             return os.path.join(BASE_DIR, "saves", "client", clean)
 
         if path == "/api/local/status":
+            # Return the Host header so remote players get the correct server URL,
+            # not a hardcoded "localhost" that only works on the server machine.
+            host = self.headers.get("Host", f"localhost:{_server_port}")
             self.send_json({
                 "success": True,
                 "is_local_backend": True,
-                "server_url": f"http://localhost:{args.port}"
+                "server_url": f"http://{host}",
             }); return
 
         if path == "/api/local/read":
@@ -2918,15 +4233,14 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             fpath = _safe_path(q.get("path"))
             if not fpath or not os.path.exists(fpath):
                 self.send_json({"success": False, "error": "File not found"}, 404); return
-            try: # Use protected load for JSON, regular for text
-                if fpath.endswith(".json"): # Protected
+            try:
+                if fpath.endswith(".json"):
+                    # load_json_protected returns a dict, not a string — send directly
                     content = load_json_protected(fpath)
-                else: # Not protected
+                    self.send_json({"success": True, "data": content})
+                else:
                     with open(fpath, "r", encoding="utf-8") as f:
                         content = f.read()
-                if fpath.endswith(".json"): # Return JSON object if it was JSON
-                    self.send_json({"success": True, "data": json.loads(content)})
-                else:
                     self.send_json({"success": True, "text": content})
             except Exception as e:
                 self.send_json({"success": False, "error": str(e)}, 500); return
@@ -2967,6 +4281,127 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             files = [f for f in os.listdir(dpath) if os.path.isfile(os.path.join(dpath, f))]
             self.send_json({"success": True, "files": sorted(files)}); return
 
+        # ==================== RENAME MANAGER ====================
+        if path == "/api/admin/rename_manager":
+            cfg = _load_config()
+            if not _check_host_pw(cfg, b.get("host_password", "")):
+                self.send_json({"success": False, "error": "Not authorised."}, 401); return
+
+            mid      = str(b.get("manager_id") or "").strip()
+            new_name = str(b.get("new_name") or "").strip()
+            if not mid or not new_name:
+                self.send_json({"success": False, "error": "manager_id and new_name required."}); return
+
+            with _lock:
+                mgrs = _load_managers()
+                if mid not in mgrs:
+                    self.send_json({"success": False, "error": "Manager not found."}); return
+
+                old_name = mgrs[mid]["manager_name"]
+
+                # 1. Update managers registry
+                mgrs[mid]["manager_name"] = new_name
+                _save_managers(mgrs)
+
+                # 2. Update standings
+                standings = _load_standings()
+                if mid in standings:
+                    standings[mid]["manager_name"] = new_name
+                    _save_standings(standings)
+
+                # 3. Update team files that belong to this manager
+                from save import TEAMS_DIR
+                team_ids = mgrs[mid].get("team_ids", [])
+                for tid in team_ids:
+                    tpath = os.path.join(TEAMS_DIR, f"team_{int(tid):04d}.json")
+                    if not os.path.exists(tpath):
+                        continue
+                    try:
+                        tdata = _load_json(tpath, None)
+                        if tdata:
+                            tdata["manager_name"] = new_name
+                            _save_json(tpath, tdata)
+                    except Exception as _e:
+                        print(f"  WARNING: Could not update team {tid} for rename: {_e}")
+
+                # 4. Update current-turn upload files
+                turn_num = cfg["current_turn"]
+                td = _turn_dir(turn_num)
+                if os.path.exists(td):
+                    for fname in os.listdir(td):
+                        if fname.startswith(f"upload_{mid}_") and fname.endswith(".json"):
+                            fpath = os.path.join(td, fname)
+                            try:
+                                udata = _load_json(fpath, None)
+                                if udata:
+                                    udata["manager_name"] = new_name
+                                    if isinstance(udata.get("team"), dict):
+                                        udata["team"]["manager_name"] = new_name
+                                    _save_json(fpath, udata)
+                            except Exception as _e:
+                                print(f"  WARNING: Could not update upload file {fname}: {_e}")
+
+                # 5. Update scouting selections
+                from save import SCOUTING_FILE
+                if os.path.exists(SCOUTING_FILE):
+                    try:
+                        scout_data = _load_json(SCOUTING_FILE, {})
+                        if mid in scout_data:
+                            scout_data[mid]["manager_name"] = new_name
+                            _save_json(SCOUTING_FILE, scout_data)
+                    except Exception as _e:
+                        print(f"  WARNING: Could not update scouting data for rename: {_e}")
+
+            print(f"  [rename] Manager '{old_name}' (ID: {mid}) renamed to '{new_name}'")
+            self.send_json({
+                "success": True,
+                "message": f"Manager '{old_name}' successfully renamed to '{new_name}'."
+            }); return
+        # =====================================================
+
+        # ==================== RENAME TEAM ====================
+        if path == "/api/admin/rename_team":
+            cfg = _load_config()
+            if not _check_host_pw(cfg, b.get("host_password", "")):
+                self.send_json({"success": False, "error": "Not authorised."}, 401); return
+
+            tid      = b.get("team_id")
+            new_name = str(b.get("new_name") or "").strip().upper()
+            if not tid or not new_name:
+                self.send_json({"success": False, "error": "team_id and new_name required."}); return
+
+            with _lock:
+                from save import load_team, save_team
+                try:
+                    team = load_team(int(tid))
+                    old_name = team.team_name
+                    team.team_name = new_name
+                    save_team(team)
+
+                    # Update current turn upload file if it exists
+                    turn_num = cfg["current_turn"]
+                    td = _turn_dir(turn_num)
+                    if os.path.exists(td):
+                        # Scan for files belonging to this team ID
+                        # upload_{mid}_team{tid}.json
+                        for fn in os.listdir(td):
+                            if fn.startswith("upload_") and (fn.endswith(f"_team{int(tid):04d}.json") or fn.endswith(f"_team{tid}.json")):
+                                fpath = os.path.join(td, fn)
+                                try:
+                                    udata = _load_json(fpath, None)
+                                    if udata and isinstance(udata.get("team"), dict):
+                                        udata["team"]["team_name"] = new_name
+                                        _save_json(fpath, udata)
+                                except: pass
+                except Exception as e:
+                    self.send_json({"success": False, "error": f"Failed to rename team: {e}"}); return
+
+            self.send_json({
+                "success": True,
+                "message": f"Team '{old_name}' (ID: {tid}) successfully renamed to '{new_name}'."
+            }); return
+        # =========================================================
+
         # ==================== DELETE MANAGER (FIXED) ====================
         if path == "/api/admin/delete_manager":
             # Load cfg FIRST so it's defined before the check
@@ -2974,7 +4409,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             if not _check_host_pw(cfg, b.get("host_password","")):
                 self.send_json({"success":False,"error":"Not authorised."}, 401); return
 
-            mid = (b.get("manager_id") or "").strip()
+            mid = str(b.get("manager_id") or "").strip()
             if not mid:
                 self.send_json({"success":False,"error":"manager_id required."}); return
 
@@ -2999,9 +4434,12 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                         if fname.startswith(f"upload_{mid}_") or fname.startswith(f"result_{mid}_"): # These are protected files
                             checksum_fpath = os.path.join(td, fname.replace('.json', '.checksum'))
                             if os.path.exists(checksum_fpath):
+                                make_file_writable(checksum_fpath)
                                 os.remove(checksum_fpath)
                             try:
-                                os.remove(os.path.join(td, fname))
+                                fpath = os.path.join(td, fname)
+                                make_file_writable(fpath)
+                                os.remove(fpath)
                             except Exception:
                                 pass
 
@@ -3016,7 +4454,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             cfg = _load_config()
             if not _check_host_pw(cfg, b.get("host_password", "")):
                 self.send_json({"success": False, "error": "Not authorised."}, 401); return
-            mid = (b.get("manager_id") or "").strip()
+            mid = str(b.get("manager_id") or "").strip()
             mname = ""
             if mid:
                 managers = _load_managers()
@@ -3026,6 +4464,368 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             cfg["admin_debug_manager_id"] = mid
             _save_config(cfg)
             self.send_json({"success": True, "manager_name": mname}); return
+
+        if path == "/api/admin/validate_teams":
+            cfg = _load_config()
+            if not _check_host_pw(cfg, b.get("host_password", "")):
+                self.send_json({"success": False, "error": "Not authorised."}, 401); return
+
+            from save import TEAMS_DIR, load_json_protected
+            teams_data = []
+            try:
+                if os.path.exists(TEAMS_DIR):
+                    for fn in sorted(os.listdir(TEAMS_DIR)):
+                        if fn.startswith("team_") and fn.endswith(".json"):
+                            fpath = os.path.join(TEAMS_DIR, fn)
+                            tdata = load_json_protected(fpath)
+                            raw_warriors = tdata.get("warriors", [])
+                            warrior_names = []
+                            for w in raw_warriors:
+                                if w and isinstance(w, dict):
+                                    warrior_names.append(w.get("name", "Unnamed"))
+                                else:
+                                    warrior_names.append("[None]")
+                            
+                            teams_data.append({
+                                "team_id": tdata.get("team_id", "?"),
+                                "team_name": tdata.get("team_name", "Unknown"),
+                                "manager_name": tdata.get("manager_name", "Unknown"),
+                                "warrior_count": len(raw_warriors),
+                                "warriors": warrior_names,
+                                "is_valid": len(raw_warriors) == 5
+                            })
+            except Exception as e:
+                self.send_json({"success": False, "error": str(e)}); return
+
+            self.send_json({"success": True, "teams": teams_data}); return
+
+        if path == "/api/admin/download_manager_files":
+            import zipfile
+            cfg = _load_config()
+            if not _check_host_pw(cfg, b.get("host_password", "")):
+                self.send_json({"success": False, "error": "Not authorised."}, 401); return
+
+            mid = str(b.get("manager_id") or "").strip()
+            if not mid:
+                self.send_json({"success": False, "error": "manager_id required."}); return
+
+            managers = _load_managers()
+            if mid not in managers:
+                self.send_json({"success": False, "error": "Manager not found."}); return
+
+            mname = managers[mid]["manager_name"]
+
+            # Create ZIP with all manager's files in proper directory structure
+            from io import BytesIO
+            zip_buffer = BytesIO()
+            manifest = []  # Track files and their target locations
+
+            with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
+                # Add all team files for this manager
+                mgr_teams = set(int(t) for t in managers[mid].get("team_ids", []) if isinstance(t,(int,str)) and str(t).isdigit())
+                from save import TEAMS_DIR
+                for team_id in mgr_teams:
+                    team_file = os.path.join(TEAMS_DIR, f"team_{int(team_id):04d}.json")
+                    if os.path.exists(team_file):
+                        # Store in teams/ subdirectory in ZIP
+                        arcname = f"teams/team_{int(team_id):04d}.json"
+                        zf.write(team_file, arcname=arcname)
+                        manifest.append({
+                            "source": arcname,
+                            "target": f"teams/team_{int(team_id):04d}.json",
+                            "type": "team"
+                        })
+
+                # Add all result files for this manager across all turns
+                league_dir = os.path.dirname(_config_path())
+                for fname in os.listdir(league_dir):
+                    if fname.startswith("turn_") and os.path.isdir(os.path.join(league_dir, fname)):
+                        turn_path = os.path.join(league_dir, fname)
+                        for result_file in os.listdir(turn_path):
+                            if result_file.startswith(f"result_{mid}_") and result_file.endswith(".json"):
+                                full_path = os.path.join(turn_path, result_file)
+                                # Store in league structure in ZIP
+                                arcname = f"league/{fname}/{result_file}"
+                                zf.write(full_path, arcname=arcname)
+                                manifest.append({
+                                    "source": arcname,
+                                    "target": f"league/{fname}/{result_file}",
+                                    "type": "result",
+                                    "turn": int(fname.split("_")[1])
+                                })
+
+                # Add manifest file
+                manifest_json = json.dumps(manifest, indent=2)
+                zf.writestr("MANIFEST.json", manifest_json)
+
+                # Add README with instructions
+                readme = f"""BLOODSPIRE Restore Package
+Manager: {mname} (ID: {mid})
+Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}
+
+CONTENTS:
+- teams/: Team data files
+- league/: Turn results organized by turn number
+- MANIFEST.json: File location mapping
+
+TO RESTORE:
+1. Download this ZIP file
+2. In the BLOODSPIRE client, go to Preferences → Reset Save Folder
+3. Select your save folder location
+4. Go to Preferences → Restore from ZIP
+5. Select this ZIP file
+6. Files will be automatically extracted to the correct locations
+
+Or manually:
+- Extract teams/*.json to your save folder's teams/ directory
+- Extract league/turn_*/result_*.json to your save folder's league/turn_*/ directory
+"""
+                zf.writestr("README.txt", readme)
+
+            zip_buffer.seek(0)
+            self.send_response(200)
+            self.send_header("Content-Type", "application/zip")
+            filename = f"manager_{mid}_files.zip"
+            self.send_header("Content-Disposition", f"attachment; filename={filename}")
+            self.send_header("Content-Length", len(zip_buffer.getvalue()))
+            self.end_headers()
+            self.wfile.write(zip_buffer.getvalue())
+            return
+
+        if path == "/api/admin/activity_log":
+            cfg = _load_config()
+            if not _check_host_pw(cfg, b.get("host_password", "")):
+                self.send_json({"success": False, "error": "Not authorised."}, 401); return
+
+            # Get query parameters for filtering
+            q = self.qs()
+            limit = int(q.get("limit", "100"))
+            action_filter = q.get("action", "")  # e.g., "upload", "download"
+            manager_filter = q.get("manager_id", "")  # filter by manager ID
+
+            try:
+                log_file = os.path.join(LEAGUE_DIR, "activity_logs", "activity.jsonl")
+                entries = []
+                if os.path.exists(log_file):
+                    with open(log_file, "r", encoding="utf-8") as f:
+                        for line in f:
+                            if not line.strip():
+                                continue
+                            try:
+                                entry = json.loads(line.strip())
+                                # Apply filters
+                                if action_filter and action_filter not in entry.get("action", ""):
+                                    continue
+                                if manager_filter and manager_filter != entry.get("manager_id", ""):
+                                    continue
+                                entries.append(entry)
+                            except json.JSONDecodeError:
+                                continue
+                    # Return last N entries (most recent first)
+                    entries = entries[-limit:]
+                    entries.reverse()
+
+                self.send_json({"success": True, "entries": entries, "total": len(entries)}); return
+            except Exception as e:
+                self.send_json({"success": False, "error": str(e)}); return
+
+        if path == "/api/admin/warriors_report":
+            cfg = _load_config()
+            if not _check_host_pw(cfg, b.get("host_password", "")):
+                self.send_json({"success": False, "error": "Not authorised."}, 401); return
+
+            try:
+                from save import load_all_teams
+                teams = load_all_teams()
+                warriors = []
+
+                for team in teams:
+                    team_id = team.team_id
+                    team_name = team.team_name
+                    manager_name = team.manager_name
+
+                    for slot_idx, warrior in enumerate(team.warriors):
+                        if warrior is None:
+                            continue
+                        warriors.append({
+                            "warrior_name": warrior.name,
+                            "team_id": team_id,
+                            "team_name": team_name,
+                            "manager_name": manager_name,
+                            "slot_index": slot_idx,
+                            "wins": warrior.wins,
+                            "losses": warrior.losses,
+                            "kills": warrior.kills,
+                            "total_fights": warrior.total_fights,
+                            "is_dead": warrior.is_dead,
+                        })
+
+                warriors.sort(key=lambda x: (x["team_id"], x["slot_index"]))
+                self.send_json({"success": True, "warriors": warriors, "total": len(warriors)}); return
+            except Exception as e:
+                import traceback; traceback.print_exc()
+                self.send_json({"success": False, "error": str(e)}); return
+
+        if path == "/api/admin/delete_team":
+            cfg = _load_config()
+            if not _check_host_pw(cfg, b.get("host_password", "")):
+                self.send_json({"success": False, "error": "Not authorised."}, 401); return
+
+            try:
+                team_id = int(b.get("team_id", 0))
+                if not team_id:
+                    self.send_json({"success": False, "error": "team_id required"}); return
+
+                from save import load_team, delete_team
+                team = load_team(team_id)
+                manager_id = None
+                managers_dict = _load_managers()
+
+                # Find which manager owns this team (type-insensitive)
+                for mid, mgr_data in managers_dict.items():
+                    tids = mgr_data.get("team_ids", [])
+                    if any(str(t) == str(team_id) for t in tids):
+                        manager_id = mid
+                        break
+
+                # FALLBACK: If not in registry, re-sync by loading the team file itself
+                if not manager_id:
+                    try:
+                        from save import load_team
+                        team_temp = load_team(team_id)
+                        target_mgr_name = team_temp.manager_name
+                        for mid, mgr_data in managers_dict.items():
+                            if mgr_data.get("manager_name") == target_mgr_name:
+                                manager_id = mid
+                                # Update registry to prevent future errors
+                                tids = mgr_data.setdefault("team_ids", [])
+                                if int(team_id) not in [int(x) for x in tids if str(x).isdigit()]:
+                                    tids.append(int(team_id))
+                                break
+                    except Exception as fallback_err:
+                        print(f"  Fallback registry re-sync failed: {fallback_err}")
+
+                if not manager_id:
+                    self.send_json({"success": False, "error": "Could not find manager for this team"}); return
+
+                # Record the deletion for user notification
+                deletion_key = f"deleted_team_{team_id}"
+                cfg[deletion_key] = {
+                    "deleted_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+                    "team_name": team.team_name,
+                    "team_id": team_id,
+                    "manager_id": manager_id
+                }
+                _save_config(cfg)
+
+                # Remove team from manager's team_ids list
+                mgr = managers_dict[manager_id]
+                if "team_ids" in mgr:
+                    mgr["team_ids"] = [tid for tid in mgr["team_ids"] if str(tid) != str(team_id)]
+                _save_managers(managers_dict)
+
+                # Clean up any current turn upload or result files for this team
+                turn_num = cfg["current_turn"]
+                td = _turn_dir(turn_num)
+                if os.path.exists(td):
+                    for fn in os.listdir(td):
+                        is_upload = fn.startswith(f"upload_{manager_id}")
+                        is_result = fn.startswith(f"result_{manager_id}")
+                        if (is_upload or is_result) and fn.endswith(".json"):
+                            if "_team" in fn:
+                                try:
+                                    tid_str = fn.split("_team")[-1].split(".")[0]
+                                    if int(tid_str) != team_id: continue
+                                except: continue
+                            fpath = os.path.join(td, fn)
+                            try:
+                                make_file_writable(fpath)
+                                os.remove(fpath)
+                                cf = fpath.replace(".json", ".checksum")
+                                if os.path.exists(cf):
+                                    make_file_writable(cf); os.remove(cf)
+                            except: pass
+
+                # Delete the team files
+                delete_team(team_id)
+
+                self.send_json({"success": True, "message": f"Team '{team.team_name}' deleted. Manager will be notified on next login."}); return
+            except Exception as e:
+                import traceback; traceback.print_exc()
+                self.send_json({"success": False, "error": str(e)}); return
+
+        if path == "/api/admin/uploaded_warriors":
+            cfg = _load_config()
+            if not _check_host_pw(cfg, b.get("host_password", "")):
+                self.send_json({"success": False, "error": "Not authorised."}, 401); return
+
+            try:
+                turn = cfg.get("current_turn", 1)
+                uploads = _load_uploads(turn)
+                managers_dict = _load_managers()
+                warriors_by_manager = {}
+
+                for upload_key, upload_data in uploads.items():
+                    team_data = upload_data.get("team", {})
+                    manager_id = str(upload_data.get("manager_id", ""))
+                    team_id = team_data.get("team_id", "")
+                    team_name = team_data.get("team_name", "Unknown")
+                    manager_info = managers_dict.get(manager_id, {})
+                    manager_name = manager_info.get("manager_name", f"Manager {manager_id}")
+
+                    if manager_name not in warriors_by_manager:
+                        warriors_by_manager[manager_name] = {
+                            "manager_id": manager_id,
+                            "teams": [],
+                            "warriors": []
+                        }
+
+                    warriors = team_data.get("warriors", [])
+                    for slot_idx, warrior_data in enumerate(warriors):
+                        if not warrior_data:
+                            continue
+                        warriors_by_manager[manager_name]["warriors"].append({
+                            "warrior_name": warrior_data.get("name", "Unknown"),
+                            "team_id": team_id,
+                            "team_name": team_name,
+                            "manager_name": manager_name,
+                            "manager_id": manager_id,
+                            "slot_index": slot_idx,
+                            "wins": warrior_data.get("wins", 0),
+                            "losses": warrior_data.get("losses", 0),
+                            "kills": warrior_data.get("kills", 0),
+                            "total_fights": warrior_data.get("total_fights", 0),
+                            "is_dead": warrior_data.get("is_dead", False),
+                            "uploaded_at": upload_data.get("uploaded_at", "Unknown"),
+                        })
+
+                    if team_name not in warriors_by_manager[manager_name]["teams"]:
+                        warriors_by_manager[manager_name]["teams"].append(team_name)
+
+                self.send_json({"success": True, "managers": warriors_by_manager, "total_managers": len(warriors_by_manager)}); return
+            except Exception as e:
+                import traceback; traceback.print_exc()
+                self.send_json({"success": False, "error": str(e)}); return
+
+        if path == "/api/check_deleted_teams":
+            manager_id = b.get("manager_id", "")
+            if not manager_id:
+                self.send_json({"success": False, "error": "manager_id required"}); return
+
+            try:
+                cfg = _load_config()
+                deleted_teams = []
+
+                # Check all deleted_team_* entries in config
+                for key in cfg.keys():
+                    if key.startswith("deleted_team_"):
+                        deletion_info = cfg[key]
+                        if deletion_info.get("manager_id") == manager_id:
+                            deleted_teams.append(deletion_info)
+
+                self.send_json({"success": True, "deleted_teams": deleted_teams}); return
+            except Exception as e:
+                self.send_json({"success": False, "error": str(e)}); return
 
         if path == "/api/shutdown":
             self.send_json({"success": True, "message": "Shutting down..."})
@@ -3045,6 +4845,9 @@ def main():
     parser.add_argument("--port", type=int, default=DEFAULT_PORT)
     args = parser.parse_args()
 
+    global _server_port
+    _server_port = args.port
+
     _ensure_dirs()
     cfg  = _load_config()
     salt = cfg.get("host_password_salt") or secrets.token_hex(16)
@@ -3062,14 +4865,14 @@ def main():
     url    = f"http://localhost:{args.port}"
 
     print()
-    print("  ╔══════════════════════════════════════════════╗")
-    print("  ║     BLOODSPIRE LEAGUE SERVER                 ║")
-    print("  ╚══════════════════════════════════════════════╝")
+    print("  +============================================+")
+    print(f"  | THE AGONY AMPHITHEATRE SERVER v{SERVER_VERSION:<10} |")
+    print("  +============================================+")
     print(f"\n  Admin panel :  {url}/admin")
     print(f"  Player URL  :  http://YOUR_LAN_IP:{args.port}")
     print(f"  Current turn:  {cfg['current_turn']}")
-    print(f"\n  ⚠  Share your LAN/public IP, not 'localhost', with other players.")
-    print(f"  ⚠  Forward port {args.port} on your router for internet play.\n")
+    print(f"\n  !  Share your LAN/public IP, not 'localhost', with other players.")
+    print(f"  !  Forward port {args.port} on your router for internet play.\n")
 
     threading.Timer(0.8, lambda: webbrowser.open(f"{url}/admin")).start()
 

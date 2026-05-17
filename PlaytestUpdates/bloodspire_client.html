@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v1.2</title>
+<title>BLOODSPIRE Client - v2.3</title>
 <style>
 /* ============================================================
    WINDOWS CLASSIC — REFINED
@@ -22,7 +22,18 @@
   --input-bg: #ffffff;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { width: 100%; height: 100%; background: var(--bg); font-family: var(--font); font-size: var(--fs); color: #000; user-select: none; overflow: hidden; }
+html, body { width: 100%; height: 100%; background: var(--bg); font-family: var(--font); font-size: var(--fs); color: #000; overflow: hidden; }
+/* Prevent text selection on UI chrome elements, but never on editable inputs */
+button, .tree-row, .menu-item, .tab, .group-label, th, .title-bar,
+.title-btn, .tree-lbl, .tree-exp, .tree-ico, .tree-mgr,
+table.grid th, table.grid td { user-select: none; -webkit-user-select: none; }
+input:not([readonly]), textarea, select {
+  user-select: text !important;
+  -webkit-user-select: auto !important;
+  pointer-events: auto !important;
+  cursor: text;
+}
+select { cursor: default; }
 #app { width:100%; height:100%; display:flex; flex-direction:column; }
 a { color: inherit; text-decoration: none; }
 
@@ -64,6 +75,11 @@ input[type=number] { width: 44px; text-align: center; }
   background: var(--title); color: var(--title-tx); font-weight: bold;
   padding: 4px 8px; display: flex; align-items: center; gap: 6px; font-size: 12px;
   letter-spacing: 0.2px;
+}
+/* Warrior name inputs in the grid — ensure they're always interactive */
+#ct-grid input[type="text"] {
+  position: relative;
+  z-index: 5;
 }
 .title-bar-btns { margin-left: auto; display: flex; gap: 2px; }
 .title-btn {
@@ -230,6 +246,8 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
+const CLIENT_VERSION = "2.3";
+
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
 const DEFAULT_SERVER_URL = "http://bloodspirearena.dpdns.org";
@@ -295,177 +313,424 @@ async function idbUpdateMeta(obj) {
   await idbSet('clientMeta', meta);
 }
 
-/* ============================================================
-   FILE SYSTEM ACCESS API helpers
-   ============================================================ */
-async function fsaVerifyPermission(handle, mode = 'readwrite') {
-  const opts = { mode };
-  if ((await handle.queryPermission(opts)) === 'granted') return true;
-  if ((await handle.requestPermission(opts)) === 'granted') return true;
-  return false;
-}
-async function fsaPickFolder() {
-  const h = await window.showDirectoryPicker({ mode: 'readwrite' });
-  await idbSet('folderHandle', h);
-  const meta = await idbGet('clientMeta') || {};
-  meta.folderName = h.name;
-  await idbSet('clientMeta', meta);
-  S.savedFolderName = h.name;
-  return h;
-}
-async function fsaGetOrPickFolder() {
-  let h = await idbGet('folderHandle');
-  if (h) {
-    if (await fsaVerifyPermission(h)) return h;
-  }
-  h = await fsaPickFolder();
-  if (!(await fsaVerifyPermission(h))) throw new Error('Folder permission denied.');
-  return h;
-}
-async function _fsaGetDir(root, parts, create = false) {
-  let cur = root;
-  for (const part of parts) {
-    cur = await cur.getDirectoryHandle(part, { create });
-  }
-  return cur;
-}
-async function fsaWriteJSON(relPath, obj) {
-  if (S.isLocalBackend) {
-    const r = await _remoteFetch('POST', '/api/local/write', { path: relPath, data: obj }, S.localBaseUrl);
-    if (!r.success) throw new Error(r.error || 'Server write failed');
-    return;
-  }
-  const root = S.folderHandle;
-  if (!root) throw new Error('No folder selected.');
-  const parts = relPath.split('/').filter(Boolean);
-  const fname = parts.pop();
-  const dir   = await _fsaGetDir(root, parts, true);
-  const fh    = await dir.getFileHandle(fname, { create: true });
-  const w     = await fh.createWritable();
-  await w.write(JSON.stringify(obj, null, 2));
-  await w.close();
-}
-async function fsaWriteText(relPath, text) {
-  if (S.isLocalBackend) {
-    const r = await _remoteFetch('POST', '/api/local/write', { path: relPath, text: text }, S.localBaseUrl);
-    if (!r.success) throw new Error(r.error || 'Server write failed');
-    return;
-  }
-  const root = S.folderHandle;
-  if (!root) throw new Error('No folder selected.');
-  const parts = relPath.split('/').filter(Boolean);
-  const fname = parts.pop();
-  const dir   = await _fsaGetDir(root, parts, true);
-  const fh    = await dir.getFileHandle(fname, { create: true });
-  const w     = await fh.createWritable();
-  await w.write(text);
-  await w.close();
-}
-async function fsaReadJSON(relPath) {
-  if (S.isLocalBackend) {
-    const r = await _remoteFetch('GET', `/api/local/read?path=${encodeURIComponent(relPath)}`, undefined, S.localBaseUrl);
-    if (r.success) return r.data;
-    return null;
-  }
-  const root = S.folderHandle;
-  if (!root) return null;
-  const parts = relPath.split('/').filter(Boolean);
-  const fname = parts.pop();
+// ============================================================
+// ELECTRON FILE SYSTEM HELPERS
+// ============================================================
+
+let baseDir = localStorage.getItem('bloodspire_base_dir') || "";
+
+async function doPickFolder(forceNew) {
   try {
-    // Temporarily make file writable to read, then set back to read-only
-    const dir = await _fsaGetDir(root, parts, false);
-    const fh  = await dir.getFileHandle(fname);
-    const f   = await fh.getFile();
-    return JSON.parse(await f.text());
-  } catch (e) {
-    if (e.name === 'NotFoundError') return null;
-    throw e;
-  }
-}
-async function fsaReadText(relPath) {
-  if (S.isLocalBackend) {
-    const r = await _remoteFetch('GET', `/api/local/read?path=${encodeURIComponent(relPath)}`, undefined, S.localBaseUrl);
-    if (r.success) return r.text;
-    return null;
-  }
-  const root = S.folderHandle;
-  if (!root) return null;
-  const parts = relPath.split('/').filter(Boolean);
-  const fname = parts.pop();
-  try {
-    // Temporarily make file writable to read, then set back to read-only
-    const dir = await _fsaGetDir(root, parts, false);
-    const fh  = await dir.getFileHandle(fname);
-    const f   = await fh.getFile();
-    return await f.text();
-  } catch (e) {
-    if (e.name === 'NotFoundError') return null;
-    throw e;
-  }
-}
-async function fsaDeleteFile(relPath) {
-  if (S.isLocalBackend) {
-    await _remoteFetch('POST', '/api/local/delete', { path: relPath }, S.localBaseUrl);
-    return;
-  }
-  const root = S.folderHandle;
-  if (!root) return;
-  const parts = relPath.split('/').filter(Boolean);
-  const fname = parts.pop();
-  try {
-    const dir = await _fsaGetDir(root, parts, false);
-    // Also remove checksum file if it exists
-    const checksumFname = fname.replace('.json', '.checksum');
-    try { await dir.removeEntry(checksumFname); } catch (e) { /* ignore if not found */ }
-    await dir.removeEntry(fname);
-  } catch (e) { /* already gone */ }
-}
-async function fsaListDir(relPath) {
-  if (S.isLocalBackend) {
-    const r = await _remoteFetch('GET', `/api/local/list?path=${encodeURIComponent(relPath)}`, undefined, S.localBaseUrl);
-    return r.success ? r.files : [];
-  }
-  const root = S.folderHandle;
-  if (!root) return [];
-  const parts = relPath.split('/').filter(Boolean);
-  const names = [];
-  try {
-    const dir = await _fsaGetDir(root, parts, false);
-    for await (const [name, handle] of dir.entries()) {
-      if (handle.kind === 'file') names.push(name);
+    console.log('Opening folder picker...');
+    let folderPath;
+
+    // Try Electron API first (native app)
+    if (window.electronAPI) {
+      console.log('Using Electron folder picker...');
+      folderPath = await window.electronAPI.selectFolder();
+
+      if (folderPath) {
+        console.log('Electron folder selected:', folderPath);
+        baseDir = folderPath;
+        localStorage.setItem('bloodspire_base_dir', folderPath);
+
+        // Tell main process about this folder
+        try {
+          const result = await window.electronAPI.setBaseDir(folderPath);
+          if (result.success) {
+            console.log('Main process baseDir set successfully');
+          } else {
+            console.error('Failed to set main process baseDir:', result.error);
+          }
+        } catch (err) {
+          console.error('Error setting base dir in main process:', err);
+        }
+      } else {
+        console.log('Folder selection cancelled');
+        return;
+      }
+    } else {
+      // Browser mode: use File System Access API
+      console.log('Using FSA folder picker (browser mode)...');
+      try {
+        folderPath = await fsaPickFolder();
+        if (!folderPath) {
+          console.log('FSA folder selection cancelled');
+          return;
+        }
+        baseDir = folderPath;
+        localStorage.setItem('bloodspire_base_dir', folderPath);
+        console.log('FSA folder selected:', folderPath);
+      } catch (e) {
+        if (e.name === 'AbortError') {
+          return;
+        }
+        throw e;
+      }
     }
-  } catch (e) { /* folder missing */ }
-  return names;
+
+    S.folderReady = true;
+    S.msg = '';
+
+    // Bootstrap from the folder
+    await _bootstrapFromFolder();
+  } catch (e) {
+    console.error('Folder pick error:', e);
+    if (e && e.name === 'AbortError') {
+      S.msg = '';
+      render();
+      return;
+    }
+    setMsg('Could not open folder: ' + (e.message || e), 'err');
+    render();
+  }
+}
+
+function triggerRestoreFromZip() {
+  if (!baseDir) {
+    alert('Please select a save folder first.');
+    return;
+  }
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.zip';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      restoreFromZip(file);
+    }
+  };
+  input.click();
+}
+
+async function restoreFromZip(zipFile) {
+  try {
+    // Show loading message
+    setMsg('Extracting files from ZIP...', 'ok');
+    render();
+
+    // Load zip.js library or use a simple approach
+    const arrayBuffer = await zipFile.arrayBuffer();
+
+    // Simple ZIP extraction - we'll need to add a ZIP library
+    // For now, try using a CDN-loaded library
+    if (!window.JSZip) {
+      // Load JSZip library from CDN
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+      script.onload = () => extractZipFiles(arrayBuffer);
+      script.onerror = () => {
+        setMsg('Error: Could not load ZIP extraction library. Check your internet connection.', 'err');
+        render();
+      };
+      document.head.appendChild(script);
+    } else {
+      extractZipFiles(arrayBuffer);
+    }
+  } catch (e) {
+    setMsg('Error reading ZIP file: ' + e.message, 'err');
+    render();
+  }
+}
+
+async function extractZipFiles(arrayBuffer) {
+  try {
+    const zip = new JSZip();
+    const loaded = await zip.loadAsync(arrayBuffer);
+
+    // Read manifest
+    let manifest = [];
+    const manifestFile = loaded.file('MANIFEST.json');
+    if (manifestFile) {
+      const manifestText = await manifestFile.async('string');
+      manifest = JSON.parse(manifestText);
+    }
+
+    if (!manifest || manifest.length === 0) {
+      setMsg('Error: ZIP file is missing MANIFEST.json', 'err');
+      render();
+      return;
+    }
+
+    let extracted = 0;
+    let failed = [];
+
+    // Extract each file according to manifest
+    for (const entry of manifest) {
+      try {
+        const sourceFile = loaded.file(entry.source);
+        if (!sourceFile) {
+          failed.push(`${entry.source} not found in ZIP`);
+          continue;
+        }
+
+        const content = await sourceFile.async('arraybuffer');
+        const pathParts = entry.target.split('/');
+        const filename = pathParts.pop();
+        const dirPath = pathParts.join('/');
+
+        // Write file using FSA
+        if (window.electronAPI) {
+          // Electron mode
+          const fullPath = `${baseDir}/${entry.target}`;
+          if (entry.type === 'team') {
+            const result = await window.electronAPI.writeJson(fullPath, JSON.parse(new TextDecoder().decode(content)));
+            if (!result.success) failed.push(filename);
+            else extracted++;
+          } else if (entry.type === 'result') {
+            const result = await window.electronAPI.writeJson(fullPath, JSON.parse(new TextDecoder().decode(content)));
+            if (!result.success) failed.push(filename);
+            else extracted++;
+          }
+        } else {
+          // Browser mode - use API to write files
+          const result = await fetch('/api/local/write', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              path: entry.target,
+              data: JSON.parse(new TextDecoder().decode(content))
+            })
+          }).then(r => r.json());
+          if (result.success) extracted++;
+          else failed.push(filename);
+        }
+      } catch (e) {
+        failed.push(`${entry.source}: ${e.message}`);
+      }
+    }
+
+    let msg = `✓ Extracted ${extracted} file(s)`;
+    if (failed.length > 0) {
+      msg += ` (${failed.length} failed: ${failed.slice(0, 3).join(', ')}${failed.length > 3 ? '...' : ''})`;
+    }
+    setMsg(msg, failed.length > 0 ? 'err' : 'ok');
+    render();
+
+    // Reload data after restore
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
+  } catch (e) {
+    setMsg('Error extracting ZIP: ' + e.message, 'err');
+    render();
+  }
+}
+
+async function resetSaveFolder() {
+  if (!confirm('Reset save folder? This will clear your saved folder path.\n\nYou will need to select a new folder on next launch.')) {
+    return;
+  }
+
+  // Clear saved folder path and related data
+  baseDir = '';
+  S.folderReady = false;
+  localStorage.removeItem('bloodspire_base_dir');
+  localStorage.removeItem('bloodspire_fsa_handle');
+  window._fsaDirHandle = null;
+
+  // Clear session data
+  S.account = null;
+  S.teams = {};
+  S.sel = { type: null };
+  S.savedPassword = null;
+  S.savedManagerName = null;
+  try { localStorage.removeItem(_ROLLUP_KEY); } catch (_) {}
+
+  alert('Save folder has been reset. The folder picker will appear on next launch.');
+  S.view = 'login';
+  S.msg = '';
+  render();
+}
+
+// Browser mode: use File System Access API to pick a folder
+async function fsaPickFolder() {
+  if (!window.showDirectoryPicker) {
+    throw new Error('File System Access API not available. Use Chrome, Edge, or Brave.');
+  }
+  try {
+    const dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+    localStorage.setItem('bloodspire_fsa_handle', JSON.stringify({ name: dirHandle.name }));
+    window._fsaDirHandle = dirHandle;
+    return dirHandle.name;
+  } catch (e) {
+    if (e.name === 'AbortError') return null;
+    throw e;
+  }
+}
+
+async function fsaGetOrPickFolder() {
+  const savedPath = localStorage.getItem('bloodspire_base_dir');
+  if (savedPath) {
+    baseDir = savedPath;
+    S.folderReady = true;
+    return savedPath;
+  }
+  const path = await fsaPickFolder();
+  if (!path) throw new Error('Folder selection cancelled.');
+  return path;
+}
+
+async function fsaWriteJSON(relPath, obj) {
+  if (window.electronAPI) {
+    const fullPath = `${baseDir}/${relPath}`;
+    const result = await window.electronAPI.writeJson(fullPath, obj);
+    if (!result.success) { console.error("Save failed:", result.error); throw new Error(result.error); }
+    return;
+  }
+  const resp = await fetch('/api/local/write', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({path: relPath, data: obj}),
+  }).then(r => r.json()).catch(() => ({success: false, error: 'network error'}));
+  if (!resp.success) throw new Error(resp.error || 'Write failed');
+}
+
+async function fsaWriteText(relPath, text) {
+  if (window.electronAPI) {
+    const fullPath = `${baseDir}/${relPath}`;
+    const result = await window.electronAPI.writeText(fullPath, text);
+    if (!result.success) throw new Error(result.error || 'Write failed');
+    return;
+  }
+  const resp = await fetch('/api/local/write', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({path: relPath, text}),
+  }).then(r => r.json()).catch(() => ({success: false, error: 'network error'}));
+  if (!resp.success) throw new Error(resp.error || 'Write failed');
+}
+
+async function fsaReadJSON(relPath) {
+  if (window.electronAPI) {
+    const fullPath = `${baseDir}/${relPath}`;
+    const result = await window.electronAPI.readJson(fullPath);
+    return result.success ? result.data : null;
+  }
+  const resp = await fetch(`/api/local/read?path=${encodeURIComponent(relPath)}`)
+    .then(r => r.json()).catch(() => ({success: false}));
+  return resp.success ? resp.data : null;
+}
+
+async function fsaReadText(relPath) {
+  if (window.electronAPI) {
+    const fullPath = `${baseDir}/${relPath}`;
+    const result = await window.electronAPI.readText(fullPath);
+    return result.success ? result.text : null;
+  }
+  const resp = await fetch(`/api/local/read?path=${encodeURIComponent(relPath)}`)
+    .then(r => r.json()).catch(() => ({success: false}));
+  return resp.success ? resp.text : null;
+}
+
+async function fsaDeleteFile(relPath) {
+  if (window.electronAPI) {
+    const fullPath = `${baseDir}/${relPath}`;
+    await window.electronAPI.deleteFile(fullPath);
+    return;
+  }
+  await fetch('/api/local/delete', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({path: relPath}),
+  }).catch(() => {});
+}
+
+async function fsaListDir(relPath) {
+  if (window.electronAPI) {
+    const fullPath = `${baseDir}/${relPath}`;
+    const result = await window.electronAPI.listDir(fullPath);
+    return result.success ? result.files : [];
+  }
+  const resp = await fetch(`/api/local/list?path=${encodeURIComponent(relPath)}`)
+    .then(r => r.json()).catch(() => ({success: false, files: []}));
+  return resp.success ? resp.files : [];
+}
+
+async function fsaEnsureDir(relPath) {
+  if (window.electronAPI) {
+    const fullPath = relPath ? `${baseDir}/${relPath}` : baseDir;
+    const result = await window.electronAPI.ensureDir(fullPath);
+    if (!result.success) throw new Error(result.error);
+    return;
+  }
+  // Browser mode: the server auto-creates directories on write — no-op here
 }
 
 /* ============================================================
    STORE — the FSA-backed persistence layer
    ============================================================ */
+// This builds the path for a specific team file
 function _teamPath(tid) {
-  const pad = String(tid).padStart(4, '0');
-  return `teams/team_${pad}.json`;
+  // Ensure the ID is padded (e.g., team 5 becomes team_0005.json)
+  const filename = `team_${String(tid).padStart(4, '0')}.json`;
+  return `teams/${filename}`;
 }
-function _newsletterPath(turn) {
-  const pad = String(turn).padStart(4, '0');
-  return `newsletters/turn_${pad}.txt`;
-}
+
+// This builds the path for turn results
 function _turnResultPath(turn) {
-  const pad = String(turn).padStart(4, '0');
-  return `turn_results/turn_${pad}.json`;
+  return `results/turn_${String(turn).padStart(3, '0')}.json`;
 }
+
+// This builds the path for newsletters
+function _newsletterPath(turn) {
+  return `newsletters/turn_${String(turn).padStart(3, '0')}.txt`;
+}
+/* ============================================================
+   COMPLETE ELECTRON-READY STORE OBJECT
+   ============================================================ */
 const Store = {
-  async readAccount()       { return await fsaReadJSON('account.json'); },
-  async writeAccount(obj)   { return await fsaWriteJSON('account.json', obj); },
-  // Settings.json is not protected as per user request
-  async readSettings()      { return (await fsaReadJSON('settings.json', false)) || {}; },
-  async writeSettings(obj)  { return await fsaWriteJSON('settings.json', obj, false); },
-  async readGameData()      { return await fsaReadJSON('game_data.json'); },
-  async writeGameData(obj)  { return await fsaWriteJSON('game_data.json', obj); },
-  async readTeam(tid)       { return await fsaReadJSON(_teamPath(tid)); },
-  async writeTeam(team)     { return await fsaWriteJSON(_teamPath(team.team_id), team); },
-  async deleteTeam(tid)     { return await fsaDeleteFile(_teamPath(tid)); },
-  // Turn results are protected
-  async writeTurnResult(turn, obj)  { return await fsaWriteJSON(_turnResultPath(turn), obj); },
+  // Account and Settings
+  async readAccount() { 
+    const data = await fsaReadJSON('account.json'); 
+    return data || {};
+  },
+  async writeAccount(obj) { 
+    return await fsaWriteJSON('account.json', obj); 
+  },
+  async readSettings() { 
+    const data = await fsaReadJSON('settings.json');
+    return data || {}; 
+  },
+  async writeSettings(obj) { 
+    return await fsaWriteJSON('settings.json', obj); 
+  },
+
+  // Game Data
+  async readGameData() { 
+    return await fsaReadJSON('game_data.json'); 
+  },
+  async writeGameData(obj) { 
+    return await fsaWriteJSON('game_data.json', obj); 
+  },
+
+  // Teams
+  async readTeam(tid) { 
+    return await fsaReadJSON(_teamPath(tid)); 
+  },
+  async writeTeam(team) { 
+    return await fsaWriteJSON(_teamPath(team.team_id), team); 
+  },
+  async deleteTeam(tid) { 
+    return await fsaDeleteFile(_teamPath(tid)); 
+  },
+  async readFightLog(fightId) {
+    const names = await fsaListDir('fights');
+    const needle = `fight_${String(fightId).padStart(4, '0')}_`;
+    const filename = names.find(n => n.startsWith(needle));
+    if (!filename) return null;
+    return await fsaReadText(`fights/${filename}`);
+  },
+
+  // Turn results and Newsletters
+  async writeTurnResult(turn, obj) { 
+    return await fsaWriteJSON(_turnResultPath(turn), obj); 
+  },
+  async readNewsletter(turn) { 
+    return await fsaReadText(_newsletterPath(turn)); 
+  }, 
+  async writeNewsletter(turn, text) { 
+    return await fsaWriteText(_newsletterPath(turn), text); 
+  }, 
+
+  // Folder Listings (Teams, Newsletters, Archives)
   async listTeamIds() {
     const names = await fsaListDir('teams');
     const ids = [];
@@ -474,6 +739,13 @@ const Store = {
       if (m) ids.push(parseInt(m[1], 10));
     }
     return ids.sort((a, b) => a - b);
+  },
+  async clearNewsletters() {
+    const names = await fsaListDir('newsletters');
+    for (const n of names) {
+      if (/^turn_\d+\.txt$/.test(n))
+        await fsaDeleteFile(`newsletters/${n}`).catch(() => {});
+    }
   },
   async listNewsletterTurns() {
     const names = await fsaListDir('newsletters');
@@ -484,9 +756,6 @@ const Store = {
     }
     return turns.sort((a, b) => a - b);
   },
-  // Newsletters are text files, not JSON, but should be read-only
-  async readNewsletter(turn) { return await fsaReadText(_newsletterPath(turn)); }, 
-  async writeNewsletter(turn, text) { return await fsaWriteText(_newsletterPath(turn), text); }, 
   async listArchivedTeamIds() {
     const names = await fsaListDir('archives');
     const ids = [];
@@ -497,8 +766,13 @@ const Store = {
     return ids.sort((a, b) => a - b);
   },
   async readArchivedTeam(tid) {
-    return await fsaReadJSON(`archives/team_${String(tid).padStart(4,'0')}.json`); // Archived teams are protected
+    const path = `archives/team_${String(tid).padStart(4, '0')}.json`;
+    return await fsaReadJSON(path);
   },
+  async writeArchivedTeam(tid, team) {
+    const path = `archives/team_${String(tid).padStart(4, '0')}.json`;
+    await fsaWriteJSON(path, team);
+  }
 };
 
 /* ============================================================
@@ -519,10 +793,11 @@ function randomHex(nBytes) {
 /* ============================================================
    MERGE RESULTS — port of gui_server._apply_league_results (JS)
    ============================================================ */
-function mergeResults(localTeam, serverResult) {
+function mergeResults(localTeam, serverResult, opts = {}) {
   const serverTeam     = serverResult.team || {};
   const serverWarriors = serverTeam.warriors || [];
   const out = JSON.parse(JSON.stringify(localTeam));
+  const rerun = !!opts.rerun;
 
   for (let idx = 0; idx < serverWarriors.length && idx < out.warriors.length; idx++) {
     const sw = serverWarriors[idx];
@@ -541,24 +816,36 @@ function mergeResults(localTeam, serverResult) {
     lw.streak        = sw.streak        ?? lw.streak;
     lw.turns_active  = sw.turns_active  ?? lw.turns_active;
     lw.injuries      = sw.injuries      ?? lw.injuries;
-    lw.is_dead       = sw.is_dead       ?? lw.is_dead;
-    lw.killed_by     = sw.killed_by     ?? lw.killed_by;
+    // Only take is_dead/killed_by from server if there was actual turn processing
+    // (i.e., server has fight results). Otherwise preserve local replacement status.
+    if (sw.fight_history && sw.fight_history.length > 0) {
+      lw.is_dead = sw.is_dead ?? lw.is_dead;
+      lw.killed_by = sw.killed_by ?? lw.killed_by;
+    }
     lw.ascended_to_monster = sw.ascended_to_monster ?? lw.ascended_to_monster ?? false;
     lw.monster_kills = sw.monster_kills ?? lw.monster_kills ?? 0;
     if (sw.favorite_weapon) lw.favorite_weapon = sw.favorite_weapon;
 
-    // Skills — max-merge so local gains aren't lost
-    lw.skills = lw.skills || {};
-    for (const [k, v] of Object.entries(sw.skills || {})) {
-      if ((v||0) > (lw.skills[k]||0)) lw.skills[k] = v;
-    }
-
-    // Attribute gains — server-authoritative (training ran there)
-    lw.attribute_gains = sw.attribute_gains ?? lw.attribute_gains;
-
-    // Raw attributes — take server value if higher (training raised them)
-    for (const attr of ['strength','dexterity','constitution','intelligence','presence']) {
-      if (sw[attr] != null && sw[attr] > (lw[attr]||0)) lw[attr] = sw[attr];
+    if (rerun) {
+      // Re-run: server is fully authoritative — replace skills and attributes
+      // so that removed gains (e.g. fewer skills learned on re-run) are applied.
+      lw.skills = Object.assign({}, sw.skills || {});
+      lw.attribute_gains = sw.attribute_gains ?? lw.attribute_gains;
+      for (const attr of ['strength','dexterity','constitution','intelligence','presence']) {
+        if (sw[attr] != null) lw[attr] = sw[attr];
+      }
+    } else {
+      // Normal download: max-merge skills so local gains aren't discarded.
+      lw.skills = lw.skills || {};
+      for (const [k, v] of Object.entries(sw.skills || {})) {
+        if ((v||0) > (lw.skills[k]||0)) lw.skills[k] = v;
+      }
+      // Attribute gains — server-authoritative (training ran there)
+      lw.attribute_gains = sw.attribute_gains ?? lw.attribute_gains;
+      // Raw attributes — take server value if higher (training raised them)
+      for (const attr of ['strength','dexterity','constitution','intelligence','presence']) {
+        if (sw[attr] != null && sw[attr] > (lw[attr]||0)) lw[attr] = sw[attr];
+      }
     }
 
     // Fight history — replace any local entries for turns the server ran
@@ -579,14 +866,39 @@ function mergeResults(localTeam, serverResult) {
     out.auto_upload_enabled = serverTeam.auto_upload_enabled;
   }
 
-  // Team turn_history — append any new entries by turn number
+  // Team turn_history — on re-run replace the existing entry for this turn;
+  // on a normal download only append new entries.
   out.turn_history = out.turn_history || [];
-  const known = new Set(out.turn_history.map(e => e.turn));
-  for (const entry of (serverTeam.turn_history || [])) {
-    if (entry.turn && !known.has(entry.turn)) {
-      out.turn_history.push(entry);
-      known.add(entry.turn);
+  if (rerun) {
+    const serverTurns = new Set((serverTeam.turn_history || []).map(e => e.turn).filter(Boolean));
+    out.turn_history = out.turn_history.filter(e => !serverTurns.has(e.turn));
+    out.turn_history.push(...(serverTeam.turn_history || []));
+  } else {
+    const known = new Set(out.turn_history.map(e => e.turn));
+    for (const entry of (serverTeam.turn_history || [])) {
+      if (entry.turn && !known.has(entry.turn)) {
+        out.turn_history.push(entry);
+        known.add(entry.turn);
+      }
     }
+  }
+
+  // Blood challenges — server is authoritative (creates them on kills, decrements
+  // turns_remaining each turn). Preserve any locally-set challenger_name selections
+  // so the manager's pick survives the download.
+  if (Array.isArray(serverTeam.blood_challenges)) {
+    const localBCs = out.blood_challenges || [];
+    out.blood_challenges = serverTeam.blood_challenges.map(sbc => {
+      const local = localBCs.find(l =>
+        l.target_name === sbc.target_name &&
+        l.dead_warrior_name === sbc.dead_warrior_name
+      );
+      // Keep locally-chosen challenger if the server hasn't set one yet
+      if (local && local.challenger_name && !sbc.challenger_name) {
+        return { ...sbc, challenger_name: local.challenger_name };
+      }
+      return sbc;
+    });
   }
 
   return out;
@@ -629,12 +941,12 @@ const S = {
   newsletters:     null,  // cached list of newsletter turn numbers
   newsletterTurn:  null,  // currently viewed turn
   newsletterText:  null,  // cached newsletter text
-  newsletterVoice: null,  // 'snide' | 'neutral'
   savedManagerName: null, // last-used manager name for login auto-fill
   savedPassword:    null, // saved password for auto-login (from session)
   savedRememberMe:  true, // whether Remember Me was checked last time
   challengeTargets: null, // null = not loaded; [] = loaded list of warriors
   // runNextTurn:     {},    // {team_id: bool} per-team run flags - now handled by team.auto_upload_enabled
+  hideRecord:      localStorage.getItem('bp_hide_record') === 'true',
   replacingTeam:   null,  // {old_team_id, manager_id} when replacing
   legacyTeams:     null,  // cached list of archived/replaced teams
   league: {               // league server connection settings
@@ -647,6 +959,9 @@ const S = {
     flags: { show_favorite_weapon: false, show_luck_factor: false, show_max_hp: false },
   },
 };
+
+// localStorage key for persisting pending team-creation rollup across reloads
+const _ROLLUP_KEY = 'bp_pending_rollup';
 
 /* ============================================================
    API — dual-layer router
@@ -662,7 +977,7 @@ const S = {
 // Paths that are still served by the league server (remote). Everything
 // else routed through API.* is handled locally via LocalAPI.
 const REMOTE_GETS  = new Set([
-  '/api/game_data',
+  // '/api/game_data' is handled by LocalAPI (cache-first, remote fallback)
   '/api/flags',
   '/api/status',
   '/api/standings',
@@ -683,6 +998,9 @@ const REMOTE_POSTS = new Set([
   '/api/register',
   '/api/team/create',
   '/api/upload',
+  '/api/team/withdraw',
+  '/api/league/check_reset',
+  '/api/league/acknowledge_reset',
 ]);
 
 function _splitPath(pathWithQs) {
@@ -710,19 +1028,32 @@ async function _remoteFetch(method, path, body, overrideBase) {
     return { success: false, error: `Server URL "${base}" is missing http:// or https:// — fix it on the login screen.` };
   }
   const url = base.replace(/\/+$/,'') + path;
-  const opts = { method, headers: {} };
+  const ctrl = new AbortController();
+  const tid  = setTimeout(() => ctrl.abort(), 20000); // 20-second timeout
+  const opts = { method, headers: {}, signal: ctrl.signal };
   if (body !== undefined) {
     opts.headers['Content-Type'] = 'application/json';
+    opts.headers['Accept'] = 'application/json';
     opts.body = JSON.stringify(body);
   }
+  console.log(`[API Request] ${method} ${url}`, body);
   let r;
   try {
     r = await fetch(url, opts);
+    clearTimeout(tid);
   } catch (e) {
-    // Browser-level network error (CORS, DNS, refused, offline, etc.). Re-throw
-    // with a message that tells the caller exactly what URL failed and why.
-    throw new Error(`Could not reach ${url} — ${e.message || e}. Check that the server is running and the URL is correct.`);
+    clearTimeout(tid);
+    if (e.name === 'AbortError') throw new Error(`Request to ${url} timed out.`);
+    throw new Error(`Could not reach ${url} — ${e.message || e}.`);
   }
+
+  // Handle server-side crashes (502/503/504) before parsing JSON
+  if (!r.ok && r.status >= 500) {
+    const text = await r.text().catch(() => '');
+    console.error(`[Server Error ${r.status}]`, text);
+    return { success: false, error: `Server Error (HTTP ${r.status}) - The Arena server is currently unable to process this request.` };
+  }
+
   try { return await r.json(); }
   catch (e) { return { success: false, error: `Non-JSON response (HTTP ${r.status}) from ${url}` }; }
 }
@@ -837,6 +1168,14 @@ const LocalAPI = {
       };
     }
 
+    if (path === '/api/fight/narrative') {
+      const fightId = parseInt(qs.id || '0', 10);
+      if (!fightId) return { success: false, error: 'Fight id required.' };
+      const narrative = await Store.readFightLog(fightId);
+      if (!narrative) return { success: false, error: 'Fight log not found.' };
+      return { success: true, narrative, fight_id: fightId };
+    }
+
     // ── Scout / Challenge targets — forwarded to the league server, with
     //    the current manager's password auto-injected from league settings.
     if (path === '/api/scout/status') {
@@ -906,7 +1245,7 @@ const LocalAPI = {
       const result = body.result || {};
       const local  = await Store.readTeam(tid);
       if (!local) return { success: false, error: 'Local team not found.' };
-      const merged = mergeResults(local, result);
+      const merged = mergeResults(local, result, { rerun: !!body.rerun });
       await Store.writeTeam(merged);
       // Also persist the raw result for audit.
       if (result.turn) await Store.writeTurnResult(result.turn, result);
@@ -919,14 +1258,6 @@ const LocalAPI = {
     if (path === '/api/newsletter/save') {
       const turn = parseInt(body.turn || 0, 10);
       await Store.writeNewsletter(turn, body.text || '');
-      return { success: true };
-    }
-
-    // ── Newsletter voice preference ──────────────────────────────────────
-    if (path === '/api/newsletter/voice') {
-      const s = await Store.readSettings();
-      s.narrator_voice = body.voice || 'neutral';
-      await Store.writeSettings(s);
       return { success: true };
     }
 
@@ -1010,6 +1341,20 @@ const LocalAPI = {
         const timer = setTimeout(() => ctrl.abort(), 15000);
         let r;
         try {
+          // Ensure all warriors have equipment defaults before uploading
+          if (team.warriors && Array.isArray(team.warriors)) {
+            team.warriors = team.warriors.map(w => {
+              if (!w) return w;
+              return {
+                ...w,
+                armor: w.armor || 'None',
+                helm: w.helm || 'None',
+                primary_weapon: w.primary_weapon || 'Open Hand',
+                secondary_weapon: w.secondary_weapon || 'Open Hand',
+                backup_weapon: w.backup_weapon || null,
+              };
+            });
+          }
           r = await fetch(url + '/api/upload', {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
@@ -1146,13 +1491,11 @@ const LocalAPI = {
       const team = await Store.readTeam(parseInt(body.team_id, 10));
       if (!team) return { success: false, error: 'Team not found.' };
       team.blood_challenges = team.blood_challenges || [];
-      team.blood_challenges.push({
-        dead_warrior_name: body.dead_warrior_name,
-        target_name:       body.target_name,
-        challenger_name:   body.challenger_name || null,
-        turns_remaining:   body.turns_remaining || 3,
-        status:            'active',
-      });
+      const bc = team.blood_challenges.find(c =>
+        c.target_name === body.target_name && c.status === 'active'
+      );
+      if (!bc) return { success: false, error: 'Blood challenge not found.' };
+      bc.challenger_name = body.challenger_name || null;
       await Store.writeTeam(team);
       return { success: true, team };
     }
@@ -1242,13 +1585,15 @@ const LocalAPI = {
    ============================================================ */
 
 const _HEIGHT_RANGES = {
-  'Halfling':[37,61],'Elf':[56,71],'Half-Elf':[60,72],
+  'Halfling':[37,54],'Gnome':[37,54],'Elf':[56,71],'Half-Elf':[60,72],
   'Human':[62,76],'Dwarf':[42,62],'Half-Orc':[65,90],
+  'Goblin':[48,60],'Tabaxi':[66,76],'Lizardfolk':[69,81],
   'Monster':[72,108],'Peasant':[62,76],
 };
 const _DENSITY = {
-  'Halfling':0.0434,'Elf':0.0338,'Half-Elf':0.0354,
+  'Halfling':0.0434,'Gnome':0.0434,'Elf':0.0338,'Half-Elf':0.0354,
   'Human':0.0368,'Dwarf':0.0780,'Half-Orc':0.0462,
+  'Goblin':0.0255,'Tabaxi':0.0315,'Lizardfolk':0.0400,
   'Monster':0.0420,'Peasant':0.0368,
 };
 function calcMeasurements(race, gender, size, trainingWeightBonus) {
@@ -1320,10 +1665,90 @@ function opts(items, val, blankLabel) {
 }
 
 function fmtRecord(w) { return `${w.wins||0}-${w.losses||0}-${w.kills||0}`; }  // W-L-K
+function toggleHideRecord(val) {
+  S.hideRecord = val;
+  localStorage.setItem('bp_hide_record', val ? 'true' : 'false');
+  render();
+}
 
 function hasFiveActiveWarriors(team) {
-  if (!team || !team.warriors || team.warriors.length !== 5) return false;
-  return team.warriors.every(w => w && !w.is_dead);
+  if (!team || !team.warriors || team.warriors.length !== 5) {
+    console.log('Team validation failed:', { 
+      hasTeam: !!team, 
+      warriorCount: team?.warriors?.length 
+    });
+    return false;
+  }
+  
+  const activeCount = team.warriors.filter(w => w && !w.is_dead && !w.ascended_to_monster).length;
+  const result = activeCount === 5;
+  
+  if (!result) {
+    console.log(`Team ${team.team_name} has ${activeCount}/5 active warriors (dead/ascended warriors need replacement)`);
+  }
+  
+  return result;
+}
+
+// The progress dialog function
+function _showUploadProgress(steps, currentIdx, error) {
+  const old = document.getElementById('ul-progress-modal');
+  if (old) old.remove();
+
+  const allDone = currentIdx >= steps.length && !error;
+  const hasFailed = !!error;
+
+  let rows = '';
+  steps.forEach((label, i) => {
+    let icon, color;
+    if (hasFailed && i === currentIdx) {
+      icon = '✗'; color = '#c00';
+    } else if (i < currentIdx || allDone) {
+      icon = '✓'; color = '#080';
+    } else if (i === currentIdx) {
+      icon = '⟳'; color = '#840';
+    } else {
+      icon = '☐'; color = '#aaa';
+    }
+    rows += `<tr>
+      <td style="padding:3px 8px; color:${color}; font-size:13px;">${icon}</td>
+      <td style="padding:3px 4px; font-size:12px; color:${i <= currentIdx || allDone ? '#111' : '#999'};">${esc(label)}</td>
+    </tr>`;
+  });
+
+  const footer = hasFailed
+    ? `<div style="color:#c00;font-size:11px;margin-bottom:8px;padding:0 12px;">${esc(error)}</div>`
+    : allDone
+    ? `<div style="color:#060;font-size:12px;font-weight:bold;margin-bottom:8px;">
+         <span style="font-size:16px;">✔</span> Completed Successfully
+       </div>`
+    : `<div style="color:#555;font-size:11px;margin-bottom:8px;">Uploading teams to arena...</div>`;
+
+  const showOk = allDone || hasFailed;
+
+  const modal = document.createElement('div');
+  modal.id = 'ul-progress-modal';
+  modal.style.cssText = `position:fixed;top:0;left:0;right:0;bottom:0;
+    background:rgba(0,0,0,0.45);z-index:9999;display:flex;
+    align-items:center;justify-content:center;`;
+  modal.innerHTML = `
+  <div style="background:#f4f1ea;border:2px solid #888;border-radius:4px;
+              min-width:260px;max-width:360px;box-shadow:4px 4px 12px rgba(0,0,0,0.4);
+              font-family:sans-serif;">
+    <div style="background:#6b4c2a;color:#f4f1ea;padding:6px 12px;font-weight:bold;font-size:13px;
+                border-radius:2px 2px 0 0;">
+      BLOODSPIRE — Uploading Teams
+    </div>
+    <div style="padding:12px 8px 4px;">
+      <table style="border-collapse:collapse;width:100%;">${rows}</table>
+    </div>
+    <div style="text-align:center;padding:8px 0 4px;">
+      ${footer}
+      ${showOk ? `<button onclick="document.getElementById('ul-progress-modal').remove()"
+                   style="min-width:80px;margin-top:4px;">OK</button>` : ''}
+    </div>
+  </div>`;
+  document.body.appendChild(modal);
 }
 
 async function loadTeams() {
@@ -1366,6 +1791,21 @@ function getSelWarrior() {
 /* ============================================================
    RENDER DISPATCHER
    ============================================================ */
+
+// autofocus on innerHTML-injected elements is silently ignored by Electron/Chromium.
+// The IPC call triggers a blur→focus cycle in the main process so Windows sends
+// WM_SETFOCUS (establishing OS keyboard routing), then resolves so we can safely
+// call element.focus() knowing keystrokes will actually reach it.
+function _focusAutofocusEl() {
+  const target = document.querySelector('[autofocus]');
+  if (!target) return;
+  if (window.electronAPI?.focusWindow) {
+    window.electronAPI.focusWindow().then(() => target.focus());
+  } else {
+    target.focus();
+  }
+}
+
 function render() {
   const app = el('app');
   clearTimeout(_saveTimer);
@@ -1377,6 +1817,7 @@ function render() {
   // Narrative overlay is appended on top, not a full re-render
   if (S.narrative) showNarrativeOverlay(); else hideNarrativeOverlay();
   attachEvents();
+  _focusAutofocusEl();
 }
 
 /* ============================================================
@@ -1411,15 +1852,30 @@ function buildFolderPick() {
 }
 async function doPickFolder(forceNew) {
   try {
-    const h = forceNew ? await fsaPickFolder() : await fsaGetOrPickFolder();
-    if (h) {
-      S.folderHandle = h;
-      S.folderReady  = true;
+    // 1. Call the Electron-native folder picker
+    const folderPath = await window.electronAPI.selectFolder();
+    
+    if (folderPath) {
+      // 2. Store the path string, not a handle
+      baseDir = folderPath; 
+      localStorage.setItem('bloodspire_base_dir', folderPath);
+      
+      // 3. Update the state to indicate we are ready
+      S.folderReady = true;
+      S.msg = ''; 
+      
+      // 4. Initialize the game data
       await _bootstrapFromFolder();
     }
   } catch (e) {
-    if (e && e.name === 'AbortError') { S.msg = ''; render(); return; }
-    setMsg('Could not open folder: ' + (e.message || e), 'err'); render();
+    // 5. Handle errors without triggering the permission-related crash
+    if (e && e.name === 'AbortError') { 
+      S.msg = ''; 
+      render(); 
+      return; 
+    }
+    setMsg('Could not open folder: ' + (e.message || e), 'err'); 
+    render();
   }
 }
 
@@ -1432,7 +1888,7 @@ function buildLogin() {
 <div style="background:#d4d0c8; width:100vw; height:100vh; display:flex; align-items:flex-start; justify-content:center; padding-top:80px;">
   <div id="login-dialog">
     <div class="title-bar">
-      <span>BLOODSPIRE Client - v1.2</span>
+      <span>BLOODSPIRE Client - v${CLIENT_VERSION}</span>
       <div class="title-bar-btns">
         <button class="title-btn">_</button>
         <button class="title-btn">□</button>
@@ -1532,7 +1988,25 @@ function buildMenuBar() {
 <div id="menu-bar" style="position:relative;">
   <span class="menu-item">File</span>
   <span class="menu-item">Edit</span>
-  <span class="menu-item">Preferences</span>
+  <span class="menu-item" id="menu-prefs" style="position:relative;">Preferences
+    <div id="prefs-dropdown" style="display:none; position:absolute; top:100%; left:0;
+         background:var(--bg); border:2px solid; border-color:var(--mid) var(--white) var(--white) var(--mid);
+         min-width:210px; z-index:999; box-shadow:2px 2px 0 var(--dark);">
+      <label class="menu-item" style="padding:4px 12px; display:flex; align-items:center; gap:6px; cursor:pointer; user-select:none;"
+             onclick="event.stopPropagation()">
+        <input type="checkbox" id="pref-hide-record" ${S.hideRecord ? 'checked' : ''}
+               onchange="toggleHideRecord(this.checked)">
+        Hide W-L-K Record
+      </label>
+      <div style="border-top:1px solid var(--mid); margin:2px 0;"></div>
+      <div class="menu-item" onclick="triggerRestoreFromZip()" style="padding:4px 12px; color:#080;">
+        📦 Restore from ZIP...
+      </div>
+      <div class="menu-item" onclick="resetSaveFolder()" style="padding:4px 12px; color:#800;">
+        Reset Save Folder...
+      </div>
+    </div>
+  </span>
   <span class="menu-item" id="menu-action" style="position:relative;">Action
     <div id="action-dropdown" style="display:none; position:absolute; top:100%; left:0;
          background:var(--bg); border:2px solid; border-color:var(--mid) var(--white) var(--white) var(--mid);
@@ -1546,8 +2020,9 @@ function buildMenuBar() {
         Account Settings...
       </div>
       <div class="menu-item" id="act-league-upload"
-           style="padding:3px 12px; ${S.league.managerId?'':'color:var(--mid); pointer-events:none;'}">
-        Upload${S.league.managerId?'':' — configure account first'}
+		   onclick="uploadAllTeams()" 
+		   style="padding:3px 12px; ${S.league.managerId ? '' : 'color:var(--mid); pointer-events:none;'}">
+	    Upload
       </div>
       <div class="menu-item" id="act-league-download-all"
            style="padding:3px 12px; ${S.league.managerId?'':'color:var(--mid); pointer-events:none;'}">
@@ -1559,7 +2034,7 @@ function buildMenuBar() {
       </div>
     </div>
   </span>
-  <span style="flex:1;"></span>
+  <span style="flex:1; text-align:right; padding-right:12px; font-size:10px; color:#666; align-self:center;">v${CLIENT_VERSION}</span>
   <span class="menu-item" id="menu-logout">Logout</span>
   <span class="menu-item">Help</span>
 </div>`;
@@ -1609,7 +2084,7 @@ function buildTree() {
 
         // Streak badge
         const streak = w.streak || 0;
-        const streakBadge = streak >= 3
+        const streakBadge = S.hideRecord ? '' : streak >= 3
           ? `<span style="color:#060;font-size:9px;margin-left:3px;">W${streak}🔥</span>`
           : streak <= -3
           ? `<span style="color:#800;font-size:9px;margin-left:3px;">L${Math.abs(streak)}❄</span>`
@@ -1622,12 +2097,12 @@ function buildTree() {
           ? `<span title="Retirement pending" style="font-size:10px;margin-left:3px;">🏆</span>`
           : '';
 
-        const deadStyle  = isDead ? 'opacity:0.55; font-style:italic;' : '';
-        const deadIcon   = isAscended ? '👹' : (isDead ? '💀' : '👤');
+        const deadStyle  = (isDead && !S.hideRecord) ? 'opacity:0.55; font-style:italic;' : '';
+        const deadIcon   = isAscended ? '👹' : (isDead && !S.hideRecord ? '💀' : '👤');
         const deadBadge  = isAscended
           ? `<span title="Ascended to Monsterdom on The Monsters roster — replacement needed"
                style="color:#844;font-size:10px;margin-left:4px;">👹 ASCENDED</span>`
-          : isDead
+          : (isDead && !S.hideRecord)
           ? `<span title="Slain by ${esc(w.killed_by||'unknown')} — replacement needed"
                style="color:#800;font-size:10px;margin-left:4px;">✝</span>`
           : '';
@@ -1660,10 +2135,9 @@ async function setWTab(tab) {
   refreshContent();
 }
 function treeSelectManager() {
-  S.sel    = {type: null};
-  S.mgrTab = 'account';
+  S.sel = {type: null};
+  setMgrTab('account');
   refreshTree();
-  refreshContent();
 }
 function treeSelectTeam(tid) {
   S.sel = {type:'team', teamId: tid};
@@ -1725,12 +2199,13 @@ function buildManagerPanel() {
   const tab    = S.mgrTab || 'account';
   const canAdd = acc.team_ids && acc.team_ids.length < 5; // Max 5 teams per manager
   const tabs   = [['account','Account'],['newsletters','Newsletters'],['scouting','Scouting'],['legacy','Legacy'],['new_team','New Team']];
-  let tabHtml  = '<div class="tabs">';
-  tabs.forEach(([key,lbl]) => {
-    const isDisabled = key === 'new_team' && !canAdd;
-    const label      = isDisabled ? `${lbl} (max 5)` : lbl;
-    tabHtml += `<div class="tab ${tab===key?'active':''} ${isDisabled?'tab-disabled':''}" onclick="${isDisabled?'':` setMgrTab('${key}')`}">${label}</div>`;
-  });
+	let tabHtml  = '<div class="tabs">';
+	tabs.forEach(([key,lbl]) => {
+	  const isDisabled = key === 'new_team' && !canAdd;
+	  // Just use the label without the counter
+	  const label = lbl;
+	  tabHtml += `<div class="tab ${tab===key?'active':''} ${isDisabled?'tab-disabled':''}" onclick="${isDisabled?'':` setMgrTab('${key}')`}">${label}</div>`;
+	});
   tabHtml += '</div>';
 
   // If somehow on new_team tab at max capacity, fall back to account tab
@@ -1741,7 +2216,7 @@ function buildManagerPanel() {
   if (activeTab === 'account') {
     // Match the screenshot layout exactly
     const record = (() => {
-      let w=0,l=0,k=0;
+      let w=0, l=0, k=0;
       for (const tid of (acc.team_ids||[])) {
         const team = S.teams[tid];
         if (!team) continue;
@@ -1755,6 +2230,15 @@ function buildManagerPanel() {
           w+=aw.wins||0; l+=aw.losses||0; k+=aw.kills||0;
         }
       }
+      // Include stats from legacy (replaced) teams
+      if (S.legacyTeams) {
+        for (const team of S.legacyTeams) {
+          const allWarriors = [...(team.warriors||[]), ...(team.archived_warriors||[])].filter(Boolean);
+          for (const ww of allWarriors) {
+            w+=ww.wins||0; l+=ww.losses||0; k+=ww.kills||0;
+          }
+        }
+      }
       return `${w}-${l}-${k}`;
     })();
     body = `
@@ -1766,7 +2250,7 @@ function buildManagerPanel() {
       <td style="padding:4px 8px; width:110px;">Name</td>
       <td><input type="text" class="ro" value="${esc(acc.manager_name||'')}" style="width:360px;" readonly></td>
       <td style="padding:4px 16px; width:80px;">Record</td>
-      <td><input type="text" class="ro" value="${esc(record)}" style="width:160px;" readonly></td>
+      <td><input type="text" class="ro" value="${S.hideRecord ? '—' : esc(record)}" style="width:160px;" readonly></td>
     </tr>
     <tr>
       <td style="padding:4px 8px;">Last Upload</td>
@@ -1820,7 +2304,6 @@ function buildManagerPanel() {
     const turns = S.newsletters || [];
     const cur   = S.newsletterTurn;
     const text  = S.newsletterText;
-    const voice = S.newsletterVoice || 'snide';
     if (!turns.length && S.newsletters === null) {
       // Initial load state, content will be populated by _ensureNewsletterContentLoadedForMgrTab
       body = '<div style="padding:20px; color:#666;">Loading newsletters...</div>';
@@ -1855,17 +2338,12 @@ function buildManagerPanel() {
               display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
     <b style="font-size:11px;">Turn:</b>
     <select onchange="loadNewsletterTurn(parseInt(this.value))" style="font-size:11px;">${opts}</select>
-    <span style="font-size:11px; margin-left:8px;">Voice:</span>
-    <select onchange="setNewsletterVoice(this.value)" style="font-size:11px;">
-      <option value="snide"   ${voice==='snide'  ?'selected':''}>Snide Clemens</option>
-      <option value="neutral" ${voice==='neutral'?'selected':''}>Neutral</option>
-    </select>
   </div>
   <div style="flex:1; overflow:auto;">
     ${text !== null
       ? `<pre style="font-family:'Courier New',monospace; font-size:11px; line-height:1.5;
              white-space:pre-wrap; margin:0; padding:8px; background:#fff; color:#111;"
-         >${esc(text)}</pre>`
+         >${renderNewsletterText(text)}</pre>`
       : '<div style="padding:20px; color:#666;">Loading...</div>'}
   </div>
 </div>`;
@@ -1898,6 +2376,9 @@ function setMgrTab(tab) {
   if (tab === 'account' && S.league.managerId) {
     checkLeagueReset();
     loadLeagueSettings(); // Refresh league settings including last upload timestamp
+  }
+  if (tab === 'account' && S.legacyTeams === null) {
+    _loadLegacyTeams().then(() => { if (S.mgrTab === 'account') refreshContent(); });
   }
   if (tab === 'newsletters') {
     // Ensure newsletter content is loaded when the tab is activated
@@ -2072,6 +2553,7 @@ function buildScoutingTab() {
       w.name.toLowerCase().includes(filter) ||
       w.team_name.toLowerCase().includes(filter)
     );
+    visible.sort((a, b) => b.total_fights - a.total_fights);
     let trows = '';
     visible.forEach(w => {
       const queued = already.has(w.name);
@@ -2088,14 +2570,15 @@ function buildScoutingTab() {
       <tr style="border-bottom:1px solid #eee;">
         <td style="padding:3px 8px;">${esc(w.name)}</td>
         <td style="padding:3px 8px; color:#555;">${esc(w.team_name)}</td>
+        <td style="padding:3px 8px; color:#555;">${esc(w.manager_name||'—')}</td>
         <td style="padding:3px 8px; color:#555;">${esc(w.race)} ${esc(w.gender)}</td>
-        <td style="padding:3px 8px; text-align:center;">${w.wins}-${w.losses}-${w.kills}</td>
+        <td style="padding:3px 8px; text-align:center;">${S.hideRecord ? '—' : `${w.wins}-${w.losses}-${w.kills}`}</td>
         <td style="padding:3px 8px; text-align:center;">${w.total_fights}</td>
         <td style="padding:3px 8px;">${btn}</td>
       </tr>`;
     });
     if (!trows) {
-      trows = `<tr><td colspan="6" style="padding:8px; color:#888; font-style:italic;">
+      trows = `<tr><td colspan="7" style="padding:8px; color:#888; font-style:italic;">
         No warriors match the search filter.</td></tr>`;
     }
     targetsHtml = `
@@ -2110,6 +2593,7 @@ function buildScoutingTab() {
         <tr style="border-bottom:2px solid #ccc; color:#666; font-size:11px;">
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Name</th>
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Team</th>
+          <th style="padding:4px 8px; text-align:left; font-weight:600;">Manager</th>
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Race</th>
           <th style="padding:4px 8px; text-align:center; font-weight:600;">Record (W-L-K)</th>
           <th style="padding:4px 8px; text-align:center; font-weight:600;">Fights</th>
@@ -2461,7 +2945,7 @@ function buildTeamPanel(team) {
     </tr>
     <tr>
       <td style="padding:3px 8px;">Record</td>
-      <td><input type="text" class="ro" value="${esc(totalW+'-'+totalL+'-'+totalD)}" style="width:320px;" readonly></td>
+      <td><input type="text" class="ro" value="${S.hideRecord ? '—' : esc(totalW+'-'+totalL+'-'+totalD)}" style="width:320px;" readonly></td>
       <td style="padding:3px 8px; text-align:right;">Run This Turn</td>
       <td>
         <input type="checkbox" id="cb-rnt-${tid}" ${rnt?'checked':''}
@@ -2517,7 +3001,16 @@ function buildStatsTab(team, w, wIdx) {
   // Guard: if game data hasn't loaded yet return a placeholder.
   // This prevents empty selects from firing scheduleAutoSave() on render
   // and overwriting the warrior's saved armor/weapons/trains/strategies.
-  if (!S.gd) return '<div style="padding:20px;color:#555;">Loading game data...</div>';
+  if (!S.gd) {
+    if (!S._loadingGd) {
+      S._loadingGd = true;
+      API.get('/api/game_data').then(gd => {
+        S._loadingGd = false;
+        if (gd && !gd.error) { S.gd = gd; render(); }
+      }).catch(() => { S._loadingGd = false; });
+    }
+    return '<div style="padding:20px;color:#555;">Loading game data...</div>';
+  }
   const gd = S.gd;
   const { height: _hin, weight: _wlbs } = calcMeasurements(w.race, w.gender, w.size, w.training_weight_bonus);
   const ft = Math.floor(_hin / 12), ins = _hin % 12;
@@ -2535,10 +3028,10 @@ function buildStatsTab(team, w, wIdx) {
     </tr>`;
   });
 
-  // Equipment dropdowns
-  const armor_opts = (gd.armor||[]).concat(['None']);
-  const helm_opts  = (gd.helms||[]).concat(['None']);
-  const wpn_opts   = gd.weapons||[];
+  // Equipment dropdowns — filter server list first to avoid duplicates
+  const armor_opts = [...(gd.armor||[]).filter(a => a !== 'None'), 'None'];
+  const helm_opts  = [...(gd.helms||[]).filter(h => h !== 'None'), 'None'];
+  const wpn_opts   = (gd.weapons||[]).filter(w => w !== 'Open Hand');
   const cur_armor  = w.armor||'None';
   const cur_helm   = w.helm||'None';
   const cur_prim   = w.primary_weapon||'Open Hand';
@@ -2631,7 +3124,7 @@ function buildStatsTab(team, w, wIdx) {
   </tr>
   <tr>
     <td style="padding:2px 4px;">Record</td>
-    <td><input type="text" class="ro" value="${esc(fmtRecord(w))}" style="width:240px;" readonly></td>
+    <td><input type="text" class="ro" value="${S.hideRecord ? '—' : esc(fmtRecord(w))}" style="width:240px;" readonly></td>
     <td style="padding:2px 12px 2px 8px;">Gender</td>
     <td><input type="text" class="ro" value="${esc(w.gender)}" style="width:80px;" readonly></td>
     <td style="padding:2px 8px;">Weight</td>
@@ -2836,15 +3329,15 @@ function buildFightsTab(w) {
     return `<div style="padding:10px;">
       <b>Fight History</b><br><br>
       <span style="color:#666;">${esc(w.name)} has not fought yet.</span>
-      <br><br>Record: ${esc(fmtRecord(w))} (${w.total_fights||0} fights)
+      ${S.hideRecord ? '' : `<br><br>Record: ${esc(fmtRecord(w))} (${w.total_fights||0} fights)`}
     </div>`;
   }
   let rows = '';
   history.forEach((h, i) => {
-    const res = h.result ? h.result.toUpperCase() : '—';
-    const resColor = res==='WIN' ? '#060' : res==='LOSS' ? '#800' : '#444';
-    const slainNote  = h.warrior_slain  ? ' <b style="color:#800">(SLAIN)</b>'  : '';
-    const killedNote = h.opponent_slain ? ' <b style="color:#060">(KILLED)</b>' : '';
+    const res = S.hideRecord ? '—' : (h.result ? h.result.toUpperCase() : '—');
+    const resColor = S.hideRecord ? '#444' : (res==='WIN' ? '#060' : res==='LOSS' ? '#800' : '#444');
+    const slainNote  = (!S.hideRecord && h.warrior_slain)  ? ' <b style="color:#800">(SLAIN)</b>'  : '';
+    const killedNote = (!S.hideRecord && h.opponent_slain) ? ' <b style="color:#060">(KILLED)</b>' : '';
     const fid = h.fight_id;
     const viewBtn = fid
       ? `<button class="sm" onclick="openNarrative(${fid},${h.turn||0})">View Fight</button>`
@@ -2853,18 +3346,22 @@ function buildFightsTab(w) {
     // Special styling for champion fights
     const isChampFight = h.fight_type === 'champion';
     const champStyle = isChampFight ? 'background:#fff8f0; border-left:3px solid #c60;' : `${i%2===0?'background:#f5f4f0;':''}`;
-    const opponentDisplay = isChampFight && res === 'WIN'
+    const killMark = !S.hideRecord && h.is_kill ? '<b style="color:#060">☠</b>' : '';
+    const opponentDisplay = (!S.hideRecord && isChampFight && h.result === 'WIN')
       ? `${esc(w.name)} defeated ${esc(h.opponent_name)} in an actionpacked ${h.minutes} minute Champion Fight${killedNote}`
       : `${esc(h.opponent_name)}${killedNote}`;
-    
+
     if (isChampFight) {
       // Champion fights get special row formatting
       rows += `<tr style="${champStyle} font-weight:bold;">
         <td style="padding:2px 6px; text-align:center;">${h.turn||'—'}</td>
-        <td style="padding:2px 6px; color:#c60;">★ CHAMPION FIGHT ★</td>
-        <td style="padding:2px 6px;">${opponentDisplay}${slainNote}</td>
+        <td style="padding:2px 6px; color:#c60;">
+          ★ CHAMPION FIGHT ★<br>${opponentDisplay}${slainNote}
+        </td>
+        <td style="padding:2px 6px; color:#555;">${esc(h.opponent_manager_name||'—')}</td>
+        <td style="padding:2px 6px; text-align:center;">${esc(h.opponent_race||'')}</td>
         <td style="padding:2px 6px; text-align:center; color:${resColor}; font-weight:bold;">${res}</td>
-        <td style="padding:2px 6px; text-align:center;">${h.is_kill?'<b style="color:#060">☠</b>':''}</td>
+        <td style="padding:2px 6px; text-align:center;">${killMark}</td>
         <td style="padding:2px 6px; text-align:center;">${h.minutes||'—'} min</td>
         <td style="padding:2px 6px;">${viewBtn}</td>
       </tr>`;
@@ -2873,9 +3370,10 @@ function buildFightsTab(w) {
       rows += `<tr style="${champStyle}">
         <td style="padding:2px 6px; text-align:center;">${h.turn||'—'}</td>
         <td style="padding:2px 6px;">${esc(h.opponent_name)}</td>
+        <td style="padding:2px 6px; color:#555;">${esc(h.opponent_manager_name||'—')}</td>
         <td style="padding:2px 6px; text-align:center;">${esc(h.opponent_race||'')}</td>
         <td style="padding:2px 6px; text-align:center; color:${resColor}; font-weight:bold;">${res}${slainNote}</td>
-        <td style="padding:2px 6px; text-align:center;">${h.is_kill?'<b style="color:#060">☠</b>':''}</td>
+        <td style="padding:2px 6px; text-align:center;">${killMark}</td>
         <td style="padding:2px 6px; text-align:center;">${h.minutes||'—'} min</td>
         <td style="padding:2px 6px;">${viewBtn}</td>
       </tr>`;
@@ -2884,13 +3382,14 @@ function buildFightsTab(w) {
   return `
 <div style="padding:6px;">
   <div style="font-weight:bold; margin-bottom:6px;">Fight History — ${esc(w.name)}</div>
-  <div style="color:#555; margin-bottom:6px;">Record: ${esc(fmtRecord(w))} — ${w.total_fights||0} fights (W-L-K)</div>
+  ${S.hideRecord ? '' : `<div style="color:#555; margin-bottom:6px;">Record: ${esc(fmtRecord(w))} — ${w.total_fights||0} fights (W-L-K)</div>`}
   <div style="overflow-x:auto;">
   <table class="grid" style="font-size:11px;">
     <thead>
       <tr>
         <th style="width:40px;">Turn</th>
         <th style="min-width:140px;">Opponent</th>
+        <th style="width:120px;">Manager</th>
         <th style="width:80px;">Race</th>
         <th style="width:60px;">Result</th>
         <th style="width:45px;">Kill</th>
@@ -2919,9 +3418,9 @@ function buildChallengesTab(team, w) {
     bc.status === "active" && bc.turns_remaining > 0
   );
 
-  // Blood challenges where this warrior is the selected challenger
+  // Blood challenges this warrior has already been assigned to carry
   const bloodList = (team.blood_challenges || []).filter(bc =>
-    bc.status === "active" && (bc.challenger_name === w.name || bc.challenger_name === null)
+    bc.status === "active" && bc.challenger_name === w.name
   );
 
   // Collect eligible opponents from the server-provided target list (includes AI teams)
@@ -2935,13 +3434,14 @@ function buildChallengesTab(team, w) {
       opponents.push({
         name     : ow.name,
         teamName : ow.team_name,
+        managerName : ow.manager_name || '—',
         race     : ow.race || '—',
-        record   : `${ow.wins||0}-${ow.losses||0}-${ow.kills||0}`,
+        record   : S.hideRecord ? '—' : `${ow.wins||0}-${ow.losses||0}-${ow.kills||0}`,
         fights   : owFights,
       });
     }
   }
-  opponents.sort((a, b) => a.fights - b.fights || a.name.localeCompare(b.name));
+  opponents.sort((a, b) => b.fights - a.fights || a.name.localeCompare(b.name));
 
   // ── Pending challenges rows ──────────────────────────────────────────────
   let pendingRows = '';
@@ -2966,11 +3466,21 @@ function buildChallengesTab(team, w) {
     </tr>`;
   });
   bloodList.forEach(bc => {
+    const bcTarget = bc.target_name || '?';
+    const bcDead   = bc.dead_warrior_name || '?';
+    const bcTurns  = bc.turns_remaining || 0;
     pendingRows += `
     <tr style="background:#ffe8e8;">
-      <td style="padding:4px 8px; font-weight:bold;">${esc(bc.target_name || '?')}</td>
-      <td style="padding:4px 8px; color:#800; font-size:11px;">Blood Challenge for ${esc(bc.dead_warrior_name || '?')} — ${bc.turns_remaining || 0} turn${(bc.turns_remaining||0) === 1 ? '' : 's'} left</td>
-      <td></td>
+      <td style="padding:4px 8px; font-weight:bold;">${esc(bcTarget)}</td>
+      <td style="padding:4px 8px; color:#800; font-size:11px;">
+        Blood Challenge (avenge ${esc(bcDead)}) &mdash; ${bcTurns} turn${bcTurns === 1 ? '' : 's'} left
+      </td>
+      <td style="padding:4px 8px;">
+        <button onclick="selectBloodChallengeChampion(${jsq(bcTarget)}, '')"
+                style="color:#800; font-size:11px; padding:1px 6px; border-color:#f88 #800 #800 #f88;">
+          ✕ Clear
+        </button>
+      </td>
     </tr>`;
   });
 
@@ -2992,6 +3502,7 @@ function buildChallengesTab(team, w) {
       <tr style="border-bottom:1px solid #eee;">
         <td style="padding:3px 8px;">${esc(op.name)}</td>
         <td style="padding:3px 8px; color:#555;">${esc(op.teamName)}</td>
+        <td style="padding:3px 8px; color:#555;">${esc(op.managerName)}</td>
         <td style="padding:3px 8px; color:#555;">${esc(op.race)}</td>
         <td style="padding:3px 8px; text-align:center;">${esc(op.record)}</td>
         <td style="padding:3px 8px; text-align:center;">${op.fights}</td>
@@ -2999,7 +3510,7 @@ function buildChallengesTab(team, w) {
       </tr>`;
     });
   } else {
-    oppRows = `<tr><td colspan="6" style="padding:10px; color:#888; text-align:center; font-style:italic;">
+    oppRows = `<tr><td colspan="7" style="padding:10px; color:#888; text-align:center; font-style:italic;">
       No warriors from other teams fall within this warrior's challenge range.</td></tr>`;
   }
 
@@ -3015,51 +3526,37 @@ function buildChallengesTab(team, w) {
     </table>
   </div>` : '';
 
-  // Build blood challenges section
+  // Blood challenges not yet assigned — this warrior can volunteer to carry one
+  const availableBloodChallenges = activeBloodChallenges.filter(bc => !bc.challenger_name);
+
   let bloodChallengesSection = '';
-  if (activeBloodChallenges.length > 0) {
-    let bcRows = '';
-    activeBloodChallenges.forEach(bc => {
+  if (availableBloodChallenges.length > 0) {
+    let bcItems = '';
+    availableBloodChallenges.forEach(bc => {
       const targetName = bc.target_name || '?';
-      const deadName = bc.dead_warrior_name || '?';
-      const challenger = bc.challenger_name || '(unset)';
-      const turnsLeft = bc.turns_remaining || 0;
-      const statusStyle = bc.challenger_name ? 'background:#e8f5e9;' : 'background:#fff3e0;';
-      
-      bcRows += `
-      <tr style="${statusStyle} border-bottom:1px solid #eee;">
-        <td style="padding:4px 8px; font-weight:bold;">${esc(targetName)}</td>
-        <td style="padding:4px 8px; color:#555; font-size:11px;">${esc(deadName)} killed — ${turnsLeft} turn${turnsLeft === 1 ? '' : 's'} left</td>
-        <td style="padding:4px 8px;">
-          <select onchange="selectBloodChallengeChampion(${jsq(targetName)}, this.value)" 
-                  style="font-size:11px; width:140px;">
-            <option value="">(unset)</option>
-            ${(team.warriors || []).map(w => w && w.name ? 
-              `<option value="${esc(w.name)}" ${w.name === bc.challenger_name ? 'selected' : ''}>${esc(w.name)}</option>` 
-              : '').join('')}
-          </select>
-        </td>
-      </tr>`;
+      const deadName   = bc.dead_warrior_name || '?';
+      const turnsLeft  = bc.turns_remaining || 0;
+      bcItems += `
+      <div style="display:flex; align-items:center; justify-content:space-between;
+                  padding:6px 10px; border-bottom:1px solid #e8c8c8; background:#fff3f3;">
+        <div>
+          <span style="font-weight:bold; font-size:13px;">${esc(targetName)}</span>
+          <span style="color:#800; font-size:11px; margin-left:10px;">
+            killed ${esc(deadName)} &mdash; ${turnsLeft} turn${turnsLeft === 1 ? '' : 's'} left
+          </span>
+        </div>
+        <button onclick="selectBloodChallengeChampion(${jsq(targetName)}, ${jsq(w.name)})"
+                style="background:#8b0000; color:#fff; font-size:11px; font-weight:bold;
+                       padding:4px 12px; border:1px solid #500; cursor:pointer; white-space:nowrap;">
+          Blood Challenge
+        </button>
+      </div>`;
     });
-    
+
     bloodChallengesSection = `
   <div class="group" style="margin:0 0 12px;">
-    <span class="group-label">Blood Challenges — ${activeBloodChallenges.length} Active</span>
-    <p style="font-size:11px; color:#555; margin:4px 0 8px;">
-      Select a warrior to respond to each blood challenge. The selected warrior will automatically fight the killer when matched.
-    </p>
-    <table style="border-collapse:collapse; width:100%; font-size:12px;">
-      <thead>
-        <tr style="border-bottom:2px solid #ccc;">
-          <th style="padding:4px 8px; text-align:left; font-weight:600; width:120px;">Killer</th>
-          <th style="padding:4px 8px; text-align:left; font-weight:600;">Info</th>
-          <th style="padding:4px 8px; text-align:left; font-weight:600;">Selected Challenger</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${bcRows}
-      </tbody>
-    </table>
+    <span class="group-label" style="color:#8b0000;">Blood Challenges</span>
+    ${bcItems}
   </div>`;
   }
 
@@ -3189,6 +3686,7 @@ function buildChallengesTab(team, w) {
         <tr style="border-bottom:2px solid #ccc; color:#666; font-size:11px;">
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Name</th>
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Team</th>
+          <th style="padding:4px 8px; text-align:left; font-weight:600;">Manager</th>
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Race</th>
           <th style="padding:4px 8px; text-align:center; font-weight:600;">Record</th>
           <th style="padding:4px 8px; text-align:center; font-weight:600;">Fights</th>
@@ -3210,7 +3708,7 @@ async function addChallenge(warriorName, targetName) {
     team_id: teamId, warrior_name: warriorName, target_name: targetName, action: 'add',
   });
   if (r.success) {
-    S.teams[teamId].challenges = r.challenges;
+    S.teams[teamId] = r.team;
     render();
   } else {
     alert('Could not add challenge: ' + r.error);
@@ -3224,7 +3722,7 @@ async function removeChallenge(warriorName, targetName) {
     team_id: teamId, warrior_name: warriorName, target_name: targetName, action: 'remove',
   });
   if (r.success) {
-    S.teams[teamId].challenges = r.challenges;
+    S.teams[teamId] = r.team;
     render();
   } else {
     alert('Could not remove challenge: ' + r.error);
@@ -3239,8 +3737,7 @@ async function selectBloodChallengeChampion(targetName, challengerName) {
       team_id: teamId, target_name: targetName, challenger_name: challengerName,
     });
     if (r.success) {
-      const team = S.teams[teamId];
-      if (team) team.blood_challenges = r.blood_challenges;
+      if (r.team) S.teams[teamId] = r.team;
       refreshContent();
     } else {
       alert('Could not set blood challenge champion: ' + r.error);
@@ -3265,8 +3762,7 @@ async function addAvoidManager(managerName) {
       team_id: teamId, manager_name: managerName, action: 'add',
     });
     if (r.success) {
-      const team = S.teams[teamId];
-      if (team) team.avoid_managers = r.avoid_managers;
+      if (r.team) S.teams[teamId] = r.team;
       render();
     } else {
       alert('Could not add manager to avoid list: ' + r.error);
@@ -3285,8 +3781,7 @@ async function removeAvoidManager(managerName) {
       team_id: teamId, manager_name: managerName, action: 'remove',
     });
     if (r.success) {
-      const team = S.teams[teamId];
-      if (team) team.avoid_managers = r.avoid_managers;
+      if (r.team) S.teams[teamId] = r.team;
       render();
     } else {
       alert('Could not remove manager from avoid list: ' + r.error);
@@ -3311,16 +3806,7 @@ async function addAvoid(warriorName, avoidWarriorName) {
       team_id: teamId, warrior_name: warriorName, avoid_warrior_name: avoidWarriorName, action: 'add',
     });
     if (r.success) {
-      const team = S.teams[teamId];
-      if (team && team.warriors) {
-        // Find the warrior in the team
-        for (let i = 0; i < team.warriors.length; i++) {
-          if (team.warriors[i] && team.warriors[i].name === warriorName) {
-            team.warriors[i].avoid_warriors = r.avoid_warriors;
-            break;
-          }
-        }
-      }
+      if (r.team) S.teams[teamId] = r.team;
       refreshContent();
     } else {
       alert('Could not add to avoid list: ' + r.error);
@@ -3339,16 +3825,7 @@ async function removeAvoid(warriorName, avoidWarriorName) {
       team_id: teamId, warrior_name: warriorName, avoid_warrior_name: avoidWarriorName, action: 'remove',
     });
     if (r.success) {
-      const team = S.teams[teamId];
-      if (team && team.warriors) {
-        // Find the warrior in the team
-        for (let i = 0; i < team.warriors.length; i++) {
-          if (team.warriors[i] && team.warriors[i].name === warriorName) {
-            team.warriors[i].avoid_warriors = r.avoid_warriors;
-            break;
-          }
-        }
-      }
+      if (r.team) S.teams[teamId] = r.team;
       refreshContent();
     } else {
       alert('Could not remove from avoid list: ' + r.error);
@@ -3494,7 +3971,7 @@ function buildReplacementTab(w) {
       <table style="border-collapse:collapse; margin-bottom:10px;">
         <tr>
           <td style="padding:3px 8px; text-align:right; width:70px;">Name</td>
-          <td><input type="text" id="rp-name" value="${esc(rs.name||'')}" style="width:200px;" placeholder="Warrior name"></td>
+          <td><input type="text" id="rp-name" value="${esc(rs.name||'')}" style="width:200px;" placeholder="Warrior name" autocomplete="off" autofocus oninput="if(S.replacement) S.replacement.name = this.value.toUpperCase();"></td>
         </tr>
         <tr>
           <td style="padding:3px 8px; text-align:right;">Race</td>
@@ -3639,6 +4116,7 @@ function buildCreateTeam() {
   // Total points used so far for selected warrior
   const ptsUsed = ATTR_KEYS.reduce((a, k) => a + (add[k]||0), 0);
   const ptsLeft = 16 - ptsUsed;
+  const allPointsUsed = ptsLeft === 0;
 
   // All 5 warriors saved?
   const allSaved = ct.saved && ct.saved.every(Boolean);
@@ -3648,11 +4126,11 @@ function buildCreateTeam() {
   ct.warriors.forEach((w, i) => {
     const sel = i === selIdx ? 'sel' : '';
     const mark = (ct.saved && ct.saved[i]);
-    const indicator = mark ? '&#10003;' : '&#9675;';
+    const indicator = mark ? '✓' : '○';
     const indStyle  = mark ? 'color:#080; font-weight:bold;' : 'color:#aaa;';
-    gridRows += `<tr class="${sel}" id="ct-row-${i}" style="cursor:default;">
-      <td style="padding:2px 4px; text-align:center; width:20px; ${indStyle}">${indicator}</td>
-      <td style="padding:2px 8px;"><input type="text" id="ct-name-${i}" value="${esc(w.name||'')}" style="width:140px;" placeholder="Name"></td>
+    gridRows += `<tr class="${sel}" id="ct-row-${i}" style="cursor:pointer;">
+	  <td style="padding:2px 4px; text-align:center; width:20px; ${indStyle}">${indicator}</td>
+	  <td style="padding:2px 8px;"><input type="text" id="ct-name-${i}" value="${esc(w.name||'')}" style="width:140px;" placeholder="Warrior name" autocomplete="off" tabindex="0" maxlength="20" oninput="updateWarriorName(${i}, this.value)"></td>
       <td style="padding:2px 4px; text-align:center;">${esc(w.race||'Human')}</td>
       <td style="padding:2px 4px; text-align:center;">${esc(w.gender||'Male')}</td>
       ${ATTR_KEYS.map(k => `<td style="padding:2px 4px; text-align:right;">${final(ct, i, k)}</td>`).join('')}
@@ -3671,8 +4149,8 @@ function buildCreateTeam() {
       <td style="padding:2px 4px;">
         <div class="stat-spin">
           <span style="min-width:30px; text-align:right; font-weight:bold;">${fv}</span>
-          <button class="sm" id="ct-dec-${k}" ${cur<=0?'disabled':''}>-</button>
-          <button class="sm" id="ct-inc-${k}" ${cur>=cap||ptsLeft<=0?'disabled':''}>+</button>
+          <button class="sm" data-attr="${k}" data-delta="-1" ${cur<=0?'disabled':''}>-</button>
+          <button class="sm" data-attr="${k}" data-delta="+1" ${cur>=cap||ptsLeft<=0?'disabled':''}>+</button>
           <span style="color:#666; font-size:10px; margin-left:4px;">(base ${base}, max add ${cap})</span>
         </div>
       </td>
@@ -3683,6 +4161,7 @@ function buildCreateTeam() {
   const gd = S.gd || {};
   const races   = gd.races||['Human','Half-Orc','Halfling','Dwarf','Half-Elf','Elf','Goblin','Gnome','Lizardfolk','Tabaxi'];
   const genders = gd.genders||['Male','Female'];
+  const nameEntered = sw.name && sw.name.trim().length > 0;
 
   return `
 <div style="height:100%; display:flex; flex-direction:column; overflow:hidden;">
@@ -3709,23 +4188,23 @@ function buildCreateTeam() {
     </div>
   </div>
 
-  <!-- Team name + action buttons — locked until all 5 warriors saved -->
+  <!-- Team name + action buttons -->
   <div style="display:flex; align-items:center; gap:10px; margin:6px 4px;">
     <span>Team Name</span>
     <input type="text" id="ct-team-name" value="${esc(ct.teamName||'')}"
-           oninput="S.ct.teamName=this.value"
-           style="width:280px;" placeholder="${allSaved ? 'Enter team name' : 'Save all 5 warriors first'}"
-           ${allSaved ? '' : 'disabled'}>
-    <span style="margin-left:12px;">Create Team as</span>
-    <button id="btn-ct-save" class="wide" ${allSaved ? '' : 'disabled'}>New</button>
-    <button disabled class="wide">Replacement</button>
+           oninput="if(S.ct) S.ct.teamName = this.value"
+           maxlength="20"
+           style="width:280px;" placeholder="Enter team name">
     <div style="flex:1;"></div>
+    <button id="btn-ct-save" class="wide" ${allSaved ? '' : 'disabled'}>
+      ${S.replacingTeam ? 'Save Replacement' : 'Save New Team'}
+    </button>
     <button id="btn-ct-cancel">Cancel</button>
   </div>
 
   <!-- Warrior editor -->
   <div class="group">
-    <span class="group-label">New Warrior</span>
+    <span class="group-label">New Warrior ${selIdx+1} of 5</span>
     <div style="display:flex; gap:20px; flex-wrap:wrap;">
       <!-- Stat spinners -->
       <div>
@@ -3734,37 +4213,71 @@ function buildCreateTeam() {
         </table>
       </div>
       <!-- Name / Race / Gender + points -->
-      <div style="min-width:260px;">
-        <table style="border-collapse:collapse; margin-bottom:8px;">
-          <tr>
-            <td style="padding:3px 8px; text-align:right; width:70px;">Name</td>
-            <td><input type="text" id="ct-wname" value="${esc(sw.name||'')}" style="width:200px;" placeholder="Warrior name"></td>
-          </tr>
+	  <div style="min-width:260px;">
+	    <table style="border-collapse:collapse; margin-bottom:8px;">
+		  <tr>
+		    <td style="padding:3px 8px; text-align:right; width:70px;">Name</td>
+		    <td><input type="text" id="ct-wname" value="${esc(sw.name||'')}" style="width:200px;" placeholder="Warrior name" autocomplete="off" autofocus maxlength="20" oninput="updateCurrentWarriorName(this.value)"></td>
+		  </tr>
           <tr>
             <td style="padding:3px 8px; text-align:right;">Race</td>
-            <td><select id="ct-wrace" style="width:200px;">${opts(races, sw.race||'Human')}</select></td>
+            <td><select id="ct-wrace" style="width:200px;" onchange="updateCurrentWarriorRace(this.value)">${opts(races, sw.race||'Human')}</select></td>
           </tr>
           <tr>
             <td style="padding:3px 8px; text-align:right;">Gender</td>
-            <td><select id="ct-wgender" style="width:200px;">${opts(genders, sw.gender||'Male')}</select></td>
+            <td><select id="ct-wgender" style="width:200px;" onchange="updateCurrentWarriorGender(this.value)">${opts(genders, sw.gender||'Male')}</select></td>
           </tr>
         </table>
         <div class="group" style="margin:0; padding:8px; display:inline-block; min-width:200px;">
-          <span class="group-label">Points Left to Distribute</span>
-          <div style="text-align:center; margin:6px 0;">
-            <span class="pts-box" id="pts-left">${ptsLeft}</span>
-          </div>
-          <div style="display:flex; gap:8px; justify-content:center;">
-            <button id="btn-ct-reset">Reset</button>
-            <button id="btn-ct-wsave">Save</button>
-          </div>
-        </div>
+		  <span class="group-label">Points Left to Distribute</span>
+		  <div style="text-align:center; margin:6px 0;">
+			<span class="pts-box" style="font-size:18px; padding:4px 10px;">${ptsLeft}</span>
+		  </div>
+		  <div style="display:flex; gap:8px; justify-content:center;">
+			<button id="btn-ct-reset">Reset</button>
+			<button id="btn-ct-wsave" ${allPointsUsed ? '' : 'disabled'}>Save Warrior</button>
+		  </div>
+		</div>
       </div>
     </div>
   </div>
 
   </div><!-- end scroll area -->
 </div>`;
+}
+
+function updateWarriorName(index, value) {
+  if (!S.ct) return;
+  S.ct.warriors[index].name = value;
+  // Keep the right-side editor input in sync if it's the same warrior, without disturbing focus
+  if (S.ct.sel === index) {
+    const mainInput = document.getElementById('ct-wname');
+    if (mainInput && mainInput !== document.activeElement && mainInput.value !== value) {
+      mainInput.value = value;
+    }
+  }
+}
+
+function updateCurrentWarriorName(value) {
+  if (!S.ct) return;
+  const i = S.ct.sel;
+  S.ct.warriors[i].name = value;
+  // Keep the grid input in sync without disturbing focus
+  const gridInput = document.getElementById(`ct-name-${i}`);
+  if (gridInput && gridInput !== document.activeElement && gridInput.value !== value) {
+    gridInput.value = value;
+  }
+}
+function updateCurrentWarriorRace(value) {
+  if (!S.ct) return;
+  const i = S.ct.sel;
+  S.ct.warriors[i].race = value;
+}
+
+function updateCurrentWarriorGender(value) {
+  if (!S.ct) return;
+  const i = S.ct.sel;
+  S.ct.warriors[i].gender = value;
 }
 
 const ATTR_KEYS = ['strength','dexterity','constitution','intelligence','presence','size'];
@@ -3788,15 +4301,23 @@ function attachEvents() {
 
   // --- Menu ---
   bind('menu-logout', async () => {
-    // Clear saved session so auto-login doesn't fire on reload
-    S.savedPassword = null;
-    try { await API.post('/api/session/save', { manager_name: S.savedManagerName || '', password: '' }); } catch(e) {}
+    if (!S.savedRememberMe) {
+      S.savedPassword = null;
+      try { await API.post('/api/session/save', { manager_name: S.savedManagerName || '', password: '' }); } catch(e) {}
+    }
     S.account = null; S.teams = {}; S.sel = {type:null};
     S.challengeTargets = null;
     S.newsletters = null; S.newsletterText = null;
     S.ct = null;
-    S.view = 'login'; S.loginTab = 'new'; S.msg = '';
+    try { localStorage.removeItem(_ROLLUP_KEY); } catch(_) {}
+    S.view = 'login'; S.loginTab = 'login'; S.msg = '';
     render();
+  });
+  bind('menu-prefs', (e) => {
+    e.stopPropagation();
+    const dd = el('prefs-dropdown');
+    if (!dd) return;
+    dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
   });
   bind('menu-action', (e) => {
     e.stopPropagation();
@@ -3860,27 +4381,20 @@ function attachEvents() {
 
   // Warrior changes auto-save via scheduleAutoSave()
 
-  // --- Create team ---
-  bind('btn-ct-cancel', () => { S.view='main'; S.msg=''; render(); });
-  bind('btn-tr-back',   () => { S.view='main'; S.turnResults=null; render(); });
-  bind('btn-ct-save',   doSaveTeam);
-  bind('btn-ct-reset',  doCtReset);
-  bind('btn-ct-wsave',  doCtSaveWarrior);
-
-  if (S.ct) {
-    // Row selection in grid
-    for (let i = 0; i < 5; i++) {
-      const row = el(`ct-row-${i}`);
-      if (row) row.addEventListener('click', () => { doCtSaveWarrior(); S.ct.sel = i; render(); });
-    }
-    // Stat spinners
-    ATTR_KEYS.forEach(k => {
-      bind(`ct-dec-${k}`, () => ctAdjust(k, -1));
-      bind(`ct-inc-${k}`, () => ctAdjust(k, +1));
-    });
-  }
+  // --- Create team events ---
+  bind('btn-ct-cancel', () => {
+  S.view = 'main';
+  // S.ct is intentionally NOT cleared here — cancelling should not allow
+  // a fresh set of stat rolls. The same rollup is shown if the user re-enters.
+  S.replacingTeam = null;
+  S.msg = '';
+  render();
+});
+bind('btn-tr-back', () => { S.view='main'; S.turnResults=null; render(); });
+bind('btn-ct-save', doSaveTeam);
+bind('btn-ct-reset', doCtReset);
+bind('btn-ct-wsave', doCtSaveWarrior);
 }
-
 function bind(id, fn) { const e = el(id); if (e) e.addEventListener('click', fn); }
 function click(id, fn) { const e = el(id); if (e) e.addEventListener('click', fn); }
 
@@ -3889,7 +4403,7 @@ function refreshTree() {
   if (wrap) { wrap.innerHTML = buildTree(); }
   // No tree-wrap = not on main screen, nothing to do
 }
-function refreshContent() { const c = el('content'); if (c) c.innerHTML = buildContent(); }
+function refreshContent() { const c = el('content'); if (c) { c.innerHTML = buildContent(); _focusAutofocusEl(); } }
 
 /* ============================================================
    LOGIN ACTIONS
@@ -3925,15 +4439,26 @@ async function doLogin() {
 
     // If local auth fails and a server URL is set, try authenticating against
     // the league server so users can recover their account on a new machine.
-    if (!r.success && S.serverUrl) {
+    // Also try window.location.origin as a fallback — remote players connecting
+    // via HTTP may have S.serverUrl set to localhost if it wasn't corrected.
+    if (!r.success) {
+      const candidateUrls = [...new Set([
+        S.serverUrl,
+        (window.location.protocol !== 'file:' ? window.location.origin : null),
+      ].filter(Boolean))];
+      if (!candidateUrls.length) { setMsg(r.error || 'Login failed.', 'err'); render(); return; }
       setMsg('No local account found — checking league server...', ''); render();
       try {
-        const base = S.serverUrl.replace(/\/+$/, '');
+        let serverReg = null, base = '';
+        for (const candidate of candidateUrls) {
+          base = candidate.replace(/\/+$/, '');
+          serverReg = await fetch(base + '/api/register', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ manager_name: name, password: pass }),
+          }).then(res => res.json()).catch(() => null);
+          if (serverReg?.success) { S.serverUrl = base; break; }
+        }
         // /api/register returns the existing manager_id when name+password match
-        const serverReg = await fetch(base + '/api/register', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ manager_name: name, password: pass }),
-        }).then(res => res.json()).catch(() => null);
 
         if (!serverReg?.success) {
           setMsg(serverReg?.error || r.error || 'Login failed.', 'err'); render(); return;
@@ -3983,7 +4508,7 @@ async function doLogin() {
         S.league.password    = pass;
    S.league.lastTurnRan = 0; // Reset for new account
 
-        await idbUpdateMeta({ managerName: name, serverUrl: S.serverUrl,
+        await idbUpdateMeta({ managerName: name, serverUrl: S.serverUrl, // This will be replaced by _persistAccount
                               rememberMe: remember, password: remember ? pass : '' });
 
    // S.account.run_next_turn is deprecated, remove it
@@ -3997,8 +4522,10 @@ async function doLogin() {
         setMsg(`Account recovered from server. ${teamMsg}`, 'ok');
         S.view = 'main';
         await loadTeams();
-        await loadLeagueSettings();
+        await loadLeagueSettings(); // This will refresh S.league.managerId etc.
+        await processDeletedTeams(serverReg.deleted_teams, serverReg.manager_id);
         render();
+        await checkLeagueResetOnLogin();
         return;
       } catch (srvErr) {
         setMsg(r.error || 'Login failed.', 'err'); render(); return;
@@ -4013,7 +4540,7 @@ async function doLogin() {
       email:        r.email || '',
       team_ids:     [...new Set(r.team_ids)],
     }
-    S.savedRememberMe = remember;
+    S.savedRememberMe = remember; // This will be replaced by _persistAccount
 
     // Persist remember-me choice to account.json
     const acc = await _ensureAccountLoaded();
@@ -4022,7 +4549,7 @@ async function doLogin() {
       acc.password_plaintext = remember ? pass : '';
       await _persistAccount(acc);
     }
-    // Update client metadata in IDB (survives browser restart)
+    // Update client metadata in IDB (survives browser restart) // This will be replaced by _persistAccount
     await idbUpdateMeta({
       managerName: name,
       serverUrl: S.serverUrl,
@@ -4041,7 +4568,8 @@ async function doLogin() {
     S.view = 'main'; S.msg = '';
     await loadTeams();
     await loadLeagueSettings();
-    // Sync S.account.id with the league manager ID if they differ — the league
+    await _loadLegacyTeams();
+    // Sync S.account.id with the league manager ID if they differ — the league // This will be replaced by _persistAccount
     // settings ID is server-authoritative; the local account.json may be stale.
     if (S.league.managerId && S.account && S.account.id !== S.league.managerId) {
       S.account.id = S.league.managerId;
@@ -4049,9 +4577,75 @@ async function doLogin() {
       if (_syncAcc) { _syncAcc.id = S.league.managerId; await _persistAccount(_syncAcc); }
     }
     render();
+    await checkLeagueResetOnLogin(); // This will refresh S.league.managerId etc.
+    // r.deleted_teams is never set by the local login handler — fetch from the
+    // league server instead so admin-deleted teams are cleaned up on login.
+    if (!S.league.password) S.league.password = pass;
+    {
+      const mid = S.league.managerId || r.id;
+      let pendingDeleted = r.deleted_teams;
+      if (mid && S.serverUrl && !pendingDeleted?.length) {
+        try {
+          const base = S.serverUrl.replace(/\/+$/, '');
+          const delResp = await fetch(base + '/api/check_deleted_teams', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ manager_id: String(mid) }),
+          }).then(res => res.json()).catch(() => null);
+          if (delResp?.success) pendingDeleted = delResp.deleted_teams;
+        } catch (_) {}
+      }
+      await processDeletedTeams(pendingDeleted, mid);
+    }
   } catch (err) {
     setMsg('Error: ' + (err.message || err), 'err'); render();
   }
+}
+
+async function processDeletedTeams(deletedTeams, managerId) {
+  if (!deletedTeams || deletedTeams.length === 0) return;
+
+  // Only process teams that are still present in the local account.
+  // If the team was already removed (e.g. handled on a previous login), skip
+  // the alert but still acknowledge so the server clears its entries.
+  const localIds = (S.account?.team_ids || []).map(Number);
+  const pending = deletedTeams.filter(d => localIds.includes(Number(d.team_id)));
+
+  if (!pending.length) {
+    API.post('/api/acknowledge_deleted_teams', { manager_id: managerId, password: S.league.password }).catch(() => {});
+    return;
+  }
+
+  let message = "The following teams have been deleted by the host:\n";
+  const deletedIds = [];
+
+  for (const deleted of pending) {
+    const tid = deleted.team_id;
+    const tname = deleted.team_name || `Team ${tid}`;
+    message += `- ${tname} (ID: ${tid})\n`;
+    deletedIds.push(tid);
+
+    // Delete local team file
+    try {
+      await Store.deleteTeam(tid);
+      console.log(`Client: Deleted local file for team ${tid}`);
+    } catch (e) {
+      console.error(`Client: Failed to delete local team file ${tid}:`, e);
+    }
+  }
+
+  // Update S.account.team_ids and persist
+  if (S.account && S.account.team_ids) {
+    S.account.team_ids = S.account.team_ids.filter(id => !deletedIds.includes(id));
+    await _persistAccount(S.account);
+  }
+
+  alert(message + "\nYour client will now be updated.");
+
+  // Acknowledge deletion with the server
+  await API.post('/api/acknowledge_deleted_teams', { manager_id: managerId, password: S.league.password });
+
+  await loadTeams(); // This will refresh S.teams based on S.account.team_ids
+  render();
 }
 
 async function doCreateAccount() {
@@ -4235,25 +4829,51 @@ async function flushSave() {
 }
 
 /* ============================================================
-   CREATE TEAM ACTIONS
+   CREATE TEAM ACTIONS (ELECTRON UPDATED)
    ============================================================ */
-async function initCreateTeam() {
-  // Load game data if needed
-  if (!S.gd) { const r = await API.get('/api/game_data'); S.gd = r; }
-  // Only fetch fresh rollups if we don't already have a pending creation session.
-  // This prevents players from cancelling out and re-rolling for better stats.
-  if (!S.ct) {
-    const r = await API.get('/api/rollup');
-    S.ct = {
-      teamName : '',
-      sel      : 0,
-      warriors : r.rolls.map(base => ({ base, name:'', race:'Human', gender:'Male' })),
-      adds     : r.rolls.map(() => ({ strength:0, dexterity:0, constitution:0, intelligence:0, presence:0, size:0 })),
-      saved    : [false, false, false, false, false],
-    };
-  }
+async function initCreateTeam(isReplacing) {
   S.view = 'create_team';
-  S.msg  = '';
+  render();
+
+  try {
+    if (!S.gd) { 
+      const r = await API.get('/api/game_data'); 
+      if (r && !r.error) S.gd = r; 
+    }
+    // Restore from localStorage if in-memory state was lost (e.g. page reload).
+    // This prevents players from refreshing the page to get a new set of stat rolls.
+    if (!S.ct) {
+      try {
+        const stored = localStorage.getItem(_ROLLUP_KEY);
+        if (stored) S.ct = JSON.parse(stored);
+      } catch(_) {}
+    }
+
+    if (!S.ct) {
+      const r = await API.get('/api/rollup');
+      if (!r || r.error || !r.rolls) {
+        setMsg('Failed to fetch warrior rollups: ' + (r?.error || 'Check server connection'), 'err');
+        S.view = 'main';
+        S.replacingTeam = null;
+        render();
+        return;
+      }
+      S.ct = {
+        teamName : '',
+        sel      : 0,
+        warriors : r.rolls.map(base => ({ base, name:'', race:'Human', gender:'Male' })),
+        adds     : r.rolls.map(() => ({ strength:0, dexterity:0, constitution:0, intelligence:0, presence:0, size:0 })),
+        saved    : [false, false, false, false, false],
+      };
+      // Persist so cancel + page reload doesn't allow a fresh re-roll
+      try { localStorage.setItem(_ROLLUP_KEY, JSON.stringify(S.ct)); } catch(_) {}
+    }
+    S.msg  = '';
+  } catch (err) {
+    setMsg('Network error: ' + (err.message || 'Check server connection'), 'err');
+    S.view = 'main';
+    S.replacingTeam = null;
+  }
   render();
 }
 
@@ -4270,7 +4890,6 @@ function ctAdjust(key, delta) {
   if (delta < 0 && cur <= 0) return;
 
   ct.adds[i][key] = cur + delta;
-  // Sync name input if open
   const nEl = el('ct-wname');
   if (nEl) ct.warriors[i].name = nEl.value;
   render();
@@ -4286,28 +4905,29 @@ function doCtSaveWarrior() {
   const ct = S.ct;
   if (!ct) return;
   const i = ct.sel;
-  // Sync all fields — name is NOT required here, validated at team save
-  // Grid name (ct-name-i) is read first; editor name (ct-wname) takes priority if non-empty,
-  // so the user can type a name in either place and it will be captured correctly.
   const rEl  = el('ct-wrace');    if (rEl)  ct.warriors[i].race   = rEl.value;
   const gEl  = el('ct-wgender'); if (gEl)  ct.warriors[i].gender = gEl.value;
-  const gNEl = el(`ct-name-${i}`); if (gNEl && gNEl.value.trim()) ct.warriors[i].name = gNEl.value.trim();
-  const nEl  = el('ct-wname');    if (nEl && nEl.value.trim())    ct.warriors[i].name = nEl.value.trim();
-  // Mark this slot confirmed — unlocks team name when all 5 done
+  const gNEl = el(`ct-name-${i}`); if (gNEl) ct.warriors[i].name = gNEl.value;
+  const nEl  = el('ct-wname');    if (nEl)  ct.warriors[i].name = nEl.value;
+  
+  // Validate name is not empty
+  if (!ct.warriors[i].name || ct.warriors[i].name.trim() === '') {
+    alert('Please enter a warrior name before saving.');
+    return;
+  }
+  
   if (!ct.saved) ct.saved = [false,false,false,false,false];
   ct.saved[i] = true;
   render();
 }
 
 async function doSaveTeam() {
-  // Capture team name BEFORE doCtSaveWarrior() re-renders the page and destroys the input
   const tNameEl = el('ct-team-name');
   if (tNameEl) S.ct.teamName = tNameEl.value.trim();
 
-  doCtSaveWarrior();  // save current warrior first (triggers render)
+  doCtSaveWarrior(); 
   const ct = S.ct;
 
-  // Sync names from grid
   for (let i = 0; i < 5; i++) {
     const gNEl = el(`ct-name-${i}`);
     if (gNEl) ct.warriors[i].name = gNEl.value.trim();
@@ -4315,18 +4935,22 @@ async function doSaveTeam() {
 
   const tName = (ct.teamName || '').trim();
   if (!tName) { setMsg('Please enter a team name.', 'err'); render(); return; }
+  if (tName.length > 20) { setMsg('Team name must be 20 characters or fewer.', 'err'); render(); return; }
 
-  // All names required at final save (can be unnamed during stat allocation)
   for (let i = 0; i < 5; i++) {
     const nm = (ct.warriors[i].name||'').trim();
     if (!nm) {
       setMsg(`Warrior ${i+1} needs a name. Click that row and enter one.`, 'err');
-      S.ct.sel = i;  // jump user to the unnamed slot
+      S.ct.sel = i;
+      render(); return;
+    }
+    if (nm.length > 20) {
+      setMsg(`Warrior ${i+1}'s name must be 20 characters or fewer.`, 'err');
+      S.ct.sel = i;
       render(); return;
     }
   }
 
-  // Build warrior data
   const warriors = ct.warriors.map((w, i) => {
     const a = ct.adds[i] || {};
     return {
@@ -4339,6 +4963,11 @@ async function doSaveTeam() {
       intelligence: w.base.intelligence+ (a.intelligence||0),
       presence    : w.base.presence    + (a.presence||0),
       size        : w.base.size        + (a.size||0),
+      armor           : w.armor || 'None',
+      helm            : w.helm || 'None',
+      primary_weapon  : w.primary_weapon || 'Open Hand',
+      secondary_weapon: w.secondary_weapon || 'Open Hand',
+      backup_weapon   : w.backup_weapon || null,
     };
   });
 
@@ -4350,44 +4979,75 @@ async function doSaveTeam() {
       team_name   : tName,
       warriors,
     });
-    if (!r.success) { setMsg(r.error || 'Could not create team.', 'err'); render(); return; }
+    
+    if (!r.success) { 
+        setMsg(r.error || 'Could not create team.', 'err'); 
+        render(); 
+        return; 
+    }
 
-    // Save the returned team to the local FSA folder.
+    // Propagate auto-upload from the replaced team so the new team uploads next turn
+    const autoUpload = S.replacingTeam ? !!S.replacingTeam.auto_upload : true;
+    r.team.auto_upload_enabled = autoUpload;
+
+    // 1. Ensure the 'teams' directory exists before writing
+    // If the folder is missing, Store.writeTeam will fail
     await Store.writeTeam(r.team);
 
-    // Update the on-disk account.json with the new team_id (or swap).
-    const acc = (await _ensureAccountLoaded()) || {};
+    // 2. Load and update the local account file
+    let acc = await Store.readAccount();
+    if (!acc || !acc.manager_name) acc = JSON.parse(JSON.stringify(S.account));
+    
     acc.team_ids = acc.team_ids || [];
+
     if (S.replacingTeam) {
       const rt = S.replacingTeam;
       const idx = acc.team_ids.indexOf(rt.old_team_id);
+      
       if (idx !== -1) acc.team_ids[idx] = r.team_id;
       else acc.team_ids.push(r.team_id);
+      
       delete S.teams[rt.old_team_id];
+      // Clean up the physical file[cite: 2]
       await Store.deleteTeam(rt.old_team_id);
-      // Reflect in in-memory account state too
+      
       const sidx = S.account.team_ids.indexOf(rt.old_team_id);
       if (sidx !== -1) S.account.team_ids[sidx] = r.team_id;
       else S.account.team_ids.push(r.team_id);
+      
       S.replacingTeam = null;
     } else {
       if (!acc.team_ids.includes(r.team_id)) acc.team_ids.push(r.team_id);
       if (!S.account.team_ids.includes(r.team_id)) S.account.team_ids.push(r.team_id);
     }
-    await _persistAccount(acc);
 
+    // 3. Persist account and update Global State[cite: 2]
+    await Store.writeAccount(acc);
+    S.account = acc; 
+
+    // 4. Synchronize memory for immediate strategy editing and uploading[cite: 2]
     S.teams[r.team_id] = r.team;
+    S.team = r.team; 
     S.expanded[r.team_id] = true;
     S.sel = { type:'team', teamId: r.team_id };
+    
     S.view = 'main';
     S.ct = null;
-    S.msg = '';
+    try { localStorage.removeItem(_ROLLUP_KEY); } catch(_) {}
+
+    let successMsg = 'Team created and saved locally.';
+    if (S.league.managerId) {
+      successMsg += ' Remember to click "Action -> Upload" to enter this team into the Arena!';
+    }
+    setMsg(successMsg, 'ok');
     render();
   } catch (err) {
-    setMsg('Could not reach the league server: ' + (err.message || err), 'err'); render();
+    // If you see this, the file system failed[cite: 2]
+    console.error("Critical Save Error:", err);
+    setMsg('Local save failed: ' + (err.message || err), 'err'); 
+    render();
   }
 }
-
 /* ============================================================
    TURN RESULTS VIEW
    ============================================================ */
@@ -4622,7 +5282,7 @@ function narrativeToHtml(text) {
       }
 
       // Prose lines — bold warrior name prefix + any ALL-CAPS items (armor, weapons)
-      const pm = ln.match(/^([A-Z][A-Z ']{2,}?)(\s+(?:is |weighs |Has |enters |fights |has ))/);
+      const pm = ln.match(/^([A-Z][A-Z ']{2,}?)(\s+(?:is |weighs |Has |enters |fights |has |wears |carries ))/);
       if (pm) {
         const name = pm[1];
         const rest = ln.slice(name.length);
@@ -4638,7 +5298,7 @@ function narrativeToHtml(text) {
     if (sepCount >= 3) {
       if (/^\*\*\*.*\*\*\*$/.test(ln))                                         { out.push(`<div class="nar-event">${esc(ln)}</div>`);   continue; }
       if (/^MINUTE\s+\d+/.test(ln.trim()))                                      { out.push(`<div class="nar-minute">${esc(ln)}</div>`);  continue; }
-      if (/SLAIN/.test(ln) || /collapses/i.test(ln) || /\bfalls\b/i.test(ln)) { out.push(`<div class="nar-death">${esc(ln)}</div>`);   continue; }
+      if (/SLAIN/.test(ln) || /collapses/i.test(ln)) { out.push(`<div class="nar-death">${esc(ln)}</div>`);   continue; }
       if (/wins/i.test(ln) && (/judge/i.test(ln) || /victory/i.test(ln)))      { out.push(`<div class="nar-win">${esc(ln)}</div>`);     continue; }
       if (/trained/i.test(ln) || /observed/i.test(ln))                         { out.push(`<div class="nar-training">${esc(ln)}</div>`); continue; }
       if (/^\s+HP/.test(ln) || /HP:/.test(ln) || /damage/i.test(ln))           { out.push(`<div class="nar-hp">${esc(ln)}</div>`);      continue; }
@@ -4788,6 +5448,41 @@ async function doRunTurn(teamId) {
    NEWSLETTER FUNCTIONS
    ============================================================ */
 
+// Convert ANSI escape sequences in newsletter text to HTML spans so
+// bold/colored markers render properly inside a <pre> block. Everything
+// outside an ANSI sequence is HTML-escaped to keep the output safe.
+function renderNewsletterText(text) {
+  if (text == null) return '';
+  const ansiRe = /\x1b\[([0-9;]*)m/g;
+  let out = '';
+  let last = 0;
+  let openSpan = false;
+  let m;
+  while ((m = ansiRe.exec(text)) !== null) {
+    out += esc(text.slice(last, m.index));
+    if (openSpan) { out += '</span>'; openSpan = false; }
+    const codes = m[1].split(';').filter(Boolean);
+    if (codes.length && !(codes.length === 1 && codes[0] === '0')) {
+      const styles = [];
+      if (codes.includes('1')) styles.push('font-weight:bold');
+      if (codes.includes('31')) styles.push('color:#8b0000');
+      else if (codes.includes('32')) styles.push('color:#060');
+      else if (codes.includes('33')) styles.push('color:#a60');
+      else if (codes.includes('34')) styles.push('color:#06c');
+      else if (codes.includes('35')) styles.push('color:#a0a');
+      else if (codes.includes('36')) styles.push('color:#088');
+      if (styles.length) {
+        out += `<span style="${styles.join(';')}">`;
+        openSpan = true;
+      }
+    }
+    last = ansiRe.lastIndex;
+  }
+  out += esc(text.slice(last));
+  if (openSpan) out += '</span>';
+  return out;
+}
+
 async function openNewsletter() {
   S.sel = {type:'newsletter'};
   S.wTab = 'stats';
@@ -4821,16 +5516,10 @@ async function loadNewsletterTurn(turn) {
   refreshContent();
 }
 
-async function setNewsletterVoice(voice) {
-  S.newsletterVoice = voice;
-  await API.post('/api/newsletter/voice', {voice});
-}
-
 function buildNewsletterPanel() {
   const turns = S.newsletters || [];
   const cur   = S.newsletterTurn;
   const text  = S.newsletterText;
-  const voice = S.newsletterVoice || 'snide';
 
   // Turn selector
   const opts = turns.map(t =>
@@ -4848,7 +5537,7 @@ function buildNewsletterPanel() {
     body = `<pre style="font-family:Courier New,monospace; font-size:11px; line-height:1.5;
                    white-space:pre-wrap; word-wrap:break-word; margin:0; padding:8px;
                    background:#fff; color:#111; overflow:auto; max-height:calc(100vh - 120px);"
-       >${esc(text)}</pre>`;
+       >${renderNewsletterText(text)}</pre>`;
   } else {
     body = '<div style="padding:20px; color:#666; font-size:11px;">Loading...</div>';
   }
@@ -4874,9 +5563,18 @@ function buildNewsletterPanel() {
 
 async function loadLeagueSettings() {
   try {
-    const name = S.account?.manager_name || '';
-    const r = await API.get('/api/league_settings?manager_name=' + encodeURIComponent(name));
-    if (r.success && r.settings) Object.assign(S.league, r.settings);
+    const r = await API.get('/api/league_settings');
+    // LocalAPI returns a flat object {url, managerId, managerName, password, ...}
+    // (no success/settings wrapper) — update S.league field-by-field.
+    if (r) {
+      if (r.url)          S.league.url         = r.url;
+      if (r.managerId)    S.league.managerId   = r.managerId;
+      if (r.managerName)  S.league.managerName = r.managerName;
+      if (r.password)     S.league.password    = r.password;
+      if (r.lastUpload)   S.league.lastUpload  = r.lastUpload;
+      if (r.lastDownload) S.league.lastDownload = r.lastDownload;
+      if (r.lastTurnRan)  S.league.lastTurnRan  = r.lastTurnRan;
+    }
     
     // Fetch feature flags and last upload timestamp from league server if connected
     if (S.league.url && S.league.managerId) {
@@ -4952,6 +5650,7 @@ function showLeagueSettings() {
       : '<div style="font-size:10px;color:#555;padding:4px 8px;">Not yet registered. Clicking Register will register you with the server.</div>'}
     <div style="margin-top:10px;display:flex;gap:6px;justify-content:flex-end;">
       ${lg.managerId ? `<button id="btn-league-rereg" onclick="doReRegisterLeague()" title="Use this if the server was reset and no longer recognizes your manager">Re-register</button>` : ''}
+      ${lg.managerId ? `<button onclick="checkLeagueReset()" title="Check server for reset or rerun notifications">Sync Records</button>` : ''}
       <button id="btn-league-save" onclick="doSaveLeagueSettings()">
         ${lg.managerId ? 'Save Settings' : 'Register &amp; Save'}
       </button>
@@ -4960,6 +5659,9 @@ function showLeagueSettings() {
   </div>
 </div>`;
   document.body.appendChild(modal);
+  // Check for server reset / rerun as soon as League Settings opens so the
+  // user doesn't have to navigate to the account tab first.
+  if (S.league.managerId && S.league.url) checkLeagueReset();
 }
 
 function _leagueMsg(text, cls) {
@@ -5087,33 +5789,80 @@ async function doReRegisterLeague() {
 
 async function doLeagueUpload(teamId) {
   const lg = S.league;
-  if (!lg.url || !lg.managerId) { setMsg('Configure league settings first (Action → League Settings).', 'err'); render(); return; }
+
+  // 1. Validation: Ensure required settings exist before attempting connection
+  if (!lg.url || !lg.managerId) { 
+    setMsg('Configure league settings first (Action → League Settings).', 'err'); 
+    render(); 
+    return; 
+  }
+
+  // 2. Security: Ensure password is present or prompted
   const pw = lg.password || prompt('League password:');
   if (!pw) return;
   lg.password = pw;
-  const teamData = await API.get('/api/team?id=' + teamId);
-  if (!teamData.success) { alert('Could not load team data.'); return; }
-  setMsg('Uploading to league server...', 'ok'); render();
+
+  setMsg('Reading local team data...', 'ok'); 
+  render();
+
   try {
-    const r = await fetch(lg.url + '/api/upload', {
-      method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({manager_id: lg.managerId, password: pw, team: teamData.team})
+    // 3. Disk Access: Retrieve the actual team file from the 'teams' folder
+    const teamData = await Store.readTeam(teamId); 
+    
+    if (!teamData || !teamData.warriors || teamData.warriors.length === 0) { 
+      setMsg('Upload aborted: No warrior data found in local file.', 'err'); 
+      render(); 
+      return; 
+    }
+
+    setMsg('Connecting to Arena server...', 'ok'); 
+    render();
+
+    // 4. URL Sanitization: Remove trailing slashes to prevent malformed API paths
+    const baseUrl = lg.url.endsWith('/') ? lg.url.slice(0, -1) : lg.url;
+    
+    // 5. Network Request: Send the bundle to the server
+    const r = await fetch(`${baseUrl}/api/upload`, {
+      method: 'POST', 
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        manager_id: lg.managerId, 
+        password: pw, 
+        team: teamData 
+      })
     });
+
+    if (!r.ok) throw new Error(`Server returned status ${r.status}`);
+
     const d = await r.json();
+    
     if (d.success) {
+      // 6. Update Client State: Track the successful upload locally
       lg.uploaded = true;
       lg.lastUpload = new Date().toLocaleString();
+      
       await API.post('/api/league_settings', {
         manager_name: S.account?.manager_name || lg.managerName || '',
-        url: lg.url, managerId: lg.managerId, managerName: lg.managerName, password: lg.password,
-        lastUpload: lg.lastUpload, lastDownload: lg.lastDownload, lastTurnRan: lg.lastTurnRan,
+        url: lg.url, 
+        managerId: lg.managerId, 
+        managerName: lg.managerName, 
+        password: lg.password,
+        lastUpload: lg.lastUpload, 
+        lastDownload: lg.lastDownload, 
+        lastTurnRan: lg.lastTurnRan,
       });
-      setMsg('✓ Team uploaded for Turn ' + d.turn + '. Waiting for host to run the turn.', 'ok');
-    } else { setMsg('Upload failed: ' + d.error, 'err'); }
-  } catch(e) { setMsg('Could not reach league server: ' + e.message, 'err'); }
+      
+      setMsg('✓ Success! Your roster is now live in the Arena.', 'ok');
+    } else { 
+      setMsg('Server Error: ' + (d.error || 'The server rejected the data.'), 'err'); 
+    }
+  } catch(e) { 
+    setMsg('Connection Failed: Check your League URL and server status.', 'err'); 
+    console.error("Upload failure details:", e);
+  }
+  
   render();
 }
-
 async function doLeagueGetResults() {
   const lg = S.league;
   if (!lg.url || !lg.managerId) { setMsg('Configure league settings first.', 'err'); render(); return; }
@@ -5127,7 +5876,7 @@ async function doLeagueGetResults() {
     if (!d.success) { setMsg('Error: ' + d.error, 'err'); render(); return; }
     const teamId = S.sel.teamId || S.account?.team_ids?.[0];
     if (!teamId) { setMsg('Select your team first.', 'err'); render(); return; }
-    const applied = await API.post('/api/apply_league_results', {team_id: teamId, result: d.result || (d.results&&d.results[0])});
+    const applied = await API.post('/api/apply_league_results', {team_id: teamId, result: d.result || (d.results&&d.results[0]), rerun: !!S._pendingRerun});
     if (!applied.success) { setMsg('Error applying results: ' + applied.error, 'err'); render(); return; }
     S.teams[teamId] = applied.team;
     S.turnResults   = {turn_number: applied.turn_number, bouts: applied.bouts, team: applied.team};
@@ -5195,7 +5944,7 @@ function _showDownloadProgress(steps, currentIdx, error) {
   </div>
   <div style="text-align:center;padding:8px 0 4px;">
     ${footer}
-    ${showOk ? `<button onclick="document.getElementById('dl-progress-modal').remove()"
+    ${showOk ? `<button onclick="${allDone ? `setMgrTab('account');` : ''}document.getElementById('dl-progress-modal').remove()"
                  style="min-width:80px;margin-top:4px;">OK</button>` : ''}
   </div>
 </div>`;
@@ -5345,9 +6094,10 @@ async function doLeagueDownloadAll() {
       }
 
       const app = await API.post('/api/apply_league_results', {
-        team_id: localTid, result,
+        team_id: localTid, result, rerun: !!S._pendingRerun,
       });
       if (app.success) {
+        console.log(`Successfully applied results for team ${localTid}`);
         S.teams[localTid] = app.team;
         applied.push({ team_id: localTid, team_name: result.team_name || '?',
                        bouts: app.bouts, team: app.team });
@@ -5412,6 +6162,7 @@ async function doLeagueDownloadAll() {
     if (applied.length >= 1) {
       S.sel  = {type: 'team', teamId: applied[0].team_id};
       S.wTab = 'fights';
+      await processDeletedTeams(resultsResp.deleted_teams, lg.managerId);
     }
     render();
 
@@ -5436,37 +6187,67 @@ async function setRunNextTurn(teamId, value) {
 async function confirmReplaceTeam(teamId) {
   const team = S.teams[teamId];
   const tname = team ? team.team_name : `Team ${teamId}`;
+  const wasRunning = team ? !!team.auto_upload_enabled : true;
+
   if (!confirm(`Replace "${tname}"?\n\nAll current warriors will be archived.\nYou will create a new team in this slot.`)) return;
-    setMsg('Preparing replacement slot...', 'ok'); render(); // This will be replaced by save_json_protected
+  
+  setMsg('Preparing replacement slot...', 'ok'); 
+  render();
+  S.ct = null;
+  try { localStorage.removeItem(_ROLLUP_KEY); } catch(_) {} // force fresh rollups for replacement
+  
   const r = await API.post('/api/team/replace', {
     manager_id: S.account.id,
     old_team_id: teamId,
   });
-  if (!r.success) { alert('Error: ' + r.error); return; }
+  
+  if (!r.success) { 
+    alert('Error: ' + r.error); 
+    return; 
+  }
 
   // Remove the old team from run_next_turn tracking
-  delete S.runNextTurn[teamId];
+  if (S.runNextTurn) delete S.runNextTurn[teamId];
+  
   await API.post('/api/team/run_next_turn', {
-    manager_id: S.account.id, team_id: teamId, value: false,
+    manager_id: S.account.id, 
+    team_id: teamId, 
+    value: false,
   });
 
-  // Withdraw the old team from the league server so it stops being auto-carried
-  const lg = S.league;
-  if (lg.url && lg.managerId && lg.password) {
+  // Withdraw the old team from the league server. If credentials are missing
+  // or the call fails, leave the archive un-flagged so uploadAllTeams retries it later.
+  if (S.league.url && S.league.managerId && S.league.password) {
     try {
-      await fetch(lg.url.replace(/\/+$/, '') + '/api/team/withdraw', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ manager_id: lg.managerId, password: lg.password, team_id: teamId }),
+      const wr = await API.post('/api/team/withdraw', {
+        manager_id: Number(S.league.managerId),
+        password:   S.league.password,
+        team_id:    Number(teamId)
       });
-    } catch (_) { /* best-effort — offline or server not reachable */ }
-is  }
+      if (wr.success) {
+        const arch = await Store.readArchivedTeam(teamId);
+        if (arch) {
+          arch.withdrawn_from_league = true;
+          await Store.writeArchivedTeam(teamId, arch);
+        }
+      } else {
+        console.warn('League withdraw failed:', wr.error);
+      }
+    } catch (e) { console.warn('Withdraw error:', e); }
+  }
 
   // Store replacement context and trigger new team creation
-  S.replacingTeam = { old_team_id: teamId, new_team_id: r.new_team_id, manager_id: S.account.id };
+  S.replacingTeam = { 
+    old_team_id: teamId, 
+    new_team_id: r.new_team_id, 
+    manager_id: S.account.id,
+    auto_upload: wasRunning
+  };
   S.legacyTeams = null; // invalidate so Legacy tab reloads on next visit
   setMsg('', '');
-  initCreateTeam(true);  // pass flag = replacing
+  
+  // Start creating a new team as replacement
+  initCreateTeam();
 }
 
 
@@ -5502,36 +6283,61 @@ async function runAllTeams() {
    LEAGUE RESET DETECTION
    ============================================================ */
 
-async function checkLeagueReset() {
+async function checkLeagueResetOnLogin() {
   if (!S.league.managerId || !S.league.url) return;
-  if (document.getElementById('league-reset-modal')) return; // already showing
+  if (document.getElementById('league-reset-modal') || document.getElementById('league-rerun-modal')) return;
   try {
-    const r = await API.post('/api/league/check_reset', {});
-    if (r.success && r.reset_detected) {
-      _showLeagueResetModal(r.server_reset_count);
+    const r = await API.post('/api/league/check_reset', { manager_id: S.league.managerId });
+    if (!r.success) return; // silent on error — don't block login
+    if (r.reset_detected) {
+      _showLeagueResetModal(r.server_reset_count, { blocking: true });
+    } else if (r.rerun_detected) {
+      _showLeagueRerunModal(r.rerun_turn, r.rerun_count);
     }
-  } catch(e) { /* silent — don't interrupt the user if the check fails */ }
+  } catch(e) { /* silent — server may be unreachable */ }
 }
 
-function _showLeagueResetModal(serverResetCount) {
+async function checkLeagueReset() {
+  if (!S.league.managerId || !S.league.url) return;
+  if (document.getElementById('league-reset-modal') || document.getElementById('league-rerun-modal')) return;
+  try {
+    const r = await API.post('/api/league/check_reset', { manager_id: S.league.managerId });
+    if (!r.success) {
+      _leagueMsg('Reset check: ' + (r.error || 'unknown error'), 'err');
+      return;
+    }
+    if (r.reset_detected) {
+      _showLeagueResetModal(r.server_reset_count, { blocking: true });
+    } else if (r.rerun_detected) {
+      _showLeagueRerunModal(r.rerun_turn, r.rerun_count);
+    } else {
+      _leagueMsg('Server sync OK — no reset or rerun pending.', 'ok');
+      setTimeout(() => { const m = el('lm-msg'); if (m) m.style.display = 'none'; }, 3000);
+    }
+  } catch(e) {
+    _leagueMsg('Reset check failed: ' + e.message, 'err');
+  }
+}
+
+function _showLeagueResetModal(serverResetCount, opts = {}) {
+  const blocking = opts.blocking || false;
   const modal = document.createElement('div');
   modal.id = 'league-reset-modal';
-  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:8500;display:flex;align-items:center;justify-content:center;';
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:8500;display:flex;align-items:center;justify-content:center;';
   modal.innerHTML = `
     <div style="background:var(--bg);border:2px solid #c60;border-radius:6px;padding:20px;min-width:360px;max-width:480px;box-shadow:0 4px 20px rgba(0,0,0,.5);">
-      <div style="font-weight:bold;font-size:14px;color:#c60;margin-bottom:12px;">⚠ League Arena Has Been Reset to Turn 1</div>
+      <div style="font-weight:bold;font-size:14px;color:#c60;margin-bottom:12px;">&#9888; League Arena Has Been Reset to Turn 1</div>
       <div style="font-size:12px;color:#444;margin-bottom:6px;line-height:1.6;">
-        The league server has been reset to start a new season. Your local records need to be cleared to match.
+        The league server has been reset to start a new season. You must sync your local records before continuing.
       </div>
       <div style="font-size:11px;background:#fff8f0;border:1px solid #e8c080;border-radius:4px;padding:8px 10px;margin-bottom:14px;line-height:1.7;">
-        <strong>Will be cleared:</strong> wins, losses, kills, fight history, injuries, fallen warriors<br>
-        <strong>Will be kept:</strong> your warriors, their stats, gear, and strategies<br>
-        <strong>Note:</strong> After clearing, re-open League Settings and click Register before uploading.
+        <strong>Will be reverted:</strong> wins, losses, kills, fight history, skills, attribute gains, injuries<br>
+        <strong>Will be kept:</strong> your warriors (at their Turn 1 stats), gear, and strategies
       </div>
       <div style="display:flex;gap:8px;justify-content:flex-end;">
-        <button onclick="document.getElementById('league-reset-modal').remove()">Dismiss</button>
+        ${!blocking ? `<button onclick="document.getElementById('league-reset-modal').remove()">Dismiss</button>` : ''}
         <button id="btn-apply-reset" onclick="applyLeagueReset(${serverResetCount})"
-                style="background:#c60;color:#fff;border-color:#a50;">Clear My Records</button>
+                style="background:#c60;color:#fff;border-color:#a50;">Clear My Records &amp; Sync</button>
       </div>
     </div>`;
   document.body.appendChild(modal);
@@ -5540,193 +6346,555 @@ function _showLeagueResetModal(serverResetCount) {
 async function applyLeagueReset(serverResetCount) {
   const btn = document.getElementById('btn-apply-reset');
   if (btn) { btn.disabled = true; btn.textContent = 'Resetting...'; }
-  const r = await API.post('/api/league/acknowledge_reset', { server_reset_count: serverResetCount });
+  const pw = S.league.password || '';
+  const r = await API.post('/api/league/acknowledge_reset', {
+    manager_id: S.league.managerId,
+    password: pw,
+    server_reset_count: serverResetCount,
+    type: 'reset',
+  });
   document.getElementById('league-reset-modal')?.remove();
   if (!r.success) { setMsg('Reset error: ' + r.error, 'err'); render(); return; }
-  setMsg('Records cleared — ready for the new season!', 'ok');
-  await loadAccount();
+
+  // Clear stale newsletter cache — server only has current-season newsletters
+  await Store.clearNewsletters().catch(() => {});
+  S.newsletters = null; S.newsletterText = null; S.newsletterTurn = null;
+
+  if (r.full_reset) {
+    // Full wipe: manager no longer exists on server — clear local league identity
+    S.league.managerId   = null;
+    S.league.managerName = null;
+    await API.post('/api/league_settings', { managerId: '', managerName: '' });
+    // Close League Settings modal so when the user reopens it they see "Register & Save"
+    el('league-modal')?.remove();
+    setMsg('Arena fully reset. Open League Settings and click Register & Save to rejoin.', 'ok');
+  } else {
+    // Progress reset: apply the server-reverted team state locally
+    if (Array.isArray(r.teams) && r.teams.length) {
+      for (const { team_id, team } of r.teams) {
+        await Store.writeTeam(team);
+        if (S.teams) S.teams[team_id] = team;
+      }
+    }
+    setMsg('Records reverted to Turn 1 — ready to fight! Download results to get the new newsletter.', 'ok');
+  }
   render();
 }
 
-async function uploadAllTeams() {
-  const lg  = S.league;
-  if (!lg.url || !lg.managerId) { setMsg('Configure league settings first (Action → League Settings).', 'err'); return; }
+function _showLeagueRerunModal(rerunTurn, rerunCount) {
+  const modal = document.createElement('div');
+  modal.id = 'league-rerun-modal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:8500;display:flex;align-items:center;justify-content:center;';
+  modal.innerHTML = `
+    <div style="background:var(--bg);border:2px solid #06a;border-radius:6px;padding:20px;min-width:360px;max-width:480px;box-shadow:0 4px 20px rgba(0,0,0,.5);">
+      <div style="font-weight:bold;font-size:14px;color:#06a;margin-bottom:12px;">↺ Turn ${rerunTurn} Was Re-Run</div>
+      <div style="font-size:12px;color:#444;margin-bottom:6px;line-height:1.6;">
+        The host re-ran turn ${rerunTurn}. Fight outcomes and training results may differ from the initial run.
+      </div>
+      <div style="font-size:11px;background:#f0f6ff;border:1px solid #80b0e0;border-radius:4px;padding:8px 10px;margin-bottom:14px;line-height:1.7;">
+        <strong>What changed:</strong> fight results, skills learned, and attribute gains for turn ${rerunTurn} have been recalculated.<br>
+        <strong>Action needed:</strong> Download your updated results to apply the correct post-turn state.
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button onclick="document.getElementById('league-rerun-modal').remove()">Dismiss</button>
+        <button id="btn-apply-rerun" onclick="applyLeagueRerun(${rerunTurn}, ${rerunCount})"
+                style="background:#06a;color:#fff;border-color:#048;">Download New Results</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
 
-  // Get team IDs from account, filtered by Run This Turn checkbox
-  // Default is true — if checkbox state is unknown, include the team
-  const accountIds = S.account?.team_ids || [];
-  const ids = accountIds.filter(tid => {
-    const t = S.teams[tid];
-    return t && t.auto_upload_enabled && hasFiveActiveWarriors(t);
+async function applyLeagueRerun(rerunTurn, rerunCount) {
+  const btn = document.getElementById('btn-apply-rerun');
+  if (btn) { btn.disabled = true; btn.textContent = 'Acknowledging...'; }
+  const pw = S.league.password || '';
+  const r  = await API.post('/api/league/acknowledge_reset', {
+    manager_id:  S.league.managerId,
+    password:    pw,
+    type:        'rerun',
+    rerun_count: rerunCount,
   });
-  if (!ids.length) {
-    setMsg('No teams are checked for "Run This Turn". Check the box on the team panel.', 'err');
+  document.getElementById('league-rerun-modal')?.remove();
+  if (!r.success) { setMsg('Error: ' + r.error, 'err'); render(); return; }
+  // Download results with rerun flag so skills/attrs are server-authoritative
+  S._pendingRerun = true;
+  await doLeagueDownloadAll();
+  S._pendingRerun = false;
+}
+
+/* ============================================================
+   UPLOAD ALL TEAMS TO ARENA
+   ============================================================ */
+
+async function uploadAllTeams() {
+  const lg = S.league;
+  
+  console.log('UploadAllTeams called', { url: lg.url, managerId: lg.managerId });
+  
+  // 1. Validate league settings
+  if (!lg.url || !lg.managerId) {
+    setMsg('Configure league settings first (Action → League Settings).', 'err');
+    render();
     return;
   }
 
-  const pw = lg.password || prompt('League password:');
-  if (!pw) return;
-  lg.password = pw;
-
-  setMsg(`Uploading ${ids.length} team(s) to league server...`, 'ok'); render();
-
-  // Build dynamic step list — one entry per team, based on the local team name
-  const steps = ids.map(tid => {
-    const t = S.teams?.[tid];
-    const nm = (t && t.team_name) ? t.team_name : `Team ${tid}`;
-    return `Uploading ${nm}`;
-  });
-  _showUploadProgress(steps, 0, null);
-  const tick = (i) => _showUploadProgress(steps, i, null);
-
-  const uploaded = [];
-  const errors   = [];
-
-  for (let i = 0; i < ids.length; i++) {
-    tick(i);
-    const tid = ids[i];
-    let r;
-    try {
-      r = await API.post('/api/league/upload_one', {
-        team_id          : tid,
-        league_url       : lg.url,
-        league_manager_id: lg.managerId,
-        password         : pw,
-      });
-    } catch(e) {
-      r = { success: false, team_id: tid, error: e.message };
+  // 2. Ensure folder is selected (for Electron)
+  if (!baseDir && !S.isLocalBackend) {
+    setMsg('Please select your Bloodspire folder first...', 'ok');
+    render();
+    
+    const folder = await window.electronAPI.selectFolder();
+    if (!folder) {
+      setMsg('Folder selection cancelled. Upload aborted.', 'err');
+      render();
+      return;
     }
-    if (r.success) {
-      uploaded.push({ team_id: tid, team_name: r.team_name || `Team ${tid}` });
-    } else {
-      errors.push({ team_id: tid, team_name: r.team_name || `Team ${tid}`,
-                    error: r.error || 'unknown error' });
-    }
-    await new Promise(res => setTimeout(res, 30));
+    baseDir = folder;
+    localStorage.setItem('bloodspire_base_dir', folder);
+    S.folderReady = true;
   }
 
-  // Close progress modal — the detailed results modal below supersedes it
+  // 3. Get password (prompt if not saved)
+  const pw = lg.password || prompt('Enter your league password:');
+  if (!pw) {
+    setMsg('Password required for upload.', 'err');
+    render();
+    return;
+  }
+  lg.password = pw;
+
+  // 4. Get team IDs from account and check each team's status
+  const accountIds = S.account?.team_ids || [];
+  console.log('Account team IDs:', accountIds);
+  console.log('Teams object:', S.teams);
+  
+  const ids = [];
+  for (const tid of accountIds) {
+    const t = S.teams[tid];
+    if (!t) {
+      console.log(`Team ${tid} not loaded yet, attempting to load...`);
+      await reloadTeam(tid);
+    }
+    
+    const team = S.teams[tid];
+    if (!team) {
+      console.log(`Team ${tid} still not available after reload`);
+      continue;
+    }
+    
+    const hasActive = hasFiveActiveWarriors(team);
+    const isEnabled = team.auto_upload_enabled;
+    
+    console.log(`Team ${tid} (${team.team_name}): active=${hasActive}, auto_upload=${isEnabled}`);
+    
+    if (hasActive && isEnabled) {
+      ids.push(tid);
+    } else {
+      if (!hasActive) {
+        console.log(`  ❌ Skipping: Doesn't have 5 active warriors`);
+        // Count dead warriors
+        const deadCount = team.warriors.filter(w => w && (w.is_dead || w.ascended_to_monster)).length;
+        console.log(`     Dead/Ascended warriors: ${deadCount}`);
+      }
+      if (!isEnabled) {
+        console.log(`  ❌ Skipping: Auto-upload not enabled (check the "Run This Turn" checkbox on team panel)`);
+      }
+    }
+  }
+
+  // Teams in the account that have "Run This Turn" unchecked need an explicit
+  // withdrawal request so the server removes any auto-carry file from a prior turn.
+  const withdrawIds = [];
+  for (const tid of accountIds) {
+    const t = S.teams[tid];
+    if (t && !t.auto_upload_enabled) withdrawIds.push(tid);
+  }
+
+  // Check for any legacy teams that need to be withdrawn
+  let archivedIds = [];
+  try { archivedIds = await Store.listArchivedTeamIds(); } catch(e) {}
+  const cleanupQueue = [];
+  for (const aid of archivedIds) {
+    const arch = await Store.readArchivedTeam(aid);
+    if (arch && !arch.withdrawn_from_league) cleanupQueue.push(aid);
+  }
+
+  if (!ids.length && !cleanupQueue.length && !withdrawIds.length) {
+    let message = 'No teams are ready for upload.\n\n';
+    message += 'Requirements:\n';
+    message += '• Team must have 5 alive warriors (no dead or ascended)\n';
+    message += '• "Run This Turn" checkbox must be checked on the team panel\n\n';
+    message += 'Check your dead warriors in the tree view (💀 icons) and replace them via the Replacement tab.';
+    alert(message);
+    setMsg('No teams ready: Need 5 alive warriors AND "Run This Turn" checked', 'err');
+    render();
+    return;
+  }
+
+  setMsg('Connecting to league server...', 'ok');
+  render();
+
+  // 5. Build step list for progress dialog (Cleanup + Uploads + Auto-Carry Withdrawals)
+  const steps = [];
+  cleanupQueue.forEach(aid => steps.push(`Withdrawing replaced Team ${aid}`));
+  ids.forEach(tid => {
+    const t = S.teams?.[tid];
+    steps.push(`Uploading ${(t && t.team_name) ? t.team_name : `Team ${tid}`}`);
+  });
+  withdrawIds.forEach(tid => {
+    const t = S.teams?.[tid];
+    steps.push(`Removing ${(t && t.team_name) ? t.team_name : `Team ${tid}`} from queue`);
+  });
+
+  _showUploadProgress(steps, 0, null);
+
+  const uploaded = [];
+  const errors = [];
+  const withdrawn = [];
+  const autoWithdrawn = [];
+
+  // 6a. Perform Cleanups first
+  let currentStep = 0;
+  for (const aid of cleanupQueue) {
+    _showUploadProgress(steps, currentStep++, null);
+    const arch = await Store.readArchivedTeam(aid);
+    try {
+      const wr = await API.post('/api/team/withdraw', {
+        manager_id: Number(lg.managerId),
+        password:   pw,
+        team_id:    Number(aid)
+      });
+      if (wr.success) {
+        arch.withdrawn_from_league = true;
+        await Store.writeArchivedTeam(aid, arch);
+        withdrawn.push({ name: arch.team_name || `Team ${aid}`, success: true });
+      } else {
+        withdrawn.push({ name: arch.team_name || `Team ${aid}`, success: false, error: wr.error });
+      }
+    } catch (e) {
+      withdrawn.push({ name: arch.team_name || `Team ${aid}`, success: false, error: e.message });
+    }
+    await new Promise(res => setTimeout(res, 50));
+  }
+
+  // 6b. Upload each team
+  for (let i = 0; i < ids.length; i++) {
+    _showUploadProgress(steps, currentStep++, null);
+    const tid = ids[i];
+    const team = S.teams[tid];
+    
+    if (!team) {
+      errors.push({ 
+        team_id: tid, 
+        team_name: `Team ${tid}`,
+        error: 'Team data not found' 
+      });
+      continue;
+    }
+    
+    try {
+      console.log(`Uploading team ${tid}: ${team.team_name}`);
+      
+      // Send to league server
+      const baseUrl = lg.url.replace(/\/+$/, '');
+      const response = await fetch(`${baseUrl}/api/upload`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          manager_id: lg.managerId,
+          password: pw,
+          team: team
+        })
+      });
+      
+      const data = await response.json();
+      console.log(`Upload response for team ${tid}:`, data);
+      
+      if (data.success) {
+        uploaded.push({ 
+          team_id: tid, 
+          team_name: team.team_name || `Team ${tid}`,
+          turn: data.turn 
+        });
+        
+        // Update last upload timestamp
+        lg.lastUpload = new Date().toLocaleString();
+        await API.post('/api/league_settings', {
+          manager_name: S.account?.manager_name || lg.managerName || '',
+          url: lg.url,
+          managerId: lg.managerId,
+          managerName: lg.managerName,
+          password: lg.password,
+          lastUpload: lg.lastUpload,
+          lastDownload: lg.lastDownload,
+          lastTurnRan: lg.lastTurnRan,
+        });
+      } else {
+        errors.push({ 
+          team_id: tid, 
+          team_name: team.team_name || `Team ${tid}`,
+          error: data.error || 'Upload failed' 
+        });
+      }
+    } catch (err) {
+      console.error(`Upload error for team ${tid}:`, err);
+      errors.push({ 
+        team_id: tid, 
+        team_name: team.team_name || `Team ${tid}`,
+        error: err.message || 'Network error' 
+      });
+    }
+    
+    // Small delay between uploads
+    await new Promise(res => setTimeout(res, 100));
+  }
+
+  // 6c. Send withdrawal requests for teams with "Run This Turn" unchecked.
+  // The server reads auto_upload_enabled=false from the team payload and
+  // removes any auto-carry upload file queued for the current turn.
+  for (const tid of withdrawIds) {
+    _showUploadProgress(steps, currentStep++, null);
+    const team = S.teams[tid];
+    if (!team) continue;
+    try {
+      const baseUrl = lg.url.replace(/\/+$/, '');
+      const response = await fetch(`${baseUrl}/api/upload`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          manager_id: lg.managerId,
+          password: pw,
+          team: team
+        })
+      });
+      const data = await response.json();
+      autoWithdrawn.push({
+        team_id: tid,
+        team_name: team.team_name || `Team ${tid}`,
+        success: !!data.success,
+        error: data.success ? null : (data.error || 'Withdraw failed')
+      });
+    } catch (err) {
+      autoWithdrawn.push({
+        team_id: tid,
+        team_name: team.team_name || `Team ${tid}`,
+        success: false,
+        error: err.message || 'Network error'
+      });
+    }
+    await new Promise(res => setTimeout(res, 50));
+  }
+
+  // 7. Close progress modal and show results
   _showUploadProgress(steps, steps.length, null);
   setTimeout(() => {
     const m = document.getElementById('ul-progress-modal');
     if (m) m.remove();
   }, 400);
 
-  // Show results modal
+  // 8. Show results modal
   const old = document.getElementById('upload-results-modal');
   if (old) old.remove();
+  
   const modal = document.createElement('div');
   modal.id = 'upload-results-modal';
   modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:8000;display:flex;align-items:center;justify-content:center;';
-  const successRows = uploaded.map(t => `<tr><td style="padding:2px 8px;">✓</td><td style="padding:2px 8px;">${esc(t.team_name)}</td><td style="padding:2px 8px; color:#060;">Uploaded</td></tr>`).join('');
-  const errorRows   = errors.map(e => `<tr><td style="padding:2px 8px; color:#c00;">✗</td><td style="padding:2px 8px;">${esc(e.team_name||'Team '+e.team_id)}</td><td style="padding:2px 8px; color:#c00;">${esc(e.error)}</td></tr>`).join('');
-  const hasErrors   = errors.length > 0;
-  const notFound    = errors.some(e => (e.error||'').toLowerCase().includes('manager not found'));
+  
+  const successRows = uploaded.map(t => 
+    `<tr><td style="padding:2px 8px;">✓</td><td style="padding:2px 8px;">${esc(t.team_name)}</td><td style="padding:2px 8px; color:#060;">Uploaded${t.turn ? ` (Turn ${t.turn})` : ''}</td></tr>`
+  ).join('');
+  
+  const errorRows = errors.map(e => 
+    `<tr><td style="padding:2px 8px; color:#c00;">✗</td><td style="padding:2px 8px;">${esc(e.team_name)}</td><td style="padding:2px 8px; color:#c00;">${esc(e.error)}</td></tr>`
+  ).join('');
+
+  const withdrawRows = withdrawn.map(w =>
+    `<tr>
+      <td style="padding:2px 8px; font-weight:bold;">${w.success ? '✓' : '✗'}</td>
+      <td style="padding:2px 8px;">${esc(w.name)}</td>
+      <td style="padding:2px 8px; font-size:10px; color:${w.success ? '#666' : '#c00'};">
+        ${w.success ? 'Withdrawn from Arena' : `Withdraw Failed: ${esc(w.error)}`}
+      </td>
+    </tr>`
+  ).join('');
+
+  const autoWithdrawRows = autoWithdrawn.map(w =>
+    `<tr>
+      <td style="padding:2px 8px; font-weight:bold; color:${w.success ? '#666' : '#c00'};">${w.success ? '↩' : '✗'}</td>
+      <td style="padding:2px 8px;">${esc(w.team_name)}</td>
+      <td style="padding:2px 8px; font-size:10px; color:${w.success ? '#666' : '#c00'};">
+        ${w.success ? 'Removed from turn queue' : `Removal Failed: ${esc(w.error)}`}
+      </td>
+    </tr>`
+  ).join('');
+
+  const hasErrors = errors.length > 0;
+  const notFound = errors.some(e => (e.error || '').toLowerCase().includes('manager not found'));
+  const allSuccess = uploaded.length === ids.length && ids.length > 0;
+  const onlyWithdrawals = ids.length === 0 && (autoWithdrawn.length > 0 || withdrawn.length > 0);
+  
   modal.innerHTML = `
-    <div style="background:var(--bg);border:2px solid ${hasErrors?'#c00':'#080'};border-radius:6px;padding:16px;min-width:320px;max-width:500px;box-shadow:0 4px 16px rgba(0,0,0,.4);">
-      <div style="font-weight:bold; font-size:13px; margin-bottom:10px; color:${hasErrors&&!uploaded.length?'#c00':'#060'};">
-        ${uploaded.length ? `✓ ${uploaded.length} team${uploaded.length===1?'':'s'} uploaded successfully` : '✗ No teams were uploaded'}
-        ${hasErrors ? ` &nbsp;·&nbsp; <span style="color:#c00;">${errors.length} error${errors.length===1?'':'s'}</span>` : ''}
+    <div style="background:var(--bg);border:2px solid ${hasErrors && !uploaded.length && !autoWithdrawn.some(w => w.success) ? '#c00' : '#080'};border-radius:6px;padding:16px;min-width:320px;max-width:500px;box-shadow:0 4px 16px rgba(0,0,0,.4);">
+      <div style="font-weight:bold; font-size:13px; margin-bottom:10px; color:${onlyWithdrawals ? '#060' : (allSuccess ? '#060' : (uploaded.length ? '#c80' : '#c00'))};">
+        ${onlyWithdrawals ? '✓ Turn queue updated' :
+          allSuccess ? '✓ All teams uploaded successfully!' :
+          uploaded.length ? `✓ ${uploaded.length} of ${ids.length} team${ids.length === 1 ? '' : 's'} uploaded` :
+          '✗ No teams were uploaded'}
       </div>
-      ${uploaded.length||errors.length ? `
+
+      ${(uploaded.length || errors.length) ? `
       <table style="width:100%; border-collapse:collapse; font-size:11px; margin-bottom:12px;">
         ${successRows}${errorRows}
       </table>` : ''}
+
+      ${autoWithdrawn.length ? `
+      <div style="font-size:11px; color:#666; margin-bottom:4px; font-weight:bold; border-top:1px solid #ccc; padding-top:8px;">Withdrawn from Turn (Run This Turn unchecked):</div>
+      <table style="width:100%; border-collapse:collapse; font-size:11px; margin-bottom:12px;">
+        ${autoWithdrawRows}
+      </table>` : ''}
+
+      ${withdrawn.length ? `
+      <div style="font-size:11px; color:#666; margin-bottom:4px; font-weight:bold; border-top:1px solid #ccc; padding-top:8px;">Replaced Team Cleanup:</div>
+      <table style="width:100%; border-collapse:collapse; font-size:11px; margin-bottom:12px;">
+        ${withdrawRows}
+      </table>` : ''}
+
       ${notFound ? `
       <div style="font-size:11px;background:#fff0f0;border:1px solid #e08080;border-radius:4px;padding:8px 10px;margin-bottom:12px;line-height:1.6;">
-        <strong>Manager not recognized by the server.</strong><br>
-        This usually happens after the league arena is reset — the server loses its manager registrations.
-        Open League Settings, enter your password, and click <em>Re-register</em> to get a new ID, then upload again.
+        <strong>⚠️ Manager not recognized by the server.</strong><br>
+        This usually happens after the league arena is reset. Open League Settings, 
+        make sure your password is correct, and click <em>Re-register</em> to get a new ID, then upload again.
       </div>` : ''}
+      
+      ${!notFound && hasErrors ? `
+      <div style="font-size:11px;background:#fff8e0;border:1px solid #e0c080;border-radius:4px;padding:8px 10px;margin-bottom:12px;line-height:1.6;">
+        <strong>Some teams failed to upload.</strong><br>
+        Check that each team has 5 active (non-dead) warriors and try again.
+      </div>` : ''}
+      
       <div style="display:flex;gap:8px;justify-content:flex-end;">
         ${notFound ? `<button onclick="document.getElementById('upload-results-modal').remove();showLeagueSettings()">Open League Settings</button>` : ''}
         <button onclick="document.getElementById('upload-results-modal').remove()">Close</button>
       </div>
     </div>`;
+  
   document.body.appendChild(modal);
 
-  setMsg(
-    uploaded.length
-      ? `✓ Uploaded ${uploaded.length} team(s) to league`
-      : `No teams uploaded.`,
-    hasErrors ? 'err' : 'ok'
-  );
+  // 9. Update status message
+  const autoWithdrawnOk = autoWithdrawn.filter(w => w.success).length;
+  if (uploaded.length || autoWithdrawnOk) {
+    const parts = [];
+    if (uploaded.length) parts.push(`Uploaded ${uploaded.length} team(s)`);
+    if (autoWithdrawnOk) parts.push(`Removed ${autoWithdrawnOk} from queue`);
+    setMsg(`✓ ${parts.join(', ')}${hasErrors ? ` (${errors.length} failed)` : ''}`,
+           hasErrors ? 'err' : 'ok');
+  } else {
+    setMsg('Upload failed. Check the error details above.', 'err');
+  }
+  
   render();
 }
+// Make sure the function is globally accessible
+window.uploadAllTeams = uploadAllTeams;
+
 
 /* ============================================================
    INITIALISATION
    ============================================================ */
 async function init() {
-  if (!isChromiumWithFSA()) { renderChromiumError(); return; }
-
-  // 1. Check if we are running from a local server that handles storage (Zero-Click Mode)
-  let localCheck = {};
+  // Check browser compatibility for non-Electron users
+  if (!window.electronAPI && !isChromiumWithFSA()) {
+    renderChromiumError();
+    return;
+  }
+  console.log('Initializing Bloodspire Client...');
+  
+  // ============================================================
+  // STEP 1: Check for local backend server (Zero-Click Mode)
+  // ============================================================
+  let localCheck = { success: false };
   try {
-    // Try current origin first (normal deployment or served by local server)
     localCheck = await fetch('/api/local/status').then(r => r.json()).catch(() => ({ success: false }));
-    // Fallback for file:// or cross-origin: check standard local server port
+    
     if (!localCheck.success && (window.location.protocol === 'file:' || window.location.hostname === 'localhost')) {
-        localCheck = await fetch('http://localhost:8766/api/local/status').then(r => r.json()).catch(() => ({ success: false }));
+      localCheck = await fetch('http://localhost:8766/api/local/status').then(r => r.json()).catch(() => ({ success: false }));
     }
 
     if (localCheck.success && localCheck.is_local_backend) {
+      console.log('Running in local backend mode');
       S.isLocalBackend = true;
-      S.folderReady    = true;
-      S.localBaseUrl   = localCheck.server_url || 'http://localhost:8766';
+      S.folderReady = true;
+      // Prefer the URL the page was actually served from so remote players
+      // get the host's Tailscale/LAN IP, not a hardcoded localhost.
+      const pageOrigin = (window.location.protocol !== 'file:') ? window.location.origin : null;
+      S.localBaseUrl = pageOrigin || localCheck.server_url || 'http://localhost:8766';
       if (!S.serverUrl || S.serverUrl === DEFAULT_SERVER_URL) S.serverUrl = S.localBaseUrl;
       
-      // Load metadata from server-managed store
       const localAcc = await LocalAPI.get('/api/account');
       if (localAcc.success) {
-          S.savedManagerName = localAcc.account.manager_name;
-          S.savedRememberMe  = localAcc.account.remember !== false;
-          S.savedPassword    = localAcc.account.password_plaintext || '';
-          S.loginTab         = 'login';
+        S.savedManagerName = localAcc.account.manager_name;
+        S.savedRememberMe = localAcc.account.remember !== false;
+        S.savedPassword = localAcc.account.password_plaintext || '';
+        S.loginTab = 'login';
       }
-      
-      // If we have a local backend, skip the folder picker entirely
+
+      // Load persisted league settings (manager_id etc.) from server-side client store
+      await loadLeagueSettings();
+
+      // Pre-load game data so Stats/Strats tab is ready immediately after login
+      try {
+        const gd = await API.get('/api/game_data');
+        if (gd && !gd.error) S.gd = gd;
+      } catch(e) {}
+
       S.view = 'login';
       render();
       return;
     }
-  } catch(e) { console.debug('Local backend check failed', e); }
+  } catch(e) {
+    console.debug('Local backend check skipped:', e.message);
+  }
 
-  // 2. Browser FSA flow: Load persistent metadata (independent of folder)
-  const meta = await idbGet('clientMeta') || {};
-  if (meta.managerName) S.savedManagerName = meta.managerName;
-  if (meta.serverUrl)   S.serverUrl = meta.serverUrl;
-  if (meta.rememberMe !== undefined) S.savedRememberMe = meta.rememberMe;
-  if (meta.password)    S.savedPassword = meta.password;
-  if (meta.folderName)  S.savedFolderName = meta.folderName;
-
-  // 3. Try to reconnect folder handle
-  let handle = await idbGet('folderHandle');
-  if (handle) {
+  // ============================================================
+  // STEP 2: Check for saved folder path (Electron mode)
+  // ============================================================
+  const savedPath = localStorage.getItem('bloodspire_base_dir');
+  console.log('Checking for saved folder path:', savedPath || 'none found');
+  
+  if (savedPath) {
+    // We have a saved folder! Use it directly.
+    baseDir = savedPath;
+    S.folderReady = true;
+    console.log('Using saved folder:', baseDir);
+    
+    // Tell main process about this folder
     try {
-      const state = await handle.queryPermission({ mode: 'readwrite' });
-      if (state === 'granted') {
-        S.folderHandle = handle;
-        S.folderReady  = true;
-        await _bootstrapFromFolder();
-        return;
-      }
-    } catch (e) { console.warn('Handle query failed', e); }
-    // We have a stored handle but permission needs re-granting.
-    // Skip the full folder-pick screen — go straight to login where a
-    // compact "Restore access" button will call requestPermission() instead.
-    S._hadPriorFolder = true;
-    S.view = 'login';
-    render();
+      await window.electronAPI.setBaseDir(baseDir);
+      console.log('Base directory sent to main process');
+    } catch (err) {
+      console.error('Failed to set base dir in main process:', err);
+    }
+    
+    // Bootstrap from the folder
+    await _bootstrapFromFolder();
     return;
   }
-
-  // No stored folder handle at all — first-time setup
-  if (S.savedManagerName) {
-    S.view = 'login';
-  } else {
-    S.view = 'folder_pick';
-  }
+  
+  // ============================================================
+  // STEP 3: No saved folder - first time setup
+  // ============================================================
+  console.log('No saved folder found - showing folder picker');
+  
+  // Try to load metadata from IDB (for backward compatibility)
+  const meta = await idbGet('clientMeta') || {};
+  if (meta.managerName) S.savedManagerName = meta.managerName;
+  if (meta.serverUrl) S.serverUrl = meta.serverUrl;
+  if (meta.rememberMe !== undefined) S.savedRememberMe = meta.rememberMe;
+  if (meta.password) S.savedPassword = meta.password;
+  if (meta.folderName) S.savedFolderName = meta.folderName;
+  
+  // Show the folder picker screen
+  S.view = 'folder_pick';
   render();
 }
 
@@ -5734,42 +6902,139 @@ async function init() {
 // folder-pick flow. Loads settings.json, caches game_data, and lands the user
 // on the login screen (or auto-login if remembered credentials are present).
 async function _bootstrapFromFolder() {
-  const settings = await Store.readSettings();
-  if (settings.server_url) S.serverUrl = settings.server_url;
+  console.log('Bootstrapping from folder:', baseDir);
+  
+  // CRITICAL: Check if we have a folder before proceeding
+  if (!baseDir) {
+    console.log('No baseDir found, showing folder picker');
+    S.view = 'folder_pick';
+    render();
+    return;
+  }
+  
+  // Verify folder exists by trying to read something (will create if needed)
+  try {
+    // Try to write a test file to verify folder access
+    await fsaEnsureDir('');
+    console.log('Folder access verified');
+  } catch (err) {
+    console.error('Folder access failed:', err);
+    S.view = 'folder_pick';
+    S.msg = 'Could not access the saved folder. Please select it again.';
+    render();
+    return;
+  }
+  
+  // Load settings from the folder
+  try {
+    const settings = await Store.readSettings();
+    if (settings && settings.server_url) {
+      S.serverUrl = settings.server_url;
+      console.log('Loaded server URL from settings:', S.serverUrl);
+    }
+  } catch (err) {
+    console.log('No settings file yet (first time with this folder)');
+  }
+
+  // Load game data (cached)
   try {
     const gd = await API.get('/api/game_data');
     if (gd && !gd.error) S.gd = gd;
-  } catch (e) { /* offline — UI uses cached data */ }
+  } catch (e) { 
+    console.log("Offline mode: using cached data or will fetch later"); 
+  }
+
+  // Load account information
   const acc = await Store.readAccount();
   if (acc && acc.manager_name) {
     S.savedManagerName = acc.manager_name;
-    S.savedPassword    = acc.password_plaintext || null;
-    S.savedRememberMe  = acc.remember !== false;
+    S.savedPassword = acc.password_plaintext || null;
+    S.savedRememberMe = acc.remember !== false;
     S.loginTab = 'login';
+    console.log('Loaded account:', acc.manager_name);
   } else {
     S.loginTab = 'new';
+    console.log('No account found, showing new account form');
   }
+
+    // Load league settings
   const lg = await API.get('/api/league_settings');
   if (lg) {
-    S.league.url          = lg.url          || S.serverUrl;
-    S.league.managerId    = lg.managerId    || '';
-    S.league.managerName  = lg.managerName  || '';
-    S.league.password     = lg.password     || '';
-    S.league.lastUpload   = lg.lastUpload   || '';
+    S.league.url = lg.url || S.serverUrl;
+    S.league.managerId = lg.managerId || '';
+    S.league.managerName = lg.managerName || '';
+    S.league.password = lg.password || '';
+    S.league.lastUpload = lg.lastUpload || '';
     S.league.lastDownload = lg.lastDownload || '';
-    S.league.lastTurnRan  = lg.lastTurnRan  || 0;
+    S.league.lastTurnRan = lg.lastTurnRan || 0;
+    console.log('Loaded league settings, manager ID:', S.league.managerId);
+    await _loadLegacyTeams();
   }
-  S.view = 'login'; S.msg = '';
+
+  // Show the login screen
+  S.view = 'login'; 
+  S.msg = '';
   render();
 }
 
-// Global one-time listener — close the Action dropdown on any click.
-document.addEventListener('click', () => {
+// Global one-time listener - FIXED for Name Input
+document.addEventListener('click', (e) => {
+  // 1. Close dropdowns
   const dd = el('action-dropdown');
   if (dd) dd.style.display = 'none';
+  const pd = el('prefs-dropdown');
+  if (pd) pd.style.display = 'none';
+
+  // 2. Handle Stat Spinners
+  const btn = e.target.closest('.stat-spin button');
+  if (btn && btn.hasAttribute('data-attr') && btn.hasAttribute('data-delta')) {
+    const attr = btn.getAttribute('data-attr');
+    const delta = parseInt(btn.getAttribute('data-delta'), 10);
+    ctAdjust(attr, delta);
+    return;
+  }
+
+  // 3. Handle ALL clicks inside the warrior grid (including on inputs/selects)
+  //    This properly switches the selected warrior row even when clicking on inputs.
+  const gridRow = e.target.closest('#ct-grid tr[id^="ct-row-"]');
+  if (gridRow) {
+    const idx = parseInt(gridRow.id.split('-')[2], 10);
+    if (!isNaN(idx) && S.ct) {
+      if (S.ct.sel !== idx) {
+        // Save the current warrior's editable fields before switching rows
+        const ci = S.ct.sel;
+        const rEl = el('ct-wrace');   if (rEl) S.ct.warriors[ci].race   = rEl.value;
+        const gEl = el('ct-wgender'); if (gEl) S.ct.warriors[ci].gender = gEl.value;
+        const nEl = el('ct-wname');   if (nEl) S.ct.warriors[ci].name   = nEl.value;
+        // Remember which input was clicked so we can re-focus it after render
+        const clickedInputId = (e.target.tagName === 'INPUT') ? e.target.id : null;
+        S.ct.sel = idx;
+        render();
+        // Re-focus the input the user clicked (render destroys and recreates it)
+        if (clickedInputId) {
+          const inp = el(clickedInputId);
+          if (inp) {
+            inp.focus();
+            const l = inp.value.length;
+            if (inp.setSelectionRange) inp.setSelectionRange(l, l);
+          }
+        }
+      }
+      // Row changed, we handled it
+      return;
+    }
+  }
+
+  // 4. For inputs/selects/textareas outside the grid, just let them get focus normally.
+  if (e.target.tagName === 'INPUT' ||
+      e.target.tagName === 'SELECT' ||
+      e.target.tagName === 'TEXTAREA') {
+    return;
+  }
 });
 
 init();
+
 </script>
 </body>
 </html>

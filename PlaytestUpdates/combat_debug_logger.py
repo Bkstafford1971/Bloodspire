@@ -143,8 +143,8 @@ class CombatDebugLogger:
             f" ({100 * state_b.hp_pct:.0f}%)"
         )
         self._emit(
-            f"  END   — {wa}: {state_a.endurance:.1f}"
-            f"   |   {wb}: {state_b.endurance:.1f}"
+            f"  END   — {wa}: {state_a.endurance:.1f}/{state_a.warrior.max_endurance}"
+            f"   |   {wb}: {state_b.endurance:.1f}/{state_b.warrior.max_endurance}"
         )
         self._emit(
             f"  STRAT — {wa}: [{strat_a.style} / Act:{strat_a.activity}]"
@@ -155,24 +155,45 @@ class CombatDebugLogger:
                        old_end_a: float, old_end_b: float,
                        act_a: int, act_b: int,
                        strat_a, strat_b):
-        from strategy import get_style_props
+        from strategy import get_style_props, AGGRESSIVE_STYLES
+        from armor import ARMOR_PIECES
+        from weapons import get_weapon
         wa = state_a.warrior.name.upper()
         wb = state_b.warrior.name.upper()
-        props_a = get_style_props(strat_a.style)
-        props_b = get_style_props(strat_b.style)
-        burn_a = props_a.endurance_burn + (strat_a.activity - 5) * 0.3
-        burn_b = props_b.endurance_burn + (strat_b.activity - 5) * 0.3
+
+        def _calc_burn_pm(warrior, strat):
+            props    = get_style_props(strat.style)
+            try:    wpn_wt = get_weapon(warrior.primary_weapon).weight
+            except: wpn_wt = 0.0
+            ad = ARMOR_PIECES.get(warrior.armor or "None", ARMOR_PIECES["None"]).defense_value
+            hd = ARMOR_PIECES.get(warrior.helm  or "None", ARMOR_PIECES["None"]).defense_value
+            dex_mit = max(0, (warrior.dexterity    - 10) // 2) * 0.01
+            int_mit = max(0, (warrior.intelligence - 10) // 2) * 0.015
+            mit     = min(0.50, dex_mit + int_mit)
+            style_mod = 2.0 if strat.style in AGGRESSIVE_STYLES else 1.25
+            gross   = (strat.activity * style_mod) + (wpn_wt / 2.0) + ((ad + hd) / 3.0)
+            net     = gross * (1.0 - mit)
+            wpn_key = warrior.primary_weapon.lower().replace(" ", "_").replace("&", "and")
+            conservation = warrior.skills.get(wpn_key, 0) * 0.5
+            net = max(0.0, net - conservation)
+            min_pm = warrior.max_endurance * 0.10
+            return max(min_pm, net)
+
+        burn_pm_a = _calc_burn_pm(state_a.warrior, strat_a)
+        burn_pm_b = _calc_burn_pm(state_b.warrior, strat_b)
+        burn_a    = burn_pm_a / max(1, act_a) if act_a else 0
+        burn_b    = burn_pm_b / max(1, act_b) if act_b else 0
         self._emit("")
         self._emit(f"  ── END OF MINUTE ──")
         self._emit(
-            f"    {wa}: {old_end_a:.1f} END"
-            f" − ({burn_a:.2f} burn × {act_a} actions)"
-            f" = {state_a.endurance:.1f}"
+            f"    {wa}: {old_end_a:.1f} END (total actions: {act_a})"
+            f" − ({burn_pm_a:.2f}/min → {burn_a:.2f}/action)"
+            f" = {state_a.endurance:.1f} / {state_a.warrior.max_endurance}"
         )
         self._emit(
-            f"    {wb}: {old_end_b:.1f} END"
-            f" − ({burn_b:.2f} burn × {act_b} actions)"
-            f" = {state_b.endurance:.1f}"
+            f"    {wb}: {old_end_b:.1f} END (total actions: {act_b})"
+            f" − ({burn_pm_b:.2f}/min → {burn_b:.2f}/action)"
+            f" = {state_b.endurance:.1f} / {state_b.warrior.max_endurance}"
         )
         self._emit(
             f"    HP POOL — {wa}:"
@@ -455,6 +476,15 @@ class CombatDebugLogger:
         )
 
     # ── concede ───────────────────────────────────────────────────────────────
+
+    def log_tabaxi_frenzy_check(self, warrior_name: str,
+                                hp: int, max_hp: int,
+                                chance: int, roll: int, triggered: bool):
+        pct = int(100 * hp / max(1, max_hp))
+        self._emit(f"  Tabaxi Frenzy Check ({warrior_name.upper()}):")
+        self._emit(f"    HP: {hp}/{max_hp} ({pct}%) — threshold ≤30%")
+        self._emit(f"    Trigger chance: {chance}%   Roll: {roll}  →  "
+                   f"{'▶ FRENZY TRIGGERED' if triggered else 'not triggered'}")
 
     def log_concede(self, warrior_name: str,
                     d100: int, pre_bonus: int, luck_half: int,

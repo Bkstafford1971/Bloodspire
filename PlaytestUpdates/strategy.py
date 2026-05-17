@@ -29,7 +29,7 @@ class FighterState:
     warrior         : Warrior
     current_hp      : int
     max_hp          : int
-    endurance       : float      # 0.0 – 100.0
+    endurance       : float      # 0.0 – warrior.max_endurance
     is_on_ground    : bool
     active_strategy_idx : int    # 1-indexed display number of the current strategy
     active_strategy : Strategy
@@ -47,15 +47,15 @@ class FighterState:
 
     @property
     def is_very_tired(self) -> bool:
-        return self.endurance <= 20.0
+        return self.endurance <= self.warrior.max_endurance * 0.25
 
     @property
     def is_somewhat_tired(self) -> bool:
-        return self.endurance <= 40.0
+        return self.endurance <= self.warrior.max_endurance * 0.50
 
     @property
     def is_slightly_tired(self) -> bool:
-        return self.endurance <= 60.0
+        return self.endurance <= self.warrior.max_endurance * 0.75
 
     # Legacy alias kept for backwards compatibility with old saves
     @property
@@ -71,18 +71,33 @@ class FighterState:
         Classify how much damage the warrior has taken.
         APPROX thresholds derived from guide sample fight context.
         """
-        pct = self.hp_lost_pct
-        if pct < 0.10:
+        pct = self.hp_lost_pct # Fraction of max HP that has been lost (0.0–1.0)
+        if pct < 0.05: # Less than 5% lost
             return "none"
-        elif pct < 0.30:
+        elif pct < 0.20: # 5% to less than 20% lost
             return "slight"
-        elif pct < 0.60:
+        elif pct < 0.50: # 20% to less than 50% lost
             return "medium"
-        else:
+        else: # 50% or more lost
             return "heavy"
 
 
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# STYLE CATEGORIES
+# ---------------------------------------------------------------------------
+
+AGGRESSIVE_STYLES = frozenset({
+    "Total Kill", "Wall of Steel", "Lunge", "Bash", "Slash",
+    "Strike", "Martial Combat",
+})
+
+TACTICAL_STYLES = frozenset({
+    "Parry", "Defend", "Sure Strike", "Calculated Attack", "Counterstrike",
+    "Engage & Withdraw", "Decoy", "Opportunity Throw",
+})
+
+
 # TRIGGER HELPERS
 # ---------------------------------------------------------------------------
 

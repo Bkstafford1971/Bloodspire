@@ -1,5 +1,5 @@
 # =============================================================================
-# warrior.py — BLOODSPIRE Warrior Class
+# warrior.py — THE AGONY AMPHITHEATRE Warrior Class
 # =============================================================================
 # Defines the Warrior dataclass along with:
 #   - 6 core attributes and their flavor descriptions
@@ -12,6 +12,7 @@
 # =============================================================================
 
 import random
+import math
 import json
 from typing import List, Optional, Dict
 from races import Race, get_race, list_playable_races
@@ -26,6 +27,11 @@ ROLLUP_MAX_PER_STAT = 7    # Hard cap: no single stat can receive more than this
 STAT_MIN            = 3    # Absolute floor for any attribute
 STAT_MAX            = 25   # Absolute ceiling (theoretical; hard to reach in practice)
 MAX_FIGHTS          = 100  # Retirement eligibility threshold
+
+# HP Multipliers
+HP_MULT_CON  = 2.5
+HP_MULT_STR  = 1.0
+HP_MULT_SIZE = 1.0
 
 # Canonical attribute order (used everywhere for consistency)
 ATTRIBUTES = [
@@ -409,13 +415,13 @@ SKILL_LEVEL_NAMES = {
 
 class Warrior:
     """
-    Represents a single gladiator in BLOODSPIRE.
+    Represents a single gladiator in THE AGONY AMPHITHEATRE.
 
     Design notes:
       - Racial modifiers are NOT baked into base stats. They are stored in
         self.race.modifiers and applied at combat time. This keeps stats clean.
       - SIZE cannot be trained (per guide). Enforced in train_skill().
-      - HP formula: 2*SIZE + (CON*1.5) + 0.5*STR, capped at 100, + racial bonus.
+      - HP formula: (CON*2.5) + STR + SIZE, rounded up, capped at 100, + racial bonus.
     """
 
     def __init__(
@@ -445,8 +451,9 @@ class Warrior:
 
         # --- Derived Stats (calculated at init and recalculated after training) ---
         self.max_hp           = self._calc_max_hp()
+        self.max_endurance    = self._calc_max_endurance()
         self.current_hp       = self.max_hp      # Reset each fight
-        self.current_endurance= 100              # 0-100 scale; reset each fight
+        self.current_endurance= self.max_endurance  # Reset each fight
 
         # --- Fight Record (W-L-K: Wins, Losses, Kills) ---
         # A "Kill" is a win where the opponent died in the fight.
@@ -545,20 +552,26 @@ class Warrior:
         # to avoid repeating them if the warrior trains the same skill multiple times
         self.shown_max_messages: set = set()
 
+        # Identity: the roster position (0-4) this warrior occupies on its team.
+        self.slot_index: Optional[int] = None
+
     # =========================================================================
     # DERIVED STAT CALCULATIONS
     # =========================================================================
 
+    def _calc_max_endurance(self) -> int:
+        """Max endurance pool: (CON × 5) + (STR × 2) + INT"""
+        return (self.constitution * 5) + (self.strength * 2) + self.intelligence
+
     def _calc_max_hp(self) -> int:
         """
-        HP Formula (from guide):
-            Base HP = 2*SIZE + (CON * 1.5) + (STR * 0.5)
-            Cap at 100.
-            Add racial HP bonus (can be negative for Elves).
+        HP Formula:
+            Base HP = (CON * 2.5) + STR + SIZE
+            Round up any fraction (e.g. 65.5 → 66).
+            Add racial HP bonus, then cap at 100.
         """
-        base = (2 * self.size) + (self.constitution * 1.5) + (self.strength * 0.5)
-        racial_bonus = self.race.modifiers.hp_bonus
-        total = int(base + racial_bonus)
+        # Call the racial calculator to ensure formula consistency
+        total = self.race.calculate_max_hp(self.strength, self.constitution, self.size)
         return max(1, min(total, 100))   # Always at least 1 HP; never more than 100
 
     def _calc_measurements(self) -> tuple:
@@ -590,12 +603,16 @@ class Warrior:
         # --- Height range table (inches, male) ---
         # Keys match race names; (min_in, max_in) at SIZE 3 and SIZE 25.
         HEIGHT_RANGES = {
-            "Halfling" : (37, 61),
+            "Halfling" : (37, 54),   # 3'01" -> 4'06"
             "Elf"      : (56, 71),
             "Half-Elf" : (60, 72),
             "Human"    : (62, 76),
             "Dwarf"    : (42, 62),
             "Half-Orc" : (65, 90),
+            "Gnome"    : (37, 54),   # Same as Halfling
+            "Goblin"   : (48, 60),   # 4'00" -> 5'00"
+            "Lizardfolk": (69, 81),  # 5'09" -> 6'09"
+            "Tabaxi"   : (66, 76),   # 5'06" -> 6'04"
             # NPC races use Human proportions as fallback
             "Monster"  : (72, 108),   # Enormous
             "Peasant"  : (62, 76),
@@ -604,12 +621,16 @@ class Warrior:
         # --- Weight density table (lbs = height_in^2 * factor, male) ---
         # Dwarves are proportionally much denser/heavier than other races.
         DENSITY = {
-            "Halfling" : 0.0434,   # Calibrated: 4'3"/51" = ~113 lbs
+            "Halfling" : 0.0434,   # Calibrated: 4'6"/54" = ~127 lbs
             "Elf"      : 0.0338,
             "Half-Elf" : 0.0354,
             "Human"    : 0.0368,
             "Dwarf"    : 0.0780,   # Notably heavier by proportion
             "Half-Orc" : 0.0462,
+            "Gnome"    : 0.0434,
+            "Goblin"   : 0.0255,   # Light frame: 5'0"/60" = ~92 lbs
+            "Lizardfolk": 0.0400,  # Muscular: 6'9"/81" = ~260 lbs
+            "Tabaxi"   : 0.0315,   # Lean: 6'4"/76" = ~182 lbs
             "Monster"  : 0.0420,
             "Peasant"  : 0.0368,
         }
@@ -640,7 +661,7 @@ class Warrior:
 
     def recalculate_derived(self):
         """
-        Recalculate HP and measurements after stats change (e.g. after training).
+        Recalculate HP, endurance, and measurements after stats change (e.g. after training).
         Call this after any attribute change.
         Note: current_hp is NOT reset here — only max_hp changes.
         """
@@ -652,7 +673,37 @@ class Warrior:
         if self.max_hp > old_max:
             self.current_hp = min(self.current_hp + (self.max_hp - old_max), self.max_hp)
 
+        self.max_endurance = self._calc_max_endurance()
         self.height_in, self.weight_lbs = self._calc_measurements()
+
+    def revert_to_initial(self):
+        """
+        Revert warrior to their creation state using initial_stats.
+        Clears all records, skills, and progress.
+        """
+        if self.initial_stats:
+            for attr in ATTRIBUTES:
+                if attr in self.initial_stats:
+                    setattr(self, attr, self.initial_stats[attr])
+        
+        self.wins = 0
+        self.losses = 0
+        self.kills = 0
+        self.monster_kills = 0
+        self.total_fights = 0
+        self.skills = {skill: 0 for skill in ALL_SKILLS}
+        self.attribute_gains = {k: 0 for k in ["strength", "dexterity", "constitution", "intelligence", "presence"]}
+        self.injuries = PermanentInjuries()
+        self.fight_history = []
+        self.popularity = 0
+        self.recognition = 0
+        self.streak = 0
+        self.turns_active = 0
+        self.training_weight_bonus = 0
+        self.is_dead = False
+        self.killed_by = ""
+        self.ascended_to_monster = False
+        self.recalculate_derived()
 
     # =========================================================================
     # STAT ACCESS
@@ -753,6 +804,14 @@ class Warrior:
     def is_alive(self) -> bool:
         """False if permanently killed (is_dead flag or a level-9 injury)."""
         return not self.is_dead and not self.injuries.is_fatal()
+
+    @property
+    def gender_possessive(self) -> str:
+        return "his" if self.gender == "Male" else "her"
+        
+    @property
+    def gender_subject(self) -> str:
+        return "he" if self.gender == "Male" else "she"
 
     # =========================================================================
     # AVOIDANCE SYSTEM
@@ -1160,6 +1219,7 @@ class Warrior:
         lines += [
             thin_sep,
             f"  Max HP:         {self.max_hp}",
+            f"  Max Endurance:  {self.max_endurance}",
             f"  Height:         {h_ft}'{h_in}\"",
             f"  Weight:         {self.weight_lbs} lbs",
             thin_sep,
@@ -1320,6 +1380,7 @@ class Warrior:
             "initial_stats":   self.initial_stats,
             "fight_history":   self.fight_history,
             "favorite_weapon": self.favorite_weapon,
+            "slot_index":      self.slot_index,
         }
 
     @classmethod
@@ -1376,6 +1437,7 @@ class Warrior:
         w.fight_history  = data.get("fight_history", [])
         w.trains     = data.get("trains",     [])
         w.favorite_weapon = data.get("favorite_weapon", "")
+        w.slot_index = data.get("slot_index")
         if not w.favorite_weapon:
             assign_favorite_weapon(w)
 
@@ -1390,6 +1452,7 @@ class Warrior:
 
         # Recalculate all derived values
         w.max_hp = w._calc_max_hp()
+        w.max_endurance = w._calc_max_endurance()
         w.current_hp = w.max_hp
         w.height_in, w.weight_lbs = w._calc_measurements()
         
@@ -1677,6 +1740,9 @@ def create_warrior_interactive(base_stats: Dict[str, int] = None) -> Optional["W
     name = input("\n  Warrior name: ").strip()
     if not name:
         print("  No name given — cancelling.")
+        return None
+    if len(name) > 20:
+        print("  Warrior name must be 20 characters or fewer.")
         return None
 
     # --- Race ---

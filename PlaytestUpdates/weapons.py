@@ -1,4 +1,4 @@
-﻿# =============================================================================
+# =============================================================================
 # weapons.py — BLOODSPIRE Weapon Definitions
 # =============================================================================
 # Contains:
@@ -43,6 +43,19 @@ def max_weapon_weight(strength: int) -> float:
         if lo <= strength <= hi:
             return capacity
     return 0.0
+
+
+def get_effective_strength_for_weapons(warrior) -> int:
+    """
+    Get the effective strength for weapon purposes, including race-based bonuses.
+
+    Bonuses:
+    - Half-Elf: +1 strength for bigger_weapons_bonus (counts as higher STR for weight reqs)
+    """
+    effective_str = warrior.strength
+    if warrior.race.name == "Half-Elf" and warrior.race.modifiers.bigger_weapons_bonus:
+        effective_str += 1
+    return effective_str
 
 
 def strength_penalty(weapon_weight: float, strength: int, two_handed: bool = False) -> float:
@@ -163,20 +176,28 @@ class Weapon:
         """The strength capacity needed to wield this weapon two-handed."""
         return max(0.0, self.weight - 1.0)
 
-    def penalty_for(self, strength: int, two_handed: bool = False) -> float:
+    def penalty_for(self, strength: int, two_handed: bool = False, warrior=None) -> float:
         """
         Shorthand: get the under-strength penalty for a given warrior STR.
         Returns 0.0–1.0 (0 = no penalty, 1 = completely ineffective).
-        """
-        return strength_penalty(self.weight, strength, two_handed)
 
-    def can_wield(self, strength: int, two_handed: bool = False) -> bool:
+        If warrior is provided, applies race-based bonuses (e.g., Half-Elf bigger_weapons_bonus).
+        """
+        effective_strength = strength
+        # Half-Elf bonus: count as 1 STR higher for weapon weight requirements
+        if warrior and warrior.race.name == "Half-Elf" and warrior.race.modifiers.bigger_weapons_bonus:
+            effective_strength += 1
+        return strength_penalty(self.weight, effective_strength, two_handed)
+
+    def can_wield(self, strength: int, two_handed: bool = False, warrior=None) -> bool:
         """
         True if the warrior can wield this weapon with no penalty.
         Does NOT block equipping — just indicates whether full effectiveness
         is available.
+
+        If warrior is provided, applies race-based bonuses (e.g., Half-Elf bigger_weapons_bonus).
         """
-        return self.penalty_for(strength, two_handed) == 0.0
+        return self.penalty_for(strength, two_handed, warrior) == 0.0
 
     def __str__(self) -> str:
         flags = []

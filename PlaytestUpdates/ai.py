@@ -1,4 +1,4 @@
-﻿# =============================================================================
+# =============================================================================
 # ai.py — BLOODSPIRE AI Helpers
 # =============================================================================
 # Provides gear, strategy, and training assignment for AI-managed warriors.
@@ -104,11 +104,12 @@ def _best_wieldable_weapon(
     From a preference list, return the first weapon the warrior can wield
     without a full penalty. Falls back to Open Hand.
     """
-    from weapons import max_weapon_weight, strength_penalty
+    from weapons import max_weapon_weight, strength_penalty, get_effective_strength_for_weapons
+    effective_str = get_effective_strength_for_weapons(warrior)
     for wpn_name in prefs:
         try:
             w = get_weapon(wpn_name)
-            pen = strength_penalty(w.weight, warrior.strength, w.two_hand)
+            pen = strength_penalty(w.weight, effective_str, w.two_hand)
             if pen < 0.30:   # Allow up to 30% penalty — still functional
                 return wpn_name
         except ValueError:

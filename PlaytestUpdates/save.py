@@ -1,4 +1,4 @@
-﻿# =============================================================================
+# =============================================================================
 # save.py — BLOODSPIRE Save & Load System
 # =============================================================================
 # All data is stored as JSON files under the saves/ directory.
@@ -109,7 +109,8 @@ def load_game_state() -> dict:
     if not os.path.exists(GAME_STATE_FILE):
         return DEFAULT_GAME_STATE.copy()
     try:
-        state = load_json_protected(GAME_STATE_FILE)
+        # allow_tampered=True to allow the game to recover its turn/ID counters if the file is out of sync
+        state = load_json_protected(GAME_STATE_FILE, allow_tampered=True)
         # Fill in any missing keys with defaults (handles version upgrades)
         for k, v in DEFAULT_GAME_STATE.items():
             state.setdefault(k, v)
@@ -233,8 +234,11 @@ def delete_team(team_id: int) -> bool:
     filepath = _team_filepath(team_id)
     checksum_filepath = filepath.replace('.json', '.checksum')
     if os.path.exists(filepath):
+        make_file_writable(filepath)
         os.remove(filepath)
-        if os.path.exists(checksum_filepath): os.remove(checksum_filepath)
+        if os.path.exists(checksum_filepath):
+            make_file_writable(checksum_filepath)
+            os.remove(checksum_filepath)
         return True
     return False
 
@@ -285,7 +289,7 @@ def save_fight_log(narrative_text: str, team_a_name: str, team_b_name: str) -> t
 
     try:
         with open(filepath, "w", encoding="utf-8") as f:
-            f.write(f"Fight #{fight_id}\n")
+            f.write(f"Fight #{fight_id} (Turn {current_turn()})\n")
             f.write(f"{team_a_name}  vs  {team_b_name}\n")
             f.write("=" * 76 + "\n\n")
             f.write(narrative_text)
@@ -305,8 +309,6 @@ def load_fight_log(fight_id: int) -> str:
     for filename in os.listdir(FIGHTS_DIR):
         if filename.startswith(f"fight_{fight_id:04d}_"):
             filepath = os.path.join(FIGHTS_DIR, filename) # This is a text file, not JSON
-            # Temporarily make writable to read, then set back to read-only
-            make_file_writable(filepath)
             with open(filepath, "r", encoding="utf-8") as f: # No checksum for text files
                 return f.read()
     raise FileNotFoundError(f"No fight log found with ID {fight_id}.")
@@ -324,6 +326,8 @@ def archive_warrior_history(team_name: str, warrior):
     filepath = os.path.join(GRAVEYARD_DIR, filename)
     
     try:
+        if os.path.exists(filepath):
+            make_file_writable(filepath)
         with open(filepath, "w", encoding="utf-8") as f:
             f.write("=" * 76 + "\n")
             f.write(f" GLADIATOR LEGACY: {warrior.name.upper()}\n")
@@ -351,9 +355,10 @@ def archive_warrior_history(team_name: str, warrior):
                     except Exception:
                         f.write("[Narrative log file not found or inaccessible]\n")
                 f.write("\n\n")
+        make_file_readonly(filepath) # Protect the archived text file
         return filepath
     except Exception as e:
-        print(f"  WARNING: Could not create legacy file for {warrior.name}: {e}") # This will be replaced by save_json_protected
+        print(f"  WARNING: Could not create legacy file for {warrior.name}: {e}")
         return ""
 
 
@@ -829,7 +834,7 @@ def reset_arena_complete():
     After this runs, every user must re-register and rebuild their teams.
 
     Keeps:
-      - newsletter_settings.json (voice preferences — app config, not arena data)
+      - (None)
     """
     import shutil
     _ensure_dirs()
@@ -842,6 +847,7 @@ def reset_arena_complete():
     def _rm_file(p):
         try:
             if os.path.exists(p):
+                make_file_writable(p)
                 os.remove(p)
         except OSError as e:
             print(f"  WARNING: Could not delete {p}: {e}")
@@ -897,6 +903,7 @@ def reset_arena_season():
     def _rm_file(p):
         try:
             if os.path.exists(p):
+                make_file_writable(p)
                 os.remove(p)
         except OSError as e:
             print(f"  WARNING: Could not delete {p}: {e}")
@@ -971,7 +978,6 @@ def reset_arena_season():
 
 NEWSLETTERS_DIR  = os.path.join(SAVES_DIR, "newsletters")
 CHAMPION_FILE    = os.path.join(SAVES_DIR, "champion.json")
-VOICE_SETTINGS_FILE = os.path.join(SAVES_DIR, "newsletter_settings.json")
 
 
 def save_newsletter(turn_num: int, text: str):
@@ -989,8 +995,6 @@ def load_newsletter(turn_num: int) -> Optional[str]:
     path = os.path.join(NEWSLETTERS_DIR, f"turn_{turn_num:04d}.txt")
     if not os.path.exists(path):
         return None
-    # Temporarily make writable to read, then set back to read-only
-    make_file_writable(path)
     with open(path, "r", encoding="utf-8") as f: # No checksum for text files
         return f.read()
 
@@ -1033,19 +1037,6 @@ def save_champion_state(state: dict):
     save_json_protected(CHAMPION_FILE, state)
 
 
-def load_newsletter_voice() -> str:
-    """Return 'snide' or 'neutral'."""
-    try:
-        with open(VOICE_SETTINGS_FILE, "r", encoding="utf-8") as f:
-            return json.load(f).get("voice", "snide")
-    except Exception:
-        return "snide"
-
-
-def save_newsletter_voice(voice: str):
-    """Persist voice preference."""
-    _ensure_dirs()
-    save_json_protected(VOICE_SETTINGS_FILE, {"voice": voice})
 
 
 # ---------------------------------------------------------------------------
@@ -1214,8 +1205,9 @@ def get_all_scouted_warriors(current_turn: int) -> dict:
             if not sel.get("confirmed"):
                 continue
             wname = sel.get("warrior_name", "")
+            tid = sel.get("team_id", 0)
             if wname:
-                result.setdefault(wname, []).append(mname)
+                result.setdefault((tid, wname), []).append(mname)
     return result
 
 

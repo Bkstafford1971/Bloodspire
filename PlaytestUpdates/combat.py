@@ -1,4 +1,4 @@
-﻿# =============================================================================
+# =============================================================================
 # combat.py, BLOODSPIRE Combat Engine v2
 # =============================================================================
 # CORE MECHANICS:
@@ -35,6 +35,7 @@
 # NO DRAWS: 30-minute limit -> judge awards decision to higher HP% warrior.
 # =============================================================================
 
+from __future__ import annotations
 import random
 from dataclasses import dataclass, field
 from typing import Optional, List, Tuple
@@ -44,13 +45,14 @@ from combat_debug_logger import CombatDebugLogger
 from warrior  import Warrior, Strategy, ATTRIBUTES
 from strategy import (
     FighterState, evaluate_triggers, get_style_advantage,
-    get_style_props,
+    get_style_props, AGGRESSIVE_STYLES as _AGGRESSIVE_STYLES,
 )
-from weapons  import get_weapon, strength_penalty, OPEN_HAND, Weapon
+from weapons  import get_weapon, strength_penalty, OPEN_HAND, Weapon, get_effective_strength_for_weapons
 from armor    import (
     effective_dex, total_defense_value, is_ap_vulnerable,
     get_effective_dex_for_race, get_effective_defense_for_race,
     get_armor_attack_rate_penalty_for_race,
+    ARMOR_PIECES,
 )
 import narrative as N
 
@@ -106,6 +108,12 @@ OPEN_HAND_WEAPONS = {
     "open_hand"
 }
 
+FINESSE_WEAPONS = {
+    "stiletto", "knife", "dagger", "short_sword", "epee", "scimitar",
+    "hatchet", "francisca", "hammer", "short_spear", "flail",
+    "cestus", "javelin", "swordbreaker", "bola"
+}
+
 
 def _is_cleave_weapon(weapon_key: str) -> bool:
     """Check if weapon qualifies for Cleave skill bonuses."""
@@ -125,6 +133,261 @@ def _is_slash_weapon(weapon_key: str) -> bool:
 def _is_open_hand_weapon(weapon_key: str) -> bool:
     """Check if weapon qualifies for Open Hand skill bonuses."""
     return weapon_key in OPEN_HAND_WEAPONS
+
+
+def _is_finesse_weapon(weapon_key: str) -> bool:
+    """Check if weapon qualifies as a finesse weapon for dual-wielding bonuses."""
+    return weapon_key in FINESSE_WEAPONS
+
+
+def _is_elf_dual_wielding_finesse(attacker: Warrior) -> bool:
+    """Check if an Elf is wielding two finesse weapons (dual-wielding)."""
+    if attacker.race.name != "Elf":
+        return False
+    if not attacker.race.modifiers.dual_weapon_bonus:
+        return False
+
+    # Both primary and secondary must be weapons (not shields or Open Hand)
+    if not attacker.primary_weapon or not attacker.secondary_weapon:
+        return False
+
+    # Both must be finesse weapons
+    primary_key = attacker.primary_weapon.lower().replace(" ", "_").replace("&", "and")
+    secondary_key = attacker.secondary_weapon.lower().replace(" ", "_").replace("&", "and")
+
+    if not _is_finesse_weapon(primary_key):
+        return False
+    if not _is_finesse_weapon(secondary_key):
+        return False
+
+    # Neither can be a shield
+    try:
+        primary_wpn = get_weapon(attacker.primary_weapon)
+        secondary_wpn = get_weapon(attacker.secondary_weapon)
+        if primary_wpn.is_shield or secondary_wpn.is_shield:
+            return False
+    except ValueError:
+        return False
+
+    return True
+
+
+def _calculate_elf_extra_attack_chance(attacker: Warrior, defender: Warrior = None) -> int:
+    """
+    Calculate the percentage chance (0-100) for an Elf extra attack from dual-wielding.
+    Base 7%, up to 20% based on secondary weapon skill level.
+    Adjusted by skill differential: +/- 2.5% per skill point difference.
+    """
+    if not _is_elf_dual_wielding_finesse(attacker):
+        return 0
+
+    secondary_key = attacker.secondary_weapon.lower().replace(" ", "_").replace("&", "and")
+    secondary_skill = attacker.skills.get(secondary_key, 0)
+
+    # Scale from 7% (skill 0) to 20% (skill 9)
+    # 7% + (20% - 7%) * (skill / 9) = 7 + 1.44... * skill
+    base_chance = 7
+    max_chance = 20
+    chance_per_level = (max_chance - base_chance) / 9.0
+
+    chance = base_chance + (secondary_skill * chance_per_level)
+
+    # Apply skill differential modifier if defender is provided
+    if defender:
+        primary_key = defender.primary_weapon.lower().replace(" ", "_").replace("&", "and")
+        defender_skill = defender.skills.get(primary_key, 0)
+        differential_modifier = _calculate_skill_differential_modifier(secondary_skill, defender_skill)
+        chance *= (1.0 + differential_modifier)
+
+    return int(max(base_chance, min(max_chance, chance)))
+
+
+def _has_martial_combat_bonus(warrior: Warrior) -> bool:
+    """Check if warrior has martial_combat_bonus from their race."""
+    return warrior.race.modifiers.martial_combat_bonus
+
+
+def _is_using_martial_combat(warrior: Warrior) -> bool:
+    """Check if warrior is currently fighting unarmed (Open Hand)."""
+    return warrior.primary_weapon == "Open Hand"
+
+
+def _calculate_martial_combat_extra_attack_chance(attacker: Warrior, defender: Warrior = None) -> int:
+    """
+    Calculate the percentage chance for a Halfling/Lizardfolk extra attack from martial combat.
+    Halflings: 5% base → 12% at skill level 9
+    Lizardfolk: 4% base → 10% at skill level 9
+    Adjusted by skill differential: +/- 2.5% per skill point difference.
+    """
+    if not _has_martial_combat_bonus(attacker) or not _is_using_martial_combat(attacker):
+        return 0
+
+    open_hand_skill = attacker.skills.get("open_hand", 0)
+
+    if attacker.race.name == "Halfling":
+        base_chance = 5
+        max_chance = 12
+    elif attacker.race.name == "Lizardfolk":
+        base_chance = 4
+        max_chance = 10
+    else:
+        return 0
+
+    chance_per_level = (max_chance - base_chance) / 9.0
+    chance = base_chance + (open_hand_skill * chance_per_level)
+
+    # Apply skill differential modifier if defender is provided
+    if defender:
+        primary_key = defender.primary_weapon.lower().replace(" ", "_").replace("&", "and")
+        defender_skill = defender.skills.get(primary_key, 0)
+        differential_modifier = _calculate_skill_differential_modifier(open_hand_skill, defender_skill)
+        chance *= (1.0 + differential_modifier)
+
+    return int(max(base_chance, min(max_chance, chance)))
+
+
+def _can_trigger_tabaxi_frenzy(attacker: Warrior, state: _CState) -> bool:
+    """Check if Tabaxi can trigger frenzy (race check, not yet used, has ability)."""
+    if attacker.race.name != "Tabaxi":
+        return False
+    if not attacker.race.modifiers.frenzy_ability:
+        return False
+    if state.frenzy_used:
+        return False
+    return True
+
+
+def _is_at_frenzy_threshold(state: _CState) -> bool:
+    """Check if warrior is at or below 30% HP threshold."""
+    max_hp = state.warrior.max_hp
+    threshold_hp = int(max_hp * 0.30)
+    return state.current_hp <= threshold_hp
+
+
+def _calculate_skill_differential_modifier(attacker_skill: int, defender_skill: int) -> float:
+    """
+    Calculate percentage modifier based on skill differential.
+    For every 1 point advantage: +2.5%
+    For every 1 point disadvantage: -2.5%
+    Returns modifier as decimal (e.g., 0.05 for +5%, -0.05 for -5%)
+    """
+    skill_diff = attacker_skill - defender_skill
+    modifier = (skill_diff * 2.5) / 100.0
+    return modifier
+
+
+def _get_elf_dual_wield_damage_bonus(attacker: Warrior) -> int:
+    """
+    Get Elf dual-wielding damage bonus based on secondary weapon skill.
+    Scales from +3 (skill 0) to +7 (skill 9)
+    """
+    if not _is_elf_dual_wielding_finesse(attacker):
+        return 0
+    secondary_key = attacker.secondary_weapon.lower().replace(" ", "_").replace("&", "and")
+    secondary_skill = attacker.skills.get(secondary_key, 0)
+    # Scale from 3 to 7: base 3 + (4 * skill/9)
+    bonus = 3 + int((4.0 * secondary_skill) / 9.0)
+    return bonus
+
+
+def _get_elf_dual_wield_parry_bonus(attacker: Warrior) -> int:
+    """
+    Get Elf dual-wielding parry bonus based on secondary weapon skill.
+    Scales from +10 (skill 0) to +20 (skill 9)
+    """
+    if not _is_elf_dual_wielding_finesse(attacker):
+        return 0
+    secondary_key = attacker.secondary_weapon.lower().replace(" ", "_").replace("&", "and")
+    secondary_skill = attacker.skills.get(secondary_key, 0)
+    # Scale from 10 to 20: base 10 + (10 * skill/9)
+    bonus = 10 + int((10.0 * secondary_skill) / 9.0)
+    return bonus
+
+
+def _get_lizardfolk_natural_weapon_bonus(attacker: Warrior) -> int:
+    """
+    Get Lizardfolk natural weapon damage bonus based on Open Hand skill.
+    Scales from +2 (skill 0) to +5 (skill 9)
+    """
+    if attacker.race.name != "Lizardfolk" or not _is_using_martial_combat(attacker):
+        return 0
+    open_hand_skill = attacker.skills.get("open_hand", 0)
+    # Scale from 2 to 5: base 2 + (3 * skill/9)
+    bonus = 2 + int((3.0 * open_hand_skill) / 9.0)
+    return bonus
+
+
+def _get_martial_combat_accuracy_bonus(attacker: Warrior) -> int:
+    """
+    Get martial combat accuracy bonus based on Open Hand skill.
+    Scales from +2 (skill 0) to +6 (skill 9)
+    """
+    if not _has_martial_combat_bonus(attacker) or not _is_using_martial_combat(attacker):
+        return 0
+    open_hand_skill = attacker.skills.get("open_hand", 0)
+    # Scale from 2 to 6: base 2 + (4 * skill/9)
+    bonus = 2 + int((4.0 * open_hand_skill) / 9.0)
+    return bonus
+
+
+def _get_martial_combat_parry_bonus(attacker: Warrior) -> int:
+    """
+    Get martial combat parry bonus based on Open Hand skill.
+    Scales from +4 (skill 0) to +8 (skill 9)
+    """
+    if not _has_martial_combat_bonus(attacker) or not _is_using_martial_combat(attacker):
+        return 0
+    open_hand_skill = attacker.skills.get("open_hand", 0)
+    # Scale from 4 to 8: base 4 + (4 * skill/9)
+    bonus = 4 + int((4.0 * open_hand_skill) / 9.0)
+    return bonus
+
+
+def _get_tabaxi_frenzy_damage_bonus(attacker: Warrior) -> int:
+    """
+    Get Tabaxi frenzy damage bonus based on primary weapon skill.
+    Scales from +3 (skill 0) to +6 (skill 9)
+    """
+    wpn_key = attacker.primary_weapon.lower().replace(" ", "_").replace("&", "and")
+    wpn_skill = attacker.skills.get(wpn_key, 0)
+    # Scale from 3 to 6: base 3 + (3 * skill/9)
+    bonus = 3 + int((3.0 * wpn_skill) / 9.0)
+    return bonus
+
+
+def _calculate_tabaxi_frenzy_trigger_chance(attacker: Warrior, defender: Warrior = None) -> int:
+    """
+    Calculate the percentage chance (0-100) for Tabaxi frenzy to trigger.
+    Base 25%, scaled by primary weapon skill.
+    Adjusted by skill differential: +/- 2.5% per skill point difference.
+    """
+    wpn_key = attacker.primary_weapon.lower().replace(" ", "_").replace("&", "and")
+    wpn_skill = attacker.skills.get(wpn_key, 0)
+
+    chance = 35
+
+    # Apply skill differential modifier if defender is provided
+    if defender:
+        primary_key = defender.primary_weapon.lower().replace(" ", "_").replace("&", "and")
+        defender_skill = defender.skills.get(primary_key, 0)
+        differential_modifier = _calculate_skill_differential_modifier(wpn_skill, defender_skill)
+        chance *= (1.0 + differential_modifier)
+
+    return int(max(10, min(40, chance)))  # Clamp between 10% and 40%
+
+
+def _get_defender_primary_defense_skill(defender: Warrior, defender_style: Strategy) -> tuple[int, str]:
+    """
+    Get defender's primary defense skill based on their style preference.
+    Returns (skill_level, defense_type) where defense_type is 'parry' or 'dodge'
+    """
+    props = get_style_props(defender_style.style)
+    uses_parry = props.parry_bonus >= props.dodge_bonus
+
+    if uses_parry:
+        return defender.skills.get("parry", 0), "parry"
+    else:
+        return defender.skills.get("dodge", 0), "dodge"
 
 
 def _check_weapon_style_compatibility(weapon_name: str, style: str) -> tuple[bool, float]:
@@ -209,12 +472,17 @@ class _CState:
     active_strat_idx   : int     = 1
     active_strategy    : Strategy = None
     consecutive_ground : int     = 0
+    is_weapon_dropped  : bool    = False
+    dropped_weapon_name: str     = ""
     concede_attempts   : int     = 0
     hp_at_last_concede : int     = 9999
     knockdowns_dealt   : int     = 0   # knockdowns inflicted on opponent
     near_kills_dealt   : int     = 0   # times this warrior reduced opponent below 20% HP
     used_favorite_weapon_this_fight : bool = False  # Tracks if favorite weapon flavor already shown
     bleeding_wounds    : int     = 0   # Cumulative bleeding damage (tracked each round)
+    triggered_injuries : dict    = field(default_factory=dict) # {location: level}
+    phase2_entered     : bool    = False  # True once warrior has crossed the 25% endurance threshold
+    frenzy_used        : bool    = False  # Tabaxi: frenzy ability has been used this fight
 
     def to_fighter_state(self) -> FighterState:
         return FighterState(
@@ -263,17 +531,44 @@ def _initiative_roll(warrior: Warrior, strategy: Strategy, state: _CState) -> in
     roll = _d100()
     dex  = get_effective_dex_for_race(warrior.dexterity, warrior.armor or "None", warrior.helm or "None", warrior.race.name)
     dex_bonus    = max(-10, min(10, (dex - 10) * 2))
-    skill_bonus  = warrior.skills.get("initiative", 0) * 3
+    # Skill scaling: higher initiative skill is more impactful
+    init_val     = warrior.skills.get("initiative", 0)
+    skill_bonus  = init_val * 4 if init_val >= 5 else init_val * 3
+
     luck_bonus   = warrior.luck
     race_init_bonus = warrior.race.modifiers.initiative_bonus
     props        = get_style_props(strategy.style)
     style_mod    = int(props.apm_modifier * 4)
     activity_mod = (strategy.activity - 5) * 2
-    endurance_pen= int(max(0, (40 - state.endurance) * 0.3)) if state.endurance < 40 else 0
+    _phase2    = state.warrior.max_endurance * 0.25
+    endurance_pen = int(max(0, (_phase2 - state.endurance) / max(1.0, _phase2) * 12)) if state.endurance < _phase2 else 0
+
+    # Injury Penalties
+    injury_pen = 0
+    if "head" in state.triggered_injuries:
+        injury_pen += state.triggered_injuries["head"] * 5
+    if "primary_leg" in state.triggered_injuries or "secondary_leg" in state.triggered_injuries:
+        injury_pen += 10
+
     if state.is_on_ground:
         return max(1, roll // 2)
+
     return max(1, roll + dex_bonus + skill_bonus + luck_bonus + race_init_bonus
-               + style_mod + activity_mod - endurance_pen)
+               + style_mod + activity_mod - endurance_pen - injury_pen)
+
+
+def _weapon_size_class(weapon_name: str) -> int:
+    """0 = small (weight ≤ 2.5), 1 = medium (≤ 5.0), 2 = large (> 5.0)."""
+    try:
+        w = get_weapon(weapon_name)
+        if w.weight <= 2.5:
+            return 0
+        elif w.weight <= 5.0:
+            return 1
+        else:
+            return 2
+    except ValueError:
+        return 1
 
 
 def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState) -> int:
@@ -291,16 +586,31 @@ def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState) -> int:
     style_b   = int(props.apm_modifier * 3)
     feint_b   = attacker.skills.get("feint", 0) * 2
     lunge_b   = attacker.skills.get("lunge", 0) * 3 if strategy.style == "Lunge" else 0
-    end_pen   = int(max(0, (30 - state.endurance) * 0.5)) if state.endurance < 30 else 0
+    _phase2   = state.warrior.max_endurance * 0.25
+    end_pen   = 15 if state.endurance < _phase2 and strategy.style in _AGGRESSIVE_STYLES else 0
     hp0_pen   = 30 if state.current_hp <= 0 else 0
-    
+
     # Favorite weapon bonus: +5 to hit when using favorite weapon
     fav_bonus = 0
     if attacker.favorite_weapon and attacker.primary_weapon == attacker.favorite_weapon:
         fav_bonus = 5
 
+    # Martial Combat bonus: scales +2 to +6 accuracy based on skill
+    martial_bonus = 0
+    if _has_martial_combat_bonus(attacker) and _is_using_martial_combat(attacker):
+        martial_bonus = _get_martial_combat_accuracy_bonus(attacker)
+
+    # Injury Penalties
+    injury_pen = 0
+    if "head" in state.triggered_injuries:
+        injury_pen += state.triggered_injuries["head"] * 4
+    if "primary_arm" in state.triggered_injuries:
+        injury_pen += state.triggered_injuries["primary_arm"] * 3
+    if state.is_weapon_dropped:
+        injury_pen += 20 # Fighting unarmed unexpectedly is hard
+
     return max(1, roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b
-               - end_pen - hp0_pen + fav_bonus)
+               - end_pen - hp0_pen + fav_bonus + martial_bonus - injury_pen)
 
 
 def _defense_roll(
@@ -365,6 +675,18 @@ def _defense_roll(
             except ValueError:
                 pass
 
+    # Elf dual-wielding parry bonus: scales +10 to +20 based on skill
+    if is_parry and _is_elf_dual_wielding_finesse(defender):
+        elf_bonus = _get_elf_dual_wield_parry_bonus(defender)
+        if elf_bonus > 0:
+            total += elf_bonus
+
+    # Martial Combat bonus: scales +4 to +8 parry/dodge based on skill
+    if _has_martial_combat_bonus(defender) and _is_using_martial_combat(defender):
+        mc_bonus = _get_martial_combat_parry_bonus(defender)
+        if mc_bonus > 0:
+            total += mc_bonus
+
     # Decoy baits the defender into committing to the guarded spot, so the
     # defense_point bonus is cancelled when the attacker is using Decoy.
     if (strategy.defense_point != "None"
@@ -382,12 +704,21 @@ def _defense_roll(
     if props.total_kill_mode:
         return max(1, roll // 3)
 
-    if state.endurance < 30:
-        total -= int((30 - state.endurance) * 0.4)
+    _phase2 = state.warrior.max_endurance * 0.25
+    if state.endurance < _phase2 and strategy.style in _AGGRESSIVE_STYLES:
+        total -= 15
     if state.is_on_ground:
         total -= 25
     if state.current_hp <= 0:
         total -= 30
+
+    # Injury Penalties
+    if "head" in state.triggered_injuries:
+        total -= state.triggered_injuries["head"] * 4
+    if not is_parry and ("primary_leg" in state.triggered_injuries or "secondary_leg" in state.triggered_injuries):
+        total -= 15
+    if is_parry and "primary_arm" in state.triggered_injuries:
+        total -= state.triggered_injuries["primary_arm"] * 3
 
     return max(1, total)
 
@@ -508,8 +839,21 @@ def _calc_damage_hybrid(
         weapon = OPEN_HAND
 
     two_handed = (attacker.secondary_weapon == "Open Hand" and weapon.two_hand)
+    is_small   = weapon.weight < 4.0
+    wpn_key = weapon_name.lower().replace(" ", "_").replace("&", "and")
+    wpn_skill = attacker.skills.get(wpn_key, 0)
 
-    base  = weapon.weight * 2.5
+    # --- Req 1: Small weapon precision logic ---
+    if is_small:
+        # Small weapons rely on DEX and Skill more than weight/STR
+        base = 7.0 # Higher floor for small weapons
+        base += (attacker.dexterity - 10) * 1.2
+        base += wpn_skill * 2.0 # Skills are more valuable for precision weapons
+        base += weapon.weight * 1.5
+    else:
+        # Heavy weapons rely on weight and STR
+        base  = weapon.weight * 2.5
+
     base += max(0.0, (attacker.strength - 10)) * 0.6
     if weapon.flail_bypass or weapon.category == "Flail":
         base += max(0.0, (attacker.size - 12)) * 0.4
@@ -520,10 +864,13 @@ def _calc_damage_hybrid(
     props  = get_style_props(atk_strategy.style)
     base  += props.damage_modifier
     base  += (5 - atk_strategy.activity) * 0.3
-    wpn_key = weapon_name.lower().replace(" ", "_").replace("&", "and")
-    base  += attacker.skills.get(wpn_key, 0) * 0.8
+    
+    if not is_small:
+        base  += wpn_skill * 0.8
+
     base  += attacker.luck * 0.15
-    base  *= (1.0 - strength_penalty(weapon.weight, attacker.strength, two_handed))
+    effective_str = get_effective_strength_for_weapons(attacker)
+    base  *= (1.0 - strength_penalty(weapon.weight, effective_str, two_handed))
     
     # Heavy weapon penalty for Goblins & Tabaxi
     if r_mod.heavy_weapon_penalty:
@@ -595,11 +942,27 @@ def _calc_damage_hybrid(
                 # Master level Brawl (9) gives additional +10% multiplier for bone-deep power
                 if brawl_level == 9:
                     base *= 1.10
-    
+
+    # Lizardfolk natural weapon bonus: scales from +2 to +5 based on Open Hand skill
+    lizardfolk_bonus = _get_lizardfolk_natural_weapon_bonus(attacker)
+    if lizardfolk_bonus > 0:
+        base += lizardfolk_bonus
+
+    # Elf dual-wielding bonus: scales from +3 to +7 based on secondary weapon skill
+    elf_dw_bonus = _get_elf_dual_wield_damage_bonus(attacker)
+    if elf_dw_bonus > 0:
+        base += elf_dw_bonus
+
     ceiling = max(3, int(base))
 
-    fraction = max(0.10, min(1.00, margin / 55.0))
+    # Higher skill increases the damage floor/fraction for smaller weapons (more medium hits)
+    floor_frac = 0.25 if (is_small and wpn_skill >= 3) else 0.10
+    fraction = max(floor_frac, min(1.00, margin / 55.0))
     raw      = max(1, int(ceiling * fraction))
+    
+    # Precision damage bonus for small weapons on successful hits
+    if is_small and margin >= 10:
+        raw += wpn_skill
     
     # Favorite weapon bonus: +1 damage when using favorite weapon
     if attacker.favorite_weapon and weapon_name == attacker.favorite_weapon:
@@ -635,7 +998,8 @@ def _initiative_roll_verbose(warrior: "Warrior", strategy: "Strategy", state: "_
     props        = get_style_props(strategy.style)
     style_mod    = int(props.apm_modifier * 4)
     activity_mod = (strategy.activity - 5) * 2
-    end_pen      = int(max(0, (40 - state.endurance) * 0.3)) if state.endurance < 40 else 0
+    _phase2  = state.warrior.max_endurance * 0.25
+    end_pen  = int(max(0, (_phase2 - state.endurance) / max(1.0, _phase2) * 12)) if state.endurance < _phase2 else 0
     if state.is_on_ground:
         result = max(1, roll // 2)
         return result, {"d100": roll, "on_ground_halved": "(÷2)"}
@@ -665,10 +1029,14 @@ def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CSt
     style_b = int(props.apm_modifier * 3)
     feint_b = attacker.skills.get("feint", 0) * 2
     lunge_b = attacker.skills.get("lunge", 0) * 3 if strategy.style == "Lunge" else 0
-    end_pen = int(max(0, (30 - state.endurance) * 0.5)) if state.endurance < 30 else 0
+    _phase2 = state.warrior.max_endurance * 0.25
+    end_pen = 15 if state.endurance < _phase2 and strategy.style in _AGGRESSIVE_STYLES else 0
     hp0_pen = 30 if state.current_hp <= 0 else 0
     fav_b   = 5 if (attacker.favorite_weapon and attacker.primary_weapon == attacker.favorite_weapon) else 0
-    result  = max(1, roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b - end_pen - hp0_pen + fav_b)
+    martial_b = 0
+    if _has_martial_combat_bonus(attacker) and _is_using_martial_combat(attacker):
+        martial_b = _get_martial_combat_accuracy_bonus(attacker)
+    result  = max(1, roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b - end_pen - hp0_pen + fav_b + martial_b)
     comps = {
         "d100": roll,
         "dex_bonus": dex_b,
@@ -678,6 +1046,7 @@ def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CSt
         "feint": feint_b,
         "lunge": lunge_b,
         "fav_bonus": fav_b,
+        "martial_combat": martial_b,
         "end_pen": -end_pen if end_pen else 0,
         "hp0_pen": -hp0_pen if hp0_pen else 0,
     }
@@ -751,6 +1120,22 @@ def _defense_roll_verbose(
             "heavy_wpn_pen": heavy_pen if heavy_pen else 0,
         })
 
+    elf_dual_bonus = 0
+    if is_parry and _is_elf_dual_wielding_finesse(defender):
+        elf_dual_bonus = _get_elf_dual_wield_parry_bonus(defender)
+        if elf_dual_bonus > 0:
+            total += elf_dual_bonus
+    if elf_dual_bonus:
+        comps["elf_dual_wielding_parry"] = elf_dual_bonus
+
+    martial_bonus = 0
+    if _has_martial_combat_bonus(defender) and _is_using_martial_combat(defender):
+        martial_bonus = _get_martial_combat_parry_bonus(defender)
+        if martial_bonus > 0:
+            total += martial_bonus
+    if martial_bonus:
+        comps["martial_combat"] = martial_bonus
+
     def_pt_bonus = 0
     if strategy.defense_point != "None" and strategy.defense_point == aim_point and atk_style != "Decoy":
         total += 15
@@ -773,9 +1158,9 @@ def _defense_roll_verbose(
         comps["total_kill_mode_override"] = True
         return total, comps
 
-    end_pen = 0
-    if state.endurance < 30:
-        end_pen = int((30 - state.endurance) * 0.4)
+    _phase2 = state.warrior.max_endurance * 0.25
+    end_pen = 15 if state.endurance < _phase2 and strategy.style in _AGGRESSIVE_STYLES else 0
+    if end_pen:
         total -= end_pen
     if state.is_on_ground:
         total -= 25
@@ -800,10 +1185,25 @@ def _calc_damage_verbose(
         weapon = OPEN_HAND
 
     two_handed = (attacker.secondary_weapon == "Open Hand" and weapon.two_hand)
+    is_small   = weapon.weight < 4.0
+    wpn_key = weapon_name.lower().replace(" ", "_").replace("&", "and")
+    wpn_skill = attacker.skills.get(wpn_key, 0)
     steps: dict = {}
 
-    base = weapon.weight * 2.5
-    steps["weapon_base"] = weapon.weight * 2.5
+    if is_small:
+        # Small weapons rely on DEX and Skill more than weight/STR
+        base = 7.0
+        base += (attacker.dexterity - 10) * 1.2
+        base += wpn_skill * 2.0
+        base += weapon.weight * 1.5
+        steps["weapon_base"] = 7.0
+        steps["dex_contrib"] = (attacker.dexterity - 10) * 1.2
+        steps["skill_contrib"] = wpn_skill * 2.0
+        steps["weight_contrib"] = weapon.weight * 1.5
+    else:
+        # Heavy weapons rely on weight and STR
+        base = weapon.weight * 2.5
+        steps["weapon_base"] = weapon.weight * 2.5
 
     str_b = max(0.0, (attacker.strength - 10)) * 0.6
     base += str_b
@@ -834,16 +1234,19 @@ def _calc_damage_verbose(
     base += ac
     steps["activity_contrib"] = ac
 
-    wpn_key_s = weapon_name.lower().replace(" ", "_").replace("&", "and")
-    ws_val    = attacker.skills.get(wpn_key_s, 0) * 0.8
-    base     += ws_val
-    steps["weapon_skill_contrib"] = ws_val
+    wpn_key_s = wpn_key
+    ws_val = 0.0
+    if not is_small:
+        ws_val    = attacker.skills.get(wpn_key_s, 0) * 0.8
+        base     += ws_val
+        steps["weapon_skill_contrib"] = ws_val
 
     lc    = attacker.luck * 0.15
     base += lc
     steps["luck_contrib"] = lc
 
-    str_pen = strength_penalty(weapon.weight, attacker.strength, two_handed)
+    effective_str = get_effective_strength_for_weapons(attacker)
+    str_pen = strength_penalty(weapon.weight, effective_str, two_handed)
     base   *= (1.0 - str_pen)
     steps["str_penalty_factor"] = str_pen
 
@@ -924,9 +1327,33 @@ def _calc_damage_verbose(
                     steps["brawl_master_mult"] = True
     steps["open_hand_bonus"] = oh_b
 
+    # Lizardfolk natural weapon bonus: scales +2 to +5 damage based on skill
+    lizardfolk_bonus = 0
+    if attacker.race.name == "Lizardfolk" and _is_open_hand_weapon(wpn_key_s):
+        lizardfolk_bonus = _get_lizardfolk_natural_weapon_bonus(attacker)
+        if lizardfolk_bonus > 0:
+            base += lizardfolk_bonus
+    steps["lizardfolk_natural_weapon"] = lizardfolk_bonus
+
+    # Elf dual-wielding bonus: scales +3 to +7 damage based on skill
+    elf_dual_bonus = 0
+    if _is_elf_dual_wielding_finesse(attacker):
+        elf_dual_bonus = _get_elf_dual_wield_damage_bonus(attacker)
+        if elf_dual_bonus > 0:
+            base += elf_dual_bonus
+    steps["elf_dual_wielding"] = elf_dual_bonus
+
     ceiling  = max(3, int(base))
-    fraction = max(0.10, min(1.00, margin / 55.0))
+    
+    # Higher skill increases the damage floor/fraction for smaller weapons
+    floor_frac = 0.25 if (is_small and wpn_skill >= 3) else 0.10
+    fraction = max(floor_frac, min(1.00, margin / 55.0))
     raw      = max(1, int(ceiling * fraction))
+
+    prec_b = 0
+    if is_small and margin >= 10:
+        raw += wpn_skill
+        prec_b = wpn_skill
 
     fav_b = 0
     if attacker.favorite_weapon and weapon_name == attacker.favorite_weapon:
@@ -952,7 +1379,8 @@ def _calc_damage_verbose(
     steps.update({
         "ceiling": ceiling,
         "fraction": fraction,
-        "raw": raw - fav_b,
+        "raw": raw - fav_b - prec_b,
+        "prec_bonus": prec_b,
         "fav_bonus": fav_b,
         "raw_with_fav": raw,
         "armor_name": armor_nm,
@@ -1054,6 +1482,7 @@ def _check_perm_injury(
     if random.randint(1, 100) > chance:
         return None
     if aim_point and aim_point != "None":
+        # Map targeting to actual injury locations
         loc_map = {
             "Head":"head","Chest":"chest","Abdomen":"abdomen",
             "Primary Arm":"primary_arm","Secondary Arm":"secondary_arm",
@@ -1065,6 +1494,31 @@ def _check_perm_injury(
     pct    = damage / warrior.max_hp
     levels = 3 if pct > 0.50 else (2 if pct > 0.35 else 1)
     return location, levels
+
+
+def _check_injury_flare_up(warrior: Warrior, state: _CState, damage: int, aim_point: str) -> Optional[str]:
+    """Check if taking damage to an existing injury causes it to flare up."""
+    if damage < warrior.max_hp * 0.10: # Must be a decent blow
+        return None
+        
+    loc_map = {
+            "Head":"head","Chest":"chest","Abdomen":"abdomen",
+            "Primary Arm":"primary_arm","Secondary Arm":"secondary_arm",
+            "Primary Leg":"primary_leg","Secondary Leg":"secondary_leg",
+        }
+    
+    target_loc = loc_map.get(aim_point, "none")
+    if target_loc == "none": return None
+    
+    lvl = warrior.injuries.get(target_loc)
+    if lvl <= 0: return None
+    
+    # Chance to flare up: 15% per level of injury
+    chance = lvl * 15
+    if random.randint(1, 100) <= chance:
+        state.triggered_injuries[target_loc] = lvl
+        return target_loc
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -1185,38 +1639,108 @@ def _concede_check(warrior: Warrior, state: _CState, is_monster_fight: bool = Fa
 # ---------------------------------------------------------------------------
 
 def _update_endurance(
-    state: _CState, strategy: Strategy, actions: int, foe: _CState
+    state: _CState, strategy: Strategy, foe: _CState, apm: int = 5, minute: int = 1
 ) -> List[str]:
-    lines  = []
-    props  = get_style_props(strategy.style)
-    burn   = props.endurance_burn + (strategy.activity - 5) * 0.3
-    
-    # --- ACROBATICS ENDURANCE COST SCALING ---
-    # Acrobatics is more tiring at lower levels, more efficient at higher levels
-    # Level 1: 9% extra, Level 2: 8%, Level 5: 5%, Level 9: 1%
-    acrobatics_level = state.warrior.skills.get("acrobatics", 0)
-    if acrobatics_level > 0 and strategy.style in ["Engage & Withdraw", "Lunge"]:
-        # Cost: 10% - (acrobatics_level * 1%)
-        acro_endurance_cost = max(1, 10 - acrobatics_level)
-        burn += acro_endurance_cost * 0.01  # Convert % to decimal
-    
-    state.endurance = max(0.0, min(100.0, state.endurance - burn * actions))
+    lines   = []
+    warrior = state.warrior
+    props   = get_style_props(strategy.style)
+
+    # Weapon weight (game scale 0–7.5)
+    try:
+        wpn_wt = get_weapon(warrior.primary_weapon).weight
+    except Exception:
+        wpn_wt = 0.0
+
+    # Armor and helm contribution via defense value (0–10 / 0–5)
+    armor_def = ARMOR_PIECES.get(warrior.armor or "None", ARMOR_PIECES["None"]).defense_value
+    helm_def  = ARMOR_PIECES.get(warrior.helm  or "None", ARMOR_PIECES["None"]).defense_value
+
+    # Mitigators: DEX −1% per 2 pts over 10; INT −1.5% per 2 pts over 10
+    dex_mit = max(0, (warrior.dexterity    - 10) // 2) * 0.01
+    int_mit = max(0, (warrior.intelligence - 10) // 2) * 0.015
+    mit     = min(0.50, dex_mit + int_mit)
+
+    # Per-minute gross burn: (activity × style_mod) + weapon/2 + (armor+helm)/3
+    # Aggressive styles burn at 2.0×; tactical/passive at 1.25×.
+    style_mod = 2.0 if strategy.style in _AGGRESSIVE_STYLES else 1.25
+    gross_pm  = (strategy.activity * style_mod) + (wpn_wt / 2.0) + ((armor_def + helm_def) / 3.0)
+    net_pm    = gross_pm * (1.0 - mit)
+
+    # Skill-based conservation: weapon mastery reduces energy wasted per minute.
+    # Level 9 (Master) saves 4.5 endurance/minute vs an unskilled fighter.
+    wpn_key        = warrior.primary_weapon.lower().replace(" ", "_").replace("&", "and")
+    wpn_skill_lv   = warrior.skills.get(wpn_key, 0)
+    conservation_pm = wpn_skill_lv * 0.5
+    net_pm = max(0.0, net_pm - conservation_pm)
+
+    # Floor: no warrior can coast through Phase I indefinitely.
+    # At 10%/min the worst case hits Phase II by ~7.5 minutes.
+    min_pm = warrior.max_endurance * 0.10
+    net_pm = max(min_pm, net_pm)
+
+    # Per-action burn (divide by current APM)
+    burn = net_pm / max(1, apm)
+
+    # Phase II feedback spiral: already exhausted → reserves drain 75% faster
+    phase2 = warrior.max_endurance * 0.25
+    if state.endurance < phase2:
+        burn *= 1.75
+
+    # Acrobatics efficiency for Lunge / Engage & Withdraw.
+    # Without acrobatics training these mobile styles cost an extra 10% per action;
+    # each acrobatics level shaves 1% off that penalty (Level 9 → only 1% extra).
+    if strategy.style in ("Engage & Withdraw", "Lunge"):
+        acro_lv = warrior.skills.get("acrobatics", 0)
+        burn += max(1, 10 - acro_lv) * 0.01
+
+    # Per-minute passive drain: cumulative fatigue past minute 5
+    # +0.5 per minute over 5, spread across actions (÷ apm)
+    if minute > 5:
+        passive_pm = (minute - 5) * 0.5
+        burn += passive_pm / max(1, apm)
+
+    old_endurance   = state.endurance
+    state.endurance = max(0.0, state.endurance - burn)
+
+    # Phase II transition narrative — fires exactly once per fight per warrior.
+    if not state.phase2_entered and old_endurance > phase2 >= state.endurance:
+        state.phase2_entered = True
+        w = warrior
+        if strategy.style in _AGGRESSIVE_STYLES:
+            lines.append(
+                f"{w.name.upper()} is EXHAUSTED - pushing on sheer aggression, "
+                f"{w.gender_subject} attack form is starting to crumble!"
+            )
+        else:
+            lines.append(
+                f"{w.name.upper()} finds a SECOND WIND - fatigue narrows "
+                f"{w.gender_possessive} focus into cold, efficient precision!"
+            )
+
+    # Anxiously-awaits drain on foe
     if props.anxiously_awaits and strategy.activity < 6:
         foe.endurance = max(0.0, foe.endurance - (6 - strategy.activity) * 0.5)
         if random.random() < 0.20:
-            ln = N.anxious_line(state.warrior.name, foe.warrior.name)
+            ln = N.anxious_line(warrior.name, foe.warrior.name)
             if ln:
                 lines.append(ln)
+
+    # Intimidation drain on foe
     if props.intimidate and strategy.activity >= 5:
-        drain = (strategy.activity - 4) * 1.0   # 1.0 per activity level above 4 (max 5.0 at activity 9)
+        drain = (strategy.activity - 4) * 1.0
         foe.endurance = max(0.0, foe.endurance - drain)
-        ln = N.intimidate_line(state.warrior.name, foe.warrior.name)
+        ln = N.intimidate_line(warrior.name, foe.warrior.name)
         if ln:
             lines.append(ln)
-    if state.endurance <= 20 and random.random() < 0.40:
-        lines.append(N.fatigue_line(state.warrior.name, state.warrior.gender, True))
-    elif state.endurance <= 40 and random.random() < 0.20:
-        lines.append(N.fatigue_line(state.warrior.name, state.warrior.gender, False))
+
+    # Fatigue narrative (proportional thresholds)
+    phase2 = warrior.max_endurance * 0.25
+    _is_aggressive = strategy.style in _AGGRESSIVE_STYLES
+    if state.endurance < phase2 and random.random() < 0.40:
+        lines.append(N.fatigue_line(warrior.name, warrior.gender, True, _is_aggressive))
+    elif state.endurance < warrior.max_endurance * 0.50 and random.random() < 0.20:
+        lines.append(N.fatigue_line(warrior.name, warrior.gender, False))
+
     return lines
 
 
@@ -1255,8 +1779,9 @@ def _calc_apm(warrior: Warrior, strategy: Strategy, state: _CState) -> int:
         except ValueError:
             pass
     
-    if state.endurance < 40:
-        base -= (40 - state.endurance) / 40 * 1.5
+    _phase2 = warrior.max_endurance * 0.25
+    if state.endurance < _phase2:
+        base -= (_phase2 - state.endurance) / max(1.0, _phase2) * 1.5
     if state.is_on_ground:
         base *= 0.5
     return max(1, min(10, int(round(base))))
@@ -1330,6 +1855,7 @@ class CombatEngine:
         pos_b           : int  = 1,
         is_monster_fight: bool = False,
         challenger_name : str  = None,
+        fight_type      : str  = "standard",
         debug_logger    : Optional[CombatDebugLogger] = None,
     ):
         self.warrior_a        = warrior_a
@@ -1342,10 +1868,11 @@ class CombatEngine:
         self.pos_b            = pos_b
         self.is_monster_fight = is_monster_fight
         self.challenger_name  = challenger_name
+        self.fight_type       = fight_type
         self.debug_logger     = debug_logger
 
-        self.state_a = _CState(warrior=warrior_a, current_hp=warrior_a.max_hp, endurance=100.0)
-        self.state_b = _CState(warrior=warrior_b, current_hp=warrior_b.max_hp, endurance=100.0)
+        self.state_a = _CState(warrior=warrior_a, current_hp=warrior_a.max_hp, endurance=float(warrior_a.max_endurance))
+        self.state_b = _CState(warrior=warrior_b, current_hp=warrior_b.max_hp, endurance=float(warrior_b.max_endurance))
 
         if warrior_a.strategies:
             self.state_a.active_strategy  = warrior_a.strategies[-1]
@@ -1361,6 +1888,50 @@ class CombatEngine:
         self._last_adv_tier: str = "even"
         self._last_adv_winner: str = ""
         self._debug_action_counter: int = 0
+
+    # =========================================================================
+    # STRATEGY RE-EVALUATION (MID-MINUTE)
+    # =========================================================================
+
+    def _check_and_switch_strategies(self, as_: _CState, ds_: _CState, minute: int):
+        # Check attacker's strategy
+        fs_a = as_.to_fighter_state()
+        fs_b = ds_.to_fighter_state() # Foe state for attacker
+        new_strat_a, new_idx_a = evaluate_triggers(as_.warrior.strategies, fs_a, fs_b, minute)
+        if new_idx_a != as_.active_strat_idx:
+            self._emit(N.strategy_switch_line(as_.warrior.name, new_idx_a))
+            if self.debug_logger:
+                self.debug_logger.log_strategy_switch(as_.warrior.name, as_.active_strat_idx, new_idx_a)
+            as_.active_strategy = new_strat_a
+            as_.active_strat_idx = new_idx_a
+
+        # Check defender's strategy
+        fs_b_for_def = ds_.to_fighter_state()
+        fs_a_for_def = as_.to_fighter_state() # Foe state for defender
+        new_strat_b, new_idx_b = evaluate_triggers(ds_.warrior.strategies, fs_b_for_def, fs_a_for_def, minute)
+        if new_idx_b != ds_.active_strat_idx:
+            self._emit(N.strategy_switch_line(ds_.warrior.name, new_idx_b))
+            if self.debug_logger:
+                self.debug_logger.log_strategy_switch(ds_.warrior.name, ds_.active_strat_idx, new_idx_b)
+            ds_.active_strategy = new_strat_b
+            ds_.active_strat_idx = new_idx_b
+
+    def _check_defender_strategy_only(self, ds_: _CState, as_: _CState, minute: int):
+        """
+        Check only the defender's strategy after they take damage.
+        The attacker's strategy should not be re-evaluated when they deal damage,
+        only when they themselves take damage.
+        """
+        # Check defender's strategy
+        fs_defender = ds_.to_fighter_state()
+        fs_attacker = as_.to_fighter_state()  # Foe state for defender
+        new_strat, new_idx = evaluate_triggers(ds_.warrior.strategies, fs_defender, fs_attacker, minute)
+        if new_idx != ds_.active_strat_idx:
+            self._emit(N.strategy_switch_line(ds_.warrior.name, new_idx))
+            if self.debug_logger:
+                self.debug_logger.log_strategy_switch(ds_.warrior.name, ds_.active_strat_idx, new_idx)
+            ds_.active_strategy = new_strat
+            ds_.active_strat_idx = new_idx
 
     # =========================================================================
     # MAIN LOOP
@@ -1382,6 +1953,15 @@ class CombatEngine:
             challenger_name=self.challenger_name,
         ))
         self._lines.append("")
+
+        # Challenge flavor line - shown under the header but before action starts
+        challenge_line = N.get_challenge_flavor_line(
+            self.warrior_a.name, self.warrior_b.name,
+            self.challenger_name, self.fight_type
+        )
+        if challenge_line:
+            self._emit(challenge_line)
+            self._emit("")
 
         minute = 0
         result = None
@@ -1440,8 +2020,7 @@ class CombatEngine:
             # both fighters share the same name.  Callers that need the training
             # list for warrior_a (always the player warrior) use "warrior_a".
             training[pos_key] = res
-            if res:
-                self._emit(N.training_summary(w.name, res, is_opponent=is_opp))
+            self._emit(N.training_summary(w.name, res, is_opponent=is_opp))
 
         result.training_results = training
         result.narrative        = "\n".join(self._lines)
@@ -1487,7 +2066,7 @@ class CombatEngine:
     # MINUTE ADVANTAGE
     # =========================================================================
 
-    _END_BRINK_THRESHOLD = 15.0   # endurance below this = potential exhaustion brink
+    _END_BRINK_THRESHOLD = 0.25   # fraction of max_endurance; below this = potential exhaustion brink
 
     def _calc_minute_advantage(self) -> tuple:
         """
@@ -1504,8 +2083,10 @@ class CombatEngine:
         total_hp = max(1, hp_a + hp_b)
         hp_ratio = hp_a / total_hp   # 0–1; > 0.5 means warrior_a leads
 
-        # Small endurance nudge (max ±0.08 shift on the score)
-        end_adj = (end_a - end_b) / 100.0 * 0.08
+        # Small endurance nudge (max ±0.08 shift on the score), normalized by max_endurance
+        max_end_a = max(1, self.state_a.warrior.max_endurance)
+        max_end_b = max(1, self.state_b.warrior.max_endurance)
+        end_adj = (end_a / max_end_a - end_b / max_end_b) * 0.08
         score = hp_ratio + end_adj
         score = max(0.0, min(1.0, score))
 
@@ -1522,7 +2103,8 @@ class CombatEngine:
         # Only fires when the loser isn't already winning (magnitude < 0.55 means
         # the HP difference alone wouldn't call it in the winner's favour clearly)
         loser_end = loser_state.endurance
-        if loser_end <= self._END_BRINK_THRESHOLD and magnitude < 0.80:
+        loser_phase2 = loser_state.warrior.max_endurance * self._END_BRINK_THRESHOLD
+        if loser_end <= loser_phase2 and magnitude < 0.80:
             return ("brink_exhaustion", winner.name, loser.name)
 
         # Map magnitude → tier using the user-specified confidence bands
@@ -1536,6 +2118,62 @@ class CombatEngine:
             return ("dominating", winner.name, loser.name)
         else:
             return ("brink", winner.name, loser.name)
+
+    def _execute_tabaxi_frenzy(self, fst: _CState, ost: _CState,
+                               fstrat: Strategy, ostrat: Strategy,
+                               minute: int) -> Optional[FightResult]:
+        """Execute the Tabaxi frenzy burst — 3 rapid attacks with escalating defense penalties."""
+        fst.frenzy_used = True
+        att = fst.warrior
+        dfr = ost.warrior
+
+        self._emit(N.tabaxi_frenzy_intro_line(att.name))
+        self._emit("")
+
+        defense_penalties = [0, 15, 30]
+        _pre_frenzy = ost.current_hp
+
+        for attack_num in range(3):
+            def_penalty = defense_penalties[attack_num]
+
+            atk = _attack_roll(att, fstrat, fst)
+            dfn = _defense_roll(dfr, ostrat, ost, att, fstrat.aim_point, fstrat.style,
+                                is_parry=(dfr.primary_weapon != "Open Hand"))
+            dfn = max(1, dfn - def_penalty)
+            margin = atk - dfn
+
+            if margin <= 0:
+                self._emit(N.miss_line(att.name, att.primary_weapon))
+            elif margin < 10:
+                self._emit(f"   {att.name.upper()}'s strike barely grazes {dfr.name.upper()}!")
+                ost.current_hp -= 1
+            else:
+                try:
+                    weapon = get_weapon(att.primary_weapon)
+                    cat = weapon.category
+                except ValueError:
+                    weapon = OPEN_HAND
+                    cat = "Oddball"
+
+                dmg, _ = _calc_damage_hybrid(att, fstrat, att.primary_weapon, dfr, margin)
+                dmg += _get_tabaxi_frenzy_damage_bonus(att)
+
+                self._emit(N.damage_line(dmg, dfr.max_hp, cat))
+                _pre_frenzy = ost.current_hp
+                ost.current_hp -= dmg
+
+                if self.debug_logger:
+                    self.debug_logger.log_hp_update(dfr.name, _pre_frenzy, dmg, ost.current_hp, dfr.max_hp, "frenzy")
+
+            if ost.current_hp <= 0:
+                return self._handle_zero_hp(
+                    ost, fst,
+                    _pre_frenzy if margin >= 10 else ost.current_hp + 1,
+                    dmg if margin >= 10 else 1,
+                    minute,
+                )
+
+        return None
 
     def _run_minute(self, minute: int) -> Optional[FightResult]:
         self._emit(f"\nMINUTE {minute}")
@@ -1571,7 +2209,18 @@ class CombatEngine:
         self.state_a.active_strategy  = strat_a;  self.state_a.active_strat_idx = idx_a
         self.state_b.active_strategy  = strat_b;  self.state_b.active_strat_idx = idx_b
 
-        for st in (self.state_a, self.state_b):
+        # --- Recovery and Ground Logic ---
+        # Apply injury recovery for both warriors at the start of the minute
+        self._apply_injury_recovery(self.state_a)
+        self._apply_injury_recovery(self.state_b)
+
+        for st in (self.state_a, self.state_b): # Only ground logic remains in this loop
+            if st.is_weapon_dropped and not st.is_on_ground:
+                # Spending an action to pick up weapon happens during the action phase,
+                # but we handle the state check here.
+                pass
+
+            # 3. Ground Recovery
             if st.is_on_ground:
                 st.consecutive_ground += 1
                 # Brawl recovery: 40% + 8% per brawl level
@@ -1603,6 +2252,8 @@ class CombatEngine:
 
         rem_a = apm_a;  rem_b = apm_b
         act_a = act_b = crowd = 0
+        old_end_a = self.state_a.endurance
+        old_end_b = self.state_b.endurance
 
         while rem_a > 0 or rem_b > 0:
             end = self._check_fatal_injury()
@@ -1650,7 +2301,55 @@ class CombatEngine:
                     self._debug_action_counter += 1
                     _dbg_init = (self._debug_action_counter, None, None, None, None)
 
-            r = self._resolve_action(as_, ds_, ax, dx, minute, _dbg_init)
+            # --- Req 4: Weapon Retrieval Logic ---
+            # If weapon is dropped, the warrior MUST use an action to pick it up or draw backup
+            if as_.is_weapon_dropped:
+                as_.is_weapon_dropped = False
+                if as_.warrior.backup_weapon and as_.warrior.backup_weapon != "Open Hand":
+                    old_wpn = as_.warrior.primary_weapon
+                    as_.warrior.primary_weapon = as_.warrior.backup_weapon
+                    as_.warrior.backup_weapon = None
+                    self._emit(f"{as_.warrior.name.upper()} draws {as_.warrior.gender_possessive} backup {as_.warrior.primary_weapon.lower()}!")
+                elif as_.dropped_weapon_name:
+                    self._emit(f"{as_.warrior.name.upper()} lunges to the sand and retrieves {as_.warrior.gender_possessive} {as_.dropped_weapon_name.lower()}!")
+                    as_.warrior.primary_weapon = as_.dropped_weapon_name
+                    as_.dropped_weapon_name = ""
+                else:
+                    # Nothing to retrieve, just spend the action adjusting
+                    self._emit(f"{as_.warrior.name.upper()} adjusts {as_.warrior.gender_possessive} stance, ready to fight unarmed!")
+                
+                # Retrieving counts as the action for this slot
+                continue
+
+            # --- TABAXI FRENZY ABILITY ---
+            # Checked every action slot for both warriors so a mid-minute threshold
+            # crossing is caught on the very next slot, regardless of who won initiative
+            # or whether the Tabaxi has action slots remaining.
+            _frenzy_end = None
+            for fst, ost, fstrat, ostrat in (
+                (as_, ds_, ax, dx),
+                (ds_, as_, dx, ax),
+            ):
+                if not (_can_trigger_tabaxi_frenzy(fst.warrior, fst) and _is_at_frenzy_threshold(fst)):
+                    continue
+                frenzy_chance = _calculate_tabaxi_frenzy_trigger_chance(fst.warrior, ost.warrior)
+                frenzy_roll   = random.randint(1, 100)
+                frenzy_fired  = frenzy_roll <= frenzy_chance
+                if self.debug_logger:
+                    self.debug_logger.log_tabaxi_frenzy_check(
+                        fst.warrior.name, fst.current_hp, fst.warrior.max_hp,
+                        frenzy_chance, frenzy_roll, frenzy_fired,
+                    )
+                if frenzy_fired:
+                    _frenzy_end = self._execute_tabaxi_frenzy(fst, ost, fstrat, ostrat, minute)
+                else:
+                    self._emit(N.tabaxi_frenzy_resist_line(fst.warrior.name))
+                break  # only one frenzy check per slot
+            if _frenzy_end:
+                return _frenzy_end
+
+            r = self._resolve_action(as_, ds_, ax, dx, minute, _dbg_init,
+                                     apm_as=(apm_a if as_ is self.state_a else apm_b))
             if r:
                 return r
 
@@ -1660,14 +2359,6 @@ class CombatEngine:
                     r = self._attempt_concede(cst, ost, minute)
                     if r:
                         return r
-
-        old_end_a = self.state_a.endurance
-        old_end_b = self.state_b.endurance
-
-        for ln in _update_endurance(self.state_a, strat_a, act_a, self.state_b):
-            self._emit(ln)
-        for ln in _update_endurance(self.state_b, strat_b, act_b, self.state_a):
-            self._emit(ln)
 
         if self.debug_logger:
             self.debug_logger.log_minute_end(
@@ -1720,7 +2411,7 @@ class CombatEngine:
     # ACTION
     # =========================================================================
 
-    def _resolve_action(self, as_: _CState, ds_: _CState, ax: Strategy, dx: Strategy, minute: int, _dbg_init=None) -> Optional[FightResult]:
+    def _resolve_action(self, as_: _CState, ds_: _CState, ax: Strategy, dx: Strategy, minute: int, _dbg_init=None, apm_as: int = 5) -> Optional[FightResult]:
         att = as_.warrior;  dfr = ds_.warrior
         wpn = att.primary_weapon;  aim = ax.aim_point
 
@@ -1745,12 +2436,26 @@ class CombatEngine:
         if random.random() < 0.55:
             props_dx = get_style_props(dx.style)
             _uses_parry = props_dx.parry_bonus >= props_dx.dodge_bonus
+            # Disarmed warriors can only dodge, never parry
+            if dfr.primary_weapon == "Open Hand":
+                _uses_parry = False
             self._emit(N.defense_intent_line(dfr.name, dfr.gender, _uses_parry))
 
         # Favorite weapon flavor, fires on first attack with this weapon, win or lose
         fav_flavor = _get_favorite_weapon_flavor(att, wpn, as_)
         if fav_flavor:
             self._emit(fav_flavor)
+
+        # --- Update attacker's endurance for this action ---
+        # This needs to happen before strategy re-evaluation for fatigue triggers
+        for ln in _update_endurance(as_, ax, ds_, apm_as, minute):
+            self._emit(ln)
+
+        # --- Phase III: endurance collapse ---
+        if as_.endurance <= 0:
+            self._emit(f"{att.name.upper()} collapses to the sand, utterly exhausted - unable to fight on!")
+            self._emit(N.victory_line(dfr.name, att.name))
+            return self._make_result(dfr, att, False, minute)
 
         # --- ATTACK ROLL ---
         _style_adv = get_style_advantage(ax.style, dx.style) * 6
@@ -1782,6 +2487,9 @@ class CombatEngine:
         # --- DEFENSE ROLL ---
         props_d = get_style_props(dx.style)
         use_p   = props_d.parry_bonus >= props_d.dodge_bonus
+        # Disarmed warriors can only dodge, never parry
+        if dfr.primary_weapon == "Open Hand":
+            use_p = False
         _decoy_pen_applied = DECOY_FEINT_PENALTY if decoy_feint_landed else 0
         if self.debug_logger:
             _def_base, _def_comps = _defense_roll_verbose(dfr, dx, ds_, att, aim, ax.style, is_parry=use_p)
@@ -1793,6 +2501,11 @@ class CombatEngine:
             _def_base = def_r; _def_comps = None
 
         margin = atk_r - def_r
+
+        # --- CRITICAL FORTUNE DICE ---
+        # One per action; determine whether a critical opportunity opens.
+        _crit_atk_fortune = random.randint(1, 100)
+        _crit_def_fortune = random.randint(1, 100)
 
         # --- DEBUG: log action header + rolls + margin ---
         if self.debug_logger:
@@ -1824,6 +2537,17 @@ class CombatEngine:
             self.debug_logger.log_margin(atk_r, def_r, margin, _outcome)
 
         if margin <= 0:
+            # Critical defense: fortune roll ≥ 95 on defense side → skill contest
+            _crit_def = False
+            if _crit_def_fortune >= 95 and margin < 0:
+                _def_skill_lv = dfr.skills.get("parry" if use_p else "dodge", 0)
+                if random.randint(1, 100) + dfr.luck + _def_skill_lv * 2 >= 85:
+                    _crit_def = True
+                    if use_p:
+                        self._emit(N.critical_parry_line(dfr.name, att.name))
+                    else:
+                        self._emit(N.critical_dodge_line(dfr.name, att.name))
+
             # Calculated Attack probe flavor — occasional line when a CA
             # probe fails to find a gap in the defender's guard.
             if (ax.style == "Calculated Attack" and not ca_precision_landed
@@ -1834,7 +2558,8 @@ class CombatEngine:
             elif margin <= -30:
                 if use_p:
                     barely = (-margin < 20)
-                    self._emit(N.parry_line(dfr.name, barely=barely, defense_point_active=(dx.defense_point == aim)))
+                    if not _crit_def:
+                        self._emit(N.parry_line(dfr.name, barely=barely, defense_point_active=(dx.defense_point == aim)))
                     
                     # --- CLEAVE/BASH PARRY PENETRATION ---
                     wpn_key_std = wpn.lower().replace(" ", "_").replace("&", "and")
@@ -1892,13 +2617,65 @@ class CombatEngine:
                             self._emit(N.counterstrike_line(dfr.name, att.name))
                             return self._counterstrike(ds_, as_, dx, ax, minute)
                 else:
-                    self._emit(N.dodge_line(dfr.name))
+                    if not _crit_def:
+                        self._emit(N.dodge_line(dfr.name))
             else:
                 if use_p:
-                    self._emit(N.parry_line(dfr.name, barely=True, defense_point_active=(dx.defense_point == aim)))
+                    if not _crit_def:
+                        self._emit(N.parry_line(dfr.name, barely=True, defense_point_active=(dx.defense_point == aim)))
                 else:
-                    self._emit(N.dodge_line(dfr.name))
-            return None
+                    if not _crit_def:
+                        self._emit(N.dodge_line(dfr.name))
+
+            # --- Req 4: Heavy Parry Disarm Check ---
+            # If it was a parry and the attack subtotal was huge, might drop weapon.
+            # Cestus and Open Hand fighters cannot be disarmed — emit numbness instead.
+            if use_p and atk_r > (dfr.strength * 4):
+                # Reduced base chance (8%) + disarm skill bonus (2% per level)
+                disarm_chance = 8 + (att.skills.get("disarm", 0) * 2)
+                if random.randint(1, 100) <= disarm_chance:
+                    _unarmed = dfr.primary_weapon.lower() in ("open hand", "cestus")
+                    if _unarmed:
+                        self._emit(N.unarmed_impact_lines(dfr.name, dfr.gender))
+                    else:
+                        ds_.is_weapon_dropped = True
+                        ds_.dropped_weapon_name = dfr.primary_weapon
+                        dfr.primary_weapon = "Open Hand"
+                        self._emit(N.weapon_drop_lines(dfr.name, ds_.dropped_weapon_name, dfr.gender, is_forceful=True))
+
+            # --- CRITICAL DEFENSE SECONDARY EFFECTS ---
+            if _crit_def:
+                if use_p:
+                    _unarmed_att = att.primary_weapon.lower() in ("open hand", "cestus")
+                    if not _unarmed_att and not as_.is_weapon_dropped:
+                        _crit_sec_roll = random.random()
+                        if _crit_sec_roll < 0.04:
+                            # Disarm: 4%
+                            self._emit(N.critical_disarm_line(dfr.name, att.name, att.primary_weapon))
+                            as_.is_weapon_dropped = True
+                            as_.dropped_weapon_name = att.primary_weapon
+                            att.primary_weapon = "Open Hand"
+                        elif _crit_sec_roll < 0.055:
+                            # Weapon break: 1.5% — only when defender's weapon ≥ attacker's size
+                            def_wpn = dfr.secondary_weapon or dfr.primary_weapon
+                            if _weapon_size_class(def_wpn) >= _weapon_size_class(att.primary_weapon):
+                                self._emit(N.critical_break_line(dfr.name, att.name, att.primary_weapon))
+                                as_.is_weapon_dropped = True
+                                as_.dropped_weapon_name = att.primary_weapon
+                                att.primary_weapon = "Open Hand"
+                else:
+                    # Critical dodge: double counterstrike at 1.5%
+                    if random.random() < 0.015:
+                        self._emit(N.critical_double_counter_line(dfr.name, att.name))
+                        result = self._counterstrike(ds_, as_, dx, ax, minute)
+                        if result:
+                            return result
+                        result = self._counterstrike(ds_, as_, dx, ax, minute)
+                        if result:
+                            return result
+
+            # Primary missed/was parried — Elf may still find an opening with the off-hand
+            return self._try_elf_extra_attack(as_, ds_, ax, dx, minute)
 
         if margin < 10:
             self._emit(f"{att.name.upper()}'s blow barely grazes {dfr.name.upper()}!")
@@ -1906,7 +2683,8 @@ class CombatEngine:
             ds_.current_hp -= 1
             if self.debug_logger:
                 self.debug_logger.log_hp_update(dfr.name, prev_hp_graze, 1, ds_.current_hp, dfr.max_hp, "graze")
-            return None
+            # Graze — Elf may still follow with the off-hand
+            return self._try_elf_extra_attack(as_, ds_, ax, dx, minute)
 
         precision = "precise" if margin >= 50 else ("barely" if margin < 20 else "normal")
 
@@ -1917,7 +2695,16 @@ class CombatEngine:
         if wpn_skill_lvl >= 5 and random.random() < 0.25 and not ca_precision_landed:
             sig = N.signature_line(att.name, wpn)
 
-        if ca_precision_landed:
+        # Critical hit: fortune roll ≥ 95 on attack → skill contest
+        _crit_hit = False
+        if _crit_atk_fortune >= 95 and not ca_precision_landed:
+            if random.randint(1, 100) + att.luck + wpn_skill_lvl * 2 >= 85:
+                _crit_hit = True
+
+        if _crit_hit:
+            _dmg_type = N.get_damage_type(wpn_key_sig)
+            self._emit(N.critical_hit_line(att.name, att.gender, dfr.name, wpn, _dmg_type))
+        elif ca_precision_landed:
             self._emit(N.calculated_precision_line(att.name, dfr.name, wpn, aim))
         elif sig:
             self._emit(sig)
@@ -1925,7 +2712,7 @@ class CombatEngine:
             for ln in N.hit_line(att.name, dfr.name, wpn, cat, aim, precision, attacker_race=att.race.name):
                 self._emit(ln)
 
-        _pbypass = CA_PRECISION_ARMOR_BYPASS if ca_precision_landed else 0.0
+        _pbypass = CA_PRECISION_ARMOR_BYPASS if (_crit_hit or ca_precision_landed) else 0.0
         if self.debug_logger:
             dmg, wcats, _dmg_steps = _calc_damage_verbose(
                 att, ax, wpn, dfr, margin,
@@ -1938,8 +2725,12 @@ class CombatEngine:
             )
             _dmg_steps = None
 
-        _sig_floor = int(dfr.max_hp * 0.12) if sig else None
-        if sig:
+        _sig_floor = int(dfr.max_hp * 0.12) if (sig and not _crit_hit) else None
+        if _crit_hit:
+            # Critical hit: 2× base damage, minimum 15% of defender's max HP
+            _crit_floor = max(15, int(dfr.max_hp * 0.15))
+            dmg = max(_crit_floor, dmg * 2)
+        elif sig:
             dmg = max(dmg, int(dfr.max_hp * 0.12))
         _ca_bonus = CA_PRECISION_DAMAGE_BONUS if ca_precision_landed else 0
         if ca_precision_landed:
@@ -1958,6 +2749,10 @@ class CombatEngine:
         if self.debug_logger:
             self.debug_logger.log_hp_update(dfr.name, prev_hp, dmg, ds_.current_hp, dfr.max_hp)
 
+        # Critical hit endurance shock: the impact disrupts the receiver's reserves
+        if _crit_hit:
+            ds_.endurance = max(0.0, ds_.endurance - ds_.warrior.max_endurance * 0.15)
+
         # --- Bleeding Wounds (slash skill) ---
         wpn_key_std = wpn.lower().replace(" ", "_").replace("&", "and")
         if _is_slash_weapon(wpn_key_std):
@@ -1966,18 +2761,21 @@ class CombatEngine:
                 bleed_chance = slash_level * 5
                 if random.randint(1, 100) <= bleed_chance:
                     ds_.bleeding_wounds += 1
-
+        
         # --- Bleeding Damage ---
         if ds_.bleeding_wounds > 0 and random.randint(1, 100) <= 40:
             bleed_dmg = _apply_bleeding_damage(ds_)
             if bleed_dmg > 0:
                 _pre_bleed_hp = ds_.current_hp
                 ds_.current_hp -= bleed_dmg
+                self._emit(f"   {dfr.name.upper()} bleeds for {bleed_dmg} damage!")
                 if self.debug_logger:
                     self.debug_logger.log_bleed(
                         dfr.name, ds_.bleeding_wounds, bleed_dmg,
                         _pre_bleed_hp, ds_.current_hp, dfr.max_hp,
                     )
+        
+        self._check_defender_strategy_only(ds_, as_, minute) # Re-evaluate strategies after HP/endurance changes
 
         # Low-HP status commentary
         hp_pct = ds_.current_hp / max(1, dfr.max_hp)
@@ -1985,6 +2783,26 @@ class CombatEngine:
             status_ln = N.low_hp_line(dfr.name, dfr.gender, hp_pct)
             if status_ln:
                 self._emit(status_ln)
+                
+        # --- Req 2: Existing Injury Flare-up Check ---
+        flare_loc = _check_injury_flare_up(dfr, ds_, dmg, aim)
+        if flare_loc:
+            for ln in N.injury_flare_up_lines(dfr.name, flare_loc, dfr.gender):
+                self._emit(ln)
+            
+            # --- Req 4: Arm Injury Fumble ---
+            # Cestus is strapped to the hand and cannot be fumbled loose.
+            if flare_loc == "primary_arm" and dfr.primary_weapon.lower() not in ("open hand", "cestus"):
+                # Level 5+ injury has scaling fumble chance on flare up
+                # Lvl 5: 15%, Lvl 9: 35% (approx 5% per level above 4)
+                fumble_lvl = dfr.injuries.get("primary_arm")
+                if fumble_lvl >= 5:
+                    fumble_chance = 10 + (fumble_lvl - 4) * 5
+                    if random.randint(1, 100) <= fumble_chance:
+                        ds_.is_weapon_dropped = True
+                        ds_.dropped_weapon_name = dfr.primary_weapon
+                        dfr.primary_weapon = "Open Hand"
+                        self._emit(N.weapon_drop_lines(dfr.name, ds_.dropped_weapon_name, dfr.gender, is_fumble=True))
 
         # Near-kill tracking
         nk_threshold = int(dfr.max_hp * 0.20)
@@ -2027,6 +2845,7 @@ class CombatEngine:
             self._emit(N.knockdown_line(dfr.name, dfr.gender))
             ds_.is_on_ground = True
             as_.knockdowns_dealt += 1
+            self._check_and_switch_strategies(as_, ds_, minute)
 
         # Perm injury
         if self.debug_logger:
@@ -2050,6 +2869,114 @@ class CombatEngine:
 
         if ds_.current_hp <= 0:
             return self._handle_zero_hp(ds_, as_, prev_hp, dmg, minute)
+
+        # --- ELF EXTRA ATTACK FROM DUAL-WIELDING ---
+        end = self._try_elf_extra_attack(as_, ds_, ax, dx, minute)
+        if end:
+            return end
+
+        # --- MARTIAL COMBAT EXTRA ATTACK (Halfling/Lizardfolk) ---
+        # After a normal attack, Halfling/Lizardfolk may get an extra unarmed strike
+        mc_extra_chance = _calculate_martial_combat_extra_attack_chance(att, dfr)
+        if mc_extra_chance > 0 and random.randint(1, 100) <= mc_extra_chance:
+            # Extra attack triggers - use Open Hand
+            try:
+                mc_weapon = get_weapon("Open Hand")
+                mc_cat = mc_weapon.category
+            except ValueError:
+                mc_weapon = OPEN_HAND
+                mc_cat = "Oddball"
+
+            # Emit narrative for the extra attack
+            if att.race.name == "Halfling":
+                self._emit(N.halfling_martial_strike_line(att.name, dfr.name, att.gender))
+            elif att.race.name == "Lizardfolk":
+                self._emit(N.lizardfolk_martial_strike_line(att.name, dfr.name, att.gender))
+
+            # Roll attack with Open Hand (slightly reduced accuracy)
+            mc_atk = _attack_roll(att, ax, as_) - 15  # Smaller penalty than off-hand weapons
+            mc_def = _defense_roll(dfr, dx, ds_, att, ax.aim_point, ax.style, is_parry=(dfr.primary_weapon != "Open Hand"))
+            mc_margin = mc_atk - mc_def
+
+            if mc_margin > 0:
+                if mc_margin < 10:
+                    # Graze
+                    self._emit(f"{att.name.upper()}'s follow-up strike barely grazes {dfr.name.upper()}!")
+                    ds_.current_hp -= 1
+                else:
+                    # Hit with Open Hand
+                    mc_dmg, _ = _calc_damage_hybrid(att, ax, "Open Hand", dfr, mc_margin)
+                    self._emit(N.damage_line(mc_dmg, dfr.max_hp, mc_cat))
+                    _pre_mc = ds_.current_hp
+                    ds_.current_hp -= mc_dmg
+                    if self.debug_logger:
+                        self.debug_logger.log_hp_update(dfr.name, _pre_mc, mc_dmg, ds_.current_hp, dfr.max_hp, "martial_extra")
+            else:
+                # Extra attack misses
+                self._emit(N.miss_line(att.name, "Open Hand"))
+
+            # Check if defender dies from extra attack
+            if ds_.current_hp <= 0:
+                return self._handle_zero_hp(ds_, as_, _pre_mc if mc_margin >= 10 else ds_.current_hp + 1, mc_dmg if mc_margin >= 10 else 1, minute)
+
+        return None
+
+    def _try_elf_extra_attack(self, as_: _CState, ds_: _CState,
+                              ax: Strategy, dx: Strategy,
+                              minute: int) -> Optional[FightResult]:
+        """
+        Attempt the Elf dual-wield off-hand attack.  Fires regardless of whether
+        the primary attack hit, missed, or grazed — the Elf plans the off-hand
+        strike independently as a racial ability, not as a reward for landing.
+        Returns a FightResult if the extra attack kills the defender, else None.
+        """
+        att = as_.warrior;  dfr = ds_.warrior
+        elf_extra_chance = _calculate_elf_extra_attack_chance(att, dfr)
+        if elf_extra_chance <= 0 or random.randint(1, 100) > elf_extra_chance:
+            return None
+
+        secondary_wpn = att.secondary_weapon
+        try:
+            sec_weapon = get_weapon(secondary_wpn)
+            sec_cat = sec_weapon.category
+        except ValueError:
+            sec_weapon = OPEN_HAND
+            sec_cat = "Oddball"
+
+        same_weapon = att.primary_weapon.lower() == secondary_wpn.lower()
+        self._emit(N.elf_dual_strike_line(att.name, dfr.name, secondary_wpn, att.gender,
+                                          off_hand=same_weapon))
+
+        _, penalty_sec = _check_weapon_style_compatibility(secondary_wpn, ax.style)
+        sec_atk = _attack_roll(att, ax, as_) - 20
+        sec_def = _defense_roll(dfr, dx, ds_, att, ax.aim_point, ax.style,
+                                is_parry=(dfr.primary_weapon != "Open Hand"))
+        sec_margin = sec_atk - sec_def
+
+        _pre_extra = ds_.current_hp
+        sec_dmg = 0
+        if sec_margin <= 0:
+            self._emit(N.miss_line(att.name, secondary_wpn))
+        elif sec_margin < 10:
+            self._emit(f"{att.name.upper()}'s follow-up blow barely grazes {dfr.name.upper()}!")
+            ds_.current_hp -= 1
+        else:
+            sec_dmg, _ = _calc_damage_hybrid(att, ax, secondary_wpn, dfr, sec_margin,
+                                             style_compat_penalty=penalty_sec)
+            self._emit(N.damage_line(sec_dmg, dfr.max_hp, sec_cat))
+            _pre_extra = ds_.current_hp
+            ds_.current_hp -= sec_dmg
+            if self.debug_logger:
+                self.debug_logger.log_hp_update(dfr.name, _pre_extra, sec_dmg,
+                                                ds_.current_hp, dfr.max_hp, "elf extra")
+
+        if ds_.current_hp <= 0:
+            return self._handle_zero_hp(
+                ds_, as_,
+                _pre_extra if sec_margin >= 10 else ds_.current_hp + 1,
+                sec_dmg if sec_margin >= 10 else 1,
+                minute,
+            )
         return None
 
     # =========================================================================
@@ -2066,6 +2993,7 @@ class CombatEngine:
         except: cat = "Oddball"
         for ln in N.hit_line(att.name, dfr.name, wpn, cat, ax.aim_point, "precise", attacker_race=att.race.name):
             self._emit(ln)
+        # Note: Counterstrike damage is a fixed margin, not a roll.
         dmg, _ = _calc_damage_hybrid(att, ax, wpn, dfr, 40, style_compat_penalty=penalty_factor)
         self._emit(N.damage_line(dmg, dfr.max_hp, cat))
         prev       = ds_.current_hp
@@ -2077,6 +3005,7 @@ class CombatEngine:
             as_.near_kills_dealt += 1
 
         if ds_.current_hp <= 0:
+            self._check_and_switch_strategies(as_, ds_, minute) # Re-evaluate strategies before death/concede
             return self._handle_zero_hp(ds_, as_, prev, dmg, minute)
         return None
 
@@ -2140,6 +3069,22 @@ class CombatEngine:
             if d.warrior.injuries.is_fatal():
                 return self._make_result(k.warrior, d.warrior, True, 0)
         return None
+
+    # =========================================================================
+    # INJURY RECOVERY (PER-MINUTE)
+    # =========================================================================
+
+    def _apply_injury_recovery(self, state: _CState):
+        """Apply injury recovery at the start of each minute."""
+        if state.triggered_injuries:
+            to_remove = []
+            for loc, lvl in state.triggered_injuries.items():
+                chance = state.warrior.intelligence + state.warrior.constitution - (lvl * 2)
+                if random.randint(1, 100) <= max(10, chance):
+                    to_remove.append(loc)
+            for loc in to_remove:
+                del state.triggered_injuries[loc]
+                self._emit(f"{state.warrior.name.upper()} shakes off the pain of the {loc.replace('_',' ')} injury!")
 
     # =========================================================================
     # TRAINING
@@ -2362,8 +3307,11 @@ def run_fight(
     manager_a_name  : str  = "Manager A",
     manager_b_name  : str  = "Manager B",
     is_monster_fight: bool = False,
+    fight_type      : str  = "standard",
     challenger_name : str  = None,
     debug_logger    : Optional[CombatDebugLogger] = None,
+    pos_a           : int  = 1,
+    pos_b           : int  = 1,
 ) -> FightResult:
     engine = CombatEngine(
         warrior_a, warrior_b,
