@@ -1709,12 +1709,12 @@ def _update_endurance(
         w = warrior
         if strategy.style in _AGGRESSIVE_STYLES:
             lines.append(
-                f"{w.name.upper()} is EXHAUSTED - pushing on sheer aggression, "
-                f"{w.gender_subject} attack form is starting to crumble!"
+                f"{w.name.upper()} is EXHAUSTED, pushing on sheer aggression, "
+                f"{w.gender_possessive} attack form is starting to crumble!"
             )
         else:
             lines.append(
-                f"{w.name.upper()} finds a SECOND WIND - fatigue narrows "
+                f"{w.name.upper()} finds a SECOND WIND, fatigue narrows "
                 f"{w.gender_possessive} focus into cold, efficient precision!"
             )
 
