@@ -331,6 +331,44 @@ def helm_selection_menu() -> List[str]:
 # RACE-SPECIFIC ARMOR MODIFIERS
 # ---------------------------------------------------------------------------
 
+# Lizardfolk armor penalty table.
+# Natural scales = Scale armor equivalent (defense 5). Cloth and Leather can
+# be layered on top; anything heavier gives no additional protection but still
+# imposes severe mobility penalties — these are NOT designed for scale-armored
+# reptilian bodies.
+#
+# Columns: (dex_pen, dodge_parry_pct, initiative_pct, attack_pct)
+#   dex_pen:         flat dexterity reduction (cloth/leather only; affects dodge + initiative dex component)
+#   dodge_parry_pct: multiplier penalty on the computed dodge/parry roll total (cuir boulli+)
+#   initiative_pct:  multiplier penalty on the computed initiative roll total (all armors)
+#   attack_pct:      multiplier penalty on base APM before rounding (cuir boulli+)
+_LIZARD_PENALTIES: dict[str, tuple] = {
+    "None":        (0, 0.00, 0.00, 0.00),
+    "Cloth":       (1, 0.00, 0.02, 0.00),
+    "Leather":     (2, 0.00, 0.03, 0.00),
+    "Cuir Boulli": (0, 0.05, 0.08, 0.05),
+    "Brigandine":  (0, 0.10, 0.15, 0.00),
+    "Scale":       (0, 0.15, 0.20, 0.10),
+    "Chain":       (0, 0.20, 0.30, 0.15),
+    "Half-Plate":  (0, 0.25, 0.35, 0.20),
+    "Full Plate":  (0, 0.35, 0.45, 0.25),
+}
+
+
+def get_lizardfolk_armor_penalties(armor_name: str) -> dict:
+    """Return all Lizardfolk-specific armor penalties for the given armor.
+
+    Keys: dex_pen (int), dodge_parry_pct (float), initiative_pct (float), attack_pct (float)
+    """
+    row = _LIZARD_PENALTIES.get(armor_name or "None", _LIZARD_PENALTIES["None"])
+    return {
+        "dex_pen":         row[0],
+        "dodge_parry_pct": row[1],
+        "initiative_pct":  row[2],
+        "attack_pct":      row[3],
+    }
+
+
 def get_effective_defense_for_race(
     armor_name: str,
     helm_name: str,
@@ -338,40 +376,37 @@ def get_effective_defense_for_race(
 ) -> int:
     """
     Get the total defense value, accounting for race-specific armor interactions.
-    
-    For Lizardfolk: natural scales (Scale armor equiv) + layering rules:
-      - Cloth: no change, just normal defense
-      - Leather: effective = Chain (6), but Lizardfolk only takes normal penalties
-      - Cuir Boulli: effective = Half-Plate (8), but Lizardfolk only takes moderate penalties
-      - Brigandine+: normal heavy armor with escalating penalties
-    
+
+    For Lizardfolk: natural scales (defense 5) + layering cap:
+      - No armor: 5 (scales only)
+      - Cloth:    6 (cloth over scales)
+      - Leather:  7 (natural + leather = maximum useful layering)
+      - Cuir Boulli and heavier: CAPPED at 7 — the armor provides no additional
+        protection because it cannot conform to Lizardfolk scale geometry;
+        they still suffer all the heavy-armor mobility penalties.
+    Helm defense always stacks normally on top.
+
     For other races: normal calculation.
     """
     if race_name != "Lizardfolk":
         return total_defense_value(armor_name, helm_name)
-    
-    # Lizardfolk with natural scales (equivalent to Scale armor: defense 5)
-    armor = get_armor(armor_name or "None")
-    helm  = get_armor(helm_name  or "None")
-    
-    base_defense = 5  # Scales = Scale armor equivalent
+
+    helm = get_armor(helm_name or "None")
     helm_defense = helm.defense_value
-    
-    # Armor layering for Lizardfolk
-    if armor_name in ("None", "Cloth"):
-        # Cloth is just normal clothing, no bonus to scales defense
-        armor_bonus = 0
+
+    NATURAL_SCALES = 5  # inherent scale armor equivalent
+
+    if not armor_name or armor_name == "None":
+        body_defense = NATURAL_SCALES
+    elif armor_name == "Cloth":
+        body_defense = NATURAL_SCALES + 1   # = 6
     elif armor_name == "Leather":
-        # Leather layered on scales = Chain equivalent (def 6)
-        armor_bonus = 6 - base_defense  # +1 to scales
-    elif armor_name == "Cuir Boulli":
-        # Cuir Boulli on scales = Half-Plate equivalent (def 8)
-        armor_bonus = 8 - base_defense  # +3 to scales
+        body_defense = NATURAL_SCALES + 2   # = 7
     else:
-        # Brigandine and heavier: standard calculation on top of scales
-        armor_bonus = armor.defense_value
-    
-    return base_defense + armor_bonus + helm_defense
+        # Cuir Boulli and heavier: no benefit beyond natural + leather
+        body_defense = NATURAL_SCALES + 2   # = 7 cap
+
+    return body_defense + helm_defense
 
 
 def get_effective_dex_for_race(
@@ -382,36 +417,19 @@ def get_effective_dex_for_race(
 ) -> int:
     """
     Get effective Dexterity after armor penalties, accounting for race-specific rules.
-    
-    For Lizardfolk: reduced DEX penalties for lighter armor:
-      - Cloth: no penalty (from scales naturally)
-      - Leather: -1 Dodge, -1 Initiative (lighter than Chain's -2)
-      - Cuir Boulli: -2 Dodge, -2 Initiative (lighter than Half-Plate's -3)
-      - Brigandine+: escalating penalties
-    
+
+    For Lizardfolk: dex_pen applies only for cloth (-1) and leather (-2).
+    Heavier armors use percentage-based roll penalties instead of dex reduction
+    (see get_lizardfolk_armor_penalties); their dex_pen is 0 here.
+
     For other races: normal calculation.
     """
     if race_name != "Lizardfolk":
         return effective_dex(base_dex, armor_name, helm_name)
-    
-    armor = get_armor(armor_name or "None")
-    helm  = get_armor(helm_name  or "None")
-    
-    # Lizardfolk start with no penalty (scales are native)
-    armor_penalty = 0
-    
-    if armor_name in ("None", "Cloth"):
-        armor_penalty = 0
-    elif armor_name == "Leather":
-        armor_penalty = 1  # Lighter than normal armor
-    elif armor_name == "Cuir Boulli":
-        armor_penalty = 2  # Moderate penalty (still lighter than Half-Plate's 3)
-    else:
-        # Brigandine and heavier: normal penalties
-        armor_penalty = armor.dex_penalty
-    
-    helm_penalty = helm.dex_penalty
-    total_penalty = armor_penalty + helm_penalty
+
+    helm = get_armor(helm_name or "None")
+    pens = get_lizardfolk_armor_penalties(armor_name or "None")
+    total_penalty = pens["dex_pen"] + helm.dex_penalty
     return max(1, base_dex - total_penalty)
 
 
@@ -420,34 +438,8 @@ def get_armor_attack_rate_penalty_for_race(
     race_name: str,
 ) -> float:
     """
-    Get the attack rate penalty for armor, accounting for race-specific rules.
-    
-    For Lizardfolk: reduced penalties for lighter armor:
-      - Cloth: 0
-      - Leather: -0.5 (lighter than Chain's -1.5)
-      - Cuir Boulli: -1.5 (lighter than Half-Plate's -2.5)
-      - Brigandine+: escalating penalties
-    
-    For other races: 0 (handled separately in combat.py)
+    Legacy function — returns 0 for all races.
+    Lizardfolk attack-rate penalties are now handled via get_lizardfolk_armor_penalties()
+    and applied as a percentage multiplier in _calc_apm().
     """
-    if race_name != "Lizardfolk":
-        return 0.0
-    
-    if armor_name in ("None", "Cloth"):
-        return 0.0
-    elif armor_name == "Leather":
-        return 0.5
-    elif armor_name == "Cuir Boulli":
-        return 1.5
-    elif armor_name == "Brigandine":
-        return 2.5
-    elif armor_name == "Scale":
-        return 3.5
-    elif armor_name == "Chain":
-        return 4.0
-    elif armor_name == "Half-Plate":
-        return 5.5
-    else:  # Full Plate
-        return 6.5
-    
     return 0.0

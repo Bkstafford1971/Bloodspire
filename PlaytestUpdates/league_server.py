@@ -27,7 +27,7 @@ from file_protection import save_json_protected, load_json_protected, make_file_
 import webbrowser
 from typing import Optional
 
-SERVER_VERSION = "2.3"
+SERVER_VERSION = "2.5"
 
 BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
 LEAGUE_DIR   = os.path.join(BASE_DIR, "saves", "league")
@@ -101,6 +101,101 @@ def _turn_dir(turn_num):
     os.makedirs(d, exist_ok=True)
     return d
 
+def _archive_dir(turn_num):
+    """Archive directory for preserving result files. CRITICAL: Never delete result files."""
+    d = os.path.join(LEAGUE_DIR, f"turn_{int(turn_num):04d}", "archive")
+    os.makedirs(d, exist_ok=True)
+    return d
+
+def _safe_delete_file(fpath, archive_to_turn=None):
+    """Safely delete a file by archiving it first.
+
+    CRITICAL: Never destroy audit files (results and uploads) without archiving.
+    If archive_to_turn is specified, archive to that turn's archive dir.
+    """
+    if not os.path.exists(fpath):
+        return True
+
+    try:
+        fn = os.path.basename(fpath)
+        # Archive audit files (results and uploads) - keep for auditing
+        # Delete only temporary/working files
+        is_result = fn.startswith("result_") and fn.endswith(".json")
+        is_result_checksum = fn.endswith(".checksum") and "_result_" in fn
+        is_upload = fn.startswith("upload_") and fn.endswith(".json")
+        is_upload_checksum = fn.endswith(".checksum") and "_upload_" in fn
+
+        if is_result or is_result_checksum or is_upload or is_upload_checksum:
+            # Archive audit files (results and uploads)
+            if archive_to_turn is not None:
+                archive_dir = _archive_dir(archive_to_turn)
+                import time
+                timestamp = time.strftime("%Y%m%d_%H%M%S")
+                timestamped_archive = os.path.join(archive_dir, timestamp)
+                os.makedirs(timestamped_archive, exist_ok=True)
+                dst = os.path.join(timestamped_archive, fn)
+                if os.path.exists(dst):
+                    os.remove(dst)
+                make_file_writable(fpath)
+                shutil.move(fpath, dst)
+                return True
+            # If no archive_to_turn specified, still don't delete audit files
+            return True
+
+        # Safe to delete only non-audit files (newsletters, etc.)
+        make_file_writable(fpath)
+        os.remove(fpath)
+        # Also remove checksum
+        cf = fpath.replace(".json", ".checksum")
+        if os.path.exists(cf):
+            make_file_writable(cf)
+            os.remove(cf)
+        return True
+    except Exception as e:
+        print(f"  WARNING: Failed to process {fpath}: {e}")
+        return False
+
+def _archive_old_results(turn_num):
+    """Preserve audit files (results and uploads) by archiving instead of deleting.
+
+    CRITICAL: Result and upload files are the only source of truth for auditing and validation.
+    These must be preserved at all costs for manual review and dispute resolution.
+    """
+    try:
+        turn_dir = _turn_dir(turn_num)
+        archive_dir = _archive_dir(turn_num)
+
+        if not os.path.exists(turn_dir):
+            return
+
+        import time
+        timestamp = time.strftime("%Y%m%d_%H%M%S")
+        timestamped_archive = os.path.join(archive_dir, timestamp)
+        os.makedirs(timestamped_archive, exist_ok=True)
+
+        for fn in os.listdir(turn_dir):
+            # Archive result files and newsletter only — never move uploads here,
+            # because uploads are the input data and must survive a failed turn run.
+            if (fn.startswith("result_") and fn.endswith(".json")) or fn == "newsletter.txt":
+                src = os.path.join(turn_dir, fn)
+                dst = os.path.join(timestamped_archive, fn)
+                try:
+                    if os.path.exists(dst):
+                        os.remove(dst)
+                    shutil.move(src, dst)
+                    # Also move checksum if exists
+                    if fn.endswith(".json"):
+                        cf_src = src.replace(".json", ".checksum")
+                        cf_dst = dst.replace(".json", ".checksum")
+                        if os.path.exists(cf_src):
+                            if os.path.exists(cf_dst):
+                                os.remove(cf_dst)
+                            shutil.move(cf_src, cf_dst)
+                except Exception as e:
+                    print(f"  WARNING: Failed to archive {fn}: {e}")
+    except Exception as e:
+        print(f"  ERROR in _archive_old_results: {e}")
+
 def _load_config():
     # allow_tampered=True for config.json to allow the server to boot and fix its own checksum
     cfg = _load_json(_config_path(), {
@@ -171,6 +266,17 @@ def _load_uploads(turn_num):
         # Verify that this manager exists in the registry.
         if mid not in mgrs: continue
 
+        # Verify team ownership: skip uploads where this manager doesn't own the team.
+        # Ghost uploads occur when manager IDs are reshuffled (e.g. after an arena revert)
+        # and stale files from old ID assignments remain on disk. Without this check,
+        # the same team_id appears under two manager IDs and matchmaking silently drops
+        # one of them via the team_id deduplication dict.
+        if team_id:
+            mgr_teams = [str(t) for t in mgrs[mid].get("team_ids", [])]
+            if str(team_id) not in mgr_teams:
+                print(f"  [WARN] Skipping {fname}: team {team_id} not in manager {mid}'s registry — ghost upload ignored")
+                continue
+
         # Key by manager_id+team_id so multiple teams from same manager coexist
         key = f"{mid}_team{team_id}" if team_id else mid
         uploads[key] = data
@@ -194,7 +300,16 @@ def _save_result(turn_num, manager_id, data):
         fname = f"result_{manager_id}_team{team_id}.json"
     else:
         fname = f"result_{manager_id}.json"
-    _save_json(os.path.join(_turn_dir(turn_num), fname), data) # Protected
+    path = os.path.join(_turn_dir(turn_num), fname)
+    try:
+        _save_json(path, data)  # Protected
+        # Verify file was created (fail fast for debugging)
+        if not os.path.exists(path):
+            print(f"  ERROR: Result file was not created at {path}")
+    except Exception as e:
+        print(f"  ERROR: Failed to save result for {manager_id} to {path}: {e}")
+        import traceback
+        traceback.print_exc()
 
 def _write_execution_log(turn_num, exec_log):
     """Write a human-readable table of turn execution status for all warriors."""
@@ -257,16 +372,20 @@ def _make_mirror_narrative(
     """
     from narrative import training_summary as _ts, _strategy_table
 
+    # Key presence distinguishes dead warriors (key absent — no training line emitted)
+    # from alive warriors who trained in nothing (key present, value is []).
+    a_alive = "warrior_a" in training_results
+    b_alive = "warrior_b" in training_results
     a_res = training_results.get("warrior_a", [])
-    b_res = training_results.get("warrior_b", {})
+    b_res = training_results.get("warrior_b", [])
     if isinstance(b_res, dict):
-        b_res = []  # Handle case where training_results might be structured differently
+        b_res = []  # safety guard
 
     # Compute the MIRROR training block (warrior_b perspective)
     mir_parts = []
-    if b_res:
+    if b_alive:
         mir_parts.append(_ts(b_name, b_res, is_opponent=False))
-    if a_res:
+    if a_alive:
         mir_parts.append(_ts(a_name, a_res, is_opponent=True))
 
     result = narrative
@@ -311,22 +430,36 @@ def _make_mirror_narrative(
     if not mir_parts:
         return result
 
-    # Compute the FORWARD training block (warrior_a perspective) so we can replace it
-    fwd_parts = []
-    if a_res:
-        fwd_parts.append(_ts(a_name, a_res, is_opponent=False))
-    if b_res:
-        fwd_parts.append(_ts(b_name, b_res, is_opponent=True))
-
-    # The training block is appended as: "\n\n" + "\n".join(parts)
-    # which in the joined narrative looks like "\n\n<line1>\n<line2>..."
-    fwd_block = "\n\n" + "\n".join(fwd_parts) if fwd_parts else ""
     mir_block = "\n\n" + "\n".join(mir_parts)
 
+    # Locate the training section using rfind with the first expected training line.
+    # Training is always preceded by a blank line (\n\n) and starts with the first
+    # alive warrior's name followed by " has trained in".  Using rfind (search from
+    # the end) means even if the warrior's name appears in fight-action text, we
+    # always find the LAST occurrence — which is the training block.
+    if a_alive:
+        needle = f"\n\n{a_name.upper()} has trained in"
+    elif b_alive:
+        needle = f"\n\n{b_name.upper()} has trained in"
+    else:
+        needle = ""
+
+    if needle:
+        pos = result.rfind(needle)
+        if pos >= 0:
+            return result[:pos] + mir_block
+
+    # Fallback: reconstruct the forward block and use endswith
+    fwd_parts = []
+    if a_alive:
+        fwd_parts.append(_ts(a_name, a_res, is_opponent=False))
+    if b_alive:
+        fwd_parts.append(_ts(b_name, b_res, is_opponent=True))
+    fwd_block = "\n\n" + "\n".join(fwd_parts) if fwd_parts else ""
     if fwd_block and result.endswith(fwd_block):
         return result[: -len(fwd_block)] + mir_block
 
-    # Fallback: couldn't find the expected suffix — return unchanged
+    print(f"  WARNING: _make_mirror_narrative could not locate training block for {a_name} vs {b_name}")
     return result
 
 
@@ -431,22 +564,8 @@ def _run_turn(request_password, rerun_turn=None):
         _FLAG_KEYS = ("show_favorite_weapon", "show_luck_factor", "show_max_hp", "ai_teams_enabled")
         _turn_start_flags = {k: cfg.get(k) for k in _FLAG_KEYS}
 
-        # Cleanup old results
-        td_clean = _turn_dir(turn_num)
-        if os.path.exists(td_clean):
-            for fn in os.listdir(td_clean):
-                if (fn.startswith("result_") and fn.endswith(".json")) or fn == "newsletter.txt":
-                    fpath = os.path.join(td_clean, fn)
-                    try:
-                        make_file_writable(fpath)
-                        os.remove(fpath)
-                        if fn.endswith(".json"):
-                            cf = fpath.replace(".json", ".checksum")
-                            if os.path.exists(cf):
-                                make_file_writable(cf)
-                                os.remove(cf)
-                    except Exception as e:
-                        print(f"  WARNING: Cleanup failed for {fn}: {e}")
+        # Archive old results instead of deleting (CRITICAL: preserve for auditing)
+        _archive_old_results(turn_num)
 
         cfg["turn_state"] = "processing"
         import datetime as _dt2
@@ -583,6 +702,7 @@ def _run_turn(request_password, rerun_turn=None):
                 player_manager_id = mid
             if team.team_id == fight.opponent_team.team_id:
                 opponent_manager_id = mid
+
 
         # Build debug logger if this fight involves a tracked warrior
         _dbg_logger = None
@@ -731,6 +851,12 @@ def _run_turn(request_password, rerun_turn=None):
                 killer_fights=fight.player_warrior.total_fights,
                 fight_type=fight_type_to_record
             )
+            try:
+                from save import archive_warrior_history
+                archive_warrior_history(fight.opponent_team.team_name, fight.opponent)
+                print(f"  Graveyard file written for opponent {fight.opponent.name}.")
+            except Exception as _ge:
+                print(f"  WARNING: Could not write graveyard file for opponent: {_ge}")
 
         # Monster ascension
         ascended = False
@@ -783,6 +909,9 @@ def _run_turn(request_password, rerun_turn=None):
 
         # Store result for opponent manager (if not NPC)
         if opponent_manager_id and fight.opponent_team.team_id >= 0:
+            # DEBUG: Track problematic managers
+            if opponent_manager_id in ['22', 22, '24', 24, '26', 26]:
+                print(f"    [STORE] Storing opponent result for manager {opponent_manager_id}")
             opponent_bout = {
                 "warrior_name": fight.opponent.name,
                 "opponent_name": fight.player_warrior.name,
@@ -824,6 +953,10 @@ def _run_turn(request_password, rerun_turn=None):
                 fight.player_warrior,
                 fight.opponent,
             )
+        elif opponent_manager_id is None and fight.opponent_team.team_id >= 0:
+            # DEBUG: Track when opponent_manager_id is None for player teams
+            if fight.opponent_team.team_id >= 0:
+                print(f"    [SKIP] opponent_manager_id is None for {fight.opponent.name} (team_id={fight.opponent_team.team_id})")
 
         # Print result
         if result.winner:
@@ -1127,6 +1260,7 @@ def _run_turn(request_password, rerun_turn=None):
         champ_state = load_champion_state()
         _champ_beaten_by = None
         _champ_beaten_team = None
+        _champ_beaten_team_id = 0
         _cur_champ = champ_state.get("name", "")
         if _cur_champ:
             for _bout in fake_card:
@@ -1136,6 +1270,7 @@ def _run_turn(request_password, rerun_turn=None):
                 if _loser.name == _cur_champ:
                     _champ_beaten_by = _winner.name
                     _champ_beaten_team = _bout.player_team.team_name if _pw_won else _bout.opponent_team.team_name
+                    _champ_beaten_team_id = _bout.player_team.team_id if _pw_won else _bout.opponent_team.team_id
                     break
 
         prev_champion_name = champ_state.get("name", "")
@@ -1143,10 +1278,50 @@ def _run_turn(request_password, rerun_turn=None):
             nl_teams, champ_state, deaths_nl,
             champion_beaten_by=_champ_beaten_by,
             champion_beaten_team=_champ_beaten_team,
+            champion_beaten_team_id=_champ_beaten_team_id,
             prev_champion_name=prev_champion_name,
             card=fake_card  # Add this line - pass the card data
         )
         save_champion_state(champ_state)
+
+        # Retroactively tag champion fights: if the champion was crowned THIS turn
+        # (not loaded from the start-of-turn state), any fight they were involved in
+        # will have been stored as "standard".  Fix those records now and resave.
+        _new_champ = champ_state.get("name", "")
+        if _new_champ and _new_champ != _champ_name:
+            for _mid, _res in all_results.items():
+                _updated = False
+                for _bout in _res.get("bouts", []):
+                    if (_bout.get("fight_type") != "champion" and (
+                        _bout.get("warrior_name") == _new_champ or
+                        _bout.get("opponent_name") == _new_champ
+                    )):
+                        _bout["fight_type"] = "champion"
+                        _updated = True
+                if _updated:
+                    # Patch the saved result file with corrected fight types
+                    _team_id = _res.get("team_id", "")
+                    _fname = (f"result_{_mid}_team{_team_id}.json" if _team_id
+                              else f"result_{_mid}.json")
+                    _fpath = os.path.join(_turn_dir(turn_num), _fname)
+                    if os.path.exists(_fpath):
+                        try:
+                            _fdata = _load_json(_fpath, None)
+                            if _fdata:
+                                _fdata["bouts"] = _res["bouts"]
+                                _save_json(_fpath, _fdata)
+                        except Exception as _pe:
+                            print(f"  WARNING: could not patch champion fight_type in {_fname}: {_pe}")
+            # Also fix fight_history on the warriors in memory
+            for _team in team_map.values():
+                for _w in _team.active_warriors:
+                    for _h in (_w.fight_history or []):
+                        if (_h.get("turn") == turn_num and
+                                _h.get("fight_type") != "champion" and (
+                                _h.get("opponent_name") == _new_champ or
+                                _w.name == _new_champ)):
+                            _h["fight_type"] = "champion"
+                save_team(_team)
 
         date_str = _dt.date.today().strftime("%m/%d/%Y")
         newsletter_text = generate_newsletter(
@@ -2720,6 +2895,28 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 "schedule_last_run_result" : cfg.get("schedule_last_run_result", ""),
             }); return
 
+        if path == "/api/graveyard":
+            q   = self.qs()
+            mid = q.get("manager_id", "")
+            pw  = q.get("password", "")
+            warrior_name = q.get("warrior_name", "").strip()
+            team_name    = q.get("team_name", "").strip()
+            mgrs = _load_managers()
+            if mid not in mgrs or not _check_mgr_pw(mgrs[mid], pw):
+                self.send_json({"success": False, "error": "Not authorised."}, 401); return
+            if not warrior_name or not team_name:
+                self.send_json({"success": False, "error": "warrior_name and team_name required"}); return
+            from save import GRAVEYARD_DIR
+            safe_team    = team_name.replace(" ", "_")
+            safe_warrior = warrior_name.replace(" ", "_")
+            legacy_path  = os.path.join(GRAVEYARD_DIR, f"{safe_team}_{safe_warrior}_legacy.txt")
+            if not os.path.exists(legacy_path):
+                self.send_json({"success": False, "error": "Legacy file not found."}); return
+            make_file_writable(legacy_path)
+            with open(legacy_path, "r", encoding="utf-8") as _lf:
+                legacy_text = _lf.read()
+            self.send_json({"success": True, "legacy": legacy_text}); return
+
         if path == "/api/results":
             q  = self.qs()
             mid= q.get("manager_id","")
@@ -3231,20 +3428,13 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     if del_key in cfg:
                         del cfg[del_key]; _save_config(cfg)
 
-                # Check if the user unchecked 'Run This Turn'. If so, remove the 
+                # Check if the user unchecked 'Run This Turn'. If so, remove the
                 # participation file for this specific team from the upcoming turn.
                 if isinstance(team, dict) and not team.get("auto_upload_enabled", True):
                     fname = f"upload_{mid}_team{team_id}.json" if team_id else f"upload_{mid}.json"
                     fpath = os.path.join(_turn_dir(turn_num), fname)
                     if os.path.exists(fpath):
-                        try:
-                            make_file_writable(fpath)
-                            os.remove(fpath)
-                            cf = fpath.replace(".json", ".checksum")
-                            if os.path.exists(cf):
-                                make_file_writable(cf)
-                                os.remove(cf)
-                        except Exception: pass
+                        _safe_delete_file(fpath)  # Uploads are safe to delete
                     # Update manager activity timestamp to reflect the request
                     mgrs[mid]["last_upload_timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S")
                     _save_managers(mgrs)
@@ -3274,8 +3464,8 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 except Exception as e:
                     print(f"  WARNING: Could not update persistent team file during upload: {e}")
                 
-                # Clear any existing result data for this manager/team to prevent
-                # replacement warriors from being marked dead by stale results
+                # Archive result data from previous turn (CRITICAL: preserve for auditing)
+                # When a replacement team is uploaded, archive the old results instead of deleting
                 res_turn = cfg["current_turn"] - 1
                 if res_turn >= 1:
                     td_path = _turn_dir(res_turn)
@@ -3288,14 +3478,9 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                                     result_data = _load_json(result_path, None)
                                     # Use string comparison to avoid int/str mismatch
                                     if result_data and str(result_data.get("team_id")) == str(team_id):
-                                        make_file_writable(result_path)
-                                        os.remove(result_path)
-                                        # Also remove checksum file
-                                        checksum_path = result_path.replace(".json", ".checksum")
-                                        if os.path.exists(checksum_path):
-                                            make_file_writable(checksum_path)
-                                            os.remove(checksum_path)
-                                        print(f"  Cleared stale result for team {team_id} (manager {mid})")
+                                        # Archive instead of delete (CRITICAL: preserve data)
+                                        _safe_delete_file(result_path, archive_to_turn=res_turn)
+                                        print(f"  Archived result for team {team_id} (manager {mid}) for auditing")
                                 except Exception:
                                     pass                
                 mgrs[mid]["last_upload_timestamp"] = upload_time # This will be replaced by save_json_protected
@@ -3328,14 +3513,8 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                             if tids_norm: # If using IDs, check ID match; no-ID file is stale
                                 if not _chk_tid_str or _chk_tid_str not in tids_norm:
                                     fpath = os.path.join(td_path, fn)
-                                    try:
-                                        make_file_writable(fpath)
-                                        os.remove(fpath)
-                                        cf = fpath.replace(".json", ".checksum")
-                                        if os.path.exists(cf):
-                                            make_file_writable(cf)
-                                            os.remove(cf)
-                                    except Exception: pass
+                                    # Safe deletion (archives result files, deletes uploads)
+                                    _safe_delete_file(fpath, archive_to_turn=turn_num)
             team_name = team.get("team_name", "?") if isinstance(team, dict) else "?"
             _log_activity("upload_success", mid, mgrs[mid]["manager_name"],
                         f"Team {team_name} (ID:{team_id}) uploaded for turn {turn_num}")
@@ -3360,21 +3539,15 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 cfg      = _load_config()
                 turn_num = cfg["current_turn"]
                 # Delete the upload file for this team from the current turn dir.
-                fname  = f"upload_{mid}_team{team_id}.json" # This is a protected file
-                checksum_fname = fname.replace('.json', '.checksum')
+                fname  = f"upload_{mid}_team{team_id}.json"
 
                 fpath  = os.path.join(_turn_dir(turn_num), fname)
                 removed_upload = False
                 if os.path.exists(fpath):
-                    make_file_writable(fpath)
-                    os.remove(fpath)
+                    _safe_delete_file(fpath)  # Uploads are safe to delete
                     removed_upload = True
                 # Remove the team from the manager's server-side team_ids list.
                 tids = mgrs[mid].get("team_ids", [])
-                checksum_fpath = os.path.join(_turn_dir(turn_num), checksum_fname)
-                if os.path.exists(checksum_fpath):
-                    make_file_writable(checksum_fpath)
-                    os.remove(checksum_fpath)
                 try:
                     int_tid = int(team_id)
                     mgrs[mid]["team_ids"] = [t for t in tids if int(t) != int_tid]
@@ -3480,18 +3653,15 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             if ack_type == "rerun":
                 if mid not in mgrs:
                     self.send_json({"success":False,"error":"Manager not found."}); return
-                if not _check_mgr_pw(mgrs[mid], pw):
-                    self.send_json({"success":False,"error":"Wrong password."}); return
+                # No password required — this is a read-receipt flag, not a state change
                 mgrs[mid]["acknowledged_rerun_count"] = int(b.get("rerun_count", 0))
                 _save_managers(mgrs)
                 self.send_json({"success": True}); return
             else:
-                # "reset" acknowledgment
+                # "reset" acknowledgment — no password required (read-receipt + team data pull)
                 server_reset_count = int(b.get("server_reset_count", 0))
                 teams_out = []
                 if mid in mgrs:
-                    if not _check_mgr_pw(mgrs[mid], pw):
-                        self.send_json({"success":False,"error":"Wrong password."}); return
                     mgrs[mid]["acknowledged_reset_count"] = server_reset_count
                     # Return each reverted team so the client can apply them locally
                     from save import load_team
@@ -3516,10 +3686,15 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 make_file_writable(path)
                 func(path)
 
-            # Remove protected files and their checksums
+            # Archive all result files before deleting turn directories (CRITICAL: preserve for auditing)
             for entry in os.listdir(LEAGUE_DIR):
                 full = os.path.join(LEAGUE_DIR, entry)
                 if entry.startswith("turn_") and os.path.isdir(full):
+                    try:
+                        turn_num = int(entry.split("_")[1])
+                        _archive_old_results(turn_num)
+                    except:
+                        pass
                     shutil.rmtree(full, onerror=_rm_error)
 
             # Remove individual protected files and their checksums
@@ -3644,10 +3819,17 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     mgrs[mid]["acknowledged_reset_count"] = 0
                 _save_managers(mgrs)
 
-                # 4. Wipe turn directories
+                # 4. Wipe turn directories (but archive results first - CRITICAL)
                 for entry in os.listdir(LEAGUE_DIR):
                     full = os.path.join(LEAGUE_DIR, entry)
                     if entry.startswith("turn_") and os.path.isdir(full):
+                        try:
+                            turn_num = int(entry.split("_")[1])
+                            # Archive all result files before deletion (CRITICAL: preserve for auditing)
+                            _archive_old_results(turn_num)
+                        except:
+                            pass
+
                         if entry == "turn_0001":
                             # Keep turn_0001 directory but revert data inside uploads
                             from team import Team
@@ -3967,22 +4149,16 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 # This is handled by the client's `Store.deleteTeam`
                 _save_managers(mgrs)
 
-                # Clean up current turn files
+                # Clean up current turn files - archive results, delete uploads
                 turn_num = cfg["current_turn"]
                 td = _turn_dir(turn_num)
                 if os.path.exists(td):
                     for fname in list(os.listdir(td)):
-                        if fname.startswith(f"upload_{mid}_") or fname.startswith(f"result_{mid}_"): # These are protected files
-                            checksum_fpath = os.path.join(td, fname.replace('.json', '.checksum'))
-                            if os.path.exists(checksum_fpath):
-                                make_file_writable(checksum_fpath)
-                                os.remove(checksum_fpath)
-                            try:
-                                fpath = os.path.join(td, fname)
-                                make_file_writable(fpath)
-                                os.remove(fpath)
-                            except Exception:
-                                pass
+                        if fname.startswith(f"upload_{mid}_") or fname.startswith(f"result_{mid}_"):
+                            fpath = os.path.join(td, fname)
+                            # Archive result files (CRITICAL: preserve for auditing)
+                            # Delete upload files (safe - these are working files)
+                            _safe_delete_file(fpath, archive_to_turn=turn_num)
 
             self.send_json({
                 "success": True,

@@ -302,8 +302,8 @@ def _warrior_report_block(w: Warrior) -> list:
     main = main_weapon.upper()
     off = off_weapon.upper()
 
-    # Normalize backup weapon: handle null, empty string, "None", etc
-    if bak_weapon and bak_weapon.lower() not in ("none", ""):
+    # Normalize backup weapon: handle null, empty string, "None", "Open Hand", etc
+    if bak_weapon and bak_weapon.lower() not in ("none", "", "open hand"):
         bak = bak_weapon
     else:
         bak = None
@@ -1869,6 +1869,41 @@ def defense_intent_line(defender_name: str, gender: str, uses_parry: bool) -> st
 
 
 # ---------------------------------------------------------------------------
+# DEFENSE FAIL LINES (fired when a defense intent was shown but the hit lands)
+# These bridge the gap between "defender prepares" and "attack connects".
+# ---------------------------------------------------------------------------
+
+DEFENSE_FAIL_PARRY = [
+    "But the guard comes a fraction too late!",
+    "The parry is just off - the timing is wrong!",
+    "{defender}'s guard is overwhelmed!",
+    "But {defender} commits to the wrong angle!",
+    "{defender}'s guard is forced aside!",
+    "The attack finds a gap in the defense!",
+    "But the parry is off by a crucial margin!",
+    "{defender} reads the attack wrong!",
+    "The defense is overpowered!",
+    "The guard holds for a moment, then gives way!",
+]
+
+DEFENSE_FAIL_DODGE = [
+    "But the dodge isn't quite enough!",
+    "{defender} can't move fast enough!",
+    "The escape route closes too quickly!",
+    "{defender} is a half-step too slow!",
+    "The attack angle was unexpected!",
+    "{defender} is caught mid-step!",
+    "There is nowhere to go!",
+    "{defender} commits to the wrong direction!",
+]
+
+
+def defense_fail_line(defender_name: str, gender: str, uses_parry: bool) -> str:
+    pool = DEFENSE_FAIL_PARRY if uses_parry else DEFENSE_FAIL_DODGE
+    return random.choice(pool).format(defender=defender_name.upper())
+
+
+# ---------------------------------------------------------------------------
 # LOW HP STATUS COMMENTARY
 # ---------------------------------------------------------------------------
 
@@ -2588,11 +2623,11 @@ def lizardfolk_martial_strike_line(attacker_name: str, defender_name: str, gende
 
 
 TABAXI_FRENZY_RESIST_LINES = [
-    "{attacker} strains at the edge of frenzy — but the surge passes without breaking loose.",
+    "{attacker} strains at the edge of frenzy, but the surge passes without breaking loose.",
     "The primal fire flickers in {attacker}'s eyes, then gutters out.",
-    "{attacker} feels the instinct surge and falter — the moment slips away.",
+    "{attacker} feels the instinct surge and falter. The moment slips away.",
     "A tremor of frenzy moves through {attacker}, but discipline holds it in check.",
-    "{attacker} tenses, on the brink — the killing rush does not come.",
+    "{attacker} tenses, on the brink. The killing rush does not come.",
 ]
 
 
@@ -2866,6 +2901,96 @@ def intimidate_line(warrior_name: str, foe_name: str) -> Optional[str]:
         return t.format(warrior=warrior_name.upper(), foe=foe_name.upper())
     return None
 
+
+# ---------------------------------------------------------------------------
+# LIZARDFOLK HEAVY ARMOR PENALTY FLAVOR
+# ---------------------------------------------------------------------------
+
+_LIZARD_ARMOR_LINES: dict[str, dict[str, list[str]]] = {
+    "Cuir Boulli": {
+        "defensive": [
+            "{warrior}'s scales bunch under the hardened leather, slowing their parry just enough to matter.",
+            "The stiff cuirass limits {warrior}'s reach and that dodge came a half-step late.",
+            "{warrior}'s reflexes are there. The armor just isn't letting them use them.",
+        ],
+        "offensive": [
+            "{warrior} struggles to rotate into the strike fully, the boiled leather binding at the shoulder.",
+            "The armor fights {warrior}'s natural movement and their attack carries less snap than it should.",
+            "The boiled leather binds at the elbow, costing {warrior} the follow-through on that swing.",
+        ],
+    },
+    "Brigandine": {
+        "defensive": [
+            "The brigandine's bulk costs {warrior} a clean parry. Their arm couldn't extend in time.",
+            "{warrior} telegraphs the dodge; the added weight is eating into their reaction speed.",
+            "That parry was a half-measure. {warrior} couldn't square up fast enough in the heavy coat.",
+        ],
+        "offensive": [
+            "The coat slows {warrior}'s weapon recovery and they're resetting a beat slower than their opponent.",
+            "{warrior} can't get their body fully behind the attack; the brigandine is killing their rotation.",
+            "{warrior}'s swing arrives a beat late; the brigandine has killed the timing.",
+        ],
+    },
+    "Scale": {
+        "defensive": [
+            "{warrior} pulls a dodge that would have worked in lighter gear. In scale, it's not enough.",
+            "The weight is showing and {warrior}'s parries are reactive now rather than decisive.",
+            "The scale hauberk robs {warrior} of the half-step they needed to get clear.",
+        ],
+        "offensive": [
+            "The scale hauberk is dragging {warrior}'s attack rate down. They simply can't move their arms freely.",
+            "{warrior}'s counterattack comes in slow; the scale is grinding against their natural movement.",
+            "The armor is robbing {warrior} of the speed their body is built for.",
+        ],
+    },
+    "Chain": {
+        "defensive": [
+            "{warrior} throws a parry but can't commit; the chainmail is dragging the arm back.",
+            "The dodge is there in instinct. The mail ensures it doesn't happen in time.",
+            "{warrior} tries to slip the strike. The mail kills it before the footwork can.",
+        ],
+        "offensive": [
+            "{warrior}'s attack rate has dropped noticeably under the chain's weight.",
+            "The chain restricts {warrior}'s follow-through; the blow lands but without real force behind it.",
+            "{warrior}'s strike telegraphs badly; the chain has robbed the movement of its deception.",
+        ],
+    },
+    "Half-Plate": {
+        "defensive": [
+            "{warrior} can barely raise a parry in time. The plate is winning the fight against their arms.",
+            "The half-plate has stripped out most of {warrior}'s evasion and they're eating hits they'd normally walk away from.",
+            "Any attempt to dodge is mostly ceremonial at this point; the armor has other ideas.",
+        ],
+        "offensive": [
+            "{warrior}'s attack comes in high and stiff. The plate is dictating the angle, not {warrior}.",
+            "{warrior}'s attack rhythm has slowed to a crawl under the half-plate.",
+            "The half-plate has reduced {warrior}'s swing to a predictable arc; there's no surprise left in it.",
+        ],
+    },
+    "Full Plate": {
+        "defensive": [
+            "{warrior} is barely parrying at all. The plate has locked their arms into a narrow range of motion.",
+            "The dodge attempt was almost impressive given the circumstances. It did not work.",
+            "The full plate has left {warrior} with nothing meaningful on defense; they are simply absorbing damage now.",
+        ],
+        "offensive": [
+            "{warrior} swings from the shoulder because the plate won't let them use the wrist and the attack telegraphs badly.",
+            "{warrior}'s attack is late. The armor is running this fight, not them.",
+            "The full plate has turned {warrior}'s strikes into slow, obvious arcs that any alert fighter can read.",
+        ],
+    },
+}
+
+_LIZARD_HEAVY_ARMORS = {"Cuir Boulli", "Brigandine", "Scale", "Chain", "Half-Plate", "Full Plate"}
+
+
+def lizard_armor_line(warrior_name: str, armor_name: str, defensive: bool = True) -> Optional[str]:
+    """Return a Lizardfolk heavy-armor flavor line. defensive=True for parry/dodge failures, False for attack failures."""
+    tier = _LIZARD_ARMOR_LINES.get(armor_name)
+    if not tier:
+        return None
+    pool = tier["defensive"] if defensive else tier["offensive"]
+    return random.choice(pool).format(warrior=warrior_name.upper())
 
 # ---------------------------------------------------------------------------
 # POST-FIGHT TRAINING SUMMARY

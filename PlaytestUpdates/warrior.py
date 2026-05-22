@@ -686,6 +686,7 @@ class Warrior:
                 if attr in self.initial_stats:
                     setattr(self, attr, self.initial_stats[attr])
         
+        # Clear all records and progress
         self.wins = 0
         self.losses = 0
         self.kills = 0
@@ -703,7 +704,20 @@ class Warrior:
         self.is_dead = False
         self.killed_by = ""
         self.ascended_to_monster = False
+        self.trains = []  # Clear any pending training
+        self.want_monster_fight = False  # Reset fight-option flags
+        self.want_retire = False
+        self.avoid_warriors = []  # Clear avoidance list
+        
+        # Clear training session message tracking
+        self.shown_max_messages = set()
+        
+        # Recalculate all derived stats (max_hp, max_endurance, measurements)
         self.recalculate_derived()
+        
+        # Reset current HP and endurance to their maximum values
+        self.current_hp = self.max_hp
+        self.current_endurance = self.max_endurance
 
     # =========================================================================
     # STAT ACCESS

@@ -503,6 +503,19 @@ class CombatDebugLogger:
             f"{'▶ CONCEDE GRANTED' if granted else 'mercy denied — fight continues'}"
         )
 
+    def log_fatal_injury_end(self, warrior_name: str, injuries: list):
+        self._emit("")
+        self._hr()
+        self._emit(f"  FATAL INJURY DETECTED: {warrior_name.upper()} DIES")
+        self._hr()
+        self._emit("  Active Injuries:")
+        if injuries:
+            for loc, level in injuries:
+                self._emit(f"    - {loc.replace('_', ' ').title()}: Level {level}")
+        else:
+            self._emit("    (No specific injuries logged, but fatal condition met)")
+        self._hr()
+
     # ── fight result ──────────────────────────────────────────────────────────
 
     def log_result(self, winner_name: str, loser_name: str,

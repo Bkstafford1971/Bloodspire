@@ -57,18 +57,19 @@ def build_global_fight_card(
     """
     if champion_state is None:
         champion_state = {}
-    
+
     card = []
     master_pool = []
-    
+
     # STEP 1: Combine all teams into a single unique list
     all_teams_map = {t.team_id: t for t in player_teams + opponent_teams}
     unique_teams = list(all_teams_map.values())
 
     for t in unique_teams:
         for w in t.active_warriors:
-            master_pool.append({'warrior': w, 'team': t, 'matched': False})
-    
+            if w:
+                master_pool.append({'warrior': w, 'team': t, 'matched': False})
+
     def _get_unmatched() -> List[dict]:
         return [e for e in master_pool if not e['matched']]
 
@@ -82,6 +83,10 @@ def build_global_fight_card(
         card.append(fight)
         e1['matched'] = True
         e2['matched'] = True
+        # DEBUG: Log fight addition
+        if ftype in ["blood_challenge", "challenge", "standard"]:
+            if e1['team'].manager_name in ["D-man", "Sleazee P Martinee", "B4youwereborn"]:
+                print(f"    [ADD_FIGHT] {ftype}: {e1['warrior'].name} vs {e2['warrior'].name} (card now has {len(card)} fights)")
 
     # STEP 2: MONSTER CHALLENGES
     monster_team = None
@@ -94,17 +99,39 @@ def build_global_fight_card(
             entry['warrior'].want_monster_fight = False
 
     # STEP 3: BLOOD CHALLENGES
+    # CRITICAL: Only process blood challenges where the manager has explicitly selected a challenger warrior
+    # Blood challenges are user-initiated vengeance, not automatic
     unmatched = _get_unmatched()
     random.shuffle(unmatched)
+
+    # Build a map of warriors for quick lookup
+    warrior_to_entry = {}
+    for entry in unmatched:
+        warrior_to_entry[entry['warrior'].name.lower()] = entry
+
     for entry in list(unmatched):
         if entry['matched']: continue
         for bc in entry['team'].blood_challenges:
-            if bc.get("status") == "active" and bc.get("turns_remaining", 0) > 0:
-                target = next((e for e in unmatched if not e['matched'] 
-                               and e['warrior'].name.lower() == bc.get("target_name","").lower()
-                               and not _is_same_manager(entry['team'], e['team'])), None)
-                if target and _challenge_succeeds(entry['warrior'].presence, target['warrior'].presence, is_blood_challenge=True):
-                    _add_fight(entry, target, "blood_challenge", entry['warrior'].name)
+            # Must have: active status, turns remaining, AND manager-selected challenger
+            if not (bc.get("status") == "active" and bc.get("turns_remaining", 0) > 0
+                    and bc.get("challenger_name")):
+                continue  # Skip if manager hasn't selected a challenger
+
+            # Get the selected challenger warrior
+            challenger_name = bc.get("challenger_name", "").lower()
+            challenger = warrior_to_entry.get(challenger_name)
+
+            # Verify challenger is from this team and unmatched
+            if not challenger or challenger['team'].team_id != entry['team'].team_id or challenger['matched']:
+                continue
+
+            # Now find the target (killer) to avenge
+            target_name = bc.get("target_name", "").lower()
+            target = warrior_to_entry.get(target_name)
+
+            if target and not target['matched'] and not _is_same_manager(entry['team'], target['team']):
+                if _challenge_succeeds(challenger['warrior'].presence, target['warrior'].presence, is_blood_challenge=True):
+                    _add_fight(challenger, target, "blood_challenge", challenger['warrior'].name)
                     break
 
     # STEP 4: CHAMPION CHALLENGES
@@ -144,27 +171,74 @@ def build_global_fight_card(
 
     # STEP 6: RANDOM P-vs-P MATCHMAKING
     unmatched = _get_unmatched()
+    print(f"  [DEBUG_PVP] Starting P-vs-P with {len(unmatched)} unmatched warriors")
+    # Count unmatched by manager
+    unmatched_by_mgr = {}
+    for e in unmatched:
+        mgr = e['team'].manager_name
+        unmatched_by_mgr[mgr] = unmatched_by_mgr.get(mgr, 0) + 1
+    print(f"  [DEBUG_PVP] Unmatched warriors by manager:")
+    for mgr in sorted(unmatched_by_mgr.keys()):
+        print(f"    {mgr}: {unmatched_by_mgr[mgr]} warriors")
     random.shuffle(unmatched)
-    for entry in list(unmatched):
-        if entry['matched']: continue
-        eligible = [e for e in unmatched if not e['matched'] 
+    fights_added_in_pvp = 0
+    warriors_with_no_match = []
+    for idx, entry in enumerate(list(unmatched)):
+        if entry['matched']:
+            if idx == 0 or unmatched[idx-1]['matched'] == False:
+                pass  # Expected, skip matched warriors
+            continue
+        eligible = [e for e in unmatched if not e['matched']
                     and not _is_same_manager(entry['team'], e['team'])
                     and _in_bracket(entry['warrior'].total_fights, e['warrior'].total_fights)]
         if eligible:
             self_rating = _warrior_rating(entry['warrior'])
             eligible.sort(key=lambda e: abs(_warrior_rating(e['warrior']) - self_rating))
             _add_fight(entry, eligible[0], "standard")
+            fights_added_in_pvp += 1
+            # Both warriors are now marked as matched by _add_fight()
+        else:
+            # Warrior found no eligible opponent - should NOT be marked as matched!
+            warriors_with_no_match.append(entry)
+            if entry['warrior'].name == "KYLE":
+                print(f"  [DEBUG_PVP] KYLE found NO eligible opponents (matched={entry['matched']})")
+    print(f"  [DEBUG_PVP] P-vs-P added {fights_added_in_pvp} fights")
+    if warriors_with_no_match:
+        print(f"  [DEBUG_PVP] WARNING: {len(warriors_with_no_match)} warriors had no eligible opponents!")
+        for entry in warriors_with_no_match[:5]:
+            matched_state = entry['matched']
+            print(f"    - {entry['warrior'].name} ({entry['team'].manager_name}) - matched={matched_state}")
+
+    # DEBUG: Check immediately after P-vs-P loop
+    print(f"  [DEBUG_PVP] Immediately after loop: {len([e for e in master_pool if e['matched']])} matched warriors")
+
+    # Check if these warriors are somehow getting marked as matched INSIDE the loop
+    for entry in warriors_with_no_match:
+        all_matched = [e for e in master_pool if e['warrior'].name == entry['warrior'].name]
+        if all_matched:
+            print(f"  [DEBUG_PVP] Check on {entry['warrior'].name}: matched={all_matched[0]['matched']}")
+
+    print(f"  [DEBUG_PVP] After P-vs-P matchmaking: {len(card)} total fights on card")
 
     # STEP 7: PEASANTS FOR REMAINING
-    for entry in _get_unmatched():
-        p_team = create_peasant_team(target_fight_count=entry['warrior'].total_fights)
-        p_warrior = random.choice(p_team.active_warriors)
-        card.append(ScheduledFight(
-            player_warrior=entry['warrior'], opponent=p_warrior,
-            player_team=entry['team'], opponent_team=p_team,
-            opponent_manager="The Arena", fight_type="peasant",
-        ))
-        entry['matched'] = True
+    unmatched_remaining = _get_unmatched()
+    print(f"  [DEBUG_PEASANTS] Found {len(unmatched_remaining)} unmatched warriors for peasants step")
+    if unmatched_remaining:
+        print(f"  [DEBUG_PEASANTS] Assigning peasant fights:")
+        for entry in unmatched_remaining[:10]:
+            print(f"    - {entry['warrior'].name} ({entry['team'].team_name}, manager: {entry['team'].manager_name})")
+        for entry in unmatched_remaining:
+            p_team = create_peasant_team(target_fight_count=entry['warrior'].total_fights)
+            p_warrior = random.choice(p_team.active_warriors)
+            card.append(ScheduledFight(
+                player_warrior=entry['warrior'], opponent=p_warrior,
+                player_team=entry['team'], opponent_team=p_team,
+                opponent_manager="The Arena", fight_type="peasant",
+            ))
+            entry['matched'] = True
+        print(f"  [DEBUG_PEASANTS] Added {len(unmatched_remaining)} peasant fights, card now has {len(card)} total")
+    else:
+        print(f"  [DEBUG] PROBLEM: All warriors matched but card only has {len(card)} fights!")
 
     return card
 # WARRIOR STRENGTH RATING (for matchmaking)

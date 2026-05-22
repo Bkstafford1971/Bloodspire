@@ -70,11 +70,6 @@ def _warrior_tier(w, is_champion: bool) -> str:
     return TIER_RECRUITS
 
 
-# =============================================================================
-# IMPROVED _update_champion function for newsletter.py
-# Replace lines 73-140 in newsletter.py with this improved version
-# =============================================================================
-
 def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
                      champion_beaten_by: str = None, champion_beaten_team: str = None,
                      champion_beaten_team_id: int = 0,
@@ -331,19 +326,6 @@ def _warrior_tiers(teams, champion_state: dict, card: list = None, turn_num: int
     champ_name=champion_state.get("name","")
     champ_tid = champion_state.get("team_id", 0)
 
-    # Collect names of all warriors who actually participated in a bout this turn
-    fought_names = set()
-    if card:
-        for bout in card:
-            pw_id = getattr(bout.player_warrior, "slot_index", -1)
-            ow_id = getattr(bout.opponent, "slot_index", -1)
-            pt_id = getattr(bout.player_team, "team_id", 0)
-            ot_id = getattr(bout.opponent_team, "team_id", 0)
-            if pw_id is not None and pw_id >= 0:
-                fought_names.add((pt_id, pw_id))
-            if ow_id is not None and ow_id >= 0:
-                fought_names.add((ot_id, ow_id))
-
     # Identify warriors that participated in this turn from the card
     warriors_that_fought = set()
     if card:
@@ -427,16 +409,34 @@ def _dead_section(deaths: list, turn_num: int) -> str:
     return "\n".join(lines)
 
 
-def _fights_section(card) -> str:
+def _fights_section(card, champion_state: dict = None) -> str:
     sep="="*85
     lines=["\nLAST TURN'S FIGHTS",sep]
-    # Organize by fight type: monster, blood_challenge, challenge, rivalry, peasant
-    _order = {"monster":0, "blood_challenge":1, "challenge":2, "rivalry":3, "peasant":4}
-    sorted_card = sorted(card, key=lambda b: _order.get(getattr(b,"fight_type","rivalry"), 3))
 
-    # Deduplicate: collapse A-vs-B and B-vs-A to one line.
+    champ_name = (champion_state or {}).get("name", "")
+
+    def _effective_type(bout):
+        ft = getattr(bout, "fight_type", "standard")
+        if ft == "monster":
+            return "monster"
+        pw_name = getattr(getattr(bout, "player_warrior", None), "name", "")
+        ow_name = getattr(getattr(bout, "opponent", None), "name", "")
+        if champ_name and (pw_name == champ_name or ow_name == champ_name):
+            return "champion"
+        if ft == "blood_challenge":
+            return "blood_challenge"
+        if ft == "challenge":
+            return "challenge"
+        if ft == "peasant":
+            return "peasant"
+        return "standard"
+
+    # Sort order: monster → champion → blood_challenge → challenge → standard/PvP → peasant
+    _order = {"monster": 0, "champion": 1, "blood_challenge": 2,
+              "challenge": 3, "standard": 4, "peasant": 5}
+    sorted_card = sorted(card, key=lambda b: _order.get(_effective_type(b), 4))
+
     seen_pairs = set()
-    # Deduplicate: ensure each physical fight appears only once using object identity
     seen_fights = set()
     for bout in sorted_card:
         if not bout.result:
@@ -452,49 +452,47 @@ def _fights_section(card) -> str:
         seen_pairs.add(pair)
         seen_fights.add(id(bout))
 
+        eff_type = _effective_type(bout)
         pw_won = r.winner and r.winner.name == pw.name
         winner = pw if pw_won else ow
-        loser = ow if pw_won else pw
-        mins = r.minutes_elapsed
-        wname = _trunc(winner.name)
-        lname = _trunc(loser.name)
+        loser  = ow if pw_won else pw
+        mins   = r.minutes_elapsed
+        wname  = _trunc(winner.name)
+        lname  = _trunc(loser.name)
+        style  = _fight_style_word(mins)
 
-        if bout.fight_type == "champion":
-            ftype = "Champions Title"
-        elif bout.fight_type in ("standard", "rivalry", "peasant", "monster"):
-            ftype = ""
-        else:
-            ftype = bout.fight_type.replace("_"," ")
-        style = _fight_style_word(mins)
-        
-        # Determine action verb based on challenge type
-        if bout.fight_type in ["challenge", "blood_challenge"]:
-            # For challenge fights, always list challenger first
-            challenger = bout.challenger_name
-            if challenger == winner.name:
-                # Challenger won
-                if r.loser_died:
-                    line = f"{wname} savagely slew {lname} in a {mins} minute {style} Challenge fight."
-                else:
-                    verb = random.choice(["bested","defeated","outlasted","overcame","vanquished"])
-                    line = f"{wname} {verb} {lname} in a {mins} minute {style} Challenge fight."
-            else:
-                # Challenger lost
-                if r.loser_died:
-                    line = f"{wname} savagely slew {lname} in a {mins} minute {style} Challenge fight."
-                else:
-                    verb = random.choice(["bested","defeated","outlasted","overcame","vanquished"])
-                    line = f"{wname} {verb} {lname} in a {mins} minute {style} Challenge fight."
-        else:
-            # Regular fight
-            ftype_str = f" {ftype}" if ftype else ""
+        if eff_type == "champion":
+            # Title fight — call out the championship explicitly
             if r.loser_died:
-                line=(f"{wname} slew {lname} in a {mins} minute {style}{ftype_str} fight."
-                      if pw_won else
-                      f"{lname} was slain by {wname} in a {mins} minute {style}{ftype_str} fight.")
+                line = (f"★ CHAMPION'S TITLE FIGHT ★  {wname} has slain {lname} to claim the"
+                        f" Champion's Title in a {mins} minute {style} battle!")
+            elif winner.name == champ_name:
+                verb = random.choice(["defended the title against", "turned back the challenge of",
+                                      "retained the championship over", "proved superior to"])
+                line = (f"★ CHAMPION'S TITLE FIGHT ★  {wname} {verb} {lname}"
+                        f" in a {mins} minute {style} fight.")
             else:
-                verb=random.choice(["bested","defeated","outlasted","overcame","vanquished"])
-                line=f"{wname} {verb} {lname} in a {mins} minute {style}{ftype_str} fight."
+                verb = random.choice(["seized the championship from", "dethroned",
+                                      "claimed the title from", "unseated champion"])
+                line = (f"★ CHAMPION'S TITLE FIGHT ★  {wname} {verb} {lname}"
+                        f" in a {mins} minute {style} fight!")
+        elif eff_type in ("challenge", "blood_challenge"):
+            label = "Blood Challenge" if eff_type == "blood_challenge" else "Challenge"
+            if r.loser_died:
+                line = f"{wname} savagely slew {lname} in a {mins} minute {style} {label} fight."
+            else:
+                verb = random.choice(["bested","defeated","outlasted","overcame","vanquished"])
+                line = f"{wname} {verb} {lname} in a {mins} minute {style} {label} fight."
+        else:
+            # monster / standard / peasant — no type label for standard/peasant
+            ftype_str = " monster" if eff_type == "monster" else ""
+            if r.loser_died:
+                line = (f"{wname} slew {lname} in a {mins} minute {style}{ftype_str} fight."
+                        if pw_won else
+                        f"{lname} was slain by {wname} in a {mins} minute {style}{ftype_str} fight.")
+            else:
+                verb = random.choice(["bested","defeated","outlasted","overcame","vanquished"])
+                line = f"{wname} {verb} {lname} in a {mins} minute {style}{ftype_str} fight."
         lines.append(line)
     return "\n".join(lines)
 
@@ -1406,7 +1404,7 @@ def generate_newsletter(turn_num, card, teams, deaths, champion_state,
     if monster_kills:
         sections.append("\n\n" + monster_kills)
     
-    sections.append("\n\n" + _fights_section(card))
+    sections.append("\n\n" + _fights_section(card, champion_state))
     dead = _dead_section(deaths, turn_num)
     if dead: sections.append("\n\n" + dead)
     sections.append("\n\n" + _race_report(teams))
