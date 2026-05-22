@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v2.3</title>
+<title>BLOODSPIRE Client - v2.5.1</title>
 <style>
 /* ============================================================
    WINDOWS CLASSIC — REFINED
@@ -246,7 +246,7 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
-const CLIENT_VERSION = "2.3";
+const CLIENT_VERSION = "2.5.1";
 
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
@@ -1246,6 +1246,17 @@ const LocalAPI = {
       const local  = await Store.readTeam(tid);
       if (!local) return { success: false, error: 'Local team not found.' };
       const merged = mergeResults(local, result, { rerun: !!body.rerun });
+      // When HideRecord is on, tag newly-slain warriors so the Replacement tab
+      // stays locked until the player opens the fatal fight narrative.
+      if (S.hideRecord) {
+        const bouts = Array.isArray(result.bouts) ? result.bouts : [];
+        for (const b of bouts) {
+          if (b.warrior_slain && b.fight_id && b.warrior_name) {
+            const w = (merged.warriors || []).find(w => w && w.name === b.warrior_name);
+            if (w && w.is_dead) w.death_fight_id_unread = b.fight_id;
+          }
+        }
+      }
       await Store.writeTeam(merged);
       // Also persist the raw result for audit.
       if (result.turn) await Store.writeTurnResult(result.turn, result);
@@ -2158,7 +2169,11 @@ async function treeSelectWarrior(tid, idx) {
   // Dead warriors open straight to the Replacement tab
   const team = S.teams[tid];
   const w    = team && team.warriors && team.warriors[idx];
-  S.wTab = (w && w.is_dead) ? 'replacement' : 'stats';
+  // Dead warriors go to Replacement — unless HideRecord is on and the fatal
+  // fight hasn't been read yet, in which case steer them to Fights first.
+  S.wTab = (w && w.is_dead)
+    ? (S.hideRecord && w.death_fight_id_unread ? 'fights' : 'replacement')
+    : 'stats';
   refreshTree();
   refreshContent();
 }
@@ -3848,6 +3863,46 @@ function buildArchivesTab(team) {
     const rec  = `${a.wins||0}-${a.losses||0}-${a.kills||0}`;
     const inj  = formatInjuriesText(a.injuries).join('<br>') || '—';
     const skls = formatSkillsText(a.skills).join('<br>') || '—';
+
+    // Build fight history table for this archived warrior
+    const history = (a.fight_history || []).slice().reverse();
+    let fightRows = '';
+    history.forEach((h, i) => {
+      const res = h.result ? h.result.toUpperCase() : '—';
+      const resColor = res==='WIN' ? '#060' : res==='LOSS' ? '#800' : '#444';
+      const slainNote  = h.warrior_slain  ? ' <b style="color:#800">(SLAIN)</b>'  : '';
+      const killedNote = h.opponent_slain ? ' <b style="color:#060">(KILLED)</b>' : '';
+      const fid = h.fight_id;
+      const viewBtn = fid
+        ? `<button class="sm" onclick="openNarrative(${fid},${h.turn||0})">View Fight</button>`
+        : `<span style="color:#aaa; font-size:10px;">no log</span>`;
+      fightRows += `<tr style="${i%2===0?'background:#f5f4f0;':''}">
+        <td style="padding:2px 6px; text-align:center;">${h.turn||'—'}</td>
+        <td style="padding:2px 6px;">${esc(h.opponent_name||'—')}${killedNote}</td>
+        <td style="padding:2px 6px; color:#555;">${esc(h.opponent_manager_name||'—')}</td>
+        <td style="padding:2px 6px; text-align:center; color:${resColor}; font-weight:bold;">${res}${slainNote}</td>
+        <td style="padding:2px 6px; text-align:center;">${h.minutes||'—'} min</td>
+        <td style="padding:2px 6px;">${viewBtn}</td>
+      </tr>`;
+    });
+    const fightSection = history.length ? `
+      <div style="margin-top:8px;">
+        <div style="color:#666; font-weight:bold; margin-bottom:3px; font-size:11px;">Fight History</div>
+        <div style="overflow-x:auto;">
+        <table class="grid" style="font-size:11px; width:100%;">
+          <thead><tr>
+            <th style="width:40px;">Turn</th>
+            <th style="min-width:130px;">Opponent</th>
+            <th style="width:110px;">Manager</th>
+            <th style="width:60px;">Result</th>
+            <th style="width:60px;">Duration</th>
+            <th style="width:80px;">Narrative</th>
+          </tr></thead>
+          <tbody>${fightRows}</tbody>
+        </table>
+        </div>
+      </div>` : `<div style="margin-top:6px; color:#aaa; font-size:11px;">No fight history recorded.</div>`;
+
     cards += `
 <div class="group" style="margin:6px 4px; background:#f9f7f4;">
   <span class="group-label" style="color:#800;">✝ ${esc(a.name)}</span>
@@ -3875,6 +3930,7 @@ function buildArchivesTab(team) {
       <div style="color:#800; line-height:1.5;">${inj}</div>
     </div>
   </div>
+  ${fightSection}
 </div>`;
   });
 
@@ -3890,6 +3946,17 @@ function buildReplacementTab(w) {
       <b>Replacement Warrior</b><br><br>
       This tab activates when <b>${esc(w.name)}</b> falls in battle.<br>
       A replacement roll-up will appear here so you can build the new recruit.
+    </div>`;
+  }
+
+  // HideRecord spoiler gate: block Replacement until the player reads the fatal fight.
+  if (w.is_dead && S.hideRecord && w.death_fight_id_unread) {
+    return `<div style="padding:14px; color:#555;">
+      <b style="color:#800;">⚔ A Warrior Has Fallen</b><br><br>
+      One of your warriors did not survive their last fight.<br><br>
+      Read the fight in the <b>Fights</b> tab to unlock this slot.
+      <br><br>
+      <button onclick="setWTab('fights')">Go to Fights Tab</button>
     </div>`;
   }
 
@@ -5351,33 +5418,54 @@ async function openNarrative(fightId, turnNum) {
     if (r.success) {
       S.narrative = { text: r.narrative, title: `Fight #${fightId}` };
       showNarrativeOverlay();
+      await _unlockDeathFight(fightId);
       return;
     }
   } catch(e) {}
 
-  // 2. Not found locally — try the league server directly (for downloaded turns)
-  const lg = S.league;
-  if (lg?.url && lg?.managerId && turnNum) {
+  // 2. Fetch from league server via API.get (uses S.serverUrl — more reliable
+  //    than S.league.url which requires the manager to have logged in).
+  //    Both manager_id and password are sent when available so the server can
+  //    authenticate and prioritise the player's own result file (correct perspective).
+  if (turnNum) {
     try {
-      const url = `${lg.url}/api/fight_log` +
-        `?turn=${turnNum}` +
-        `&fight_id=${fightId}` +
-        `&manager_id=${encodeURIComponent(lg.managerId)}` +
-        `&password=${encodeURIComponent(lg.password||'')}`;
-      const ctrl = new AbortController();
-      const tmo  = setTimeout(() => ctrl.abort(), 15000);
-      const res  = await fetch(url, {signal: ctrl.signal});
-      clearTimeout(tmo);
-      const d = await res.json();
+      const lg = S.league;
+      let qs = `turn=${turnNum}&fight_id=${fightId}`;
+      if (lg?.managerId) qs += `&manager_id=${encodeURIComponent(lg.managerId)}`;
+      if (lg?.password)  qs += `&password=${encodeURIComponent(lg.password)}`;
+      const d = await API.get(`/api/fight_log?${qs}`);
       if (d.success) {
         S.narrative = { text: d.narrative, title: `Fight #${fightId} (Turn ${turnNum})` };
         showNarrativeOverlay();
+        await _unlockDeathFight(fightId);
         return;
       }
     } catch(e) {}
   }
 
   alert('Fight log not available. The narrative may not have been saved for this fight.');
+}
+
+async function _unlockDeathFight(fightId) {
+  // If this fight killed one of the player's warriors and HideRecord is on,
+  // clear the gate flag now that they've read it and unlock the Replacement tab.
+  const tid = S.sel?.teamId;
+  const team = tid != null ? S.teams[tid] : null;
+  if (!team) return;
+  let changed = false;
+  for (const w of team.warriors || []) {
+    if (w && w.death_fight_id_unread === fightId) {
+      delete w.death_fight_id_unread;
+      changed = true;
+    }
+  }
+  if (changed) {
+    await Store.writeTeam(team);
+    S.teams[tid] = team;
+    // Switch to Replacement tab now that the gate is lifted
+    S.wTab = 'replacement';
+    render();
+  }
 }
 
 function closeNarrative() {
@@ -6353,8 +6441,11 @@ async function applyLeagueReset(serverResetCount) {
     server_reset_count: serverResetCount,
     type: 'reset',
   });
+  if (!r.success) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Clear My Records & Sync'; }
+    setMsg('Reset error: ' + r.error, 'err'); render(); return;
+  }
   document.getElementById('league-reset-modal')?.remove();
-  if (!r.success) { setMsg('Reset error: ' + r.error, 'err'); render(); return; }
 
   // Clear stale newsletter cache — server only has current-season newsletters
   await Store.clearNewsletters().catch(() => {});
@@ -6376,6 +6467,15 @@ async function applyLeagueReset(serverResetCount) {
         if (S.teams) S.teams[team_id] = team;
       }
     }
+    // Clear archived/legacy teams — they contribute to the manager record calculation
+    // and must not survive a revert-to-turn-1.
+    try {
+      const archIds = await Store.listArchivedTeamIds();
+      for (const aid of archIds) {
+        await fsaDeleteFile(`archives/team_${String(aid).padStart(4,'0')}.json`).catch(() => {});
+      }
+    } catch(e) { /* non-fatal */ }
+    S.legacyTeams = [];
     setMsg('Records reverted to Turn 1 — ready to fight! Download results to get the new newsletter.', 'ok');
   }
   render();
