@@ -938,6 +938,20 @@ def _calc_damage_hybrid(
     if str_bonus_mult > 0.0:
         raw = int(raw * (1.0 + str_bonus_mult))
 
+    # Under-strength weight penalty
+    effective_str = get_effective_strength_for_weapons(attacker)
+    weight_pen = strength_penalty(weapon.weight, effective_str, two_handed)
+    if weight_pen > 0:
+        raw = int(raw * (1.0 - weight_pen))
+
+    # Finesse weapon precision bonus (parity with verbose path)
+    if wpn_key in FINESSE_DAMAGE_WEAPONS and margin >= 10:
+        raw += wpn_skill
+
+    # Favorite weapon damage bonus: +1 raw damage
+    if attacker.favorite_weapon and weapon_name == attacker.favorite_weapon:
+        raw += 1
+
     # Calculate armor reduction
     armor_nm = defender.armor or "None"
     helm_nm = defender.helm or "None"
@@ -1819,6 +1833,14 @@ def _calc_apm(warrior: Warrior, strategy: Strategy, state: _CState) -> int:
     if r.heavy_weapon_penalty:
         try:
             weapon = get_weapon(warrior.primary_weapon)
+            
+            # Apply under-strength weight penalty to APM
+            effective_str = get_effective_strength_for_weapons(warrior)
+            two_handed_use = (warrior.secondary_weapon == "Open Hand" and weapon.two_hand)
+            weight_penalty = strength_penalty(weapon.weight, effective_str, two_handed_use)
+            if weight_penalty > 0:
+                base *= (1.0 - weight_penalty)
+
             two_handed = (warrior.secondary_weapon == "Open Hand" and weapon.two_hand)
 
             # Check if weapon is heavy (weight 4.0+) or two-handed
@@ -2475,12 +2497,12 @@ class CombatEngine:
             # Promote backup to primary
             warrior.primary_weapon = warrior.backup_weapon
             warrior.backup_weapon = None
-            return f"{warrior.name.upper()} pulls {warrior.name.lower()}'s backup {current_primary.lower()}!"
-        
+            return f"{warrior.name.upper()} draws {warrior.gender_possessive} backup {current_primary.lower()}!"
+
         # No matching backup, try secondary weapon
         if warrior.secondary_weapon != "Open Hand":
             warrior.primary_weapon = warrior.secondary_weapon
-            return f"{warrior.name.upper()} switches to {warrior.name.lower()}'s {warrior.secondary_weapon.lower()}!"
+            return f"{warrior.name.upper()} switches to {warrior.gender_possessive} {warrior.secondary_weapon.lower()}!"
         
         # Fall back to Open Hand
         warrior.primary_weapon = "Open Hand"
@@ -2838,7 +2860,7 @@ class CombatEngine:
         elif sig:
             self._emit(sig)
         else:
-            for ln in N.hit_line(att.name, dfr.name, wpn, cat, aim, precision, attacker_race=att.race.name):
+            for ln in N.hit_line(att.name, dfr.name, wpn, cat, aim, precision, attacker_race=att.race.name, style=ax.style):
                 self._emit(ln)
 
         _pbypass = CA_PRECISION_ARMOR_BYPASS if (_crit_hit or ca_precision_landed) else 0.0
@@ -3201,13 +3223,13 @@ class CombatEngine:
     # FATAL INJURY CHECK
     # =========================================================================
 
-    def _check_fatal_injury(self) -> Optional[FightResult]:
+    def _check_fatal_injury(self, minute: int = 0) -> Optional[FightResult]:
         for d, k in [(self.state_a, self.state_b), (self.state_b, self.state_a)]:
             if d.warrior.injuries.is_fatal():
                 if self.debug_logger:
                     self.debug_logger.log_fatal_injury_end(d.warrior.name, d.warrior.injuries.active_injuries())
 
-                return self._make_result(k.warrior, d.warrior, True, 0)
+                return self._make_result(k.warrior, d.warrior, True, minute)
         return None
 
     # =========================================================================

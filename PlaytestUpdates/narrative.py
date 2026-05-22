@@ -767,6 +767,14 @@ def attack_line(
             f"{attacker_name.upper()} {verb} {defender_name.upper()}'s {location}!"
         )
 
+    # Opportunity Throw uses a throw-specific sentence structure
+    if style == "Opportunity Throw":
+        throw_verb = random.choice(["hurls", "flings", "launches", "sends", "pitches"])
+        return (
+            f"{attacker_name.upper()} {throw_verb} {pronoun} {weapon_name.lower()} "
+            f"at {defender_name.upper()}'s {location}!"
+        )
+
     # Style-flavored variant, always ends with weapon reference
     if style in STYLE_ATTACK_PREFIX and random.random() < 0.5:
         verb = random.choice(STYLE_ATTACK_PREFIX[style])
@@ -788,6 +796,11 @@ def attack_line(
 # HIT VERB LINES (weapon makes contact)
 # Format: "{attacker}'s {weapon} {hit_verb} {defender}'s {hit_location}!"
 # ---------------------------------------------------------------------------
+
+THROW_HIT_VERBS: list[str] = [
+    "slams into", "buries itself in", "embeds in", "pierces",
+    "strikes home on", "drives through", "punches into",
+]
 
 HIT_VERBS: dict[str, list[str]] = {
     "Sword/Knife"  : ["bites into", "slices into", "cuts into", "finds"],
@@ -837,6 +850,7 @@ def hit_line(
     aim_point     : str,
     hit_precision : str = "normal",  # "precise", "normal", "barely"
     attacker_race : str = None,       # For Lizardfolk special handling
+    style         : str = None,       # For Opportunity Throw special handling
 ) -> list[str]:
     """
     Return 1-2 lines describing a successful hit.
@@ -876,11 +890,13 @@ def hit_line(
             f"{verb} {defender_name.upper()}'s {target}!"
         )
     else:
-        # Standard weapon-based hit description
-        verb_pool = HIT_VERBS.get(weapon_category, HIT_VERBS["Oddball"])
-        verb = random.choice(verb_pool)
         target_pool = HIT_TARGETS.get(aim_point, HIT_TARGETS["None"])
         target = random.choice(target_pool)
+        if style == "Opportunity Throw":
+            verb = random.choice(THROW_HIT_VERBS)
+        else:
+            verb_pool = HIT_VERBS.get(weapon_category, HIT_VERBS["Oddball"])
+            verb = random.choice(verb_pool)
         lines.append(
             f"{attacker_name.upper()}'s {weapon_name.lower()} "
             f"{verb} {defender_name.upper()}'s {target}!"
