@@ -4,14 +4,14 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 module.exports = {
   packagerConfig: {
     asar: true,
-   // icon: './bloodspireshortcut',
+    icon: './bloodspireshortcut',
   },
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-     //   setupIcon: './bloodspireshortcut.ico',
+        setupIcon: './bloodspireshortcut.ico',
         loadingGif: './Bloodspire.png',
       },
     },
