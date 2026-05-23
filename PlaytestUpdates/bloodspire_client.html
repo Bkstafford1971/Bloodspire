@@ -2309,7 +2309,7 @@ function buildManagerPanel() {
   </div>`}
 </div>
 <div style="display:flex; justify-content:center; align-items:center; flex:1; padding:20px; pointer-events:none;">
-  <img src="./Bloodspire.png" alt="Bloodspire" style="width:90%; height:90%; object-fit:contain;">
+  <img src="${(S.serverUrl || '').replace(/\/+$/, '')}/bloodspire.png" alt="Bloodspire" style="width:90%; height:90%; object-fit:contain;">
 </div>
 </div>`;
   }
@@ -4197,7 +4197,7 @@ function buildCreateTeam() {
     const indStyle  = mark ? 'color:#080; font-weight:bold;' : 'color:#aaa;';
     gridRows += `<tr class="${sel}" id="ct-row-${i}" style="cursor:pointer;">
 	  <td style="padding:2px 4px; text-align:center; width:20px; ${indStyle}">${indicator}</td>
-	  <td style="padding:2px 8px;"><input type="text" id="ct-name-${i}" value="${esc(w.name||'')}" style="width:140px;" placeholder="Warrior name" autocomplete="off" tabindex="0" maxlength="25" oninput="updateWarriorName(${i}, this.value)"></td>
+	  <td style="padding:2px 8px;"><input type="text" id="ct-name-${i}" value="${esc(w.name||'')}" style="width:140px;" placeholder="Warrior name" autocomplete="off" tabindex="0" maxlength="20" oninput="updateWarriorName(${i}, this.value)"></td>
       <td style="padding:2px 4px; text-align:center;">${esc(w.race||'Human')}</td>
       <td style="padding:2px 4px; text-align:center;">${esc(w.gender||'Male')}</td>
       ${ATTR_KEYS.map(k => `<td style="padding:2px 4px; text-align:right;">${final(ct, i, k)}</td>`).join('')}
@@ -4260,7 +4260,7 @@ function buildCreateTeam() {
     <span>Team Name</span>
     <input type="text" id="ct-team-name" value="${esc(ct.teamName||'')}"
            oninput="if(S.ct) S.ct.teamName = this.value"
-           maxlength="25"
+           maxlength="20"
            style="width:280px;" placeholder="Enter team name">
     <div style="flex:1;"></div>
     <button id="btn-ct-save" class="wide" ${allSaved ? '' : 'disabled'}>
@@ -4284,7 +4284,7 @@ function buildCreateTeam() {
 	    <table style="border-collapse:collapse; margin-bottom:8px;">
 		  <tr>
 		    <td style="padding:3px 8px; text-align:right; width:70px;">Name</td>
-		    <td><input type="text" id="ct-wname" value="${esc(sw.name||'')}" style="width:200px;" placeholder="Warrior name" autocomplete="off" autofocus maxlength="25" oninput="updateCurrentWarriorName(this.value)"></td>
+		    <td><input type="text" id="ct-wname" value="${esc(sw.name||'')}" style="width:200px;" placeholder="Warrior name" autocomplete="off" autofocus maxlength="20" oninput="updateCurrentWarriorName(this.value)"></td>
 		  </tr>
           <tr>
             <td style="padding:3px 8px; text-align:right;">Race</td>
@@ -5962,6 +5962,7 @@ async function doLeagueGetResults() {
     const r = await fetch(`${lg.url}/api/results?manager_id=${encodeURIComponent(lg.managerId)}&password=${encodeURIComponent(pw)}`);
     const d = await r.json();
     if (!d.success) { setMsg('Error: ' + d.error, 'err'); render(); return; }
+    if (d.already_current) { setMsg(`Turn ${d.turn} results already downloaded — nothing new to apply.`, 'ok'); render(); return; }
     const teamId = S.sel.teamId || S.account?.team_ids?.[0];
     if (!teamId) { setMsg('Select your team first.', 'err'); render(); return; }
     const applied = await API.post('/api/apply_league_results', {team_id: teamId, result: d.result || (d.results&&d.results[0]), rerun: !!S._pendingRerun});
@@ -6147,6 +6148,16 @@ async function doLeagueDownloadAll() {
     }
     if (!resultsResp.success) {
       fail(resultsResp.error || 'Server returned an error.', 3); return;
+    }
+
+    if (resultsResp.already_current) {
+      _showDownloadProgress(_DL_STEPS, _DL_STEPS.length, null);
+      const dlModal = document.getElementById('dl-progress-modal');
+      if (dlModal) {
+        const footer = dlModal.querySelector('div[style*="color:#060"]') || dlModal.querySelector('div[style*="color:#555"]');
+        if (footer) footer.textContent = `Turn ${resultsResp.turn} already downloaded — nothing new to apply.`;
+      }
+      return;
     }
 
     const turnNum    = resultsResp.turn;

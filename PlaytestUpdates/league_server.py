@@ -319,17 +319,17 @@ def _write_execution_log(turn_num, exec_log):
             f.write(f"TURN {turn_num} EXECUTION LOG\n")
             f.write(f"Started: {exec_log.get('started_at', 'Unknown')}\n")
             f.write(f"Finished: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
-            f.write("="*120 + "\n")
-            f.write(f"{'MANAGER':<25} {'TEAM':<25} {'WARRIOR':<25} {'STATUS':<25} {'OPPONENT':<25}\n")
-            f.write("-"*120 + "\n")
+            f.write("="*110 + "\n")
+            f.write(f"{'MANAGER':<20} {'TEAM':<20} {'WARRIOR':<20} {'STATUS':<25} {'OPPONENT':<20}\n")
+            f.write("-"*110 + "\n")
             
             # Sort warriors by manager then team then name
             sorted_warriors = sorted(exec_log["warriors"].values(), 
                                      key=lambda x: (x["manager"], x["team"], x["name"]))
             
             for w in sorted_warriors:
-                f.write(f"{w['manager'][:24]:<25} {w['team'][:24]:<25} {w['name'][:24]:<25} "
-                        f"{w['status']:<25} {(w['opponent'] or 'None')[:24]:<25}\n")
+                f.write(f"{w['manager'][:19]:<20} {w['team'][:19]:<20} {w['name'][:19]:<20} "
+                        f"{w['status']:<25} {(w['opponent'] or 'None')[:19]:<20}\n")
                 if w.get("error"):
                     f.write(f"  ! ERROR: {w['error']}\n")
         print(f"  Execution log written: {exec_log_path}")
@@ -2973,6 +2973,22 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 if key.startswith("deleted_team_") and str(val.get("manager_id")) == str(mid):
                     deleted_teams_list.append(val)
 
+            # If the manager already downloaded this exact turn's results and the turn
+            # has not advanced, return an "already current" marker so the client skips
+            # re-applying the same data (avoids duplicate fight history, double popups).
+            last_dl = mgrs[mid].get("last_downloaded_turn", 0)
+            if int(last_dl) == int(res_turn):
+                _log_activity("download_already_current", mid, mgrs[mid]["manager_name"],
+                              f"Already downloaded turn {res_turn} — returning already_current")
+                self.send_json({
+                    "success": True, "already_current": True,
+                    "turn": res_turn,
+                }); return
+
+            # Mark this turn as downloaded for this manager
+            mgrs[mid]["last_downloaded_turn"] = res_turn
+            _save_managers(mgrs)
+
             # Log the download
             team_count = len(team_results)
             _log_activity("download_success", mid, mgrs[mid]["manager_name"],
@@ -3464,25 +3480,9 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 except Exception as e:
                     print(f"  WARNING: Could not update persistent team file during upload: {e}")
                 
-                # Archive result data from previous turn (CRITICAL: preserve for auditing)
-                # When a replacement team is uploaded, archive the old results instead of deleting
-                res_turn = cfg["current_turn"] - 1
-                if res_turn >= 1:
-                    td_path = _turn_dir(res_turn)
-                    if os.path.exists(td_path):
-                        for fn in os.listdir(td_path):
-                            if fn.startswith(f"result_{mid}") and fn.endswith(".json"):
-                                # Check if this result file belongs to the uploaded team
-                                try:
-                                    result_path = os.path.join(td_path, fn)
-                                    result_data = _load_json(result_path, None)
-                                    # Use string comparison to avoid int/str mismatch
-                                    if result_data and str(result_data.get("team_id")) == str(team_id):
-                                        # Archive instead of delete (CRITICAL: preserve data)
-                                        _safe_delete_file(result_path, archive_to_turn=res_turn)
-                                        print(f"  Archived result for team {team_id} (manager {mid}) for auditing")
-                                except Exception:
-                                    pass                
+                # Result files from the previous turn are left in place so the manager
+                # can still download them until the next turn actually runs.
+                # _archive_old_results() handles cleanup at the start of each new turn.
                 mgrs[mid]["last_upload_timestamp"] = upload_time # This will be replaced by save_json_protected
                 _save_managers(mgrs)
 
@@ -4090,8 +4090,8 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             new_name = str(b.get("new_name") or "").strip().upper()
             if not tid or not new_name:
                 self.send_json({"success": False, "error": "team_id and new_name required."}); return
-            if len(new_name) > 25:
-                self.send_json({"success": False, "error": "Team name must be 25 characters or fewer."}); return
+            if len(new_name) > 20:
+                self.send_json({"success": False, "error": "Team name must be 20 characters or fewer."}); return
 
             with _lock:
                 from save import load_team, save_team
