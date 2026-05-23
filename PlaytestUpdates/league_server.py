@@ -319,17 +319,17 @@ def _write_execution_log(turn_num, exec_log):
             f.write(f"TURN {turn_num} EXECUTION LOG\n")
             f.write(f"Started: {exec_log.get('started_at', 'Unknown')}\n")
             f.write(f"Finished: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
-            f.write("="*110 + "\n")
-            f.write(f"{'MANAGER':<20} {'TEAM':<20} {'WARRIOR':<20} {'STATUS':<25} {'OPPONENT':<20}\n")
-            f.write("-"*110 + "\n")
+            f.write("="*120 + "\n")
+            f.write(f"{'MANAGER':<25} {'TEAM':<25} {'WARRIOR':<25} {'STATUS':<25} {'OPPONENT':<25}\n")
+            f.write("-"*120 + "\n")
             
             # Sort warriors by manager then team then name
             sorted_warriors = sorted(exec_log["warriors"].values(), 
                                      key=lambda x: (x["manager"], x["team"], x["name"]))
             
             for w in sorted_warriors:
-                f.write(f"{w['manager'][:19]:<20} {w['team'][:19]:<20} {w['name'][:19]:<20} "
-                        f"{w['status']:<25} {(w['opponent'] or 'None')[:19]:<20}\n")
+                f.write(f"{w['manager'][:24]:<25} {w['team'][:24]:<25} {w['name'][:24]:<25} "
+                        f"{w['status']:<25} {(w['opponent'] or 'None')[:24]:<25}\n")
                 if w.get("error"):
                     f.write(f"  ! ERROR: {w['error']}\n")
         print(f"  Execution log written: {exec_log_path}")
@@ -4090,8 +4090,8 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             new_name = str(b.get("new_name") or "").strip().upper()
             if not tid or not new_name:
                 self.send_json({"success": False, "error": "team_id and new_name required."}); return
-            if len(new_name) > 20:
-                self.send_json({"success": False, "error": "Team name must be 20 characters or fewer."}); return
+            if len(new_name) > 25:
+                self.send_json({"success": False, "error": "Team name must be 25 characters or fewer."}); return
 
             with _lock:
                 from save import load_team, save_team

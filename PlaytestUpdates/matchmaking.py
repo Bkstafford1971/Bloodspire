@@ -1487,7 +1487,7 @@ def turn_summary(card: List[ScheduledFight], player_team_name: str) -> str:
         pw = bout.player_warrior
         r  = bout.result
         if r is None:
-            lines.append(f"  {pw.name:<20} — No result")
+            lines.append(f"  {pw.name:<25} — No result")
             continue
 
         if r.winner is pw:
@@ -1505,7 +1505,7 @@ def turn_summary(card: List[ScheduledFight], player_team_name: str) -> str:
 
         opp_type = f"[{bout.fight_type}]"
         lines.append(
-            f"  {pw.name:<20} {outcome}  vs {bout.opponent.name:<20} "
+            f"  {pw.name:<25} {outcome}  vs {bout.opponent.name:<25} "
             f"{opp_type:<18}{died_note}{kill_note}"
         )
 

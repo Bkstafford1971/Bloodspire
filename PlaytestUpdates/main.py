@@ -181,8 +181,8 @@ def _create_new_team(gs: GameState):
     team_name = prompt("Team name: ")
     if not team_name:
         return
-    if len(team_name) > 20:
-        print("  Team name must be 20 characters or fewer.")
+    if len(team_name) > 25:
+        print("  Team name must be 25 characters or fewer.")
         return
 
     team = Team(team_name=team_name, manager_name=manager_name)

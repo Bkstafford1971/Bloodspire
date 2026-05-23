@@ -282,8 +282,8 @@ def save_fight_log(narrative_text: str, team_a_name: str, team_b_name: str) -> t
     """
     _ensure_dirs()
     fight_id = next_fight_id()
-    safe_a   = team_a_name.replace(" ", "_")[:20]
-    safe_b   = team_b_name.replace(" ", "_")[:20]
+    safe_a   = team_a_name.replace(" ", "_")[:25]
+    safe_b   = team_b_name.replace(" ", "_")[:25]
     filename = f"fight_{fight_id:04d}_{safe_a}_vs_{safe_b}.txt"
     filepath = os.path.join(FIGHTS_DIR, filename)
 
@@ -641,9 +641,9 @@ def write_turn_logs(turn_num: int, card, player_team_name: str):
     mm_lines = [
         f"BLOODSPIRE — MATCHMAKING LOG",
         f"Turn {turn_num}  |  Team: {player_team_name}  |  {ts}",
-        "=" * 72,
-        f"{'#':<4} {'Fighter':<20} {'Exp':>5} {'vs':<4} {'Opponent':<20} {'Exp':>5} {'Type':<16} {'Result':<8} {'Mins':>4}",
-        "-" * 72,
+        "=" * 96,
+        f"{'#':<4} {'Fighter':<25} {'Exp':>5} {'vs':<4} {'Opponent':<25} {'Exp':>5} {'Type':<16} {'Result':<8} {'Mins':>4}",
+        "-" * 96,
     ]
     for i, bout in enumerate(card, 1):
         pw  = bout.player_warrior
@@ -651,8 +651,8 @@ def write_turn_logs(turn_num: int, card, player_team_name: str):
         r   = bout.result
         res = "WIN" if (r and r.winner and r.winner.name == pw.name) else "LOSS"
         mm_lines.append(
-            f"{i:<4} {pw.name[:19]:<20} {pw.total_fights:>5}  vs  "
-            f"{ow.name[:19]:<20} {ow.total_fights:>5} {bout.fight_type:<16} {res:<8} {r.minutes_elapsed if r else '?':>4}"
+            f"{i:<4} {pw.name[:24]:<25} {pw.total_fights:>5}  vs  "
+            f"{ow.name[:24]:<25} {ow.total_fights:>5} {bout.fight_type:<16} {res:<8} {r.minutes_elapsed if r else '?':>4}"
         )
     mm_lines += ["", f"Total bouts: {len(card)}", ""]
     mm_path = os.path.join(turn_log_dir, "matchmaking.txt")

@@ -446,7 +446,7 @@ class Team:
         thin      = "-" * 62
         lines = [
             separator,
-            f"  TEAM:     {self.team_name.upper():<20} (Record: {self.record_str})",
+            f"  TEAM:     {self.team_name.upper():<25} (Record: {self.record_str})",
             f"  MANAGER:  {self.manager_name.upper()}   (ID: {self.team_id})",
             thin,
             f"  {'#':<3} {'Name':<18} {'Race':<10} {'Record':<10} {'HP':>4}  {'Injuries'}",

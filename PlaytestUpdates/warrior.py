@@ -1755,8 +1755,8 @@ def create_warrior_interactive(base_stats: Dict[str, int] = None) -> Optional["W
     if not name:
         print("  No name given — cancelling.")
         return None
-    if len(name) > 20:
-        print("  Warrior name must be 20 characters or fewer.")
+    if len(name) > 25:
+        print("  Warrior name must be 25 characters or fewer.")
         return None
 
     # --- Race ---
