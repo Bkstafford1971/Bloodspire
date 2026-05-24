@@ -27,7 +27,7 @@ from file_protection import save_json_protected, load_json_protected, make_file_
 import webbrowser
 from typing import Optional
 
-SERVER_VERSION = "2.5"
+SERVER_VERSION = "2.7"
 
 BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
 LEAGUE_DIR   = os.path.join(BASE_DIR, "saves", "league")
@@ -2845,6 +2845,451 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     make_file_readonly(nl_path) # Set back to read-only
                     self.send_json({"success":True,"turn":turn_num,"newsletter":nl_text}); return
             self.send_json({"success":False,"error":"No newsletters found"}); return
+
+        # ==================== NEWSLETTER DOWNLOAD (PUBLIC) ====================
+        if path == "/newsletter" or path.startswith("/newsletter/"):
+            # Serves newsletter as an HTML page with download button
+            # Usage: /newsletter/turn/1 or /newsletter to list all
+            parts = path.split("/")
+            turn_num = 0
+
+            # Check if just /newsletter with no turn specified
+            if path == "/newsletter" or len(parts) <= 3 or (len(parts) == 4 and parts[3] == ""):
+                # List available newsletters
+                available = []
+                try:
+                    if os.path.exists(LEAGUE_DIR):
+                        for turn_dir in os.listdir(LEAGUE_DIR):
+                            if turn_dir.startswith("turn_"):
+                                turn_path = os.path.join(LEAGUE_DIR, turn_dir)
+                                if os.path.isdir(turn_path):
+                                    nl_path = os.path.join(turn_path, "newsletter.txt")
+                                    if os.path.exists(nl_path):
+                                        try:
+                                            turn_num = int(turn_dir.split("_")[1])
+                                            available.append(turn_num)
+                                        except (ValueError, IndexError):
+                                            pass
+                except Exception as e:
+                    pass
+
+                available.sort(reverse=True)  # Sort by turn number, newest first
+
+                # Create HTML page with list of available newsletters
+                newsletter_links = ""
+                if available:
+                    for turn in available:
+                        newsletter_links += f'            <li><a href="/newsletter/turn/{turn}">Turn {turn}</a></li>\n'
+                else:
+                    newsletter_links = '            <li><em>No newsletters available yet</em></li>\n'
+
+                html_page = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Agony Amphitheatre — Newsletters</title>
+    <style>
+        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+        html {{ scroll-behavior: smooth; }}
+        body {{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1a1a 100%);
+            color: #e8e8e8;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }}
+        .container {{
+            max-width: 99vw;
+            margin: 0 auto;
+            background: rgba(20, 20, 20, 0.95);
+            color: #e8e8e8;
+            padding: 20px;
+            border: 2px solid #a61a1a;
+            border-radius: 6px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }}
+        .header {{
+            text-align: center;
+            border-bottom: 3px solid #a61a1a;
+            padding-bottom: 25px;
+            margin-bottom: 35px;
+        }}
+        .header h1 {{
+            font-size: 2.4em;
+            color: #ff4444;
+            margin-bottom: 8px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }}
+        .header p {{
+            font-size: 1.15em;
+            color: #999;
+        }}
+        .newsletter-list {{
+            list-style: none;
+            padding: 0;
+        }}
+        .newsletter-list li {{
+            padding: 18px 24px;
+            margin-bottom: 12px;
+            background: rgba(42, 42, 42, 0.8);
+            border-left: 4px solid #a61a1a;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }}
+        .newsletter-list li:hover {{
+            background: rgba(50, 50, 50, 1);
+            transform: translateX(5px);
+        }}
+        .newsletter-list li em {{
+            color: #999;
+            font-style: italic;
+        }}
+        .newsletter-list a {{
+            color: #ff9999;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: color 0.2s ease;
+        }}
+        .newsletter-list a:hover {{
+            color: #ffaaaa;
+            text-decoration: underline;
+        }}
+        .footer {{
+            text-align: center;
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #777;
+            font-size: 0.9em;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚔ THE AGONY AMPHITHEATRE ⚔</h1>
+            <p>Arena Newsletters</p>
+        </div>
+
+        <ul class="newsletter-list">
+{newsletter_links}        </ul>
+
+        <div class="footer">
+            <p>The Agony Amphitheatre Arena League</p>
+        </div>
+    </div>
+</body>
+</html>"""
+
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.end_headers()
+                self.wfile.write(html_page.encode("utf-8"))
+                return
+
+            try:
+                if len(parts) >= 4 and parts[2] == "turn":
+                    turn_num = int(parts[3])
+            except (IndexError, ValueError):
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(b"Invalid turn number")
+                return
+
+            if turn_num <= 0:
+                self.send_response(400)
+                self.end_headers()
+                self.wfile.write(b"Turn number must be positive")
+                return
+
+            nl_path = os.path.join(_turn_dir(turn_num), "newsletter.txt")
+            if not os.path.exists(nl_path):
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(f"Newsletter for turn {turn_num} not found".encode("utf-8"))
+                return
+
+            try:
+                make_file_writable(nl_path)
+                with open(nl_path, "r", encoding="utf-8") as f:
+                    nl_content = f.read()
+                make_file_readonly(nl_path)
+
+                # Strip ANSI color codes from the content
+                import re
+                ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+                nl_content_clean = ansi_escape.sub('', nl_content)
+
+                # For JavaScript, we need the original content but with proper escaping for JSON string
+                # Use json.dumps to properly escape for JavaScript
+                import json
+                js_content = json.dumps(nl_content_clean)
+
+                # Escape HTML and format for display with section-specific formatting
+                import html
+                escaped_content = html.escape(nl_content_clean)
+
+                # Split content into sections and apply different formatting
+                # Look for "ARENA HAPPENINGS" section and the next major section after it
+                if "ARENA HAPPENINGS" in escaped_content:
+                    parts = escaped_content.split("ARENA HAPPENINGS")
+                    standings_part = parts[0] + "ARENA HAPPENINGS"
+                    after_happenings = parts[1]
+
+                    # Find the next section header (all caps on its own line)
+                    # Look for pattern: blank lines followed by ALL CAPS text
+                    import re
+                    match = re.search(r'\n\n[A-Z][A-Z\s]+\n', after_happenings)
+
+                    if match:
+                        happenings_end = match.start()
+                        happenings_narrative = after_happenings[:happenings_end]
+                        rest_of_content = after_happenings[happenings_end:]
+                    else:
+                        happenings_narrative = after_happenings
+                        rest_of_content = ""
+
+                    # Standings and initial happenings header: no wrapping
+                    formatted_standings = standings_part
+
+                    # Happenings narrative: word wrapping
+                    formatted_happenings = happenings_narrative.replace("\n", "<br>")
+
+                    # Rest of content: no wrapping
+                    formatted_rest = rest_of_content
+
+                    formatted_content = f'<pre class="newsletter-standings">{formatted_standings}</pre><div class="newsletter-happenings">{formatted_happenings}</div><pre class="newsletter-standings">{formatted_rest}</pre>'
+                else:
+                    # Fallback: no wrapping
+                    formatted_content = f'<pre>{escaped_content}</pre>'
+
+                # Create HTML page with download button using JavaScript
+                html_page = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Agony Amphitheatre — Newsletter Turn {turn_num}</title>
+    <style>
+        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+        html {{ scroll-behavior: smooth; }}
+        body {{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1a1a 100%);
+            color: #e8e8e8;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }}
+        .container {{
+            max-width: 99vw;
+            margin: 0 auto;
+            background: rgba(20, 20, 20, 0.95);
+            color: #e8e8e8;
+            padding: 20px;
+            border: 2px solid #a61a1a;
+            border-radius: 6px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }}
+        .header {{
+            text-align: center;
+            border-bottom: 3px solid #a61a1a;
+            padding-bottom: 25px;
+            margin-bottom: 35px;
+        }}
+        .header h1 {{
+            font-size: 2.4em;
+            color: #ff4444;
+            margin-bottom: 8px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }}
+        .header p {{
+            font-size: 1.15em;
+            color: #999;
+        }}
+        .button-row {{
+            text-align: center;
+            margin-bottom: 35px;
+        }}
+        button {{
+            background: linear-gradient(135deg, #a61a1a 0%, #8b0000 100%);
+            color: #fff;
+            padding: 14px 40px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(166, 26, 26, 0.3);
+        }}
+        button:hover {{
+            background: linear-gradient(135deg, #cc2222 0%, #a61a1a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(166, 26, 26, 0.5);
+        }}
+        button:active {{
+            transform: translateY(0);
+        }}
+        .newsletter-content {{
+            font-family: 'Courier New', 'Consolas', monospace;
+            font-size: 0.82em;
+            line-height: 1.5;
+            background: #0d0d0d;
+            color: #d0d0d0;
+            padding: 0;
+            border: 1px solid #444;
+            border-radius: 5px;
+            max-height: 70vh;
+            overflow: auto;
+        }}
+        .newsletter-standings {{
+            font-family: 'Courier New', 'Consolas', monospace;
+            font-size: 0.82em;
+            line-height: 1.5;
+            white-space: pre;
+            margin: 0;
+            padding: 15px 15px 15px 50px;
+            color: #d0d0d0;
+        }}
+        .newsletter-happenings {{
+            font-family: 'Courier New', 'Consolas', monospace;
+            font-size: 0.82em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.6;
+            padding: 15px 15px 15px 50px;
+            margin: 0;
+            color: #d0d0d0;
+        }}
+        .newsletter-content::-webkit-scrollbar {{
+            width: 8px;
+            height: 8px;
+        }}
+        .newsletter-content::-webkit-scrollbar-track {{
+            background: #1a1a1a;
+        }}
+        .newsletter-content::-webkit-scrollbar-thumb {{
+            background: #a61a1a;
+            border-radius: 4px;
+        }}
+        .newsletter-content::-webkit-scrollbar-thumb:hover {{
+            background: #cc2222;
+        }}
+        .footer {{
+            text-align: center;
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #777;
+            font-size: 0.9em;
+        }}
+        .footer code {{
+            background: #2a2a2a;
+            color: #ff9999;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚔ THE AGONY AMPHITHEATRE ⚔</h1>
+            <p>Arena Newsletter — Turn {turn_num}</p>
+        </div>
+
+        <div class="button-row">
+            <button onclick="downloadNewsletter()">📥 Download Newsletter</button>
+        </div>
+
+        <div class="newsletter-content">
+{formatted_content}
+        </div>
+
+        <div class="footer">
+            <p>Newsletter for Turn {turn_num} | The Agony Amphitheatre Arena League</p>
+            <p style="margin-top: 10px; font-size: 0.85em;">After downloading, place the file in your client's <code>newsletters</code> folder to view it in the game.</p>
+        </div>
+    </div>
+
+    <script>
+        function downloadNewsletter() {{
+            const content = {js_content};
+            const filename = 'turn_{turn_num:03d}.txt';
+            const blob = new Blob([content], {{ type: 'text/plain;charset=utf-8' }});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }}
+    </script>
+</body>
+</html>"""
+
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.end_headers()
+                self.wfile.write(html_page.encode("utf-8"))
+            except Exception as e:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(f"Error reading newsletter: {e}".encode("utf-8"))
+            return
+
+        # ==================== NEWSLETTER RAW DOWNLOAD ====================
+        if path.startswith("/newsletter/download/"):
+            # Direct file download endpoint
+            parts = path.split("/")
+            turn_num = 0
+            try:
+                if len(parts) >= 5 and parts[3] == "turn":
+                    turn_num = int(parts[4])
+            except (IndexError, ValueError):
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(b"Invalid turn number")
+                return
+
+            if turn_num <= 0:
+                self.send_response(400)
+                self.end_headers()
+                self.wfile.write(b"Turn number must be positive")
+                return
+
+            nl_path = os.path.join(_turn_dir(turn_num), "newsletter.txt")
+            if not os.path.exists(nl_path):
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(f"Newsletter for turn {turn_num} not found".encode("utf-8"))
+                return
+
+            try:
+                make_file_writable(nl_path)
+                with open(nl_path, "r", encoding="utf-8") as f:
+                    nl_content = f.read()
+                make_file_readonly(nl_path)
+
+                # Send as file download with proper name
+                filename = f"turn_{turn_num:03d}.txt"
+                self.send_response(200)
+                self.send_header("Content-Type", "text/plain; charset=utf-8")
+                self.send_header("Content-Disposition", f'attachment; filename="{filename}"')
+                self.send_header("Content-Length", len(nl_content.encode("utf-8")))
+                self.end_headers()
+                self.wfile.write(nl_content.encode("utf-8"))
+            except Exception as e:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(f"Error reading newsletter: {e}".encode("utf-8"))
+            return
 
         if path == "/api/fight_log":
             q       = self.qs()

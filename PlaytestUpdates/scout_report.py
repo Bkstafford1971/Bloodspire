@@ -47,11 +47,12 @@ _PERSONA_HEADER = {
 }
 
 # Error rates: probability that each soft field is reported incorrectly.
+# All scouts have a flat 10% error rate for fairness - no advantage/disadvantage based on scout type
 _ERROR_RATES = {
-    "veteran":  {"style": 0.10, "activity": 0.12, "aim": 0.10, "skills": 0.18},
-    "academic": {"style": 0.10, "activity": 0.10, "aim": 0.08, "skills": 0.15},
-    "street":   {"style": 0.22, "activity": 0.26, "aim": 0.20, "skills": 0.32},
-    "rookie":   {"style": 0.28, "activity": 0.32, "aim": 0.26, "skills": 0.38},
+    "veteran":  {"style": 0.10, "activity": 0.10, "aim": 0.10, "skills": 0.10},
+    "academic": {"style": 0.10, "activity": 0.10, "aim": 0.10, "skills": 0.10},
+    "street":   {"style": 0.10, "activity": 0.10, "aim": 0.10, "skills": 0.10},
+    "rookie":   {"style": 0.10, "activity": 0.10, "aim": 0.10, "skills": 0.10},
 }
 
 def random_persona_name(persona_type: str) -> str:
@@ -744,6 +745,127 @@ def _wattr(warrior, attr, default=None):
 
 
 # ---------------------------------------------------------------------------
+# PHYSICAL OBSERVATIONS - Scout's perception of warrior's attributes
+# ---------------------------------------------------------------------------
+
+# Narrative pools for each attribute, keyed by observed stat value range
+_PHYSICAL_OBSERVATIONS = {
+    "strength": {
+        (3, 5):   ["frail-looking", "appears weak", "physically fragile"],
+        (6, 8):   ["slightly built", "slender frame", "not particularly strong"],
+        (9, 11):  ["ordinary build", "average strength", "fairly typical"],
+        (12, 13): ["sturdy", "well-built", "clearly strong"],
+        (14, 16): ["muscular", "powerfully built", "impressive physique"],
+        (17, 19): ["formidable strength", "heavily muscled", "imposing frame"],
+        (20, 25): ["tremendous strength", "almost overwhelmingly powerful", "beastly physique"],
+    },
+    "dexterity": {
+        (3, 5):   ["sluggish movements", "appears clumsy", "slow and labored"],
+        (6, 8):   ["deliberate movements", "steady but slow", "not particularly quick"],
+        (9, 11):  ["stable movements", "steady reflexes", "typical reaction speed"],
+        (12, 13): ["quick movements", "fairly agile", "good reflexes"],
+        (14, 16): ["agile", "nimble on their feet", "quick reactions"],
+        (17, 19): ["swift movements", "exceptional agility", "lightning-quick reflexes"],
+        (20, 25): ["blur-like speed", "supernatural quickness", "movements barely followable"],
+    },
+    "constitution": {
+        (3, 5):   ["frail", "delicate appearance", "looks easily hurt"],
+        (6, 8):   ["fragile build", "doesn't look durable", "seems susceptible to injury"],
+        (9, 11):  ["normal endurance", "average durability", "typical toughness"],
+        (12, 13): ["sturdy frame", "solid build", "good durability"],
+        (14, 16): ["tough", "brawny appearance", "clearly resilient"],
+        (17, 19): ["incredibly tough", "rugged frame", "built to take punishment"],
+        (20, 25): ["iron constitution", "seems almost indestructible", "built like a fortress"],
+    },
+    "intelligence": {
+        (3, 5):   ["dim-witted", "seems simple-minded", "not particularly clever"],
+        (6, 8):   ["slow-thinking", "relies on instinct", "deliberate but not quick-witted"],
+        (9, 11):  ["muscle over mind", "straightforward approach", "depends on physical ability"],
+        (12, 13): ["reasonably intelligent", "decent tactical sense", "average intellect"],
+        (14, 16): ["sharp mind", "clearly clever", "quick thinker"],
+        (17, 19): ["brilliant tactician", "razor-sharp intellect", "strategic mastermind"],
+        (20, 25): ["genius-level intellect", "extraordinarily clever", "intellectual prodigy"],
+    },
+    "presence": {
+        (3, 5):   ["easily overlooked", "commands no respect", "fades into the background"],
+        (6, 8):   ["makes little impression", "unremarkable demeanor", "doesn't stand out"],
+        (9, 11):  ["fairly ordinary presence", "somewhat noticeable", "average bearing"],
+        (12, 13): ["carries themselves well", "commands some attention", "notable presence"],
+        (14, 16): ["impressive bearing", "commands respect", "stands out in the arena"],
+        (17, 19): ["commanding presence", "truly impressive", "clearly in control"],
+        (20, 25): ["legendary presence", "supremely commanding", "dominates any space"],
+    },
+}
+
+
+def _get_observed_stat(actual_value: int, min_val: int = 1, max_val: int = 25) -> int:
+    """
+    Generate a scout's observed stat value with ±4 variance.
+    Clamps result to valid range.
+    """
+    variance = random.randint(-4, 4)
+    observed = actual_value + variance
+    return max(min_val, min(max_val, observed))
+
+
+def _get_observation_phrase(stat_name: str, observed_value: int) -> str:
+    """
+    Get a descriptive phrase for a stat based on the observed value.
+    Returns a random phrase from the pool for that stat/value range.
+    """
+    obs_pool = _PHYSICAL_OBSERVATIONS.get(stat_name.lower())
+    if not obs_pool:
+        return f"has {stat_name} of {observed_value}"
+
+    for (lo, hi), phrases in obs_pool.items():
+        if lo <= observed_value <= hi:
+            return random.choice(phrases)
+
+    # Fallback
+    return f"has unusual {stat_name}"
+
+
+def _generate_physical_observations(warrior, persona: str) -> str:
+    """
+    Generate narrative description of warrior's physical attributes as perceived by the scout.
+    Based on observed stats (±4 variance), not actual stats.
+    """
+    # Get actual stats
+    strength = _wattr(warrior, "strength", 10)
+    dexterity = _wattr(warrior, "dexterity", 10)
+    constitution = _wattr(warrior, "constitution", 10)
+    intelligence = _wattr(warrior, "intelligence", 10)
+    presence = _wattr(warrior, "presence", 10)
+
+    # Get observed values (with variance)
+    obs_str = _get_observed_stat(strength)
+    obs_dex = _get_observed_stat(dexterity)
+    obs_con = _get_observed_stat(constitution)
+    obs_int = _get_observed_stat(intelligence)
+    obs_pre = _get_observed_stat(presence)
+
+    # Get observation phrases
+    str_phrase = _get_observation_phrase("strength", obs_str)
+    dex_phrase = _get_observation_phrase("dexterity", obs_dex)
+    con_phrase = _get_observation_phrase("constitution", obs_con)
+    int_phrase = _get_observation_phrase("intelligence", obs_int)
+    pre_phrase = _get_observation_phrase("presence", obs_pre)
+
+    # Build narrative based on persona style
+    if persona == "veteran":
+        return f"Their physique suggests {str_phrase}. {dex_phrase.capitalize()} in the ring. The warrior appears {con_phrase}. Tactically, they seem to rely on {int_phrase}, and {pre_phrase.capitalize()}."
+
+    elif persona == "academic":
+        return f"Physical assessment: {str_phrase}. Movement pattern indicates {dex_phrase}. Durability appears {con_phrase}. Cognitive approach suggests {int_phrase}, with {pre_phrase} in the arena."
+
+    elif persona == "street":
+        return f"This one looks {str_phrase}. Moves like they're {dex_phrase}. Built {con_phrase} - seen worse, seen better. Brain-wise, they {int_phrase}. Presence? Yeah, they're {pre_phrase}."
+
+    else:  # rookie
+        return f"They seem {str_phrase}. Their movements appear {dex_phrase}. They look {con_phrase}. I'd say they {int_phrase}, and {pre_phrase}."
+
+
+# ---------------------------------------------------------------------------
 # MAIN GENERATOR
 # ---------------------------------------------------------------------------
 
@@ -783,6 +905,23 @@ def generate_scout_report(warrior, last_fight_entry: dict, team_name: str,
     lines.append(f"Subject: {wname}  |  {team_name}")
     lines.append(f"Filed by: {scout_name}, {title}")
     lines.append(f"Record at time of observation: {wins}-{losses}-{kills} ({tf} fights)")
+    lines.append("")
+
+    # Equipment (always accurate - scout can physically see these)
+    lines.append("EQUIPMENT")
+    lines.append("-" * 60)
+    lines.append(f"Primary Weapon: {weapon}")
+    if _wattr(warrior, "secondary_weapon"):
+        sec_weapon = _wattr(warrior, "secondary_weapon") or "None"
+        if sec_weapon and sec_weapon != "Open Hand":
+            lines.append(f"Secondary Weapon: {sec_weapon}")
+    lines.append(f"Armor: {armor if armor and armor != 'None' else 'None'}")
+    lines.append("")
+
+    # Physical observations (scout's perception of attributes with ±4 variance)
+    lines.append("PHYSICAL ASSESSMENT")
+    lines.append("-" * 60)
+    lines.append(_generate_physical_observations(warrior, persona))
     lines.append("")
 
     if not last_fight_entry:

@@ -2508,15 +2508,17 @@ class CombatEngine:
         
         # Check if backup exists and is same weapon type as primary
         if warrior.backup_weapon and warrior.backup_weapon == current_primary:
-            # Promote backup to primary
+            # Promote backup to primary, clear the old primary slot
             warrior.primary_weapon = warrior.backup_weapon
             warrior.backup_weapon = None
             return f"{warrior.name.upper()} draws {warrior.gender_possessive} backup {current_primary.lower()}!"
 
         # No matching backup, try secondary weapon
         if warrior.secondary_weapon != "Open Hand":
+            old_secondary = warrior.secondary_weapon
             warrior.primary_weapon = warrior.secondary_weapon
-            return f"{warrior.name.upper()} switches to {warrior.gender_possessive} {warrior.secondary_weapon.lower()}!"
+            warrior.secondary_weapon = "Open Hand"
+            return f"{warrior.name.upper()} switches to {warrior.gender_possessive} {old_secondary.lower()}!"
         
         # Fall back to Open Hand
         warrior.primary_weapon = "Open Hand"
@@ -2529,6 +2531,19 @@ class CombatEngine:
     def _resolve_action(self, as_: _CState, ds_: _CState, ax: Strategy, dx: Strategy, minute: int, _dbg_init=None, apm_as: int = 5) -> Optional[FightResult]:
         att = as_.warrior;  dfr = ds_.warrior
         wpn = att.primary_weapon;  aim = ax.aim_point
+
+        # Opportunity Throw: consume the weapon before the attack (weapon is gone regardless of outcome)
+        _weapon_thrown_away = False
+        if ax.style == "Opportunity Throw":
+            try:
+                wpn_obj = get_weapon(wpn)
+                if wpn_obj.skill_key != "empty_hand":  # Only consume if throwable
+                    _weapon_thrown_away = True
+                    weapon_loss_msg = self._handle_opportunity_throw_loss(att, as_)
+                    if weapon_loss_msg:
+                        self._emit(weapon_loss_msg)
+            except ValueError:
+                pass  # Invalid weapon, continue without loss
 
         # Check weapon/style compatibility
         is_compatible, penalty_factor = _check_weapon_style_compatibility(wpn, ax.style)
@@ -2974,12 +2989,6 @@ class CombatEngine:
         nk_threshold = int(dfr.max_hp * 0.20)
         if prev_hp > nk_threshold >= ds_.current_hp:
             as_.near_kills_dealt += 1
-
-        # Opportunity Throw weapon loss
-        if ax.style == "Opportunity Throw":
-            weapon_loss_msg = self._handle_opportunity_throw_loss(att, as_)
-            if weapon_loss_msg:
-                self._emit(weapon_loss_msg)
 
         # Entangle/trip (Bola, Heavy Whip)
         was_thrown = ax.style == "Opportunity Throw"

@@ -3082,8 +3082,8 @@ def training_summary(warrior_name: str, results: list[str], is_opponent: bool = 
     else:
         lines.append(f"{warrior_name.upper()} has trained in nothing")
 
-    if observed:
-        # Always reveal the actual skill, this is the scouting intelligence payoff
+    if observed and not is_opponent:
+        # Only show observed skills to the warrior's own manager
         for obs_skill in observed:
             lines.append(
                 f"{warrior_name.upper()} observed and learned a {obs_skill} skill"
