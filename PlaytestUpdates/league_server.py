@@ -888,6 +888,19 @@ def _run_turn(request_password, rerun_turn=None):
             ascended = True
             print(f"  !!! {fight.player_warrior.name} has SLAIN a monster and joins The Monsters! !!!")
 
+        # Blood challenge resolution — always consumes the challenge (win or loss)
+        if fight.fight_type == "blood_challenge":
+            bc_info = getattr(fight, "_blood_challenge_info", {})
+            if bc_info:
+                bc_target_name = bc_info.get("target_name")
+                bc_dead_name = bc_info.get("dead_warrior_name")
+                removed = fight.player_team.remove_blood_challenge(bc_target_name, bc_dead_name)
+                if removed:
+                    if pw_won:
+                        print(f"  !!! BLOOD CHALLENGE AVENGED: {fight.player_warrior.name} has avenged {bc_dead_name}! !!!")
+                    else:
+                        print(f"  The blood challenge for {bc_dead_name} has been fought - the fallen remain unavenged.")
+
         # Build player bout data
         player_bout = {
             "warrior_name": fight.player_warrior.name,
@@ -1020,6 +1033,12 @@ def _run_turn(request_password, rerun_turn=None):
                 "l": sum(1 for b in res["bouts"] if b.get("result") == "LOSS"),
                 "k": sum(1 for b in res["bouts"] if b.get("opponent_slain")),
             })
+            # Decrement and expire any remaining blood challenges for this turn
+            team.decrement_blood_challenge_turns()
+            team.blood_challenges = [
+                bc for bc in team.blood_challenges
+                if bc.get("status") == "active" and bc.get("turns_remaining", 0) > 0
+            ]
             save_team(team)
             res["team"] = team.to_dict()
 
