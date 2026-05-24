@@ -1321,9 +1321,12 @@ const LocalAPI = {
 
     // ── Scout select / remove - forwarded to the league server with password.
     if (path === '/api/scout/select' || path === '/api/scout/remove') {
+      const mid = body.manager_id || S.league.managerId || '';
+      const pw = S.league.password || '';
+      console.log(`[Scout POST] mid=${mid}, pw_present=${!!pw}, path=${path}`);
       return await _remoteFetch('POST', path, {
-        manager_id:   body.manager_id   || S.league.managerId || '',
-        password:     S.league.password || '',
+        manager_id:   mid,
+        password:     pw,
         warrior_name: body.warrior_name || '',
         team_name:    body.team_name    || '',
         team_id:      body.team_id      || 0,

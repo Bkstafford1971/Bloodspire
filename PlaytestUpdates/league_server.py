@@ -3026,7 +3026,6 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
 
                 # For JavaScript, we need the original content but with proper escaping for JSON string
                 # Use json.dumps to properly escape for JavaScript
-                import json
                 js_content = json.dumps(nl_content_clean)
 
                 # Escape HTML and format for display with section-specific formatting
@@ -3524,9 +3523,11 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             pw  = q.get("password","")
             mgrs = _load_managers()
             if mid not in mgrs or not _check_mgr_pw(mgrs[mid], pw):
+                print(f"  [Scout] Auth failed: mid={mid}, pw_present={bool(pw)}, in_mgrs={mid in mgrs}")
                 self.send_json({"success":False,"error":"Not authorised."}, 401); return
             # Exclude the caller's own teams from the target list.
             own_team_ids = set(int(t) for t in mgrs[mid].get("team_ids", []) if isinstance(t,(int,str)) and str(t).isdigit())
+            print(f"  [Scout] Manager {mid} has teams: {sorted(own_team_ids)}")
             # For /api/challenge/targets, also allow excluding one specific team
             # (the attacking team itself - its own warriors can't be challenged).
             try:    exclude_tid = int(q.get("team_id","0") or 0)
@@ -3544,7 +3545,8 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 try:
                     with open(fpath, "r", encoding="utf-8") as f:
                         tdata = json.load(f)
-                except Exception:
+                except Exception as e:
+                    print(f"    Error loading {fname}: {e}")
                     continue
                 tid = tdata.get("team_id", 0)
                 if tid in own_team_ids: continue
@@ -3568,6 +3570,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                         "weight_lbs"  : w.get("weight_lbs", 0),
                         "total_fights": w.get("total_fights", 0),
                     })
+            print(f"  [Scout] Found {len(warriors)} warriors available to scout")
             self.send_json({"success": True, "warriors": warriors}); return
 
         if path == "/api/scout/report":
