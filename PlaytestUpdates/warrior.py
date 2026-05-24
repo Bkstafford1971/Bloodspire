@@ -1,5 +1,5 @@
 # =============================================================================
-# warrior.py — THE AGONY AMPHITHEATRE Warrior Class
+# warrior.py - THE AGONY AMPHITHEATRE Warrior Class
 # =============================================================================
 # Defines the Warrior dataclass along with:
 #   - 6 core attributes and their flavor descriptions
@@ -99,7 +99,7 @@ INTELLIGENCE_DESCRIPTIONS = {
     (24, 25): "Is a genius",
 }
 
-# PRESENCE has no description table in the guide — custom table created.
+# PRESENCE has no description table in the guide - custom table created.
 # APPROX: Scaled to feel thematically appropriate based on guide descriptions.
 PRESENCE_DESCRIPTIONS = {
     (3,  3):  "Has no presence whatsoever",
@@ -159,9 +159,9 @@ def compare_stats(val_a: int, val_b: int) -> str:
     If it's 3 or more, it gives the advantage arrow to the higher."
 
     Returns:
-        "   " — effectively equal (within 2)
-        "<--" — A has the advantage
-        "-->" — B has the advantage
+        "   " - effectively equal (within 2)
+        "<--" - A has the advantage
+        "-->" - B has the advantage
     """
     diff = val_a - val_b
     if abs(diff) <= 2:
@@ -248,7 +248,7 @@ class PermanentInjuries:
         for loc, level in active:
             desc = INJURY_DESCRIPTIONS[level]
             display = loc.replace("_", " ").title()
-            lines.append(f"  {display:<16} Level {level} — {desc}")
+            lines.append(f"  {display:<16} Level {level} - {desc}")
         return "\n".join(lines)
 
     def to_dict(self) -> dict:
@@ -380,7 +380,7 @@ NON_WEAPON_SKILLS = [
     "cleave", "bash", "acrobatics", "riposte", "slash", "strike",
 ]
 
-# 45 weapon skills — one per weapon in the game.
+# 45 weapon skills - one per weapon in the game.
 WEAPON_SKILLS = [
     "stiletto", "cestus", "knife", "dagger", "javelin", "hatchet",
     "short_sword", "epee", "hammer", "net", "small_pick", "buckler",
@@ -437,7 +437,8 @@ class Warrior:
         size:         int,
     ):
         # --- Identity ---
-        self.name   = name
+        self.name      = name
+        self.warrior_id: Optional[int] = None   # assigned by save_team() on first save
         self.race   = get_race(race_name)
         self.gender = gender
 
@@ -495,7 +496,7 @@ class Warrior:
         # --- Blood Cry (≤50 chars, screamed at a trigger moment) ---
         self.blood_cry: str = ""
 
-        # --- Initial stats at creation (never changes — used for "current (initial)" display) ---
+        # --- Initial stats at creation (never changes - used for "current (initial)" display) ---
         self.initial_stats: Optional[Dict[str, int]] = None
 
         # --- Fight history (persisted; shown in Fights tab) ---
@@ -587,10 +588,10 @@ class Warrior:
         WEIGHT:
           Derived from height using a race-specific body-density factor
           (lbs = height_in^2 * density).  Dwarves have a much higher density
-          than other races — heavier by proportion as specified.
+          than other races - heavier by proportion as specified.
           Females use 92% of the male density factor.
 
-        Gender is purely cosmetic — no combat modifiers result from this.
+        Gender is purely cosmetic - no combat modifiers result from this.
 
         Height ranges (male SIZE 3 → SIZE 25):
           Halfling : 3'01" → 5'01"
@@ -663,7 +664,7 @@ class Warrior:
         """
         Recalculate HP, endurance, and measurements after stats change (e.g. after training).
         Call this after any attribute change.
-        Note: current_hp is NOT reset here — only max_hp changes.
+        Note: current_hp is NOT reset here - only max_hp changes.
         """
         old_max    = self.max_hp
         self.max_hp = self._calc_max_hp()
@@ -750,7 +751,7 @@ class Warrior:
     def record_result(self, result: str, killed_opponent: bool = False):
         """
         Record a fight result: 'win' or 'loss'. No draws exist.
-        Pass killed_opponent=True when the winning warrior slew their foe —
+        Pass killed_opponent=True when the winning warrior slew their foe -
         this increments both wins and kills.
         """
         result = result.lower().strip()
@@ -876,9 +877,9 @@ class Warrior:
         """
         Apply one training session to a skill or attribute.
         Returns a human-readable result message (success OR no-progress).
-        Training is NOT automatic — success depends on the warrior's stats.
+        Training is NOT automatic - success depends on the warrior's stats.
 
-        GRADUATED LEARNING CURVE — two-factor formula:
+        GRADUATED LEARNING CURVE - two-factor formula:
           1. Base chance from governing stat (INT for skills, CON for attributes):
                stat  3-8  -> 28%    stat  9-14 -> 45%
                stat 15-20 -> 55%    stat 21-25 -> 72%
@@ -914,7 +915,7 @@ class Warrior:
         # --- Attribute training ---
         if key in ATTRIBUTES:
             if key == "size":
-                msg = "SIZE cannot be trained — it is fixed at warrior creation."
+                msg = "SIZE cannot be trained - it is fixed at warrior creation."
                 return (msg, 0, 0) if verbose else msg
 
             current_val = self.get_attr(key)
@@ -949,7 +950,7 @@ class Warrior:
             if gains >= 8 and stat >= 15:
                 chance += int((stat - 14) * 1.5)
 
-            # Racial bonus (Humans & Gnomes) — applies to attributes
+            # Racial bonus (Humans & Gnomes) - applies to attributes
             if self.race.modifiers.trains_stats_faster:
                 chance = min(90, chance + 7)
 
@@ -984,7 +985,7 @@ class Warrior:
             self.attribute_gains[key] = gains + 1
             tier_note = " [mastery]" if gains >= 8 else (" [late]" if gains >= 6 else "")
             # DEX bonus (+2.5% dodge, +2% parry) and INT bonus (4th train) are applied
-            # in combat.py — they are derived live from the current stat value.
+            # in combat.py - they are derived live from the current stat value.
             # Presence hesitation chance is also derived live.
 
             msg = (
@@ -1015,7 +1016,7 @@ class Warrior:
             if gains >= 8 and stat >= 15:
                 chance += int((stat - 14) * 1.5)
 
-            # Racial bonus (Humans & Gnomes) — now applies to skills too
+            # Racial bonus (Humans & Gnomes) - now applies to skills too
             if self.race.modifiers.trains_stats_faster:
                 chance = min(90, chance + 7)
 
@@ -1077,7 +1078,7 @@ class Warrior:
         record_result() must already have run so total_fights is current.
         """
         # ------------------------------------------------------------------
-        # Experience (pre-fight counts — record_result already incremented)
+        # Experience (pre-fight counts - record_result already incremented)
         # ------------------------------------------------------------------
         self_exp = max(1, self.total_fights - 1)
         opp_exp  = max(1, opponent_total_fights - 1)
@@ -1097,14 +1098,14 @@ class Warrior:
         # ------------------------------------------------------------------
         underdog_bonus = 0
         if won:
-            # Beat a more experienced opponent — bonus
+            # Beat a more experienced opponent - bonus
             if opp_exp > self_exp:
                 pct_more = (opp_exp - self_exp) / self_exp * 100
                 if pct_more >= 25:   underdog_bonus = 3
                 elif pct_more >= 15: underdog_bonus = 2
                 else:                underdog_bonus = 1
         else:
-            # Lost to a LESS experienced opponent — crowd turns on you
+            # Lost to a LESS experienced opponent - crowd turns on you
             if self_exp > opp_exp:
                 pct_less = (self_exp - opp_exp) / self_exp * 100
                 if pct_less >= 50:   underdog_bonus = -4  # massive upset
@@ -1135,7 +1136,7 @@ class Warrior:
             elif dominated_score >= 25: dominance_bonus = -1
 
         # ------------------------------------------------------------------
-        # 4. Bravery Credit (losses only — partial mitigation for going down
+        # 4. Bravery Credit (losses only - partial mitigation for going down
         #    swinging; formerly "Flashy Loss Bonus")
         # ------------------------------------------------------------------
         bravery_credit = 0
@@ -1145,13 +1146,13 @@ class Warrior:
             if duration_pct >= 0.80:    bravery_credit += 1   # went the distance
 
         # ------------------------------------------------------------------
-        # 5. Popularity Bonus (all outcomes — crowd remembers fan favourites)
+        # 5. Popularity Bonus (all outcomes - crowd remembers fan favourites)
         # ------------------------------------------------------------------
         popularity_bonus = max(0, (self.popularity - 30) // 20)
         # pop 50 → +1, pop 70 → +2, pop 90 → +3
 
         # ------------------------------------------------------------------
-        # 6. Luck Bonus (probabilistic — lucky warriors occasionally shine)
+        # 6. Luck Bonus (probabilistic - lucky warriors occasionally shine)
         # ------------------------------------------------------------------
         luck_bonus = 0
         luck_threshold = 15
@@ -1267,7 +1268,7 @@ class Warrior:
         lines += [thin_sep, "  PERMANENT INJURIES:"]
         lines.append(self.injuries.summary())
 
-        # Skills summary — only show trained ones
+        # Skills summary - only show trained ones
         trained = [(s, lvl) for s, lvl in self.skills.items() if lvl > 0]
         if trained:
             lines += [thin_sep, "  SKILLS:"]
@@ -1350,6 +1351,7 @@ class Warrior:
         ]
         return {
             "name":            self.name,
+            "warrior_id":      self.warrior_id,
             "race":            self.race.name,
             "gender":          self.gender,
             "strength":        self.strength,
@@ -1411,6 +1413,7 @@ class Warrior:
             presence     = data["presence"],
             size         = data["size"],
         )
+        w.warrior_id   = data.get("warrior_id")
         w.wins         = data.get("wins",         0)
         w.losses       = data.get("losses",       0)
         w.kills        = data.get("kills",  data.get("draws", 0))  # migrate old saves
@@ -1622,7 +1625,7 @@ def max_addable(base_stats: Dict[str, int], attr: str) -> int:
 
     Rules (both must be satisfied simultaneously):
       - Hard cap per stat:    ROLLUP_MAX_PER_STAT (7)
-      - Hard ceiling per stat: STAT_MAX (25) — adding more would push the
+      - Hard ceiling per stat: STAT_MAX (25) - adding more would push the
         final value over 25, which is not allowed.
 
     Example: base Strength = 20 → max addable = min(7, 25-20) = 5.
@@ -1678,7 +1681,7 @@ def ai_rollup(base_stats: Dict[str, int], race_name: str) -> Dict[str, int]:
     the 7-per-stat cap or the 16-total cap is reached.
     """
 
-    # Stat weight tables per race — higher weight = more likely to invest here.
+    # Stat weight tables per race - higher weight = more likely to invest here.
     # Derived from guide descriptions of each race's strengths.
     RACE_WEIGHTS = {
         "Human": {
@@ -1753,10 +1756,10 @@ def create_warrior_interactive(base_stats: Dict[str, int] = None) -> Optional["W
     # --- Name ---
     name = input("\n  Warrior name: ").strip()
     if not name:
-        print("  No name given — cancelling.")
+        print("  No name given - cancelling.")
         return None
-    if len(name) > 25:
-        print("  Warrior name must be 25 characters or fewer.")
+    if len(name) > 20:
+        print("  Warrior name must be 20 characters or fewer.")
         return None
 
     # --- Race ---
@@ -1810,7 +1813,7 @@ def create_warrior_interactive(base_stats: Dict[str, int] = None) -> Optional["W
                     print("    Cannot add negative points.")
                 elif val > cap:
                     print(
-                        f"    Cannot add {val} — base is {base_stats[attr]}, "
+                        f"    Cannot add {val} - base is {base_stats[attr]}, "
                         f"so max addable is {cap} (would exceed {STAT_MAX})."
                     )
                 elif val > points_left:
@@ -1824,10 +1827,10 @@ def create_warrior_interactive(base_stats: Dict[str, int] = None) -> Optional["W
             except ValueError:
                 print("    Please enter a whole number.")
 
-    # Auto-spend any leftover points — player chose to leave some unspent.
+    # Auto-spend any leftover points - player chose to leave some unspent.
     # Distribute to attributes with the most remaining headroom first.
     if points_left > 0:
-        print(f"\n  {points_left} unspent point(s) — auto-distributing to highest-headroom stats...")
+        print(f"\n  {points_left} unspent point(s) - auto-distributing to highest-headroom stats...")
         sortable = sorted(ATTRIBUTES, key=lambda a: max_addable(base_stats, a) - additions[a], reverse=True)
         for attr in sortable:
             if points_left <= 0:

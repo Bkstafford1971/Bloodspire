@@ -1,5 +1,5 @@
 # =============================================================================
-# weapons.py — BLOODSPIRE Weapon Definitions
+# weapons.py - BLOODSPIRE Weapon Definitions
 # =============================================================================
 # Contains:
 #   - Full weapon table (44 weapons, matching the 44 weapon skills)
@@ -52,7 +52,7 @@ def max_weapon_weight(strength: int) -> float:
 
 def min_str_for_weight(weight: float, two_handed: bool = False) -> int:
     """Return the minimum STR needed to wield a weapon of the given weight without penalty.
-    Open Hand (weight 0.0) always returns 3 — the absolute floor.
+    Open Hand (weight 0.0) always returns 3 - the absolute floor.
     """
     for str_val in range(3, 26):
         cap = max_weapon_weight(str_val) + (1.0 if two_handed else 0.0)
@@ -139,20 +139,20 @@ class Weapon:
     category:    Weapon family. Determines narrative line pools and style bonuses.
 
     Special flags (all Boolean):
-      armor_piercing   — Does extra damage vs Scale/Chain/Half-Plate/Plate.
+      armor_piercing   - Does extra damage vs Scale/Chain/Half-Plate/Plate.
                          Weapons: Stiletto, Scythe, Small Pick, Military Pick,
                                   Great Pick, Pick Axe.
-      mc_compatible    — Can be used with Martial Combat style.
+      mc_compatible    - Can be used with Martial Combat style.
                          Weapons: Stiletto, Dagger, Knife, Quarterstaff,
                                   Net, Great Staff, Open Hand.
-      flail_bypass     — Can wrap around shields and blocking weapons.
+      flail_bypass     - Can wrap around shields and blocking weapons.
                          All Flails.
-      charge_attack    — Gets the special spear charge attack based on Charge skill.
+      charge_attack    - Gets the special spear charge attack based on Charge skill.
                          All Polearms/Spears except Cestus.
-      can_disarm       — Has special disarm interaction. Net, Swordbreaker,
+      can_disarm       - Has special disarm interaction. Net, Swordbreaker,
                          Scythe, Ball & Chain.
-      can_sweep        — Has sweep interaction. Ball & Chain, all Flails.
-      is_shield        — Is a shield (affects parry calculations differently).
+      can_sweep        - Has sweep interaction. Ball & Chain, all Flails.
+      is_shield        - Is a shield (affects parry calculations differently).
 
     preferred_styles: Styles this weapon works especially well with.
                       Used by the AI strategy selector and narrative engine.
@@ -178,7 +178,7 @@ class Weapon:
     can_sweep       : bool = False
     is_shield       : bool = False
 
-    # Style guidance (informational — used by AI and narrative engine)
+    # Style guidance (informational - used by AI and narrative engine)
     preferred_styles: List[str] = field(default_factory=list)
     weak_styles     : List[str] = field(default_factory=list)
 
@@ -211,7 +211,7 @@ class Weapon:
     def can_wield(self, strength: int, two_handed: bool = False, warrior=None) -> bool:
         """
         True if the warrior can wield this weapon with no penalty.
-        Does NOT block equipping — just indicates whether full effectiveness
+        Does NOT block equipping - just indicates whether full effectiveness
         is available.
 
         If warrior is provided, applies race-based bonuses (e.g., Half-Elf bigger_weapons_bonus).
@@ -245,7 +245,7 @@ OPEN_HAND = Weapon(
     category         = ODDBALL,
     mc_compatible    = True,
     notes            = (
-        "Natural weapon — baseline 6–10 damage before skill/STR bonuses. "
+        "Natural weapon - baseline 6–10 damage before skill/STR bonuses. "
         "Stronger warriors hit harder with no cap beyond 100% STR bonus. "
         "Excels in Strike and Martial Combat styles."
     ),
@@ -255,7 +255,7 @@ OPEN_HAND = Weapon(
 
 # ---------------------------------------------------------------------------
 # ALL WEAPONS
-# Full table — exactly 44 weapons matching the 44 weapon skills.
+# Full table - exactly 44 weapons matching the 44 weapon skills.
 # Order mirrors the weapon table in the player's guide.
 # ---------------------------------------------------------------------------
 
@@ -946,7 +946,7 @@ WEAPONS: dict[str, Weapon] = {
         throwable     = False,
         two_hand      = False,       # Needs 2H unless warrior is very strong
         category      = ODDBALL,
-        charge_attack = True,        # Three-pronged pole — classified with spears
+        charge_attack = True,        # Three-pronged pole - classified with spears
         notes=(
             "Once much stronger. Gets good results for Dwarves and Half-Elves. "
             "No longer competitive with Boar Spear."
@@ -1043,7 +1043,7 @@ WEAPONS: dict[str, Weapon] = {
         can_sweep     = True,
         notes=(
             "Very high damage rate but very low attack rate. "
-            "Can finish a fight in 2 hits — if you survive the 10 they land first."
+            "Can finish a fight in 2 hits - if you survive the 10 they land first."
         ),
         preferred_styles=["Total Kill", "Bash"],
         weak_styles   =["Wall of Steel", "Lunge"],

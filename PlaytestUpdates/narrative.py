@@ -894,6 +894,9 @@ def hit_line(
         target = random.choice(target_pool)
         if style == "Opportunity Throw":
             verb = random.choice(THROW_HIT_VERBS)
+        elif weapon_name.lower() == "bola":
+            # Bola hits with swinging weighted balls - flail-style, never "punches"
+            verb = random.choice(["crashes into", "slams into", "smashes into", "wraps around and strikes"])
         else:
             verb_pool = HIT_VERBS.get(weapon_category, HIT_VERBS["Oddball"])
             verb = random.choice(verb_pool)
@@ -2231,7 +2234,9 @@ def injury_flare_up_lines(warrior_name: str, location: str, gender: str) -> list
 
 def weapon_drop_lines(warrior_name: str, weapon_name: str, gender: str, is_fumble: bool = False, is_forceful: bool = False) -> str:
     """Narrative lines for when a warrior drops their weapon (fumble or disarm)."""
-    pronoun = "his" if gender == "Male" else "her"
+    pronoun = "his" if gender == "Male" else "her"   # possessive
+    obj_pro = "him" if gender == "Male" else "her"   # object
+    sub_pro = "he"  if gender == "Male" else "she"   # subject
     wpn = weapon_name.lower()
     n = warrior_name.upper()
 
@@ -2242,10 +2247,10 @@ def weapon_drop_lines(warrior_name: str, weapon_name: str, gender: str, is_fumbl
             f"Agony wracks {n}'s arm and the {wpn} slips from {pronoun} numb fingers!",
             f"A sharp intake of breath -{n} fumbles the {wpn}, unable to maintain {pronoun} hold!",
             f"The wound takes its toll. {n}'s {wpn} tumbles free from {pronoun} failing grip!",
-            f"{n}'s fingers betray {pronoun} as the pain overwhelms -the {wpn} hits the dirt!",
+            f"{n}'s fingers betray {obj_pro} as the pain overwhelms -the {wpn} hits the dirt!",
             f"The injury flares at the worst moment and {n} cannot hold the {wpn}!",
             f"{n} clenches {pronoun} teeth but the {wpn} falls regardless, {pronoun} arm refusing to obey!",
-            f"Pain shoots through {n}'s arm -the {wpn} clatters to the sand before {pronoun} can stop it!",
+            f"Pain shoots through {n}'s arm -the {wpn} clatters to the sand before {sub_pro} can stop it!",
             f"The arm gives out. {n}'s {wpn} drops to the arena floor with a dull thud!",
         ]
     elif is_forceful:
@@ -2565,6 +2570,29 @@ TABAXI_FRENZY_INTRO_LINES = [
     "The cornered hunter strikes back - {attacker} bursts forward in a frenzied assault!",
 ]
 
+# Per-attack lines within the frenzy burst - one emitted before each of the 3 strikes.
+# Conveys escalating speed/pressure; keyed by attack_num (0, 1, 2).
+TABAXI_FRENZY_STRIKE_LINES = {
+    0: [
+        "{attacker} explodes forward with the first strike!",
+        "{attacker} launches the opening blow!",
+        "{attacker} drives in with a lightning-fast first attack!",
+        "{attacker} opens with a savage burst!",
+    ],
+    1: [
+        "Before the opponent can recover, {attacker} strikes again!",
+        "{attacker} follows immediately with a second assault!",
+        "The speed is dizzying - {attacker} is already attacking again!",
+        "{attacker} presses without pause, the second blow already in motion!",
+    ],
+    2: [
+        "{attacker} completes the barrage with a final desperate strike!",
+        "A third and final blow - {attacker} gives everything!",
+        "{attacker} hammers home the last attack of the frenzy!",
+        "The frenzy peaks - {attacker} throws everything into one last strike!",
+    ],
+}
+
 VICTORY_LINES = [
     "{winner} has won this affair of honor!",
     "{winner} stands victorious over the fallen {loser}!",
@@ -2652,6 +2680,12 @@ def tabaxi_frenzy_intro_line(attacker_name: str) -> str:
     return random.choice(TABAXI_FRENZY_INTRO_LINES).format(
         attacker=attacker_name.upper(),
     )
+
+
+def tabaxi_frenzy_strike_line(attacker_name: str, attack_num: int) -> str:
+    """Generate the per-attack setup line for one of the 3 frenzy strikes (attack_num 0/1/2)."""
+    pool = TABAXI_FRENZY_STRIKE_LINES.get(attack_num, TABAXI_FRENZY_STRIKE_LINES[2])
+    return random.choice(pool).format(attacker=attacker_name.upper())
 
 
 def tabaxi_frenzy_resist_line(attacker_name: str) -> str:

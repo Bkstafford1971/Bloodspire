@@ -1,5 +1,5 @@
 # =============================================================================
-# races.py — BLOODSPIRE Race Definitions
+# races.py - BLOODSPIRE Race Definitions
 # =============================================================================
 # Contains all 10 playable races and 2 NPC races with their modifiers.
 #
@@ -7,7 +7,7 @@
 #   - Median warrior (all stats = 12) is true baseline
 #   - Every bonus has a proportional penalty
 #   - Luck (1-30) is universal and naturally amplifies strengths/weaknesses
-#   - No "super race" — all are viable but require different playstyles
+#   - No "super race" - all are viable but require different playstyles
 # =============================================================================
 
 import math
@@ -96,7 +96,7 @@ class Race:
     base_height_in: int    # inches
     base_weight_lbs: int   # pounds
 
-    # Favored/weak enemy races — deliberately None here so discovery is gameplay.
+    # Favored/weak enemy races - deliberately None here so discovery is gameplay.
     # The guide says: "discovering this is part of the fun for a new player."
     favored_enemy_race: Optional[str] = None
     weak_against_race: Optional[str] = None
@@ -131,7 +131,7 @@ RACES: dict[str, Race] = {
             trains_stats_faster=True,   # +20% training speed
             fewer_perms=True,           # -20% permanent injury chance
             preferred_weapons=[],
-            favored_opponents="All races — Humans fight well against everyone.",
+            favored_opponents="All races - Humans fight well against everyone.",
             disfavored_opponents="None in particular.",
         ),
     ),
@@ -187,7 +187,7 @@ RACES: dict[str, Race] = {
                 "Maul", "Great Axe", "Great Sword", "Halberd",
                 "Battle Flail", "Ball & Chain",
             ],
-            favored_opponents="Most opponents — Halflings are balanced offensively and defensively.",
+            favored_opponents="Most opponents - Halflings are balanced offensively and defensively.",
             disfavored_opponents="Warriors who specifically fight small opponents well (e.g. Dwarves).",
         ),
     ),
@@ -201,7 +201,7 @@ RACES: dict[str, Race] = {
             "masterfully, but very slow and poor at dodging."
         ),
         base_height_in=50,    # 4'2" male SIZE-12 midpoint (range 3'6"–5'2")
-        base_weight_lbs=195,  # Dense — notably heavier than height implies
+        base_weight_lbs=195,  # Dense - notably heavier than height implies
         modifiers=RacialModifiers(
             hp_bonus=12,                 # Highest HP in game
             damage_bonus=3,
@@ -215,7 +215,7 @@ RACES: dict[str, Race] = {
                 "War Hammer", "Boar Spear", "Target Shield", "Net", "Trident",
             ],
             weak_weapons=["Halberd", "Pole Axe"],
-            favored_opponents="Very small and very large opponents — Dwarves have something to prove against both.",
+            favored_opponents="Very small and very large opponents - Dwarves have something to prove against both.",
             disfavored_opponents="Mid-sized opponents with average stats.",
         ),
     ),
@@ -242,7 +242,7 @@ RACES: dict[str, Race] = {
             weak_weapons=[],
             favored_opponents="Average, mid-tier opponents.",
             disfavored_opponents=(
-                "Warriors who can take and dish out a lot of damage — "
+                "Warriors who can take and dish out a lot of damage - "
                 "Half-Elves share this weakness with most non-tanks."
             ),
         ),
@@ -268,7 +268,7 @@ RACES: dict[str, Race] = {
                 "Dagger", "Short Sword", "Scimitar", "Scythe", "Flail",
                 "Javelin", "Stiletto", "Epee",
             ],
-            favored_opponents="Light and medium opponents — small, fast weapons struggle vs heavy armor.",
+            favored_opponents="Light and medium opponents - small, fast weapons struggle vs heavy armor.",
             disfavored_opponents="Large, powerful opponents who can't be taken out with small weapons.",
         ),
     ),
@@ -281,7 +281,7 @@ RACES: dict[str, Race] = {
             "Tiny dirty fighters. Extremely fast and tricky with thrown weapons, "
             "but very weak and fragile."
         ),
-        base_height_in=42,    # 3'6" male — tiny
+        base_height_in=42,    # 3'6" male - tiny
         base_weight_lbs=48,
         modifiers=RacialModifiers(
             attack_rate_bonus=5,
@@ -301,7 +301,7 @@ RACES: dict[str, Race] = {
                 "Great Axe", "Great Sword", "Halberd", "Battle Flail",
                 "Great Pick", "War Flail", "Morning Star", "Maul",
             ],
-            favored_opponents="Slow, heavily armored opponents — Goblins can dart in and out.",
+            favored_opponents="Slow, heavily armored opponents - Goblins can dart in and out.",
             disfavored_opponents="Other fast, evasive opponents. One solid hit usually ends them.",
         ),
     ),
@@ -314,7 +314,7 @@ RACES: dict[str, Race] = {
             "Small, surprisingly tough tacticians. Excel at counterstrikes "
             "and turning aggression against opponents."
         ),
-        base_height_in=40,    # 3'4" male — smallest playable race
+        base_height_in=40,    # 3'4" male - smallest playable race
         base_weight_lbs=85,
         modifiers=RacialModifiers(
             hp_bonus=6,
@@ -332,7 +332,7 @@ RACES: dict[str, Race] = {
                 "Great Axe", "Battle Axe", "Halberd", "Great Pick",
                 "Boar Spear", "Pole Axe", "Pike",
             ],
-            favored_opponents="Aggressive warriors with high activity styles — Gnomes punish overcommitment.",
+            favored_opponents="Aggressive warriors with high activity styles - Gnomes punish overcommitment.",
             disfavored_opponents="Methodical, patient fighters with low activity and careful tactics.",
         ),
     ),
@@ -345,7 +345,7 @@ RACES: dict[str, Race] = {
             "Savage reptilian predators. Tough, relentless, with natural "
             "armor and weapons, but cold-blooded and slower to accelerate."
         ),
-        base_height_in=72,    # 6'0" male — larger than humans, muscular
+        base_height_in=72,    # 6'0" male - larger than humans, muscular
         base_weight_lbs=240,  # Muscular / dense
         modifiers=RacialModifiers(
             hp_bonus=9,
@@ -361,7 +361,7 @@ RACES: dict[str, Race] = {
             weak_weapons=[
                 "Epee", "Rapier", "Long Sword",  # Not suited to their heavy fighting style
             ],
-            favored_opponents="Most opponents — Lizardfolk are well-rounded tanks.",
+            favored_opponents="Most opponents - Lizardfolk are well-rounded tanks.",
             disfavored_opponents="None in particular, but heavy armor restricts their natural strengths.",
         ),
     ),
@@ -374,7 +374,7 @@ RACES: dict[str, Race] = {
             "Lightning-quick acrobatic felines. Best evasion in the game, "
             "but fragile and tire quickly in long fights."
         ),
-        base_height_in=58,    # 4'10" male — slightly shorter than average human with feline build
+        base_height_in=58,    # 4'10" male - slightly shorter than average human with feline build
         base_weight_lbs=115,  # Light and lean
         modifiers=RacialModifiers(
             dodge_bonus=7,               # Best pure evasion
@@ -392,13 +392,13 @@ RACES: dict[str, Race] = {
                 "Great Axe", "Great Sword", "Halberd", "Maul", "Battle Flail",
                 "War Flail", "Ball & Chain", "Great Pick",
             ],
-            favored_opponents="Most opponents — Tabaxi are hard to hit and difficult to pin down.",
+            favored_opponents="Most opponents - Tabaxi are hard to hit and difficult to pin down.",
             disfavored_opponents="Heavy hitters and endurance grinders (Dwarf, Lizardfolk, Half-Orc).",
         ),
     ),
 
     # =========================================================================
-    # NPC RACES — Not player-selectable
+    # NPC RACES - Not player-selectable
     # =========================================================================
 
     "Monster": Race(
@@ -407,12 +407,12 @@ RACES: dict[str, Race] = {
         description=(
             "Hideous creatures controlled by the game. Fighting a Monster is "
             "essentially a death sentence. Less than a dozen warriors in Pit history "
-            "have survived — those few were absorbed into the Monster team."
+            "have survived - those few were absorbed into the Monster team."
         ),
-        base_height_in=90,    # Enormous — can reach 9'+ at max SIZE
+        base_height_in=90,    # Enormous - can reach 9'+ at max SIZE
         base_weight_lbs=405,
         modifiers=RacialModifiers(
-            # Monsters are intentionally overpowered — these are large fixed bonuses.
+            # Monsters are intentionally overpowered - these are large fixed bonuses.
             hp_bonus=50,
             damage_bonus=10,
             attack_rate_bonus=5,
@@ -433,7 +433,7 @@ RACES: dict[str, Race] = {
         ),
         base_height_in=67,    # Human proportions
         base_weight_lbs=165,
-        modifiers=RacialModifiers(),  # All zeros — Peasants are scaled in matchmaking
+        modifiers=RacialModifiers(),  # All zeros - Peasants are scaled in matchmaking
     ),
 }
 

@@ -1,5 +1,5 @@
 """
-combat_debug_logger.py  —  BLOODSPIRE Admin Combat Debug Logger
+combat_debug_logger.py  -  BLOODSPIRE Admin Combat Debug Logger
 
 Produces a verbose, line-by-line record of every combat calculation for
 league admin inspection.  Only active when a debug team is selected in
@@ -78,7 +78,7 @@ class CombatDebugLogger:
                    team_a: str, team_b: str,
                    manager_a: str, manager_b: str):
         self._hr()
-        self._emit("  BLOODSPIRE — ADMIN COMBAT LOG")
+        self._emit("  BLOODSPIRE - ADMIN COMBAT LOG")
         self._emit(f"  Fight #{self.fight_id}   Turn: {self.turn_num}")
         self._emit(f"  Debug team: {self.debug_team}")
         self._emit(f"  {manager_a} / {team_a}   vs   {manager_b} / {team_b}")
@@ -135,19 +135,19 @@ class CombatDebugLogger:
         self._section(f"MINUTE {minute}")
         wa = state_a.warrior.name.upper()
         wb = state_b.warrior.name.upper()
-        self._emit(f"  APM   — {wa}: {apm_a}   |   {wb}: {apm_b}")
+        self._emit(f"  APM   - {wa}: {apm_a}   |   {wb}: {apm_b}")
         self._emit(
-            f"  HP    — {wa}: {state_a.current_hp}/{state_a.warrior.max_hp}"
+            f"  HP    - {wa}: {state_a.current_hp}/{state_a.warrior.max_hp}"
             f" ({100 * state_a.hp_pct:.0f}%)   |   "
             f"{wb}: {state_b.current_hp}/{state_b.warrior.max_hp}"
             f" ({100 * state_b.hp_pct:.0f}%)"
         )
         self._emit(
-            f"  END   — {wa}: {state_a.endurance:.1f}/{state_a.warrior.max_endurance}"
+            f"  END   - {wa}: {state_a.endurance:.1f}/{state_a.warrior.max_endurance}"
             f"   |   {wb}: {state_b.endurance:.1f}/{state_b.warrior.max_endurance}"
         )
         self._emit(
-            f"  STRAT — {wa}: [{strat_a.style} / Act:{strat_a.activity}]"
+            f"  STRAT - {wa}: [{strat_a.style} / Act:{strat_a.activity}]"
             f"   |   {wb}: [{strat_b.style} / Act:{strat_b.activity}]"
         )
 
@@ -196,19 +196,19 @@ class CombatDebugLogger:
             f" = {state_b.endurance:.1f} / {state_b.warrior.max_endurance}"
         )
         self._emit(
-            f"    HP POOL — {wa}:"
+            f"    HP POOL - {wa}:"
             f" {state_a.current_hp}/{state_a.warrior.max_hp}"
             f" ({100 * state_a.hp_pct:.0f}%)"
         )
         self._emit(
-            f"    HP POOL — {wb}:"
+            f"    HP POOL - {wb}:"
             f" {state_b.current_hp}/{state_b.warrior.max_hp}"
             f" ({100 * state_b.hp_pct:.0f}%)"
         )
 
     def log_strategy_switch(self, warrior_name: str, old_idx: int, new_idx: int):
         self._emit(
-            f"  ▶ STRATEGY SWITCH — {warrior_name.upper()}:"
+            f"  ▶ STRATEGY SWITCH - {warrior_name.upper()}:"
             f" [{old_idx}] → [{new_idx}]"
         )
 
@@ -238,7 +238,7 @@ class CombatDebugLogger:
         if not is_compatible:
             self._emit(
                 f"  ⚠ Weapon/style INCOMPATIBLE"
-                f" — penalty ×{penalty_factor:.2f}"
+                f" - penalty ×{penalty_factor:.2f}"
                 f" (−{int((1.0 - penalty_factor) * 25)} to attack roll)"
             )
 
@@ -270,7 +270,7 @@ class CombatDebugLogger:
             if is_parry else
             f"dodge_bonus({dodge_bonus}) > parry_bonus({parry_bonus})"
         )
-        self._emit(f"  Defense Roll ({defender_name.upper()}, {mode} — {reason}):")
+        self._emit(f"  Defense Roll ({defender_name.upper()}, {mode} - {reason}):")
         display = {k: v for k, v in comps.items() if not k.startswith("_")}
         self._emit(f"    {_fmt_comps(display)}")
         self._emit(f"    Subtotal: {base_result + decoy_pen}")
@@ -360,7 +360,7 @@ class CombatDebugLogger:
         )
         if steps.get("armor_piercing"):
             self._emit(
-                f"    Armor piercing: YES — DEF halved"
+                f"    Armor piercing: YES - DEF halved"
                 f" → {steps.get('armor_after_ap', 0)}"
             )
         pbyp = steps.get("precision_bypass", 0.0)
@@ -403,7 +403,7 @@ class CombatDebugLogger:
                   prev_hp: int, new_hp: int, max_hp: int):
         self._emit(
             f"  Bleed ({warrior_name.upper()})"
-            f" — accumulated wounds: {wounds}"
+            f" - accumulated wounds: {wounds}"
             f",  bleed damage this round: {bleed_dmg}"
         )
         self._emit(
@@ -443,7 +443,7 @@ class CombatDebugLogger:
             f" {'≥' if damage >= threshold else '<'} threshold"
         )
         if damage < threshold:
-            self._emit(f"    → Below threshold — no injury possible")
+            self._emit(f"    → Below threshold - no injury possible")
             return
         self._emit(
             f"    chance = max(5, min(80, int({damage}/{max_hp}×100) − 5))"
@@ -482,7 +482,7 @@ class CombatDebugLogger:
                                 chance: int, roll: int, triggered: bool):
         pct = int(100 * hp / max(1, max_hp))
         self._emit(f"  Tabaxi Frenzy Check ({warrior_name.upper()}):")
-        self._emit(f"    HP: {hp}/{max_hp} ({pct}%) — threshold ≤30%")
+        self._emit(f"    HP: {hp}/{max_hp} ({pct}%) - threshold ≤30%")
         self._emit(f"    Trigger chance: {chance}%   Roll: {roll}  →  "
                    f"{'▶ FRENZY TRIGGERED' if triggered else 'not triggered'}")
 
@@ -500,7 +500,7 @@ class CombatDebugLogger:
         self._emit(
             f"    {total} {'≥' if granted else '<'} {threshold}"
             f"  →  "
-            f"{'▶ CONCEDE GRANTED' if granted else 'mercy denied — fight continues'}"
+            f"{'▶ CONCEDE GRANTED' if granted else 'mercy denied - fight continues'}"
         )
 
     def log_fatal_injury_end(self, warrior_name: str, injuries: list):
@@ -551,24 +551,24 @@ class CombatDebugLogger:
             src     = d.get("source", "train")
 
             if src == "observed_trigger":
-                self._emit(f"  INT observed learning: d100={roll} vs {chance}% — no trigger")
+                self._emit(f"  INT observed learning: d100={roll} vs {chance}% - no trigger")
             elif src == "observed":
                 tr = d.get("trigger_roll", 0)
                 tc = d.get("trigger_chance", 0)
                 outcome = "SUCCESS" if success else "FAIL"
                 self._emit(
                     f"  [OBSERVED] {sk}: trigger d100={tr}/{tc}% passed  |  "
-                    f"skill d100={roll} vs {chance}% — {outcome}"
+                    f"skill d100={roll} vs {chance}% - {outcome}"
                 )
                 if msg:
                     self._emit(f"    → {msg.lstrip('[OBSERVED] ')}")
             elif roll == 0 and chance == 0:
-                # At-max or unknown-skill paths — no roll made
+                # At-max or unknown-skill paths - no roll made
                 if msg:
                     self._emit(f"  {sk}: {msg}")
             else:
                 outcome = "SUCCESS" if success else "FAIL"
-                self._emit(f"  {sk}: d100={roll} vs {chance}% — {outcome}")
+                self._emit(f"  {sk}: d100={roll} vs {chance}% - {outcome}")
                 if msg:
                     self._emit(f"    → {msg}")
 

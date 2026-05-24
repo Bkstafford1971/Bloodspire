@@ -1,5 +1,5 @@
 # =============================================================================
-# ai_league_teams.py — AI Manager Teams for League Play
+# ai_league_teams.py - AI Manager Teams for League Play
 # =============================================================================
 import random, json, os
 from typing import List, Optional
@@ -32,7 +32,7 @@ AI_MANAGER_ROSTER = [
 ]
 
 # ---------------------------------------------------------------------------
-# WARRIOR NAME TABLES  — deep fantasy names by race and gender
+# WARRIOR NAME TABLES  - deep fantasy names by race and gender
 # ---------------------------------------------------------------------------
 
 _NAMES = {
@@ -253,7 +253,7 @@ def _pick_name(race: str, gender: str, used_names: set) -> str:
     pool = _NAMES.get(race, _NAMES["Human"]).get(gender, _NAMES["Human"]["Male"])
     available = [n for n in pool if n not in used_names]
     if not available:
-        # Exhaust the pool — add a numeric suffix
+        # Exhaust the pool - add a numeric suffix
         base = random.choice(pool)
         suffix = sum(1 for n in used_names if n.startswith(base))
         return f"{base} {_roman(suffix+1)}"

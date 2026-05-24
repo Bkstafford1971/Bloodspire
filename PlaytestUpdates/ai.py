@@ -1,5 +1,5 @@
 # =============================================================================
-# ai.py — BLOODSPIRE AI Helpers
+# ai.py - BLOODSPIRE AI Helpers
 # =============================================================================
 # Provides gear, strategy, and training assignment for AI-managed warriors.
 # =============================================================================
@@ -110,7 +110,7 @@ def _best_wieldable_weapon(
         try:
             w = get_weapon(wpn_name)
             pen = strength_penalty(w.weight, effective_str, w.two_hand)
-            if pen < 0.30:   # Allow up to 30% penalty — still functional
+            if pen < 0.30:   # Allow up to 30% penalty - still functional
                 return wpn_name
         except ValueError:
             continue

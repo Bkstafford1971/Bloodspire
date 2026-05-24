@@ -829,7 +829,7 @@ def _attempt_precision_strike(
     chance    = 20 + wpn_skill * 3 + dex_bonus + attacker.luck // 3
 
     # Heavier weapons erode precision chance. Calibrated so the "precise"
-    # weapon tier (< 3.5 wt — stilettos, daggers, short swords, epees) takes
+    # weapon tier (< 3.5 wt - stilettos, daggers, short swords, epees) takes
     # no penalty, mid-weight weapons take a small bite, and anything near
     # great-weapon weight is penalized severely.
     if weapon.weight >= 4.5:
@@ -844,7 +844,7 @@ def _attempt_precision_strike(
     )
     chance -= best_def_skill * 4
 
-    # Actively defensive styles get a small additional buffer — they aren't
+    # Actively defensive styles get a small additional buffer - they aren't
     # guaranteed to shut down the probe, but they're harder to finesse
     if def_style in ("Parry", "Defend", "Wall of Steel", "Counterstrike"):
         chance -= 5
@@ -1523,7 +1523,7 @@ def _check_perm_injury_verbose(warrior: "Warrior", damage: int, aim_point: str):
 # PERM INJURY
 # ---------------------------------------------------------------------------
 
-# Used when no aim point is set (generic "body" strike) — head and legs excluded
+# Used when no aim point is set (generic "body" strike) - head and legs excluded
 # since the narrative already describes the hit as targeting the torso/midsection.
 _BODY_LOCATION_POOL = [
     "chest", "chest", "chest", "abdomen", "abdomen",
@@ -1552,7 +1552,7 @@ def _check_perm_injury(
         }
         location = loc_map.get(aim_point, random.choice(_BODY_LOCATION_POOL))
     else:
-        # No aim point — generic body strike, restrict to torso/arm locations
+        # No aim point - generic body strike, restrict to torso/arm locations
         location = random.choice(_BODY_LOCATION_POOL)
     pct    = damage / warrior.max_hp
     levels = 3 if pct > 0.50 else (2 if pct > 0.35 else 1)
@@ -1765,7 +1765,7 @@ def _update_endurance(
     old_endurance   = state.endurance
     state.endurance = max(0.0, state.endurance - burn)
 
-    # Phase II transition narrative — fires exactly once per fight per warrior.
+    # Phase II transition narrative - fires exactly once per fight per warrior.
     if not state.phase2_entered and old_endurance > phase2 >= state.endurance:
         state.phase2_entered = True
         w = warrior
@@ -2095,7 +2095,7 @@ class CombatEngine:
         ]:
             # Dead warriors do not train, they're carried out on a shield.
             # NPC opponents (peasants, monsters) have no persistent stats and
-            # never train — skip their line entirely.
+            # never train - skip their line entirely.
             # Deliberately leave the key ABSENT (not set to []) so that
             # _make_mirror_narrative can distinguish "died, no line emitted"
             # from "alive but trained in nothing, 'nothing' line emitted".
@@ -2218,7 +2218,7 @@ class CombatEngine:
     def _execute_tabaxi_frenzy(self, fst: _CState, ost: _CState,
                                fstrat: Strategy, ostrat: Strategy,
                                minute: int) -> Optional[FightResult]:
-        """Execute the Tabaxi frenzy burst — 3 rapid attacks with escalating defense penalties."""
+        """Execute the Tabaxi frenzy burst - 3 rapid attacks with escalating defense penalties."""
         fst.frenzy_used = True
         att = fst.warrior
         dfr = ost.warrior
@@ -2228,8 +2228,23 @@ class CombatEngine:
         defense_penalties = [0, 15, 30]
         _pre_frenzy = ost.current_hp
 
+        try:
+            _frenzy_wpn = get_weapon(att.primary_weapon)
+            _frenzy_cat = _frenzy_wpn.category
+        except ValueError:
+            _frenzy_wpn = OPEN_HAND
+            _frenzy_cat = "Oddball"
+
         for attack_num in range(3):
             def_penalty = defense_penalties[attack_num]
+
+            # Per-attack setup line — shows each of the 3 strikes distinctly
+            self._emit(N.tabaxi_frenzy_strike_line(att.name, attack_num))
+
+            self._emit(N.attack_line(
+                att.name, dfr.name, att.primary_weapon, _frenzy_cat,
+                fstrat.style, fstrat.aim_point, att.gender, attacker_race=att.race.name,
+            ))
 
             atk = _attack_roll(att, fstrat, fst)
             dfn = _defense_roll(dfr, ostrat, ost, att, fstrat.aim_point, fstrat.style,
@@ -2244,17 +2259,16 @@ class CombatEngine:
                 ost.current_hp -= 3
                 self._check_defender_strategy_only(ost, fst, minute)
             else:
-                try:
-                    weapon = get_weapon(att.primary_weapon)
-                    cat = weapon.category
-                except ValueError:
-                    weapon = OPEN_HAND
-                    cat = "Oddball"
+                for ln in N.hit_line(
+                    att.name, dfr.name, att.primary_weapon, _frenzy_cat,
+                    fstrat.aim_point, "normal", attacker_race=att.race.name, style=fstrat.style,
+                ):
+                    self._emit(ln)
 
                 dmg, _ = _calc_damage_hybrid(att, fstrat, att.primary_weapon, dfr, margin)
                 dmg += _get_tabaxi_frenzy_damage_bonus(att)
 
-                self._emit(N.damage_line(dmg, dfr.max_hp, cat))
+                self._emit(N.damage_line(dmg, dfr.max_hp, _frenzy_cat))
                 _pre_frenzy = ost.current_hp
                 ost.current_hp -= dmg
 
@@ -2520,7 +2534,7 @@ class CombatEngine:
         is_compatible, penalty_factor = _check_weapon_style_compatibility(wpn, ax.style)
 
         # Use appropriate intent line (normal or awkward)
-        _weak_attack_intent = not is_compatible  # awkward flavor was used — suppress "barely" on parry
+        _weak_attack_intent = not is_compatible  # awkward flavor was used - suppress "barely" on parry
         if is_compatible:
             intent = N.style_intent_line(att.name, dfr.name, ax.style, wpn, att.gender)
         else:
@@ -2538,7 +2552,7 @@ class CombatEngine:
             self._emit(N.attack_line(att.name, dfr.name, wpn, cat, ax.style, aim, att.gender, attacker_race=att.race.name))
 
         # Defense reaction line, defender's posture before the result is known
-        # Lower probability for awkward attacks — the setup already signals struggle,
+        # Lower probability for awkward attacks - the setup already signals struggle,
         # so adding a crisp defensive read makes hits feel even more contradictory.
         _defense_intent_emitted = False
         _defense_intent_is_parry = False
@@ -2689,7 +2703,7 @@ class CombatEngine:
                     else:
                         self._emit(N.critical_dodge_line(dfr.name, att.name))
 
-            # Calculated Attack probe flavor — occasional line when a CA
+            # Calculated Attack probe flavor - occasional line when a CA
             # probe fails to find a gap in the defender's guard.
             if (ax.style == "Calculated Attack" and not ca_precision_landed
                     and random.randint(1, 100) <= CA_PROBE_EMIT_CHANCE):
@@ -2771,7 +2785,7 @@ class CombatEngine:
 
             # --- Req 4: Heavy Parry Disarm Check ---
             # If it was a parry and the attack subtotal was huge, might drop weapon.
-            # Cestus and Open Hand fighters cannot be disarmed — emit numbness instead.
+            # Cestus and Open Hand fighters cannot be disarmed - emit numbness instead.
             if use_p and atk_r > (dfr.strength * 4):
                 # Reduced base chance (8%) + disarm skill bonus (2% per level)
                 disarm_chance = 8 + (att.skills.get("disarm", 0) * 2)
@@ -2800,7 +2814,7 @@ class CombatEngine:
                             att.primary_weapon = "Open Hand"
                             self._check_and_switch_strategies(as_, ds_, minute)
                         elif _crit_sec_roll < 0.055:
-                            # Weapon break: 1.5% — only when defender's weapon ≥ attacker's size
+                            # Weapon break: 1.5% - only when defender's weapon ≥ attacker's size
                             def_wpn = dfr.secondary_weapon or dfr.primary_weapon
                             if _weapon_size_class(def_wpn) >= _weapon_size_class(att.primary_weapon):
                                 self._emit(N.critical_break_line(dfr.name, att.name, att.primary_weapon))
@@ -2819,7 +2833,7 @@ class CombatEngine:
                         if result:
                             return result
 
-            # Primary missed/was parried — Elf may still find an opening with the off-hand
+            # Primary missed/was parried - Elf may still find an opening with the off-hand
             return self._try_elf_extra_attack(as_, ds_, ax, dx, minute)
 
         if margin < 10:
@@ -2829,7 +2843,7 @@ class CombatEngine:
             if self.debug_logger:
                 self.debug_logger.log_hp_update(dfr.name, prev_hp_graze, 3, ds_.current_hp, dfr.max_hp, "graze")
             self._check_defender_strategy_only(ds_, as_, minute)
-            # Graze — Elf may still follow with the off-hand
+            # Graze - Elf may still follow with the off-hand
             return self._try_elf_extra_attack(as_, ds_, ax, dx, minute)
 
         precision = "precise" if margin >= 50 else ("barely" if margin < 20 else "normal")
@@ -3081,7 +3095,7 @@ class CombatEngine:
                               minute: int) -> Optional[FightResult]:
         """
         Attempt the Elf dual-wield off-hand attack.  Fires regardless of whether
-        the primary attack hit, missed, or grazed — the Elf plans the off-hand
+        the primary attack hit, missed, or grazed - the Elf plans the off-hand
         strike independently as a racial ability, not as a reward for landing.
         Returns a FightResult if the extra attack kills the defender, else None.
         """

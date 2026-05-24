@@ -1,5 +1,5 @@
-﻿# =============================================================================
-# strategy.py — BLOODSPIRE Strategy & Trigger Evaluation
+# =============================================================================
+# strategy.py - BLOODSPIRE Strategy & Trigger Evaluation
 # =============================================================================
 # Evaluates the trigger list for a warrior each minute and returns the
 # active Strategy. Implements all trigger conditions from the guide.
@@ -17,7 +17,7 @@ from weapons import get_weapon
 
 
 # ---------------------------------------------------------------------------
-# FIGHTER STATE — combat snapshot passed to the trigger evaluator each minute
+# FIGHTER STATE - combat snapshot passed to the trigger evaluator each minute
 # ---------------------------------------------------------------------------
 
 @dataclass
@@ -249,7 +249,7 @@ def _check_trigger(
     ):
         return False
 
-    # Unknown trigger — never matches (fail safe)
+    # Unknown trigger - never matches (fail safe)
     return False
 
 
@@ -270,7 +270,7 @@ def evaluate_triggers(
         if _check_trigger(strat.trigger, self_state, foe_state, minute):
             return strat, i + 1
 
-    # Safety fallback — return the last strategy (should always have "Always")
+    # Safety fallback - return the last strategy (should always have "Always")
     return strategies[-1], len(strategies)
 
 
@@ -385,7 +385,7 @@ STYLE_COUNTER_MATRIX: dict[str, dict[str, int]] = {
         "Lunge":          1,
     },
     "Opportunity Throw": {
-        # Specialty — mostly neutral, relies on thrown weapon damage
+        # Specialty - mostly neutral, relies on thrown weapon damage
     },
     "Martial Combat": {
         "Engage & Withdraw": -2,  # E&W specifically counters MC
@@ -429,7 +429,7 @@ def get_style_advantage(atk_style: str, def_style: str) -> int:
 # STYLE COMBAT PROPERTIES
 # ---------------------------------------------------------------------------
 # Per-style modifiers for combat calculations.
-# All values APPROX — calibrated against guide descriptions.
+# All values APPROX - calibrated against guide descriptions.
 
 @dataclass
 class StyleProperties:
@@ -447,7 +447,7 @@ class StyleProperties:
 
 STYLE_PROPERTIES: dict[str, StyleProperties] = {
     # Endurance burn philosophy:
-    #   Every style costs something — no style gains endurance in combat.
+    #   Every style costs something - no style gains endurance in combat.
     #   Aggressive styles burn fast (8-10/action). Defensive styles break even
     #   or cost a little (1-2/action). This ensures fights resolve within ~5-6
     #   minutes without the ref becoming the primary deciding factor.
@@ -497,7 +497,7 @@ STYLE_PROPERTIES: dict[str, StyleProperties] = {
     "Engage & Withdraw": StyleProperties(
         apm_modifier=-0.3, damage_modifier=-1.0,
         parry_bonus=0, dodge_bonus=5,
-        endurance_burn=2.0,               # Low cost — hit and run is tiring but efficient
+        endurance_burn=2.0,               # Low cost - hit and run is tiring but efficient
         intimidate=False,
         anxiously_awaits=True, total_kill_mode=False,
         notes="Very high dodge. Low endurance cost.",
@@ -519,7 +519,7 @@ STYLE_PROPERTIES: dict[str, StyleProperties] = {
     "Sure Strike": StyleProperties(
         apm_modifier=-1.0, damage_modifier=0.0,
         parry_bonus=0, dodge_bonus=0,
-        endurance_burn=1.5,               # Slow and deliberate — efficient but not free
+        endurance_burn=1.5,               # Slow and deliberate - efficient but not free
         intimidate=False,
         anxiously_awaits=True, total_kill_mode=False,
         notes="Highest hit %. Slow. Low endurance cost.",
@@ -527,7 +527,7 @@ STYLE_PROPERTIES: dict[str, StyleProperties] = {
     "Calculated Attack": StyleProperties(
         apm_modifier=-1.0, damage_modifier=2.0,
         parry_bonus=0, dodge_bonus=0,
-        endurance_burn=1.5,               # Methodical — low cost
+        endurance_burn=1.5,               # Methodical - low cost
         intimidate=False,
         anxiously_awaits=True, total_kill_mode=False,
         notes="Hits critical locations. Slow. Low endurance cost.",
@@ -549,7 +549,7 @@ STYLE_PROPERTIES: dict[str, StyleProperties] = {
     "Parry": StyleProperties(
         apm_modifier=-2.5, damage_modifier=-4.0,
         parry_bonus=6, dodge_bonus=2,
-        endurance_burn=1.0,               # Near-passive — breaks even in a quiet fight
+        endurance_burn=1.0,               # Near-passive - breaks even in a quiet fight
         intimidate=False,
         anxiously_awaits=False, total_kill_mode=False,
         notes="Purely defensive. Very low endurance cost.",

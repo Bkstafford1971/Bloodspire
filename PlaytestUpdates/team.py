@@ -1,5 +1,5 @@
 # =============================================================================
-# team.py — BLOODSPIRE Team Class
+# team.py - BLOODSPIRE Team Class
 # =============================================================================
 # A team always has exactly 5 warriors.
 # When a warrior dies or retires, a replacement slot opens immediately.
@@ -33,7 +33,7 @@ class Team:
         self.manager_name : str            = manager_name
         self.team_id      : int            = team_id
 
-        # Active roster — always TEAM_SIZE entries.
+        # Active roster - always TEAM_SIZE entries.
         # Slots hold Warrior objects; None means "pending replacement".
         self.warriors: List[Optional[Warrior]] = []
 
@@ -58,7 +58,7 @@ class Team:
         # Pending challenges: {slot_index: [challenge_target, ...]}
         self.challenges: Dict[int, List[str]] = {}
 
-        # Archived warriors — dead warriors stored as stat snapshots after replacement
+        # Archived warriors - dead warriors stored as stat snapshots after replacement
         self.archived_warriors: List[dict] = []
 
         # Pending replacement rollup bases: {slot_idx: base_stats_dict}
@@ -136,7 +136,7 @@ class Team:
 
     @property
     def active_warriors(self) -> List[Warrior]:
-        """Return living warriors only — excludes None slots and is_dead warriors."""
+        """Return living warriors only - excludes None slots and is_dead warriors."""
         return [w for w in self.warriors if w is not None
                 and w.is_alive and not getattr(w, "is_dead", False)]
 
@@ -446,7 +446,7 @@ class Team:
         thin      = "-" * 62
         lines = [
             separator,
-            f"  TEAM:     {self.team_name.upper():<25} (Record: {self.record_str})",
+            f"  TEAM:     {self.team_name.upper():<20} (Record: {self.record_str})",
             f"  MANAGER:  {self.manager_name.upper()}   (ID: {self.team_id})",
             thin,
             f"  {'#':<3} {'Name':<18} {'Race':<10} {'Record':<10} {'HP':>4}  {'Injuries'}",
@@ -522,7 +522,7 @@ class Team:
                 team.warriors.append(None)
         team.fallen_warriors     = data.get("fallen_warriors", [])
         
-        # Handle blood_challenges — migrate from old tuple format to new dict format
+        # Handle blood_challenges - migrate from old tuple format to new dict format
         raw_bcs = data.get("blood_challenges", [])
         team.blood_challenges = []
         for bc in raw_bcs:
@@ -530,7 +530,7 @@ class Team:
                 # Already in new format
                 team.blood_challenges.append(bc)
             else:
-                # Old tuple format (challenger_name, target_name) — convert to new format
+                # Old tuple format (challenger_name, target_name) - convert to new format
                 team.blood_challenges.append({
                     "dead_warrior_name": "Unknown",
                     "target_name": bc[1] if len(bc) > 1 else "",
@@ -578,34 +578,34 @@ def create_ai_team(
 # Players should win roughly 70-75% of the time against a matching peasant.
 # Stats are fixed per character for consistency; the matchmaker selects
 # the appropriate tier(s) based on the player warrior's fight count.
-# Names are original — deliberately distinct from any copyrighted sources.
+# Names are original - deliberately distinct from any copyrighted sources.
 # ---------------------------------------------------------------------------
 
 # Each entry: (name, gender, STR, DEX, CON, INT, PRE, SIZ, armor, weapon)
 # Tier 1 = hardest, Tier 10 = easiest.
-# Peasant stats bumped slightly from v1 — they should present a real threat
+# Peasant stats bumped slightly from v1 - they should present a real threat
 # but still be clearly beatable. Target: player wins ~65-70% (was 70-75%).
 # Each stat raised by 2-3 points across the board.
 PEASANT_ROSTER = [
-    # Tier 1 — Crom the Bell-Keeper: big and mean, likes to bash
+    # Tier 1 - Crom the Bell-Keeper: big and mean, likes to bash
     ("Crom the Bell-Keeper",  "Male",   19, 15, 17, 11, 10, 17, "Brigandine",  "Morningstar"),
-    # Tier 2 — Bawdy Nell: fast and sneaky, dagger in the ribs
+    # Tier 2 - Bawdy Nell: fast and sneaky, dagger in the ribs
     ("Bawdy Nell",            "Female", 14, 18, 14, 14, 12, 11, "Cuir Boulli", "Short Sword"),
-    # Tier 3 — Vernon the Versifier: surprisingly capable with a spear
+    # Tier 3 - Vernon the Versifier: surprisingly capable with a spear
     ("Vernon the Versifier",  "Male",   15, 16, 15, 13, 11, 13, "Leather",     "Boar Spear"),
-    # Tier 4 — Hilda the Fishmonger: tough as old boots
+    # Tier 4 - Hilda the Fishmonger: tough as old boots
     ("Hilda the Fishmonger",  "Female", 16, 13, 17, 11, 10, 14, "Brigandine",  "War Flail"),
-    # Tier 5 — Grub the Coinless: desperate fighter, nothing to lose
+    # Tier 5 - Grub the Coinless: desperate fighter, nothing to lose
     ("Grub the Coinless",     "Male",   14, 14, 14, 11,  9, 13, "Leather",     "Battle Axe"),
-    # Tier 6 — Mort the Ditch-Digger: slow but surprisingly durable
+    # Tier 6 - Mort the Ditch-Digger: slow but surprisingly durable
     ("Mort the Ditch-Digger", "Male",   15, 12, 15, 10,  9, 15, "Cloth",       "Morningstar"),
-    # Tier 7 — Wandering Wanda: slippery and hard to pin down
+    # Tier 7 - Wandering Wanda: slippery and hard to pin down
     ("Wandering Wanda",       "Female", 12, 16, 13, 13, 10, 11, "Leather",     "Flail"),
-    # Tier 8 — Oswald the Soothsayer: more prophet than fighter
+    # Tier 8 - Oswald the Soothsayer: more prophet than fighter
     ("Oswald the Soothsayer", "Male",   12, 13, 13, 13, 12, 12, "Cloth",       "Short Sword"),
-    # Tier 9 — Crackers McGee: unpredictable but fragile
+    # Tier 9 - Crackers McGee: unpredictable but fragile
     ("Crackers McGee",        "Male",   11, 14, 12, 11,  9, 10, "Cloth",       "Hatchet"),
-    # Tier 10 — Wilbur the Weed-Puller: not totally helpless now
+    # Tier 10 - Wilbur the Weed-Puller: not totally helpless now
     ("Wilbur the Weed-Puller","Male",   10, 11, 11, 10,  8, 10, "Cloth",       "Short Sword"),
 ]
 
@@ -700,19 +700,19 @@ def get_peasant_by_name(name: str) -> Optional[Warrior]:
 # (name, gender, STR, DEX, CON, INT, PRE, SIZ, armor, helm, primary, secondary,
 #  flavour_style, kill_skill, kill_skill_level)
 MONSTER_ROSTER = [
-    # The Iron Colossus — unstoppable armored juggernaut
+    # The Iron Colossus - unstoppable armored juggernaut
     ("The Iron Colossus",  "Male",   25, 18, 25, 10, 20, 25,
      "Full Plate", "Full Helm", "Maul",      "Tower Shield", "Bash",    "parry",      8),
-    # Dread Reaver — shadow-fast assassin, impossible to hit
+    # Dread Reaver - shadow-fast assassin, impossible to hit
     ("Dread Reaver",       "Male",   20, 25, 20, 18, 22, 17,
      "Chain",     "Camail",    "Scythe",     "Open Hand",    "Lunge",   "dodge",      8),
-    # The Pit Tyrant — arena veteran with every dirty trick known
+    # The Pit Tyrant - arena veteran with every dirty trick known
     ("The Pit Tyrant",     "Male",   22, 22, 23, 20, 22, 20,
      "Half-Plate","Full Helm", "War Flail",  "Open Hand",    "Total Kill","initiative",9),
-    # Stonehide Brute — near-unkillable regenerating monstrosity
+    # Stonehide Brute - near-unkillable regenerating monstrosity
     ("Stonehide Brute",    "Male",   24, 17, 25, 10, 18, 25,
      "Full Plate","Full Helm", "Great Pick", "Open Hand",    "Bash",    "constitution",0),
-    # The Doomwyrm — ancient beast, all limbs are weapons
+    # The Doomwyrm - ancient beast, all limbs are weapons
     ("The Doomwyrm",       "Male",   23, 23, 24, 14, 21, 24,
      "Full Plate","Full Helm", "Halberd",    "Open Hand",    "Wall of Steel","lunge",  7),
 ]
@@ -753,7 +753,7 @@ def _make_monster(roster_index: int) -> Warrior:
     if kill_skill and kill_level > 0:
         w.skills[kill_skill] = kill_level
 
-    # Aggressive strategy — they always press the attack
+    # Aggressive strategy - they always press the attack
     w.strategies = [
         Strategy(trigger="You have taken heavy damage", style="Total Kill",
                  activity=9, aim_point="Head",  defense_point="None"),
@@ -768,7 +768,7 @@ def _make_monster(roster_index: int) -> Warrior:
 def create_monster_team() -> Team:
     """
     Create the full Monster team of 5.
-    Fights against monsters are always to the death — no mercy.
+    Fights against monsters are always to the death - no mercy.
     Player wins approximately 0.5% of the time.
     If a player warrior defeats a monster, they join The Monsters.
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # =============================================================================
-# main.py — BLOODSPIRE Main Menu & Game Loop
+# main.py - BLOODSPIRE Main Menu & Game Loop
 # =============================================================================
 # Entry point. Run with:  python main.py
 #
@@ -169,7 +169,7 @@ def _load_existing_team(gs: GameState):
 
 
 def _create_new_team(gs: GameState):
-    """Interactive new team creation — name the team and create 5 warriors."""
+    """Interactive new team creation - name the team and create 5 warriors."""
     header("Create New Team")
 
     manager_name = prompt("Manager name: ")
@@ -181,8 +181,8 @@ def _create_new_team(gs: GameState):
     team_name = prompt("Team name: ")
     if not team_name:
         return
-    if len(team_name) > 25:
-        print("  Team name must be 25 characters or fewer.")
+    if len(team_name) > 20:
+        print("  Team name must be 20 characters or fewer.")
         return
 
     team = Team(team_name=team_name, manager_name=manager_name)
@@ -245,7 +245,7 @@ MAIN_MENU_OPTIONS = [
 def main_menu(gs: GameState):
     while True:
         clear()
-        header(f"BLOODSPIRE  —  {gs.player_team.team_name}  ({gs.player_team.manager_name})")
+        header(f"BLOODSPIRE  -  {gs.player_team.team_name}  ({gs.player_team.manager_name})")
         idx = choose(MAIN_MENU_OPTIONS, "Action", allow_back=False)
 
         if MAIN_MENU_OPTIONS[idx] == "View team roster":
@@ -354,7 +354,7 @@ def _setup_warrior_menu(gs: GameState):
 
 def _assign_armor(warrior: Warrior):
     """Interactive armor and helm assignment."""
-    header(f"Armor — {warrior.name}  (STR {warrior.strength})")
+    header(f"Armor - {warrior.name}  (STR {warrior.strength})")
     is_dw = warrior.race.name == "Dwarf"
 
     print("  BODY ARMOR:")
@@ -363,7 +363,7 @@ def _assign_armor(warrior: Warrior):
     for a in armor_opts:
         allowed, msg = can_wear_armor(a, warrior.strength, is_dw)
         mark = "✓" if allowed else "✗"
-        print(f"    [{mark}] {a:<16} — {msg}")
+        print(f"    [{mark}] {a:<16} - {msg}")
         if allowed:
             valid_armor.append(a)
     valid_armor.append("None")
@@ -381,8 +381,8 @@ def _assign_armor(warrior: Warrior):
 
 
 def _assign_weapons(warrior: Warrior):
-    """Interactive weapon assignment — primary, secondary, backup."""
-    header(f"Weapons — {warrior.name}  (STR {warrior.strength})")
+    """Interactive weapon assignment - primary, secondary, backup."""
+    header(f"Weapons - {warrior.name}  (STR {warrior.strength})")
 
     # Group weapons by category for display
     from weapons import ALL_CATEGORIES, list_weapons_by_category
@@ -420,7 +420,7 @@ def _assign_weapons(warrior: Warrior):
 
 def _edit_strategies(warrior: Warrior):
     """Interactive strategy editor."""
-    header(f"Strategies — {warrior.name}")
+    header(f"Strategies - {warrior.name}")
 
     while True:
         print("\n  Current strategies:")
@@ -513,7 +513,7 @@ def _build_strategy(existing: Strategy = None) -> Strategy:
 
 def _set_training(warrior: Warrior):
     """Set up to 3 training targets."""
-    header(f"Training — {warrior.name}")
+    header(f"Training - {warrior.name}")
     print(f"  Current queue: {warrior.trains or '(empty)'}")
     print(f"  Intelligence: {warrior.intelligence}  (higher INT = faster skill learning)")
     print(f"  Constitution: {warrior.constitution}  (higher CON = better stat training)\n")
@@ -546,7 +546,7 @@ def _set_training(warrior: Warrior):
 # ---------------------------------------------------------------------------
 
 def _run_turn(gs: GameState, setup_first: bool = False):
-    """Run one turn — optionally let player set up all warriors first."""
+    """Run one turn - optionally let player set up all warriors first."""
     header("Run Turn")
 
     if setup_first:
@@ -603,7 +603,7 @@ def _view_last_fight(gs: GameState):
         pause()
         return
 
-    options = [f"Fight #{l['fight_id']}  —  {l['filename']}" for l in logs[-10:]]
+    options = [f"Fight #{l['fight_id']}  -  {l['filename']}" for l in logs[-10:]]
     idx = choose(options, "Choose log")
     if idx < 0:
         return

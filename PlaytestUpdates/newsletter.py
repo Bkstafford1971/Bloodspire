@@ -71,8 +71,8 @@ def _warrior_tier(w, is_champion: bool) -> str:
 
 
 def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
-                     champion_beaten_by: str = None, champion_beaten_team: str = None,
-                     champion_beaten_team_id: int = 0,
+                     champion_beaten_by: str = None, champion_beaten_by_wid: int = None,
+                     champion_beaten_team: str = None, champion_beaten_team_id: int = 0,
                      prev_champion_name: str = None,
                      card = None) -> tuple:
     """
@@ -120,7 +120,8 @@ def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
     
     # RULE 1: A warrior who beat the current champion claims the title immediately.
     if champion_beaten_by:
-        new_state = {"name": champion_beaten_by, "team_name": champion_beaten_team or "Unknown",
+        new_state = {"name": champion_beaten_by, "warrior_id": champion_beaten_by_wid,
+                     "team_name": champion_beaten_team or "Unknown",
                      "team_id": champion_beaten_team_id,
                      "source": "beat_champion"}
         is_new = (champion_beaten_by != prev_champ)
@@ -182,7 +183,8 @@ def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
     
     # NO TIE - Award championship to the warrior with highest recognition
     champ_w, champ_t, champ_tid = all_warriors[0]
-    new_state = {"name": champ_w.name, "team_name": champ_t, "team_id": champ_tid, "source": "recognition"}
+    new_state = {"name": champ_w.name, "warrior_id": getattr(champ_w, "warrior_id", None),
+                 "team_name": champ_t, "team_id": champ_tid, "source": "recognition"}
     is_new = (champ_w.name != prev_champ)
     return new_state, is_new
 
@@ -323,8 +325,9 @@ def _team_standings(teams, turn_num: int, card: list = None) -> str:
 # ---------------------------------------------------------------------------
 
 def _warrior_tiers(teams, champion_state: dict, card: list = None, turn_num: int = 0) -> str:
-    champ_name=champion_state.get("name","")
-    champ_tid = champion_state.get("team_id", 0)
+    champ_name = champion_state.get("name","")
+    champ_tid  = champion_state.get("team_id", 0)
+    champ_wid  = champion_state.get("warrior_id")
 
     # Identify warriors that participated in this turn from the card
     warriors_that_fought = set()
@@ -362,7 +365,11 @@ def _warrior_tiers(teams, champion_state: dict, card: list = None, turn_num: int
             # Don't show replacement warriors until they've competed at least once
             if getattr(wobj,"total_fights",0) == 0: continue
 
-            is_champ = (wobj.name == champ_name and tid == champ_tid)
+            w_wid = getattr(wobj, "warrior_id", None)
+            if champ_wid and w_wid:
+                is_champ = (champ_wid == w_wid)
+            else:
+                is_champ = (wobj.name == champ_name and tid == champ_tid)
             tier = _warrior_tier(wobj, is_champ)
             # Mark warriors that didn't fight this turn with a "-" prefix (but keep them visible)
             warrior_display_name = wobj.name if (tid, wobj.name) in warriors_that_fought else f"- {wobj.name}"
@@ -414,14 +421,28 @@ def _fights_section(card, champion_state: dict = None) -> str:
     lines=["\nLAST TURN'S FIGHTS",sep]
 
     champ_name = (champion_state or {}).get("name", "")
+    champ_tid  = (champion_state or {}).get("team_id", 0)
+    champ_wid  = (champion_state or {}).get("warrior_id")
+
+    def _is_champion_warrior(warrior_obj, team_obj) -> bool:
+        if not champ_name:
+            return False
+        wid = getattr(warrior_obj, "warrior_id", None)
+        if champ_wid and wid and champ_wid == wid:
+            return True
+        # Fallback for warriors or champion states that predate warrior_id
+        tid = getattr(team_obj, "team_id", 0)
+        return warrior_obj.name == champ_name and tid == champ_tid
 
     def _effective_type(bout):
         ft = getattr(bout, "fight_type", "standard")
         if ft == "monster":
             return "monster"
-        pw_name = getattr(getattr(bout, "player_warrior", None), "name", "")
-        ow_name = getattr(getattr(bout, "opponent", None), "name", "")
-        if champ_name and (pw_name == champ_name or ow_name == champ_name):
+        pw = getattr(bout, "player_warrior", None)
+        ow = getattr(bout, "opponent", None)
+        pt = getattr(bout, "player_team", None)
+        ot = getattr(bout, "opponent_team", None)
+        if (pw and _is_champion_warrior(pw, pt)) or (ow and _is_champion_warrior(ow, ot)):
             return "champion"
         if ft == "blood_challenge":
             return "blood_challenge"
@@ -444,7 +465,10 @@ def _fights_section(card, champion_state: dict = None) -> str:
         pw = bout.player_warrior
         ow = bout.opponent
         r = bout.result
-        pair = frozenset([pw.name, ow.name])
+        # Use warrior_id when available so same-name fighters on different teams dedup correctly
+        pw_key = getattr(pw, "warrior_id", None) or pw.name
+        ow_key = getattr(ow, "warrior_id", None) or ow.name
+        pair = frozenset([pw_key, ow_key])
         if pair in seen_pairs:
             continue
         if id(bout) in seen_fights:
@@ -462,7 +486,7 @@ def _fights_section(card, champion_state: dict = None) -> str:
         style  = _fight_style_word(mins)
 
         if eff_type == "champion":
-            # Title fight — call out the championship explicitly
+            # Title fight - call out the championship explicitly
             if r.loser_died:
                 line = (f"★ CHAMPION'S TITLE FIGHT ★  {wname} has slain {lname} to claim the"
                         f" Champion's Title in a {mins} minute {style} battle!")
@@ -484,7 +508,7 @@ def _fights_section(card, champion_state: dict = None) -> str:
                 verb = random.choice(["bested","defeated","outlasted","overcame","vanquished"])
                 line = f"{wname} {verb} {lname} in a {mins} minute {style} {label} fight."
         else:
-            # monster / standard / peasant — no type label for standard/peasant
+            # monster / standard / peasant - no type label for standard/peasant
             ftype_str = " monster" if eff_type == "monster" else ""
             if r.loser_died:
                 line = (f"{wname} slew {lname} in a {mins} minute {style}{ftype_str} fight."

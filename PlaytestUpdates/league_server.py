@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # =============================================================================
-# league_server.py — THE AGONY AMPHITHEATRE League Server
+# league_server.py - THE AGONY AMPHITHEATRE League Server
 # =============================================================================
 # The host runs this alongside their normal client.
 # All other players connect to http://HOST_IP:8766 to upload teams and
@@ -174,7 +174,7 @@ def _archive_old_results(turn_num):
         os.makedirs(timestamped_archive, exist_ok=True)
 
         for fn in os.listdir(turn_dir):
-            # Archive result files and newsletter only — never move uploads here,
+            # Archive result files and newsletter only - never move uploads here,
             # because uploads are the input data and must survive a failed turn run.
             if (fn.startswith("result_") and fn.endswith(".json")) or fn == "newsletter.txt":
                 src = os.path.join(turn_dir, fn)
@@ -274,7 +274,7 @@ def _load_uploads(turn_num):
         if team_id:
             mgr_teams = [str(t) for t in mgrs[mid].get("team_ids", [])]
             if str(team_id) not in mgr_teams:
-                print(f"  [WARN] Skipping {fname}: team {team_id} not in manager {mid}'s registry — ghost upload ignored")
+                print(f"  [WARN] Skipping {fname}: team {team_id} not in manager {mid}'s registry - ghost upload ignored")
                 continue
 
         # Key by manager_id+team_id so multiple teams from same manager coexist
@@ -372,7 +372,7 @@ def _make_mirror_narrative(
     """
     from narrative import training_summary as _ts, _strategy_table
 
-    # Key presence distinguishes dead warriors (key absent — no training line emitted)
+    # Key presence distinguishes dead warriors (key absent - no training line emitted)
     # from alive warriors who trained in nothing (key present, value is []).
     a_alive = "warrior_a" in training_results
     b_alive = "warrior_b" in training_results
@@ -436,7 +436,7 @@ def _make_mirror_narrative(
     # Training is always preceded by a blank line (\n\n) and starts with the first
     # alive warrior's name followed by " has trained in".  Using rfind (search from
     # the end) means even if the warrior's name appears in fight-action text, we
-    # always find the LAST occurrence — which is the training block.
+    # always find the LAST occurrence - which is the training block.
     if a_alive:
         needle = f"\n\n{a_name.upper()} has trained in"
     elif b_alive:
@@ -583,7 +583,7 @@ def _run_turn(request_password, rerun_turn=None):
     set_show_luck_factor(_turn_start_flags.get("show_luck_factor", False))
     set_show_max_hp(_turn_start_flags.get("show_max_hp", False))
 
-    # Build debug warrior set — fights involving these warriors get verbose logs
+    # Build debug warrior set - fights involving these warriors get verbose logs
     _dbg_mid = cfg.get("admin_debug_manager_id", "")
     _debug_warrior_names: set = set()
     _dbg_mgr_name = ""
@@ -1066,11 +1066,16 @@ def _run_turn(request_password, rerun_turn=None):
             for wd in all_fighters:
                 if not wd:
                     continue
-                wn = wd["name"]
-                if wn not in e["warriors"]:
-                    e["warriors"][wn] = {"wins": 0, "losses": 0, "kills": 0, "fights": 0}
-                ws = e["warriors"][wn]
+                wn  = wd["name"]
+                wid = wd.get("warrior_id")
+                # Key by warrior_id when available so same-name warriors don't collide
+                standings_key = str(wid) if wid else wn
+                if standings_key not in e["warriors"]:
+                    e["warriors"][standings_key] = {"wins": 0, "losses": 0, "kills": 0, "fights": 0}
+                ws = e["warriors"][standings_key]
                 ws.update(
+                    name=wn,
+                    warrior_id=wid,
                     wins=wd.get("wins", 0),
                     losses=wd.get("losses", 0),
                     kills=wd.get("kills", 0),
@@ -1115,7 +1120,7 @@ def _run_turn(request_password, rerun_turn=None):
         
         _save_config(cfg)
         _turn_progress = {"running": False, "done": len(uploads), "total": len(uploads),
-                          "message": f"Turn {turn_num} complete — {len(all_results)} managers."}
+                          "message": f"Turn {turn_num} complete - {len(all_results)} managers."}
 
         # Auto-carry for next turn
         _next_turn = cfg["current_turn"]
@@ -1259,16 +1264,27 @@ def _run_turn(request_password, rerun_turn=None):
         # Update champion
         champ_state = load_champion_state()
         _champ_beaten_by = None
+        _champ_beaten_by_wid = None
         _champ_beaten_team = None
         _champ_beaten_team_id = 0
         _cur_champ = champ_state.get("name", "")
+        _cur_champ_tid = champ_state.get("team_id", 0)
+        _cur_champ_wid = champ_state.get("warrior_id")
         if _cur_champ:
             for _bout in fake_card:
                 _pw_won = _bout.result.winner.name == _bout.player_warrior.name
                 _winner = _bout.player_warrior if _pw_won else _bout.opponent
-                _loser = _bout.opponent if _pw_won else _bout.player_warrior
-                if _loser.name == _cur_champ:
+                _loser  = _bout.opponent if _pw_won else _bout.player_warrior
+                _loser_team = _bout.opponent_team if _pw_won else _bout.player_team
+                _loser_wid = getattr(_loser, "warrior_id", None)
+                # Prefer warrior_id match; fall back to name+team_id for old saves
+                _loser_is_champ = (
+                    (_cur_champ_wid and _loser_wid and _cur_champ_wid == _loser_wid) or
+                    (not _cur_champ_wid and _loser.name == _cur_champ and _loser_team.team_id == _cur_champ_tid)
+                )
+                if _loser_is_champ:
                     _champ_beaten_by = _winner.name
+                    _champ_beaten_by_wid = getattr(_winner, "warrior_id", None)
                     _champ_beaten_team = _bout.player_team.team_name if _pw_won else _bout.opponent_team.team_name
                     _champ_beaten_team_id = _bout.player_team.team_id if _pw_won else _bout.opponent_team.team_id
                     break
@@ -1277,10 +1293,11 @@ def _run_turn(request_password, rerun_turn=None):
         champ_state, is_new_champion = _update_champion(
             nl_teams, champ_state, deaths_nl,
             champion_beaten_by=_champ_beaten_by,
+            champion_beaten_by_wid=_champ_beaten_by_wid,
             champion_beaten_team=_champ_beaten_team,
             champion_beaten_team_id=_champ_beaten_team_id,
             prev_champion_name=prev_champion_name,
-            card=fake_card  # Add this line - pass the card data
+            card=fake_card
         )
         save_champion_state(champ_state)
 
@@ -1343,7 +1360,7 @@ def _run_turn(request_password, rerun_turn=None):
         print(f"  WARNING: newsletter generation failed: {_e}")
 
     total_fights = sum(len(r["bouts"]) for r in all_results.values())
-    print(f"\n  Turn {turn_num} complete — {len(all_results)} manager(s), {total_fights} fight(s)")
+    print(f"\n  Turn {turn_num} complete - {len(all_results)} manager(s), {total_fights} fight(s)")
     print(f"  Expected fights: {total_warriors} warriors -> {total_warriors} fights")
     if total_fights == total_warriors:
         print("  ✓ PERFECT: Each warrior fought exactly once!")
@@ -1364,7 +1381,7 @@ def _filter_warrior_for_client(warrior_dict: dict, cfg: dict) -> dict:
         w.pop("luck", None)
     # favorite_weapon is intentionally NOT stripped here.
     # Stripping it caused the field to be absent from client uploads, triggering
-    # assign_favorite_weapon() on every turn re-load — changing the weapon each turn.
+    # assign_favorite_weapon() on every turn re-load - changing the weapon each turn.
     # The client UI already conditionally hides it via S.league.flags.show_favorite_weapon.
     return w
 
@@ -1429,7 +1446,7 @@ def _render_schedule_slots(slots):
 
 
 # =============================================================================
-# ADMIN PAGE (HTML) — Updated with Delete Manager Dropdown + Button
+# ADMIN PAGE (HTML) - Updated with Delete Manager Dropdown + Button
 # =============================================================================
 def _admin_page():
     cfg = _load_config()
@@ -1479,7 +1496,7 @@ def _admin_page():
             if manual: parts.append(f"{manual} manual")
             if auto: parts.append(f"{auto} auto-carry")
             badge = (f"<b style='color:#060'>✓ {total} team(s) uploaded "
-                     f"({', '.join(parts)}) — {mgr_upload_times.get(mid,'')}</b>")
+                     f"({', '.join(parts)}) - {mgr_upload_times.get(mid,'')}</b>")
         else:
             badge = "<span style='color:#800'>✗ not uploaded</span>"
         urows += f"<tr><td>{mgr['manager_name']}</td><td>{badge}</td></tr>"
@@ -1539,7 +1556,7 @@ def _admin_page():
 
     return f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Agony Amphitheatre League — Admin v{SERVER_VERSION}</title>
+<title>The Agony Amphitheatre League - Admin v{SERVER_VERSION}</title>
 <style>
  body{{font:13px Tahoma,Arial,sans-serif;background:#d4d0c8;margin:0}}
  .bar{{background:#000080;color:#fff;padding:6px 14px;font-weight:bold;font-size:15px;
@@ -1591,14 +1608,14 @@ function openTab(evt, tabId) {{
   }}
 }}
 </script>
-<div class="bar">⚔ THE AGONY AMPHITHEATRE — Admin <span style="margin-left:8px; opacity:0.7;">v{SERVER_VERSION}</span>
+<div class="bar">⚔ THE AGONY AMPHITHEATRE - Admin <span style="margin-left:8px; opacity:0.7;">v{SERVER_VERSION}</span>
  <span>Turn {turn}</span>
  <span class="state">{state_display}</span>
  <span id="sched-top-badge" style="display:none;background:#060;color:#fff;padding:2px 8px;border-radius:3px;font-size:10px;margin-left:8px;vertical-align:middle;border:1px solid #0a0">AUTO-SCHEDULE ON</span>
  <span>{len(mgr_upload_counts)}/{len(managers)} players + {ai_count} AI uploaded</span>
 </div>
 <div id="msg"></div>
-{'<div style="background:#0a3;color:#fff;padding:10px 18px;font-size:13px;border-bottom:2px solid #080;display:flex;align-items:center;gap:12px"><span style="font-size:18px">✓</span><span><strong>Auto-scheduled turn ' + str(last_sched_turn) + ' completed</strong> — ' + last_sched_result.replace("Completed at ","") + '</span></div>' if auto_completed else ''}
+{'<div style="background:#0a3;color:#fff;padding:10px 18px;font-size:13px;border-bottom:2px solid #080;display:flex;align-items:center;gap:12px"><span style="font-size:18px">✓</span><span><strong>Auto-scheduled turn ' + str(last_sched_turn) + ' completed</strong> - ' + last_sched_result.replace("Completed at ","") + '</span></div>' if auto_completed else ''}
 
 <div class="tabs">
  <button class="tab-btn active" onclick="openTab(event, 'tab-ops')">⚔ OPERATIONS</button>
@@ -1626,7 +1643,7 @@ function openTab(evt, tabId) {{
   {rerun_section}
  </div>
  <div class="panel">
-  <h3>Upload Status — Turn {turn}</h3>
+  <h3>Upload Status - Turn {turn}</h3>
   <table><tr><th>Manager</th><th>Status</th></tr>{urows}</table>
  </div>
  <div class="panel" style="min-width:260px;max-width:380px">
@@ -1886,7 +1903,7 @@ function _abortPoll(msg){{
  stopPoll();
  document.getElementById('prog-wrap').style.display='none';
  const hint=msg.toLowerCase().includes('already')
-  ?' — Click 🔓 to unlock if the previous run crashed.':'';
+  ?' - Click 🔓 to unlock if the previous run crashed.':'';
  show('Error: '+msg+hint,'err');
 }}
 async function runTurn(){{
@@ -1977,7 +1994,7 @@ async function pollProgress(){{
   if(d.running) _seenRunning=true;
   if(!d.running && d.done>0 && _seenRunning){{
    stopPoll();
-   show(`Done — ${{d.message}}`,'ok');
+   show(`Done - ${{d.message}}`,'ok');
    setTimeout(()=>{{_isNavigating=true;location.href='/admin?t='+Date.now();}},2000);
   }}
  }}catch(e){{}}
@@ -2020,7 +2037,7 @@ function removeSchedSlot(btn){{
 
 async function saveSchedule(){{
   const pw=pw_val()||prompt('Host password required to save the schedule:');
-  if(!pw){{show('Schedule not saved — host password required.','err');return false;}}
+  if(!pw){{show('Schedule not saved - host password required.','err');return false;}}
   const hp=document.getElementById('hp'); if(hp && !hp.value) hp.value=pw;
   const enabled=!!document.getElementById('sched-enabled')?.checked;
   const slots=[...document.querySelectorAll('#sched-slots .sched-row')].map(row=>{{
@@ -2035,7 +2052,7 @@ async function saveSchedule(){{
    const d=await r.json();
    if(d.success){{
     const slotDesc=slots.length?slots.map(s=>`${{s.day}} ${{s.time}}`).join(', '):'no slots';
-    show(`Saved: ${{enabled?'enabled':'disabled'}} — ${{slotDesc}}`,'ok');
+    show(`Saved: ${{enabled?'enabled':'disabled'}} - ${{slotDesc}}`,'ok');
     await refreshScheduleStatus(); return true;
    }}
    else{{show('Error: '+(d.error||'update failed'),'err');return false;}}
@@ -2056,7 +2073,7 @@ async function refreshScheduleStatus(){{
     nextTxt='Next runs: '+d.schedule_slots.map(s=>`${{s.day}} ${{s.time}}`).join(', ');
    }}
    const last=d.schedule_last_run_turn
-    ? `Last auto-run: turn ${{d.schedule_last_run_turn}}${{d.schedule_last_run_at?` at ${{d.schedule_last_run_at}}`:''}}${{d.schedule_last_run_result?` — ${{d.schedule_last_run_result}}`:''}}` : 'Last auto-run: never';
+    ? `Last auto-run: turn ${{d.schedule_last_run_turn}}${{d.schedule_last_run_at?` at ${{d.schedule_last_run_at}}`:''}}${{d.schedule_last_run_result?` - ${{d.schedule_last_run_result}}`:''}}` : 'Last auto-run: never';
    el.textContent=`${{nextTxt}} | ${{last}}`;
    const badge=document.getElementById('sched-top-badge');
    if(badge) badge.style.display=d.schedule_enabled?'inline-block':'none';
@@ -2067,14 +2084,14 @@ setTimeout(refreshScheduleStatus, 0);
 
 // Persist feature-flag toggles so they survive turn reloads.
 window.toggleFlag = async function(evt,key){{
-  // currentTarget can be null in inline onchange handlers in some browsers — fall back to target
+  // currentTarget can be null in inline onchange handlers in some browsers - fall back to target
   const el=evt?(evt.currentTarget||evt.target):null;
   const val=el?el.checked:false;
  let pw=pw_val();
  if(!pw){{
   pw=prompt('Host password required to save this flag:');
   if(!pw){{
-   show('Flag not saved — host password required.','err');
+   show('Flag not saved - host password required.','err');
    if(el) el.checked=!val;
    return;
   }}
@@ -2158,7 +2175,7 @@ async function renameSelectedManager() {{
     if (!confirm(`Rename "${{oldName}}" to "${{newName}}"?\n\nThis will update their manager name in all teams and standings.`)) return;
 
     const pw = pw_val() || prompt('Enter host password:');
-    if (!pw) {{ show('Rename cancelled — no password provided.', 'err'); return; }}
+    if (!pw) {{ show('Rename cancelled - no password provided.', 'err'); return; }}
     const hp = document.getElementById('hp'); if (hp) hp.value = pw;
 
     try {{
@@ -2216,7 +2233,7 @@ async function downloadManagerFiles() {{
 
     const managerName = select.options[select.selectedIndex].text.split(' (ID:')[0];
     const pw = pw_val() || prompt('Enter host password:');
-    if (!pw) {{ show('Download cancelled — no password provided.', 'err'); return; }}
+    if (!pw) {{ show('Download cancelled - no password provided.', 'err'); return; }}
     const hp = document.getElementById('hp'); if (hp) hp.value = pw;
 
     try {{
@@ -2597,7 +2614,7 @@ document.addEventListener('DOMContentLoaded',()=>{{
    let pw=pw_val();
    if(!pw){{
     pw=prompt('Host password required to save this flag:');
-    if(!pw){{show('Flag not saved — host password required.','err');this.checked=!val;return;}}
+    if(!pw){{show('Flag not saved - host password required.','err');this.checked=!val;return;}}
     const hp=document.getElementById('hp');if(hp) hp.value=pw;
    }}
    try{{
@@ -2612,7 +2629,7 @@ document.addEventListener('DOMContentLoaded',()=>{{
  }});
 }});
 
-// Browser close detection — only shut down on real tab close, not auto-reloads
+// Browser close detection - only shut down on real tab close, not auto-reloads
 window.addEventListener('beforeunload', () => {{
   if(!_isNavigating) navigator.sendBeacon('/api/shutdown', '');
 }});
@@ -2746,7 +2763,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 managers_info.append({
                     "manager_id": mid,
                     "manager_name": mgr["manager_name"],
-                    "last_upload_timestamp": mgr.get("last_upload_timestamp", "—")
+                    "last_upload_timestamp": mgr.get("last_upload_timestamp", "-")
                 })
             self.send_json({
                 "current_turn"    : cfg["current_turn"],
@@ -2798,7 +2815,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             pw      = q.get("password", "")
             if not turn_n or not fid:
                 self.send_json({"success":False,"error":"turn and fight_id required"}); return
-            # Auth check — require valid manager credentials
+            # Auth check - require valid manager credentials
             mgrs = _load_managers()
             if mid and pw:
                 if mid not in mgrs or not _check_mgr_pw(mgrs[mid], pw):
@@ -2979,7 +2996,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             last_dl = mgrs[mid].get("last_downloaded_turn", 0)
             if int(last_dl) == int(res_turn):
                 _log_activity("download_already_current", mid, mgrs[mid]["manager_name"],
-                              f"Already downloaded turn {res_turn} — returning already_current")
+                              f"Already downloaded turn {res_turn} - returning already_current")
                 self.send_json({
                     "success": True, "already_current": True,
                     "turn": res_turn,
@@ -3027,7 +3044,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             # Exclude the caller's own teams from the target list.
             own_team_ids = set(int(t) for t in mgrs[mid].get("team_ids", []) if isinstance(t,(int,str)) and str(t).isdigit())
             # For /api/challenge/targets, also allow excluding one specific team
-            # (the attacking team itself — its own warriors can't be challenged).
+            # (the attacking team itself - its own warriors can't be challenged).
             try:    exclude_tid = int(q.get("team_id","0") or 0)
             except: exclude_tid = 0
             from save import TEAMS_DIR
@@ -3170,7 +3187,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 self.send_json({"success": False, "error": "File not found"}, 404); return
             try:
                 if fpath.endswith(".json"):
-                    # load_json_protected returns a dict, not a string — send directly
+                    # load_json_protected returns a dict, not a string - send directly
                     content = load_json_protected(fpath)
                     self.send_json({"success": True, "data": content})
                 else:
@@ -3210,7 +3227,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 for existing_mid, m in mgrs.items():
                     if m["manager_name"].lower() == mname.lower():
                         if _check_mgr_pw(m, pw):
-                            # Do NOT stamp acknowledged_reset_count here — an existing
+                            # Do NOT stamp acknowledged_reset_count here - an existing
                             # manager reconnecting after a reset should still see the
                             # reset modal. The check_reset default handles new-to-feature
                             # managers. Only new registrations get the ack stamp.
@@ -3224,7 +3241,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                                 "deleted_teams": deleted_teams_list,
                                 "team_ids": m.get("team_ids", [])
                             }); return
-                        self.send_json({"success":False,"error":"Manager name already registered — use your original password to reconnect."}); return
+                        self.send_json({"success":False,"error":"Manager name already registered - use your original password to reconnect."}); return
                 # Numeric IDs, starting at 20 and incrementing. Legacy non-numeric
                 # IDs (hex uuids from older builds) are skipped so they don't
                 # poison the sequence.
@@ -3422,7 +3439,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                             stuck = True
                     if not stuck:
                         self.send_json({"success":False,"error":"Turn is running. Try again shortly."}); return
-                    print(" WARNING: turn_state was stuck as 'processing' — auto-recovering.")
+                    print(" WARNING: turn_state was stuck as 'processing' - auto-recovering.")
                     cfg["turn_state"] = "open"; _save_config(cfg)
                 if cfg["turn_state"] == "results_ready":
                     cfg["turn_state"] = "open"; _save_config(cfg)
@@ -3653,12 +3670,12 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             if ack_type == "rerun":
                 if mid not in mgrs:
                     self.send_json({"success":False,"error":"Manager not found."}); return
-                # No password required — this is a read-receipt flag, not a state change
+                # No password required - this is a read-receipt flag, not a state change
                 mgrs[mid]["acknowledged_rerun_count"] = int(b.get("rerun_count", 0))
                 _save_managers(mgrs)
                 self.send_json({"success": True}); return
             else:
-                # "reset" acknowledgment — no password required (read-receipt + team data pull)
+                # "reset" acknowledgment - no password required (read-receipt + team data pull)
                 server_reset_count = int(b.get("server_reset_count", 0))
                 teams_out = []
                 if mid in mgrs:
@@ -3674,7 +3691,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     _save_managers(mgrs)
                     self.send_json({"success": True, "teams": teams_out, "full_reset": False, "clear_local_results": True}); return
                 else:
-                    # Manager no longer exists (full reset) — just acknowledge
+                    # Manager no longer exists (full reset) - just acknowledge
                     self.send_json({"success": True, "teams": [], "full_reset": True, "clear_local_results": True}); return
 
         if path == "/api/arena/reset":
@@ -3956,7 +3973,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 self.send_json({"success": False, "error": "File not found"}, 404); return
             try:
                 if fpath.endswith(".json"):
-                    # load_json_protected returns a dict, not a string — send directly
+                    # load_json_protected returns a dict, not a string - send directly
                     content = load_json_protected(fpath)
                     self.send_json({"success": True, "data": content})
                 else:
@@ -4566,6 +4583,16 @@ def main():
     _server_port = args.port
 
     _ensure_dirs()
+
+    # One-time migration: assign warrior_ids to existing warriors that predate this feature
+    try:
+        from save import migrate_warrior_ids
+        _migrated = migrate_warrior_ids()
+        if _migrated:
+            print(f"  [startup] Assigned warrior IDs to {_migrated} existing warrior(s).")
+    except Exception as _me:
+        print(f"  WARNING: warrior ID migration failed: {_me}")
+
     cfg  = _load_config()
     salt = cfg.get("host_password_salt") or secrets.token_hex(16)
     cfg["host_password_salt"] = salt
@@ -4573,7 +4600,7 @@ def main():
     _save_config(cfg)
 
     # Use a threading server so GET requests (results, status, etc.) are handled
-    # concurrently while a turn is running — prevents 10053 socket abort on Windows
+    # concurrently while a turn is running - prevents 10053 socket abort on Windows
     class ThreadedLeagueServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
         daemon_threads = True   # threads die with the server process
 
@@ -4581,7 +4608,7 @@ def main():
             import sys
             exc = sys.exc_info()[1]
             if isinstance(exc, (ConnectionResetError, BrokenPipeError)):
-                return  # client dropped the connection — harmless, suppress noise
+                return  # client dropped the connection - harmless, suppress noise
             super().handle_error(request, client_address)
 
     server = ThreadedLeagueServer(("0.0.0.0", args.port), LeagueHandler)
@@ -4645,7 +4672,7 @@ def main():
                         args=(args.host_password,),
                         daemon=True,
                     ).start()
-                    break  # one turn per check — don't fire two slots at once
+                    break  # one turn per check - don't fire two slots at once
             except Exception as _se:
                 print(f"  [scheduler] Error: {_se}")
 

@@ -1,5 +1,5 @@
 # =============================================================================
-# file_protection.py — File Integrity Protection System
+# file_protection.py - File Integrity Protection System
 # =============================================================================
 # Prevents players from manually editing save files by:
 #   1. Creating checksums for all JSON files

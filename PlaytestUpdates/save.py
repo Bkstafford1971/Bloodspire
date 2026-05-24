@@ -1,17 +1,17 @@
 # =============================================================================
-# save.py — BLOODSPIRE Save & Load System
+# save.py - BLOODSPIRE Save & Load System
 # =============================================================================
 # All data is stored as JSON files under the saves/ directory.
 #
 # Directory layout:
 #   saves/
-#     game_state.json         — global state (next team ID, turn counter)
+#     game_state.json         - global state (next team ID, turn counter)
 #     teams/
-#       team_0001.json        — one file per team
+#       team_0001.json        - one file per team
 #       team_0002.json
 #       ...
 #     fights/
-#       fight_0001.txt        — plain-text fight log
+#       fight_0001.txt        - plain-text fight log
 #       fight_0002.txt
 #       ...
 #
@@ -48,7 +48,7 @@ GRAVEYARD_DIR  = os.path.join(SAVES_DIR, "graveyard")
 # Legacy local-accounts file from the retired gui_server. Kept as a path
 # constant so reset routines can still wipe it if it lingers on disk.
 ACCOUNTS_FILE  = os.path.join(SAVES_DIR, "accounts.json")
-# Central manager registry owned by league_server.py — the source of truth
+# Central manager registry owned by league_server.py - the source of truth
 # for manager names now that the local accounts.py has been removed.
 LEAGUE_MANAGERS_FILE = os.path.join(SAVES_DIR, "league", "managers.json")
 
@@ -97,9 +97,10 @@ def save_monster_team(team: Team):
 # ---------------------------------------------------------------------------
 
 DEFAULT_GAME_STATE = {
-    "next_team_id" : 1,
-    "next_fight_id": 1,
-    "turn_number"  : 0,
+    "next_team_id"    : 1,
+    "next_fight_id"   : 1,
+    "next_warrior_id" : 1,
+    "turn_number"     : 0,
 }
 
 
@@ -147,6 +148,48 @@ def next_fight_id() -> int:
     return new_id
 
 
+def next_warrior_id() -> int:
+    """Consume and return the next available warrior ID. Increments the counter."""
+    state  = load_game_state()
+    new_id = state.get("next_warrior_id", 1)
+    state["next_warrior_id"] = new_id + 1
+    save_game_state(state)
+    return new_id
+
+
+def migrate_warrior_ids() -> int:
+    """
+    One-time migration: assign warrior_ids to every warrior that lacks one.
+    Scans all team save files, assigns sequential IDs, and re-saves changed files.
+    Returns the number of warriors that received new IDs.
+    """
+    assigned = 0
+    if not os.path.exists(TEAMS_DIR):
+        return 0
+    for fname in os.listdir(TEAMS_DIR):
+        if not fname.startswith("team_") or not fname.endswith(".json"):
+            continue
+        fpath = os.path.join(TEAMS_DIR, fname)
+        try:
+            with open(fpath, "r", encoding="utf-8") as fh:
+                data = json.load(fh)
+        except Exception:
+            continue
+        changed = False
+        for section in ("warriors", "archived_warriors"):
+            for wd in data.get(section, []):
+                if wd and not wd.get("warrior_id"):
+                    wd["warrior_id"] = next_warrior_id()
+                    assigned += 1
+                    changed = True
+        if changed:
+            try:
+                save_json_protected(fpath, data)
+            except Exception as e:
+                print(f"  WARNING: migrate_warrior_ids could not save {fname}: {e}")
+    return assigned
+
+
 def increment_turn():
     """Advance the global turn counter by 1."""
     state = load_game_state()
@@ -179,6 +222,18 @@ def save_team(team: Team) -> str:
     # Assign ID on first save
     if team.team_id == 0:
         team.team_id = next_team_id()
+
+    # Assign warrior_ids to any warrior that still lacks one (handles both Warrior objects and dicts)
+    for section in (team.warriors, getattr(team, "archived_warriors", [])):
+        for w in (section or []):
+            if not w:
+                continue
+            if isinstance(w, dict):
+                if not w.get("warrior_id"):
+                    w["warrior_id"] = next_warrior_id()
+            else:
+                if getattr(w, "warrior_id", None) is None:
+                    w.warrior_id = next_warrior_id()
 
     filepath = _team_filepath(team.team_id)
     try:
@@ -277,13 +332,13 @@ def save_fight_log(narrative_text: str, team_a_name: str, team_b_name: str) -> t
     Save a fight narrative to a timestamped text file.
     Returns (filepath, fight_id).
 
-    Fight logs are plain text — the full blow-by-blow narrative exactly
+    Fight logs are plain text - the full blow-by-blow narrative exactly
     as printed to the console.
     """
     _ensure_dirs()
     fight_id = next_fight_id()
-    safe_a   = team_a_name.replace(" ", "_")[:25]
-    safe_b   = team_b_name.replace(" ", "_")[:25]
+    safe_a   = team_a_name.replace(" ", "_")[:20]
+    safe_b   = team_b_name.replace(" ", "_")[:20]
     filename = f"fight_{fight_id:04d}_{safe_a}_vs_{safe_b}.txt"
     filepath = os.path.join(FIGHTS_DIR, filename)
 
@@ -601,7 +656,7 @@ def print_save_status():
 # ---------------------------------------------------------------------------
 
 def _summary_rows(card) -> str:
-    """Build HTML table rows for the fight summary — kept outside f-strings
+    """Build HTML table rows for the fight summary - kept outside f-strings
     so backslashes in attribute values are safe on Python < 3.12."""
     rows = []
     for i, bout in enumerate(card, 1):
@@ -639,11 +694,11 @@ def write_turn_logs(turn_num: int, card, player_team_name: str):
 
     # ── Matchmaking log (plain text) ──────────────────────────────────────
     mm_lines = [
-        f"BLOODSPIRE — MATCHMAKING LOG",
+        f"BLOODSPIRE - MATCHMAKING LOG",
         f"Turn {turn_num}  |  Team: {player_team_name}  |  {ts}",
-        "=" * 96,
-        f"{'#':<4} {'Fighter':<25} {'Exp':>5} {'vs':<4} {'Opponent':<25} {'Exp':>5} {'Type':<16} {'Result':<8} {'Mins':>4}",
-        "-" * 96,
+        "=" * 72,
+        f"{'#':<4} {'Fighter':<20} {'Exp':>5} {'vs':<4} {'Opponent':<20} {'Exp':>5} {'Type':<16} {'Result':<8} {'Mins':>4}",
+        "-" * 72,
     ]
     for i, bout in enumerate(card, 1):
         pw  = bout.player_warrior
@@ -651,8 +706,8 @@ def write_turn_logs(turn_num: int, card, player_team_name: str):
         r   = bout.result
         res = "WIN" if (r and r.winner and r.winner.name == pw.name) else "LOSS"
         mm_lines.append(
-            f"{i:<4} {pw.name[:24]:<25} {pw.total_fights:>5}  vs  "
-            f"{ow.name[:24]:<25} {ow.total_fights:>5} {bout.fight_type:<16} {res:<8} {r.minutes_elapsed if r else '?':>4}"
+            f"{i:<4} {pw.name[:19]:<20} {pw.total_fights:>5}  vs  "
+            f"{ow.name[:19]:<20} {ow.total_fights:>5} {bout.fight_type:<16} {res:<8} {r.minutes_elapsed if r else '?':>4}"
         )
     mm_lines += ["", f"Total bouts: {len(card)}", ""]
     mm_path = os.path.join(turn_log_dir, "matchmaking.txt")
@@ -721,7 +776,7 @@ def write_turn_logs(turn_num: int, card, player_team_name: str):
 
     html = f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8">
-<title>BLOODSPIRE — Turn {turn_num} Fight Log</title>
+<title>BLOODSPIRE - Turn {turn_num} Fight Log</title>
 <style>
   body{{background:#111;color:#ccc;font-family:Tahoma,Arial,sans-serif;font-size:13px;margin:0;padding:16px}}
   h1{{color:#c80;margin:0 0 4px}}
@@ -732,7 +787,7 @@ def write_turn_logs(turn_num: int, card, player_team_name: str):
   .summary th{{padding:3px 12px;color:#888;text-align:left;border-bottom:1px solid #333}}
 </style>
 </head><body>
-<h1>⚔ BLOODSPIRE — Fight Log</h1>
+<h1>⚔ BLOODSPIRE - Fight Log</h1>
 <div class="meta">Turn {turn_num} | {player_team_name} | Generated {ts}</div>
 <div class="summary">
   <table>
@@ -885,7 +940,7 @@ def reset_arena_complete():
 
 def reset_arena_season():
     """
-    Season reset — clear fight records, injuries, and fallen warriors, but keep
+    Season reset - clear fight records, injuries, and fallen warriors, but keep
     each warrior's identity, attributes, gear, strategies, trains, and skills.
     Matches the league-reset modal's promise: "warriors, stats, gear, strategies"
     are kept; "wins, losses, kills, fight history, injuries, fallen warriors" are cleared.
@@ -1182,7 +1237,7 @@ def get_all_scouted_warriors(current_turn: int) -> dict:
     Return a mapping of warrior_name → [manager_name, ...] for the current turn.
     Only includes confirmed scouts. Used during fight resolution to inject scout-attendance flavor text.
     """
-    # Read the league server's manager registry directly — the old accounts.py
+    # Read the league server's manager registry directly - the old accounts.py
     # local store is gone; manager records live at saves/league/managers.json.
     mgrs = {}
     try:
@@ -1221,7 +1276,7 @@ SESSION_FILE = os.path.join(SAVES_DIR, "session.json")
 def save_session(manager_name: str, password: str = ""):
     """
     Persist login credentials for auto-login on next launch.
-    Password is stored obfuscated (base64) — not plaintext, not cryptographically
+    Password is stored obfuscated (base64) - not plaintext, not cryptographically
     protected.  This is purely convenience; security relies on the server-side
     bcrypt/sha256 check in accounts.py.
     """

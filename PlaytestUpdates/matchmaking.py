@@ -1,5 +1,5 @@
 # =============================================================================
-# matchmaking.py — THE AGONY AMPHITHEATRE Turn Matchmaking Engine
+# matchmaking.py - THE AGONY AMPHITHEATRE Turn Matchmaking Engine
 # =============================================================================
 # Builds the list of fights for a turn:
 #   1. Resolve blood challenges (highest priority).
@@ -279,7 +279,7 @@ def _in_bracket(player_fights: int, opponent_fights: int) -> bool:
       upper = floor(fights × 1.30)
     A 0-fight warrior only matches other 0-fight warriors (0×1.30 = 0).
     A 1-fight warrior matches 0–1 fights, 5-fight matches 4–6, etc.
-    No special rookie bucket — graduated window applies from fight 0 onward.
+    No special rookie bucket - graduated window applies from fight 0 onward.
     """
     lower = int(player_fights * BRACKET_LOWER)
     upper = int(player_fights * BRACKET_UPPER)
@@ -467,7 +467,7 @@ def _absorb_into_monsters(
 
     Player-side effects:
       - Warrior's record (already updated by run_fight) is frozen at its current
-        value — kill_warrior marks them is_dead, preventing further fights.
+        value - kill_warrior marks them is_dead, preventing further fights.
       - Original warrior stats/skills/record are preserved on the player team
         for archiving (we build a SEPARATE monster clone; the original is not
         mutated before kill_warrior is called).
@@ -488,7 +488,7 @@ def _absorb_into_monsters(
 
     # ---- Build the monster-ified clone (does NOT mutate the original) ----
     src = warrior.to_dict()
-    src["race"] = "Monster"          # Race change — freezes record in run_fight
+    src["race"] = "Monster"          # Race change - freezes record in run_fight
     src["wins"] = 0                  # Monsters always display 0-0-0
     src["losses"] = 0
     src["kills"] = 0
@@ -545,13 +545,13 @@ def _absorb_into_monsters(
           f"on the Monster roster (slot {slot_idx}).")
 
     # ---- Open replacement slot on the player team ----
-    # The original warrior is untouched up to this point — archive will
+    # The original warrior is untouched up to this point - archive will
     # preserve their real stats and 34-2-16 record.
     player_team.kill_warrior(
         warrior,
         killed_by     = "The Monsters",
         killer_fights = 999,
-        fight_type    = "monster",   # ascension — no blood challenge against monsters
+        fight_type    = "monster",   # ascension - no blood challenge against monsters
     )
 
 
@@ -603,7 +603,7 @@ def validate_warrior_fight_frequency(card: List[ScheduledFight]) -> List[dict]:
     # Check for violations
     for key, fight_list in warrior_fight_map.items():
         if len(fight_list) > 1:
-            # Multiple fights for a user/AI warrior — this is a violation
+            # Multiple fights for a user/AI warrior - this is a violation
             team_id, _ = key
             warrior_name = fight_list[0][2]
             violations.append({
@@ -712,7 +712,7 @@ def build_fight_card(
     # Hard rule: every warrior fights at most once per turn, so any warrior
     # already scheduled elsewhere (as someone else's pw) is excluded from
     # this team's pw pool.  Since team size = 5, this also caps every
-    # team at 5 fights/turn — a rule with no exceptions.
+    # team at 5 fights/turn - a rule with no exceptions.
     active_players = [w for w in player_team.active_warriors 
                       if (player_team.team_id, w.slot_index) not in global_used]
     if not active_players:
@@ -790,7 +790,7 @@ def build_fight_card(
             }
             matched_players.add(challenger.slot_index)
             matched_teams.add(target_team.team_id)
-            print(f"  BLOOD CHALLENGE: {challenger.name} vs {target_warrior.name} — ACCEPTED")
+            print(f"  BLOOD CHALLENGE: {challenger.name} vs {target_warrior.name} - ACCEPTED")
             print(f"    (Avenging {bc_dead_name} against {bc_target_name}; {bc.get('turns_remaining')} turn(s) remaining)")
         else:
             print(
@@ -1030,7 +1030,7 @@ def build_fight_card(
                 fight_type       = "standard",
             ))
             matched_players.add(player_warrior.slot_index)
-            # Don't add to matched_teams for standard matches — allow multiple warriors
+            # Don't add to matched_teams for standard matches - allow multiple warriors
             # to fight the same opponent team. Only challenges (exclusive) use matched_teams.
 
     # ------------------------------------------------------------------
@@ -1085,7 +1085,7 @@ def run_turn(
     if global_used is None:
         global_used = set()
     current_champion = champion_state.get("name", "")
-    print(f"\n  === RUNNING TURN — {player_team.team_name} ===\n")
+    print(f"\n  === RUNNING TURN - {player_team.team_name} ===\n")
     print(f"  [run_turn start] archived_warriors={len(getattr(player_team,'archived_warriors',[]))}")
 
     card = build_fight_card(player_team, opponent_teams,
@@ -1242,7 +1242,7 @@ def run_turn(
                 print(f"  !!! {pw.name} has SLAIN a monster and joins The Monsters! !!!")
                 print(f"  >>> A replacement slot is now available on {player_team.team_name}")
             elif bout.fight_type == "peasant":
-                pass   # Peasants have no persistent team — nothing to update
+                pass   # Peasants have no persistent team - nothing to update
             else:
                 bout.opponent_team.kill_warrior(ow, killed_by=pw.name,
                                                 killer_fights=pw.total_fights,
@@ -1250,7 +1250,7 @@ def run_turn(
 
         # Handle blood challenge victory
         if bout.fight_type == "blood_challenge" and pw_won:
-            # Player won the blood challenge — mark it as avenged
+            # Player won the blood challenge - mark it as avenged
             bc_info = getattr(bout, "_blood_challenge_info", {})
             if bc_info:
                 target_name = bc_info.get("target_name")
@@ -1359,7 +1359,7 @@ def run_turn(
     player_team.turn_history.append({"turn": turn, "w": turn_w, "l": turn_l, "k": turn_k})
     save_team(player_team)
 
-    # Generate newsletter — include opponent teams, exclude Monsters/Peasants
+    # Generate newsletter - include opponent teams, exclude Monsters/Peasants
     from newsletter import generate_newsletter, _update_champion
     import datetime as _dt
     processed_date = _dt.date.today().strftime("%m/%d/%Y")
@@ -1421,7 +1421,7 @@ def run_turn(
     champion_state = load_champion_state()
 
     # Detect if the reigning champion was defeated this turn.
-    # The champion retains the title unless they actually lose a fight —
+    # The champion retains the title unless they actually lose a fight -
     # not fighting, or fighting a peasant, never costs them the title.
     _champ_beaten_by   = None
     _champ_beaten_team = None
@@ -1478,7 +1478,7 @@ def turn_summary(card: List[ScheduledFight], player_team_name: str) -> str:
     lines = [
         "",
         "=" * 62,
-        f"  TURN RESULTS — {player_team_name.upper()}",
+        f"  TURN RESULTS - {player_team_name.upper()}",
         "=" * 62,
     ]
     wins = losses = draws = 0
@@ -1487,7 +1487,7 @@ def turn_summary(card: List[ScheduledFight], player_team_name: str) -> str:
         pw = bout.player_warrior
         r  = bout.result
         if r is None:
-            lines.append(f"  {pw.name:<25} — No result")
+            lines.append(f"  {pw.name:<20} - No result")
             continue
 
         if r.winner is pw:
@@ -1505,7 +1505,7 @@ def turn_summary(card: List[ScheduledFight], player_team_name: str) -> str:
 
         opp_type = f"[{bout.fight_type}]"
         lines.append(
-            f"  {pw.name:<25} {outcome}  vs {bout.opponent.name:<25} "
+            f"  {pw.name:<20} {outcome}  vs {bout.opponent.name:<20} "
             f"{opp_type:<18}{died_note}{kill_note}"
         )
 
