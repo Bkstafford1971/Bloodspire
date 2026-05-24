@@ -1248,15 +1248,19 @@ def run_turn(
                                                 killer_fights=pw.total_fights,
                                                 fight_type=bout.fight_type)
 
-        # Handle blood challenge victory
-        if bout.fight_type == "blood_challenge" and pw_won:
-            # Player won the blood challenge - mark it as avenged
+        # Handle blood challenge resolution — always consumes the challenge (win or loss).
+        # One fight per death: prevents padding records with repeated easy wins.
+        if bout.fight_type == "blood_challenge":
             bc_info = getattr(bout, "_blood_challenge_info", {})
             if bc_info:
-                target_name = bc_info.get("target_name")
+                target_name     = bc_info.get("target_name")
                 dead_warrior_name = bc_info.get("dead_warrior_name")
-                if player_team.mark_blood_challenge_avenged(target_name, dead_warrior_name):
-                    print(f"  !!! BLOOD CHALLENGE AVENGED: {pw.name} has avenged {dead_warrior_name}! !!!")
+                removed = player_team.remove_blood_challenge(target_name, dead_warrior_name)
+                if removed:
+                    if pw_won:
+                        print(f"  !!! BLOOD CHALLENGE AVENGED: {pw.name} has avenged {dead_warrior_name}! !!!")
+                    else:
+                        print(f"  The blood challenge for {dead_warrior_name} has been fought - the fallen remain unavenged.")
 
         if verbose:
             if result.winner:
@@ -1268,12 +1272,14 @@ def run_turn(
     # Clear regular challenges
     player_team.clear_challenges()
     
-    # Decrement blood challenge turns and clean up expired ones
+    # Decrement blood challenge turns and clean up expired or already-fought ones.
     player_team.decrement_blood_challenge_turns()
-    # Remove expired blood challenges (turns_remaining == 0 and not avenged)
+    # Keep only active challenges that still have turns left.
+    # Avenged entries are removed immediately when the fight resolves; this filter
+    # handles turn-expiry and cleans up any legacy "avenged" entries from old saves.
     player_team.blood_challenges = [
-        bc for bc in player_team.blood_challenges 
-        if not (bc.get("turns_remaining", 0) <= 0 and bc.get("status") == "active")
+        bc for bc in player_team.blood_challenges
+        if bc.get("status") == "active" and bc.get("turns_remaining", 0) > 0
     ]
 
     # Increment turns_active for every living warrior on the team

@@ -392,12 +392,27 @@ class Team:
         Returns True if found and marked, False otherwise.
         """
         for bc in self.blood_challenges:
-            if (bc.get("target_name") == target_name and 
+            if (bc.get("target_name") == target_name and
                 bc.get("dead_warrior_name") == dead_warrior_name and
                 bc.get("status") == "active"):
                 bc["status"] = "avenged"
                 return True
         return False
+
+    def remove_blood_challenge(self, target_name: str, dead_warrior_name: str) -> bool:
+        """
+        Remove a blood challenge entirely after it has been fought (win or loss).
+        A challenge is one-and-done: once the fight happens the opportunity is spent,
+        preventing repeated fights against a weaker opponent for easy wins.
+        Returns True if an entry was found and removed.
+        """
+        before = len(self.blood_challenges)
+        self.blood_challenges = [
+            bc for bc in self.blood_challenges
+            if not (bc.get("target_name") == target_name and
+                    bc.get("dead_warrior_name") == dead_warrior_name)
+        ]
+        return len(self.blood_challenges) < before
 
     def decrement_blood_challenge_turns(self):
         """

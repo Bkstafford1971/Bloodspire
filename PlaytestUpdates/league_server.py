@@ -350,6 +350,26 @@ def _check_host_pw(cfg, password):
 def _check_mgr_pw(mgr, password):
     return _hash_pw(password, mgr["salt"]) == mgr["password_hash"]
 
+
+def _get_or_assign_scout_persona(mid: str, mgrs: dict) -> tuple:
+    """
+    Return (scout_name, scout_type) for this manager.
+    If not yet assigned, pick one randomly, persist it, and return it.
+    """
+    import random
+    from scout_report import PERSONA_TYPES, random_persona_name
+    mgr = mgrs.get(mid, {})
+    scout = mgr.get("scout")
+    if scout and scout.get("name") and scout.get("type"):
+        return scout["name"], scout["type"]
+    # Assign fresh persona
+    ptype = random.choice(PERSONA_TYPES)
+    pname = random_persona_name(ptype)
+    mgr["scout"] = {"name": pname, "type": ptype}
+    mgrs[mid] = mgr
+    _save_managers(mgrs)
+    return pname, ptype
+
 def _next_fid(cfg):
     cfg["fight_counter"] = cfg.get("fight_counter", 0) + 1
     return cfg["fight_counter"]
@@ -3126,7 +3146,9 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 warrior_obj = found_w
             fh = found_w.get("fight_history", []) or []
             last_fight = fh[-1] if fh else None
-            scout_text = generate_scout_report(warrior_obj, last_fight, found_team_name)
+            scout_name, scout_type = _get_or_assign_scout_persona(mid, mgrs)
+            scout_text = generate_scout_report(warrior_obj, last_fight, found_team_name,
+                                               scout_name=scout_name, scout_type=scout_type)
             self.send_json({
                 "success": True,
                 "report": {
@@ -3144,6 +3166,8 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     "primary_weapon"  : found_w.get("primary_weapon")   or "Open Hand",
                     "secondary_weapon": found_w.get("secondary_weapon") or "Open Hand",
                     "backup_weapon"   : found_w.get("backup_weapon")    or "None",
+                    "scout_name"      : scout_name,
+                    "scout_type"      : scout_type,
                     "scout_report"    : scout_text,
                 }
             }); return
