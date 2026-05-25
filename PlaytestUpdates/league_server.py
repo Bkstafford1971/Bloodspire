@@ -4433,6 +4433,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             if not _check_host_pw(cfg, b.get("host_password","")):
                 self.send_json({"success":False,"error":"Not authorised."}, 401); return
             cfg["turn_state"] = "open"
+            cfg.pop("processing_started_at", None)  # Clear the stuck turn timestamp
             _save_config(cfg)
             _turn_progress = {"running": False, "done": 0, "total": 0, "message": "Unlocked manually"}
             self.send_json({"success":True,"message":"Turn state reset to OPEN."}); return

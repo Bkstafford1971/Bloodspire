@@ -748,53 +748,55 @@ def _wattr(warrior, attr, default=None):
 # PHYSICAL OBSERVATIONS - Scout's perception of warrior's attributes
 # ---------------------------------------------------------------------------
 
-# Narrative pools for each attribute, keyed by observed stat value range
-_PHYSICAL_OBSERVATIONS = {
-    "strength": {
-        (3, 5):   ["frail-looking", "appears weak", "physically fragile"],
-        (6, 8):   ["slightly built", "slender frame", "not particularly strong"],
-        (9, 11):  ["ordinary build", "average strength", "fairly typical"],
-        (12, 13): ["sturdy", "well-built", "clearly strong"],
-        (14, 16): ["muscular", "powerfully built", "impressive physique"],
-        (17, 19): ["formidable strength", "heavily muscled", "imposing frame"],
-        (20, 25): ["tremendous strength", "almost overwhelmingly powerful", "beastly physique"],
-    },
-    "dexterity": {
-        (3, 5):   ["sluggish movements", "appears clumsy", "slow and labored"],
-        (6, 8):   ["deliberate movements", "steady but slow", "not particularly quick"],
-        (9, 11):  ["stable movements", "steady reflexes", "typical reaction speed"],
-        (12, 13): ["quick movements", "fairly agile", "good reflexes"],
-        (14, 16): ["agile", "nimble on their feet", "quick reactions"],
-        (17, 19): ["swift movements", "exceptional agility", "lightning-quick reflexes"],
-        (20, 25): ["blur-like speed", "supernatural quickness", "movements barely followable"],
-    },
-    "constitution": {
-        (3, 5):   ["frail", "delicate appearance", "looks easily hurt"],
-        (6, 8):   ["fragile build", "doesn't look durable", "seems susceptible to injury"],
-        (9, 11):  ["normal endurance", "average durability", "typical toughness"],
-        (12, 13): ["sturdy frame", "solid build", "good durability"],
-        (14, 16): ["tough", "brawny appearance", "clearly resilient"],
-        (17, 19): ["incredibly tough", "rugged frame", "built to take punishment"],
-        (20, 25): ["iron constitution", "seems almost indestructible", "built like a fortress"],
-    },
-    "intelligence": {
-        (3, 5):   ["dim-witted", "seems simple-minded", "not particularly clever"],
-        (6, 8):   ["slow-thinking", "relies on instinct", "deliberate but not quick-witted"],
-        (9, 11):  ["muscle over mind", "straightforward approach", "depends on physical ability"],
-        (12, 13): ["reasonably intelligent", "decent tactical sense", "average intellect"],
-        (14, 16): ["sharp mind", "clearly clever", "quick thinker"],
-        (17, 19): ["brilliant tactician", "razor-sharp intellect", "strategic mastermind"],
-        (20, 25): ["genius-level intellect", "extraordinarily clever", "intellectual prodigy"],
-    },
-    "presence": {
-        (3, 5):   ["easily overlooked", "commands no respect", "fades into the background"],
-        (6, 8):   ["makes little impression", "unremarkable demeanor", "doesn't stand out"],
-        (9, 11):  ["fairly ordinary presence", "somewhat noticeable", "average bearing"],
-        (12, 13): ["carries themselves well", "commands some attention", "notable presence"],
-        (14, 16): ["impressive bearing", "commands respect", "stands out in the arena"],
-        (17, 19): ["commanding presence", "truly impressive", "clearly in control"],
-        (20, 25): ["legendary presence", "supremely commanding", "dominates any space"],
-    },
+# More sophisticated narrative observation templates - phrased for coherent sentence construction
+_STRENGTH_OBSERVATIONS = {
+    (1, 5):   "frail and physically weak",
+    (6, 8):   "slight and unimposing",
+    (9, 11):  "ordinary and unremarkable",
+    (12, 13): "sturdy and well-built",
+    (14, 16): "clearly muscular and powerfully built",
+    (17, 19): "impressively muscular and formidable",
+    (20, 25): "possessed of nearly overwhelming physical strength",
+}
+
+_DEXTERITY_OBSERVATIONS = {
+    (1, 5):   "sluggish and lacking grace",
+    (6, 8):   "slow and deliberate",
+    (9, 11):  "typical and unremarkable",
+    (12, 13): "fairly quick and precise",
+    (14, 16): "impressively agile with quick reflexes",
+    (17, 19): "exceptionally swift and graceful",
+    (20, 25): "almost supernatural in speed and fluidity",
+}
+
+_CONSTITUTION_OBSERVATIONS = {
+    (1, 5):   "frail and easily susceptible to injury",
+    (6, 8):   "fragile and delicate",
+    (9, 11):  "average in durability",
+    (12, 13): "solid and durable",
+    (14, 16): "brawny and resilient",
+    (17, 19): "built to withstand tremendous punishment",
+    (20, 25): "iron-like in frame",
+}
+
+_INTELLIGENCE_OBSERVATIONS = {
+    (1, 5):   "rely heavily on instinct",
+    (6, 8):   "depend on brute force rather than intellect",
+    (9, 11):  "favor muscle over mind",
+    (12, 13): "demonstrate reasonable tactical awareness",
+    (14, 16): "possess a sharp and strategic mind",
+    (17, 19): "display brilliant tactical insight",
+    (20, 25): "possess genius-level strategic thinking",
+}
+
+_PRESENCE_OBSERVATIONS = {
+    (1, 5):   "barely command attention",
+    (6, 8):   "make little impression in bearing",
+    (9, 11):  "are fairly ordinary in presence",
+    (12, 13): "carry confidence in their bearing",
+    (14, 16): "command a notable presence",
+    (17, 19): "command great respect and attention",
+    (20, 25): "dominate any space with legendary presence",
 }
 
 
@@ -811,15 +813,22 @@ def _get_observed_stat(actual_value: int, min_val: int = 1, max_val: int = 25) -
 def _get_observation_phrase(stat_name: str, observed_value: int) -> str:
     """
     Get a descriptive phrase for a stat based on the observed value.
-    Returns a random phrase from the pool for that stat/value range.
     """
-    obs_pool = _PHYSICAL_OBSERVATIONS.get(stat_name.lower())
+    stat_pools = {
+        "strength": _STRENGTH_OBSERVATIONS,
+        "dexterity": _DEXTERITY_OBSERVATIONS,
+        "constitution": _CONSTITUTION_OBSERVATIONS,
+        "intelligence": _INTELLIGENCE_OBSERVATIONS,
+        "presence": _PRESENCE_OBSERVATIONS,
+    }
+
+    obs_pool = stat_pools.get(stat_name.lower())
     if not obs_pool:
         return f"has {stat_name} of {observed_value}"
 
-    for (lo, hi), phrases in obs_pool.items():
+    for (lo, hi), phrase in obs_pool.items():
         if lo <= observed_value <= hi:
-            return random.choice(phrases)
+            return phrase
 
     # Fallback
     return f"has unusual {stat_name}"
@@ -828,7 +837,8 @@ def _get_observation_phrase(stat_name: str, observed_value: int) -> str:
 def _generate_physical_observations(warrior, persona: str) -> str:
     """
     Generate narrative description of warrior's physical attributes as perceived by the scout.
-    Based on observed stats (±4 variance), not actual stats.
+    Based on observed stats (±4 variance), not actual stats. Synthesizes observations into
+    flowing prose organized by thematic grouping rather than attribute-by-attribute listing.
     """
     # Get actual stats
     strength = _wattr(warrior, "strength", 10)
@@ -851,18 +861,60 @@ def _generate_physical_observations(warrior, persona: str) -> str:
     int_phrase = _get_observation_phrase("intelligence", obs_int)
     pre_phrase = _get_observation_phrase("presence", obs_pre)
 
-    # Build narrative based on persona style
+    # Build narrative based on persona style - synthesize into flowing prose
     if persona == "veteran":
-        return f"Their physique suggests {str_phrase}. {dex_phrase.capitalize()} in the ring. The warrior appears {con_phrase}. Tactically, they seem to rely on {int_phrase}, and {pre_phrase.capitalize()}."
+        parts = []
+        # Physical build and appearance (strength + constitution)
+        parts.append(f"From what I observed, this warrior appears {str_phrase}, with a frame that seems {con_phrase}.")
+        # Movement and reflexes (dexterity)
+        parts.append(f"In the ring, they appear {dex_phrase}.")
+        # Tactical mind and bearing (intelligence + presence)
+        parts.append(f"As for presence, they {pre_phrase}. Strategically, they {int_phrase}.")
+        return " ".join(parts)
 
     elif persona == "academic":
-        return f"Physical assessment: {str_phrase}. Movement pattern indicates {dex_phrase}. Durability appears {con_phrase}. Cognitive approach suggests {int_phrase}, with {pre_phrase} in the arena."
+        parts = []
+        # Physical assessment (strength + constitution)
+        parts.append(f"Physical assessment: the subject appears {str_phrase}, with a constitution that seems {con_phrase}.")
+        # Movement analysis (dexterity)
+        parts.append(f"Kinetic profile: from observation, reflexes appear {dex_phrase}.")
+        # Strategic profile (intelligence + presence)
+        # Handle presence phrase which may start with verbs - convert to singular
+        if pre_phrase.startswith("are "):
+            pre_formatted = "is " + pre_phrase[4:]
+        elif pre_phrase.startswith("make "):
+            pre_formatted = "makes " + pre_phrase[5:]
+        elif pre_phrase.startswith("command "):
+            pre_formatted = "commands " + pre_phrase[8:]
+        elif pre_phrase.startswith("dominate "):
+            pre_formatted = "dominates " + pre_phrase[9:]
+        elif pre_phrase.startswith("carry "):
+            pre_formatted = "carries " + pre_phrase[6:]
+        else:
+            pre_formatted = pre_phrase
+        # Create a more natural cognitive assessment
+        parts.append(f"Behavioral assessment: the subject {pre_formatted}. Cognitive approach: from my observations, they appear to typically {int_phrase}.")
+        return " ".join(parts)
 
     elif persona == "street":
-        return f"This one looks {str_phrase}. Moves like they're {dex_phrase}. Built {con_phrase} - seen worse, seen better. Brain-wise, they {int_phrase}. Presence? Yeah, they're {pre_phrase}."
+        parts = []
+        # Build and durability (strength + constitution)
+        parts.append(f"From what I could see, this one's {str_phrase}, and durability-wise they seem {con_phrase}.")
+        # Movement (dexterity)
+        parts.append(f"The way they move around the pit, they appear {dex_phrase}.")
+        # Smarts and presence (intelligence + presence)
+        parts.append(f"Presence-wise, they {pre_phrase}. When it comes to brains, they {int_phrase}.")
+        return " ".join(parts)
 
     else:  # rookie
-        return f"They seem {str_phrase}. Their movements appear {dex_phrase}. They look {con_phrase}. I'd say they {int_phrase}, and {pre_phrase}."
+        parts = []
+        # Physical impression (strength + constitution)
+        parts.append(f"From what I observed, they look {str_phrase}. Frame-wise, they seem {con_phrase}.")
+        # Movement impression (dexterity)
+        parts.append(f"The way they move, they appear {dex_phrase}.")
+        # Tactical and presence impression (intelligence + presence)
+        parts.append(f"Personality-wise, they {pre_phrase}. Tactically, they {int_phrase}.")
+        return " ".join(parts)
 
 
 # ---------------------------------------------------------------------------
