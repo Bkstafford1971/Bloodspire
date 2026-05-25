@@ -1668,8 +1668,7 @@ function openTab(evt, tabId) {{
  <div class="panel" style="min-width:260px;max-width:340px">
   <h3>▶ Run Turn {turn}</h3>
   <p style="font-size:11px;color:#555;margin:0 0 6px">
-   {len(uploads)} of {len(managers)} players uploaded.<br>
-   {ai_count} AI teams auto-included. Players who haven't uploaded are skipped.
+   {len(mgr_upload_counts)} of {len(managers)} managers uploaded with a total of {len(uploads) + ai_count} teams active.
   </p>
   Host password:<br>
   <input type="password" id="hp" style="width:200px"><br>
