@@ -3435,10 +3435,15 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             # Collect ALL result files for this manager (one per uploaded team)
             td = _turn_dir(res_turn)
             team_results = []
+            result_mtime = 0.0   # newest mtime among this manager's result files
             if os.path.exists(td):
                 for fname in sorted(os.listdir(td)):
                     if fname.startswith(f"result_{mid}") and fname.endswith(".json"):
-                        r = _load_json(os.path.join(td, fname), None)
+                        fpath = os.path.join(td, fname)
+                        fm = os.path.getmtime(fpath)
+                        if fm > result_mtime:
+                            result_mtime = fm
+                        r = _load_json(fpath, None)
                         if r:
                             # Verify ownership: only show results for teams the
                             # manager still officially owns.
@@ -3473,11 +3478,16 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 if key.startswith("deleted_team_") and str(val.get("manager_id")) == str(mid):
                     deleted_teams_list.append(val)
 
-            # If the manager already downloaded this exact turn's results and the turn
-            # has not advanced, return an "already current" marker so the client skips
-            # re-applying the same data (avoids duplicate fight history, double popups).
+            # If the manager already downloaded this exact turn's results AND the result
+            # files haven't been regenerated since (mtime unchanged), return already_current.
+            # This allows re-download after an arena revert+rerun even on the same turn number.
             last_dl = mgrs[mid].get("last_downloaded_turn", 0)
-            if int(last_dl) == int(res_turn):
+            last_dl_mtime = float(mgrs[mid].get("last_downloaded_result_mtime", 0))
+            # Fall back to newsletter mtime when no per-manager result files exist
+            if result_mtime == 0.0 and os.path.exists(nl_path):
+                result_mtime = os.path.getmtime(nl_path)
+            same_generation = result_mtime > 0 and abs(result_mtime - last_dl_mtime) < 1.0
+            if int(last_dl) == int(res_turn) and same_generation:
                 _log_activity("download_already_current", mid, mgrs[mid]["manager_name"],
                               f"Already downloaded turn {res_turn} - returning already_current")
                 self.send_json({
@@ -3485,8 +3495,9 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     "turn": res_turn,
                 }); return
 
-            # Mark this turn as downloaded for this manager
+            # Mark this turn as downloaded for this manager (include mtime for revert detection)
             mgrs[mid]["last_downloaded_turn"] = res_turn
+            mgrs[mid]["last_downloaded_result_mtime"] = result_mtime
             _save_managers(mgrs)
 
             # Log the download

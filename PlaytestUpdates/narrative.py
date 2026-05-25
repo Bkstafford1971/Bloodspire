@@ -2245,49 +2245,49 @@ def weapon_drop_lines(warrior_name: str, weapon_name: str, gender: str, is_fumbl
             f"The sudden surge of pain causes {n} to drop {pronoun} {wpn}!",
             f"{n}'s grip fails as {pronoun} arm spasms, sending the {wpn} to the sand!",
             f"Agony wracks {n}'s arm and the {wpn} slips from {pronoun} numb fingers!",
-            f"A sharp intake of breath -{n} fumbles the {wpn}, unable to maintain {pronoun} hold!",
+            f"A sharp intake of breath, and {n} fumbles the {wpn}, unable to maintain {pronoun} hold!",
             f"The wound takes its toll. {n}'s {wpn} tumbles free from {pronoun} failing grip!",
-            f"{n}'s fingers betray {obj_pro} as the pain overwhelms -the {wpn} hits the dirt!",
+            f"{n}'s fingers betray {obj_pro} as the pain overwhelms, and the {wpn} hits the dirt!",
             f"The injury flares at the worst moment and {n} cannot hold the {wpn}!",
             f"{n} clenches {pronoun} teeth but the {wpn} falls regardless, {pronoun} arm refusing to obey!",
-            f"Pain shoots through {n}'s arm -the {wpn} clatters to the sand before {sub_pro} can stop it!",
+            f"Pain shoots through {n}'s arm, and the {wpn} clatters to the sand before {sub_pro} can stop it!",
             f"The arm gives out. {n}'s {wpn} drops to the arena floor with a dull thud!",
         ]
     elif is_forceful:
         pools = [
             f"The force of the blow wrenches the {wpn} from {n}'s hands! It clatters to the sand!",
-            f"The impact is too much -{n}'s {wpn} is ripped away by the sheer power of the strike!",
+            f"The impact is too much: {n}'s {wpn} is ripped away by the sheer power of the strike!",
             f"A bone-jarring blow jars the {wpn} loose from {n}'s grasp!",
             f"The brutal weight of the attack hammers the {wpn} from {n}'s numbed fingers!",
             f"The sheer violence of the blow sends the {wpn} spinning from {n}'s grip!",
-            f"A thunderous strike rattles {n}'s arms -the {wpn} goes flying to the sand!",
+            f"A thunderous strike rattles {n}'s arms, sending the {wpn} flying to the sand!",
             f"The impact travels straight up {n}'s arms and the {wpn} is torn free!",
-            f"Strength against strength -{n} loses, the {wpn} ripped away and crashing to the ground!",
+            f"Strength against strength: {n} loses. The {wpn} is ripped away and crashes to the ground!",
             f"The {wpn} is blasted clean from {n}'s hands by the ferocity of the blow!",
-            f"{n} staggers from the impact -the {wpn} clatters across the arena floor!",
+            f"{n} staggers from the impact, and the {wpn} clatters across the arena floor!",
         ]
     else:
         pools = [
             f"{n} loses {pronoun} grip and the {wpn} falls to the ground!",
             f"The {wpn} slips from {n}'s hands and hits the sand with a heavy thud!",
             f"In the chaos, {n} drops {pronoun} {wpn}!",
-            f"A clumsy moment -{n}'s {wpn} tumbles free to the arena floor!",
+            f"A clumsy moment. {n}'s {wpn} tumbles free to the arena floor!",
             f"The {wpn} slips from sweat-slicked fingers and crashes to the sand!",
-            f"{n} can't maintain {pronoun} grip -the {wpn} clatters away!",
-            f"Footing lost, focus lost -{n}'s {wpn} lands in the dirt!",
+            f"{n} can't maintain {pronoun} grip, and the {wpn} clatters away!",
+            f"Footing lost, focus lost: {n}'s {wpn} lands in the dirt!",
             f"The {wpn} tears loose and skids across the sand!",
         ]
     return "   " + random.choice(pools)
 
 
 def unarmed_impact_lines(warrior_name: str, gender: str) -> str:
-    """Lines for a heavy blow landing on an unarmed fighter (Open Hand or Cestus) -no disarm possible."""
+    """Lines for a heavy blow landing on an unarmed fighter (Open Hand or Cestus). No disarm possible."""
     pronoun = "his" if gender == "Male" else "her"
     n = warrior_name.upper()
     pools = [
         f"The thunderous blow sends a wave of numbness through {n}'s arm!",
         f"The force hammers into {n}'s guard, leaving {pronoun} arm momentarily leaden!",
-        f"{n}'s arm goes numb from the sheer impact -{pronoun} fists still clenched!",
+        f"{n}'s arm goes numb from the sheer impact, {pronoun} fists still clenched!",
         f"The brutal strike jars {n}'s arm savagely!",
         f"The blow rattles {n}'s guard -{pronoun} knuckles absorb the brunt and hold!",
         f"{n} reels from the impact, {pronoun} arm tingling with bone-deep force!",
@@ -2431,21 +2431,21 @@ CRITICAL_DODGE_LINES = [
 ]
 
 CRITICAL_DISARM_LINES = [
-    "The parry catches {attacker}'s {weapon} at exactly the wrong angle -{defender} twists on contact, and the weapon wrenches free, spinning into the sand!",
-    "{defender} redirects the blow and seizes the leverage immediately, a sharp rotation sending {attacker}'s {weapon} tumbling from the grip -the crowd erupts!",
-    "The parry traps the blade and {defender} presses home -{attacker}'s {weapon} flies free with a sound like a broken lock, and the pit falls momentarily silent.",
+    "The parry catches {attacker}'s {weapon} at exactly the wrong angle. {defender} twists on contact, and the weapon wrenches free, spinning into the sand!",
+    "{defender} redirects the blow and seizes the leverage immediately, a sharp rotation sending {attacker}'s {weapon} tumbling from the grip, and the crowd erupts!",
+    "The parry traps the blade and {defender} presses home. {attacker}'s {weapon} flies free with a sound like a broken lock, and the pit falls momentarily silent.",
 ]
 
 CRITICAL_BREAK_LINES = [
-    "{attacker}'s {weapon} meets a perfectly braced parry and something in the metal gives -a crack, then another, and the weapon fails completely.",
-    "The {weapon} shatters against {defender}'s guard -a sound like a gunshot cuts across the crowd noise, followed by fragments scattering across the sand.",
-    "Against the flawless parry, {attacker}'s {weapon} does something weapons shouldn't: it breaks. The crowd goes silent -then roars.",
+    "{attacker}'s {weapon} meets a perfectly braced parry and something in the metal gives. A crack, then another, and the weapon fails completely.",
+    "The {weapon} shatters against {defender}'s guard. A sound like a gunshot cuts across the crowd noise, followed by fragments scattering across the sand.",
+    "Against the flawless parry, {attacker}'s {weapon} does something weapons shouldn't: it breaks. The crowd goes silent, then roars.",
 ]
 
 CRITICAL_DOUBLE_COUNTER_LINES = [
-    "{defender} flows out of the dodge directly into the attack -two strikes, no pause, moving like water downhill.",
+    "{defender} flows out of the dodge directly into the attack. Two strikes, no pause, moving like water downhill.",
     "The dodge becomes the offense before {attacker} can recover: {defender} is already inside the guard, already moving, two fluid strikes delivered in the blink of an eye.",
-    "Slipping the blow opens something and {defender} takes it immediately -one motion into another, two swift strikes before the window closes.",
+    "Slipping the blow opens something and {defender} takes it immediately, one motion into another, two swift strikes before the window closes.",
 ]
 
 
