@@ -1496,10 +1496,10 @@ def _check_knockdown_verbose(warrior: "Warrior", state: "_CState", damage: int, 
 
 
 def _check_perm_injury_verbose(warrior: "Warrior", damage: int, aim_point: str):
-    threshold = int(warrior.max_hp * 0.15)
-    if damage < warrior.max_hp * 0.15:
+    threshold = int(warrior.max_hp * 0.35)
+    if damage < warrior.max_hp * 0.35:
         return None, threshold, 0, 0
-    chance = max(5, min(80, int((damage / warrior.max_hp) * 100) - 5))
+    chance = max(5, min(55, int((damage / warrior.max_hp) * 100) - 30))
     if warrior.race.modifiers.fewer_perms:
         chance = int(chance * 0.85)
     roll = random.randint(1, 100)
@@ -1536,15 +1536,14 @@ def _check_perm_injury(
     damage    : int,
     aim_point : str,
 ) -> Optional[Tuple[str, int]]:
-    if damage < warrior.max_hp * 0.15:
+    if damage < warrior.max_hp * 0.35:
         return None
-    chance = max(5, min(80, int((damage / warrior.max_hp) * 100) - 5))
+    chance = max(5, min(55, int((damage / warrior.max_hp) * 100) - 30))
     if warrior.race.modifiers.fewer_perms:
         chance = int(chance * 0.85)
     if random.randint(1, 100) > chance:
         return None
     if aim_point and aim_point != "None":
-        # Map targeting to actual injury locations
         loc_map = {
             "Head":"head","Chest":"chest","Abdomen":"abdomen",
             "Primary Arm":"primary_arm","Secondary Arm":"secondary_arm",
@@ -1552,7 +1551,6 @@ def _check_perm_injury(
         }
         location = loc_map.get(aim_point, random.choice(_BODY_LOCATION_POOL))
     else:
-        # No aim point - generic body strike, restrict to torso/arm locations
         location = random.choice(_BODY_LOCATION_POOL)
     pct    = damage / warrior.max_hp
     levels = 3 if pct > 0.50 else (2 if pct > 0.35 else 1)
