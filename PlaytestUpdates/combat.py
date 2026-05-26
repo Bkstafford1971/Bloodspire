@@ -2468,6 +2468,13 @@ class CombatEngine:
             if r:
                 return r
 
+            # Re-sync strategy references: mid-action events (throws, weapon drops,
+            # knockdowns) call _check_and_switch_strategies which updates active_strategy
+            # on the state, but strat_a/strat_b are local and don't see those changes.
+            # Refreshing here ensures the next action in this minute uses the correct strategy.
+            strat_a = self.state_a.active_strategy
+            strat_b = self.state_b.active_strategy
+
             for cst, ost in [(self.state_a, self.state_b), (self.state_b, self.state_a)]:
                 if cst.wants_to_concede:
                     cst.hp_at_last_concede = cst.current_hp
