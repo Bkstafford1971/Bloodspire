@@ -282,8 +282,57 @@ def _load_uploads(turn_num):
         uploads[key] = data
     return uploads
 
+def _normalize_team_challenge_keys(team_dict):
+    """Normalize challenge and pending_replacement keys to string slot indices."""
+    if not isinstance(team_dict, dict):
+        return
+
+    # Build a name-to-slot map from the team's active roster
+    name_to_slot = {}
+    warriors = team_dict.get("warriors", []) or []
+    for i, w in enumerate(warriors):
+        if isinstance(w, dict) and w.get("name"):
+            name_to_slot.setdefault(w["name"].lower(), []).append(i)
+
+    for field in ("challenges", "pending_replacements"):
+        raw_map = team_dict.get(field)
+        if not isinstance(raw_map, dict):
+            continue
+
+        normalized = {}
+        for key, value in raw_map.items():
+            key_str = str(key)
+            if key_str.isdigit():
+                normalized[str(int(key_str))] = value
+                continue
+
+            matches = name_to_slot.get(key_str.lower(), [])
+            if len(matches) == 1:
+                normalized[str(matches[0])] = value
+                print(
+                    f"  NOTE: Normalized {field} key '{key_str}' to slot {matches[0]} "
+                    f"for team '{team_dict.get('team_name', 'Unknown')}'."
+                )
+            elif len(matches) > 1:
+                print(
+                    f"  WARNING: Ambiguous {field} key '{key_str}' in team "
+                    f"'{team_dict.get('team_name', 'Unknown')}'. Multiple warriors share that name."
+                )
+                normalized[key_str] = value
+            else:
+                print(
+                    f"  WARNING: Could not normalize {field} key '{key_str}' "
+                    f"for team '{team_dict.get('team_name', 'Unknown')}'."
+                )
+                normalized[key_str] = value
+
+        team_dict[field] = normalized
+
+
 def _save_upload(turn_num, manager_id, data):
     team_id = data.get("team_id") or (data.get("team") or {}).get("team_id", "")
+    if isinstance(data.get("team"), dict):
+        _normalize_team_challenge_keys(data["team"])
     if team_id:
         fname = f"upload_{manager_id}_team{team_id}.json"
     else:

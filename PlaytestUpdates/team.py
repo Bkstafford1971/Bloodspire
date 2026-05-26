@@ -555,9 +555,47 @@ class Team:
                 })
         
         team.avoid_managers      = data.get("avoid_managers", [])
-        team.challenges          = {int(k): v for k, v in data.get("challenges", {}).items()}
+
+        # Load challenges robustly: keys may be numeric slot indices (string)
+        # or, in older/malformed uploads, warrior names. Map names to slot
+        # indices when necessary and warn when a key cannot be resolved.
+        raw_challenges = data.get("challenges", {}) or {}
+        parsed_challenges: Dict[int, List[str]] = {}
+        for k, v in raw_challenges.items():
+            try:
+                idx = int(k)
+            except Exception:
+                # Try to resolve by warrior name (case-insensitive)
+                idx = team.warrior_index(k)
+                if idx == -1:
+                    print(
+                        f"WARNING: could not parse challenge key '{k}' for "
+                        f"team '{team.team_name}' (skipping)."
+                    )
+                    continue
+            parsed_challenges[idx] = v
+        team.challenges = parsed_challenges
+
         team.archived_warriors   = data.get("archived_warriors", [])
-        team.pending_replacements= {int(k): v for k, v in data.get("pending_replacements", {}).items()}
+
+        # Pending replacements may also use numeric-string keys; parse defensively
+        raw_pending = data.get("pending_replacements", {}) or {}
+        parsed_pending: Dict[int, dict] = {}
+        for k, v in raw_pending.items():
+            try:
+                idx = int(k)
+            except Exception:
+                # Attempt to resolve by warrior name, but replacements normally
+                # reference slot indices. If unresolved, warn and skip.
+                idx = team.warrior_index(k)
+                if idx == -1:
+                    print(
+                        f"WARNING: could not parse pending_replacements key '{k}' "
+                        f"for team '{team.team_name}' (skipping)."
+                    )
+                    continue
+            parsed_pending[idx] = v
+        team.pending_replacements= parsed_pending
         team.turn_history        = data.get("turn_history", [])
         team.last_turn_ran       = data.get("last_turn_ran", 0)
         team.auto_upload_enabled = data.get("auto_upload_enabled", True)
