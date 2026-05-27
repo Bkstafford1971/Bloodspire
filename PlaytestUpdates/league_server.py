@@ -801,7 +801,9 @@ def _run_turn(request_password, rerun_turn=None):
             # CRITICAL: Attach the result to the fight object so it can be used for the newsletter
             fight.result = result
         except Exception as e:
-            print(f"  ERROR running fight: {e}")
+            import traceback
+            print(f"  *** ERROR running fight {fight.player_warrior.name} vs {fight.opponent.name}: {e}")
+            traceback.print_exc()
             continue
 
         # Write debug log file if applicable

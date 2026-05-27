@@ -497,6 +497,66 @@ def strategy_switch_line(warrior_name: str, strat_idx: int) -> str:
 
 
 # ---------------------------------------------------------------------------
+# OVERENCUMBRANCE FLAVOR LINES
+# Fires ~25% chance each minute when armor_penalty >= 0.10.
+# ---------------------------------------------------------------------------
+
+_OVERENCUMBERED_LINES = [
+    "{warrior} labors under the weight of {his} armor, breath already ragged.",
+    "{warrior}'s movements are sluggish, dragged down by more iron than {his} frame can carry.",
+    "Sweat pours down {warrior}'s face as {he} fights the drag of over-heavy armor.",
+    "{warrior} staggers slightly under the bulk of gear that exceeds {his} strength.",
+    "Every step is costing {warrior} something extra, the over-heavy armor grinding on {his} body.",
+    "{warrior} planted that armor on a body not built to carry it, and it shows.",
+    "The armor straps creak against {warrior}'s frame as {he} grinds to keep pace.",
+    "{warrior} is burning down faster than expected, the armor wearing on {him}.",
+    "{warrior} presses forward, but the weight of that armor is a tax on every move.",
+    "{warrior} is working twice as hard just to move in that gear.",
+    "That armor on {warrior} is too much for {his} strength, and the crowd can see it.",
+    "The toll of wearing armor beyond {his} strength is plain in {warrior}'s labored movement.",
+]
+
+_OVERENCUMBERED_PREFIGHT_LINES = [
+    "{warrior} enters the arena already straining under armor that exceeds {his} strength.",
+    "The crowd murmurs as {warrior} takes the field — that armor is clearly beyond {his} frame.",
+    "{warrior} steps onto the sand in gear too heavy for {his} build. It will cost {him}.",
+    "Before a single blow is thrown, {warrior}'s over-heavy armor is already working against {him}.",
+    "{warrior} is burdened from the moment {he} sets foot on the sand — that armor is too heavy for {his} strength.",
+    "It is plain to the crowd that {warrior}'s armor exceeds {his} strength. {he} will pay for that choice.",
+    "{warrior} marches out bearing armor {his} body was not built to carry.",
+    "The arena master eyes {warrior}'s kit — that iron exceeds {his} strength, and the fight has not even begun.",
+    "{warrior} is already fighting the weight of {his} armor before the first blow is struck.",
+    "That armor looks impressive on {warrior}, but it is heavier than {his} frame can handle.",
+]
+
+
+def overencumbered_prefight_line(warrior_name: str, gender: str) -> str:
+    his = "his" if gender == "Male" else "her"
+    he  = "He"  if gender == "Male" else "She"
+    him = "him" if gender == "Male" else "her"
+    template = random.choice(_OVERENCUMBERED_PREFIGHT_LINES)
+    return template.format(
+        warrior=warrior_name.upper(),
+        his=his,
+        he=he,
+        him=him,
+    )
+
+
+def overencumbered_line(warrior_name: str, gender: str) -> str:
+    his = "his" if gender == "Male" else "her"
+    he  = "he"  if gender == "Male" else "she"
+    him = "him" if gender == "Male" else "her"
+    template = random.choice(_OVERENCUMBERED_LINES)
+    return template.format(
+        warrior=warrior_name.upper(),
+        his=his,
+        he=he,
+        him=him,
+    )
+
+
+# ---------------------------------------------------------------------------
 # STYLE INTENT LINES
 # Appear before an attack (roughly 40% of the time).
 # Template: "{name} {intent_phrase} with {pronoun} {weapon}"

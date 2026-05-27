@@ -205,19 +205,32 @@ def get_armor(name: str) -> ArmorPiece:
 # on weapon scale) - but we're scaling armor weight in actual lbs, not the
 # 0-9 weapon point scale.  So we need a separate lbs→capacity table.
 
-ARMOR_STR_TABLE = [
-    # (str_lo, str_hi, max_armor_lbs)
-    (3,  3,   0),
-    (4,  6,  10),
-    (7,  8,  14),
-    (9,  11, 20),
-    (12, 13, 27),
-    (14, 16, 38),
-    (17, 18, 50),
-    (19, 21, 65),
-    (22, 23, 72),
-    (24, 25, 85),
-]
+# Direct Strength-to-Weight mapping to ensure every point of STR matters.
+ARMOR_STR_CAPACITY: dict[int, float] = {
+    3:  0.0,
+    4:  10.0,
+    5:  11.5,
+    6:  13.0,
+    7:  15.0,
+    8:  18.0,
+    9:  21.0,
+    10: 23.5,
+    11: 26.0,
+    12: 29.0,
+    13: 33.0,
+    14: 38.0,
+    15: 41.5,
+    16: 45.0,
+    17: 50.0,
+    18: 56.0,
+    19: 65.0,
+    20: 68.5,
+    21: 72.0,
+    22: 76.0,
+    23: 80.0,
+    24: 84.0,
+    25: 88.0,
+}
 
 
 def max_armor_weight(strength: int) -> float:
@@ -230,10 +243,41 @@ def max_armor_weight(strength: int) -> float:
       - STR 9  (low warrior) tops out around Cuir Boulli (17 lbs) ✓
       - STR 22+ can wear Full Plate (80 lbs)
     """
-    for lo, hi, capacity in ARMOR_STR_TABLE:
-        if lo <= strength <= hi:
-            return float(capacity)
-    return 0.0
+    # Clamp strength between 3 and 25 for lookup
+    effective_str = max(3, min(25, strength))
+    return float(ARMOR_STR_CAPACITY.get(effective_str, 0.0))
+
+
+def armor_penalty_factor(weight: float, strength: int, is_dwarf: bool = False, piece_is_helm: bool = False) -> float:
+    """
+    Calculate the under-strength armor penalty fraction (0.0 = no penalty, 1.0 = unusable).
+
+    Dwarf rule: can equip one body armor tier above what their STR normally allows
+    without penalty.
+    """
+    capacity = max_armor_weight(strength)
+
+    # Check if within normal capacity
+    if weight <= capacity:
+        return 0.0
+
+    # Dwarf racial bonus: effectively higher capacity for body armor tiers
+    if is_dwarf and not piece_is_helm:
+        # Find the highest tier allowed by normal capacity
+        max_tier_idx = -1
+        for i, tier_name in enumerate(ARMOR_TIERS):
+            if ARMOR_PIECES[tier_name].weight <= capacity:
+                max_tier_idx = i
+
+        # If this piece is within one tier of the normal limit, no penalty
+        target_tier_idx = min(len(ARMOR_TIERS)-1, max_tier_idx + 1)
+        if weight <= ARMOR_PIECES[ARMOR_TIERS[target_tier_idx]].weight:
+            return 0.0
+
+    if capacity <= 0:
+        return 1.0
+    overage = weight - capacity
+    return min(1.0, overage / capacity)
 
 
 def can_wear_armor(
@@ -255,37 +299,22 @@ def can_wear_armor(
     if piece.name == "None":
         return True, "No armor - always allowed."
 
+    penalty = armor_penalty_factor(piece.weight, strength, is_dwarf, piece.is_helm)
     capacity = max_armor_weight(strength)
-    piece_is_helm = piece.is_helm
 
-    # Helms use their own simpler check - they're light enough that STR
-    # is rarely the limiting factor. Full Helm (9 lbs) is accessible to STR 4+.
-    # APPROX: Treat helm weight as equivalent to armor weight for capacity check.
+    if penalty == 0.0:
+        if piece.weight <= capacity:
+            return True, f"STR {strength} supports {piece.name} ({piece.weight} lbs ≤ {capacity} lbs)."
+        else:
+            return True, f"Dwarf racial bonus allows {piece.name} without penalty."
 
-    if piece.weight <= capacity:
-        return True, f"STR {strength} supports {piece.name} ({piece.weight} lbs ≤ {capacity} lbs)."
-
-    # Dwarf tier-up rule for body armor only
-    if is_dwarf and not piece_is_helm:
-        tiers = ARMOR_TIERS
-        if piece.name in tiers:
-            piece_idx  = tiers.index(piece.name)
-            # Find the highest tier this warrior's STR normally allows
-            max_tier_idx = -1
-            for i, tier_name in enumerate(tiers):
-                t = ARMOR_PIECES[tier_name]
-                if t.weight <= capacity:
-                    max_tier_idx = i
-            # Dwarf can go ONE tier above their normal maximum
-            if piece_idx <= max_tier_idx + 1:
-                return True, (
-                    f"Dwarf racial bonus allows one tier above STR limit. "
-                    f"Equipping {piece.name}."
-                )
+    if penalty < 1.0:
+        # We allow equipping with a penalty warning
+        return True, f"STR {strength} is under-strength for {piece.name} (Penalty: {int(penalty*100)}%)"
 
     return False, (
-        f"STR {strength} supports up to {capacity} lbs of armor. "
-        f"{piece.name} weighs {piece.weight} lbs."
+        f"STR {strength} cannot support {piece.name}. "
+        f"Weight {piece.weight} lbs is too far beyond capacity {capacity} lbs."
     )
 
 

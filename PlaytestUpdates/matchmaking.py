@@ -240,6 +240,23 @@ def build_global_fight_card(
     else:
         print(f"  [DEBUG] PROBLEM: All warriors matched but card only has {len(card)} fights!")
 
+    # SAFETY NET: after all steps, every warrior in the pool must have a fight.
+    # This should never fire — if it does, a bug in an earlier step failed to
+    # schedule a warrior. Force-assign a peasant fight so no warrior sits out.
+    still_unmatched = [e for e in master_pool if not e['matched']]
+    if still_unmatched:
+        print(f"  *** SAFETY NET: {len(still_unmatched)} warrior(s) still unmatched after all steps — force-assigning peasant fights ***")
+        for entry in still_unmatched:
+            print(f"    SAFETY: {entry['warrior'].name} ({entry['team'].manager_name}) — forcing peasant fight")
+            p_team = create_peasant_team(target_fight_count=entry['warrior'].total_fights)
+            p_warrior = random.choice(p_team.active_warriors)
+            card.append(ScheduledFight(
+                player_warrior=entry['warrior'], opponent=p_warrior,
+                player_team=entry['team'], opponent_team=p_team,
+                opponent_manager="The Arena", fight_type="peasant",
+            ))
+            entry['matched'] = True
+
     return card
 # WARRIOR STRENGTH RATING (for matchmaking)
 # ---------------------------------------------------------------------------

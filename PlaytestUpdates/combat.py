@@ -51,6 +51,7 @@ from weapons  import get_weapon, strength_penalty, OPEN_HAND, Weapon, get_effect
 from armor    import (
     effective_dex, total_defense_value, is_ap_vulnerable,
     get_effective_dex_for_race, get_effective_defense_for_race,
+    armor_penalty_factor, get_armor,
     get_lizardfolk_armor_penalties,
     ARMOR_PIECES,
 )
@@ -513,6 +514,7 @@ class _CState:
     triggered_injuries : dict    = field(default_factory=dict) # {location: level}
     phase2_entered     : bool    = False  # True once warrior has crossed the 25% endurance threshold
     frenzy_used        : bool    = False  # Tabaxi: frenzy ability has been used this fight
+    armor_penalty      : float   = 0.0    # fraction 0.0-1.0 from over-weight armor
 
     def to_fighter_state(self) -> FighterState:
         return FighterState(
@@ -559,7 +561,11 @@ def _d100() -> int:
 def _initiative_roll(warrior: Warrior, strategy: Strategy, state: _CState) -> int:
     """d100 + DEX_bonus + initiative_skill*3 + luck + style_mod + activity_mod"""
     roll = _d100()
-    dex  = get_effective_dex_for_race(warrior.dexterity, warrior.armor or "None", warrior.helm or "None", warrior.race.name)
+    dex = get_effective_dex_for_race(
+        warrior.dexterity,
+        warrior.armor or "None",
+        warrior.helm or "None",
+        warrior.race.name)
     dex_bonus    = max(-10, min(10, (dex - 10) * 2))
     # Skill scaling: higher initiative skill is more impactful
     init_val     = warrior.skills.get("initiative", 0)
@@ -585,6 +591,11 @@ def _initiative_roll(warrior: Warrior, strategy: Strategy, state: _CState) -> in
 
     total = max(1, roll + dex_bonus + skill_bonus + luck_bonus + race_init_bonus
                 + style_mod + activity_mod - endurance_pen - injury_pen)
+
+    # Overencumbrance penalty to Initiative
+    if state.armor_penalty > 0:
+        total = int(total * (1.0 - state.armor_penalty))
+
     if warrior.race.name == "Lizardfolk":
         init_pct = get_lizardfolk_armor_penalties(warrior.armor or "None")["initiative_pct"]
         if init_pct > 0:
@@ -690,15 +701,20 @@ def _defense_roll(
         act_mod  = (strategy.activity - 5) * 2
         size_diff= attacker.size - defender.size
         size_b   = 5 if size_diff >= 3 else (-5 if size_diff <= -3 else 0)
+
         dex_train_dodge = int(dex_trained * 2.5) # +2.5 per trained DEX point
         race_dodge_bonus = defender.race.modifiers.dodge_bonus * 2  # Apply race dodge bonus
-        
+
         # Acrobatics skill bonus to dodge
         acrobatics_level = defender.skills.get("acrobatics", 0)
         acrobatics_b = acrobatics_level * 2 if acrobatics_level > 0 else 0
-        
+
         total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train_dodge + race_dodge_bonus + acrobatics_b
-        
+
+        # Overencumbrance penalty (Dodge only) — must apply after total is computed
+        if state.armor_penalty > 0:
+            total = int(total * (1.0 - state.armor_penalty))
+
         # Heavy weapon dodge penalty for Goblins & Tabaxi
         if defender.race.modifiers.heavy_weapon_penalty:
             try:
@@ -995,7 +1011,11 @@ def _calc_damage_hybrid(
 
 def _initiative_roll_verbose(warrior: "Warrior", strategy: "Strategy", state: "_CState"):
     roll         = _d100()
-    dex          = get_effective_dex_for_race(warrior.dexterity, warrior.armor or "None", warrior.helm or "None", warrior.race.name)
+    dex = get_effective_dex_for_race(
+        warrior.dexterity,
+        warrior.armor or "None",
+        warrior.helm or "None",
+        warrior.race.name)
     dex_bonus    = max(-10, min(10, (dex - 10) * 2))
     skill_bonus  = warrior.skills.get("initiative", 0) * 3
     luck_bonus   = warrior.luck
@@ -1019,6 +1039,11 @@ def _initiative_roll_verbose(warrior: "Warrior", strategy: "Strategy", state: "_
         "activity_mod": activity_mod,
         "end_pen": -end_pen if end_pen else 0,
     }
+
+    if state.armor_penalty > 0:
+        result = int(result * (1.0 - state.armor_penalty))
+        comps["overencumbrance_pen"] = -int(state.armor_penalty * 100)
+
     if warrior.race.name == "Lizardfolk":
         init_pct = get_lizardfolk_armor_penalties(warrior.armor or "None")["initiative_pct"]
         if init_pct > 0:
@@ -1029,7 +1054,11 @@ def _initiative_roll_verbose(warrior: "Warrior", strategy: "Strategy", state: "_
 
 def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CState"):
     roll    = _d100()
-    dex     = get_effective_dex_for_race(attacker.dexterity, attacker.armor or "None", attacker.helm or "None", attacker.race.name)
+    dex = get_effective_dex_for_race(
+        attacker.dexterity,
+        attacker.armor or "None",
+        attacker.helm or "None",
+        attacker.race.name)
     dex_b   = max(-8, min(8, (dex - 10)))
     wpn_key = attacker.primary_weapon.lower().replace(" ", "_").replace("&", "and")
     wpn_sk  = attacker.skills.get(wpn_key, 0)
@@ -1102,11 +1131,17 @@ def _defense_roll_verbose(
         act_mod  = (strategy.activity - 5) * 2
         size_diff= attacker.size - defender.size
         size_b   = 5 if size_diff >= 3 else (-5 if size_diff <= -3 else 0)
+
         dex_train= int(dex_trained * 2.5)
         race_dg  = defender.race.modifiers.dodge_bonus * 2
         acro_lv  = defender.skills.get("acrobatics", 0)
         acro_b   = acro_lv * 2 if acro_lv > 0 else 0
         total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train + race_dg + acro_b
+
+        # Overencumbrance penalty (Dodge only) — must apply after total is computed
+        if state.armor_penalty > 0:
+            total = int(total * (1.0 - state.armor_penalty))
+            comps["overencumbrance_pen"] = -int(state.armor_penalty * 100)
         heavy_pen = 0
         if defender.race.modifiers.heavy_weapon_penalty:
             try:
@@ -1496,10 +1531,10 @@ def _check_knockdown_verbose(warrior: "Warrior", state: "_CState", damage: int, 
 
 
 def _check_perm_injury_verbose(warrior: "Warrior", damage: int, aim_point: str):
-    threshold = int(warrior.max_hp * 0.35)
-    if damage < warrior.max_hp * 0.35:
+    threshold = int(warrior.max_hp * 0.15)
+    if damage < warrior.max_hp * 0.15:
         return None, threshold, 0, 0
-    chance = max(5, min(55, int((damage / warrior.max_hp) * 100) - 30))
+    chance = max(5, min(80, int((damage / warrior.max_hp) * 100) - 5))
     if warrior.race.modifiers.fewer_perms:
         chance = int(chance * 0.85)
     roll = random.randint(1, 100)
@@ -1536,14 +1571,15 @@ def _check_perm_injury(
     damage    : int,
     aim_point : str,
 ) -> Optional[Tuple[str, int]]:
-    if damage < warrior.max_hp * 0.35:
+    if damage < warrior.max_hp * 0.15:
         return None
-    chance = max(5, min(55, int((damage / warrior.max_hp) * 100) - 30))
+    chance = max(5, min(80, int((damage / warrior.max_hp) * 100) - 5))
     if warrior.race.modifiers.fewer_perms:
         chance = int(chance * 0.85)
     if random.randint(1, 100) > chance:
         return None
     if aim_point and aim_point != "None":
+        # Map targeting to actual injury locations
         loc_map = {
             "Head":"head","Chest":"chest","Abdomen":"abdomen",
             "Primary Arm":"primary_arm","Secondary Arm":"secondary_arm",
@@ -1551,6 +1587,7 @@ def _check_perm_injury(
         }
         location = loc_map.get(aim_point, random.choice(_BODY_LOCATION_POOL))
     else:
+        # No aim point - generic body strike, restrict to torso/arm locations
         location = random.choice(_BODY_LOCATION_POOL)
     pct    = damage / warrior.max_hp
     levels = 3 if pct > 0.50 else (2 if pct > 0.35 else 1)
@@ -1742,6 +1779,10 @@ def _update_endurance(
     # Per-action burn (divide by current APM)
     burn = net_pm / max(1, apm)
 
+    # Overencumbrance burn penalty
+    if state.armor_penalty > 0:
+        burn *= (1.0 + state.armor_penalty)
+
     # Phase II feedback spiral: already exhausted → reserves drain 75% faster
     phase2 = warrior.max_endurance * 0.25
     if state.endurance < phase2:
@@ -1810,7 +1851,11 @@ def _update_endurance(
 # ---------------------------------------------------------------------------
 
 def _calc_apm(warrior: Warrior, strategy: Strategy, state: _CState) -> int:
-    dex  = get_effective_dex_for_race(warrior.dexterity, warrior.armor or "None", warrior.helm or "None", warrior.race.name)
+    dex = get_effective_dex_for_race(
+        warrior.dexterity,
+        warrior.armor or "None",
+        warrior.helm or "None",
+        warrior.race.name)
     wpn  = warrior.primary_weapon.lower().replace(" ", "_").replace("&", "and")
     base = 3.0
     base += max(0.0, (dex - 10)) * 0.20
@@ -1855,6 +1900,10 @@ def _calc_apm(warrior: Warrior, strategy: Strategy, state: _CState) -> int:
         base -= (_phase2 - state.endurance) / max(1.0, _phase2) * 1.5
     if state.is_on_ground:
         base *= 0.5
+
+    # Under-strength armor penalty to APM
+    if state.armor_penalty > 0:
+        base *= (1.0 - state.armor_penalty)
 
     # Warrior APM calculated, now combine with weapon APM
     warrior_apm = max(1, min(10, int(round(base))))
@@ -1957,6 +2006,16 @@ class CombatEngine:
 
         self.state_a = _CState(warrior=warrior_a, current_hp=warrior_a.max_hp, endurance=float(warrior_a.max_endurance))
         self.state_b = _CState(warrior=warrior_b, current_hp=warrior_b.max_hp, endurance=float(warrior_b.max_endurance))
+
+        # Calculate overencumbrance penalties
+        for st in (self.state_a, self.state_b):
+            is_dw = st.warrior.race.name == "Dwarf"
+            # Body armor check
+            p_body = armor_penalty_factor(get_armor(st.warrior.armor).weight, st.warrior.strength, is_dw, False)
+            # Helm check
+            p_helm = armor_penalty_factor(get_armor(st.warrior.helm).weight, st.warrior.strength, is_dw, True)
+            # Take the worst penalty
+            st.armor_penalty = max(p_body, p_helm)
 
         if warrior_a.strategies:
             self.state_a.active_strategy  = warrior_a.strategies[-1]
@@ -2288,6 +2347,9 @@ class CombatEngine:
         self._emit(f"\nMINUTE {minute}")
         if minute == 1:
             self._emit(random.choice(N.FIGHT_OPENERS))
+            for st in (self.state_a, self.state_b):
+                if st.armor_penalty >= 0.10:
+                    self._emit(N.overencumbered_prefight_line(st.warrior.name, st.warrior.gender))
         else:
             tier, winner_name, loser_name = self._calc_minute_advantage()
             adv_line = N.minute_status_line(
@@ -2317,6 +2379,11 @@ class CombatEngine:
                 self.debug_logger.log_strategy_switch(self.warrior_b.name, self.state_b.active_strat_idx, idx_b)
         self.state_a.active_strategy  = strat_a;  self.state_a.active_strat_idx = idx_a
         self.state_b.active_strategy  = strat_b;  self.state_b.active_strat_idx = idx_b
+
+        # Overencumbrance flavor
+        for st in (self.state_a, self.state_b):
+            if st.armor_penalty >= 0.10 and random.random() < 0.25:
+                self._emit(N.overencumbered_line(st.warrior.name, st.warrior.gender))
 
         # --- Recovery and Ground Logic ---
         # Apply injury recovery for both warriors at the start of the minute
