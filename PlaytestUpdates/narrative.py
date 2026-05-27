@@ -487,6 +487,153 @@ FIGHT_OPENERS = [
     "The Blood Master raises his fist, the fight begins!",
 ]
 
+RACE_KILL_POOLS = {
+    "Half-Orc": [
+        "{name} snorts in triumph, a thick string of bloody saliva trailing from {his} lower tusks.",
+        "{name} lets out a primal, guttural roar that vibrates through the arena floor.",
+        "{name} beats {his} chest with blood-stained hands, howling at the screaming crowd.",
+        "{name} stares down at the corpse, a slow, predatory grin spreading across {his} heavy features.",
+        "{name} wipes {his} weapon on the fallen warrior's clothing with a grunt of disdain.",
+        "{name} looms over the body, {his} breath coming in heavy, jagged snorts of victory.",
+        "{name} kicks a spray of sand over the remains, a simple gesture of orcish finality.",
+        "{name} raises {his} blood-slicked weapon high, a deafening war-cry erupting from {his} throat.",
+        "{name} stands motionless over the kill, the scent of fresh blood igniting a dark fire in {his} eyes.",
+        "{name} spits on the dirt beside the corpse, satisfied with the carnage.",
+    ],
+    "Elf": [
+        "{name} lowers {his} weapon with fluid grace, offering a silent, cold nod to the fallen.",
+        "{name} stands perfectly still, the only sign of the kill a subtle, chilling smile.",
+        "{name} sheathes {his} blade in a blur of motion, looking already bored with the victory.",
+        "{name} murmurs a short, melodic phrase in Elvish, a sharp contrast to the surrounding violence.",
+        "{name} steps delicately over the body, {his} movements as precise as the strike that ended it.",
+        "{name} gazes upon the corpse with a detached, clinical interest before turning away.",
+        "{name} flickers {his} weapon to clear the blood, the motion so swift it's almost invisible.",
+        "{name} stands like a statue over the remains, {his} eyes reflecting the setting sun with unsettling calm.",
+        "{name} adjusts {his} stance with effortless elegance, the kill merely a footnote in {his} afternoon.",
+        "{name} offers a mocking, graceful bow to the cheering stands, a predator's charm on full display.",
+    ],
+    "Dwarf": [
+        "{name} plants {his} feet firmly and grunts, the weight of the kill settling deep in {his} bones.",
+        "{name} spits a thick glob of phlegm onto the sand, a stolid mark of Dwarven triumph.",
+        "{name} hefts {his} weapon onto {his} shoulder, a grim, satisfied nod offered to the body.",
+        "{name} mutters a gruff word of respect to the mountain, the kill a debt paid in full.",
+        "{name} stands like a mountain over the fallen, {his} beard matted with the dust of the pit.",
+        "{name} kicks the corpse's weapon aside with a heavy boot, a final act of dismissal.",
+        "{name} lets out a low, booming laugh that sounds like stones grinding together.",
+        "{name} wipes a bead of sweat from {his} brow with a bloodied glove, the job finished.",
+        "{name} stares at the body for a long moment, {his} features an unreadable mask of iron.",
+        "{name} thumps a fist against {his} armor, the resonant clang signaling the end of the bout.",
+    ],
+    "Human": [
+        "{name} raises a blood-streaked hand to the crowd, soaking in the roar of the arena.",
+        "{name} stands over the fallen opponent, chest heaving, a look of grim determination on {his} face.",
+        "{name} offers a salute with {his} weapon to the Blood Master, the kill dedicated to the Pit.",
+        "{name} stares at {his} blood-stained hands for a heartbeat before looking back at the stands.",
+        "{name} lets out a weary but triumphant shout, the adrenaline of the kill still surging.",
+        "{name} looks down at the corpse with a mix of pity and pride, the reality of the amphitheatre setting in.",
+        "{name} wipes {his} brow, a sharp, victory-drunk grin splitting {his} face.",
+        "{name} stands tall among the sawdust and blood, a common man made legendary by the kill.",
+        "{name} offers a simple, respectful nod to the fallen before turning to acknowledge the fans.",
+        "{name} screams a name to the heavens, a personal victory won in the blood of the sands.",
+    ],
+    "Halfling": [
+        "{name} darts a quick, mischievous look at the crowd before offering a cheeky wink.",
+        "{name} stands over the much larger opponent, a look of feigned surprise on {his} youthful face.",
+        "{name} wipes {his} blade with a flourish, the kill handled with more style than seems strictly necessary.",
+        "{name} hops over the corpse with a nimble skip, already looking for the next excitement.",
+        "{name} lets out a high-pitched, mocking cheer that carries clearly over the roar of the fans.",
+        "{name} strikes a dramatic pose over the body, {his} small frame casting a long shadow on the sand.",
+        "{name} chuckles to {himself}, a light-hearted sound in the midst of the carnage.",
+        "{name} offers a playful, exaggerated bow to the Blood Master, the kill a show for the people.",
+        "{name} stands with hands on hips, looking down at the remains with a satisfied, cocky grin.",
+        "{name} takes a quick, mocking victory lap around the body before settling into a confident stance.",
+    ],
+    "Gnome": [
+        "{name} adjusts a piece of gear with clinical detachment, the kill just another data point.",
+        "{name} offers a thin, calculating smile to the fallen, the tactical puzzle solved.",
+        "{name} mutters a string of complex observations to {himself}, ignoring the cheering crowd.",
+        "{name} stands over the body with an analytical gaze, noting the exact efficiency of the strike.",
+        "{name} performs a quick, precise flourish with {his} weapon, a mechanical celebration of form.",
+        "{name} looks at the Blood Master with a questioning tilt of the head, as if seeking a score.",
+        "{name} offers a small, polite nod to the remains, a tactician's professional courtesy.",
+        "{name} checks {his} weapon for wear, the kill a secondary concern to the maintenance of {his} tools.",
+        "{name} stands perfectly poised, {his} sharp eyes darting between the corpse and the stands.",
+        "{name} gives a short, sharp laugh, the sound of a clever trap snapping shut.",
+    ],
+    "Goblin": [
+        "{name} cackles with high-pitched glee, poking at the corpse with the tip of {his} weapon.",
+        "{name} spits on the fallen, a mean-spirited hiss escaping {his} jagged teeth.",
+        "{name} does a frantic, jerky dance of victory around the body, hissing at the crowd.",
+        "{name} stares at the remains with wide, hungry eyes, a predator's joy in {his} gaze.",
+        "{name} lets out a screeching victory cry that sounds like metal scraping on stone.",
+        "{name} wipes {his} nose with a bloodied sleeve, looking down at the kill with cruel satisfaction.",
+        "{name} mocks the fallen's final moments with a series of ugly, exaggerated gestures.",
+        "{name} stands over the kill, {his} frame trembling with the feverish energy of the pit.",
+        "{name} snarls at a nearby guard, the kill having stoked a feral fire in {his} blood.",
+        "{name} kicks a handful of dirt into the face of the dead, a final, petty act of goblin triumph.",
+    ],
+    "Lizardfolk": [
+        "{name} tastes the air with a flickering tongue, the scent of fresh blood thick and satisfying.",
+        "{name} lets out a low, vibrating hiss that seems to come from the very depths of {his} chest.",
+        "{name} stands over the kill with cold, unblinking eyes, a primal predator in {his} element.",
+        "{name} sweeps {his} tail across the sand with a heavy thud, a rhythmic celebration of the kill.",
+        "{name} stares at the corpse with a detached, reptilian hunger before turning to the stands.",
+        "{name} opens {his} maw in a silent, terrifying display of teeth and victory.",
+        "{name} stands perfectly still, {his} scales shimmering with the heat and blood of the arena.",
+        "{name} offers a slow, deliberate blink to the Blood Master, the kill a simple fact of nature.",
+        "{name} wipes a clawed hand across the sand, a cold and ancient ritual of the hunt.",
+        "{name} lets out a sound that is half-roar and half-hiss, the voice of the swamp in the heart of the pit.",
+    ],
+    "Tabaxi": [
+        "{name} licks a blood-spattered paw with feline poise, the kill handled with casual elegance.",
+        "{name} stands over the remains, tail twitching in a rhythmic, satisfied pattern.",
+        "{name} offers a wide, toothy grin to the crowd, {his} eyes narrowed with predatory delight.",
+        "{name} stretches {his} lithe frame over the body, a graceful display of feline triumph.",
+        "{name} lets out a sharp, bird-like chirp of victory that echoes through the silence of the stands.",
+        "{name} moves around the kill with a series of fluid, dancing steps, light and dangerous.",
+        "{name} gazes down at the fallen with a mix of curiosity and intense, feline pride.",
+        "{name} performs a quick, acrobatic flip over the corpse, a flashy end to a lethal bout.",
+        "{name} stands with {his} fur ruffled by the wind, the scent of the kill an intoxicating prize.",
+        "{name} purrs—a low, unsettling rumble that carries surprisingly far in the quieted arena.",
+    ],
+    "Half-Elf": [
+        "{name} stands with a conflicted but proud bearing, the duality of {his} blood clear in victory.",
+        "{name} offers a disciplined salute to the stands, the kill a hard-won prize.",
+        "{name} stares at the fallen with a look of somber respect before sheathing {his} weapon.",
+        "{name} lets out a strong, clear shout of triumph that rings with both human passion and elven clarity.",
+        "{name} stands tall over the remains, {his} features an elegant mask of warrior's pride.",
+        "{name} wipes {his} blade with a methodical grace, the task completed with professional focus.",
+        "{name} offers a slight, knowing smile to the crowd, the kill a validation of {his} hybrid path.",
+        "{name} moves with a balance of power and agility that mocks the stillness of the dead.",
+        "{name} looks at the Blood Master with a steady, confident gaze, a survivor's entitlement.",
+        "{name} stands motionless for a heartbeat, the silence of the kill a moment of pure reflection.",
+    ],
+    "Monster": [
+        "{name} lets out a deafening, bone-chilling roar that shakes the very foundations of the pit.",
+        "{name} looms over the mangled remains, its eyes glowing with a malevolent, inhuman hunger.",
+        "A terrifying, wet gurgle erupts from {name}'s throat as it stares down at its prize.",
+        "{name} beats the ground with massive, blood-stained limbs, a primal display of raw power.",
+        "{name} stands over the kill, a dark, pulsing shadow that seems to swallow the arena's light.",
+        "The beast snarls at the crowd, its features twisted into a mask of pure, unadulterated rage.",
+        "{name} pokes at the remains with a monstrous claw, a detached and terrible curiosity in its gaze.",
+        "{name} lets out a high-pitched, unnatural shriek that sends a wave of cold through the stands.",
+        "{name} looms over the body, its breath coming in hot, sulfurous clouds of victory.",
+        "{name} remains perfectly still over the kill, a silent sentinel of the arena's darkest depths.",
+    ],
+    "Peasant": [
+        "{name} stands over the fallen warrior with wide, disbelief-filled eyes, {his} weapon trembling in {his} hand.",
+        "{name} lets out a ragged, desperate cheer, more relief than triumph in {his} voice.",
+        "{name} stares at the body as if unable to comprehend that {he} is the one still standing.",
+        "{name} offers a shaky, terrified salute to the crowd, the kill an accidental miracle.",
+        "{name} wipes {his} face with a grimy sleeve, a frantic, victory-drunk laugh escaping {him}.",
+        "{name} stands motionless, the scent of blood making {his} knees buckle with delayed shock.",
+        "{name} looks at the Blood Master with a pleading gaze, as if asking for permission to leave.",
+        "{name} does a small, clumsy dance of joy, a commoner's celebration of an impossible win.",
+        "{name} spits a mouthful of dust and blood, a weary and surprised victor of the pit.",
+        "{name} stands tall for the first time in {his} life, the kill having transformed {him} into something more.",
+    ],
+}
+
 
 # ---------------------------------------------------------------------------
 # STRATEGY SWITCH LINE
@@ -2674,6 +2821,21 @@ def mercy_result_line(warrior_name: str, granted: bool) -> str:
 def death_line(warrior_name: str, gender: str) -> str:
     pronoun = "his" if gender == "Male" else "her"
     return random.choice(DEATH_LINES).format(warrior=warrior_name.upper(), his=pronoun)
+
+
+def race_kill_line(killer_name: str, race_name: str, gender: str) -> str:
+    """Return a race-specific narrative line for a kill."""
+    pool = RACE_KILL_POOLS.get(race_name, RACE_KILL_POOLS["Human"])
+    template = random.choice(pool)
+    his = "his" if gender == "Male" else "her"
+    he = "he" if gender == "Male" else "she"
+    him = "him" if gender == "Male" else "her"
+    himself = "himself" if gender == "Male" else "herself"
+
+    return template.format(
+        name=killer_name.upper(),
+        his=his, he=he, him=him, himself=himself
+    )
 
 
 def victory_line(winner_name: str, loser_name: str) -> str:

@@ -282,7 +282,7 @@ WEAPONS: dict[str, Weapon] = {
             "Ultimately does too little damage for high-level play. Halflings like it."
         ),
         preferred_styles=["Lunge", "Martial Combat", "Calculated Attack"],
-        weak_styles   =["Bash", "Total Kill"],
+        weak_styles   =["Bash"],
     ),
 
     "knife": Weapon(
@@ -352,7 +352,7 @@ WEAPONS: dict[str, Weapon] = {
             "as other light weapons. Effective in first 50 fights played right."
         ),
         preferred_styles=["Lunge", "Engage & Withdraw", "Sure Strike"],
-        weak_styles   =["Bash", "Total Kill"],
+        weak_styles   =["Bash"],
     ),
 
     "scimitar": Weapon(
@@ -634,7 +634,7 @@ WEAPONS: dict[str, Weapon] = {
         category      = HAMMER_MACE,
         notes="Too slow to be effective; lacks the defenses to compensate. Requires very high Strength.",
         preferred_styles=["Total Kill", "Bash"],
-        weak_styles   =["Wall of Steel", "Lunge"],
+        weak_styles   =["Wall of Steel", "Lunge", "Counterstrike"],
     ),
 
     "club": Weapon(
@@ -1046,7 +1046,7 @@ WEAPONS: dict[str, Weapon] = {
             "Can finish a fight in 2 hits - if you survive the 10 they land first."
         ),
         preferred_styles=["Total Kill", "Bash"],
-        weak_styles   =["Wall of Steel", "Lunge"],
+        weak_styles   =["Wall of Steel", "Lunge", "Counterstrike"],
     ),
 
     "bola": Weapon(

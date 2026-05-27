@@ -440,17 +440,13 @@ def _check_weapon_style_compatibility(weapon_name: str, style: str) -> tuple[boo
     # Check broader incompatibilities based on weapon category and style
     # These are thematic mismatches that aren't explicitly in weak_styles
     
-    # Light weapons (weight < 2.5) with Bash/Total Kill
-    if weapon.weight < 2.5 and style in ("Bash", "Total Kill"):
+    # Light weapons (weight < 2.5) with Bash (Shields are exempt)
+    if weapon.weight < 2.5 and style == "Bash" and not weapon.is_shield:
         return False, 0.70
     
     # Heavier weapons (weight >= 4.0) with Lunge/Calculated Attack
     if weapon.weight >= 4.0 and style in ("Lunge", "Calculated Attack"):
         return False, 0.70
-    
-    # Small weapons with Total Kill
-    if weapon.weight < 2.0 and style == "Total Kill":
-        return False, 0.65
     
     # Two-handed weapons with Wall of Steel (too slow for rapid flurry)
     if weapon.two_hand and style == "Wall of Steel":
@@ -655,8 +651,18 @@ def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState) -> int:
     if state.is_weapon_dropped:
         injury_pen += 20 # Fighting unarmed unexpectedly is hard
 
-    return max(1, roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b
-               - end_pen - hp0_pen + fav_bonus + martial_bonus - injury_pen)
+    total = roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b \
+               - end_pen - hp0_pen + fav_bonus + martial_bonus - injury_pen
+
+    if attacker.race.name == "Lizardfolk":
+        atk_pct = get_lizardfolk_armor_penalties(attacker.armor or "None")["dodge_parry_pct"]
+        if atk_pct > 0:
+            total = int(total * (1.0 - atk_pct))
+
+    if state.armor_penalty > 0:
+        total = int(total * (1.0 - state.armor_penalty))
+
+    return max(1, total)
 
 
 def _defense_roll(
@@ -710,10 +716,6 @@ def _defense_roll(
         acrobatics_b = acrobatics_level * 2 if acrobatics_level > 0 else 0
 
         total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train_dodge + race_dodge_bonus + acrobatics_b
-
-        # Overencumbrance penalty (Dodge only) — must apply after total is computed
-        if state.armor_penalty > 0:
-            total = int(total * (1.0 - state.armor_penalty))
 
         # Heavy weapon dodge penalty for Goblins & Tabaxi
         if defender.race.modifiers.heavy_weapon_penalty:
@@ -775,6 +777,10 @@ def _defense_roll(
         dp_pct = get_lizardfolk_armor_penalties(defender.armor or "None")["dodge_parry_pct"]
         if dp_pct > 0:
             total = int(total * (1.0 - dp_pct))
+
+    # Overencumbrance penalty applies to final defensive effort (Parry and Dodge)
+    if state.armor_penalty > 0:
+        total = int(total * (1.0 - state.armor_penalty))
 
     return max(1, total)
 
@@ -1075,7 +1081,7 @@ def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CSt
     martial_b = 0
     if _has_martial_combat_bonus(attacker) and _is_using_martial_combat(attacker):
         martial_b = _get_martial_combat_accuracy_bonus(attacker)
-    result  = max(1, roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b - end_pen - hp0_pen + fav_b + martial_b)
+    result  = roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b - end_pen - hp0_pen + fav_b + martial_b
     comps = {
         "d100": roll,
         "dex_bonus": dex_b,
@@ -1089,6 +1095,17 @@ def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CSt
         "end_pen": -end_pen if end_pen else 0,
         "hp0_pen": -hp0_pen if hp0_pen else 0,
     }
+
+    if attacker.race.name == "Lizardfolk":
+        atk_pct = get_lizardfolk_armor_penalties(attacker.armor or "None")["dodge_parry_pct"]
+        if atk_pct > 0:
+            result = int(result * (1.0 - atk_pct))
+            comps["lizard_armor_atk_pct"] = -int(atk_pct * 100)
+
+    if state.armor_penalty > 0:
+        result = int(result * (1.0 - state.armor_penalty))
+        comps["overencumbrance_pen"] = -int(state.armor_penalty * 100)
+    result = max(1, result)
     return result, comps
 
 
@@ -1138,10 +1155,6 @@ def _defense_roll_verbose(
         acro_b   = acro_lv * 2 if acro_lv > 0 else 0
         total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train + race_dg + acro_b
 
-        # Overencumbrance penalty (Dodge only) — must apply after total is computed
-        if state.armor_penalty > 0:
-            total = int(total * (1.0 - state.armor_penalty))
-            comps["overencumbrance_pen"] = -int(state.armor_penalty * 100)
         heavy_pen = 0
         if defender.race.modifiers.heavy_weapon_penalty:
             try:
@@ -1221,6 +1234,11 @@ def _defense_roll_verbose(
         if dp_pct > 0:
             total = int(total * (1.0 - dp_pct))
             comps["lizard_armor_dp_pct"] = -int(dp_pct * 100)
+
+    # Overencumbrance penalty applies to final defensive effort
+    if state.armor_penalty > 0:
+        total = int(total * (1.0 - state.armor_penalty))
+        comps["overencumbrance_pen"] = -int(state.armor_penalty * 100)
 
     return max(1, total), comps
 
@@ -1758,26 +1776,24 @@ def _update_endurance(
     int_mit = max(0, (warrior.intelligence - 10) // 2) * 0.015
     mit     = min(0.50, dex_mit + int_mit)
 
-    # Per-minute gross burn: (activity × style_mod) + weapon/2 + (armor+helm)/3
-    # Aggressive styles burn at 2.0×; tactical/passive at 1.25×.
-    style_mod = 2.0 if strategy.style in _AGGRESSIVE_STYLES else 1.25
-    gross_pm  = (strategy.activity * style_mod) + (wpn_wt / 2.0) + ((armor_def + helm_def) / 3.0)
-    net_pm    = gross_pm * (1.0 - mit)
-
-    # Skill-based conservation: weapon mastery reduces energy wasted per minute.
-    # Level 9 (Master) saves 4.5 endurance/minute vs an unskilled fighter.
+    # Action-centric burn logic:
+    # Use the base endurance_burn defined in strategy.py (e.g. 1.0 for Parry, 10.0 for Total Kill)
+    base_burn = props.endurance_burn
+    
+    # Activity multiplier: act 1 = 60%, act 5 = 100%, act 9 = 140% of base burn
+    act_mult = 0.5 + (strategy.activity * 0.1)
+    
+    # Gear weight tax: added per action. Reduced slightly to prevent gear from 
+    # completely drowning out style-based costs.
+    gear_tax = (wpn_wt * 0.12) + ((armor_def + helm_def) * 0.08)
+    
+    # Mastery bonus: weapon mastery reduces friction
     wpn_key        = warrior.primary_weapon.lower().replace(" ", "_").replace("&", "and")
     wpn_skill_lv   = warrior.skills.get(wpn_key, 0)
-    conservation_pm = wpn_skill_lv * 0.5
-    net_pm = max(0.0, net_pm - conservation_pm)
+    mastery_reduction = wpn_skill_lv * 0.05 # up to 45% reduction of gear tax
 
-    # Floor: no warrior can coast through Phase I indefinitely.
-    # At 10%/min the worst case hits Phase II by ~7.5 minutes.
-    min_pm = warrior.max_endurance * 0.10
-    net_pm = max(min_pm, net_pm)
-
-    # Per-action burn (divide by current APM)
-    burn = net_pm / max(1, apm)
+    burn = (base_burn * act_mult) + (gear_tax * (1.0 - mastery_reduction))
+    burn *= (1.0 - mit)
 
     # Overencumbrance burn penalty
     if state.armor_penalty > 0:
@@ -3111,6 +3127,7 @@ class CombatEngine:
                 self._emit(ln)
             if fatal:
                 self._emit(N.death_line(dfr.name, dfr.gender))
+                self._emit(N.race_kill_line(att.name, att.race.name, att.gender))
                 self._emit("")
                 self._emit(N.victory_line(att.name, dfr.name))
                 return self._make_result(att, dfr, True, minute)
@@ -3273,6 +3290,7 @@ class CombatEngine:
             dw.is_dead = True
             self._emit(f"{dw.name.upper()} collapses, the monster shows no mercy!")
             self._emit(N.death_line(dw.name, dw.gender))
+            self._emit(N.race_kill_line(kw.name, kw.race.name, kw.gender))
             self._emit(""); self._emit(N.victory_line(kw.name, dw.name))
             return self._make_result(kw, dw, True, minute)
         if self.debug_logger:
@@ -3285,6 +3303,7 @@ class CombatEngine:
         if died:
             dw.is_dead = True
             self._emit(N.death_line(dw.name, dw.gender))
+            self._emit(N.race_kill_line(kw.name, kw.race.name, kw.gender))
             self._emit(""); self._emit(N.victory_line(kw.name, dw.name))
             return self._make_result(kw, dw, True, minute)
         # Survived: concede system takes over via wants_to_concede
