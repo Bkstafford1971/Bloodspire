@@ -1783,15 +1783,23 @@ async function reloadTeam(tid) {
 async function refreshLeagueFlags() {
   if (!S.league.url || !S.league.managerId) return;
   try {
-    const resp = await fetch(S.league.url + '/api/flags');
-    if (!resp.ok) return;
-    const d = await resp.json();
-    if (!d.success) return;
-    S.league.flags = {
-      show_favorite_weapon: d.show_favorite_weapon || false,
-      show_luck_factor:     d.show_luck_factor     || false,
-      show_max_hp:          d.show_max_hp          || false,
-    };
+    const ctrl = new AbortController();
+    const timeout = setTimeout(() => ctrl.abort(), 2000); // 2-second timeout
+    try {
+      const resp = await fetch(S.league.url + '/api/flags', {signal: ctrl.signal});
+      clearTimeout(timeout);
+      if (!resp.ok) return;
+      const d = await resp.json();
+      if (!d.success) return;
+      S.league.flags = {
+        show_favorite_weapon: d.show_favorite_weapon || false,
+        show_luck_factor:     d.show_luck_factor     || false,
+        show_max_hp:          d.show_max_hp          || false,
+      };
+    } catch(e) {
+      clearTimeout(timeout);
+      /* silent */
+    }
   } catch(e) { /* silent */ }
 }
 
@@ -2167,8 +2175,10 @@ async function treeSelectWarrior(tid, idx) {
     await flushSave();
   }
   S.sel  = {type:'warrior', teamId: tid, wIdx: idx};
-  // Fetch fresh data so streak/favorite_weapon always reflect server state
-  await Promise.all([reloadTeam(tid), refreshLeagueFlags()]);
+  // Reload team data from local storage
+  await reloadTeam(tid);
+  // Refresh league flags in background (don't block on network)
+  refreshLeagueFlags();
   // Dead warriors open straight to the Replacement tab
   const team = S.teams[tid];
   const w    = team && team.warriors && team.warriors[idx];
