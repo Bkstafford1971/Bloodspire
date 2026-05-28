@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v2.7</title>
+<title>BLOODSPIRE Client - v2.7.2</title>
 <style>
 /* ============================================================
    WINDOWS CLASSIC - REFINED
@@ -246,7 +246,7 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
-const CLIENT_VERSION = "2.7";
+const CLIENT_VERSION = "2.7.2";
 
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
@@ -6922,51 +6922,54 @@ async function init() {
     return;
   }
   console.log('Initializing Bloodspire Client...');
-  
+
   // ============================================================
   // STEP 1: Check for local backend server (Zero-Click Mode)
+  // SKIP for Electron - Electron mode uses direct filesystem access
   // ============================================================
-  let localCheck = { success: false };
-  try {
-    localCheck = await fetch('/api/local/status').then(r => r.json()).catch(() => ({ success: false }));
-    
-    if (!localCheck.success && (window.location.protocol === 'file:' || window.location.hostname === 'localhost')) {
-      localCheck = await fetch('http://localhost:8766/api/local/status').then(r => r.json()).catch(() => ({ success: false }));
-    }
+  if (!window.electronAPI) {
+    let localCheck = { success: false };
+    try {
+      localCheck = await fetch('/api/local/status').then(r => r.json()).catch(() => ({ success: false }));
 
-    if (localCheck.success && localCheck.is_local_backend) {
-      console.log('Running in local backend mode');
-      S.isLocalBackend = true;
-      S.folderReady = true;
-      // Prefer the URL the page was actually served from so remote players
-      // get the host's Tailscale/LAN IP, not a hardcoded localhost.
-      const pageOrigin = (window.location.protocol !== 'file:') ? window.location.origin : null;
-      S.localBaseUrl = pageOrigin || localCheck.server_url || 'http://localhost:8766';
-      if (!S.serverUrl || S.serverUrl === DEFAULT_SERVER_URL) S.serverUrl = S.localBaseUrl;
-      
-      const localAcc = await LocalAPI.get('/api/account');
-      if (localAcc.success) {
-        S.savedManagerName = localAcc.account.manager_name;
-        S.savedRememberMe = localAcc.account.remember !== false;
-        S.savedPassword = localAcc.account.password_plaintext || '';
-        S.loginTab = 'login';
+      if (!localCheck.success && (window.location.protocol === 'file:' || window.location.hostname === 'localhost')) {
+        localCheck = await fetch('http://localhost:8766/api/local/status').then(r => r.json()).catch(() => ({ success: false }));
       }
 
-      // Load persisted league settings (manager_id etc.) from server-side client store
-      await loadLeagueSettings();
+      if (localCheck.success && localCheck.is_local_backend) {
+        console.log('Running in local backend mode');
+        S.isLocalBackend = true;
+        S.folderReady = true;
+        // Prefer the URL the page was actually served from so remote players
+        // get the host's Tailscale/LAN IP, not a hardcoded localhost.
+        const pageOrigin = (window.location.protocol !== 'file:') ? window.location.origin : null;
+        S.localBaseUrl = pageOrigin || localCheck.server_url || 'http://localhost:8766';
+        if (!S.serverUrl || S.serverUrl === DEFAULT_SERVER_URL) S.serverUrl = S.localBaseUrl;
 
-      // Pre-load game data so Stats/Strats tab is ready immediately after login
-      try {
-        const gd = await API.get('/api/game_data');
-        if (gd && !gd.error) S.gd = gd;
-      } catch(e) {}
+        const localAcc = await LocalAPI.get('/api/account');
+        if (localAcc.success) {
+          S.savedManagerName = localAcc.account.manager_name;
+          S.savedRememberMe = localAcc.account.remember !== false;
+          S.savedPassword = localAcc.account.password_plaintext || '';
+          S.loginTab = 'login';
+        }
 
-      S.view = 'login';
-      render();
-      return;
+        // Load persisted league settings (manager_id etc.) from server-side client store
+        await loadLeagueSettings();
+
+        // Pre-load game data so Stats/Strats tab is ready immediately after login
+        try {
+          const gd = await API.get('/api/game_data');
+          if (gd && !gd.error) S.gd = gd;
+        } catch(e) {}
+
+        S.view = 'login';
+        render();
+        return;
+      }
+    } catch(e) {
+      console.debug('Local backend check skipped:', e.message);
     }
-  } catch(e) {
-    console.debug('Local backend check skipped:', e.message);
   }
 
   // ============================================================
