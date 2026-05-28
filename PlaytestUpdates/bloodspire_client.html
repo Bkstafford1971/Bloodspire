@@ -4667,10 +4667,13 @@ async function doLogin() {
       if (mid && S.serverUrl && !pendingDeleted?.length) {
         try {
           const base = S.serverUrl.replace(/\/+$/, '');
+          const ctrl = new AbortController();
+          const timeout = setTimeout(() => ctrl.abort(), 3000);
           const delResp = await fetch(base + '/api/check_deleted_teams', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ manager_id: String(mid) }),
-          }).then(res => res.json()).catch(() => null);
+            signal: ctrl.signal,
+          }).then(res => res.json()).catch(() => null).finally(() => clearTimeout(timeout));
           if (delResp?.success) pendingDeleted = delResp.deleted_teams;
         } catch (_) {}
       }
@@ -5679,40 +5682,56 @@ async function loadLeagueSettings() {
     
     // Fetch feature flags and last upload timestamp from league server if connected
     if (S.league.url && S.league.managerId) {
-      // Fetch feature flags (public, no auth needed)
+      // Fetch feature flags (public, no auth needed) - with 3-second timeout
       try {
-        const flagResp = await fetch(S.league.url + '/api/flags');
-        if (flagResp.ok) {
-          const flagData = await flagResp.json();
-          if (flagData.success) {
-            S.league.flags = {
-              show_favorite_weapon: flagData.show_favorite_weapon || false,
-              show_luck_factor:     flagData.show_luck_factor     || false,
-              show_max_hp:          flagData.show_max_hp          || false,
-            };
-            refreshContent();
+        const ctrl = new AbortController();
+        const timeout = setTimeout(() => ctrl.abort(), 3000);
+        try {
+          const flagResp = await fetch(S.league.url + '/api/flags', {signal: ctrl.signal});
+          clearTimeout(timeout);
+          if (flagResp.ok) {
+            const flagData = await flagResp.json();
+            if (flagData.success) {
+              S.league.flags = {
+                show_favorite_weapon: flagData.show_favorite_weapon || false,
+                show_luck_factor:     flagData.show_luck_factor     || false,
+                show_max_hp:          flagData.show_max_hp          || false,
+              };
+              refreshContent();
+            }
           }
+        } catch(e) {
+          clearTimeout(timeout);
+          /* silent */
         }
       } catch(e) { /* silent */ }
 
       try {
-        const statusResp = await fetch(S.league.url + '/api/status');
-        if (statusResp.ok) {
-          const statusData = await statusResp.json();
-          if (statusData.managers) {
-            const mgr = statusData.managers.find(m => m.manager_id === S.league.managerId);
-            if (mgr && mgr.last_upload_timestamp) {
-              // Convert timestamp string (YYYY-MM-DD HH:MM:SS) to toLocaleString() format
-              try {
-                const uploadDate = new Date(mgr.last_upload_timestamp.replace(' ', 'T'));
-                S.league.lastUpload = uploadDate.toLocaleString();
-              } catch(e) {
-                S.league.lastUpload = mgr.last_upload_timestamp; // fallback to raw string
+        const ctrl = new AbortController();
+        const timeout = setTimeout(() => ctrl.abort(), 3000);
+        try {
+          const statusResp = await fetch(S.league.url + '/api/status', {signal: ctrl.signal});
+          clearTimeout(timeout);
+          if (statusResp.ok) {
+            const statusData = await statusResp.json();
+            if (statusData.managers) {
+              const mgr = statusData.managers.find(m => m.manager_id === S.league.managerId);
+              if (mgr && mgr.last_upload_timestamp) {
+                // Convert timestamp string (YYYY-MM-DD HH:MM:SS) to toLocaleString() format
+                try {
+                  const uploadDate = new Date(mgr.last_upload_timestamp.replace(' ', 'T'));
+                  S.league.lastUpload = uploadDate.toLocaleString();
+                } catch(e) {
+                  S.league.lastUpload = mgr.last_upload_timestamp; // fallback to raw string
+                }
               }
             }
           }
+        } catch(e) {
+          clearTimeout(timeout);
+          /* silent - don't interrupt if status fetch fails */
         }
-      } catch(e) { /* silent - don't interrupt if status fetch fails */ }
+      } catch(e) { /* silent */ }
     }
   } catch(e) {}
 }
