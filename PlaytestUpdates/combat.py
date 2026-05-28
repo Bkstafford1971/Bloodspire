@@ -131,7 +131,7 @@ VERSATILE_WEAPONS = {
 
 # Weapons that use finesse/precision damage calculation (small weapon skill bonus)
 FINESSE_DAMAGE_WEAPONS = {
-    "stiletto", "cestus", "knife", "dagger"
+    "stiletto", "cestus", "knife", "dagger", "epee"
 }
 
 
@@ -436,7 +436,11 @@ def _check_weapon_style_compatibility(weapon_name: str, style: str) -> tuple[boo
     if style in weapon.weak_styles:
         # Severe incompatibility (e.g., Bash with Stiletto)
         return False, 0.60
-    
+
+    # A style the weapon was designed for overrides all generic category rules
+    if style in weapon.preferred_styles:
+        return True, 1.0
+
     # Check broader incompatibilities based on weapon category and style
     # These are thematic mismatches that aren't explicitly in weak_styles
     
@@ -511,6 +515,7 @@ class _CState:
     phase2_entered     : bool    = False  # True once warrior has crossed the 25% endurance threshold
     frenzy_used        : bool    = False  # Tabaxi: frenzy ability has been used this fight
     armor_penalty      : float   = 0.0    # fraction 0.0-1.0 from over-weight armor
+    perm_injuries_this_fight: int = 0    # cap at 2 per fight to prevent injury avalanche
 
     def to_fighter_state(self) -> FighterState:
         return FighterState(
@@ -1255,7 +1260,7 @@ def _calc_damage_verbose(
 
     two_handed = (attacker.secondary_weapon == "Open Hand" and weapon.two_hand)
     wpn_key = weapon_name.lower().replace(" ", "_").replace("&", "and")
-    is_small   = wpn_key in FINESSE_DAMAGE_WEAPONS  # Only true finesse weapons get skill bonus
+    is_small   = wpn_key in FINESSE_DAMAGE_WEAPONS
     wpn_skill = attacker.skills.get(wpn_key, 0)
     steps: dict = {}
 
@@ -1266,199 +1271,68 @@ def _calc_damage_verbose(
             secondary_wpn_obj = get_weapon(attacker.secondary_weapon)
             primary_wpn_obj = get_weapon(attacker.primary_weapon)
             if not secondary_wpn_obj.is_shield and not primary_wpn_obj.is_shield:
-                dual_wield_bonus = 2 # Small flat bonus for dual-wielding non-finesse
+                dual_wield_bonus = 2
         except ValueError:
             pass
 
-    is_open_hand_wpn = _is_open_hand_weapon(wpn_key)
-    if is_open_hand_wpn:
-        # Open Hand uses its own damage baseline (natural weapon)
-        base = float(weapon.damage_base)
-        steps["weapon_base"] = base
-    elif is_small:
-        # Small weapons rely on DEX and Skill more than weight/STR
-        base = 7.0
-        base += (attacker.dexterity - 10) * 1.2
-        base += wpn_skill * 2.0
-        base += weapon.weight * 1.5
-        steps["weapon_base"] = 7.0
-        steps["dex_contrib"] = (attacker.dexterity - 10) * 1.2
-        steps["skill_contrib"] = wpn_skill * 2.0
-        steps["weight_contrib"] = weapon.weight * 1.5
+    # Mirror _calc_damage_hybrid: stat/skill bonus drives floor and ceiling
+    str_bonus = (attacker.strength - 10) * 1.0
+    skill_bonus = wpn_skill * 1.0
+    bonus = max(-10, str_bonus + skill_bonus)
+
+    base_ceiling = weapon.damage_top + bonus + dual_wield_bonus
+    base_floor = weapon.damage_base + max(0, (bonus + dual_wield_bonus) * 0.3)
+
+    steps["damage_base"] = weapon.damage_base
+    steps["damage_top"] = weapon.damage_top
+    steps["str_bonus"] = str_bonus
+    steps["skill_bonus"] = skill_bonus
+    steps["bonus"] = bonus
+    steps["dual_wield_bonus"] = dual_wield_bonus
+    steps["base_floor"] = round(base_floor, 2)
+    steps["base_ceiling"] = round(base_ceiling, 2)
+
+    fraction = max(0.0, min(1.00, margin / 55.0))
+    raw = max(1, int(base_floor + (base_ceiling - base_floor) * fraction))
+    steps["fraction"] = round(fraction, 3)
+
+    # Versatile weapon two-handed bonus: 1.15x damage multiplier
+    if _is_versatile_two_handed(wpn_key, attacker):
+        raw = int(raw * 1.15)
+        steps["two_hand_mult"] = 1.15
     else:
-        # Heavy weapons rely on weight and STR
-        base = weapon.weight * 2.5
-        steps["weapon_base"] = weapon.weight * 2.5
+        steps["two_hand_mult"] = 1.0
 
-    str_b = max(0.0, (attacker.strength - 10)) * 1.0 # Increased STR contribution
-    base += str_b
-    steps["str_bonus"] = str_b
-
-    flail_b = 0.0
-    if weapon.flail_bypass or weapon.category == "Flail":
-        flail_b = max(0.0, (attacker.size - 12)) * 0.4
-        base += flail_b
-    steps["flail_size_bonus"] = flail_b
-
-    two_hand_mult = 1.15 if (two_handed or weapon.two_hand) else 1.0
-    if two_hand_mult != 1.0:
-        base *= two_hand_mult
-    steps["two_hand_mult"] = two_hand_mult
-
-    r_mod     = attacker.race.modifiers
-    race_net  = r_mod.damage_bonus - r_mod.damage_penalty
-    base     += race_net
-    steps["race_net"] = race_net
-
-    props = get_style_props(atk_strategy.style)
-    sd    = props.damage_modifier
-    base += sd
-    steps["style_damage"] = sd
-
-    ac    = (5 - atk_strategy.activity) * 0.3
-    base += ac
-    steps["activity_contrib"] = ac
-
-    wpn_key_s = wpn_key
-    ws_val = 0.0
-    if not is_small:
-        ws_val    = attacker.skills.get(wpn_key_s, 0) * 0.8
-        base     += ws_val
-        steps["weapon_skill_contrib"] = ws_val
-
-    lc    = attacker.luck * 0.15
-    base += lc
-    steps["luck_contrib"] = lc
-
-    effective_str = get_effective_strength_for_weapons(attacker)
-    str_pen = strength_penalty(weapon.weight, effective_str, two_handed)
-    base   *= (1.0 - str_pen)
-    steps["str_penalty_factor"] = str_pen
-
-    hwm = 1.0
-    if r_mod.heavy_weapon_penalty:
-        is_heavy = weapon.weight >= 4.0 or (weapon.two_hand and two_handed)
-        if is_heavy and not (r_mod.spear_exception and weapon.category == "Polearm/Spear"):
-            base *= 0.8
-            hwm = 0.8
-    steps["heavy_weapon_mult"] = hwm
-
-    base *= style_compat_penalty
-    steps["style_compat"] = style_compat_penalty
-
-    # Specialized skill bonuses
-    cleave_b = 0.0
-    if _is_cleave_weapon(wpn_key_s):
-        cl = attacker.skills.get("cleave", 0)
-        if cl > 0:
-            cleave_b += cl * 2.0
-            base     += cl * 2.0
-            if cl == 9:
-                base *= 1.25
-                steps["cleave_master_mult"] = True
-            ddf = defender.skills.get("dodge", 0)
-            if ddf > 5:
-                mult = max(0.5, 1.0 - (ddf - 5) * 0.10)
-                base *= mult
-    steps["cleave_bonus"] = cleave_b
-
-    bash_b = 0.0
-    if _is_bash_weapon(wpn_key_s):
-        bl = attacker.skills.get("bash", 0)
-        if bl > 0:
-            bash_b += bl * 2.0
-            base   += bl * 2.0
-            ddf = defender.skills.get("dodge", 0)
-            if ddf > 5:
-                mult = max(0.5, 1.0 - (ddf - 5) * 0.10)
-                base *= mult
-    steps["bash_bonus"] = bash_b
-
-    slash_b = 0.0
-    if _is_slash_weapon(wpn_key_s):
-        sl = attacker.skills.get("slash", 0)
-        if sl > 0:
-            slash_b += sl * 1.0
-            base    += sl * 1.0
-            if defender.armor and defender.armor not in ["None", "Leather", "Studded Leather", "Boiled Leather"]:
-                base *= 0.85
-            dp = defender.skills.get("parry", 0)
-            if dp >= 5:
-                base *= max(0.8, 1.0 - (dp - 4) * 0.05)
-    steps["slash_bonus"] = slash_b
-
-    strike_b = 0.0
-    sl_v = attacker.skills.get("strike", 0)
-    if sl_v > 0:
-        strike_b += sl_v * 0.8
-        base     += sl_v * 0.8
-    steps["strike_bonus"] = strike_b
-
-    oh_b = 0.0
-    if _is_open_hand_weapon(wpn_key_s):
-        ohl = attacker.skills.get("open_hand", 0)
-        if ohl > 0:
-            oh_b += ohl * 2.0
-            base += ohl * 2.0
-            if ohl == 9:
-                base *= 1.20
-                steps["open_hand_master_mult"] = True
-            brl = attacker.skills.get("brawl", 0)
-            if brl > 0:
-                oh_b += brl * 0.5
-                base += brl * 0.5
-                if brl == 9:
-                    base *= 1.10
-                    steps["brawl_master_mult"] = True
-    steps["open_hand_bonus"] = oh_b
-
-    # Lizardfolk natural weapon bonus: scales +2 to +5 damage based on skill
-    lizardfolk_bonus = 0
-    if attacker.race.name == "Lizardfolk" and _is_open_hand_weapon(wpn_key_s):
-        lizardfolk_bonus = _get_lizardfolk_natural_weapon_bonus(attacker)
-        if lizardfolk_bonus > 0:
-            base += lizardfolk_bonus
-    steps["lizardfolk_natural_weapon"] = lizardfolk_bonus
-
-    # Elf dual-wielding bonus: scales +3 to +7 damage based on skill
-    elf_dual_bonus = 0
-    if _is_elf_dual_wielding_finesse(attacker):
-        elf_dual_bonus = _get_elf_dual_wield_damage_bonus(attacker)
-        if elf_dual_bonus > 0:
-            base += elf_dual_bonus
-    steps["elf_dual_wielding"] = elf_dual_bonus
-
-    if dual_wield_bonus > 0:
-        base += dual_wield_bonus
-        steps["generic_dual_wield_bonus"] = dual_wield_bonus
-
-    if dual_wield_bonus > 0:
-        base += dual_wield_bonus
-        steps["generic_dual_wield_bonus"] = dual_wield_bonus
-
-    ceiling  = max(3, int(base))
-    
-    # Higher skill increases the damage floor/fraction for smaller weapons
-    floor_frac = 0.25 if ((is_small or is_open_hand_wpn) and wpn_skill >= 3) else 0.10
-    fraction = max(floor_frac, min(1.00, margin / 55.0))
-    raw      = max(1, int(ceiling * fraction))
-
-    # Strength-above-minimum bonus (small/medium/open-hand weapons)
+    # Strength-above-minimum bonus
     str_dmg_bonus = _str_damage_bonus(weapon, attacker, two_handed)
     if str_dmg_bonus > 0.0:
         raw = int(raw * (1.0 + str_dmg_bonus))
         steps["str_above_req_bonus"] = round(str_dmg_bonus, 3)
 
+    # Under-strength weight penalty
+    effective_str = get_effective_strength_for_weapons(attacker)
+    str_pen = strength_penalty(weapon.weight, effective_str, two_handed)
+    if str_pen > 0:
+        raw = int(raw * (1.0 - str_pen))
+        steps["str_penalty_factor"] = round(str_pen, 3)
+
+    # Finesse weapon precision bonus
     prec_b = 0
     if is_small and margin >= 10:
         raw += wpn_skill
         prec_b = wpn_skill
+    steps["prec_bonus"] = prec_b
 
+    # Favorite weapon damage bonus
     fav_b = 0
     if attacker.favorite_weapon and weapon_name == attacker.favorite_weapon:
-        raw  += 1
+        raw += 1
         fav_b = 1
+    steps["fav_bonus"] = fav_b
+    steps["raw"] = raw - fav_b - prec_b
+    steps["raw_with_fav"] = raw
 
+    # Armor calculation (percentage-based, mirroring _calc_damage_hybrid)
     armor_nm  = defender.armor or "None"
     helm_nm   = defender.helm  or "None"
     defense   = get_effective_defense_for_race(armor_nm, helm_nm, defender.race.name)
@@ -1470,7 +1344,7 @@ def _calc_damage_verbose(
         ap = True
 
     armor_after_ap = defense
-    # Add finesse-based precision bypass (same logic as non-verbose path)
+
     finesse_bypass = 0.0
     try:
         if is_small:
@@ -1488,24 +1362,20 @@ def _calc_damage_verbose(
         steps["total_precision_bypass"] = round(total_bypass, 3)
         defense = max(0, int(defense * (1.0 - total_bypass)))
 
-    net = max(1, raw - defense)
+    armor_reduction = min(0.76, defense * 0.04)
+    final_damage = max(1, int(raw * (1.0 - armor_reduction)))
 
     steps.update({
-        "ceiling": ceiling,
-        "fraction": fraction,
-        "raw": raw - fav_b - prec_b,
-        "prec_bonus": prec_b,
-        "fav_bonus": fav_b,
-        "raw_with_fav": raw,
         "armor_name": armor_nm,
         "armor_def": armor_def,
         "armor_piercing": ap,
         "armor_after_ap": armor_after_ap,
         "precision_bypass": precision_bypass,
         "final_armor": defense,
-        "net_pre_mods": net,
+        "armor_reduction": round(armor_reduction, 3),
+        "net_pre_mods": final_damage,
     })
-    return net, weapon.category, steps
+    return final_damage, weapon.category, steps
 
 
 def _concede_check_verbose(warrior: "Warrior", state: "_CState", is_monster_fight: bool = False):
@@ -1537,11 +1407,11 @@ def _death_check_verbose(prev_hp: int, damage: int):
 def _check_knockdown_verbose(warrior: "Warrior", state: "_CState", damage: int, cat: str):
     if state.is_on_ground:
         return False, 0, 0
-    chance = int((damage / max(1, warrior.max_hp)) * 80)
+    chance = int((damage / max(1, warrior.max_hp)) * 12)
     if cat in ("Hammer/Mace", "Flail"):
-        chance += 10
-    if cat == "Polearm/Spear":
         chance += 5
+    if cat == "Polearm/Spear":
+        chance += 3
     chance -= max(0, (warrior.size - 12)) * 2
     final  = max(1, chance)
     roll   = random.randint(1, 100)
@@ -1549,10 +1419,10 @@ def _check_knockdown_verbose(warrior: "Warrior", state: "_CState", damage: int, 
 
 
 def _check_perm_injury_verbose(warrior: "Warrior", damage: int, aim_point: str):
-    threshold = int(warrior.max_hp * 0.15)
-    if damage < warrior.max_hp * 0.15:
+    threshold = int(warrior.max_hp * 0.30)
+    if damage < warrior.max_hp * 0.30:
         return None, threshold, 0, 0
-    chance = max(5, min(80, int((damage / warrior.max_hp) * 100) - 5))
+    chance = max(5, min(80, int((damage / warrior.max_hp) * 100) - 20))
     if warrior.race.modifiers.fewer_perms:
         chance = int(chance * 0.85)
     roll = random.randint(1, 100)
@@ -1568,7 +1438,7 @@ def _check_perm_injury_verbose(warrior: "Warrior", damage: int, aim_point: str):
     else:
         location = random.choice(_BODY_LOCATION_POOL)
     pct    = damage / warrior.max_hp
-    levels = 3 if pct > 0.50 else (2 if pct > 0.35 else 1)
+    levels = 3 if pct > 0.65 else (2 if pct > 0.45 else 1)
     return (location, levels), threshold, chance, roll
 
 
@@ -1589,9 +1459,9 @@ def _check_perm_injury(
     damage    : int,
     aim_point : str,
 ) -> Optional[Tuple[str, int]]:
-    if damage < warrior.max_hp * 0.15:
+    if damage < warrior.max_hp * 0.30:
         return None
-    chance = max(5, min(80, int((damage / warrior.max_hp) * 100) - 5))
+    chance = max(5, min(80, int((damage / warrior.max_hp) * 100) - 20))
     if warrior.race.modifiers.fewer_perms:
         chance = int(chance * 0.85)
     if random.randint(1, 100) > chance:
@@ -1608,7 +1478,7 @@ def _check_perm_injury(
         # No aim point - generic body strike, restrict to torso/arm locations
         location = random.choice(_BODY_LOCATION_POOL)
     pct    = damage / warrior.max_hp
-    levels = 3 if pct > 0.50 else (2 if pct > 0.35 else 1)
+    levels = 3 if pct > 0.65 else (2 if pct > 0.45 else 1)
     return location, levels
 
 
@@ -1706,9 +1576,9 @@ def _check_entangle(warrior: Warrior, state: _CState, weapon: Weapon, was_thrown
 def _check_knockdown(warrior: Warrior, state: _CState, damage: int, cat: str) -> bool:
     if state.is_on_ground:
         return False
-    chance  = int((damage / max(1, warrior.max_hp)) * 80)
-    if cat in ("Hammer/Mace","Flail"):  chance += 10
-    if cat == "Polearm/Spear":          chance += 5
+    chance  = int((damage / max(1, warrior.max_hp)) * 30)
+    if cat in ("Hammer/Mace","Flail"):  chance += 5
+    if cat == "Polearm/Spear":          chance += 3
     chance -= max(0, (warrior.size - 12)) * 2
     return random.randint(1, 100) <= max(1, chance)
 
@@ -1756,7 +1626,7 @@ def _concede_check(warrior: Warrior, state: _CState, is_monster_fight: bool = Fa
 
 def _update_endurance(
     state: _CState, strategy: Strategy, foe: _CState, apm: int = 5, minute: int = 1
-) -> List[str]:
+) -> Tuple[List[str], float]:
     lines   = []
     warrior = state.warrior
     props   = get_style_props(strategy.style)
@@ -1799,10 +1669,10 @@ def _update_endurance(
     if state.armor_penalty > 0:
         burn *= (1.0 + state.armor_penalty)
 
-    # Phase II feedback spiral: already exhausted → reserves drain 75% faster
+    # Phase II feedback spiral: already exhausted → reserves drain 25% faster
     phase2 = warrior.max_endurance * 0.25
     if state.endurance < phase2:
-        burn *= 1.75
+        burn *= 1.25
 
     # Acrobatics efficiency for Lunge / Engage & Withdraw.
     # Without acrobatics training these mobile styles cost an extra 10% per action;
@@ -1859,7 +1729,7 @@ def _update_endurance(
     elif state.endurance < warrior.max_endurance * 0.50 and random.random() < 0.20:
         lines.append(N.fatigue_line(warrior.name, warrior.gender, False))
 
-    return lines
+    return lines, burn
 
 
 # ---------------------------------------------------------------------------
@@ -2676,8 +2546,11 @@ class CombatEngine:
 
         # --- Update attacker's endurance for this action ---
         # This needs to happen before strategy re-evaluation for fatigue triggers
-        for ln in _update_endurance(as_, ax, ds_, apm_as, minute):
+        _end_lines, _self_burn = _update_endurance(as_, ax, ds_, apm_as, minute)
+        for ln in _end_lines:
             self._emit(ln)
+        if self.debug_logger:
+            self.debug_logger.log_action_burn(as_.warrior.name, ax.style, _self_burn)
 
         # Re-evaluate both warriors' strategies after endurance update (fatigue triggers)
         self._check_and_switch_strategies(as_, ds_, minute)
@@ -3010,6 +2883,7 @@ class CombatEngine:
                 att.name, dfr.name, margin, _dmg_steps,
                 _sig_floor, _ca_bonus, dmg,
             )
+            self.debug_logger.log_hit_severity(dfr.name, dmg, dfr.max_hp)
 
         prev_hp        = ds_.current_hp
         ds_.current_hp -= dmg
@@ -3120,8 +2994,9 @@ class CombatEngine:
         else:
             perm = _check_perm_injury(dfr, dmg, aim)
 
-        if perm:
+        if perm and ds_.perm_injuries_this_fight < 2:
             loc, lvls = perm
+            ds_.perm_injuries_this_fight += 1
             fatal = dfr.injuries.add(loc, lvls)
             for ln in N.perm_injury_lines(dfr.name, loc, lvls, dfr.gender):
                 self._emit(ln)

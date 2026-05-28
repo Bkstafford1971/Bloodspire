@@ -1358,8 +1358,8 @@ _WEAPON_DAMAGE_TYPE: dict[str, str] = {
 def damage_line(damage: int, max_hp: int, weapon_category: str = "Oddball") -> str:
     """Return a damage description line based on damage severity and weapon type."""
     pct = damage / max(1, max_hp)
-    if   pct < 0.12: severity = "Light"
-    elif pct < 0.30: severity = "Medium"
+    if   pct < 0.19: severity = "Light"
+    elif pct < 0.34: severity = "Medium"
     else:            severity = "Heavy"
 
     dmg_type = _WEAPON_DAMAGE_TYPE.get(weapon_category, "Generic")

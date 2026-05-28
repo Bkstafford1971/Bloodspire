@@ -435,10 +435,10 @@ class CombatDebugLogger:
     def log_perm_injury(self, warrior_name: str,
                         damage: int, max_hp: int,
                         chance: int, roll: int, result):
-        threshold = int(max_hp * 0.15)
+        threshold = int(max_hp * 0.30)
         self._emit(f"  Perm Injury Check ({warrior_name.upper()}):")
         self._emit(
-            f"    threshold = 15% of {max_hp} = {threshold}"
+            f"    threshold = 30% of {max_hp} = {threshold}"
             f"   damage {damage}"
             f" {'≥' if damage >= threshold else '<'} threshold"
         )
@@ -446,7 +446,7 @@ class CombatDebugLogger:
             self._emit(f"    → Below threshold - no injury possible")
             return
         self._emit(
-            f"    chance = max(5, min(80, int({damage}/{max_hp}×100) − 5))"
+            f"    chance = max(5, min(80, int({damage}/{max_hp}×100) − 20))"
             f" = {chance}%"
         )
         self._emit(
@@ -571,6 +571,14 @@ class CombatDebugLogger:
                 self._emit(f"  {sk}: d100={roll} vs {chance}% - {outcome}")
                 if msg:
                     self._emit(f"    → {msg}")
+
+    # ── endurance burn logging (no-op in base; overridden by SimDataLogger) ──
+
+    def log_action_burn(self, _warrior_name: str, style: str, burn: float) -> None:
+        pass
+
+    def log_hit_severity(self, _defender_name: str, damage: int, max_hp: int) -> None:
+        pass
 
     # ── output ────────────────────────────────────────────────────────────────
 

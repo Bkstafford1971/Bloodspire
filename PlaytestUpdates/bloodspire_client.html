@@ -536,6 +536,7 @@ async function resetSaveFolder() {
   S.savedPassword = null;
   S.savedManagerName = null;
   try { localStorage.removeItem(_ROLLUP_KEY); } catch (_) {}
+  try { localStorage.removeItem(_REPLACEMENT_KEY); } catch (_) {}
 
   alert('Save folder has been reset. The folder picker will appear on next launch.');
   S.view = 'login';
@@ -962,6 +963,8 @@ const S = {
 
 // localStorage key for persisting pending team-creation rollup across reloads
 const _ROLLUP_KEY = 'bp_pending_rollup';
+// localStorage key for persisting a pending warrior replacement rollup across reloads
+const _REPLACEMENT_KEY = 'bp_pending_replacement';
 
 /* ============================================================
    API - dual-layer router
@@ -1783,23 +1786,15 @@ async function reloadTeam(tid) {
 async function refreshLeagueFlags() {
   if (!S.league.url || !S.league.managerId) return;
   try {
-    const ctrl = new AbortController();
-    const timeout = setTimeout(() => ctrl.abort(), 2000); // 2-second timeout
-    try {
-      const resp = await fetch(S.league.url + '/api/flags', {signal: ctrl.signal});
-      clearTimeout(timeout);
-      if (!resp.ok) return;
-      const d = await resp.json();
-      if (!d.success) return;
-      S.league.flags = {
-        show_favorite_weapon: d.show_favorite_weapon || false,
-        show_luck_factor:     d.show_luck_factor     || false,
-        show_max_hp:          d.show_max_hp          || false,
-      };
-    } catch(e) {
-      clearTimeout(timeout);
-      /* silent */
-    }
+    const resp = await fetch(S.league.url + '/api/flags');
+    if (!resp.ok) return;
+    const d = await resp.json();
+    if (!d.success) return;
+    S.league.flags = {
+      show_favorite_weapon: d.show_favorite_weapon || false,
+      show_luck_factor:     d.show_luck_factor     || false,
+      show_max_hp:          d.show_max_hp          || false,
+    };
   } catch(e) { /* silent */ }
 }
 
@@ -2175,10 +2170,8 @@ async function treeSelectWarrior(tid, idx) {
     await flushSave();
   }
   S.sel  = {type:'warrior', teamId: tid, wIdx: idx};
-  // Reload team data from local storage
-  await reloadTeam(tid);
-  // Refresh league flags in background (don't block on network)
-  refreshLeagueFlags();
+  // Fetch fresh data so streak/favorite_weapon always reflect server state
+  await Promise.all([reloadTeam(tid), refreshLeagueFlags()]);
   // Dead warriors open straight to the Replacement tab
   const team = S.teams[tid];
   const w    = team && team.warriors && team.warriors[idx];
@@ -3975,6 +3968,18 @@ function buildReplacementTab(w) {
 
   const teamId = S.sel.teamId;
   const wIdx   = S.sel.wIdx;
+
+  // Restore from localStorage if in-memory state was lost (e.g. app restart / tab change)
+  if (!S.replacement) {
+    try {
+      const stored = localStorage.getItem(_REPLACEMENT_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.teamId === teamId && parsed.wIdx === wIdx) S.replacement = parsed;
+      }
+    } catch(_) {}
+  }
+
   const rs     = S.replacement;
   const hasRs  = rs && rs.teamId === teamId && rs.wIdx === wIdx;
 
@@ -4108,6 +4113,7 @@ async function initReplacement(teamId, wIdx) {
     gender  : 'Male',
     rerolled: false,   // one-time re-roll flag
   };
+  _rpPersist();
   refreshContent();
 }
 
@@ -4120,6 +4126,7 @@ async function rpReroll() {
   S.replacement.adds     = {};
   S.replacement.rerolled = true;
   _rpSync();
+  _rpPersist();
   refreshContent();
 }
 
@@ -4133,13 +4140,13 @@ function rpAdj(key, delta) {
   if (delta > 0 && (cur >= cap || ptsLeft <= 0)) return;
   if (delta < 0 && cur <= 0) return;
   rs.adds[key] = cur + delta;
-  _rpSync(); refreshContent();
+  _rpSync(); _rpPersist(); refreshContent();
 }
 
 function rpReset() {
   if (!S.replacement) return;
   S.replacement.adds = {};
-  _rpSync(); refreshContent();
+  _rpSync(); _rpPersist(); refreshContent();
 }
 
 function _rpSync() {
@@ -4147,6 +4154,13 @@ function _rpSync() {
   const n = el('rp-name');   if (n)  rs.name   = n.value.trim();
   const r = el('rp-race');   if (r)  rs.race   = r.value;
   const g = el('rp-gender'); if (g)  rs.gender = g.value;
+}
+
+function _rpPersist() {
+  try {
+    if (S.replacement) localStorage.setItem(_REPLACEMENT_KEY, JSON.stringify(S.replacement));
+    else localStorage.removeItem(_REPLACEMENT_KEY);
+  } catch(_) {}
 }
 
 async function rpSave(teamId, wIdx) {
@@ -4172,6 +4186,7 @@ async function rpSave(teamId, wIdx) {
     if (r.success) {
       S.teams[teamId] = r.team;
       S.replacement   = null;
+      try { localStorage.removeItem(_REPLACEMENT_KEY); } catch(_) {}
       S.sel  = {type:'team', teamId};
       S.wTab = 'stats';
       setMsg('Replacement warrior saved - ' + nm + ' joins the team.', 'ok');
@@ -4390,6 +4405,7 @@ function attachEvents() {
     S.newsletters = null; S.newsletterText = null;
     S.ct = null;
     try { localStorage.removeItem(_ROLLUP_KEY); } catch(_) {}
+    try { localStorage.removeItem(_REPLACEMENT_KEY); } catch(_) {}
     S.view = 'login'; S.loginTab = 'login'; S.msg = '';
     render();
   });
@@ -4667,13 +4683,10 @@ async function doLogin() {
       if (mid && S.serverUrl && !pendingDeleted?.length) {
         try {
           const base = S.serverUrl.replace(/\/+$/, '');
-          const ctrl = new AbortController();
-          const timeout = setTimeout(() => ctrl.abort(), 3000);
           const delResp = await fetch(base + '/api/check_deleted_teams', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ manager_id: String(mid) }),
-            signal: ctrl.signal,
-          }).then(res => res.json()).catch(() => null).finally(() => clearTimeout(timeout));
+          }).then(res => res.json()).catch(() => null);
           if (delResp?.success) pendingDeleted = delResp.deleted_teams;
         } catch (_) {}
       }
@@ -5682,56 +5695,40 @@ async function loadLeagueSettings() {
     
     // Fetch feature flags and last upload timestamp from league server if connected
     if (S.league.url && S.league.managerId) {
-      // Fetch feature flags (public, no auth needed) - with 3-second timeout
+      // Fetch feature flags (public, no auth needed)
       try {
-        const ctrl = new AbortController();
-        const timeout = setTimeout(() => ctrl.abort(), 3000);
-        try {
-          const flagResp = await fetch(S.league.url + '/api/flags', {signal: ctrl.signal});
-          clearTimeout(timeout);
-          if (flagResp.ok) {
-            const flagData = await flagResp.json();
-            if (flagData.success) {
-              S.league.flags = {
-                show_favorite_weapon: flagData.show_favorite_weapon || false,
-                show_luck_factor:     flagData.show_luck_factor     || false,
-                show_max_hp:          flagData.show_max_hp          || false,
-              };
-              refreshContent();
-            }
+        const flagResp = await fetch(S.league.url + '/api/flags');
+        if (flagResp.ok) {
+          const flagData = await flagResp.json();
+          if (flagData.success) {
+            S.league.flags = {
+              show_favorite_weapon: flagData.show_favorite_weapon || false,
+              show_luck_factor:     flagData.show_luck_factor     || false,
+              show_max_hp:          flagData.show_max_hp          || false,
+            };
+            refreshContent();
           }
-        } catch(e) {
-          clearTimeout(timeout);
-          /* silent */
         }
       } catch(e) { /* silent */ }
 
       try {
-        const ctrl = new AbortController();
-        const timeout = setTimeout(() => ctrl.abort(), 3000);
-        try {
-          const statusResp = await fetch(S.league.url + '/api/status', {signal: ctrl.signal});
-          clearTimeout(timeout);
-          if (statusResp.ok) {
-            const statusData = await statusResp.json();
-            if (statusData.managers) {
-              const mgr = statusData.managers.find(m => m.manager_id === S.league.managerId);
-              if (mgr && mgr.last_upload_timestamp) {
-                // Convert timestamp string (YYYY-MM-DD HH:MM:SS) to toLocaleString() format
-                try {
-                  const uploadDate = new Date(mgr.last_upload_timestamp.replace(' ', 'T'));
-                  S.league.lastUpload = uploadDate.toLocaleString();
-                } catch(e) {
-                  S.league.lastUpload = mgr.last_upload_timestamp; // fallback to raw string
-                }
+        const statusResp = await fetch(S.league.url + '/api/status');
+        if (statusResp.ok) {
+          const statusData = await statusResp.json();
+          if (statusData.managers) {
+            const mgr = statusData.managers.find(m => m.manager_id === S.league.managerId);
+            if (mgr && mgr.last_upload_timestamp) {
+              // Convert timestamp string (YYYY-MM-DD HH:MM:SS) to toLocaleString() format
+              try {
+                const uploadDate = new Date(mgr.last_upload_timestamp.replace(' ', 'T'));
+                S.league.lastUpload = uploadDate.toLocaleString();
+              } catch(e) {
+                S.league.lastUpload = mgr.last_upload_timestamp; // fallback to raw string
               }
             }
           }
-        } catch(e) {
-          clearTimeout(timeout);
-          /* silent - don't interrupt if status fetch fails */
         }
-      } catch(e) { /* silent */ }
+      } catch(e) { /* silent - don't interrupt if status fetch fails */ }
     }
   } catch(e) {}
 }
@@ -6951,54 +6948,51 @@ async function init() {
     return;
   }
   console.log('Initializing Bloodspire Client...');
-
+  
   // ============================================================
   // STEP 1: Check for local backend server (Zero-Click Mode)
-  // SKIP for Electron - Electron mode uses direct filesystem access
   // ============================================================
-  if (!window.electronAPI) {
-    let localCheck = { success: false };
-    try {
-      localCheck = await fetch('/api/local/status').then(r => r.json()).catch(() => ({ success: false }));
-
-      if (!localCheck.success && (window.location.protocol === 'file:' || window.location.hostname === 'localhost')) {
-        localCheck = await fetch('http://localhost:8766/api/local/status').then(r => r.json()).catch(() => ({ success: false }));
-      }
-
-      if (localCheck.success && localCheck.is_local_backend) {
-        console.log('Running in local backend mode');
-        S.isLocalBackend = true;
-        S.folderReady = true;
-        // Prefer the URL the page was actually served from so remote players
-        // get the host's Tailscale/LAN IP, not a hardcoded localhost.
-        const pageOrigin = (window.location.protocol !== 'file:') ? window.location.origin : null;
-        S.localBaseUrl = pageOrigin || localCheck.server_url || 'http://localhost:8766';
-        if (!S.serverUrl || S.serverUrl === DEFAULT_SERVER_URL) S.serverUrl = S.localBaseUrl;
-
-        const localAcc = await LocalAPI.get('/api/account');
-        if (localAcc.success) {
-          S.savedManagerName = localAcc.account.manager_name;
-          S.savedRememberMe = localAcc.account.remember !== false;
-          S.savedPassword = localAcc.account.password_plaintext || '';
-          S.loginTab = 'login';
-        }
-
-        // Load persisted league settings (manager_id etc.) from server-side client store
-        await loadLeagueSettings();
-
-        // Pre-load game data so Stats/Strats tab is ready immediately after login
-        try {
-          const gd = await API.get('/api/game_data');
-          if (gd && !gd.error) S.gd = gd;
-        } catch(e) {}
-
-        S.view = 'login';
-        render();
-        return;
-      }
-    } catch(e) {
-      console.debug('Local backend check skipped:', e.message);
+  let localCheck = { success: false };
+  try {
+    localCheck = await fetch('/api/local/status').then(r => r.json()).catch(() => ({ success: false }));
+    
+    if (!localCheck.success && (window.location.protocol === 'file:' || window.location.hostname === 'localhost')) {
+      localCheck = await fetch('http://localhost:8766/api/local/status').then(r => r.json()).catch(() => ({ success: false }));
     }
+
+    if (localCheck.success && localCheck.is_local_backend) {
+      console.log('Running in local backend mode');
+      S.isLocalBackend = true;
+      S.folderReady = true;
+      // Prefer the URL the page was actually served from so remote players
+      // get the host's Tailscale/LAN IP, not a hardcoded localhost.
+      const pageOrigin = (window.location.protocol !== 'file:') ? window.location.origin : null;
+      S.localBaseUrl = pageOrigin || localCheck.server_url || 'http://localhost:8766';
+      if (!S.serverUrl || S.serverUrl === DEFAULT_SERVER_URL) S.serverUrl = S.localBaseUrl;
+      
+      const localAcc = await LocalAPI.get('/api/account');
+      if (localAcc.success) {
+        S.savedManagerName = localAcc.account.manager_name;
+        S.savedRememberMe = localAcc.account.remember !== false;
+        S.savedPassword = localAcc.account.password_plaintext || '';
+        S.loginTab = 'login';
+      }
+
+      // Load persisted league settings (manager_id etc.) from server-side client store
+      await loadLeagueSettings();
+
+      // Pre-load game data so Stats/Strats tab is ready immediately after login
+      try {
+        const gd = await API.get('/api/game_data');
+        if (gd && !gd.error) S.gd = gd;
+      } catch(e) {}
+
+      S.view = 'login';
+      render();
+      return;
+    }
+  } catch(e) {
+    console.debug('Local backend check skipped:', e.message);
   }
 
   // ============================================================

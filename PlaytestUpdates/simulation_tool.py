@@ -37,8 +37,60 @@ class SimDataLogger(CombatDebugLogger):
         self.exhaustion_stats = {} # name: {p2_min: int, p3_min: int}
         self.finesse_triggers = 0
         self.signature_triggers = 0
+        self.perm_injury_events = []  # {name, damage_pct, chance, qualified, rolled_injury, location, levels}
+        self.knockdown_events   = []  # {name, damage_pct, category, chance, roll, knocked}
+        self.action_burns: dict = {}  # {style: [self-burn per action]}
+        self.severity_counts: dict = {"Light": 0, "Medium": 0, "Heavy": 0}
+        self.severity_damage: dict = {"Light": 0, "Medium": 0, "Heavy": 0}
 
-    def log_damage(self, attacker_name: str, defender_name: str, margin: int, steps: dict, 
+    def log_action_burn(self, _warrior_name: str, style: str, burn: float) -> None:
+        self.action_burns.setdefault(style, []).append(burn)
+
+    def log_hit_severity(self, _defender_name: str, damage: int, max_hp: int) -> None:
+        pct = damage / max(1, max_hp)
+        if pct < 0.19:
+            tier = "Light"
+        elif pct < 0.34:
+            tier = "Medium"
+        else:
+            tier = "Heavy"
+        self.severity_counts[tier] += 1
+        self.severity_damage[tier] += damage
+
+    def log_knockdown(self, warrior_name: str, damage: int, max_hp: int,
+                      category: str, chance: int, roll: int, knocked: bool):
+        self.knockdown_events.append({
+            'name':       warrior_name,
+            'damage_pct': round(damage / max(1, max_hp) * 100, 1),
+            'category':   category,
+            'chance':     chance,
+            'roll':       roll,
+            'knocked':    knocked,
+        })
+
+    def log_perm_injury(self, warrior_name: str, damage: int, max_hp: int,
+                        chance: int, roll: int, result):  # noqa: ARG002 roll unused here
+        location = levels = None
+        if result:
+            try:
+                parts = result.split(" (")
+                location = parts[0]
+                levels = int(parts[1].split(" ")[0])
+            except Exception:
+                location = "unknown"
+                levels = 1
+        self.perm_injury_events.append({
+            'name': warrior_name,
+            'damage_pct': round(damage / max(1, max_hp) * 100, 1),
+            'chance': chance,
+            'roll': roll,
+            'qualified': chance > 0,
+            'rolled_injury': result is not None,
+            'location': location,
+            'levels': levels,
+        })
+
+    def log_damage(self, attacker_name: str, defender_name: str, margin: int, steps: dict,
                    sig_floor: int, ca_bonus: int, net_damage: int):
         # We capture the weapon from the ceiling breakdown or context
         self.damage_events.append({
@@ -127,6 +179,9 @@ class BloodspireSimTool:
             "Weapon Damage Analysis",
             "Endurance & Exhaustion Analysis",
             "Encumbrance & Penalty Analysis",
+            "Permanent Injury Analysis",
+            "Knockdown Analysis",
+            "Damage Severity Distribution",
             "Full Turn Dry-Run",
         ]
         self.mode_combo = ttk.Combobox(config_frame, textvariable=self.sim_type, values=modes, state="readonly", width=35)
@@ -265,6 +320,12 @@ class BloodspireSimTool:
             self._sim_endurance_burn(teams)
         elif mode == "Encumbrance & Penalty Analysis":
             self._sim_encumbrance_audit(teams)
+        elif mode == "Permanent Injury Analysis":
+            self._sim_perm_injury(teams)
+        elif mode == "Knockdown Analysis":
+            self._sim_knockdown(teams)
+        elif mode == "Damage Severity Distribution":
+            self._sim_damage_severity(teams)
         elif mode == "Full Turn Dry-Run":
             self._sim_full_dry_run(teams)
 
@@ -429,67 +490,70 @@ class BloodspireSimTool:
     def _sim_endurance_burn(self, teams):
         card = MM.build_global_fight_card(teams, [], champion_state={})
         fights_ended_exhaustion = 0
-        p2_times = [] # Minutes until phase 2
-        p3_times = [] # Minutes until collapse
-        style_base_burns = {} # {style: base_endurance_burn from strategy.py}
-        style_burn = {} # {style: [burn_per_action]}
+        p2_times = []
+        p3_times = []
+        style_base_burns = {}
+        style_self_burn  = {}  # {style: [self-burn per action]} — from _update_endurance only
+        style_total_burn = {}  # {style: [total drain per action]} — includes external sources
 
         for bout in card:
             w1, w2 = copy.deepcopy(bout.player_warrior), copy.deepcopy(bout.opponent)
             logger = SimDataLogger()
             res = C.run_fight(w1, w2, debug_logger=logger)
-            
-            if res.exhaustion_end: 
+
+            if res.exhaustion_end:
                 fights_ended_exhaustion += 1
-                # Capture the collapse minute from the final result if logger missed it
                 p3_times.append(res.minutes_elapsed)
-            
+
             for name, stats in logger.exhaustion_stats.items():
                 if stats['p2']: p2_times.append(stats['p2'])
                 if stats['p3']: p3_times.append(stats['p3'])
-            
-            for min_idx, name, end, apm, current_style in logger.endurance_history:
-                # Find previous minute to calculate delta spent DURING that minute
+
+            # Self-burn: clean per-action values logged by _update_endurance
+            for style, burns in logger.action_burns.items():
+                style_self_burn.setdefault(style, []).extend(burns)
+                if style not in style_base_burns:
+                    style_base_burns[style] = S.get_style_props(style).endurance_burn
+
+            # Total burn: minute-delta metric (includes anxiously_awaits / intimidate drain)
+            for min_idx, name, end, _, _ in logger.endurance_history:
                 prev_recs = [h for h in logger.endurance_history if h[1] == name and h[0] == min_idx - 1]
                 if prev_recs:
-                    p_min, p_name, p_end, p_apm, p_style = prev_recs[0]
-                    if p_style not in style_burn: style_burn[p_style] = []
-                    # Attribute the drain between T and T+1 to the style used during T
-                    style_burn[p_style].append((p_end - end) / max(1, p_apm))
-                    
+                    _, _, p_end, p_apm, p_style = prev_recs[0]
+                    style_total_burn.setdefault(p_style, []).append((p_end - end) / max(1, p_apm))
                     if p_style not in style_base_burns:
                         style_base_burns[p_style] = S.get_style_props(p_style).endurance_burn
 
         # Build Report
-        lines = ["\nENDURANCE & EXHAUSTION ANALYSIS", "="*70]
+        lines = ["\nENDURANCE & EXHAUSTION ANALYSIS", "=" * 80]
         lines.append("COLUMN LEGEND:")
-        lines.append(f"{'  AVG BURN':<12}: Total endurance lost per action (Base + Gear Tax + Activity).")
-        lines.append(f"{'  BASE BURN':<12}: The intended raw cost of the style from strategy.py.")
-        lines.append(f"{'  DISCREPANCY':<12}: Difference between observed and base (mostly gear/penalty overhead).")
-        lines.append("-" * 70)
+        lines.append(f"{'  SELF BURN':<14}: Endurance spent by this warrior's own actions (gear + style + activity).")
+        lines.append(f"{'  TOTAL BURN':<14}: SELF BURN + external drain (anxiously_awaits, intimidate from opponent).")
+        lines.append(f"{'  BASE BURN':<14}: Raw style cost from strategy.py (the tuning target).")
+        lines.append(f"{'  OVERHEAD':<14}: SELF BURN minus BASE BURN (gear/activity overhead on top of base).")
+        lines.append("-" * 80)
 
         lines.append(f"Total Fights: {len(card)}")
         lines.append(f"Exhaustion Collapses: {fights_ended_exhaustion} ({fights_ended_exhaustion/max(1,len(card))*100:.1f}%)")
         lines.append(f"Average Minute for Phase II (25%): {sum(p2_times)/max(1,len(p2_times)):.1f}")
         lines.append(f"Average Minute for Phase III (Collapse): {sum(p3_times)/max(1,len(p3_times)):.1f}" if p3_times else "Average Minute for Phase III (Collapse): N/A")
-        lines.append("\nBURN RATE BY STYLE (Avg Endurance per Action) - Expected vs Observed")
-        lines.append("-" * 70)
-        
-        lines.append(f"{'STYLE':<20} | {'AVG BURN':>10} | {'BASE BURN':>10} | {'DISCREPANCY'}")
-        lines.append("-" * 70)
-        
-        for style, burns in style_burn.items():
-            avg_burn = sum(burns) / max(1, len(burns))
-            base_burn = style_base_burns.get(style, 0.0)
-            discrepancy = ""
-            if abs(avg_burn - base_burn) > 0.1: # Flag if difference is significant
-                diff = avg_burn - base_burn
-                discrepancy = f"({diff:+.2f} vs base)"
-                if avg_burn == 0 and base_burn > 0: discrepancy = "(ERROR: Expected burn, got 0)"
-                # Only flag as HIGH if the overhead is more than 5.0 pts above base
-                elif diff > 5.0: discrepancy = "(HIGH! Check for overencumbrance)"
-                elif avg_burn < base_burn / 2: discrepancy = "(LOW! Check combat logic)"
-            lines.append(f"{style:<20} | {avg_burn:>10.2f} | {base_burn:>10.2f} | {discrepancy}")
+        lines.append("\nBURN RATE BY STYLE (Avg Endurance per Action)")
+        lines.append("-" * 80)
+        lines.append(f"{'STYLE':<20} | {'SELF BURN':>10} | {'TOTAL BURN':>10} | {'BASE BURN':>10} | {'OVERHEAD'}")
+        lines.append("-" * 80)
+
+        all_styles = sorted(set(list(style_self_burn.keys()) + list(style_total_burn.keys())))
+        for style in all_styles:
+            self_burns  = style_self_burn.get(style, [])
+            total_burns = style_total_burn.get(style, [])
+            base_burn   = style_base_burns.get(style, 0.0)
+            avg_self  = sum(self_burns)  / max(1, len(self_burns))  if self_burns  else 0.0
+            avg_total = sum(total_burns) / max(1, len(total_burns)) if total_burns else 0.0
+            overhead  = avg_self - base_burn
+            overhead_str = f"({overhead:+.2f})"
+            lines.append(
+                f"{style:<20} | {avg_self:>10.2f} | {avg_total:>10.2f} | {base_burn:>10.2f} | {overhead_str}"
+            )
 
         self.report_content = "\n".join(lines)
         self.text_area.insert(tk.END, self.report_content)
@@ -574,7 +638,412 @@ class BloodspireSimTool:
         self.text_area.insert(tk.END, self.report_content)
 
     # -----------------------------------------------------------------------
-    # SIM 4: FULL TURN DRY-RUN
+    # SIM 4: PERMANENT INJURY ANALYSIS
+    # -----------------------------------------------------------------------
+    def _sim_perm_injury(self, teams):
+        ITERATIONS = 30
+        card = MM.build_global_fight_card(teams, [], champion_state={})
+        if not card:
+            self.text_area.insert(tk.END, "No fights to simulate.\n")
+            return
+
+        self.text_area.insert(tk.END, f"Running {ITERATIONS} iterations × {len(card)} bouts...\n")
+        self.root.update()
+
+        total_fights = 0
+        total_hits_checked = 0
+        total_qualified = 0   # hits meeting 20% HP threshold
+        total_rolled = 0      # dice said "injury"
+        total_applied = 0     # after 2-event-per-warrior cap
+        cap_triggered = 0     # fights where cap actually fired
+
+        fights_rolled   = {0: 0, 1: 0, 2: 0, "3+": 0}
+        fights_applied  = {0: 0, 1: 0, 2: 0}
+
+        loc_stats   = {}   # {location: {'count': N, 'total_levels': X}}
+        level_dist  = {}   # {level_int: count}
+
+        LOCS = ['head', 'chest', 'abdomen', 'primary_arm', 'secondary_arm',
+                'primary_leg', 'secondary_leg']
+
+        for _ in range(ITERATIONS):
+            for bout in card:
+                w1 = copy.deepcopy(bout.player_warrior)
+                w2 = copy.deepcopy(bout.opponent)
+                logger = SimDataLogger()
+                C.run_fight(w1, w2, debug_logger=logger)
+                total_fights += 1
+
+                events = logger.perm_injury_events
+                total_hits_checked += len(events)
+                total_qualified    += sum(1 for e in events if e['qualified'])
+
+                w1_rolled = sum(1 for e in events if e['name'] == w1.name and e['rolled_injury'])
+                w2_rolled = sum(1 for e in events if e['name'] == w2.name and e['rolled_injury'])
+                fight_rolled   = w1_rolled + w2_rolled
+                fight_applied  = min(w1_rolled, 2) + min(w2_rolled, 2)
+
+                total_rolled  += fight_rolled
+                total_applied += fight_applied
+
+                if w1_rolled > 2 or w2_rolled > 2:
+                    cap_triggered += 1
+
+                bucket = fight_rolled if fight_rolled <= 2 else "3+"
+                fights_rolled[bucket] = fights_rolled.get(bucket, 0) + 1
+
+                applied_bucket = min(fight_applied, 2)
+                fights_applied[applied_bucket] = fights_applied.get(applied_bucket, 0) + 1
+
+                for e in events:
+                    if not e['rolled_injury']:
+                        continue
+                    loc = e['location'] or 'unknown'
+                    lvl = e['levels'] or 1
+                    if loc not in loc_stats:
+                        loc_stats[loc] = {'count': 0, 'total_levels': 0}
+                    loc_stats[loc]['count'] += 1
+                    loc_stats[loc]['total_levels'] += lvl
+                    level_dist[lvl] = level_dist.get(lvl, 0) + 1
+
+        tf = max(1, total_fights)
+        tq = max(1, total_qualified)
+        tr = max(1, total_rolled)
+
+        lines = [
+            f"\nPERMANENT INJURY ANALYSIS  "
+            f"({ITERATIONS} iterations × {len(card)} bouts = {total_fights} total fights)",
+            "=" * 70,
+            "",
+            "WHAT THIS REPORT MEASURES",
+            "-" * 70,
+            "  This sim runs every fight on the current turn card 30 times and tracks how",
+            "  permanent injuries are generated, capped, and distributed.",
+            "",
+            "  SECTION GUIDE:",
+            "  HIT QUALIFICATION   — Of all successful hits, how many are hard enough to",
+            "                        even roll for a perm injury (>25% of max HP).  Shows",
+            "                        the roll success rate and how many survive the cap.",
+            "",
+            "  ROLLED PER FIGHT    — How many times per fight the injury dice said YES",
+            "                        (before the 2-event-per-warrior cap is enforced).",
+            "                        '3+ events' = fights where the cap actually fired.",
+            "",
+            "  APPLIED PER FIGHT   — Injuries that actually stuck after the cap.  Max 2",
+            "                        per warrior per fight, so max 4 per bout total.",
+            "                        Avg per fight here is your primary balance number —",
+            "                        target is roughly 0.3 to 0.8 for a healthy turn.",
+            "",
+            "  LEVEL DISTRIBUTION  — When an injury is rolled, it lands at level 1 (minor),",
+            "                        level 2 (serious), or level 3 (severe).  Level is set",
+            "                        by how big the hit was relative to max HP:",
+            "                          25–45% HP dealt  → Level 1  (Minor)",
+            "                          >45% HP dealt    → Level 2  (Serious)",
+            "                          >65% HP dealt    → Level 3  (Severe)",
+            "                        Levels stack across fights on the same location.",
+            "                        Level 9 on any location is fatal.",
+            "",
+            "  LOCATION BREAKDOWN  — Which body parts are taking injuries and how bad.",
+            "                        'Events' counts individual injury rolls; 'Avg Level'",
+            "                        is the average level per event (not cumulative).",
+            "                        Head injuries are most dangerous (they stack fast).",
+            "",
+            "=" * 70,
+            "",
+            "HIT QUALIFICATION",
+            "-" * 70,
+            f"  {'Total hits checked:':<40} {total_hits_checked:>8,}",
+            f"  {'Hits meeting 25% HP threshold:':<40} {total_qualified:>8,}"
+            f"  ({total_qualified / max(1, total_hits_checked) * 100:.1f}%)",
+            f"  {'Of those — dice rolled an injury:':<40} {total_rolled:>8,}"
+            f"  ({total_rolled / tq * 100:.1f}% of qualified)",
+            f"  {'Applied after 2-event-per-warrior cap:':<40} {total_applied:>8,}"
+            f"  ({total_applied / tr * 100:.1f}% of rolled)",
+            "",
+            "ROLLED INJURIES PER FIGHT  (dice successes, before cap)",
+            "-" * 70,
+            f"  {'0 events':<30} {fights_rolled[0]:>6}  ({fights_rolled[0] / tf * 100:.1f}%)",
+            f"  {'1 event':<30} {fights_rolled[1]:>6}  ({fights_rolled[1] / tf * 100:.1f}%)",
+            f"  {'2 events':<30} {fights_rolled[2]:>6}  ({fights_rolled[2] / tf * 100:.1f}%)",
+            f"  {'3+ events  (cap fired on these)':<30} {fights_rolled['3+']:>6}"
+            f"  ({fights_rolled['3+'] / tf * 100:.1f}%)",
+            f"  {'Avg per fight:':<30} {total_rolled / tf:>8.2f}",
+            "",
+            "APPLIED INJURIES PER FIGHT  (after cap — max 2 per warrior)",
+            "-" * 70,
+            f"  {'0 applied  (clean fight)':<30} {fights_applied[0]:>6}  ({fights_applied[0] / tf * 100:.1f}%)",
+            f"  {'1 applied':<30} {fights_applied[1]:>6}  ({fights_applied[1] / tf * 100:.1f}%)",
+            f"  {'2+ applied':<30} {fights_applied[2]:>6}  ({fights_applied[2] / tf * 100:.1f}%)",
+            f"  {'Avg per fight:':<30} {total_applied / tf:>8.2f}",
+            f"  {'Cap triggered in:':<30} {cap_triggered:>6} fights  ({cap_triggered / tf * 100:.1f}%)",
+            "",
+        ]
+
+        if level_dist:
+            total_lvl = sum(level_dist.values())
+            lines += [
+                "INJURY LEVEL DISTRIBUTION  (from all rolled events)",
+                "-" * 70,
+            ]
+            labels = {1: "Level 1  (Minor)", 2: "Level 2  (Serious)", 3: "Level 3  (Severe)"}
+            for lvl in sorted(level_dist):
+                lbl = labels.get(lvl, f"Level {lvl}")
+                cnt = level_dist[lvl]
+                lines.append(f"  {lbl:<30} {cnt:>6}  ({cnt / total_lvl * 100:.1f}%)")
+            lines.append("")
+
+        if loc_stats:
+            lines += [
+                "INJURY LOCATION BREAKDOWN  (rolled events by location)",
+                "-" * 70,
+                f"  {'LOCATION':<22} {'EVENTS':>8}  {'AVG LEVEL':>10}",
+                "-" * 70,
+            ]
+            for loc in LOCS:
+                if loc in loc_stats:
+                    d = loc_stats[loc]
+                    avg = d['total_levels'] / max(1, d['count'])
+                    lines.append(
+                        f"  {loc.replace('_', ' ').title():<22} {d['count']:>8}  {avg:>10.1f}"
+                    )
+            for loc in sorted(loc_stats):
+                if loc not in LOCS:
+                    d = loc_stats[loc]
+                    avg = d['total_levels'] / max(1, d['count'])
+                    lines.append(
+                        f"  {loc.replace('_', ' ').title():<22} {d['count']:>8}  {avg:>10.1f}"
+                    )
+
+        self.report_content = "\n".join(lines)
+        self.text_area.insert(tk.END, self.report_content)
+
+    # -----------------------------------------------------------------------
+    # SIM 5: KNOCKDOWN ANALYSIS
+    # -----------------------------------------------------------------------
+    def _sim_knockdown(self, teams):
+        ITERATIONS = 30
+        card = MM.build_global_fight_card(teams, [], champion_state={})
+        if not card:
+            self.text_area.insert(tk.END, "No fights to simulate.\n")
+            return
+
+        self.text_area.insert(tk.END, f"Running {ITERATIONS} iterations × {len(card)} bouts...\n")
+        self.root.update()
+
+        total_fights   = 0
+        total_checks   = 0
+        total_knocked  = 0
+
+        fights_dist    = {0: 0, 1: 0, 2: 0, "3+": 0}
+
+        # Per weapon category: {cat: {checks, knocked, total_chance, total_dmg_pct}}
+        cat_stats = {}
+
+        # Raw roll data for hit vs miss comparison
+        knocked_rolls   = []   # roll values when KD fired
+        knocked_chances = []   # chance values when KD fired
+        missed_rolls    = []   # roll values when KD missed
+        missed_chances  = []   # chance values when KD missed
+
+        # Damage % buckets when a KD actually fires
+        dmg_buckets = {"<15%": 0, "15-25%": 0, "25-40%": 0, "40-60%": 0, ">60%": 0}
+
+        for _ in range(ITERATIONS):
+            for bout in card:
+                w1 = copy.deepcopy(bout.player_warrior)
+                w2 = copy.deepcopy(bout.opponent)
+                logger = SimDataLogger()
+                C.run_fight(w1, w2, debug_logger=logger)
+                total_fights += 1
+
+                events   = logger.knockdown_events
+                fight_kd = sum(1 for e in events if e['knocked'])
+
+                total_checks  += len(events)
+                total_knocked += fight_kd
+
+                bucket = fight_kd if fight_kd <= 2 else "3+"
+                fights_dist[bucket] = fights_dist.get(bucket, 0) + 1
+
+                for e in events:
+                    cat = e['category'] or "Other"
+                    if cat not in cat_stats:
+                        cat_stats[cat] = {'checks': 0, 'knocked': 0,
+                                          'total_chance': 0, 'total_dmg_pct': 0.0}
+                    cs = cat_stats[cat]
+                    cs['checks']      += 1
+                    cs['total_chance'] += e['chance']
+                    cs['total_dmg_pct'] += e['damage_pct']
+                    if e['knocked']:
+                        cs['knocked'] += 1
+                        knocked_rolls.append(e['roll'])
+                        knocked_chances.append(e['chance'])
+                        dpct = e['damage_pct']
+                        if dpct < 15:
+                            dmg_buckets["<15%"] += 1
+                        elif dpct < 25:
+                            dmg_buckets["15-25%"] += 1
+                        elif dpct < 40:
+                            dmg_buckets["25-40%"] += 1
+                        elif dpct < 60:
+                            dmg_buckets["40-60%"] += 1
+                        else:
+                            dmg_buckets[">60%"] += 1
+                    else:
+                        missed_rolls.append(e['roll'])
+                        missed_chances.append(e['chance'])
+
+        tf  = max(1, total_fights)
+        tc  = max(1, total_checks)
+        tkd = max(1, total_knocked)
+
+        lines = [
+            f"\nKNOCKDOWN ANALYSIS  "
+            f"({ITERATIONS} iterations × {len(card)} bouts = {total_fights} total fights)",
+            "=" * 70,
+            "",
+            "WHAT THIS REPORT MEASURES",
+            "-" * 70,
+            "  Every successful hit triggers a knockdown check. This report tracks how",
+            "  often that check succeeds and what drives it.",
+            "",
+            "  SECTION GUIDE:",
+            "  OVERVIEW            — Top-line knockdown rate across all fights.",
+            "                        'Avg per fight' is your primary balance number.",
+            "                        Target is roughly 0-1 per fight for most matchups.",
+            "",
+            "  KDs PER FIGHT       — Distribution of how many knockdowns occur per bout.",
+            "                        '3+' fights are the ones players notice as excessive.",
+            "",
+            "  BY WEAPON CATEGORY  — Which weapon types knock down most often.",
+            "                        'Rate' is knockdowns as % of all checks for that",
+            "                        category.  'Avg Chance' is the mean dice threshold",
+            "                        rolled against — higher = more dangerous per hit.",
+            "",
+            "  ROLL COMPARISON     — Avg roll and avg chance for hits that knocked down",
+            "                        vs hits that didn't.  If 'KD avg chance' is close",
+            "                        to 'Miss avg chance', knockdowns are luck-driven.",
+            "                        A big gap means weapon/damage type matters more.",
+            "",
+            "  DAMAGE AT KD        — How hard were the hits that actually caused a",
+            "                        knockdown?  Mostly >25% HP means the mechanic is",
+            "                        working as intended (only big hits knock warriors",
+            "                        down).  Many <15% entries = too hair-trigger.",
+            "",
+            "=" * 70,
+            "",
+            "OVERVIEW",
+            "-" * 70,
+            f"  {'Total fights:':<35} {total_fights:>8,}",
+            f"  {'Total knockdown checks (all hits):':<35} {total_checks:>8,}",
+            f"  {'Knockdowns that fired:':<35} {total_knocked:>8,}"
+            f"  ({total_knocked / tc * 100:.1f}% of checks)",
+            f"  {'Avg knockdowns per fight:':<35} {total_knocked / tf:>8.2f}",
+            "",
+            "KNOCKDOWNS PER FIGHT",
+            "-" * 70,
+            f"  {'0 knockdowns:':<30} {fights_dist[0]:>6}  ({fights_dist[0] / tf * 100:.1f}%)",
+            f"  {'1 knockdown:':<30} {fights_dist[1]:>6}  ({fights_dist[1] / tf * 100:.1f}%)",
+            f"  {'2 knockdowns:':<30} {fights_dist[2]:>6}  ({fights_dist[2] / tf * 100:.1f}%)",
+            f"  {'3+ knockdowns:':<30} {fights_dist['3+']:>6}  ({fights_dist['3+'] / tf * 100:.1f}%)",
+            "",
+            "BY WEAPON CATEGORY",
+            "-" * 70,
+            f"  {'CATEGORY':<22} {'CHECKS':>7}  {'KDs':>5}  {'RATE':>7}  {'AVG CHANCE':>10}  {'AVG HIT %':>9}",
+            "-" * 70,
+        ]
+
+        for cat, cs in sorted(cat_stats.items(), key=lambda x: x[1]['knocked'], reverse=True):
+            rate     = cs['knocked'] / max(1, cs['checks']) * 100
+            avg_ch   = cs['total_chance'] / max(1, cs['checks'])
+            avg_dpct = cs['total_dmg_pct'] / max(1, cs['checks'])
+            lines.append(
+                f"  {cat:<22} {cs['checks']:>7}  {cs['knocked']:>5}  "
+                f"{rate:>6.1f}%  {avg_ch:>10.1f}  {avg_dpct:>8.1f}%"
+            )
+
+        kd_avg_roll   = sum(knocked_rolls)   / tkd
+        kd_avg_chance = sum(knocked_chances) / tkd
+        ms_avg_roll   = sum(missed_rolls)    / max(1, len(missed_rolls))
+        ms_avg_chance = sum(missed_chances)  / max(1, len(missed_chances))
+
+        lines += [
+            "",
+            "ROLL COMPARISON  (KD fired vs missed)",
+            "-" * 70,
+            f"  {'':22} {'AVG ROLL':>10}  {'AVG CHANCE':>10}",
+            f"  {'Knockdown fired:':<22} {kd_avg_roll:>10.1f}  {kd_avg_chance:>10.1f}",
+            f"  {'Knockdown missed:':<22} {ms_avg_roll:>10.1f}  {ms_avg_chance:>10.1f}",
+            "",
+            "DAMAGE % AT KNOCKDOWN  (how big was the hit that knocked them down?)",
+            "-" * 70,
+        ]
+
+        total_kd_hits = sum(dmg_buckets.values())
+        for band, cnt in dmg_buckets.items():
+            pct = cnt / max(1, total_kd_hits) * 100
+            lines.append(f"  {band:<12} {cnt:>6} knockdowns  ({pct:.1f}%)")
+
+        self.report_content = "\n".join(lines)
+        self.text_area.insert(tk.END, self.report_content)
+
+    # -----------------------------------------------------------------------
+    # SIM 6: DAMAGE SEVERITY DISTRIBUTION
+    # -----------------------------------------------------------------------
+    def _sim_damage_severity(self, teams):
+        ITERATIONS = 30
+        card = MM.build_global_fight_card(teams, [], champion_state={})
+
+        totals   = {"Light": 0, "Medium": 0, "Heavy": 0}
+        damage   = {"Light": 0, "Medium": 0, "Heavy": 0}
+        fights   = 0
+
+        for bout in card:
+            for _ in range(ITERATIONS):
+                w1 = copy.deepcopy(bout.player_warrior)
+                w2 = copy.deepcopy(bout.opponent)
+                logger = SimDataLogger()
+                C.run_fight(w1, w2, debug_logger=logger)
+                for tier in ("Light", "Medium", "Heavy"):
+                    totals[tier] += logger.severity_counts[tier]
+                    damage[tier] += logger.severity_damage[tier]
+                fights += 1
+
+        total_hits = sum(totals.values())
+
+        lines = ["\nDAMAGE SEVERITY DISTRIBUTION", "=" * 60]
+        lines.append("COLUMN LEGEND:")
+        lines.append(f"{'  TIER':<12}: Narrative tier based on damage as % of defender max HP.")
+        lines.append(f"{'  THRESHOLD':<12}: Light <19% | Medium 19-33% | Heavy >=34%.")
+        lines.append(f"{'  COUNT':<12}: Total hits in this tier across all fights.")
+        lines.append(f"{'  % OF HITS':<12}: Share of all damaging hits.")
+        lines.append(f"{'  AVG DMG':<12}: Average damage dealt per hit in this tier.")
+        lines.append(f"{'  AVG/FIGHT':<12}: Average hits in this tier per fight.")
+        lines.append("-" * 60)
+        lines.append(f"Total Fights Simulated : {fights}")
+        lines.append(f"Total Damaging Hits    : {total_hits}")
+        lines.append("-" * 60)
+        lines.append(f"{'TIER':<10} | {'COUNT':>7} | {'% HITS':>8} | {'AVG DMG':>8} | {'AVG/FIGHT':>10}")
+        lines.append("-" * 60)
+
+        for tier in ("Light", "Medium", "Heavy"):
+            cnt      = totals[tier]
+            pct      = cnt / max(1, total_hits) * 100
+            avg_dmg  = damage[tier] / max(1, cnt)
+            avg_pfgt = cnt / max(1, fights)
+            lines.append(f"{tier:<10} | {cnt:>7} | {pct:>7.1f}% | {avg_dmg:>8.1f} | {avg_pfgt:>10.1f}")
+
+        lines.append("-" * 60)
+        if total_hits:
+            lines.append(f"{'TOTAL':<10} | {total_hits:>7} | {'100.0%':>8} | "
+                         f"{sum(damage.values())/total_hits:>8.1f} | "
+                         f"{total_hits/max(1,fights):>10.1f}")
+
+        self.report_content = "\n".join(lines)
+        self.text_area.insert(tk.END, self.report_content)
+
+    # -----------------------------------------------------------------------
+    # SIM 7: FULL TURN DRY-RUN
     # -----------------------------------------------------------------------
     def _sim_full_dry_run(self, teams):
         lines = ["\nFULL TURN DRY-RUN REPORT (Comprehensive Simulation)", "="*120]
