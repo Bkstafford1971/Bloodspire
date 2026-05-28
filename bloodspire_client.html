@@ -1,11 +1,11 @@
-﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v2.2</title>
+<title>BLOODSPIRE Client - v2.7.2</title>
 <style>
 /* ============================================================
-   WINDOWS CLASSIC — REFINED
+   WINDOWS CLASSIC - REFINED
    ============================================================ */
 :root {
   --bg:       #d4d0c8;
@@ -76,7 +76,7 @@ input[type=number] { width: 44px; text-align: center; }
   padding: 4px 8px; display: flex; align-items: center; gap: 6px; font-size: 12px;
   letter-spacing: 0.2px;
 }
-/* Warrior name inputs in the grid — ensure they're always interactive */
+/* Warrior name inputs in the grid - ensure they're always interactive */
 #ct-grid input[type="text"] {
   position: relative;
   z-index: 5;
@@ -246,14 +246,14 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
-const CLIENT_VERSION = "2.2";
+const CLIENT_VERSION = "2.7.2";
 
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
 const DEFAULT_SERVER_URL = "http://bloodspirearena.dpdns.org";
 
 /* ============================================================
-   CHROMIUM GATE — File System Access API is Chromium-only
+   CHROMIUM GATE - File System Access API is Chromium-only
    ============================================================ */
 function isChromiumWithFSA() {
   return typeof window !== 'undefined'
@@ -277,7 +277,7 @@ function renderChromiumError() {
 }
 
 /* ============================================================
-   INDEXEDDB — persist the folder handle between sessions
+   INDEXEDDB - persist the folder handle between sessions
    ============================================================ */
 const IDB_NAME  = 'bloodspire';
 const IDB_STORE = 'handles';
@@ -651,11 +651,11 @@ async function fsaEnsureDir(relPath) {
     if (!result.success) throw new Error(result.error);
     return;
   }
-  // Browser mode: the server auto-creates directories on write — no-op here
+  // Browser mode: the server auto-creates directories on write - no-op here
 }
 
 /* ============================================================
-   STORE — the FSA-backed persistence layer
+   STORE - the FSA-backed persistence layer
    ============================================================ */
 // This builds the path for a specific team file
 function _teamPath(tid) {
@@ -710,6 +710,13 @@ const Store = {
   },
   async deleteTeam(tid) { 
     return await fsaDeleteFile(_teamPath(tid)); 
+  },
+  async readFightLog(fightId) {
+    const names = await fsaListDir('fights');
+    const needle = `fight_${String(fightId).padStart(4, '0')}_`;
+    const filename = names.find(n => n.startsWith(needle));
+    if (!filename) return null;
+    return await fsaReadText(`fights/${filename}`);
   },
 
   // Turn results and Newsletters
@@ -769,7 +776,7 @@ const Store = {
 };
 
 /* ============================================================
-   CRYPTO — client-side SHA-256 for password hashing
+   CRYPTO - client-side SHA-256 for password hashing
    ============================================================ */
 async function sha256Hex(str) {
   const buf = new TextEncoder().encode(str);
@@ -784,7 +791,7 @@ function randomHex(nBytes) {
 }
 
 /* ============================================================
-   MERGE RESULTS — port of gui_server._apply_league_results (JS)
+   MERGE RESULTS - port of gui_server._apply_league_results (JS)
    ============================================================ */
 function mergeResults(localTeam, serverResult, opts = {}) {
   const serverTeam     = serverResult.team || {};
@@ -820,7 +827,7 @@ function mergeResults(localTeam, serverResult, opts = {}) {
     if (sw.favorite_weapon) lw.favorite_weapon = sw.favorite_weapon;
 
     if (rerun) {
-      // Re-run: server is fully authoritative — replace skills and attributes
+      // Re-run: server is fully authoritative - replace skills and attributes
       // so that removed gains (e.g. fewer skills learned on re-run) are applied.
       lw.skills = Object.assign({}, sw.skills || {});
       lw.attribute_gains = sw.attribute_gains ?? lw.attribute_gains;
@@ -833,15 +840,15 @@ function mergeResults(localTeam, serverResult, opts = {}) {
       for (const [k, v] of Object.entries(sw.skills || {})) {
         if ((v||0) > (lw.skills[k]||0)) lw.skills[k] = v;
       }
-      // Attribute gains — server-authoritative (training ran there)
+      // Attribute gains - server-authoritative (training ran there)
       lw.attribute_gains = sw.attribute_gains ?? lw.attribute_gains;
-      // Raw attributes — take server value if higher (training raised them)
+      // Raw attributes - take server value if higher (training raised them)
       for (const attr of ['strength','dexterity','constitution','intelligence','presence']) {
         if (sw[attr] != null && sw[attr] > (lw[attr]||0)) lw[attr] = sw[attr];
       }
     }
 
-    // Fight history — replace any local entries for turns the server ran
+    // Fight history - replace any local entries for turns the server ran
     const srcHistory = sw.fight_history || [];
     if (srcHistory.length) {
       const srcTurns = new Set(srcHistory.map(e => e.turn).filter(Boolean));
@@ -859,7 +866,7 @@ function mergeResults(localTeam, serverResult, opts = {}) {
     out.auto_upload_enabled = serverTeam.auto_upload_enabled;
   }
 
-  // Team turn_history — on re-run replace the existing entry for this turn;
+  // Team turn_history - on re-run replace the existing entry for this turn;
   // on a normal download only append new entries.
   out.turn_history = out.turn_history || [];
   if (rerun) {
@@ -876,7 +883,7 @@ function mergeResults(localTeam, serverResult, opts = {}) {
     }
   }
 
-  // Blood challenges — server is authoritative (creates them on kills, decrements
+  // Blood challenges - server is authoritative (creates them on kills, decrements
   // turns_remaining each turn). Preserve any locally-set challenger_name selections
   // so the manager's pick survives the download.
   if (Array.isArray(serverTeam.blood_challenges)) {
@@ -957,7 +964,7 @@ const S = {
 const _ROLLUP_KEY = 'bp_pending_rollup';
 
 /* ============================================================
-   API — dual-layer router
+   API - dual-layer router
    ============================================================
    Calls to league-server endpoints use the configured S.serverUrl.
    Calls that used to hit gui_server are now handled locally by the
@@ -965,7 +972,7 @@ const _ROLLUP_KEY = 'bp_pending_rollup';
 
    Call sites in the rest of the file continue to use the same
    path strings they used against gui_server, so most UI code is
-   untouched — only the routing changes. */
+   untouched - only the routing changes. */
 
 // Paths that are still served by the league server (remote). Everything
 // else routed through API.* is handled locally via LocalAPI.
@@ -979,12 +986,12 @@ const REMOTE_GETS  = new Set([
   '/api/progress',
 ]);
 // Note: /api/newsletter?turn=N is intentionally NOT in REMOTE_GETS. It
-// reads the local FSA cache written by doLeagueDownloadAll — that way
+// reads the local FSA cache written by doLeagueDownloadAll - that way
 // users can still open old newsletters offline. The live download from
 // the league server happens inline in doLeagueDownloadAll via direct fetch.
 // Note: /api/rollup and /api/rollup_single are *POST* endpoints on the
 // league server but older call sites use API.get(). The translator in
-// API.get() below sends them as POSTs — do not add them to REMOTE_GETS
+// API.get() below sends them as POSTs - do not add them to REMOTE_GETS
 // or the GET branch will intercept first and the server returns 404.
 const REMOTE_POSTS = new Set([
   '/api/check_manager_name',
@@ -1018,7 +1025,7 @@ async function _remoteFetch(method, path, body, overrideBase) {
     return { success: false, error: 'Server URL is empty. Enter it on the login screen.' };
   }
   if (!/^https?:\/\//i.test(base)) {
-    return { success: false, error: `Server URL "${base}" is missing http:// or https:// — fix it on the login screen.` };
+    return { success: false, error: `Server URL "${base}" is missing http:// or https:// - fix it on the login screen.` };
   }
   const url = base.replace(/\/+$/,'') + path;
   const ctrl = new AbortController();
@@ -1037,7 +1044,7 @@ async function _remoteFetch(method, path, body, overrideBase) {
   } catch (e) {
     clearTimeout(tid);
     if (e.name === 'AbortError') throw new Error(`Request to ${url} timed out.`);
-    throw new Error(`Could not reach ${url} — ${e.message || e}.`);
+    throw new Error(`Could not reach ${url} - ${e.message || e}.`);
   }
 
   // Handle server-side crashes (502/503/504) before parsing JSON
@@ -1077,7 +1084,7 @@ const API = {
 };
 
 /* ============================================================
-   LocalAPI — FSA-backed handlers for former gui_server paths
+   LocalAPI - FSA-backed handlers for former gui_server paths
    ============================================================ */
 async function _ensureAccountLoaded() {
   if (S._accountCache) return S._accountCache;
@@ -1092,7 +1099,7 @@ async function _persistAccount(acc) {
 
 const LocalAPI = {
   async get(path, qs) {
-    // ── Game data — cache-first, fetch from server if missing ────────────
+    // ── Game data - cache-first, fetch from server if missing ────────────
     if (path === '/api/game_data') {
       const cached = await Store.readGameData();
       if (cached) return cached;
@@ -1161,7 +1168,15 @@ const LocalAPI = {
       };
     }
 
-    // ── Scout / Challenge targets — forwarded to the league server, with
+    if (path === '/api/fight/narrative') {
+      const fightId = parseInt(qs.id || '0', 10);
+      if (!fightId) return { success: false, error: 'Fight id required.' };
+      const narrative = await Store.readFightLog(fightId);
+      if (!narrative) return { success: false, error: 'Fight log not found.' };
+      return { success: true, narrative, fight_id: fightId };
+    }
+
+    // ── Scout / Challenge targets - forwarded to the league server, with
     //    the current manager's password auto-injected from league settings.
     if (path === '/api/scout/status') {
       const mid = qs.manager_id || S.league.managerId || '';
@@ -1192,14 +1207,14 @@ const LocalAPI = {
         `&password=${pw}&team_id=${encodeURIComponent(tid)}`);
     }
 
-    // ── Progress (local stub — no local turn runner any more) ────────────
+    // ── Progress (local stub - no local turn runner any more) ────────────
     if (path === '/api/progress') return { running: false, done: 0, total: 0, message: '' };
 
     return { success: false, error: `Unknown local GET ${path}` };
   },
 
   async post(path, body) {
-    // ── Session save — persist login credentials locally ────────────────
+    // ── Session save - persist login credentials locally ────────────────
     if (path === '/api/session/save') {
       const a = (await _ensureAccountLoaded()) || {};
       a.manager_name       = body.manager_name || a.manager_name || '';
@@ -1231,6 +1246,17 @@ const LocalAPI = {
       const local  = await Store.readTeam(tid);
       if (!local) return { success: false, error: 'Local team not found.' };
       const merged = mergeResults(local, result, { rerun: !!body.rerun });
+      // When HideRecord is on, tag newly-slain warriors so the Replacement tab
+      // stays locked until the player opens the fatal fight narrative.
+      if (S.hideRecord) {
+        const bouts = Array.isArray(result.bouts) ? result.bouts : [];
+        for (const b of bouts) {
+          if (b.warrior_slain && b.fight_id && b.warrior_name) {
+            const w = (merged.warriors || []).find(w => w && w.name === b.warrior_name);
+            if (w && w.is_dead) w.death_fight_id_unread = b.fight_id;
+          }
+        }
+      }
       await Store.writeTeam(merged);
       // Also persist the raw result for audit.
       if (result.turn) await Store.writeTurnResult(result.turn, result);
@@ -1265,10 +1291,10 @@ const LocalAPI = {
     // ── Account create is handled entirely by doCreateAccount ────────────
     // (still forwards via API.post above). Kept here as a safety stub.
     if (path === '/api/account/create') {
-      return { success: false, error: 'Account creation is handled by the new flow — this path is deprecated.' };
+      return { success: false, error: 'Account creation is handled by the new flow - this path is deprecated.' };
     }
 
-    // ── Account login — local-only verification ──────────────────────────
+    // ── Account login - local-only verification ──────────────────────────
     if (path === '/api/account/login') {
       const a = await _ensureAccountLoaded();
       if (!a) return { success: false, error: 'No account on this machine. Create one first.' };
@@ -1291,11 +1317,14 @@ const LocalAPI = {
       };
     }
 
-    // ── Scout select / remove — forwarded to the league server with password.
+    // ── Scout select / remove - forwarded to the league server with password.
     if (path === '/api/scout/select' || path === '/api/scout/remove') {
+      const mid = body.manager_id || S.league.managerId || '';
+      const pw = S.league.password || '';
+      console.log(`[Scout POST] mid=${mid}, pw_present=${!!pw}, path=${path}`);
       return await _remoteFetch('POST', path, {
-        manager_id:   body.manager_id   || S.league.managerId || '',
-        password:     S.league.password || '',
+        manager_id:   mid,
+        password:     pw,
         warrior_name: body.warrior_name || '',
         team_name:    body.team_name    || '',
         team_id:      body.team_id      || 0,
@@ -1310,7 +1339,7 @@ const LocalAPI = {
       return { success: false, error: 'Local turn running has been removed. Use Upload to send your team to the arena.' };
     }
     if (path === '/api/full_reset') {
-      return { success: false, error: 'Full reset removed — delete your saved folder manually to reset.' };
+      return { success: false, error: 'Full reset removed - delete your saved folder manually to reset.' };
     }
     if (path === '/api/league/check_reset' || path === '/api/league/acknowledge_reset') {
       return { success: true, reset_detected: false };
@@ -1326,6 +1355,20 @@ const LocalAPI = {
         const timer = setTimeout(() => ctrl.abort(), 15000);
         let r;
         try {
+          // Ensure all warriors have equipment defaults before uploading
+          if (team.warriors && Array.isArray(team.warriors)) {
+            team.warriors = team.warriors.map(w => {
+              if (!w) return w;
+              return {
+                ...w,
+                armor: w.armor || 'None',
+                helm: w.helm || 'None',
+                primary_weapon: w.primary_weapon || 'Open Hand',
+                secondary_weapon: w.secondary_weapon || 'Open Hand',
+                backup_weapon: w.backup_weapon || null,
+              };
+            });
+          }
           r = await fetch(url + '/api/upload', {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
@@ -1370,7 +1413,7 @@ const LocalAPI = {
       if ('want_retire'        in body) w.want_retire        = !!body.want_retire;
       if (Array.isArray(body.trains)) {
         w.trains = body.trains
-          .filter(t => t && t !== '—')
+          .filter(t => t && t !== '-')
           .map(t => t.toLowerCase().replace(/ /g, '_'))
           .slice(0, 3);
       }
@@ -1556,13 +1599,15 @@ const LocalAPI = {
    ============================================================ */
 
 const _HEIGHT_RANGES = {
-  'Halfling':[37,61],'Elf':[56,71],'Half-Elf':[60,72],
+  'Halfling':[37,54],'Gnome':[37,54],'Elf':[56,71],'Half-Elf':[60,72],
   'Human':[62,76],'Dwarf':[42,62],'Half-Orc':[65,90],
+  'Goblin':[48,60],'Tabaxi':[66,76],'Lizardfolk':[69,81],
   'Monster':[72,108],'Peasant':[62,76],
 };
 const _DENSITY = {
-  'Halfling':0.0434,'Elf':0.0338,'Half-Elf':0.0354,
+  'Halfling':0.0434,'Gnome':0.0434,'Elf':0.0338,'Half-Elf':0.0354,
   'Human':0.0368,'Dwarf':0.0780,'Half-Orc':0.0462,
+  'Goblin':0.0255,'Tabaxi':0.0315,'Lizardfolk':0.0400,
   'Monster':0.0420,'Peasant':0.0368,
 };
 function calcMeasurements(race, gender, size, trainingWeightBonus) {
@@ -1706,7 +1751,7 @@ function _showUploadProgress(steps, currentIdx, error) {
               font-family:sans-serif;">
     <div style="background:#6b4c2a;color:#f4f1ea;padding:6px 12px;font-weight:bold;font-size:13px;
                 border-radius:2px 2px 0 0;">
-      BLOODSPIRE — Uploading Teams
+      BLOODSPIRE - Uploading Teams
     </div>
     <div style="padding:12px 8px 4px;">
       <table style="border-collapse:collapse;width:100%;">${rows}</table>
@@ -1738,15 +1783,23 @@ async function reloadTeam(tid) {
 async function refreshLeagueFlags() {
   if (!S.league.url || !S.league.managerId) return;
   try {
-    const resp = await fetch(S.league.url + '/api/flags');
-    if (!resp.ok) return;
-    const d = await resp.json();
-    if (!d.success) return;
-    S.league.flags = {
-      show_favorite_weapon: d.show_favorite_weapon || false,
-      show_luck_factor:     d.show_luck_factor     || false,
-      show_max_hp:          d.show_max_hp          || false,
-    };
+    const ctrl = new AbortController();
+    const timeout = setTimeout(() => ctrl.abort(), 2000); // 2-second timeout
+    try {
+      const resp = await fetch(S.league.url + '/api/flags', {signal: ctrl.signal});
+      clearTimeout(timeout);
+      if (!resp.ok) return;
+      const d = await resp.json();
+      if (!d.success) return;
+      S.league.flags = {
+        show_favorite_weapon: d.show_favorite_weapon || false,
+        show_luck_factor:     d.show_luck_factor     || false,
+        show_max_hp:          d.show_max_hp          || false,
+      };
+    } catch(e) {
+      clearTimeout(timeout);
+      /* silent */
+    }
   } catch(e) { /* silent */ }
 }
 
@@ -1790,7 +1843,7 @@ function render() {
 }
 
 /* ============================================================
-   FOLDER PICKER SCREEN — first-run and re-permission flow
+   FOLDER PICKER SCREEN - first-run and re-permission flow
    ============================================================ */
 function buildFolderPick() {
   return `
@@ -1935,7 +1988,7 @@ function buildNewPlayerForm() {
    MAIN SCREEN
    ============================================================ */
 function buildMain() {
-  // NOTE: No id="app" wrapper here — the outer #app div (in the HTML body)
+  // NOTE: No id="app" wrapper here - the outer #app div (in the HTML body)
   // is the permanent container. We only write its innerHTML.
   return `
 <div style="display:flex; flex-direction:column; height:100%;overflow:hidden;">
@@ -1995,7 +2048,7 @@ function buildMenuBar() {
       </div>
       <div class="menu-item" id="act-league-download-all"
            style="padding:3px 12px; ${S.league.managerId?'':'color:var(--mid); pointer-events:none;'}">
-        Download${S.league.managerId?'':' — configure account first'}
+        Download${S.league.managerId?'':' - configure account first'}
       </div>
       <div style="border-top:1px solid var(--mid); margin:2px 0;"></div>
       <div class="menu-item" id="act-newsletter" style="padding:3px 12px;">
@@ -2069,10 +2122,10 @@ function buildTree() {
         const deadStyle  = (isDead && !S.hideRecord) ? 'opacity:0.55; font-style:italic;' : '';
         const deadIcon   = isAscended ? '👹' : (isDead && !S.hideRecord ? '💀' : '👤');
         const deadBadge  = isAscended
-          ? `<span title="Ascended to Monsterdom on The Monsters roster — replacement needed"
+          ? `<span title="Ascended to Monsterdom on The Monsters roster - replacement needed"
                style="color:#844;font-size:10px;margin-left:4px;">👹 ASCENDED</span>`
           : (isDead && !S.hideRecord)
-          ? `<span title="Slain by ${esc(w.killed_by||'unknown')} — replacement needed"
+          ? `<span title="Slain by ${esc(w.killed_by||'unknown')} - replacement needed"
                style="color:#800;font-size:10px;margin-left:4px;">✝</span>`
           : '';
 
@@ -2096,7 +2149,7 @@ function buildTree() {
    ============================================================ */
 async function setWTab(tab) {
   // Flush any pending warrior save BEFORE we rebuild the DOM for the new
-  // sub-tab — otherwise the 700ms auto-save timer would fire against an
+  // sub-tab - otherwise the 700ms auto-save timer would fire against an
   // empty DOM and wipe the warrior's equipment/training/strategies.
   if (_saveTimer) await flushSave();
   S.wTab = tab;
@@ -2122,12 +2175,18 @@ async function treeSelectWarrior(tid, idx) {
     await flushSave();
   }
   S.sel  = {type:'warrior', teamId: tid, wIdx: idx};
-  // Fetch fresh data so streak/favorite_weapon always reflect server state
-  await Promise.all([reloadTeam(tid), refreshLeagueFlags()]);
+  // Reload team data from local storage
+  await reloadTeam(tid);
+  // Refresh league flags in background (don't block on network)
+  refreshLeagueFlags();
   // Dead warriors open straight to the Replacement tab
   const team = S.teams[tid];
   const w    = team && team.warriors && team.warriors[idx];
-  S.wTab = (w && w.is_dead) ? 'replacement' : 'stats';
+  // Dead warriors go to Replacement - unless HideRecord is on and the fatal
+  // fight hasn't been read yet, in which case steer them to Fights first.
+  S.wTab = (w && w.is_dead)
+    ? (S.hideRecord && w.death_fight_id_unread ? 'fights' : 'replacement')
+    : 'stats';
   refreshTree();
   refreshContent();
 }
@@ -2219,23 +2278,23 @@ function buildManagerPanel() {
       <td style="padding:4px 8px; width:110px;">Name</td>
       <td><input type="text" class="ro" value="${esc(acc.manager_name||'')}" style="width:360px;" readonly></td>
       <td style="padding:4px 16px; width:80px;">Record</td>
-      <td><input type="text" class="ro" value="${S.hideRecord ? '—' : esc(record)}" style="width:160px;" readonly></td>
+      <td><input type="text" class="ro" value="${S.hideRecord ? '-' : esc(record)}" style="width:160px;" readonly></td>
     </tr>
     <tr>
       <td style="padding:4px 8px;">Last Upload</td>
-      <td><input type="text" class="ro" value="${esc(S.league.lastUpload||'—')}" style="width:360px;" readonly></td>
+      <td><input type="text" class="ro" value="${esc(S.league.lastUpload||'-')}" style="width:360px;" readonly></td>
       <td style="padding:4px 16px;">Account #</td>
       <td><input type="text" class="ro" value="${esc(String(acc.id||''))}" style="width:160px;" readonly></td>
     </tr>
     <tr>
       <td style="padding:4px 8px;">Last Download</td>
-      <td><input type="text" class="ro" value="${esc(S.league.lastDownload||'—')}" style="width:360px;" readonly></td>
+      <td><input type="text" class="ro" value="${esc(S.league.lastDownload||'-')}" style="width:360px;" readonly></td>
       <td style="padding:4px 16px;">Last Turn Ran</td>
-      <td><input type="text" class="ro" value="${esc(String(S.league.lastTurnRan||'—'))}" style="width:160px;" readonly title="Last turn any of your teams ran"></td>
+      <td><input type="text" class="ro" value="${esc(String(S.league.lastTurnRan||'-'))}" style="width:160px;" readonly title="Last turn any of your teams ran"></td>
     </tr>
     <tr>
       <td style="padding:4px 8px;">Email Address</td>
-      <td><input type="text" class="ro" value="${esc(acc.email||'—')}" style="width:360px;" readonly></td>
+      <td><input type="text" class="ro" value="${esc(acc.email||'-')}" style="width:360px;" readonly></td>
       <td style="padding:4px 16px;">Run Next Turn</td>
       <td>
         <span style="font-size:11px; color:#555;" title="Teams with 5 active warriors and auto-upload enabled">
@@ -2387,8 +2446,8 @@ function buildLegacyTab() {
 
   function warriorCard(w) {
     const rec  = `${w.wins||0}-${w.losses||0}-${w.kills||0}`;
-    const inj  = formatInjuriesText(w.injuries).join('<br>') || '—';
-    const skls = formatSkillsText(w.skills).join('<br>') || '—';
+    const inj  = formatInjuriesText(w.injuries).join('<br>') || '-';
+    const skls = formatSkillsText(w.skills).join('<br>') || '-';
     const isDead      = w.is_dead;
     const isAscended  = w.ascended_to_monster;
     const label = isDead
@@ -2412,7 +2471,7 @@ function buildLegacyTab() {
       </div>
       <table style="border-collapse:collapse; font-size:11px;">
         ${['strength','dexterity','constitution','intelligence','presence','size'].map(attr => {
-          const deathVal = w[attr] != null ? w[attr] : '—';
+          const deathVal = w[attr] != null ? w[attr] : '-';
           const baseVal  = (w.initial_stats && w.initial_stats[attr] != null) ? ` (${w.initial_stats[attr]})` : '';
           return `<tr><td style="padding:1px 6px; color:#555; width:90px;">${capitalize(attr)}</td>
                <td style="padding:1px 6px; font-weight:bold;">${deathVal}${baseVal}</td></tr>`;
@@ -2455,7 +2514,7 @@ function buildLegacyTab() {
   });
 
   return `<div style="padding:6px;">
-    <div style="font-weight:bold; margin-bottom:8px;">Legacy — Replaced Teams</div>
+    <div style="font-weight:bold; margin-bottom:8px;">Legacy - Replaced Teams</div>
     ${sections}
   </div>`;
 }
@@ -2491,7 +2550,7 @@ function buildScoutingTab() {
     selRows += `
     <tr style="border-bottom:1px solid #eee;">
       <td style="padding:4px 8px; font-weight:bold;">${esc(entry.warrior_name)}</td>
-      <td style="padding:4px 8px; color:#555;">${esc(entry.team_name||'—')}</td>
+      <td style="padding:4px 8px; color:#555;">${esc(entry.team_name||'-')}</td>
       <td style="padding:4px 8px; display:flex; gap:4px;">
         <button onclick='viewScoutReport(${jsq(entry.warrior_name)})'
                 style="font-size:11px; padding:1px 6px; margin-right:4px;">View Report</button>
@@ -2509,7 +2568,7 @@ function buildScoutingTab() {
   // ── Available targets ─────────────────────────────────────────────────────
   let targetsHtml = '';
   if (sc.targets === null) {
-    // Not yet loaded — trigger load
+    // Not yet loaded - trigger load
     loadScoutTargets();
     targetsHtml = '<div style="padding:8px; color:#666; font-style:italic;">Loading warriors...</div>';
   } else if (!sc.targets.length) {
@@ -2539,9 +2598,9 @@ function buildScoutingTab() {
       <tr style="border-bottom:1px solid #eee;">
         <td style="padding:3px 8px;">${esc(w.name)}</td>
         <td style="padding:3px 8px; color:#555;">${esc(w.team_name)}</td>
-        <td style="padding:3px 8px; color:#555;">${esc(w.manager_name||'—')}</td>
+        <td style="padding:3px 8px; color:#555;">${esc(w.manager_name||'-')}</td>
         <td style="padding:3px 8px; color:#555;">${esc(w.race)} ${esc(w.gender)}</td>
-        <td style="padding:3px 8px; text-align:center;">${S.hideRecord ? '—' : `${w.wins}-${w.losses}-${w.kills}`}</td>
+        <td style="padding:3px 8px; text-align:center;">${S.hideRecord ? '-' : `${w.wins}-${w.losses}-${w.kills}`}</td>
         <td style="padding:3px 8px; text-align:center;">${w.total_fights}</td>
         <td style="padding:3px 8px;">${btn}</td>
       </tr>`;
@@ -2576,7 +2635,7 @@ function buildScoutingTab() {
   return `
 <div style="padding:12px; display:flex; flex-direction:column; gap:12px; overflow:auto; height:100%;">
   <div class="group" style="margin:0;">
-    <span class="group-label">Scouting Assignments — ${slotsLeft} slot${slotsLeft===1?'':'s'} remaining this turn</span>
+    <span class="group-label">Scouting Assignments - ${slotsLeft} slot${slotsLeft===1?'':'s'} remaining this turn</span>
     <p style="font-size:11px; color:#555; margin:4px 0 8px;">
       Select up to <b>3</b> opposing warriors to scout each turn. When you select a warrior, your scout will be
       confirmed, and you'll see the scouting report. Once confirmed, scouts are locked and cannot be removed.
@@ -2625,7 +2684,7 @@ function buildScoutReport(report) {
   <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
     <button onclick="closeScoutReport()" style="font-size:11px; padding:2px 10px;">← Back</button>
     <b style="font-size:13px;">Scouting Report: ${esc(report.warrior_name)}</b>
-    <span style="font-size:11px; color:#666;">— ${esc(report.team_name)}</span>
+    <span style="font-size:11px; color:#666;">- ${esc(report.team_name)}</span>
     <span style="font-size:11px; color:#888; margin-left:auto;">${report.wins}-${report.losses}-${report.kills} (${report.total_fights} fights)</span>
   </div>
   <div class="group" style="margin:0 0 10px;">
@@ -2661,7 +2720,7 @@ function _renderScoutReportText(text) {
       continue;
     }
 
-    // Top-level report header lines (first 4 lines — name, filed-by, record)
+    // Top-level report header lines (first 4 lines - name, filed-by, record)
     if (i < 5 && trim) {
       if (i === 0) {
         html += `<div style="font-size:13px; font-weight:bold; letter-spacing:1px; color:#3a1a00; margin-bottom:4px;">${esc(trim)}</div>`;
@@ -2671,7 +2730,7 @@ function _renderScoutReportText(text) {
       continue;
     }
 
-    // Divider lines — skip rendering
+    // Divider lines - skip rendering
     if (DIVIDER_RE.test(trim)) continue;
 
     // ALL-CAPS section headings
@@ -2682,7 +2741,7 @@ function _renderScoutReportText(text) {
       continue;
     }
 
-    // "THREAT LEVEL:" keyword — highlight it
+    // "THREAT LEVEL:" keyword - highlight it
     if (trim.startsWith('THREAT LEVEL:')) {
       const isHigh = trim.includes('HIGH');
       const isMod  = trim.includes('MODERATE');
@@ -2704,8 +2763,8 @@ function _renderScoutReportText(text) {
       continue;
     }
 
-    // Closing signature lines ("— Name")
-    if (trim.startsWith('—') || trim.startsWith('-')) {
+    // Closing signature lines ("- Name")
+    if (trim.startsWith('-') || trim.startsWith('-')) {
       html += `<div style="margin-top:8px; color:#555; font-style:italic; font-size:11px;">${esc(trim)}</div>`;
       continue;
     }
@@ -2910,11 +2969,11 @@ function buildTeamPanel(team) {
       <td style="padding:3px 8px; width:90px;">Name</td>
       <td><input type="text" class="ro" value="${esc(team.team_name)}" style="width:320px;" readonly></td>
       <td style="padding:3px 8px; width:140px; text-align:right;" title="Last turn this team actively participated in">Last Turn Ran</td>
-      <td><input type="text" class="ro" value="${esc(String(team.last_turn_ran || '—'))}" style="width:80px;" readonly></td>
+      <td><input type="text" class="ro" value="${esc(String(team.last_turn_ran || '-'))}" style="width:80px;" readonly></td>
     </tr>
     <tr>
       <td style="padding:3px 8px;">Record</td>
-      <td><input type="text" class="ro" value="${S.hideRecord ? '—' : esc(totalW+'-'+totalL+'-'+totalD)}" style="width:320px;" readonly></td>
+      <td><input type="text" class="ro" value="${S.hideRecord ? '-' : esc(totalW+'-'+totalL+'-'+totalD)}" style="width:320px;" readonly></td>
       <td style="padding:3px 8px; text-align:right;">Run This Turn</td>
       <td>
         <input type="checkbox" id="cb-rnt-${tid}" ${rnt?'checked':''}
@@ -2935,7 +2994,7 @@ function buildTeamPanel(team) {
 }
 
 /* ============================================================
-   WARRIOR PANEL — TABS
+   WARRIOR PANEL - TABS
    ============================================================ */
 function buildWarriorPanel(team, w, wIdx) {
   const isAscended = w.ascended_to_monster || false;
@@ -2997,7 +3056,7 @@ function buildStatsTab(team, w, wIdx) {
     </tr>`;
   });
 
-  // Equipment dropdowns — filter server list first to avoid duplicates
+  // Equipment dropdowns - filter server list first to avoid duplicates
   const armor_opts = [...(gd.armor||[]).filter(a => a !== 'None'), 'None'];
   const helm_opts  = [...(gd.helms||[]).filter(h => h !== 'None'), 'None'];
   const wpn_opts   = (gd.weapons||[]).filter(w => w !== 'Open Hand');
@@ -3020,7 +3079,7 @@ function buildStatsTab(team, w, wIdx) {
     const norm = v => v.replace(/_/g,' ').replace(/\b\w/g, ch => ch.toUpperCase());
     const valNorm = norm(val);
     const sel = v => (v === val || norm(v) === valNorm) ? ' selected' : '';
-    let h = '<option value="">—</option>';
+    let h = '<option value="">-</option>';
     h += '<optgroup label="── Attributes ──">';
     attrTrains.forEach(a => { h += `<option value="${a}"${sel(a)}>${a}</option>`; });
     h += '</optgroup><optgroup label="── Skills ──">';
@@ -3046,7 +3105,7 @@ function buildStatsTab(team, w, wIdx) {
   const numbered = strats.filter(s => !isDefaultTrigger(s.trigger));
   const always   = strats.find(s => isDefaultTrigger(s.trigger)) || {trigger:'Always (Default Loop)',style:'',activity:'',aim_point:'',defense_point:''};
 
-  // Blank-first option list — blank = row inactive
+  // Blank-first option list - blank = row inactive
   function stratOpts(items, val) {
     let h = '<option value=""></option>';
     items.forEach(it => { h += `<option value="${esc(it)}" ${it===val?'selected':''}>${esc(it)}</option>`; });
@@ -3064,7 +3123,7 @@ function buildStatsTab(team, w, wIdx) {
       <td><select data-si="${i}" data-sf="defense_point" ${OC}>${stratOpts(aimPts, s.defense_point)}</select></td>
     </tr>`;
   }
-  // D row — "Always" trigger locked, cannot be changed
+  // D row - "Always" trigger locked, cannot be changed
   stratRows += `<tr>
     <td class="row-num" style="font-weight:bold;">D</td>
     <td style="padding:2px 4px; background:#ececec; font-style:italic; color:#444;">Always (Default Loop)</td>
@@ -3074,7 +3133,7 @@ function buildStatsTab(team, w, wIdx) {
     <td><select data-si="D" data-sf="defense_point" ${OC}>${stratOpts(aimPts, always.defense_point)}</select></td>
   </tr>`;
 
-  // Skills and injuries — built from raw dicts so post-merge data is always current
+  // Skills and injuries - built from raw dicts so post-merge data is always current
   const skillsText = formatSkillsText(w.skills).join('\n') || '(none)';
   const injText    = formatInjuriesText(w.injuries).join('\n') || '(none)';
 
@@ -3093,7 +3152,7 @@ function buildStatsTab(team, w, wIdx) {
   </tr>
   <tr>
     <td style="padding:2px 4px;">Record</td>
-    <td><input type="text" class="ro" value="${S.hideRecord ? '—' : esc(fmtRecord(w))}" style="width:240px;" readonly></td>
+    <td><input type="text" class="ro" value="${S.hideRecord ? '-' : esc(fmtRecord(w))}" style="width:240px;" readonly></td>
     <td style="padding:2px 12px 2px 8px;">Gender</td>
     <td><input type="text" class="ro" value="${esc(w.gender)}" style="width:80px;" readonly></td>
     <td style="padding:2px 8px;">Weight</td>
@@ -3183,8 +3242,8 @@ function buildFightOptionsTab(w) {
   const isMonster = w.want_monster_fight || false;
   const isRetire  = w.want_retire        || false;
   const retireLabel = canRetire
-    ? 'Retire Warrior — submit retirement papers this turn'
-    : `Retire Warrior — not eligible yet (${w.total_fights||0}/100 fights)`;
+    ? 'Retire Warrior - submit retirement papers this turn'
+    : `Retire Warrior - not eligible yet (${w.total_fights||0}/100 fights)`;
 
   return `
 <div style="padding:12px;">
@@ -3258,7 +3317,7 @@ function buildFightOptionsTab(w) {
 }
 
 function streakLabel(s) {
-  if (s === 0)  return '<span style="color:#888">—</span>';
+  if (s === 0)  return '<span style="color:#888">-</span>';
   if (s  >  0)  return `<b style="color:#060">W${s}</b>`;
   return `<b style="color:#800">L${Math.abs(s)}</b>`;
 }
@@ -3303,7 +3362,7 @@ function buildFightsTab(w) {
   }
   let rows = '';
   history.forEach((h, i) => {
-    const res = S.hideRecord ? '—' : (h.result ? h.result.toUpperCase() : '—');
+    const res = S.hideRecord ? '-' : (h.result ? h.result.toUpperCase() : '-');
     const resColor = S.hideRecord ? '#444' : (res==='WIN' ? '#060' : res==='LOSS' ? '#800' : '#444');
     const slainNote  = (!S.hideRecord && h.warrior_slain)  ? ' <b style="color:#800">(SLAIN)</b>'  : '';
     const killedNote = (!S.hideRecord && h.opponent_slain) ? ' <b style="color:#060">(KILLED)</b>' : '';
@@ -3323,35 +3382,35 @@ function buildFightsTab(w) {
     if (isChampFight) {
       // Champion fights get special row formatting
       rows += `<tr style="${champStyle} font-weight:bold;">
-        <td style="padding:2px 6px; text-align:center;">${h.turn||'—'}</td>
+        <td style="padding:2px 6px; text-align:center;">${h.turn||'-'}</td>
         <td style="padding:2px 6px; color:#c60;">
           ★ CHAMPION FIGHT ★<br>${opponentDisplay}${slainNote}
         </td>
-        <td style="padding:2px 6px; color:#555;">${esc(h.opponent_manager_name||'—')}</td>
+        <td style="padding:2px 6px; color:#555;">${esc(h.opponent_manager_name||'-')}</td>
         <td style="padding:2px 6px; text-align:center;">${esc(h.opponent_race||'')}</td>
         <td style="padding:2px 6px; text-align:center; color:${resColor}; font-weight:bold;">${res}</td>
         <td style="padding:2px 6px; text-align:center;">${killMark}</td>
-        <td style="padding:2px 6px; text-align:center;">${h.minutes||'—'} min</td>
+        <td style="padding:2px 6px; text-align:center;">${h.minutes||'-'} min</td>
         <td style="padding:2px 6px;">${viewBtn}</td>
       </tr>`;
     } else {
       // Regular fights
       rows += `<tr style="${champStyle}">
-        <td style="padding:2px 6px; text-align:center;">${h.turn||'—'}</td>
+        <td style="padding:2px 6px; text-align:center;">${h.turn||'-'}</td>
         <td style="padding:2px 6px;">${esc(h.opponent_name)}</td>
-        <td style="padding:2px 6px; color:#555;">${esc(h.opponent_manager_name||'—')}</td>
+        <td style="padding:2px 6px; color:#555;">${esc(h.opponent_manager_name||'-')}</td>
         <td style="padding:2px 6px; text-align:center;">${esc(h.opponent_race||'')}</td>
         <td style="padding:2px 6px; text-align:center; color:${resColor}; font-weight:bold;">${res}${slainNote}</td>
         <td style="padding:2px 6px; text-align:center;">${killMark}</td>
-        <td style="padding:2px 6px; text-align:center;">${h.minutes||'—'} min</td>
+        <td style="padding:2px 6px; text-align:center;">${h.minutes||'-'} min</td>
         <td style="padding:2px 6px;">${viewBtn}</td>
       </tr>`;
     }
   });
   return `
 <div style="padding:6px;">
-  <div style="font-weight:bold; margin-bottom:6px;">Fight History — ${esc(w.name)}</div>
-  ${S.hideRecord ? '' : `<div style="color:#555; margin-bottom:6px;">Record: ${esc(fmtRecord(w))} — ${w.total_fights||0} fights (W-L-K)</div>`}
+  <div style="font-weight:bold; margin-bottom:6px;">Fight History - ${esc(w.name)}</div>
+  ${S.hideRecord ? '' : `<div style="color:#555; margin-bottom:6px;">Record: ${esc(fmtRecord(w))} - ${w.total_fights||0} fights (W-L-K)</div>`}
   <div style="overflow-x:auto;">
   <table class="grid" style="font-size:11px;">
     <thead>
@@ -3403,9 +3462,9 @@ function buildChallengesTab(team, w) {
       opponents.push({
         name     : ow.name,
         teamName : ow.team_name,
-        managerName : ow.manager_name || '—',
-        race     : ow.race || '—',
-        record   : S.hideRecord ? '—' : `${ow.wins||0}-${ow.losses||0}-${ow.kills||0}`,
+        managerName : ow.manager_name || '-',
+        race     : ow.race || '-',
+        record   : S.hideRecord ? '-' : `${ow.wins||0}-${ow.losses||0}-${ow.kills||0}`,
         fights   : owFights,
       });
     }
@@ -3421,7 +3480,7 @@ function buildChallengesTab(team, w) {
       const ow = (t.warriors || []).find(x => x && x.name === target);
       if (ow) { teamLabel = t.team_name; fightLabel = `${ow.total_fights||0} fights`; break; }
     }
-    const info = teamLabel ? `${esc(teamLabel)}${fightLabel ? ', ' + fightLabel : ''}` : '—';
+    const info = teamLabel ? `${esc(teamLabel)}${fightLabel ? ', ' + fightLabel : ''}` : '-';
     pendingRows += `
     <tr>
       <td style="padding:4px 8px; font-weight:bold;">${esc(target)}</td>
@@ -3484,18 +3543,18 @@ function buildChallengesTab(team, w) {
   }
 
   const rangeDesc = fights === 0
-    ? `0 fights (rookie bracket — only other rookies)`
+    ? `0 fights (rookie bracket - only other rookies)`
     : `${minFights}–${maxFights} fights`;
 
   const pendingSection = (myPending.length || bloodList.length) ? `
   <div class="group" style="margin:0 0 12px;">
-    <span class="group-label">Pending Challenges — ${slotsUsed}/3 slots used</span>
+    <span class="group-label">Pending Challenges - ${slotsUsed}/3 slots used</span>
     <table style="border-collapse:collapse; width:100%; font-size:12px;">
       ${pendingRows}
     </table>
   </div>` : '';
 
-  // Blood challenges not yet assigned — this warrior can volunteer to carry one
+  // Blood challenges not yet assigned - this warrior can volunteer to carry one
   const availableBloodChallenges = activeBloodChallenges.filter(bc => !bc.challenger_name);
 
   let bloodChallengesSection = '';
@@ -3570,7 +3629,7 @@ function buildChallengesTab(team, w) {
 
   const avoidManagersSection = `
   <div class="group" style="margin:0 0 12px;">
-    <span class="group-label">Avoid Managers — ${avoidMgrs.length}/2 set</span>
+    <span class="group-label">Avoid Managers - ${avoidMgrs.length}/2 set</span>
     <p style="font-size:11px; color:#555; margin:4px 0 8px;">
       Avoid all challenges from warriors on a specific manager's team (25-30% success rate).
     </p>
@@ -3608,7 +3667,7 @@ function buildChallengesTab(team, w) {
     avoidWDropdown = `
       <select id="avoid-sel" onchange="handleAddAvoid(${jsq(w.name)})" style="width:220px; font-size:11px;">
         <option value="">(select a warrior)</option>
-        ${avoidableWarriors.map(ow => `<option value="${esc(ow.name)}">${esc(ow.name)} — ${esc(ow.team_name||'')}</option>`).join('')}
+        ${avoidableWarriors.map(ow => `<option value="${esc(ow.name)}">${esc(ow.name)} - ${esc(ow.team_name||'')}</option>`).join('')}
       </select>`;
   } else {
     avoidWDropdown = '<div style="color:#999; font-style:italic; font-size:11px;">Loading warriors...</div>';
@@ -3616,7 +3675,7 @@ function buildChallengesTab(team, w) {
 
   const avoidWarriorsSection = `
   <div class="group" style="margin:0 0 12px;">
-    <span class="group-label">Avoid Warriors — ${avoidWarriors.length}/2 set</span>
+    <span class="group-label">Avoid Warriors - ${avoidWarriors.length}/2 set</span>
     <p style="font-size:11px; color:#555; margin:4px 0 8px;">
       Select specific warriors that ${esc(w.name)} will try to avoid being matched against.
     </p>
@@ -3635,13 +3694,13 @@ function buildChallengesTab(team, w) {
   return `
 <div style="padding:12px;">
   <div class="group" style="margin:0 0 12px;">
-    <span class="group-label">Challenge Range — ${esc(w.name)}</span>
+    <span class="group-label">Challenge Range - ${esc(w.name)}</span>
     <p style="font-size:11px; color:#555; margin:4px 0 0;">
       ${esc(w.name)} has <b>${fights}</b> fight${fights === 1 ? '' : 's'}.
       Eligible targets: <b>${rangeDesc}</b>
       (up to 30% more experience, down to 10% less).
       Up to <b>3</b> challenges may be queued per warrior per turn.
-      Challenges are not guaranteed — success depends on warrior presence.
+      Challenges are not guaranteed - success depends on warrior presence.
     </p>
   </div>
   ${bloodChallengesSection}
@@ -3649,7 +3708,7 @@ function buildChallengesTab(team, w) {
   ${avoidWarriorsSection}
   ${pendingSection}
   <div class="group" style="margin:0;">
-    <span class="group-label">Available to Challenge${opponents.length ? ` — ${opponents.length} warrior${opponents.length === 1 ? '' : 's'} in range` : ''}</span>
+    <span class="group-label">Available to Challenge${opponents.length ? ` - ${opponents.length} warrior${opponents.length === 1 ? '' : 's'} in range` : ''}</span>
     <table style="border-collapse:collapse; width:100%; font-size:12px;">
       <thead>
         <tr style="border-bottom:2px solid #ccc; color:#666; font-size:11px;">
@@ -3815,8 +3874,48 @@ function buildArchivesTab(team) {
   let cards = '';
   archived.forEach(a => {
     const rec  = `${a.wins||0}-${a.losses||0}-${a.kills||0}`;
-    const inj  = formatInjuriesText(a.injuries).join('<br>') || '—';
-    const skls = formatSkillsText(a.skills).join('<br>') || '—';
+    const inj  = formatInjuriesText(a.injuries).join('<br>') || '-';
+    const skls = formatSkillsText(a.skills).join('<br>') || '-';
+
+    // Build fight history table for this archived warrior
+    const history = (a.fight_history || []).slice().reverse();
+    let fightRows = '';
+    history.forEach((h, i) => {
+      const res = h.result ? h.result.toUpperCase() : '-';
+      const resColor = res==='WIN' ? '#060' : res==='LOSS' ? '#800' : '#444';
+      const slainNote  = h.warrior_slain  ? ' <b style="color:#800">(SLAIN)</b>'  : '';
+      const killedNote = h.opponent_slain ? ' <b style="color:#060">(KILLED)</b>' : '';
+      const fid = h.fight_id;
+      const viewBtn = fid
+        ? `<button class="sm" onclick="openNarrative(${fid},${h.turn||0})">View Fight</button>`
+        : `<span style="color:#aaa; font-size:10px;">no log</span>`;
+      fightRows += `<tr style="${i%2===0?'background:#f5f4f0;':''}">
+        <td style="padding:2px 6px; text-align:center;">${h.turn||'-'}</td>
+        <td style="padding:2px 6px;">${esc(h.opponent_name||'-')}${killedNote}</td>
+        <td style="padding:2px 6px; color:#555;">${esc(h.opponent_manager_name||'-')}</td>
+        <td style="padding:2px 6px; text-align:center; color:${resColor}; font-weight:bold;">${res}${slainNote}</td>
+        <td style="padding:2px 6px; text-align:center;">${h.minutes||'-'} min</td>
+        <td style="padding:2px 6px;">${viewBtn}</td>
+      </tr>`;
+    });
+    const fightSection = history.length ? `
+      <div style="margin-top:8px;">
+        <div style="color:#666; font-weight:bold; margin-bottom:3px; font-size:11px;">Fight History</div>
+        <div style="overflow-x:auto;">
+        <table class="grid" style="font-size:11px; width:100%;">
+          <thead><tr>
+            <th style="width:40px;">Turn</th>
+            <th style="min-width:130px;">Opponent</th>
+            <th style="width:110px;">Manager</th>
+            <th style="width:60px;">Result</th>
+            <th style="width:60px;">Duration</th>
+            <th style="width:80px;">Narrative</th>
+          </tr></thead>
+          <tbody>${fightRows}</tbody>
+        </table>
+        </div>
+      </div>` : `<div style="margin-top:6px; color:#aaa; font-size:11px;">No fight history recorded.</div>`;
+
     cards += `
 <div class="group" style="margin:6px 4px; background:#f9f7f4;">
   <span class="group-label" style="color:#800;">✝ ${esc(a.name)}</span>
@@ -3828,7 +3927,7 @@ function buildArchivesTab(team) {
       </div>
       <table style="border-collapse:collapse; font-size:11px;">
         ${['strength','dexterity','constitution','intelligence','presence','size'].map(attr => {
-          const deathVal = a[attr] != null ? a[attr] : '—';
+          const deathVal = a[attr] != null ? a[attr] : '-';
           const baseVal  = (a.initial_stats && a.initial_stats[attr] != null) ? ` (${a.initial_stats[attr]})` : '';
           return `<tr><td style="padding:1px 6px; color:#555; width:90px;">${capitalize(attr)}</td>
                <td style="padding:1px 6px; font-weight:bold;">${deathVal}${baseVal}</td></tr>`;
@@ -3844,16 +3943,17 @@ function buildArchivesTab(team) {
       <div style="color:#800; line-height:1.5;">${inj}</div>
     </div>
   </div>
+  ${fightSection}
 </div>`;
   });
 
   return `<div style="padding:6px;">
-    <div style="font-weight:bold; margin-bottom:6px;">Fallen Warriors — ${esc(team.team_name)}</div>
+    <div style="font-weight:bold; margin-bottom:6px;">Fallen Warriors - ${esc(team.team_name)}</div>
     ${cards}
   </div>`;
 }
 function buildReplacementTab(w) {
-  // Living warrior — show placeholder
+  // Living warrior - show placeholder
   if (!w.is_dead && !w.ascended_to_monster) {
     return `<div style="padding:12px; color:#555;">
       <b>Replacement Warrior</b><br><br>
@@ -3862,12 +3962,23 @@ function buildReplacementTab(w) {
     </div>`;
   }
 
+  // HideRecord spoiler gate: block Replacement until the player reads the fatal fight.
+  if (w.is_dead && S.hideRecord && w.death_fight_id_unread) {
+    return `<div style="padding:14px; color:#555;">
+      <b style="color:#800;">⚔ A Warrior Has Fallen</b><br><br>
+      One of your warriors did not survive their last fight.<br><br>
+      Read the fight in the <b>Fights</b> tab to unlock this slot.
+      <br><br>
+      <button onclick="setWTab('fights')">Go to Fights Tab</button>
+    </div>`;
+  }
+
   const teamId = S.sel.teamId;
   const wIdx   = S.sel.wIdx;
   const rs     = S.replacement;
   const hasRs  = rs && rs.teamId === teamId && rs.wIdx === wIdx;
 
-  // Ascended warrior — show special message (only when no roll-up yet)
+  // Ascended warrior - show special message (only when no roll-up yet)
   if (w.ascended_to_monster && !hasRs) {
     return `<div style="padding:14px;">
       <div style="font-weight:bold; color:#844; margin-bottom:10px; font-size:12px; background:#fef8f0; padding:8px; border-left:3px solid #844;">
@@ -3884,21 +3995,21 @@ function buildReplacementTab(w) {
     </div>`;
   }
 
-  // No roll-up yet — show the "roll up" button
+  // No roll-up yet - show the "roll up" button
   if (!hasRs) {
     return `<div style="padding:14px;">
       <div style="font-weight:bold; color:#800; margin-bottom:10px; font-size:12px;">
         ✝ ${esc(w.name)} was slain by ${esc(w.killed_by||'unknown')}.
       </div>
       <p style="color:#555; font-size:11px; margin-bottom:12px;">
-        Roll up a replacement warrior for this slot. They start fresh —
+        Roll up a replacement warrior for this slot. They start fresh -
         your 16 build points apply on top of a random base just like a new team.
       </p>
       <button onclick="initReplacement(${teamId}, ${wIdx})">Roll Up Replacement Warrior</button>
     </div>`;
   }
 
-  // Roll-up state ready — show the full editor
+  // Roll-up state ready - show the full editor
   const base    = rs.base;
   const adds    = rs.adds || {};
   const ATTRS   = ['strength','dexterity','constitution','intelligence','presence','size'];
@@ -3932,7 +4043,7 @@ function buildReplacementTab(w) {
   return `
 <div style="padding:10px;">
   <div style="font-weight:bold; color:#800; margin-bottom:8px; font-size:12px;">
-    ✝ ${esc(w.name)} — Build Replacement Warrior
+    ✝ ${esc(w.name)} - Build Replacement Warrior
   </div>
   <div style="display:flex; gap:20px; flex-wrap:wrap;">
     <table style="border-collapse:collapse;">${spinRows}</table>
@@ -3974,7 +4085,7 @@ function buildReplacementTab(w) {
         </div>` : `
         <div style="margin-top:10px; border-top:1px solid #ccc; padding-top:6px; text-align:center;
                     font-size:10px; color:#888;">
-          Re-roll used — build from this roll.
+          Re-roll used - build from this roll.
         </div>`}
       </div>
     </div>
@@ -4002,7 +4113,7 @@ async function initReplacement(teamId, wIdx) {
 
 async function rpReroll() {
   if (!S.replacement || S.replacement.rerolled) return;
-  if (!confirm('Re-roll your base stats? This is a one-time option — you will have to build from the new roll regardless of the result.')) return;
+  if (!confirm('Re-roll your base stats? This is a one-time option - you will have to build from the new roll regardless of the result.')) return;
   const r = await API.get('/api/rollup_single');
   // Mark rerolled and reset everything except slot identity
   S.replacement.base     = r.base;
@@ -4063,7 +4174,7 @@ async function rpSave(teamId, wIdx) {
       S.replacement   = null;
       S.sel  = {type:'team', teamId};
       S.wTab = 'stats';
-      setMsg('Replacement warrior saved — ' + nm + ' joins the team.', 'ok');
+      setMsg('Replacement warrior saved - ' + nm + ' joins the team.', 'ok');
       render();
     } else {
       alert('Error: ' + r.error);
@@ -4342,18 +4453,18 @@ function attachEvents() {
     openNewsletter();
   });
   bind('btn-league-save', doSaveLeagueSettings);
-  // btn-league-register removed — registration now happens automatically in doSaveLeagueSettings
+  // btn-league-register removed - registration now happens automatically in doSaveLeagueSettings
   bind('btn-league-close', () => { el('league-modal')?.remove(); });
-  // Tree rows and warrior tabs use inline onclick — no binding needed here
+  // Tree rows and warrior tabs use inline onclick - no binding needed here
 
-  // Warrior tabs use inline onclick="setWTab(...)" — no binding needed
+  // Warrior tabs use inline onclick="setWTab(...)" - no binding needed
 
   // Warrior changes auto-save via scheduleAutoSave()
 
   // --- Create team events ---
   bind('btn-ct-cancel', () => {
   S.view = 'main';
-  // S.ct is intentionally NOT cleared here — cancelling should not allow
+  // S.ct is intentionally NOT cleared here - cancelling should not allow
   // a fresh set of stat rolls. The same rollup is shown if the user re-enters.
   S.replacingTeam = null;
   S.msg = '';
@@ -4408,7 +4519,7 @@ async function doLogin() {
 
     // If local auth fails and a server URL is set, try authenticating against
     // the league server so users can recover their account on a new machine.
-    // Also try window.location.origin as a fallback — remote players connecting
+    // Also try window.location.origin as a fallback - remote players connecting
     // via HTTP may have S.serverUrl set to localhost if it wasn't corrected.
     if (!r.success) {
       const candidateUrls = [...new Set([
@@ -4416,7 +4527,7 @@ async function doLogin() {
         (window.location.protocol !== 'file:' ? window.location.origin : null),
       ].filter(Boolean))];
       if (!candidateUrls.length) { setMsg(r.error || 'Login failed.', 'err'); render(); return; }
-      setMsg('No local account found — checking league server...', ''); render();
+      setMsg('No local account found - checking league server...', ''); render();
       try {
         let serverReg = null, base = '';
         for (const candidate of candidateUrls) {
@@ -4433,7 +4544,7 @@ async function doLogin() {
           setMsg(serverReg?.error || r.error || 'Login failed.', 'err'); render(); return;
         }
 
-        // Credentials confirmed — download teams from server
+        // Credentials confirmed - download teams from server
         const teamsResp = await fetch(base + '/api/team/get_my_team', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ manager_id: serverReg.manager_id, password: pass }),
@@ -4487,7 +4598,7 @@ async function doLogin() {
 
         const tc = teamIds.length;
         const teamMsg = tc ? `${tc} team${tc > 1 ? 's' : ''} downloaded.`
-                           : 'No teams on server yet — create your first team.';
+                           : 'No teams on server yet - create your first team.';
         setMsg(`Account recovered from server. ${teamMsg}`, 'ok');
         S.view = 'main';
         await loadTeams();
@@ -4538,7 +4649,7 @@ async function doLogin() {
     await loadTeams();
     await loadLeagueSettings();
     await _loadLegacyTeams();
-    // Sync S.account.id with the league manager ID if they differ — the league // This will be replaced by _persistAccount
+    // Sync S.account.id with the league manager ID if they differ - the league // This will be replaced by _persistAccount
     // settings ID is server-authoritative; the local account.json may be stale.
     if (S.league.managerId && S.account && S.account.id !== S.league.managerId) {
       S.account.id = S.league.managerId;
@@ -4547,7 +4658,7 @@ async function doLogin() {
     }
     render();
     await checkLeagueResetOnLogin(); // This will refresh S.league.managerId etc.
-    // r.deleted_teams is never set by the local login handler — fetch from the
+    // r.deleted_teams is never set by the local login handler - fetch from the
     // league server instead so admin-deleted teams are cleaned up on login.
     if (!S.league.password) S.league.password = pass;
     {
@@ -4556,10 +4667,13 @@ async function doLogin() {
       if (mid && S.serverUrl && !pendingDeleted?.length) {
         try {
           const base = S.serverUrl.replace(/\/+$/, '');
+          const ctrl = new AbortController();
+          const timeout = setTimeout(() => ctrl.abort(), 3000);
           const delResp = await fetch(base + '/api/check_deleted_teams', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ manager_id: String(mid) }),
-          }).then(res => res.json()).catch(() => null);
+            signal: ctrl.signal,
+          }).then(res => res.json()).catch(() => null).finally(() => clearTimeout(timeout));
           if (delResp?.success) pendingDeleted = delResp.deleted_teams;
         } catch (_) {}
       }
@@ -4629,20 +4743,20 @@ async function doCreateAccount() {
   if (pass !== pass2) { setMsg('Passwords do not match.', 'err'); render(); return; }
 
   try {
-    // Step 1 — server-side uniqueness check
+    // Step 1 - server-side uniqueness check
     const check = await API.post('/api/check_manager_name', { manager_name: name });
     if (!check || check.available === false) {
       setMsg(check?.error || 'That manager name is already taken. Pick another.', 'err');
       render(); return;
     }
 
-    // Step 2 — register on the league server to get a unique account ID
+    // Step 2 - register on the league server to get a unique account ID
     const reg = await API.post('/api/register', { manager_name: name, password: pass });
     if (!reg || !reg.success) {
       setMsg(reg?.error || 'Registration failed.', 'err'); render(); return;
     }
 
-    // Step 3 — persist to FSA account.json with a locally-derived hash
+    // Step 3 - persist to FSA account.json with a locally-derived hash
     const salt = randomHex(16);
     const pw_hash = await sha256Hex(salt + pass);
     const account = {
@@ -4668,7 +4782,7 @@ async function doCreateAccount() {
       password: pass,
     });
 
-    // Step 4 — persist league connection info so upload/download work right away
+    // Step 4 - persist league connection info so upload/download work right away
     const settings = await Store.readSettings();
     settings.server_url    = S.serverUrl;
     settings.manager_id    = reg.manager_id;
@@ -4685,7 +4799,7 @@ async function doCreateAccount() {
     S.msg  = '';
     render();
 
-    // Step 5 — auto-download a fresh random team roll so the user is ready
+    // Step 5 - auto-download a fresh random team roll so the user is ready
     // to build their first team right away (matches the design the user described).
     initCreateTeam();
   } catch (err) {
@@ -4705,12 +4819,12 @@ async function doSaveWarrior() {
   // Hard gate: if the stats-tab inputs aren't in the DOM (user moved to a
   // different sub-tab like Fights/Fight Options/Archives while a 700ms
   // auto-save timer was still pending), bail. Otherwise we'd read a bunch of
-  // nulls and save `trains: []`, `armor: 'None'`, etc. — wiping the warrior's
+  // nulls and save `trains: []`, `armor: 'None'`, etc. - wiping the warrior's
   // equipment and training. The switch-warrior path calls flushSave() *before*
   // the DOM is rebuilt, so this guard doesn't interfere with that case.
-  if (!el('sel-armor')) { console.debug('[save] skipped — stats-tab DOM not present'); return; }
+  if (!el('sel-armor')) { console.debug('[save] skipped - stats-tab DOM not present'); return; }
 
-  // Collect strategies — numbered rows only saved if trigger is set
+  // Collect strategies - numbered rows only saved if trigger is set
   const strats = [];
   for (let i = 0; i < 5; i++) {
     const trigger = getSelectVal(`#strat-body select[data-si="${i}"][data-sf="trigger"]`);
@@ -4722,7 +4836,7 @@ async function doSaveWarrior() {
     const def      = getSelectVal(`#strat-body select[data-si="${i}"][data-sf="defense_point"]`) || 'None';
     strats.push({trigger, style, activity, aim_point:aim, defense_point:def});
   }
-  // D row — trigger is always "Always (Default Loop)" regardless of DOM
+  // D row - trigger is always "Always (Default Loop)" regardless of DOM
   const dStyle    = getSelectVal('#strat-body select[data-si="D"][data-sf="style"]')    || 'Strike';
   const dActRaw   = getInputVal('#strat-body input[data-si="D"][data-sf="activity"]');
   const dActivity = (dActRaw !== '' && dActRaw !== null) ? parseInt(dActRaw) : 5;
@@ -4733,7 +4847,7 @@ async function doSaveWarrior() {
   // Training
   const trains = [
     getSelectVal('#sel-t1'), getSelectVal('#sel-t2'), getSelectVal('#sel-t3')
-  ].filter(t => t && t !== '—');
+  ].filter(t => t && t !== '-');
 
   const body = {
     team_id     : teamId,
@@ -4932,6 +5046,11 @@ async function doSaveTeam() {
       intelligence: w.base.intelligence+ (a.intelligence||0),
       presence    : w.base.presence    + (a.presence||0),
       size        : w.base.size        + (a.size||0),
+      armor           : w.armor || 'None',
+      helm            : w.helm || 'None',
+      primary_weapon  : w.primary_weapon || 'Open Hand',
+      secondary_weapon: w.secondary_weapon || 'Open Hand',
+      backup_weapon   : w.backup_weapon || null,
     };
   });
 
@@ -5051,7 +5170,7 @@ function buildTurnResults() {
       <td style="padding:3px 8px;">${esc(b.opponent_name)}<br><span style="color:#888;font-size:10px;">${esc(b.opponent_team)}</span></td>
       <td style="padding:3px 8px; text-align:center;">${esc(b.opponent_race)}</td>
       <td style="padding:3px 8px; text-align:center;">${b.minutes} min ${typeTag}</td>
-      <td style="padding:3px 8px; font-size:10px; color:#333;">${trainLines||'—'}</td>
+      <td style="padding:3px 8px; font-size:10px; color:#333;">${trainLines||'-'}</td>
       <td style="padding:3px 8px;">${viewBtn}</td>
     </tr>`;
   });
@@ -5070,7 +5189,7 @@ function buildTurnResults() {
         ${names}<br>
         <span style="color:#666; font-size:11px;">
           Slew a monster and has been absorbed into The Monsters roster.
-          A replacement warrior slot is now available — visit the warrior's Replacement tab to roll up a recruit.
+          A replacement warrior slot is now available - visit the warrior's Replacement tab to roll up a recruit.
         </span>
       </div>
     </div>`;
@@ -5120,13 +5239,13 @@ function buildTurnResults() {
    ============================================================ */
 function _damageClass(text) {
   const t = text.toLowerCase();
-  // Light — superficial, grazes, nicks, barely connects
+  // Light - superficial, grazes, nicks, barely connects
   if (/superficial|shallow|barely|minor|skim|kisses|merely|beads|sting|prick|lightly|scrapes|nicks|glances|slap|little real harm|little more than|little effect/.test(t))
     return 'nar-damage-light';
-  // Heavy — horrific, savage, bone-breaking, devastating
+  // Heavy - horrific, savage, bone-breaking, devastating
   if (/horrific|terrible|savage|gruesome|brutal|devastating|shattering|violently|gaping|ghastly|erupts|sprays wildly|impales|skewered|ragged|bone-|nearly severing|nearly takes|wide open|ruin|pulps/.test(t))
     return 'nar-damage-heavy';
-  // Default — medium
+  // Default - medium
   return 'nar-damage-medium';
 }
 
@@ -5188,7 +5307,7 @@ function narrativeToHtml(text) {
           const L = ln.slice(0, vsIdx).trim();
           const R = ln.slice(vsIdx + 8).trim();
           if (/\(\d+[-–]\d+/.test(L)) {
-            // Warrior name line — bold + larger
+            // Warrior name line - bold + larger
             const fw = p => {
               const m = p.match(/^(.*?)\s+(\([^)]+\))$/);
               return m
@@ -5197,7 +5316,7 @@ function narrativeToHtml(text) {
             };
             out.push(`<div class="nar-row" style="margin:6px 0"><span class="nar-col-l">${fw(L)}</span><span class="nar-col-vs">vs</span><span class="nar-col-r">${fw(R)}</span></div>`);
           } else {
-            // Team / race lines — same column structure, empty vs cell so columns align
+            // Team / race lines - same column structure, empty vs cell so columns align
             out.push(`<div class="nar-row"><span class="nar-col-l">${esc(L)}</span><span class="nar-col-vs"></span><span class="nar-col-r">${esc(R)}</span></div>`);
           }
         } else {
@@ -5213,7 +5332,7 @@ function narrativeToHtml(text) {
 
       if (!ln.trim()) { closeStrat(); out.push('<div style="height:6px"></div>'); continue; }
 
-      // Strategy table header — detect column positions first, then parse
+      // Strategy table header - detect column positions first, then parse
       if (/^TRIGGER\s/.test(ln.trim())) {
         detectCols(ln);
         const c = parseStrat(ln);
@@ -5245,8 +5364,8 @@ function narrativeToHtml(text) {
         continue;
       }
 
-      // Prose lines — bold warrior name prefix + any ALL-CAPS items (armor, weapons)
-      const pm = ln.match(/^([A-Z][A-Z ']{2,}?)(\s+(?:is |weighs |Has |enters |fights |has ))/);
+      // Prose lines - bold warrior name prefix + any ALL-CAPS items (armor, weapons)
+      const pm = ln.match(/^([A-Z][A-Z ']{2,}?)(\s+(?:is |weighs |Has |enters |fights |has |wears |carries ))/);
       if (pm) {
         const name = pm[1];
         const rest = ln.slice(name.length);
@@ -5262,7 +5381,7 @@ function narrativeToHtml(text) {
     if (sepCount >= 3) {
       if (/^\*\*\*.*\*\*\*$/.test(ln))                                         { out.push(`<div class="nar-event">${esc(ln)}</div>`);   continue; }
       if (/^MINUTE\s+\d+/.test(ln.trim()))                                      { out.push(`<div class="nar-minute">${esc(ln)}</div>`);  continue; }
-      if (/SLAIN/.test(ln) || /collapses/i.test(ln) || /\bfalls\b/i.test(ln)) { out.push(`<div class="nar-death">${esc(ln)}</div>`);   continue; }
+      if (/SLAIN/.test(ln) || /collapses/i.test(ln)) { out.push(`<div class="nar-death">${esc(ln)}</div>`);   continue; }
       if (/wins/i.test(ln) && (/judge/i.test(ln) || /victory/i.test(ln)))      { out.push(`<div class="nar-win">${esc(ln)}</div>`);     continue; }
       if (/trained/i.test(ln) || /observed/i.test(ln))                         { out.push(`<div class="nar-training">${esc(ln)}</div>`); continue; }
       if (/^\s+HP/.test(ln) || /HP:/.test(ln) || /damage/i.test(ln))           { out.push(`<div class="nar-hp">${esc(ln)}</div>`);      continue; }
@@ -5315,33 +5434,54 @@ async function openNarrative(fightId, turnNum) {
     if (r.success) {
       S.narrative = { text: r.narrative, title: `Fight #${fightId}` };
       showNarrativeOverlay();
+      await _unlockDeathFight(fightId);
       return;
     }
   } catch(e) {}
 
-  // 2. Not found locally — try the league server directly (for downloaded turns)
-  const lg = S.league;
-  if (lg?.url && lg?.managerId && turnNum) {
+  // 2. Fetch from league server via API.get (uses S.serverUrl - more reliable
+  //    than S.league.url which requires the manager to have logged in).
+  //    Both manager_id and password are sent when available so the server can
+  //    authenticate and prioritise the player's own result file (correct perspective).
+  if (turnNum) {
     try {
-      const url = `${lg.url}/api/fight_log` +
-        `?turn=${turnNum}` +
-        `&fight_id=${fightId}` +
-        `&manager_id=${encodeURIComponent(lg.managerId)}` +
-        `&password=${encodeURIComponent(lg.password||'')}`;
-      const ctrl = new AbortController();
-      const tmo  = setTimeout(() => ctrl.abort(), 15000);
-      const res  = await fetch(url, {signal: ctrl.signal});
-      clearTimeout(tmo);
-      const d = await res.json();
+      const lg = S.league;
+      let qs = `turn=${turnNum}&fight_id=${fightId}`;
+      if (lg?.managerId) qs += `&manager_id=${encodeURIComponent(lg.managerId)}`;
+      if (lg?.password)  qs += `&password=${encodeURIComponent(lg.password)}`;
+      const d = await API.get(`/api/fight_log?${qs}`);
       if (d.success) {
         S.narrative = { text: d.narrative, title: `Fight #${fightId} (Turn ${turnNum})` };
         showNarrativeOverlay();
+        await _unlockDeathFight(fightId);
         return;
       }
     } catch(e) {}
   }
 
   alert('Fight log not available. The narrative may not have been saved for this fight.');
+}
+
+async function _unlockDeathFight(fightId) {
+  // If this fight killed one of the player's warriors and HideRecord is on,
+  // clear the gate flag now that they've read it and unlock the Replacement tab.
+  const tid = S.sel?.teamId;
+  const team = tid != null ? S.teams[tid] : null;
+  if (!team) return;
+  let changed = false;
+  for (const w of team.warriors || []) {
+    if (w && w.death_fight_id_unread === fightId) {
+      delete w.death_fight_id_unread;
+      changed = true;
+    }
+  }
+  if (changed) {
+    await Store.writeTeam(team);
+    S.teams[tid] = team;
+    // Switch to Replacement tab now that the gate is lifted
+    S.wTab = 'replacement';
+    render();
+  }
 }
 
 function closeNarrative() {
@@ -5387,7 +5527,7 @@ async function doRunTurn(teamId) {
       S.newsletters = null;     // invalidate newsletter cache
       S.newsletterText = null;  // force fresh load on next view
       S.turnResults = r;
-      // Turn advanced — invalidate scout cache so locks clear on next view
+      // Turn advanced - invalidate scout cache so locks clear on next view
       S.scout.loaded     = false;
       S.scout.selections = [];
       S.scout.slotsLeft  = 3;
@@ -5492,7 +5632,7 @@ function buildNewsletterPanel() {
 
   const selector = turns.length
     ? `<select onchange="loadNewsletterTurn(parseInt(this.value))" style="font-size:11px;">${opts}</select>`
-    : `<span style="color:#888;font-size:11px;">No newsletters yet — run a turn first.</span>`;
+    : `<span style="color:#888;font-size:11px;">No newsletters yet - run a turn first.</span>`;
 
   let body = '';
   if (!turns.length) {
@@ -5529,7 +5669,7 @@ async function loadLeagueSettings() {
   try {
     const r = await API.get('/api/league_settings');
     // LocalAPI returns a flat object {url, managerId, managerName, password, ...}
-    // (no success/settings wrapper) — update S.league field-by-field.
+    // (no success/settings wrapper) - update S.league field-by-field.
     if (r) {
       if (r.url)          S.league.url         = r.url;
       if (r.managerId)    S.league.managerId   = r.managerId;
@@ -5542,40 +5682,56 @@ async function loadLeagueSettings() {
     
     // Fetch feature flags and last upload timestamp from league server if connected
     if (S.league.url && S.league.managerId) {
-      // Fetch feature flags (public, no auth needed)
+      // Fetch feature flags (public, no auth needed) - with 3-second timeout
       try {
-        const flagResp = await fetch(S.league.url + '/api/flags');
-        if (flagResp.ok) {
-          const flagData = await flagResp.json();
-          if (flagData.success) {
-            S.league.flags = {
-              show_favorite_weapon: flagData.show_favorite_weapon || false,
-              show_luck_factor:     flagData.show_luck_factor     || false,
-              show_max_hp:          flagData.show_max_hp          || false,
-            };
-            refreshContent();
+        const ctrl = new AbortController();
+        const timeout = setTimeout(() => ctrl.abort(), 3000);
+        try {
+          const flagResp = await fetch(S.league.url + '/api/flags', {signal: ctrl.signal});
+          clearTimeout(timeout);
+          if (flagResp.ok) {
+            const flagData = await flagResp.json();
+            if (flagData.success) {
+              S.league.flags = {
+                show_favorite_weapon: flagData.show_favorite_weapon || false,
+                show_luck_factor:     flagData.show_luck_factor     || false,
+                show_max_hp:          flagData.show_max_hp          || false,
+              };
+              refreshContent();
+            }
           }
+        } catch(e) {
+          clearTimeout(timeout);
+          /* silent */
         }
       } catch(e) { /* silent */ }
 
       try {
-        const statusResp = await fetch(S.league.url + '/api/status');
-        if (statusResp.ok) {
-          const statusData = await statusResp.json();
-          if (statusData.managers) {
-            const mgr = statusData.managers.find(m => m.manager_id === S.league.managerId);
-            if (mgr && mgr.last_upload_timestamp) {
-              // Convert timestamp string (YYYY-MM-DD HH:MM:SS) to toLocaleString() format
-              try {
-                const uploadDate = new Date(mgr.last_upload_timestamp.replace(' ', 'T'));
-                S.league.lastUpload = uploadDate.toLocaleString();
-              } catch(e) {
-                S.league.lastUpload = mgr.last_upload_timestamp; // fallback to raw string
+        const ctrl = new AbortController();
+        const timeout = setTimeout(() => ctrl.abort(), 3000);
+        try {
+          const statusResp = await fetch(S.league.url + '/api/status', {signal: ctrl.signal});
+          clearTimeout(timeout);
+          if (statusResp.ok) {
+            const statusData = await statusResp.json();
+            if (statusData.managers) {
+              const mgr = statusData.managers.find(m => m.manager_id === S.league.managerId);
+              if (mgr && mgr.last_upload_timestamp) {
+                // Convert timestamp string (YYYY-MM-DD HH:MM:SS) to toLocaleString() format
+                try {
+                  const uploadDate = new Date(mgr.last_upload_timestamp.replace(' ', 'T'));
+                  S.league.lastUpload = uploadDate.toLocaleString();
+                } catch(e) {
+                  S.league.lastUpload = mgr.last_upload_timestamp; // fallback to raw string
+                }
               }
             }
           }
+        } catch(e) {
+          clearTimeout(timeout);
+          /* silent - don't interrupt if status fetch fails */
         }
-      } catch(e) { /* silent — don't interrupt if status fetch fails */ }
+      } catch(e) { /* silent */ }
     }
   } catch(e) {}
 }
@@ -5610,7 +5766,7 @@ function showLeagueSettings() {
       ${lg.managerId ? `<tr><td style="padding:4px 8px;color:#666;font-size:10px;">Manager ID</td><td style="font-size:10px;color:#666;">${esc(lg.managerId)}</td></tr>` : ''}
     </table>
     ${lg.managerId
-      ? `<div style="font-size:10px;color:#060;padding:4px 8px;">✓ Registered as ${esc(lg.managerName||'')} — ID: ${esc(lg.managerId)}</div>`
+      ? `<div style="font-size:10px;color:#060;padding:4px 8px;">✓ Registered as ${esc(lg.managerName||'')} - ID: ${esc(lg.managerId)}</div>`
       : '<div style="font-size:10px;color:#555;padding:4px 8px;">Not yet registered. Clicking Register will register you with the server.</div>'}
     <div style="margin-top:10px;display:flex;gap:6px;justify-content:flex-end;">
       ${lg.managerId ? `<button id="btn-league-rereg" onclick="doReRegisterLeague()" title="Use this if the server was reset and no longer recognizes your manager">Re-register</button>` : ''}
@@ -5677,7 +5833,7 @@ async function doSaveLeagueSettings() {
     });
     _leagueMsg(
       S.league.managerId
-        ? '✓ Registered as ' + S.league.managerName + ' — settings saved.'
+        ? '✓ Registered as ' + S.league.managerName + ' - settings saved.'
         : 'Settings saved.',
       'ok'
     );
@@ -5838,6 +5994,7 @@ async function doLeagueGetResults() {
     const r = await fetch(`${lg.url}/api/results?manager_id=${encodeURIComponent(lg.managerId)}&password=${encodeURIComponent(pw)}`);
     const d = await r.json();
     if (!d.success) { setMsg('Error: ' + d.error, 'err'); render(); return; }
+    if (d.already_current) { setMsg(`Turn ${d.turn} results already downloaded - nothing new to apply.`, 'ok'); render(); return; }
     const teamId = S.sel.teamId || S.account?.team_ids?.[0];
     if (!teamId) { setMsg('Select your team first.', 'err'); render(); return; }
     const applied = await API.post('/api/apply_league_results', {team_id: teamId, result: d.result || (d.results&&d.results[0]), rerun: !!S._pendingRerun});
@@ -5901,7 +6058,7 @@ function _showDownloadProgress(steps, currentIdx, error) {
             font-family:sans-serif;">
   <div style="background:#6b4c2a;color:#f4f1ea;padding:6px 12px;font-weight:bold;font-size:13px;
               border-radius:2px 2px 0 0;">
-    BLOODSPIRE — Downloading Results
+    BLOODSPIRE - Downloading Results
   </div>
   <div style="padding:12px 8px 4px;">
     <table style="border-collapse:collapse;width:100%;">${rows}</table>
@@ -5972,7 +6129,7 @@ function _showUploadProgress(steps, currentIdx, error) {
             font-family:sans-serif;">
   <div style="background:#6b4c2a;color:#f4f1ea;padding:6px 12px;font-weight:bold;font-size:13px;
               border-radius:2px 2px 0 0;">
-    BLOODSPIRE — Uploading Teams
+    BLOODSPIRE - Uploading Teams
   </div>
   <div style="padding:12px 8px 4px;">
     <table style="border-collapse:collapse;width:100%;">${rows}</table>
@@ -5999,7 +6156,7 @@ async function doLeagueDownloadAll() {
 
   try {
     // ── Step 1-2: Connect directly to league server from the browser ──────
-    // This bypasses the Python proxy entirely — no urllib timeout possible.
+    // This bypasses the Python proxy entirely - no urllib timeout possible.
     tick(1); await new Promise(r => setTimeout(r, 60));
     tick(2); await new Promise(r => setTimeout(r, 60));
     tick(3); // Authenticating + fetching
@@ -6023,6 +6180,16 @@ async function doLeagueDownloadAll() {
     }
     if (!resultsResp.success) {
       fail(resultsResp.error || 'Server returned an error.', 3); return;
+    }
+
+    if (resultsResp.already_current) {
+      _showDownloadProgress(_DL_STEPS, _DL_STEPS.length, null);
+      const dlModal = document.getElementById('dl-progress-modal');
+      if (dlModal) {
+        const footer = dlModal.querySelector('div[style*="color:#060"]') || dlModal.querySelector('div[style*="color:#555"]');
+        if (footer) footer.textContent = `Turn ${resultsResp.turn} already downloaded - nothing new to apply.`;
+      }
+      return;
     }
 
     const turnNum    = resultsResp.turn;
@@ -6101,7 +6268,7 @@ async function doLeagueDownloadAll() {
 
     _showDownloadProgress(_DL_STEPS, _DL_STEPS.length, null);
 
-    // Turn downloaded — invalidate scout cache so locks clear on next view
+    // Turn downloaded - invalidate scout cache so locks clear on next view
     S.scout.loaded     = false;
     S.scout.selections = [];
     S.scout.slotsLeft  = 3;
@@ -6136,7 +6303,7 @@ async function doLeagueDownloadAll() {
 }
 
 /* ============================================================
-   TEAM MANAGEMENT — Replace, Remove, Run All, Upload All
+   TEAM MANAGEMENT - Replace, Remove, Run All, Upload All
    ============================================================ */
 
 async function setRunNextTurn(teamId, value) {
@@ -6233,7 +6400,7 @@ async function runAllTeams() {
   }
   const wins  = (r.results||[]).reduce((a,x)=>a+(x.bouts||[]).filter(b=>b.result==='WIN').length,0);
   const total = (r.results||[]).reduce((a,x)=>a+(x.bouts||[]).length,0);
-  setMsg(`Turn ${r.turn_number} complete — ${wins}W/${total-wins}L across ${ids.length} team(s).`, 'ok');
+  setMsg(`Turn ${r.turn_number} complete - ${wins}W/${total-wins}L across ${ids.length} team(s).`, 'ok');
   S.sel = {type: null};
   S.scout.loaded     = false;
   S.scout.selections = [];
@@ -6252,13 +6419,13 @@ async function checkLeagueResetOnLogin() {
   if (document.getElementById('league-reset-modal') || document.getElementById('league-rerun-modal')) return;
   try {
     const r = await API.post('/api/league/check_reset', { manager_id: S.league.managerId });
-    if (!r.success) return; // silent on error — don't block login
+    if (!r.success) return; // silent on error - don't block login
     if (r.reset_detected) {
       _showLeagueResetModal(r.server_reset_count, { blocking: true });
     } else if (r.rerun_detected) {
       _showLeagueRerunModal(r.rerun_turn, r.rerun_count);
     }
-  } catch(e) { /* silent — server may be unreachable */ }
+  } catch(e) { /* silent - server may be unreachable */ }
 }
 
 async function checkLeagueReset() {
@@ -6275,7 +6442,7 @@ async function checkLeagueReset() {
     } else if (r.rerun_detected) {
       _showLeagueRerunModal(r.rerun_turn, r.rerun_count);
     } else {
-      _leagueMsg('Server sync OK — no reset or rerun pending.', 'ok');
+      _leagueMsg('Server sync OK - no reset or rerun pending.', 'ok');
       setTimeout(() => { const m = el('lm-msg'); if (m) m.style.display = 'none'; }, 3000);
     }
   } catch(e) {
@@ -6317,15 +6484,18 @@ async function applyLeagueReset(serverResetCount) {
     server_reset_count: serverResetCount,
     type: 'reset',
   });
+  if (!r.success) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Clear My Records & Sync'; }
+    setMsg('Reset error: ' + r.error, 'err'); render(); return;
+  }
   document.getElementById('league-reset-modal')?.remove();
-  if (!r.success) { setMsg('Reset error: ' + r.error, 'err'); render(); return; }
 
-  // Clear stale newsletter cache — server only has current-season newsletters
+  // Clear stale newsletter cache - server only has current-season newsletters
   await Store.clearNewsletters().catch(() => {});
   S.newsletters = null; S.newsletterText = null; S.newsletterTurn = null;
 
   if (r.full_reset) {
-    // Full wipe: manager no longer exists on server — clear local league identity
+    // Full wipe: manager no longer exists on server - clear local league identity
     S.league.managerId   = null;
     S.league.managerName = null;
     await API.post('/api/league_settings', { managerId: '', managerName: '' });
@@ -6340,7 +6510,16 @@ async function applyLeagueReset(serverResetCount) {
         if (S.teams) S.teams[team_id] = team;
       }
     }
-    setMsg('Records reverted to Turn 1 — ready to fight! Download results to get the new newsletter.', 'ok');
+    // Clear archived/legacy teams - they contribute to the manager record calculation
+    // and must not survive a revert-to-turn-1.
+    try {
+      const archIds = await Store.listArchivedTeamIds();
+      for (const aid of archIds) {
+        await fsaDeleteFile(`archives/team_${String(aid).padStart(4,'0')}.json`).catch(() => {});
+      }
+    } catch(e) { /* non-fatal */ }
+    S.legacyTeams = [];
+    setMsg('Records reverted to Turn 1 - ready to fight! Download results to get the new newsletter.', 'ok');
   }
   render();
 }
@@ -6772,51 +6951,54 @@ async function init() {
     return;
   }
   console.log('Initializing Bloodspire Client...');
-  
+
   // ============================================================
   // STEP 1: Check for local backend server (Zero-Click Mode)
+  // SKIP for Electron - Electron mode uses direct filesystem access
   // ============================================================
-  let localCheck = { success: false };
-  try {
-    localCheck = await fetch('/api/local/status').then(r => r.json()).catch(() => ({ success: false }));
-    
-    if (!localCheck.success && (window.location.protocol === 'file:' || window.location.hostname === 'localhost')) {
-      localCheck = await fetch('http://localhost:8766/api/local/status').then(r => r.json()).catch(() => ({ success: false }));
-    }
+  if (!window.electronAPI) {
+    let localCheck = { success: false };
+    try {
+      localCheck = await fetch('/api/local/status').then(r => r.json()).catch(() => ({ success: false }));
 
-    if (localCheck.success && localCheck.is_local_backend) {
-      console.log('Running in local backend mode');
-      S.isLocalBackend = true;
-      S.folderReady = true;
-      // Prefer the URL the page was actually served from so remote players
-      // get the host's Tailscale/LAN IP, not a hardcoded localhost.
-      const pageOrigin = (window.location.protocol !== 'file:') ? window.location.origin : null;
-      S.localBaseUrl = pageOrigin || localCheck.server_url || 'http://localhost:8766';
-      if (!S.serverUrl || S.serverUrl === DEFAULT_SERVER_URL) S.serverUrl = S.localBaseUrl;
-      
-      const localAcc = await LocalAPI.get('/api/account');
-      if (localAcc.success) {
-        S.savedManagerName = localAcc.account.manager_name;
-        S.savedRememberMe = localAcc.account.remember !== false;
-        S.savedPassword = localAcc.account.password_plaintext || '';
-        S.loginTab = 'login';
+      if (!localCheck.success && (window.location.protocol === 'file:' || window.location.hostname === 'localhost')) {
+        localCheck = await fetch('http://localhost:8766/api/local/status').then(r => r.json()).catch(() => ({ success: false }));
       }
 
-      // Load persisted league settings (manager_id etc.) from server-side client store
-      await loadLeagueSettings();
+      if (localCheck.success && localCheck.is_local_backend) {
+        console.log('Running in local backend mode');
+        S.isLocalBackend = true;
+        S.folderReady = true;
+        // Prefer the URL the page was actually served from so remote players
+        // get the host's Tailscale/LAN IP, not a hardcoded localhost.
+        const pageOrigin = (window.location.protocol !== 'file:') ? window.location.origin : null;
+        S.localBaseUrl = pageOrigin || localCheck.server_url || 'http://localhost:8766';
+        if (!S.serverUrl || S.serverUrl === DEFAULT_SERVER_URL) S.serverUrl = S.localBaseUrl;
 
-      // Pre-load game data so Stats/Strats tab is ready immediately after login
-      try {
-        const gd = await API.get('/api/game_data');
-        if (gd && !gd.error) S.gd = gd;
-      } catch(e) {}
+        const localAcc = await LocalAPI.get('/api/account');
+        if (localAcc.success) {
+          S.savedManagerName = localAcc.account.manager_name;
+          S.savedRememberMe = localAcc.account.remember !== false;
+          S.savedPassword = localAcc.account.password_plaintext || '';
+          S.loginTab = 'login';
+        }
 
-      S.view = 'login';
-      render();
-      return;
+        // Load persisted league settings (manager_id etc.) from server-side client store
+        await loadLeagueSettings();
+
+        // Pre-load game data so Stats/Strats tab is ready immediately after login
+        try {
+          const gd = await API.get('/api/game_data');
+          if (gd && !gd.error) S.gd = gd;
+        } catch(e) {}
+
+        S.view = 'login';
+        render();
+        return;
+      }
+    } catch(e) {
+      console.debug('Local backend check skipped:', e.message);
     }
-  } catch(e) {
-    console.debug('Local backend check skipped:', e.message);
   }
 
   // ============================================================
