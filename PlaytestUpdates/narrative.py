@@ -665,13 +665,13 @@ _OVERENCUMBERED_LINES = [
 
 _OVERENCUMBERED_PREFIGHT_LINES = [
     "{warrior} enters the arena already straining under armor that exceeds {his} strength.",
-    "The crowd murmurs as {warrior} takes the field — that armor is clearly beyond {his} frame.",
+    "The crowd murmurs as {warrior} takes the field. That armor is clearly beyond {his} frame.",
     "{warrior} steps onto the sand in gear too heavy for {his} build. It will cost {him}.",
     "Before a single blow is thrown, {warrior}'s over-heavy armor is already working against {him}.",
-    "{warrior} is burdened from the moment {he} sets foot on the sand — that armor is too heavy for {his} strength.",
+    "{warrior} is burdened from the moment {he} sets foot on the sand, carrying armor far too heavy for {his} strength.",
     "It is plain to the crowd that {warrior}'s armor exceeds {his} strength. {he} will pay for that choice.",
     "{warrior} marches out bearing armor {his} body was not built to carry.",
-    "The arena master eyes {warrior}'s kit — that iron exceeds {his} strength, and the fight has not even begun.",
+    "The arena master eyes {warrior}'s kit, noting that the heavy iron exceeds {his} strength before the fight has even begun.",
     "{warrior} is already fighting the weight of {his} armor before the first blow is struck.",
     "That armor looks impressive on {warrior}, but it is heavier than {his} frame can handle.",
 ]
@@ -716,76 +716,145 @@ STYLE_INTENT_POOLS: dict[str, list[str]] = {
         "{name} drives suddenly forward, {weapon} whistling through the air",
         "{name} attacks in a berserker rage",
         "{name} hurls {himself} forward with reckless abandon",
+        "{name} unleashes a terrifying, bloodthirsty roar and storms forward",
+        "{name} abandons all pretense of defense, hunting only for a slaughter",
+        "{name} swings with murderous intent, completely blinded by battle-fury",
+        "{name} presses a chaotic, savage assault meant to completely butcher {foe}",
+        "{name} storms the line, bringing down a desperate, bone-crushing strike",
+        "{name} drives forward like a madman, looking to hack {foe} to pieces",
     ],
     "Wall of Steel": [
         "{name} relentlessly presses forward with {his} {weapon}",
         "{name} creates a whirling wall of steel",
         "{name} attacks in a flurry of blows",
-        "{name} hammers away with machine-like persistence",
+        "{name} hammers away with tireless, rhythmic persistence",
+        "{name} drives an unyielding tempest of iron at {foe}",
+        "{name} maintains an absolute, suffocating pressure",
+        "{name} unleashes a ceaseless, crushing barrage of strikes",
+        "{name} locks down the defensive line, advancing grimly",
+        "{name} dictates the rhythm of combat with a relentless cadence",
     ],
     "Lunge": [
         "{name} darts forward, looking for an opening",
         "{name} probes for a weakness in {foe}'s defense",
         "{name} moves with quick, precise footwork",
         "{name} circles {foe}, waiting for the perfect moment",
+        "{name} violently explodes forward from a crouch",
+        "{name} extends {his} reach to its absolute limit, striking hard",
+        "{name} drives a sudden, piercing line of attack",
+        "{name} shifts weight instantly to launch a low, flashing strike",
+        "{name} closes the distance in a single, desperate stride",
+        "{name} throws a cunning feint before committing to a hard stab",
+        "{name} lunges cleanly through a sudden gap in the guard",
     ],
     "Bash": [
         "{name} winds up for a crushing blow",
         "{name} drives forward with brute force",
         "{name} attempts to batter through {foe}'s defenses",
+        "{name} puts the entirety of {his} weight behind a punishing smash",
+        "{name} looks to break bone and shatter iron with a heavy impact",
+        "{name} rears back to deliver a concussive, grounding assault",
+        "{name} targets {foe}'s vitals with a slow, devastating wind-up",
     ],
     "Slash": [
         "{name} draws back for a sweeping slash",
         "{name} lines up for a powerful drawing cut",
         "{name} seeks to open a telling wound",
+        "{name} unleashes a wide, flashing arc of steel toward {foe}",
+        "{name} carves a wicked path through the air with {his} {weapon}",
+        "{name} slices forward in a deadly, fluid motion designed to draw blood",
+        "{name} pivots sharply to deliver a vicious, tearing slash",
     ],
     "Strike": [
         "{name} tries to hit the mighty {foe}",
         "{name} sizes up {foe} carefully",
         "{name} directs an attack toward {foe}",
         "{name} steps threateningly close to the {adj} {foe}",
+        "{name} tests the distance, launching a sudden attack at {foe}",
+        "{name} squares {his} shoulders and lashes out at the {adj} opponent",
+        "{name} finds an opening and instantly drives {his} {weapon} forward",
+        "{name} advances with a calculated, standard offensive against the {adj} {foe}",
     ],
     "Engage & Withdraw": [
         "{name} probes and retreats, looking for an opening",
         "{name} feints left and prepares to strike",
         "{name} dances away from {foe}'s reach",
+        "{name} steps in with a quick prick before springing backward out of danger",
+        "{name} tests the line with a sharp advance, then instantly glides out of range",
+        "{name} plays a dangerous game of distance, pulling {foe} out of position",
+        "{name} slips inside the guard for a brief instant before retreating to safety",
     ],
     "Counterstrike": [
         "{name} waits patiently for {foe} to make a mistake",
         "{name} holds ground, watching {foe} like a hawk",
         "{name} anxiously awaits {foe}'s next move",
+        "{name} anchors {his} weight, coiled like a spring to exploit the slightest slip",
+        "{name} tracks the arc of {foe}'s stance, biding time for a fatal mistake",
+        "{name} lets {foe} dictate the tempo, preparing to violently reverse the momentum",
+        "{name} keeps a perfectly still guard, baiting the attack to execute a sharp riposte",
     ],
     "Decoy": [
         "{name} engages {foe}'s weapon with {his} off-hand",
         "{name} feints to draw {foe}'s attention",
         "{name} draws {foe} into an elaborate trap",
+        "{name} purposely exposes a glaring opening to mask a lethal incoming strike",
+        "{name} drops {his} guard for a split second, daring {foe} to rush forward",
+        "{name} throws a loud, distracting blow to mask the true path of {his} {weapon}",
+        "{name} misdirects with a sudden shift in posture, blinding {foe} to the real danger",
     ],
     "Sure Strike": [
         "{name} waits for absolutely the right moment",
         "{name} carefully prepares a deliberate strike",
         "{name} takes aim at {foe} with methodical precision",
+        "{name} narrows {his} focus, blocking out the roaring crowd to ensure a perfect hit",
+        "{name} aligns {his} posture to guarantee the oncoming blow finds its mark",
+        "{name} measures the distance perfectly before committing to a flawless execution",
+        "{name} refuses to waste motion, locking onto a definitive weakness in the defense",
     ],
     "Calculated Attack": [
         "{name} ruthlessly seeks wreckage with {his} {weapon}",
         "{name} calculates the perfect attack angle",
         "{name} studies {foe}'s armor for weak points",
+        "{name} analyzes the gaps in the iron plate to maximize the impending trauma",
+        "{name} maps out a lethal trajectory across the sand with cold, analytical focus",
+        "{name} deliberately exploits a minor flaw in {foe}'s footwork to setup a devastating wound",
+        "{name} weighs the risk of the engagement, choosing a path of maximum destruction",
     ],
     "Opportunity Throw": [
         "{name} hefts {his} {weapon} for a throw",
         "{name} lines up a ranged attack",
+        "{name} spots a momentary lapse in distance and cocks {his} arm back to launch",
+        "{name} balances the weight of {his} {weapon}, preparing to send it flying through the air",
+        "{name} readies a lethal projectile strike as the gap between the fighters widens",
+        "{name} prepares to release a flying assault that will catch {foe} completely off guard",
+        "{name} measures the distance for a desperate, high-stakes ranged throw",
     ],
     "Martial Combat": [
         "{name} drops into a fighting crouch",
         "{name} circles {foe} with fluid martial grace",
         "{name} prepares to unleash a flurry of strikes",
+        "{name} shifts seamlessly between combat stances, executing flawless form",
+        "{name} channels disciplined training, moving with the cold efficiency of a veteran",
+        "{name} balances weight perfectly on the balls of {his} feet, ready for a complex sequence",
+        "{name} controls the space with expert positioning, establishing absolute command of the sand",
     ],
     "Parry": [
         "{name} raises {his} {weapon} defensively",
         "{name} holds ground, focused entirely on defense",
+        "{name} sets an iron guard, tracking the trajectory of the incoming threat",
+        "{name} angles {his} blade to catch and deflect the next strike with minimal effort",
+        "{name} mirrors {foe}'s weapon movements, preparing a crisp deflection",
+        "{name} readies a tight, defensive redirection to turn the momentum of the fight",
+        "{name} anchors {his} posture, waiting to cross steel and turn the blow aside",
     ],
     "Defend": [
         "{name} keeps {his} guard high",
         "{name} circles warily, waiting for an opening",
+        "{name} tucks {his} chin and locks down {his} defensive perimeter",
+        "{name} refuses to overextend, maintaining an unbreakable protective posture",
+        "{name} yields ground deliberately, monitoring the distance with absolute caution",
+        "{name} hunkers down behind a wall of steel, offering {foe} zero easy targets",
+        "{name} watches the opponent's shoulders, entirely prepared to absorb or evade the coming assault",
     ],
 }
 
@@ -2101,7 +2170,7 @@ def defense_intent_line(defender_name: str, gender: str, uses_parry: bool) -> st
 
 DEFENSE_FAIL_PARRY = [
     "But the guard comes a fraction too late!",
-    "The parry is just off - the timing is wrong!",
+    "The timing is wrong, leaving the parry just off target!",
     "{defender}'s guard is overwhelmed!",
     "But {defender} commits to the wrong angle!",
     "{defender}'s guard is forced aside!",
@@ -2212,13 +2281,13 @@ DECOY_FEINT_SUCCESS_LINES = [
     "{attacker}'s misdirection pulls {foe}'s attention the wrong way!",
     "{attacker} feigns an attack to one flank, baiting {foe} to commit!",
     "{attacker}'s ruse opens a seam in {foe}'s defense!",
-    "{attacker} sells the feint -{foe} lunges to block a blow that isn't coming!",
+    "{attacker} sells the feint. {foe} lunges to block a blow that isn't coming!",
     "{attacker} dips a shoulder and {foe} bites on the bluff!",
 ]
 
 DECOY_FEINT_READ_LINES = [
     "{foe} reads the feint and holds position, unshaken!",
-    "{foe} isn't fooled -the ruse falls flat!",
+    "{foe} anticipates the trick, and the ruse falls flat!",
     "{foe} sees through {attacker}'s misdirection!",
 ]
 
@@ -2279,7 +2348,7 @@ CALCULATED_PRECISION_LINES = {
 CALCULATED_PROBE_LINES = [
     "{attacker} probes methodically for an opening, but {foe}'s guard holds!",
     "{attacker} studies {foe}'s defense, waiting for a seam that never comes!",
-    "{attacker} measures a strike and thinks better of it -{foe} is too disciplined!",
+    "{attacker} measures a strike and thinks better of it. {foe} is simply too disciplined!",
     "{attacker}'s calculating eye finds no gap in {foe}'s guard this pass!",
     "{attacker} circles, searching for a weakness, but {foe} stays tight!",
 ]
@@ -2499,7 +2568,7 @@ def unarmed_impact_lines(warrior_name: str, gender: str) -> str:
         f"The blow rattles {n}'s guard -{pronoun} knuckles absorb the brunt and hold!",
         f"{n} reels from the impact, {pronoun} arm tingling with bone-deep force!",
         f"The impact staggers {n}, {pronoun} arm dead with numbness for a heartbeat!",
-        f"A savage blow -{n}'s arm goes briefly numb!",
+        f"A savage blow leaves {n}'s arm briefly numb!",
     ]
     return "   " + random.choice(pools)
 
@@ -2524,7 +2593,7 @@ EXHAUSTED_LINES = [
 
 SECOND_WIND_LINES = [
     "{warrior} breathes through the pain, letting technique carry {him}",
-    "{warrior} strips away the noise -every motion deliberate, nothing wasted",
+    "{warrior} strips away the noise as every motion becomes deliberate and nothing is wasted.",
     "{warrior} slows {his} breathing, drawing on hard-won discipline",
     "{warrior} narrows to pure fundamentals as the body screams to stop",
 ]
@@ -2584,33 +2653,33 @@ def get_damage_type(weapon_skill_key: str) -> str:
 
 
 CRITICAL_HIT_SLASHING = [
-    "{attacker}'s {weapon} catches an opening in {defender}'s guard and drives through -the cut is deep enough to change the fight instantly.",
+    "{attacker}'s {weapon} catches an opening in {defender}'s guard and drives through, opening a deep cut that changes the fight instantly.",
     "With a fluid change of angle, {attacker} pulls the blade across {defender}'s torso in a precise draw cut that opens a wound that won't close easily.",
-    "{attacker} finds the gap between {defender}'s armor plates and commits fully -the edge bites deep, past leather and cloth and flesh.",
+    "{attacker} finds the gap between {defender}'s armor plates and commits fully as the edge bites deep past leather, cloth, and flesh.",
     "The attack looks ordinary until the final moment, when {attacker} hooks the blade and opens a jagged line across {defender}'s ribs.",
-    "A controlled slash from {attacker} lands at the exact juncture of armor and skin -the kind of cut that changes the math of a fight.",
-    "{attacker}'s {weapon} describes a clean arc and catches {defender} exactly wrong -a blow driven home with everything behind it.",
+    "{attacker} lands a controlled slash at the exact juncture of armor and skin, opening the kind of cut that changes the math of a fight.",
+    "{attacker}'s {weapon} describes a clean arc and catches {defender} exactly wrong, landing a blow driven home with everything behind it.",
     "{attacker} reads the stance perfectly and strikes into the step, the blade finding the crease at {defender}'s side with ugly precision.",
 ]
 
 CRITICAL_HIT_PIERCING = [
-    "{attacker}'s {weapon} threads through {defender}'s defense with a patience that looks almost gentle -then buries itself somewhere vital.",
+    "{attacker}'s {weapon} threads through {defender}'s defense with a patience that looks almost gentle, suddenly burying itself somewhere vital.",
     "A blindingly fast thrust from {attacker} catches {defender} in transition, the point driving home before the defense can close.",
     "{attacker} turns the weapon at the last instant, threading the point past iron and bone to find something soft and critical inside {defender}'s guard.",
-    "The attack looks like a probe until it isn't -{attacker}'s {weapon} sinks to striking depth before {defender} can react.",
-    "{attacker} waits for the opening and when it comes, drives the weapon through with mechanical precision -the point finding a vital junction of sinew and armor.",
+    "{attacker}'s attack looks like a probe until it isn't, and {his_her} {weapon} sinks to striking depth before {defender} can react.",
+    "{attacker} waits for the gap, driving the point through a vital junction with mechanical precision.",
     "One perfectly timed thrust from {attacker} catches {defender} at the worst possible moment, the point driving home into a critical area.",
     "{attacker} moves the weapon on a line that looks impossible until it arrives -threading through the guard to find the soft tissue beyond.",
 ]
 
 CRITICAL_HIT_CRUSHING = [
-    "{attacker}'s {weapon} arrives with the force of total commitment -{defender}'s attempt to block fails completely, and the blow lands with structural finality.",
+    "{attacker}'s {weapon} arrives with the force of total commitment, causing {defender}'s attempt to block to fail completely as the blow lands with structural finality.",
     "The strike from {attacker} arrives at a spot {defender}'s defense simply didn't cover, carrying momentum enough that the impact reverberates across the pit.",
-    "{attacker} swings from an angle {defender}'s guard wasn't set to absorb -the blow lands flush and the sound of it draws a collective wince from the crowd.",
-    "An overhead from {attacker} crashes through {defender}'s raised guard and connects with everything behind it -{defender}'s knees shake from the pure force.",
+    "{attacker} strikes from an angle {defender}'s guard can't absorb, landing flush to a collective wince from the crowd.",
+    "An overhead from {attacker} crashes through {defender}'s raised guard with enough force to make {defender}'s knees shake",
     "{attacker}'s {weapon} finds {defender} fully extended and off-balance, the crushing impact landing at the worst possible moment.",
     "The blow is textbook in its execution: {attacker} drops the weapon into a gap {defender} couldn't close in time, and it lands with bone-rattling finality.",
-    "{attacker}'s {weapon} hammers into {defender} with the weight of full commitment -the kind of impact that makes armor feel like a kindness.",
+    "{attacker}'s {weapon} hammers into {defender} with full commitment, shattering both guard and grit under the sheer weight of the strike.",
 ]
 
 CRITICAL_HIT_LINES: dict[str, list[str]] = {
@@ -2620,18 +2689,18 @@ CRITICAL_HIT_LINES: dict[str, list[str]] = {
 }
 
 CRITICAL_PARRY_LINES = [
-    "{defender} catches {attacker}'s strike at the perfect angle and redirects it completely -a parry executed with precision that draws a murmur from the crowd.",
-    "With something approaching artistry, {defender} meets the blow dead-center and folds it harmlessly aside -textbook form under the worst conditions.",
-    "{defender}'s weapon intercepts the attack and sends it wide, the motion fluid where it should be desperate -a parry drilled ten thousand times, finally counting.",
+    "{defender} catches {attacker}'s strike at the perfect angle and redirects it completely. The precise parry draws an immediate murmur from the crowd.",
+    "With something approaching artistry, {defender} meets the blow dead-center, folding it harmlessly aside with textbook form under the worst conditions.",
+    "{defender} deflects the incoming strike with effortless grace, turning a moment of pure desperation into a showcase of perfect muscle memory..",
     "The parry from {defender} is unhurried and exact, catching the incoming blow and neutralizing it with minimal effort.",
-    "{defender} reads {attacker}'s angle a breath early and has the counter waiting -the clash rings out sharp and clean, and the attack finds nothing.",
-    "An almost contemptuous parry from {defender} turns the blow aside -not merely deflected, but answered with the poise of someone already planning the next step.",
+    "{defender} reads {attacker}'s angle a breath early, setting up a counter that rings out sharp and clean as the attack finds nothing.",
+    "{defender} turns the blow aside with a contemptuous parry, already poised for the next step.",
 ]
 
 CRITICAL_DODGE_LINES = [
-    "{defender} is no longer where the blow lands -the movement looks effortless from outside, but the timing is everything.",
+    "{defender} is no longer where the blow lands, an effortless movement where timing is everything.",
     "The attack passes through space that {defender} vacated a half-second earlier, the move so clean the crowd takes a moment to register it.",
-    "{defender} rotates offline at the last instant with no apparent hurry -the blow grazes nothing as it passes through empty air.",
+    "{defender} smoothly steps off the line of attack without a hint of panic, letting the blow sail harmlessly past.",
     "An impossible read: {defender} begins moving before {attacker}'s commitment is visible, leaving the attack with nothing to find.",
     "{defender} slips the blow with unhurried economy that looks like instinct and takes years to learn.",
     "Not a dodge so much as an erasure -{defender} is simply not where {attacker} aimed, and there's nothing lucky about it.",
@@ -2645,13 +2714,13 @@ CRITICAL_DISARM_LINES = [
 
 CRITICAL_BREAK_LINES = [
     "{attacker}'s {weapon} meets a perfectly braced parry and something in the metal gives. A crack, then another, and the weapon fails completely.",
-    "The {weapon} shatters against {defender}'s guard. A sound like a gunshot cuts across the crowd noise, followed by fragments scattering across the sand.",
-    "Against the flawless parry, {attacker}'s {weapon} does something weapons shouldn't: it breaks. The crowd goes silent, then roars.",
+    "The {weapon} shatters against {defender}'s guard with a deafening crack that silences the crowd, sending sharp fragments raining down onto the sand.",
+    "The flawless parry shatters {attacker}'s {weapon} entirely, shocking the crowd into a brief silence before a massive roar breaks out.",
 ]
 
 CRITICAL_DOUBLE_COUNTER_LINES = [
     "{defender} flows out of the dodge directly into the attack. Two strikes, no pause, moving like water downhill.",
-    "The dodge becomes the offense before {attacker} can recover: {defender} is already inside the guard, already moving, two fluid strikes delivered in the blink of an eye.",
+    "{defender} slips the blow and drives inside the guard, answering instantly with a fluid double-strike.",
     "Slipping the blow opens something and {defender} takes it immediately, one motion into another, two swift strikes before the window closes.",
 ]
 
@@ -2730,6 +2799,18 @@ DEATH_LINES = [
     "{warrior} breathes {his} last on the arena floor!!!",
     "{warrior} is dead. The crowd erupts!!!",
     "{warrior} falls, never to rise again!!!",
+    "Blood stains the sand as {warrior} is broken and destroyed before the roaring crowd!!!",
+    "A brutal end! {warrior} is slaughtered where {he} stands, sending the stands into a frenzy!!!",
+    "With a final, sickening impact, {warrior} falls still, never to leave the pit alive!!!",
+    "{warrior} meets a gruesome demise, leaving nothing but a crimson ruin on the arena floor!!!",
+    "{warrior} collapses hard into the dirt, a mangled and lifeless ruin as the crowd goes wild!!!",
+    "A final, devastating strike tears through {warrior}, who crashes down and moves no more!!!",
+    "The sickening crunch of shattered bone marks the end of {warrior}, dead before {he} hits the sand!!!",
+    "{warrior} is utterly butchered in a flash of cold steel, painting the pit with a final splash of red!!!",
+    "With a violent gasp, {warrior} is broken apart by the lethal blow and drops like stone into the dust!!!",
+    "The savage attack tears the remaining life from {warrior}, leaving a bloody, motionless shell on the floor!!!",
+    "A horrific finishing blow splits {warrior}'s guard and ends {his} life in a sudden, crimson spray!!!",
+    "{warrior} takes a catastrophic impact directly to the vitals and slumps to the earth, entirely spent and destroyed!!!",
 ]
 
 ELF_DUAL_STRIKE_LINES = [
@@ -2770,11 +2851,11 @@ TABAXI_FRENZY_INTRO_LINES = [
     "Backed into a corner, {attacker} unleashes primal fury in a savage assault!",
     "{attacker} moves with impossible speed, claws flashing in a desperate barrage!",
     "Instinct takes over, and {attacker} becomes a whirlwind of claws and desperation!",
-    "Survival instinct awakens - {attacker} lashes out with ferocious precision!",
+    "{attacker}'s survival instinct awakens as {he} lashes out with ferocious precision!",
     "{attacker}'s natural predator instincts ignite, driving a vicious flurry of strikes!",
     "Eyes ablaze with feline rage, {attacker} unleashes a devastating combination!",
     "{attacker} moves like a creature possessed, delivering a blur of attacks!",
-    "The cornered hunter strikes back - {attacker} bursts forward in a frenzied assault!",
+    "Like a cornered hunter striking back, {attacker} bursts forward in a frenzied assault!",
 ]
 
 # Per-attack lines within the frenzy burst - one emitted before each of the 3 strikes.
@@ -2789,14 +2870,14 @@ TABAXI_FRENZY_STRIKE_LINES = {
     1: [
         "Before the opponent can recover, {attacker} strikes again!",
         "{attacker} follows immediately with a second assault!",
-        "The speed is dizzying - {attacker} is already attacking again!",
+        "With dizzying speed, {attacker} launches straight into another attack!",
         "{attacker} presses without pause, the second blow already in motion!",
     ],
     2: [
         "{attacker} completes the barrage with a final desperate strike!",
-        "A third and final blow - {attacker} gives everything!",
+        "With a third and final blow, {attacker} throws everything into the attack!",
         "{attacker} hammers home the last attack of the frenzy!",
-        "The frenzy peaks - {attacker} throws everything into one last strike!",
+        "The frenzy peaks as {attacker} throws everything into one last strike!",
     ],
 }
 
