@@ -2814,35 +2814,35 @@ DEATH_LINES = [
 ]
 
 ELF_DUAL_STRIKE_LINES = [
-    "{attacker} draws upon {his} inherent Elvish heritage and brings {his} {secondary} across in a lightning quick strike!",
+    "{attacker} draws upon {his} inherent Elvish heritage and brings {his} {secondary} across in a lightning quick follow-up!",
     "{attacker}'s grace becomes evident as {secondary_subject} flashes forth with supernatural speed!",
-    "With movements too quick to follow, {attacker} spins and drives {his} {secondary} home!",
-    "{attacker}'s {secondary} whips around in a blur of motion, finding {defender} again!",
-    "The Elf's natural dexterity shines as {secondary_subject} strikes with deadly precision!",
-    "{attacker} pivots fluidly and delivers a follow-up strike with {his} {secondary}!",
+    "With movements too quick to follow, {attacker} spins and launches {his} {secondary} at {defender}!",
+    "{attacker}'s {secondary} whips around in a blur of motion, targeting {defender} once more!",
+    "The Elf's natural dexterity shines as {secondary_subject} darts forward with deadly speed!",
+    "{attacker} pivots fluidly and swings {his} {secondary} in a rapid follow-up!",
     "In a display of dual-blade mastery, {attacker} brings {his} {secondary} around for another attack!",
     "{attacker}'s {secondary} glints in the light as {subject} presses the advantage with uncanny speed!",
-    "Moving with elvish fluidity, {attacker} finds an opening and {secondary_subject} finds its mark!",
+    "Moving with elvish fluidity, {attacker} spots an opening and {secondary_subject} lunges forward!",
 ]
 
 HALFLING_MARTIAL_STRIKE_LINES = [
     "{attacker} darts in with a flurry of rapid strikes, exploiting openings with preternatural quickness!",
-    "In a blur of motion, {attacker} weaves and strikes again, fists moving faster than the eye can follow!",
+    "In a blur of motion, {attacker} weaves and launches another attack, fists moving faster than the eye can follow!",
     "{attacker} presses the advantage with a barrage of nimble punches and kicks!",
-    "Quick as lightning, {attacker} finds an opening and delivers another strike with perfect timing!",
+    "Quick as lightning, {attacker} spots an opening and throws another strike at {defender}!",
     "{attacker} flows from one strike to another, a whirlwind of precise martial technique!",
     "With halfling speed and grace, {attacker} unleashes a follow-up strike before {defender} can react!",
-    "{attacker} dances around {defender} and drives another fist home with deadly accuracy!",
+    "{attacker} dances around {defender} and drives another fist forward with deadly intent!",
     "In a display of halfling martial prowess, {attacker} chains strikes together with fluid precision!",
 ]
 
 LIZARDFOLK_MARTIAL_STRIKE_LINES = [
-    "{attacker} lashes out with primal fury, claws raking across in a second devastating strike!",
+    "{attacker} lashes out with primal fury, launching a second devastating strike at {defender}!",
     "Instinct takes over as {attacker} follows with a vicious counterattack, tail whipping around!",
     "{attacker}'s natural reflexes drive another ferocious strike, pure power behind it!",
     "Driven by inhuman speed, {attacker} unleashes another blow before {defender} can recover!",
-    "{attacker} roars and presses forward, claws slashing in a relentless assault!",
-    "With the grace of a natural predator, {attacker} strikes again, movements efficient and deadly!",
+    "{attacker} roars and presses forward, claws slashing toward {defender} in a relentless assault!",
+    "With the grace of a natural predator, {attacker} surges forward again, movements efficient and deadly!",
     "{attacker} demonstrates the lethal martial prowess of the Lizardfolk, striking in quick succession!",
     "Battle instinct guides {attacker} as {subject_pronoun} unleashes another ferocious attack!",
 ]
@@ -2978,10 +2978,12 @@ TABAXI_FRENZY_RESIST_LINES = [
 ]
 
 
-def tabaxi_frenzy_intro_line(attacker_name: str) -> str:
+def tabaxi_frenzy_intro_line(attacker_name: str, gender: str = "Male") -> str:
     """Generate narrative for the opening of a Tabaxi frenzy ability."""
+    he = "he" if gender == "Male" else "she"
     return random.choice(TABAXI_FRENZY_INTRO_LINES).format(
         attacker=attacker_name.upper(),
+        he=he,
     )
 
 

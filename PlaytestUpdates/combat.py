@@ -2166,7 +2166,7 @@ class CombatEngine:
         att = fst.warrior
         dfr = ost.warrior
 
-        self._emit(N.tabaxi_frenzy_intro_line(att.name))
+        self._emit(N.tabaxi_frenzy_intro_line(att.name, att.gender))
 
         defense_penalties = [0, 15, 30]
         _pre_frenzy = ost.current_hp

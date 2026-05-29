@@ -489,7 +489,6 @@ WEAPONS: dict[str, Weapon] = {
             "Good for Counterstrike users. Excellent for low-DEX, high-STR Dwarves."
         ),
         preferred_styles=["Counterstrike", "Bash", "Strike"],
-        weak_styles   =["Wall of Steel"],
     ),
 
     "great_axe": Weapon(
@@ -507,6 +506,7 @@ WEAPONS: dict[str, Weapon] = {
             "Attack rate low due to size. Very high stat requirements."
         ),
         preferred_styles=["Bash", "Total Kill", "Slash"],
+        weak_styles   =["Lunge"],
     ),
 
     "small_pick": Weapon(
@@ -522,6 +522,7 @@ WEAPONS: dict[str, Weapon] = {
         armor_piercing= True,
         notes="Fast and effective early, starts becoming ineffective around fight 50. Humans and Halflings.",
         preferred_styles=["Lunge", "Calculated Attack", "Strike"],
+        weak_styles   =["Slash"],
     ),
 
     "military_pick": Weapon(
@@ -540,6 +541,7 @@ WEAPONS: dict[str, Weapon] = {
             "have graduated to Scale and above. Works in many popular styles."
         ),
         preferred_styles=["Calculated Attack", "Strike", "Lunge"],
+        weak_styles   =["Slash"],
     ),
 
     "pick_axe": Weapon(
@@ -555,6 +557,7 @@ WEAPONS: dict[str, Weapon] = {
         armor_piercing= True,
         notes="New to the Pit. Insufficient data to characterize.",
         preferred_styles=["Bash", "Calculated Attack"],
+        weak_styles   =["Slash"],
     ),
 
     # =========================================================================
@@ -1009,6 +1012,7 @@ WEAPONS: dict[str, Weapon] = {
             "Against light armor (CB or leather) it's like hitting with a wiffle bat."
         ),
         preferred_styles=["Total Kill", "Bash", "Calculated Attack"],
+        weak_styles   =["Slash"],
     ),
 
     "javelin": Weapon(
