@@ -43,8 +43,8 @@
         .modal-scroll-body a:hover { color: #5a0f0f; }
         
         /* Wax Seal Style Button */
-        button#closeModal { display: block; margin: 30px auto 0; padding: 12px 35px; background-color: #8b1a1a; color: #f4e4bc; font-family: 'Cinzel', serif; font-weight: bold; border: 2px solid #5a0f0f; border-radius: 50px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 8px rgba(0,0,0,0.4); transition: all 0.2s ease; }
-        button#closeModal:hover { background-color: #a31616; color: #fff; transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,0.5); }
+        button.close-modal-btn { display: block; margin: 30px auto 0; padding: 12px 35px; background-color: #8b1a1a; color: #f4e4bc; font-family: 'Cinzel', serif; font-weight: bold; border: 2px solid #5a0f0f; border-radius: 50px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 8px rgba(0,0,0,0.4); transition: all 0.2s ease; }
+        button.close-modal-btn:hover { background-color: #a31616; color: #fff; transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,0.5); }
         
         .content-box { background: #080808; font-style: italic; line-height: 1.0; font-size: .85rem; margin-bottom: 30px; padding: 10px 0; }
         .notification-badge { color: #ffcc00; background: #a31616; padding: 2px 6px; border-radius: 50%; font-size: 0.7rem; margin-left: 4px; }
@@ -88,9 +88,12 @@
             <section id="updates">
                 <h3>Announcements</h3>
                 <div class="content-box">
-                    <p style="text-align: center; margin-top: 20px;">
-                        <a href="#" id="viewAnnouncement" style="color: #d4af37; font-size: 1.1rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif;">
-                            VIEW THE OFFICIAL PLAYTEST ANNOUNCEMENT
+                    <p style="text-align: center; margin: 15px 0;">
+                        <a href="#" id="viewNewAnnouncement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            🛡️ MAY 29, 2026 — LATEST UPDATE
+                        </a>
+                        <a href="#" id="viewAnnouncement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif;">
+                            VIEW THE OFFICIAL PLAYTEST ANNOUNCEMENT (5/27)
                         </a>
                     </p>
                 </div>
@@ -98,6 +101,7 @@
         </main>
     </div>
 
+    <!-- Original Announcement Modal -->
     <div id="announcementModal" class="modal-overlay">
         <div class="modal-content">
             <h2 id="modalTitle">Official Playtest Proclamation</h2>
@@ -130,7 +134,45 @@
                 
                 <p>Thank you all for sticking with me on this while I ironed out some of the issues that have popped up thus far. For any issues or enhancements, you can utilize the Report an Issue link or post it on the message board.</p>
             </div>
-            <button id="closeModal">Dismiss</button>
+            <button class="close-modal-btn" id="closeModal">Dismiss</button>
+        </div>
+    </div>
+
+    <!-- New Announcement Modal - May 29, 2026 -->
+    <div id="newAnnouncementModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>ARENA UPDATE — MAY 29, 2026</h2>
+            <div class="modal-scroll-body">
+                <p><strong>Honored Managers of the Bloodspire Arena,</strong></p>
+                
+                <p>I have implemented several important balance and quality-of-life improvements based on feedback from the first turn. The following changes are now live:</p>
+                
+                <ul>
+                    <li>Fixed an exploit related to replacements rollups</li>
+                    <li>Modified endurance calculations to prevent early exhaustion</li>
+                    <li>Updated permanent injury thresholds — they are now less likely to trigger</li>
+                    <li>Cleaned up knockdown logic (warriors were hitting the ground too frequently)</li>
+                    <li>Minor verbiage updates and grammar tweaks throughout the client</li>
+                    <li>Tweaked the damage formula for all weapons to improve overall balance</li>
+                    <li>Adjusted thresholds for light, medium, and heavy damage descriptions</li>
+                    <li>Many additional minor cosmetic additions and modifications</li>
+                </ul>
+                
+                <p><strong>You will need to install Client version 2.7.2</strong> for these updates to take full effect.</p>
+                
+                <p>Going forward, unless a major issue or exploit is discovered, the plan is to release new client versions no more than once per week.</p>
+                
+                <p><strong>Turn 2 will run on Saturday, May 30th at 9:00 PM CST.</strong></p>
+                
+                <p>Regular turns will now follow a <strong>Tuesday — Thursday — Saturday</strong> schedule.</p>
+                
+                <p>Thank you all again for your patience and valuable feedback. Things are steadily improving and getting much closer to the vision I had when this arena first opened its gates.</p>
+                
+                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
+                    — ILNEVAL
+                </p>
+            </div>
+            <button class="close-modal-btn" id="closeNewModal">Dismiss</button>
         </div>
     </div>
 
@@ -141,7 +183,6 @@
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         async function checkNewMessages() {
-            // Use a slight delay to ensure localStorage has updated if coming back from the board
             setTimeout(async () => {
                 const lastViewed = localStorage.getItem('last_board_view') || new Date(0).toISOString();
                 const { count, error } = await _supabase
@@ -161,31 +202,46 @@
         window.addEventListener('DOMContentLoaded', (event) => {
             checkNewMessages();
 
-            // FORCE CLEAR: If they click the link, save the current time immediately
             document.getElementById('nav-board').onclick = function() {
                 localStorage.setItem('last_board_view', new Date().toISOString());
             };
 
-            // MODAL LOGIC
-            const modal = document.getElementById('announcementModal');
-            const closeBtn = document.getElementById('closeModal');
-            const viewLink = document.getElementById('viewAnnouncement');
-            
-            // Check if player has seen the official playtest rollout notice yet
-            if (!localStorage.getItem('bloodspire_official_playtest_2026')) {
-                modal.style.display = 'block';
+            // Original Modal
+            const originalModal = document.getElementById('announcementModal');
+            const closeOriginal = document.getElementById('closeModal');
+            const viewOriginal = document.getElementById('viewAnnouncement');
+
+            // New Modal
+            const newModal = document.getElementById('newAnnouncementModal');
+            const closeNew = document.getElementById('closeNewModal');
+            const viewNew = document.getElementById('viewNewAnnouncement');
+
+            // Show new announcement automatically if not seen
+            if (!localStorage.getItem('bloodspire_update_20260529')) {
+                newModal.style.display = 'block';
             }
 
-            // Close modal button action
-            closeBtn.onclick = () => { 
-                modal.style.display = 'none'; 
+            // Close new modal
+            closeNew.onclick = () => { 
+                newModal.style.display = 'none'; 
+                localStorage.setItem('bloodspire_update_20260529', 'true'); 
+            };
+
+            // Open new modal via link
+            viewNew.onclick = function(e) {
+                e.preventDefault();
+                newModal.style.display = 'block';
+            };
+
+            // Original modal logic (kept for backward compatibility)
+            closeOriginal.onclick = () => { 
+                originalModal.style.display = 'none'; 
                 localStorage.setItem('bloodspire_official_playtest_2026', 'true'); 
             };
 
-            // Re-open modal via main link click
-            viewLink.onclick = function(e) {
+            viewOriginal.onclick = function(e) {
                 e.preventDefault();
-                modal.style.display = 'block';
+                originalModal.style.display = 'block';
             };
         });
     </script>
