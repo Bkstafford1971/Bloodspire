@@ -90,8 +90,11 @@
                 <h3>Announcements</h3>
                 <div class="content-box">
                     <p style="text-align: center; margin: 15px 0;">
-                        <a href="#" id="viewNewAnnouncement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            🛡️ MAY 29, 2026 — LATEST UPDATE
+                        <a href="#" id="viewLatestAnnouncement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            🛡️ JUNE 1, 2026 — OFFLINE FIGHTS & ARENA STATS
+                        </a>
+                        <a href="#" id="viewNewAnnouncement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            MAY 29, 2026 — ARENA UPDATE
                         </a>
                         <a href="#" id="viewAnnouncement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif;">
                             VIEW THE OFFICIAL PLAYTEST ANNOUNCEMENT (5/27)
@@ -102,44 +105,28 @@
         </main>
     </div>
 
-    <!-- Original Announcement Modal -->
-    <div id="announcementModal" class="modal-overlay">
+    <div id="latestAnnouncementModal" class="modal-overlay">
         <div class="modal-content">
-            <h2 id="modalTitle">Official Playtest Proclamation</h2>
-            <div id="modalBody" class="modal-scroll-body">
-                <p>After many tests and live backend playtesting, I am confident that I am ready to roll Bloodspire Arena out for official playtest. I understand that the first attempts to get this project off the ground were not successful, but I was able to take a step back and work on things more focused. I have run 100's of simulations of the game play mechanics and through some focused live playtesting, I feel very good about the stability and overall game mechanics.</p>
+            <h2>ARENA UPDATE — JUNE 1, 2026</h2>
+            <div class="modal-scroll-body">
+                <p><strong>Honored Managers,</strong></p>
                 
-                <p>I would like to announce that we will <strong>officially start playtest on Wednesday 5/27/2026 at 9:00 PM</strong>. I have the upload information that you all gave me a few days ago, and it is cleaned up and ready for the first turn. You do not need to re-upload. If you choose to re-upload with new strategies, you may do so starting at <strong>7:00 PM on Tuesday 5/26/2026</strong>. I will be rolling the arena back to turn 0 just prior to that timeframe.</p>
+                <p>A new client version (<strong>v2.7.3</strong>) is now available. This version introduces an offline viewing feature, allowing you to review your combat logs and fights without relying on a live server connection.</p>
                 
-                <p>You will need to have the most current Client version prior to any new uploads or first turn download. This new client has numerous bug fixes and enhancements included in it. Please make sure that you install and use <strong>Client version 2.7.1</strong>.</p>
+                <p>Please note that <strong>this update is not mandatory at this stage</strong>. You will still be completely capable of viewing your fight logs using older client versions, provided you have an active internet connection and the game server remains online. While numerous fail-safes are in place to preserve server stability, brief periods of downtime may occur. Upgrading to v2.7.3 completely removes this online requirement during log review. Installation is highly recommended at your earliest convenience.</p>
                 
-                <p>Some major fixes include:</p>
-                <ul>
-                    <li>Static stats for new teams. No more canceling and getting a new set of roll-ups</li>
-                    <li>No more dead replacements prior to their first turn in the arena</li>
-                    <li>Corrected newsletter Arena Happenings report</li>
-                    <li>Enhanced fight dialogue lines</li>
-                    <li>Special race related abilities</li>
-                    <li>Enhanced Scouting report. Each manager will have a dedicated scout now</li>
-                    <li>Better archive warrior visibility, including fight visibility for archived warriors</li>
-                    <li>Improved error handling for purged files. Files are no longer archived after downloading</li>
-                </ul>
+                <p>Additionally, progress is underway on an automated <strong>Arena Statistics</strong> section directly on the website. Once a turn executes, navigating to the Arena Statistics hub will reveal a fresh landing page containing two pathways: <strong>Arena Statistics</strong> and <strong>Team Rosters</strong>.</p>
                 
-                <p>Many other updates, fixes and enhancements as well!</p>
+                <p>These hubs closely mirror the structure found on the Blood Pit player connection pages. While currently initialized with simulated test metrics, live data will populate these tables automatically upon the conclusion of Turn 2.</p>
                 
-                <p>I also want to add that I have created a newsletter endpoint as well. In the event that you do not get a newsletter on a download (which sometimes happens if you do not download every turn), you should always receive the fight results, but may only receive the most current newsletter. You can now download any archived newsletter and manually add it to the newsletter directory in your saves folder.</p>
-                
-                <p>You can access the newsletters at the following link:<br>
-                <a href="http://bloodspirearena.dpdns.org/newsletter" target="_blank">http://bloodspirearena.dpdns.org/newsletter</a><br>
-                When you access the newsletters from this link, you will have a download button available for any newsletter you need.</p>
-                
-                <p>Thank you all for sticking with me on this while I ironed out some of the issues that have popped up thus far. For any issues or enhancements, you can utilize the Report an Issue link or post it on the message board.</p>
+                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
+                    — ILNEVAL
+                </p>
             </div>
-            <button class="close-modal-btn" id="closeModal">Dismiss</button>
+            <button class="close-modal-btn" id="closeLatestModal">Dismiss</button>
         </div>
     </div>
 
-    <!-- New Announcement Modal - May 29, 2026 -->
     <div id="newAnnouncementModal" class="modal-overlay">
         <div class="modal-content">
             <h2>ARENA UPDATE — MAY 29, 2026</h2>
@@ -177,6 +164,42 @@
         </div>
     </div>
 
+    <div id="announcementModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="modalTitle">Official Playtest Proclamation</h2>
+            <div id="modalBody" class="modal-scroll-body">
+                <p>After many tests and live backend playtesting, I am confident that I am ready to roll Bloodspire Arena out for official playtest. I understand that the first attempts to get this project off the ground were not successful, but I was able to take a step back and work on things more focused. I have run 100's of simulations of the game play mechanics and through some focused live playtesting, I feel very good about the stability and overall game mechanics.</p>
+                
+                <p>I would like to announce that we will <strong>officially start playtest on Wednesday 5/27/2026 at 9:00 PM</strong>. I have the upload information that you all gave me a few days ago, and it is cleaned up and ready for the first turn. You do not need to re-upload. If you choose to re-upload with new strategies, you may do so starting at <strong>7:00 PM on Tuesday 5/26/2026</strong>. I will be rolling the arena back to turn 0 just prior to that timeframe.</p>
+                
+                <p>You will need to have the most current Client version prior to any new uploads or first turn download. This new client has numerous bug fixes and enhancements included in it. Please make sure that you install and use <strong>Client version 2.7.1</strong>.</p>
+                
+                <p>Some major fixes include:</p>
+                <ul>
+                    <li>Static stats for new teams. No more canceling and getting a new set of roll-ups</li>
+                    <li>No more dead replacements prior to their first turn in the arena</li>
+                    <li>Corrected newsletter Arena Happenings report</li>
+                    <li>Enhanced fight dialogue lines</li>
+                    <li>Special race related abilities</li>
+                    <li>Enhanced Scouting report. Each manager will have a dedicated scout now</li>
+                    <li>Better archive warrior visibility, including fight visibility for archived warriors</li>
+                    <li>Improved error handling for purged files. Files are no longer archived after downloading</li>
+                </ul>
+                
+                <p>Many other updates, fixes and enhancements as well!</p>
+                
+                <p>I also want to add that I have created a newsletter endpoint as well. In the event that you do not get a newsletter on a download (which sometimes happens if you do not download every turn), you should always receive the fight results, but may only receive the most current newsletter. You can now download any archived newsletter and manually add it to the newsletter directory in your saves folder.</p>
+                
+                <p>You can access the newsletters at the following link:<br>
+                <a href="http://bloodspirearena.dpdns.org/newsletter" target="_blank">http://bloodspirearena.dpdns.org/newsletter</a><br>
+                When you access the newsletters from this link, you will have a download button available for any newsletter you need.</p>
+                
+                <p>Thank you all for sticking with me on this while I ironed out some of the issues that have popped up thus far. For any issues or enhancements, you can utilize the Report an Issue link or post it on the message board.</p>
+            </div>
+            <button class="close-modal-btn" id="closeModal">Dismiss</button>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         const SUPABASE_URL = 'https://ngjjnlpmisgwhktdfveq.supabase.co';
@@ -207,34 +230,51 @@
                 localStorage.setItem('last_board_view', new Date().toISOString());
             };
 
-            // Original Modal
+            // Original Modal (May 27)
             const originalModal = document.getElementById('announcementModal');
             const closeOriginal = document.getElementById('closeModal');
             const viewOriginal = document.getElementById('viewAnnouncement');
 
-            // New Modal
+            // Mid Modal (May 29)
             const newModal = document.getElementById('newAnnouncementModal');
             const closeNew = document.getElementById('closeNewModal');
             const viewNew = document.getElementById('viewNewAnnouncement');
 
-            // Show new announcement automatically if not seen
-            if (!localStorage.getItem('bloodspire_update_20260529')) {
-                newModal.style.display = 'block';
+            // Latest Modal (June 1)
+            const latestModal = document.getElementById('latestAnnouncementModal');
+            const closeLatest = document.getElementById('closeLatestModal');
+            const viewLatest = document.getElementById('viewLatestAnnouncement');
+
+            // Show latest announcement automatically if not seen
+            if (!localStorage.getItem('bloodspire_update_20260601')) {
+                latestModal.style.display = 'block';
             }
 
-            // Close new modal
+            // Close latest modal
+            closeLatest.onclick = () => { 
+                latestModal.style.display = 'none'; 
+                localStorage.setItem('bloodspire_update_20260601', 'true'); 
+            };
+
+            // Open latest modal via link
+            viewLatest.onclick = function(e) {
+                e.preventDefault();
+                latestModal.style.display = 'block';
+            };
+
+            // Close mid modal
             closeNew.onclick = () => { 
                 newModal.style.display = 'none'; 
                 localStorage.setItem('bloodspire_update_20260529', 'true'); 
             };
 
-            // Open new modal via link
+            // Open mid modal via link
             viewNew.onclick = function(e) {
                 e.preventDefault();
                 newModal.style.display = 'block';
             };
 
-            // Original modal logic (kept for backward compatibility)
+            // Original modal logic
             closeOriginal.onclick = () => { 
                 originalModal.style.display = 'none'; 
                 localStorage.setItem('bloodspire_official_playtest_2026', 'true'); 
