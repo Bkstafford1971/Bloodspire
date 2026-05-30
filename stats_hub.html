@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bloodspire — Arena Facts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -18,13 +19,18 @@
         padding: 20px 40px 16px;
     }
     .site-name {
-        font-size: 2.4em; font-weight: bold; color: #cc0000;
-        letter-spacing: 3px;
-        text-shadow: 0 0 14px #880000;
+        font-family: 'Metal Mania', cursive;
+        font-size: 3.2em; letter-spacing: 3px; text-transform: uppercase;
+        background: linear-gradient(to bottom, #3a0000 0%, #8b1a1a 40%, #a31616 60%, #2a0000 100%);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        display: inline-block;
+        filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.8));
+        margin: 0;
     }
     .site-subtitle {
-        color: #888; font-size: 0.78em; letter-spacing: 2px;
-        text-transform: uppercase; margin-top: 2px;
+        font-family: 'Cinzel', serif;
+        color: #888; font-size: 0.82em; letter-spacing: 2px;
+        text-transform: uppercase; margin-top: 4px;
     }
     /* ── Main layout ── */
     .main { display: flex; gap: 0; }
@@ -53,14 +59,15 @@
         font-size: 0.88em;
     }
     .report-links { list-style: none; padding-left: 20px; }
-    .report-links li { margin-bottom: 4px; }
+    .report-links li { margin-bottom: 8px; }
     .report-links a {
-        color: #cc6600; text-decoration: none;
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 0.9em;
+        color: #ffcc00; text-decoration: none;
+        font-family: 'Cinzel', serif;
+        font-size: 1.05em; font-weight: bold;
+        letter-spacing: 0.5px;
     }
-    .report-links a:hover { color: #ff8800; text-decoration: underline; }
-    .report-links a::before { content: "→  "; color: #660000; }
+    .report-links a:hover { color: #ffe566; text-decoration: underline; }
+    .report-links a::before { content: ">> "; color: #884400; }
     /* ── Footer ── */
     .footer {
         border-top: 1px solid #220000;
@@ -81,7 +88,7 @@
 
       <div class="page-title">Arena Facts</div>
       <div class="page-intro">
-        Turn 1 &nbsp;|&nbsp; Updated: 2026-05-29 23:54
+        Turn 2 &nbsp;|&nbsp; Updated: 2026-05-30 09:20
       </div>
 
       <div class="section">
@@ -114,7 +121,7 @@
   </div>
 
   <div class="footer">
-    All data reflects active gladiators as of Turn 1.
+    All data reflects active gladiators as of Turn 2.
     Reports are overwritten each turn with current data.
   </div>
 </body>
