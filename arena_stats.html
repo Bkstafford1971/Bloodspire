@@ -3,43 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bloodspire Arena Statistics — Turn 1</title>
+  <title>Bloodspire — Arena Statistics Turn 1</title>
   <style>
     * { box-sizing: border-box; }
     body {
         font-family: 'Courier New', Courier, monospace;
-        background: #1a1a1a; color: #d4c9a8;
-        margin: 24px; font-size: 13px;
+        background: #000000; color: #ffffff;
+        margin: 0; font-size: 13px;
     }
-    h1  { color: #c8a04a; font-size: 1.35em; margin-bottom: 2px; }
-    .meta { color: #777; font-size: 0.82em; margin-bottom: 18px; }
-    .summary { margin-bottom: 26px; line-height: 1.8; }
-    .summary strong { color: #c8a04a; }
-    h2  { color: #c8a04a; font-size: 1.0em; border-bottom: 1px solid #444;
-          padding-bottom: 3px; margin: 30px 0 8px; }
+    /* ── Page header ── */
+    .site-header {
+        background: #000;
+        border-bottom: 2px solid #880000;
+        padding: 18px 32px 14px;
+        margin-bottom: 30px;
+    }
+    .site-name {
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 2.2em; font-weight: bold;
+        color: #cc0000;
+        letter-spacing: 2px;
+        text-shadow: 0 0 12px #880000;
+        margin: 0 0 4px;
+    }
+    .site-subtitle {
+        color: #999; font-size: 0.8em; letter-spacing: 1px;
+    }
+    /* ── Content area ── */
+    .content { padding: 0 32px 40px; }
+    h1  {
+        font-family: Georgia, 'Times New Roman', serif;
+        color: #ffffff; font-size: 1.6em;
+        text-align: center; margin: 0 0 4px;
+        letter-spacing: 1px;
+    }
+    .meta { color: #666; font-size: 0.80em; text-align: center; margin-bottom: 24px; }
+    .summary { margin-bottom: 28px; line-height: 1.9; color: #ffffff; }
+    .summary strong { color: #cc0000; }
+    h2  {
+        color: #cc0000; font-size: 1.0em;
+        border-bottom: 1px solid #440000;
+        padding-bottom: 3px; margin: 32px 0 10px;
+        letter-spacing: 1px; text-transform: uppercase;
+    }
     table { border-collapse: collapse; margin-bottom: 8px; }
-    th   { background: #252525; color: #c8a04a; padding: 4px 14px;
-           text-align: right; border: 1px solid #3a3a3a; white-space: nowrap; }
+    th   { background: #111; color: #cc0000; padding: 5px 14px;
+           text-align: right; border: 1px solid #330000; white-space: nowrap; }
     th.lbl { text-align: left; min-width: 140px; }
-    td   { padding: 3px 14px; border: 1px solid #2e2e2e;
-           text-align: right; white-space: nowrap; }
-    td.lbl   { text-align: left; color: #c8a04a; }
-    td.plain { text-align: left; color: #d4c9a8; }
-    .zero { color: #484848; }
-    tr.tot td { border-top: 2px solid #555; font-weight: bold; background: #212121; }
-    tr:nth-child(odd)  { background: #1c1c1c; }
-    tr:nth-child(even) { background: #191919; }
+    td   { padding: 3px 14px; border: 1px solid #1a1a1a;
+           text-align: right; white-space: nowrap; color: #dddddd; }
+    td.lbl   { text-align: left; color: #ff4444; }
+    td.plain { text-align: left; color: #dddddd; }
+    .zero { color: #333333; }
+    tr.tot td { border-top: 2px solid #550000; font-weight: bold;
+                background: #0d0000; color: #ffffff; }
+    tr.tot td.lbl { color: #ff4444; }
+    tr:nth-child(odd)  { background: #080808; }
+    tr:nth-child(even) { background: #050505; }
     </style>
 </head>
 <body>
-  <h1>Bloodspire Arena Statistics — Turn 1</h1>
-  <div class="meta">Generated: 2026-05-29 23:10</div>
-  <div class="summary">
-    <strong>9</strong> active managers<br>
-    <strong>36</strong> active teams<br>
-    <strong>180</strong> active gladiators
+  <div class="site-header">
+    <div class="site-name">BLOODSPIRE</div>
+    <div class="site-subtitle">THE AGONY AMPHITHEATRE</div>
   </div>
-  
+  <div class="content">
+    <h1>Arena Statistics</h1>
+    <div class="meta">Turn 1 &nbsp;|&nbsp; Generated: 2026-05-29 23:42</div>
+    <div class="summary">
+      <strong>9</strong> active managers<br>
+      <strong>36</strong> active teams<br>
+      <strong>180</strong> active gladiators
+    </div>
+    
 <h2>Race Distribution</h2>
 <table>
   <tr>
@@ -59,7 +95,7 @@
 <tr class="tot"><td class="lbl">TOTAL</td><td>154&nbsp;(85.56%)</td><td>26&nbsp;(14.44%)</td><td>180&nbsp;(100.00%)</td></tr>
 
 </table>
-  
+    
 <h2>Armor × Helm Combinations</h2>
 <table>
   <tr><th class="lbl">Body \ Head</th><th>None</th><th>Leather Cap</th><th>Steel Cap</th><th>Helm</th><th>Camail</th><th>Full Helm</th><th>TOTAL</th></tr>
@@ -77,7 +113,7 @@
   <tr class="tot"><td class="lbl">TOTAL</td><td>12&nbsp;(6.67%)</td><td>19&nbsp;(10.56%)</td><td>104&nbsp;(57.78%)</td><td>14&nbsp;(7.78%)</td><td>6&nbsp;(3.33%)</td><td>25&nbsp;(13.89%)</td><td>180&nbsp;(100.00%)</td></tr>
 
 </table>
-  
+    
 <h2>Weapon Usage</h2>
 <table>
   <tr>
@@ -125,7 +161,7 @@
 <tr><td class="lbl">Open Hand</td><td>14&nbsp;(7.78%)</td><td>147&nbsp;(81.67%)</td><td>3&nbsp;(1.67%)</td></tr>
 
 </table>
-  
+    
 <h2>Most Popular Weapon &amp; Fighting Style by Race</h2>
 <table>
   <tr>
@@ -145,5 +181,6 @@
 <tr><td class="lbl">Tabaxi</td><td class="plain">Scimitar</td><td class="plain">Total Kill</td></tr>
 
 </table>
+  </div>
 </body>
 </html>
