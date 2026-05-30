@@ -1193,7 +1193,7 @@ def _run_turn(request_password, rerun_turn=None):
     try:
         from arena_stats import generate_arena_stats
         _reports_dir = os.path.join(LEAGUE_DIR, "reports")
-        generate_arena_stats(uploads, turn_num, _reports_dir)
+        generate_arena_stats(uploads, team_map, turn_num, _reports_dir)
     except Exception as _rpt_err:
         print(f"  WARNING: arena_stats report failed: {_rpt_err}")
 

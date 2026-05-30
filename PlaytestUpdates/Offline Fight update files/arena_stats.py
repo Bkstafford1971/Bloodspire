@@ -50,19 +50,19 @@ WEAPON_ORDER = [
 
 # ── Public entry point ─────────────────────────────────────────────────────────
 
-def generate_arena_stats(uploads: dict, turn_num: int, output_dir: str) -> None:
+def generate_arena_stats(uploads: dict, team_map: dict, turn_num: int, output_dir: str) -> None:
     """
     Generate arena_stats.html in output_dir.
 
-    uploads   : the raw uploads dict from league_server._run_turn()
-                { upload_key -> upload_data_dict }
+    uploads   : raw uploads dict (pre-fight warrior state)
+    team_map  : post-fight Team objects keyed by upload key
     turn_num  : current turn number
     output_dir: directory to write arena_stats.html into
 
     Silent on failure — logs to stdout but never raises.
     """
     try:
-        _generate(uploads, turn_num, output_dir)
+        _generate(uploads, team_map, turn_num, output_dir)
     except Exception as e:
         import traceback
         print(f"  WARNING: arena_stats report failed: {e}")
@@ -71,7 +71,11 @@ def generate_arena_stats(uploads: dict, turn_num: int, output_dir: str) -> None:
 
 # ── Internal implementation ────────────────────────────────────────────────────
 
-def _generate(uploads: dict, turn_num: int, output_dir: str) -> None:
+def _record() -> Dict:
+    return {"w": 0, "l": 0, "k": 0}
+
+
+def _generate(uploads: dict, team_map: dict, turn_num: int, output_dir: str) -> None:
     os.makedirs(output_dir, exist_ok=True)
 
     # ── Filter to player uploads only (AI keys start with "ai_") ───────────
@@ -136,6 +140,82 @@ def _generate(uploads: dict, turn_num: int, output_dir: str) -> None:
             if style:
                 race_style[race][style] += 1
 
+    # ── Turn & career W-L-K records by race and gender ──────────────────────
+    # Turn delta = post-fight minus pre-fight for each warrior this turn.
+    # Career     = post-fight current warriors + all fallen/replaced warriors.
+    turn_race:    Dict[str, Dict] = {r: _record() for r in PLAYABLE_RACES}
+    career_race:  Dict[str, Dict] = {r: _record() for r in PLAYABLE_RACES}
+    turn_gender:  Dict[str, Dict] = {"Male": _record(), "Female": _record()}
+    career_gender: Dict[str, Dict] = {"Male": _record(), "Female": _record()}
+
+    for upload_key, upload in player_uploads.items():
+        upload_team  = upload.get("team") or {}
+        team_obj     = team_map.get(upload_key)
+        pre_warriors = upload_team.get("warriors") or []
+        post_warriors = list(team_obj.warriors) if team_obj else []
+
+        for i, pre_w in enumerate(pre_warriors):
+            if not pre_w:
+                continue
+            race   = pre_w.get("race",   "")
+            gender = pre_w.get("gender", "")
+
+            # Pre-fight record (from upload)
+            pre_w_val = pre_w.get("wins",   0)
+            pre_l_val = pre_w.get("losses", 0)
+            pre_k_val = pre_w.get("kills",  0)
+
+            # Post-fight record (from team_map Warrior object)
+            if team_obj and i < len(post_warriors) and post_warriors[i]:
+                pw = post_warriors[i]
+                post_w_val = pw.wins
+                post_l_val = pw.losses
+                post_k_val = pw.kills
+            else:
+                post_w_val, post_l_val, post_k_val = pre_w_val, pre_l_val, pre_k_val
+
+            dw = post_w_val - pre_w_val
+            dl = post_l_val - pre_l_val
+            dk = post_k_val - pre_k_val
+
+            # Turn totals
+            if race in turn_race:
+                turn_race[race]["w"] += dw
+                turn_race[race]["l"] += dl
+                turn_race[race]["k"] += dk
+            if gender in turn_gender:
+                turn_gender[gender]["w"] += dw
+                turn_gender[gender]["l"] += dl
+                turn_gender[gender]["k"] += dk
+
+            # Career totals — post-fight current warriors
+            if race in career_race:
+                career_race[race]["w"] += post_w_val
+                career_race[race]["l"] += post_l_val
+                career_race[race]["k"] += post_k_val
+            if gender in career_gender:
+                career_gender[gender]["w"] += post_w_val
+                career_gender[gender]["l"] += post_l_val
+                career_gender[gender]["k"] += post_k_val
+
+        # Career totals — fallen/replaced warriors (full career already baked in)
+        for fw in (upload_team.get("fallen_warriors") or []):
+            if not isinstance(fw, dict):
+                continue
+            race   = fw.get("race",   "")
+            gender = fw.get("gender", "")
+            fw_w   = fw.get("wins",   0)
+            fw_l   = fw.get("losses", 0)
+            fw_k   = fw.get("kills",  0)
+            if race in career_race:
+                career_race[race]["w"] += fw_w
+                career_race[race]["l"] += fw_l
+                career_race[race]["k"] += fw_k
+            if gender in career_gender:
+                career_gender[gender]["w"] += fw_w
+                career_gender[gender]["l"] += fw_l
+                career_gender[gender]["k"] += fw_k
+
     html = _render_html(
         turn_num      = turn_num,
         manager_count = manager_count,
@@ -148,12 +228,16 @@ def _generate(uploads: dict, turn_num: int, output_dir: str) -> None:
         wpn_backup    = wpn_backup,
         race_wpn      = race_wpn,
         race_style    = race_style,
+        turn_race     = turn_race,
+        career_race   = career_race,
+        turn_gender   = turn_gender,
+        career_gender = career_gender,
     )
 
     out_path = os.path.join(output_dir, "arena_stats.html")
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html)
-    print(f"  Arena stats report written → {out_path}")
+    print(f"  Arena stats report written: {out_path}")
 
     # ── Push arena stats + hub to GitHub Pages ──────────────────────────────
     try:
@@ -205,6 +289,8 @@ def _render_html(
     race_gender, armor_helm,
     wpn_primary, wpn_secondary, wpn_backup,
     race_wpn, race_style,
+    turn_race, career_race,
+    turn_gender, career_gender,
 ) -> str:
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -265,6 +351,10 @@ def _render_html(
     tr.tot td.lbl { color: #ff4444; }
     tr:nth-child(odd)  { background: #080808; }
     tr:nth-child(even) { background: #050505; }
+    /* ── Side-by-side table layout ── */
+    .tables-row { display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start; margin-bottom: 8px; }
+    .tables-row h2 { margin-top: 0; }
+    .tbl-block { flex: 0 0 auto; }
     """
 
     # ── Table 1: Race × Gender ───────────────────────────────────────────────
@@ -377,6 +467,70 @@ def _render_html(
   {rows4}
 </table>"""
 
+    # ── Tables 5–8: record rows with Total Fights and Win% ──────────────────
+    def _winpct(w, l):
+        fights = w + l
+        if fights == 0:
+            return '<td class="zero">—</td>'
+        return f"<td>{w / fights * 100:.1f}%</td>"
+
+    def _rec_row(label, d):
+        fights = d["w"] + d["l"]
+        return (f'<tr><td class="lbl">{label}</td>'
+                f'<td>{d["w"]}</td><td>{d["l"]}</td><td>{d["k"]}</td>'
+                f'<td>{fights}</td>{_winpct(d["w"], d["l"])}</tr>\n')
+
+    rec_header = '<tr><th class="lbl">Race</th><th>W</th><th>L</th><th>K</th><th>Total</th><th>Win%</th></tr>\n'
+    gen_header = '<tr><th class="lbl">Gender</th><th>W</th><th>L</th><th>K</th><th>Total</th><th>Win%</th></tr>\n'
+
+    # ── Table 5: This Turn's Race Record ────────────────────────────────────
+    rows5 = ""
+    for race in PLAYABLE_RACES:
+        rows5 += _rec_row(race, turn_race[race])
+
+    table5 = f"""
+<h2>This Turn's Race Record</h2>
+<table>
+  {rec_header}
+  {rows5}
+</table>"""
+
+    # ── Table 6: Career Race Record ──────────────────────────────────────────
+    rows6 = ""
+    for race in PLAYABLE_RACES:
+        rows6 += _rec_row(race, career_race[race])
+
+    table6 = f"""
+<h2>Career Race Record</h2>
+<table>
+  {rec_header}
+  {rows6}
+</table>"""
+
+    # ── Table 7: This Turn's Gender Record ──────────────────────────────────
+    rows7 = ""
+    for gender in ("Male", "Female"):
+        rows7 += _rec_row(gender, turn_gender[gender])
+
+    table7 = f"""
+<h2>This Turn's Gender Record</h2>
+<table>
+  {gen_header}
+  {rows7}
+</table>"""
+
+    # ── Table 8: Career Gender Record ────────────────────────────────────────
+    rows8 = ""
+    for gender in ("Male", "Female"):
+        rows8 += _rec_row(gender, career_gender[gender])
+
+    table8 = f"""
+<h2>Career Gender Record</h2>
+<table>
+  {gen_header}
+  {rows8}
+</table>"""
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -398,7 +552,15 @@ def _render_html(
       <strong>{team_count}</strong> active teams<br>
       <strong>{total}</strong> active gladiators
     </div>
-    {table1}
+    <div class="tables-row">
+      <div class="tbl-block">{table1}</div>
+      <div class="tbl-block">{table5}</div>
+      <div class="tbl-block">{table6}</div>
+    </div>
+    <div class="tables-row">
+      <div class="tbl-block">{table7}</div>
+      <div class="tbl-block">{table8}</div>
+    </div>
     {table2}
     {table3}
     {table4}
@@ -433,13 +595,18 @@ def _render_hub_html(turn_num: int) -> str:
         padding: 20px 40px 16px;
     }
     .site-name {
-        font-size: 2.4em; font-weight: bold; color: #cc0000;
-        letter-spacing: 3px;
-        text-shadow: 0 0 14px #880000;
+        font-family: 'Metal Mania', cursive;
+        font-size: 3.2em; letter-spacing: 3px; text-transform: uppercase;
+        background: linear-gradient(to bottom, #3a0000 0%, #8b1a1a 40%, #a31616 60%, #2a0000 100%);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        display: inline-block;
+        filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.8));
+        margin: 0;
     }
     .site-subtitle {
-        color: #888; font-size: 0.78em; letter-spacing: 2px;
-        text-transform: uppercase; margin-top: 2px;
+        font-family: 'Cinzel', serif;
+        color: #888; font-size: 0.82em; letter-spacing: 2px;
+        text-transform: uppercase; margin-top: 4px;
     }
     /* ── Main layout ── */
     .main { display: flex; gap: 0; }
@@ -468,14 +635,15 @@ def _render_hub_html(turn_num: int) -> str:
         font-size: 0.88em;
     }
     .report-links { list-style: none; padding-left: 20px; }
-    .report-links li { margin-bottom: 4px; }
+    .report-links li { margin-bottom: 8px; }
     .report-links a {
-        color: #cc6600; text-decoration: none;
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 0.9em;
+        color: #ffcc00; text-decoration: none;
+        font-family: 'Cinzel', serif;
+        font-size: 1.05em; font-weight: bold;
+        letter-spacing: 0.5px;
     }
-    .report-links a:hover { color: #ff8800; text-decoration: underline; }
-    .report-links a::before { content: "→  "; color: #660000; }
+    .report-links a:hover { color: #ffe566; text-decoration: underline; }
+    .report-links a::before { content: ">> "; color: #884400; }
     /* ── Footer ── */
     .footer {
         border-top: 1px solid #220000;
@@ -491,6 +659,7 @@ def _render_hub_html(turn_num: int) -> str:
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bloodspire — Arena Facts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
   <style>{css}</style>
 </head>
 <body>
