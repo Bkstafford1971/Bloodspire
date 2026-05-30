@@ -1189,6 +1189,23 @@ def _run_turn(request_password, rerun_turn=None):
         traceback.print_exc()
         print(f"  WARNING: AI team evolution failed: {e}")
 
+    # Generate arena statistics HTML report
+    try:
+        from arena_stats import generate_arena_stats
+        _reports_dir = os.path.join(LEAGUE_DIR, "reports")
+        generate_arena_stats(uploads, turn_num, _reports_dir)
+    except Exception as _rpt_err:
+        print(f"  WARNING: arena_stats report failed: {_rpt_err}")
+
+    # Generate team roster HTML report
+    try:
+        from team_roster import generate_team_roster_html, write_team_roster
+        _reports_dir = os.path.join(LEAGUE_DIR, "reports")
+        _roster_html = generate_team_roster_html(uploads, team_map, turn_num)
+        write_team_roster(_roster_html, _reports_dir)
+    except Exception as _rpt_err:
+        print(f"  WARNING: team_roster report failed: {_rpt_err}")
+
     # ===================================================================
     # STEP 5: Finalize config and auto-carry
     # ===================================================================

@@ -713,26 +713,58 @@ const Store = {
     return await fsaDeleteFile(_teamPath(tid)); 
   },
   async readFightLog(fightId, turnNum = null) {
-    // 1. Try "fights/" folder first (local run)
+    // 1. Try "fights/" folder first (for locally-run matches)
     const names = await fsaListDir('fights');
     const needle = `fight_${String(fightId).padStart(4, '0')}_`;
     const filename = names.find(n => n.startsWith(needle));
     if (filename) return await fsaReadText(`fights/${filename}`);
 
-    // 2. Try results/turn_XXX.json (downloaded results)
-    if (turnNum) {
-      const res = await fsaReadJSON(_turnResultPath(turnNum));
-      if (res && res.fight_logs && res.fight_logs[String(fightId)]) {
-        console.log(`Found narrative for fight ${fightId} in turn ${turnNum} results cache.`);
-        return res.fight_logs[String(fightId)];
+    if (!turnNum) return null;
+
+    // 2. Search ALL result files for this turn — a manager with multiple teams
+    //    gets one file per team (team_XXXX_turn_YYY.json), so searching only
+    //    turn_YYY.json would miss any team whose result was saved first and
+    //    overwritten by a later team's download.
+    const turnSuffix   = `turn_${String(turnNum).padStart(3, '0')}.json`;
+    const allResultFiles = await fsaListDir('results');
+    const turnFiles = allResultFiles.filter(f => f.endsWith(turnSuffix));
+    for (const f of turnFiles) {
+      const data = await fsaReadJSON(`results/${f}`);
+      if (data && data.fight_logs && data.fight_logs[String(fightId)]) {
+        return data.fight_logs[String(fightId)];
+      }
+    }
+
+    // 3. Try league/turn_XXXX/ (ZIP Restore path)
+    // ZIP restores recreate the server's multi-file structure per turn
+    const turnDir = `league/turn_${String(turnNum).padStart(4, '0')}`;
+    const zipFiles = await fsaListDir(turnDir);
+    const resultFiles = zipFiles.filter(f => f.startsWith('result_') && f.endsWith('.json'));
+    
+    for (const f of resultFiles) {
+      try {
+        const data = await fsaReadJSON(`${turnDir}/${f}`);
+        if (data && data.fight_logs && data.fight_logs[String(fightId)]) {
+          return data.fight_logs[String(fightId)];
+        }
+      } catch (e) {
+        console.warn(`Error reading result file ${f} in ${turnDir}:`, e);
       }
     }
     return null;
   },
 
   // Turn results and Newsletters
-  async writeTurnResult(turn, obj) { 
-    return await fsaWriteJSON(_turnResultPath(turn), obj); 
+  async writeTurnResult(turn, obj) {
+    // Save to a team-specific file so multiple teams owned by the same manager
+    // don't overwrite each other's fight_logs. Falls back to the legacy shared
+    // path when no team_id is present (backward compat).
+    const teamId = obj && obj.team_id;
+    if (teamId) {
+      const path = `results/team_${String(teamId).padStart(4,'0')}_turn_${String(turn).padStart(3,'0')}.json`;
+      return await fsaWriteJSON(path, obj);
+    }
+    return await fsaWriteJSON(_turnResultPath(turn), obj);
   },
   async readNewsletter(turn) { 
     return await fsaReadText(_newsletterPath(turn)); 
