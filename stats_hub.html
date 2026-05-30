@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bloodspire — Arena Facts</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        background: #000; color: #fff;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 14px; line-height: 1.6;
+    }
+    /* ── Header ── */
+    .site-header {
+        background: #000;
+        border-bottom: 2px solid #880000;
+        padding: 20px 40px 16px;
+    }
+    .site-name {
+        font-size: 2.4em; font-weight: bold; color: #cc0000;
+        letter-spacing: 3px;
+        text-shadow: 0 0 14px #880000;
+    }
+    .site-subtitle {
+        color: #888; font-size: 0.78em; letter-spacing: 2px;
+        text-transform: uppercase; margin-top: 2px;
+    }
+    /* ── Main layout ── */
+    .main { display: flex; gap: 0; }
+    .content {
+        padding: 36px 40px 60px;
+        flex: 1;
+    }
+    /* ── Page title ── */
+    .page-title {
+        font-size: 1.8em; font-weight: bold; color: #fff;
+        margin-bottom: 4px; letter-spacing: 1px;
+    }
+    .page-intro {
+        color: #999; font-size: 0.85em; margin-bottom: 36px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    /* ── Report sections ── */
+    .section { margin-bottom: 36px; }
+    .section-title {
+        font-size: 1.3em; font-weight: bold; color: #cc0000;
+        margin-bottom: 6px;
+    }
+    .section-desc {
+        color: #ccc; margin-bottom: 10px;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.88em;
+    }
+    .report-links { list-style: none; padding-left: 20px; }
+    .report-links li { margin-bottom: 4px; }
+    .report-links a {
+        color: #cc6600; text-decoration: none;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.9em;
+    }
+    .report-links a:hover { color: #ff8800; text-decoration: underline; }
+    .report-links a::before { content: "→  "; color: #660000; }
+    /* ── Footer ── */
+    .footer {
+        border-top: 1px solid #220000;
+        padding: 14px 40px;
+        color: #444; font-size: 0.75em;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    </style>
+</head>
+<body>
+  <div class="site-header">
+    <div class="site-name">BLOODSPIRE</div>
+    <div class="site-subtitle">The Agony Amphitheatre</div>
+  </div>
+
+  <div class="main">
+    <div class="content">
+
+      <div class="page-title">Arena Facts</div>
+      <div class="page-intro">
+        Turn 1 &nbsp;|&nbsp; Updated: 2026-05-29 23:14
+      </div>
+
+      <div class="section">
+        <div class="section-title">Arena Demographics &amp; Statistics</div>
+        <div class="section-desc">
+          The numbers that define the Agony Amphitheatre. Current race
+          distribution, armor and helm combinations, weapon preferences,
+          and the fighting styles favored by each race — all at a glance.
+        </div>
+        <ul class="report-links">
+          <li><a href="arena_stats.html">Arena Statistics</a></li>
+        </ul>
+      </div>
+
+      <!-- Add new report sections here as they are created -->
+
+    </div>
+  </div>
+
+  <div class="footer">
+    All data reflects active gladiators as of Turn 1.
+    Reports are overwritten each turn with current data.
+  </div>
+</body>
+</html>
