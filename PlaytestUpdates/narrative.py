@@ -1009,8 +1009,8 @@ STYLE_ATTACK_PREFIX: dict[str, list[str]] = {
     "Calculated Attack": ["executes a downward strike at", "makes a precise attack on",
                           "aims a calculated blow at"],
     "Sure Strike"      : ["carefully aims at", "takes a measured swing at"],
-    "Counterstrike"    : ["counters with a blow at", "retaliates against",
-                          "fires back at"],
+    "Counterstrike"    : ["strikes carefully at", "prepares a measured blow at",
+                          "waits for an opening and attacks"],
     "Wall of Steel"    : ["attacks relentlessly at", "relentlessly targets"],
 }
 
@@ -2728,11 +2728,15 @@ CRITICAL_DOUBLE_COUNTER_LINES = [
 def critical_hit_line(attacker_name: str, attacker_gender: str,
                       defender_name: str, weapon_name: str,
                       damage_type: str) -> str:
-    pronoun_his = "his" if attacker_gender == "Male" else "her"
+    his     = "his"     if attacker_gender == "Male" else "her"
+    his_her = his
+    he      = "he"      if attacker_gender == "Male" else "she"
+    him     = "him"     if attacker_gender == "Male" else "her"
+    himself = "himself" if attacker_gender == "Male" else "herself"
     pool = CRITICAL_HIT_LINES.get(damage_type, CRITICAL_HIT_CRUSHING)
     return random.choice(pool).format(
         attacker=attacker_name.upper(), defender=defender_name.upper(),
-        weapon=weapon_name, his=pronoun_his,
+        weapon=weapon_name, his=his, his_her=his_her, he=he, him=him, himself=himself,
     )
 
 
@@ -2900,8 +2904,13 @@ def mercy_result_line(warrior_name: str, granted: bool) -> str:
 
 
 def death_line(warrior_name: str, gender: str) -> str:
-    pronoun = "his" if gender == "Male" else "her"
-    return random.choice(DEATH_LINES).format(warrior=warrior_name.upper(), his=pronoun)
+    his     = "his"     if gender == "Male" else "her"
+    he      = "he"      if gender == "Male" else "she"
+    him     = "him"     if gender == "Male" else "her"
+    himself = "himself" if gender == "Male" else "herself"
+    return random.choice(DEATH_LINES).format(
+        warrior=warrior_name.upper(), his=his, he=he, him=him, himself=himself
+    )
 
 
 def race_kill_line(killer_name: str, race_name: str, gender: str) -> str:

@@ -107,7 +107,7 @@ class CombatDebugLogger:
         if w.strategies:
             self._emit("    Strategies:")
             for i, s in enumerate(w.strategies, 1):
-                cond = getattr(s, "condition", "Always")
+                cond = getattr(s, "trigger", "Always")
                 self._emit(
                     f"      [{i}] {cond}  →  {s.style}"
                     f" / Act:{s.activity} / Aim:{s.aim_point}"
