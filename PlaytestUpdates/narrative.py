@@ -252,19 +252,30 @@ def _warrior_report_block(w: Warrior) -> list:
 
     _no_armor = not armor_val or armor_val.lower() == "none"
 
+    # Determine pronoun for Lizardfolk armor descriptions
+    pronoun = "his" if (hasattr(w, "gender") and w.gender == "Male") else "her"
+
     if _has_natural_armor:
         if _no_armor:
             # Scales only — equivalent to Scale armor protection
             armor_part = "in NATURAL SCALE ARMOR"
         elif armor_val.lower() in ("cloth", "leather"):
             # Cloth/Leather layers over scales and adds a small bonus
-            armor_part = f"in {armor_val.upper()} over natural scales"
+            armor_part = f"in {armor_val.upper()} over {pronoun} natural scales"
         else:
-            # Cuir Boulli and heavier: describe the physical reality, reveal nothing mechanical
-            armor_part = (
-                f"in {armor_val.upper()}, the metal plates fitted awkwardly"
-                f" over dense reptilian scales"
-            )
+            # Armor over scales: armor-type-specific flavor that implies restriction without being explicit
+            armor_lower = armor_val.lower()
+            if armor_lower == "cuir boulli":
+                armor_part = f"in {armor_val.upper()}, rigid leather restricting {pronoun} natural flexibility"
+            elif armor_lower == "brigandine":
+                armor_part = f"in {armor_val.upper()}, plates catching awkwardly over {pronoun} natural scales"
+            elif armor_lower == "scale":
+                armor_part = f"in {armor_val.upper()}, layered awkwardly over {pronoun} natural plating"
+            elif armor_lower == "chain":
+                armor_part = f"in {armor_val.upper()}, links that snag between {pronoun} scales"
+            else:
+                # Half-Plate, Full Plate, and any others
+                armor_part = f"in {armor_val.upper()}, rigid plates constraining {pronoun} natural mobility"
     else:
         armor_part = f"in {armor_val.upper()}" if not _no_armor else "unarmored"
 
