@@ -384,7 +384,7 @@ def _gnome_cs_line(defender_name: str, attacker_name: str) -> str:
     return random.choice([
         f"{defender_name.upper()} reads the attack perfectly and snaps a precise counter!",
         f"Turning the blade aside, {defender_name.upper()} drives a surgical riposte at {attacker_name.upper()}!",
-        f"{defender_name.upper()} barely deflects the blow — then exploits the gap with expert precision!",
+        f"{defender_name.upper()} barely deflects the blow and then exploits the gap with expert precision!",
         f"The parry flows into a seamless counter as {defender_name.upper()} punishes the overextension!",
         f"{defender_name.upper()} uses {attacker_name.upper()}'s own momentum against them with a swift riposte!",
     ])
@@ -690,9 +690,12 @@ def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState, foe_styl
     if state.is_weapon_dropped:
         injury_pen += 20 # Fighting unarmed unexpectedly is hard
 
+    # Ground penalty: attacking from the floor is desperate and inaccurate
+    ground_pen = 25 if state.is_on_ground else 0
+
     total = roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b \
                - end_pen - hp0_pen + fav_bonus + martial_bonus + thrown_mastery_b \
-               + tactician_b - injury_pen
+               + tactician_b - injury_pen - ground_pen
 
     if attacker.race.name == "Lizardfolk":
         atk_pct = get_lizardfolk_armor_penalties(attacker.armor or "None")["dodge_parry_pct"]
@@ -1164,7 +1167,8 @@ def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CSt
     if attacker.race.modifiers.tactician_edge and foe_style:
         if foe_style in _TACTICIAN_FAVORED:    tactician_b =  8
         elif foe_style in _TACTICIAN_DISFAVORED: tactician_b = -6
-    result  = roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b - end_pen - hp0_pen + fav_b + martial_b + thrown_b + tactician_b
+    ground_pen = 25 if state.is_on_ground else 0
+    result  = roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b - end_pen - hp0_pen + fav_b + martial_b + thrown_b + tactician_b - ground_pen
     comps = {
         "d100": roll,
         "dex_bonus": dex_b,
@@ -1177,6 +1181,7 @@ def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CSt
         "martial_combat": martial_b,
         "thrown_mastery": thrown_b,
         "tactician_edge": tactician_b,
+        "ground_pen": -ground_pen if ground_pen else 0,
         "end_pen": -end_pen if end_pen else 0,
         "hp0_pen": -hp0_pen if hp0_pen else 0,
     }
@@ -2370,26 +2375,8 @@ class CombatEngine:
                 # Spending an action to pick up weapon happens during the action phase,
                 # but we handle the state check here.
                 pass
-
-            # 3. Ground Recovery
-            if st.is_on_ground:
-                st.consecutive_ground += 1
-                # Brawl recovery: 40% + 8% per brawl level
-                brawl_recovery = 40 + st.warrior.skills.get("brawl", 0) * 8
-                # Acrobatics recovery: 20% per level, capped at 85%
-                acrobatics_level = st.warrior.skills.get("acrobatics", 0)
-                acrobatics_recovery = min(85, acrobatics_level * 20) if acrobatics_level > 0 else 0
-                # Use best recovery option available
-                recovery_chance = max(brawl_recovery, acrobatics_recovery)
-
-                if random.randint(1, 100) <= recovery_chance:
-                    st.is_on_ground       = False
-                    st.consecutive_ground = 0
-                    recovery_method = "acrobatics" if acrobatics_recovery > brawl_recovery else "brawl"
-                    if recovery_method == "acrobatics":
-                        self._emit(f"{st.warrior.name.upper()} somersaults back to their feet with acrobatic grace!")
-                    else:
-                        self._emit(N.getup_line(st.warrior.name, st.warrior.gender))
+            # Ground recovery is handled per-action inside _resolve_action so that
+            # getting up costs an action rather than being free at minute start.
 
         apm_a = _calc_apm(self.warrior_a, strat_a, self.state_a)
         apm_b = _calc_apm(self.warrior_b, strat_b, self.state_b)
@@ -2613,7 +2600,7 @@ class CombatEngine:
             self._emit(random.choice([
                 f"   {att.name.upper()}'s eyes sweep the arena floor between exchanges!",
                 f"   Between strikes, {att.name.upper()} scans the sand for a discarded weapon!",
-                f"   {att.name.upper()} glances across the pit — always watching for something useful!",
+                f"   {att.name.upper()} glances across the pit, always watching for something useful!",
             ]))
             return False
 
@@ -2622,7 +2609,7 @@ class CombatEngine:
         if random.random() > base_chance:
             # Miss: occasional flavor (30% to avoid spam)
             if random.random() < 0.30:
-                self._emit(f"   {att.name.upper()} lunges for a discarded blade but pulls back — the angle is wrong!")
+                self._emit(f"   {att.name.upper()} lunges for a discarded blade but pulls back; the angle is wrong!")
             return False
 
         # ── Success: determine weapon ─────────────────────────────────────────
@@ -2635,25 +2622,25 @@ class CombatEngine:
             self._emit(random.choice([
                 f"   {att.name.upper()} darts to the sand and snatches up {att.gender_possessive} {wpn_name.lower()}!",
                 f"   With a sharp eye, {att.name.upper()} reclaims {att.gender_possessive} thrown {wpn_name.lower()} from the arena floor!",
-                f"   {att.name.upper()} skids to the dirt and comes up with {att.gender_possessive} {wpn_name.lower()} — back in business!",
+                f"   {att.name.upper()} skids to the dirt and comes up with {att.gender_possessive} {wpn_name.lower()}, back in business!",
             ]))
         elif tier1:
             # Had own weapons but RNG picked tier 2
             wpn_name = random.choice(_TIER2)
             self._emit(random.choice([
-                f"   A gleam of metal catches {att.name.upper()}'s eye — {att.gender_subject} snatches a {wpn_name.lower()} from the sand!",
+                f"   A gleam of metal catches {att.name.upper()}'s eye as {att.gender_subject} snatches a {wpn_name.lower()} from the sand!",
                 f"   {att.name.upper()} spots a stray {wpn_name.lower()} near the wall and grabs it in one fluid motion!",
             ]))
         else:
             # No own weapons: smaller chance to find arena debris
             if random.random() > 0.30:
                 if random.random() < 0.30:
-                    self._emit(f"   {att.name.upper()} scans the floor desperately — nothing useful within reach!")
+                    self._emit(f"   {att.name.upper()} scans the floor desperately; nothing useful within reach!")
                 return False
             wpn_name = random.choice(_TIER2)
             self._emit(random.choice([
-                f"   {att.name.upper()} spots a {wpn_name.lower()} half-buried in the sand — the arena always provides!",
-                f"   A forgotten {wpn_name.lower()} in the dirt catches {att.name.upper()}'s eye — {att.gender_subject} darts in and grabs it!",
+                f"   {att.name.upper()} spots a {wpn_name.lower()} half-buried in the sand; the arena always provides!",
+                f"   A forgotten {wpn_name.lower()} in the dirt catches {att.name.upper()}'s eye and {att.gender_subject} darts in and grabs it!",
             ]))
 
         # ── Bonus throw: grab-and-hurl in one motion ─────────────────────────
@@ -2696,8 +2683,8 @@ class CombatEngine:
                 return True   # fight ended
         else:
             self._emit(random.choice([
-                f"   The hurried throw flies wide — {ds_.warrior.name.upper()} barely flinches!",
-                f"   The desperate hurl lacks accuracy — {ds_.warrior.name.upper()} sidesteps!",
+                f"   The hurried throw flies wide and {ds_.warrior.name.upper()} barely flinches!",
+                f"   The desperate hurl lacks accuracy as {ds_.warrior.name.upper()} sidesteps!",
             ]))
 
         # Weapon goes into pool — never back into permanent inventory
@@ -2714,6 +2701,30 @@ class CombatEngine:
     def _resolve_action(self, as_: _CState, ds_: _CState, ax: Strategy, dx: Strategy, minute: int, _dbg_init=None, apm_as: int = 5) -> Optional[FightResult]:
         att = as_.warrior;  dfr = ds_.warrior
         wpn = att.primary_weapon;  aim = ax.aim_point
+
+        # ── Ground Recovery: Attacker on ground ────────────────────────────
+        # The warrior acting has WON the initiative. If they're on the ground,
+        # they get a good chance to get up (60-80% base). Success consumes
+        # the action (no attack). Failure emits a struggle line and continues
+        # the attack at a heavy penalty (already baked into _attack_roll).
+        if as_.is_on_ground:
+            brawl_lv = att.skills.get("brawl", 0)
+            acro_lv = att.skills.get("acrobatics", 0)
+            # Won initiative: high recovery chance
+            recovery_chance = max(60 + brawl_lv * 6, min(85, acro_lv * 15) if acro_lv > 0 else 0)
+            if random.randint(1, 100) <= recovery_chance:
+                # Success: got up
+                as_.is_on_ground = False
+                as_.consecutive_ground = 0
+                if acro_lv > 0 and min(85, acro_lv * 15) > 60 + brawl_lv * 6:
+                    self._emit(f"{att.name.upper()} quickly rolls back to their feet with acrobatic precision!")
+                else:
+                    self._emit(f"{att.name.upper()} pushes off the ground and rises to their feet!")
+                self._check_and_switch_strategies(as_, ds_, minute)
+                return None  # action consumed by getting up; no attack
+            else:
+                # Failure: still on ground, but trying
+                self._emit(N.ground_struggle_line(att.name, att.gender))
 
         # If a warrior is on Opportunity Throw strategy but their current weapon is
         # not throwable (e.g. Open Hand after running out of throwables), override
@@ -3359,6 +3370,25 @@ class CombatEngine:
             if ds_.current_hp <= 0:
                 return self._handle_zero_hp(ds_, as_, _pre_mc if mc_margin >= 10 else ds_.current_hp + 1, mc_dmg if mc_margin >= 10 else 1, minute)
 
+        # ── Ground Recovery: Defender on ground (lost this action) ──────────
+        # The defender lost the initiative for this action. If they're on the
+        # ground, they get a MUCH lower chance to recover (15-25%) because they
+        # were just attacked or couldn't get an action off. They'll try again
+        # when they win the next initiative roll.
+        if ds_.is_on_ground:
+            brawl_lv = dfr.skills.get("brawl", 0)
+            acro_lv = dfr.skills.get("acrobatics", 0)
+            # Lost initiative: low recovery chance (being attacked/missed action)
+            recovery_chance = max(15 + brawl_lv * 3, min(40, acro_lv * 8) if acro_lv > 0 else 0)
+            if random.randint(1, 100) <= recovery_chance:
+                # Success: got up despite the barrage
+                ds_.is_on_ground = False
+                ds_.consecutive_ground = 0
+                self._emit(f"{dfr.name.upper()} fights through the onslaught and regains their footing!")
+            else:
+                # Failure: still struggling
+                self._emit(N.ground_struggle_line(dfr.name, dfr.gender))
+
         return None
 
     def _try_elf_extra_attack(self, as_: _CState, ds_: _CState,
@@ -3666,8 +3696,11 @@ class CombatEngine:
                     f"{attacker_state.warrior.name.upper()}'s commanding presence "
                     f"makes {defender_state.warrior.name.upper()} hesitate!"
                 )
-        # Re-evaluate both warriors' strategies after presence endurance penalties
-        self._check_and_switch_strategies(self.state_a, self.state_b, 0)
+        # NOTE: Do not re-evaluate strategies at minute 0. All strategy evaluations,
+        # including initial ones triggered by presence hesitation, must occur inside
+        # _run_minute() so they appear within the minute block, not in the reserved
+        # challenge-flavor space between the strategy table and "MINUTE 1".
+        # The minute 1 evaluation will catch any initial switches.
 
     def _throw_stones(self, minute: int):
         """

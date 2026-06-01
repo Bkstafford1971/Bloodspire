@@ -626,7 +626,7 @@ RACE_KILL_POOLS = {
         "{name} gazes down at the fallen with a mix of curiosity and intense, feline pride.",
         "{name} performs a quick, acrobatic flip over the corpse, a flashy end to a lethal bout.",
         "{name} stands with {his} fur ruffled by the wind, the scent of the kill an intoxicating prize.",
-        "{name} purrs—a low, unsettling rumble that carries surprisingly far in the quieted arena.",
+        "{name} purrs: a low, unsettling rumble that carries surprisingly far in the quieted arena.",
     ],
     "Half-Elf": [
         "{name} stands with a conflicted but proud bearing, the duality of {his} blood clear in victory.",
@@ -2427,6 +2427,20 @@ GET_UP_LINES = [
     "{warrior} rises from the dust, spitting blood",
 ]
 
+GROUND_STRUGGLE_LINES = [
+    "{warrior} tries to rise but cannot find {his} footing!",
+    "{warrior} scrambles in the dirt, unable to regain {his} feet!",
+    "{warrior} claws at the sand but stays down!",
+    "{warrior} fights to stand, but {his} legs won't cooperate!",
+]
+
+GROUND_ATTACK_LINES = [
+    "{warrior} lashes out desperately from the ground!",
+    "{warrior} strikes upward from {his} knees!",
+    "{warrior} swings wildly from the sand!",
+    "{warrior} attacks from a losing position!",
+]
+
 
 def knockdown_line(warrior_name: str, gender: str) -> str:
     pronoun = "his" if gender == "Male" else "her"
@@ -2438,6 +2452,20 @@ def getup_line(warrior_name: str, gender: str) -> str:
     pronoun = "his" if gender == "Male" else "her"
     template = random.choice(GET_UP_LINES)
     return template.format(warrior=warrior_name.upper(), his=pronoun)
+
+
+def ground_struggle_line(warrior_name: str, gender: str) -> str:
+    """Failed recovery attempt — warrior tries to get up but can't."""
+    pronoun = "his" if gender == "Male" else "her"
+    return random.choice(GROUND_STRUGGLE_LINES).format(
+        warrior=warrior_name.upper(), his=pronoun)
+
+
+def ground_attack_line(warrior_name: str, gender: str) -> str:
+    """Warrior attacks from the ground after failing to rise."""
+    pronoun = "his" if gender == "Male" else "her"
+    return random.choice(GROUND_ATTACK_LINES).format(
+        warrior=warrior_name.upper(), his=pronoun)
 
 
 # ---------------------------------------------------------------------------
