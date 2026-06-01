@@ -47,6 +47,14 @@ from strategy import (
     FighterState, evaluate_triggers, get_style_advantage,
     get_style_props, AGGRESSIVE_STYLES as _AGGRESSIVE_STYLES,
 )
+
+# Gnome tactician_edge — opponents using these styles trigger the bonus/penalty.
+_TACTICIAN_FAVORED    = frozenset({
+    "Total Kill", "Wall of Steel", "Lunge", "Bash", "Slash", "Strike", "Martial Combat",
+})
+_TACTICIAN_DISFAVORED = frozenset({
+    "Parry", "Defend", "Sure Strike", "Calculated Attack", "Counterstrike", "Engage & Withdraw",
+})
 from weapons  import get_weapon, strength_penalty, OPEN_HAND, Weapon, get_effective_strength_for_weapons, min_str_for_weight
 from armor    import (
     effective_dex, total_defense_value, is_ap_vulnerable,
@@ -371,6 +379,17 @@ def _get_martial_combat_parry_bonus(attacker: Warrior) -> int:
     return bonus
 
 
+def _gnome_cs_line(defender_name: str, attacker_name: str) -> str:
+    """Flavor line for a Gnome counterstrike_mastery riposte."""
+    return random.choice([
+        f"{defender_name.upper()} reads the attack perfectly and snaps a precise counter!",
+        f"Turning the blade aside, {defender_name.upper()} drives a surgical riposte at {attacker_name.upper()}!",
+        f"{defender_name.upper()} barely deflects the blow — then exploits the gap with expert precision!",
+        f"The parry flows into a seamless counter as {defender_name.upper()} punishes the overextension!",
+        f"{defender_name.upper()} uses {attacker_name.upper()}'s own momentum against them with a swift riposte!",
+    ])
+
+
 def _get_tabaxi_frenzy_damage_bonus(attacker: Warrior) -> int:
     """
     Get Tabaxi frenzy damage bonus based on primary weapon skill.
@@ -516,6 +535,8 @@ class _CState:
     frenzy_used        : bool    = False  # Tabaxi: frenzy ability has been used this fight
     armor_penalty      : float   = 0.0    # fraction 0.0-1.0 from over-weight armor
     perm_injuries_this_fight: int = 0    # cap at 2 per fight to prevent injury avalanche
+    thrown_pool        : list    = field(default_factory=list)  # Goblin scavenger: weapons thrown this fight
+    scavenger_scan_next: bool    = True   # Goblin scavenger: alternates scan(True)/roll(False)
 
     def to_fighter_state(self) -> FighterState:
         return FighterState(
@@ -618,7 +639,7 @@ def _weapon_size_class(weapon_name: str) -> int:
         return 1
 
 
-def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState) -> int:
+def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState, foe_style: str = "") -> int:
     """d100 + DEX + weapon_skill*5 + luck + style_mod + feint + lunge bonuses + favorite_weapon bonus"""
     roll  = _d100()
     dex   = get_effective_dex_for_race(attacker.dexterity, attacker.armor or "None", attacker.helm or "None", attacker.race.name)
@@ -647,6 +668,19 @@ def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState) -> int:
     if _has_martial_combat_bonus(attacker) and _is_using_martial_combat(attacker):
         martial_bonus = _get_martial_combat_accuracy_bonus(attacker)
 
+    # Thrown mastery bonus: +10 to hit on Opportunity Throw (Goblin racial)
+    thrown_mastery_b = 0
+    if strategy.style == "Opportunity Throw" and attacker.race.modifiers.thrown_mastery:
+        thrown_mastery_b = 10
+
+    # Tactician's edge: +8 vs aggressive opponents, -6 vs methodical ones (Gnome racial)
+    tactician_b = 0
+    if attacker.race.modifiers.tactician_edge and foe_style:
+        if foe_style in _TACTICIAN_FAVORED:
+            tactician_b = 8
+        elif foe_style in _TACTICIAN_DISFAVORED:
+            tactician_b = -6
+
     # Injury Penalties
     injury_pen = 0
     if "head" in state.triggered_injuries:
@@ -657,7 +691,8 @@ def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState) -> int:
         injury_pen += 20 # Fighting unarmed unexpectedly is hard
 
     total = roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b \
-               - end_pen - hp0_pen + fav_bonus + martial_bonus - injury_pen
+               - end_pen - hp0_pen + fav_bonus + martial_bonus + thrown_mastery_b \
+               + tactician_b - injury_pen
 
     if attacker.race.name == "Lizardfolk":
         atk_pct = get_lizardfolk_armor_penalties(attacker.armor or "None")["dodge_parry_pct"]
@@ -787,6 +822,13 @@ def _defense_roll(
     if state.armor_penalty > 0:
         total = int(total * (1.0 - state.armor_penalty))
 
+    # Tactician's edge: +5 defense vs aggressive attackers, -4 vs methodical (Gnome racial)
+    if defender.race.modifiers.tactician_edge and atk_style:
+        if atk_style in _TACTICIAN_FAVORED:
+            total += 5
+        elif atk_style in _TACTICIAN_DISFAVORED:
+            total -= 4
+
     return max(1, total)
 
 
@@ -884,7 +926,8 @@ def _attempt_precision_strike(
 # STRENGTH DAMAGE BONUS
 # ---------------------------------------------------------------------------
 
-def _str_damage_bonus(weapon: Weapon, attacker: Warrior, two_handed: bool = False) -> float:
+def _str_damage_bonus(weapon: Weapon, attacker: Warrior, two_handed: bool = False,
+                      eff_str_override: int = None) -> float:
     """Bonus damage multiplier from having strength above the weapon's minimum requirement.
 
     Open Hand (natural weapon, req STR 3): 5% per point above 3, capped at 100%.
@@ -892,11 +935,15 @@ def _str_damage_bonus(weapon: Weapon, attacker: Warrior, two_handed: bool = Fals
     Medium weapons (weight 4.0–5.9 lbs):  3% per point above req, capped at  25%.
     Heavy weapons  (weight ≥ 6.0 lbs):    no bonus.
 
+    eff_str_override: pass a pre-capped effective STR (used for Opportunity Throw
+    to enforce the STR-14 throw-damage ceiling).
+
     Returns a float 0.0–1.0 that callers add to 1.0 before multiplying raw damage.
     """
     weight = weapon.weight
     req_str = min_str_for_weight(weight, two_handed)
-    eff_str = get_effective_strength_for_weapons(attacker)
+    eff_str = eff_str_override if eff_str_override is not None \
+              else get_effective_strength_for_weapons(attacker)
     pts_above = max(0, eff_str - req_str)
 
     if _is_open_hand_weapon(weapon.skill_key):
@@ -906,6 +953,16 @@ def _str_damage_bonus(weapon: Weapon, attacker: Warrior, two_handed: bool = Fals
     if weight <= 5.9:
         return min(0.25, pts_above * 0.03)
     return 0.0
+
+
+def _ot_eff_str(attacker: Warrior) -> int:
+    """Effective STR for Opportunity Throw damage, capped at base STR 14.
+    STR above 14 adds no throw damage — further gains come from skill only.
+    """
+    eff = get_effective_strength_for_weapons(attacker)
+    if attacker.strength > 14:
+        eff -= (attacker.strength - 14)   # remove excess above cap
+    return max(0, eff)
 
 
 # ---------------------------------------------------------------------------
@@ -933,10 +990,20 @@ def _calc_damage_hybrid(
     wpn_key = weapon_name.lower().replace(" ", "_").replace("&", "and")
     two_handed = (attacker.secondary_weapon == "Open Hand" and weapon.two_hand)
     wpn_skill = attacker.skills.get(wpn_key, 0)
+
+    # Opportunity Throw: strength contributes less to thrown damage than to melee.
+    # Technique and timing matter more than raw muscle when releasing a weapon.
+    # Rules for OT damage:
+    #   1. STR contribution is halved (technique > muscle for throws).
+    #   2. STR above base 14 adds NO additional throw damage — further gains
+    #      require skill training in throw/weapon (and even then are minimal).
+    _is_ot = (atk_strategy.style == "Opportunity Throw")
+
     # Simple stat and skill scaling: STR bonus + weapon skill bonus
-    str_bonus = (attacker.strength - 10) * 1.0
-    skill_bonus = wpn_skill * 1.0
-    bonus = max(-10, str_bonus + skill_bonus)
+    _str_for_ot  = min(attacker.strength, 14) if _is_ot else attacker.strength
+    str_bonus    = (_str_for_ot - 10) * (0.5 if _is_ot else 1.0)
+    skill_bonus  = wpn_skill * 1.0
+    bonus        = max(-10, str_bonus + skill_bonus)
 
     # Generic dual-wielding bonus
     dual_wield_bonus = 0
@@ -960,14 +1027,20 @@ def _calc_damage_hybrid(
     if _is_versatile_two_handed(wpn_key, attacker):
         raw = int(raw * 1.15)
 
-    # Strength-above-minimum bonus
-    str_bonus_mult = _str_damage_bonus(weapon, attacker, two_handed)
+    # Strength-above-minimum bonus.
+    # OT: use STR-14-capped effective STR, then halve the result.
+    if _is_ot:
+        _eff_str_ot    = _ot_eff_str(attacker)
+        str_bonus_mult = _str_damage_bonus(weapon, attacker, two_handed,
+                                           eff_str_override=_eff_str_ot) * 0.5
+        weight_pen     = strength_penalty(weapon.weight, _eff_str_ot, two_handed) * 0.5
+    else:
+        effective_str  = get_effective_strength_for_weapons(attacker)
+        str_bonus_mult = _str_damage_bonus(weapon, attacker, two_handed)
+        weight_pen     = strength_penalty(weapon.weight, effective_str, two_handed)
+
     if str_bonus_mult > 0.0:
         raw = int(raw * (1.0 + str_bonus_mult))
-
-    # Under-strength weight penalty
-    effective_str = get_effective_strength_for_weapons(attacker)
-    weight_pen = strength_penalty(weapon.weight, effective_str, two_handed)
     if weight_pen > 0:
         raw = int(raw * (1.0 - weight_pen))
 
@@ -1063,7 +1136,7 @@ def _initiative_roll_verbose(warrior: "Warrior", strategy: "Strategy", state: "_
     return result, comps
 
 
-def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CState"):
+def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CState", foe_style: str = ""):
     roll    = _d100()
     dex = get_effective_dex_for_race(
         attacker.dexterity,
@@ -1086,7 +1159,12 @@ def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CSt
     martial_b = 0
     if _has_martial_combat_bonus(attacker) and _is_using_martial_combat(attacker):
         martial_b = _get_martial_combat_accuracy_bonus(attacker)
-    result  = roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b - end_pen - hp0_pen + fav_b + martial_b
+    thrown_b = 10 if (strategy.style == "Opportunity Throw" and attacker.race.modifiers.thrown_mastery) else 0
+    tactician_b = 0
+    if attacker.race.modifiers.tactician_edge and foe_style:
+        if foe_style in _TACTICIAN_FAVORED:    tactician_b =  8
+        elif foe_style in _TACTICIAN_DISFAVORED: tactician_b = -6
+    result  = roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b - end_pen - hp0_pen + fav_b + martial_b + thrown_b + tactician_b
     comps = {
         "d100": roll,
         "dex_bonus": dex_b,
@@ -1097,6 +1175,8 @@ def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CSt
         "lunge": lunge_b,
         "fav_bonus": fav_b,
         "martial_combat": martial_b,
+        "thrown_mastery": thrown_b,
+        "tactician_edge": tactician_b,
         "end_pen": -end_pen if end_pen else 0,
         "hp0_pen": -hp0_pen if hp0_pen else 0,
     }
@@ -1275,8 +1355,10 @@ def _calc_damage_verbose(
         except ValueError:
             pass
 
-    # Mirror _calc_damage_hybrid: stat/skill bonus drives floor and ceiling
-    str_bonus = (attacker.strength - 10) * 1.0
+    # Mirror _calc_damage_hybrid exactly (OT: halved + STR 14 cap)
+    _is_ot       = (atk_strategy.style == "Opportunity Throw")
+    _str_for_ot  = min(attacker.strength, 14) if _is_ot else attacker.strength
+    str_bonus    = (_str_for_ot - 10) * (0.5 if _is_ot else 1.0)
     skill_bonus = wpn_skill * 1.0
     bonus = max(-10, str_bonus + skill_bonus)
 
@@ -1286,6 +1368,7 @@ def _calc_damage_verbose(
     steps["damage_base"] = weapon.damage_base
     steps["damage_top"] = weapon.damage_top
     steps["str_bonus"] = str_bonus
+    steps["ot_str_scale"] = "0.5x (throw)" if _is_ot else "1.0x (melee)"
     steps["skill_bonus"] = skill_bonus
     steps["bonus"] = bonus
     steps["dual_wield_bonus"] = dual_wield_bonus
@@ -1303,15 +1386,21 @@ def _calc_damage_verbose(
     else:
         steps["two_hand_mult"] = 1.0
 
-    # Strength-above-minimum bonus
-    str_dmg_bonus = _str_damage_bonus(weapon, attacker, two_handed)
+    # Strength-above-minimum bonus (OT: capped at STR 14, then halved)
+    if _is_ot:
+        _eff_str_ot   = _ot_eff_str(attacker)
+        str_dmg_bonus = _str_damage_bonus(weapon, attacker, two_handed,
+                                          eff_str_override=_eff_str_ot) * 0.5
+        str_pen       = strength_penalty(weapon.weight, _eff_str_ot, two_handed) * 0.5
+        steps["ot_eff_str_capped"] = _eff_str_ot
+    else:
+        effective_str = get_effective_strength_for_weapons(attacker)
+        str_dmg_bonus = _str_damage_bonus(weapon, attacker, two_handed)
+        str_pen       = strength_penalty(weapon.weight, effective_str, two_handed)
+
     if str_dmg_bonus > 0.0:
         raw = int(raw * (1.0 + str_dmg_bonus))
         steps["str_above_req_bonus"] = round(str_dmg_bonus, 3)
-
-    # Under-strength weight penalty
-    effective_str = get_effective_strength_for_weapons(attacker)
-    str_pen = strength_penalty(weapon.weight, effective_str, two_handed)
     if str_pen > 0:
         raw = int(raw * (1.0 - str_pen))
         steps["str_penalty_factor"] = round(str_pen, 3)
@@ -2463,6 +2552,10 @@ class CombatEngine:
                 return None
         except ValueError:
             return None
+
+        # Goblin scavenger: track every thrown weapon for potential recovery
+        if warrior.race.modifiers.scavenger:
+            state.thrown_pool.append(current_primary)
         
         # Check if backup exists and is same weapon type as primary
         if warrior.backup_weapon and warrior.backup_weapon == current_primary:
@@ -2483,6 +2576,138 @@ class CombatEngine:
         return f"{warrior.name.upper()} has no more throwables and resorts to martial combat!"
 
     # =========================================================================
+    # GOBLIN SCAVENGER
+    # =========================================================================
+
+    def _try_goblin_scavenge(self, as_: _CState, ds_: _CState, minute: int) -> bool:
+        """
+        Goblin racial scavenger check.  Fires at the top of each action when the
+        Goblin is in a weapon-related strategy (not OT itself).
+
+        Alternates between a scan turn (flavor only, normal attack continues) and
+        a roll turn (attempt to retrieve a throwable).  On a successful roll the
+        retrieved weapon is thrown immediately as a bonus action (-8 attack) and
+        the weapon is added to the thrown_pool — never kept in hand permanently.
+
+        Returns True when the normal attack should be suppressed (retrieval fired).
+        Returns False when the normal attack should proceed as usual.
+        """
+        att = as_.warrior
+
+        if not att.race.modifiers.scavenger:
+            return False
+        if not as_.active_strategy:
+            return False
+        # Only when NOT currently throwing (scavenge is for when OT isn't active)
+        if as_.active_strategy.style == "Opportunity Throw":
+            return False
+        # Only when the reason for being off OT is weapon-related, not health/fatigue
+        trigger_lower = as_.active_strategy.trigger.lower()
+        if not any(kw in trigger_lower for kw in ("weapon", "weaponless", "throwable")):
+            return False
+
+        # Alternate scan / roll turns
+        as_.scavenger_scan_next = not as_.scavenger_scan_next
+        if as_.scavenger_scan_next:
+            # Scan turn: brief flavor, normal attack continues
+            self._emit(random.choice([
+                f"   {att.name.upper()}'s eyes sweep the arena floor between exchanges!",
+                f"   Between strikes, {att.name.upper()} scans the sand for a discarded weapon!",
+                f"   {att.name.upper()} glances across the pit — always watching for something useful!",
+            ]))
+            return False
+
+        # ── Roll turn ────────────────────────────────────────────────────────
+        base_chance = 0.55 + (att.luck - 15) * 0.01   # 41% – 70% by luck
+        if random.random() > base_chance:
+            # Miss: occasional flavor (30% to avoid spam)
+            if random.random() < 0.30:
+                self._emit(f"   {att.name.upper()} lunges for a discarded blade but pulls back — the angle is wrong!")
+            return False
+
+        # ── Success: determine weapon ─────────────────────────────────────────
+        _TIER2 = ["Stiletto", "Knife", "Dagger", "Hatchet", "Bola"]
+        tier1 = list(as_.thrown_pool)   # own previously-thrown weapons
+
+        if tier1 and random.random() < 0.70:
+            wpn_name = random.choice(tier1)
+            as_.thrown_pool.remove(wpn_name)   # remove one copy
+            self._emit(random.choice([
+                f"   {att.name.upper()} darts to the sand and snatches up {att.gender_possessive} {wpn_name.lower()}!",
+                f"   With a sharp eye, {att.name.upper()} reclaims {att.gender_possessive} thrown {wpn_name.lower()} from the arena floor!",
+                f"   {att.name.upper()} skids to the dirt and comes up with {att.gender_possessive} {wpn_name.lower()} — back in business!",
+            ]))
+        elif tier1:
+            # Had own weapons but RNG picked tier 2
+            wpn_name = random.choice(_TIER2)
+            self._emit(random.choice([
+                f"   A gleam of metal catches {att.name.upper()}'s eye — {att.gender_subject} snatches a {wpn_name.lower()} from the sand!",
+                f"   {att.name.upper()} spots a stray {wpn_name.lower()} near the wall and grabs it in one fluid motion!",
+            ]))
+        else:
+            # No own weapons: smaller chance to find arena debris
+            if random.random() > 0.30:
+                if random.random() < 0.30:
+                    self._emit(f"   {att.name.upper()} scans the floor desperately — nothing useful within reach!")
+                return False
+            wpn_name = random.choice(_TIER2)
+            self._emit(random.choice([
+                f"   {att.name.upper()} spots a {wpn_name.lower()} half-buried in the sand — the arena always provides!",
+                f"   A forgotten {wpn_name.lower()} in the dirt catches {att.name.upper()}'s eye — {att.gender_subject} darts in and grabs it!",
+            ]))
+
+        # ── Bonus throw: grab-and-hurl in one motion ─────────────────────────
+        # Action is consumed by retrieval; the bonus throw is the payoff.
+        # The weapon is temporarily equipped, thrown at -8 accuracy, then
+        # added to thrown_pool (never kept in hand).
+        saved_primary = att.primary_weapon
+        att.primary_weapon = wpn_name
+
+        strat_ot = Strategy(
+            trigger       = "Scavenger bonus throw",
+            style         = "Opportunity Throw",
+            activity      = as_.active_strategy.activity,
+            aim_point     = as_.active_strategy.aim_point,
+            defense_point = as_.active_strategy.defense_point,
+        )
+
+        self._emit(random.choice([
+            f"   In the same motion, {att.name.upper()} hurls the {wpn_name.lower()} with deadly intent!",
+            f"   Without breaking stride, {att.name.upper()} sends the {wpn_name.lower()} flying across the pit!",
+            f"   The grab becomes a throw in one explosive burst of movement!",
+        ]))
+
+        atk = _attack_roll(att, strat_ot, as_) - 8   # hurried throw penalty
+        dfs = _defense_roll(ds_.warrior, ds_.active_strategy, ds_,
+                            att, aim_point=strat_ot.aim_point,
+                            atk_style="Opportunity Throw", is_parry=False)
+
+        if atk > dfs:
+            margin = atk - dfs
+            dmg, cat = _calc_damage_hybrid(att, strat_ot, wpn_name, ds_.warrior, margin)
+            if att.race.modifiers.thrown_mastery:
+                dmg += 4
+            self._emit(N.damage_line(dmg, ds_.warrior.max_hp, cat))
+            prev_hp        = ds_.current_hp
+            ds_.current_hp -= dmg
+            result = self._handle_zero_hp(ds_, as_, prev_hp, dmg, minute)
+            if result:
+                att.primary_weapon = saved_primary
+                return True   # fight ended
+        else:
+            self._emit(random.choice([
+                f"   The hurried throw flies wide — {ds_.warrior.name.upper()} barely flinches!",
+                f"   The desperate hurl lacks accuracy — {ds_.warrior.name.upper()} sidesteps!",
+            ]))
+
+        # Weapon goes into pool — never back into permanent inventory
+        as_.thrown_pool.append(wpn_name)
+        att.primary_weapon = saved_primary
+
+        # Strategy re-evaluates naturally next action — no forced switch
+        return True   # normal attack suppressed; bonus throw was the action
+
+    # =========================================================================
     # ACTION
     # =========================================================================
 
@@ -2490,16 +2715,41 @@ class CombatEngine:
         att = as_.warrior;  dfr = ds_.warrior
         wpn = att.primary_weapon;  aim = ax.aim_point
 
-        # Opportunity Throw: consume the weapon before the attack (weapon is gone regardless of outcome)
+        # If a warrior is on Opportunity Throw strategy but their current weapon is
+        # not throwable (e.g. Open Hand after running out of throwables), override
+        # the style to a sensible melee fallback for this action only.  This prevents
+        # "hurls his open hand at..." narrative when the fighter has nothing left to throw.
+        if ax.style == "Opportunity Throw":
+            try:
+                _wpn_check = get_weapon(wpn)
+                if not _wpn_check.throwable:
+                    import copy as _copy
+                    ax = _copy.copy(ax)
+                    ax.style = "Martial Combat" if wpn == "Open Hand" else "Strike"
+            except ValueError:
+                import copy as _copy
+                ax = _copy.copy(ax)
+                ax.style = "Strike"
+
+        # Goblin scavenger: attempt to retrieve a throwable weapon.
+        # Fires before the normal attack; returns True if action was consumed.
+        if as_.warrior.race.modifiers.scavenger:
+            scav_result = self._try_goblin_scavenge(as_, ds_, minute)
+            if scav_result:
+                return None   # bonus throw already handled; advance to next action
+
+        # Opportunity Throw: consume the weapon before the attack (weapon is gone regardless
+        # of outcome — it's in the air). Defer the swap narrative until after the attack
+        # line so the sequence reads: "throws → [draws next weapon] → result", not
+        # "[draws next weapon] → throws → result".
         _weapon_thrown_away = False
+        _weapon_loss_msg    = None
         if ax.style == "Opportunity Throw":
             try:
                 wpn_obj = get_weapon(wpn)
                 if wpn_obj.skill_key != "empty_hand":  # Only consume if throwable
                     _weapon_thrown_away = True
-                    weapon_loss_msg = self._handle_opportunity_throw_loss(att, as_)
-                    if weapon_loss_msg:
-                        self._emit(weapon_loss_msg)
+                    _weapon_loss_msg = self._handle_opportunity_throw_loss(att, as_)
             except ValueError:
                 pass  # Invalid weapon, continue without loss
 
@@ -2565,10 +2815,10 @@ class CombatEngine:
         _style_adv = get_style_advantage(ax.style, dx.style) * 6
         _compat_pen = int((1.0 - penalty_factor) * 25) if not is_compatible else 0
         if self.debug_logger:
-            _atk_base, _atk_comps = _attack_roll_verbose(att, ax, as_)
+            _atk_base, _atk_comps = _attack_roll_verbose(att, ax, as_, foe_style=dx.style)
             atk_r = _atk_base + _style_adv - _compat_pen
         else:
-            atk_r = _attack_roll(att, ax, as_)
+            atk_r = _attack_roll(att, ax, as_, foe_style=dx.style)
             atk_r += _style_adv
             if not is_compatible:
                 atk_r = int(atk_r - _compat_pen)
@@ -2725,36 +2975,65 @@ class CombatEngine:
                                         f"splitting into {dfr.name.capitalize()}'s {_aim_flavor}!"
                                     )
                                 self._emit(_pen_line)
-                                self._check_defender_strategy_only(ds_, as_, minute)
+                                self._check_defender_strategy_only(ds_, as_, minute)  # victim reacts to HP drop
+                                self._check_defender_strategy_only(as_, ds_, minute)  # attacker reacts to foe HP
                                 return None
                             except ValueError:
                                 pass
                     
-                    # --- RIPOSTE COUNTER-ATTACK ---
-                    riposte_level = dfr.skills.get("riposte", 0)
-                    if riposte_level > 0 and not ds_.is_on_ground:
-                        # Base 40% + 5% per level, reduced if attacker has high cleave
-                        riposte_chance = 40 + (riposte_level * 5)
-                        
-                        if cleave_level >= 3:
-                            cleave_advantage = (cleave_level - 2) * 15  # 15% reduction per cleave level above 2
-                            riposte_chance = max(5, riposte_chance - cleave_advantage)
-                        
-                        if random.randint(1, 100) <= riposte_chance:
-                            self._emit(N.counterstrike_line(dfr.name, att.name))
-                            return self._counterstrike(ds_, as_, dx, ax, minute)
-                    
-                    if dx.style == "Counterstrike" and not ds_.is_on_ground:
-                        if random.randint(1, 100) <= 30 + dfr.skills.get("parry", 0) * 5:
-                            self._emit(N.counterstrike_line(dfr.name, att.name))
-                            return self._counterstrike(ds_, as_, dx, ax, minute)
+                    # --- RIPOSTE / COUNTERSTRIKE MASTERY ---
+                    riposte_level   = dfr.skills.get("riposte", 0)
+                    _gnome_mastery  = dfr.race.modifiers.counterstrike_mastery
+                    _cleave_reduce  = max(0, (cleave_level - 2) * 15) if cleave_level >= 3 else 0
+
+                    if not ds_.is_on_ground:
+                        if _gnome_mastery:
+                            # Gnome mastery fires FIRST as an extra chance on a strong parry.
+                            # 15% base (no skill required), +4% per riposte level, +6% CS style.
+                            # If mastery doesn't fire, the standard paths below still run —
+                            # mastery is an addition, not a replacement.
+                            _cs_chance = 15 + (riposte_level * 4)
+                            if dx.style == "Counterstrike":
+                                _cs_chance = min(65, _cs_chance + 6)
+                            _cs_chance = max(5, _cs_chance - _cleave_reduce)
+                            if random.randint(1, 100) <= _cs_chance:
+                                self._emit(_gnome_cs_line(dfr.name, att.name))
+                                if _weapon_loss_msg: self._emit(_weapon_loss_msg)
+                                return self._counterstrike(ds_, as_, dx, ax, minute)
+
+                        # Standard riposte skill path (all races)
+                        if riposte_level > 0:
+                            _rip_chance = max(5, 40 + (riposte_level * 5) - _cleave_reduce)
+                            if random.randint(1, 100) <= _rip_chance:
+                                self._emit(N.counterstrike_line(dfr.name, att.name))
+                                if _weapon_loss_msg: self._emit(_weapon_loss_msg)
+                                return self._counterstrike(ds_, as_, dx, ax, minute)
+
+                        # Counterstrike style path (all races)
+                        if dx.style == "Counterstrike":
+                            if random.randint(1, 100) <= 30 + dfr.skills.get("parry", 0) * 5:
+                                self._emit(N.counterstrike_line(dfr.name, att.name))
+                                if _weapon_loss_msg: self._emit(_weapon_loss_msg)
+                                return self._counterstrike(ds_, as_, dx, ax, minute)
                 else:
                     if not _crit_def:
                         self._emit(N.dodge_line(dfr.name))
             else:
+                # Weak parry (margin -1 to -29) or weak dodge
                 if use_p:
                     if not _crit_def:
                         self._emit(N.parry_line(dfr.name, barely=not _weak_attack_intent, defense_point_active=(dx.defense_point == aim)))
+
+                    # Gnome counterstrike mastery: weak parries open a small window.
+                    # 5% base + 2% per riposte level. No style bonus — weak parries
+                    # are barely openings; only practice (riposte skill) improves them.
+                    if dfr.race.modifiers.counterstrike_mastery and not ds_.is_on_ground:
+                        _riposte_lv  = dfr.skills.get("riposte", 0)
+                        _weak_chance = 4 + (_riposte_lv * 2)
+                        if random.randint(1, 100) <= _weak_chance:
+                            self._emit(_gnome_cs_line(dfr.name, att.name))
+                            if _weapon_loss_msg: self._emit(_weapon_loss_msg)
+                            return self._counterstrike(ds_, as_, dx, ax, minute)
                 else:
                     if not _crit_def:
                         self._emit(N.dodge_line(dfr.name))
@@ -2774,7 +3053,8 @@ class CombatEngine:
                         ds_.dropped_weapon_name = dfr.primary_weapon
                         dfr.primary_weapon = "Open Hand"
                         self._emit(N.weapon_drop_lines(dfr.name, ds_.dropped_weapon_name, dfr.gender, is_forceful=True))
-                        self._check_defender_strategy_only(ds_, as_, minute)
+                        self._check_defender_strategy_only(ds_, as_, minute)  # disarmed warrior reacts
+                        self._check_defender_strategy_only(as_, ds_, minute)  # attacker: "your foe is weaponless"
 
             # --- CRITICAL DEFENSE SECONDARY EFFECTS ---
             if _crit_def:
@@ -2809,6 +3089,10 @@ class CombatEngine:
                         if result:
                             return result
 
+            # Weapon swap message: after the miss/parry/dodge result is clear
+            if _weapon_loss_msg:
+                self._emit(_weapon_loss_msg)
+
             # Primary missed/was parried - Elf may still find an opening with the off-hand
             return self._try_elf_extra_attack(as_, ds_, ax, dx, minute)
 
@@ -2819,6 +3103,8 @@ class CombatEngine:
             if self.debug_logger:
                 self.debug_logger.log_hp_update(dfr.name, prev_hp_graze, 3, ds_.current_hp, dfr.max_hp, "graze")
             self._check_defender_strategy_only(ds_, as_, minute)
+            if _weapon_loss_msg:
+                self._emit(_weapon_loss_msg)
             # Graze - Elf may still follow with the off-hand
             return self._try_elf_extra_attack(as_, ds_, ax, dx, minute)
 
@@ -2876,7 +3162,16 @@ class CombatEngine:
         _ca_bonus = CA_PRECISION_DAMAGE_BONUS if ca_precision_landed else 0
         if ca_precision_landed:
             dmg += _ca_bonus
+
+        # Thrown mastery damage bonus: +4 on Opportunity Throw hits (Goblin racial)
+        if ax.style == "Opportunity Throw" and att.race.modifiers.thrown_mastery:
+            dmg += 4
+
         self._emit(N.damage_line(dmg, dfr.max_hp, cat))
+
+        # Weapon swap message: after damage lands, attacker draws their next weapon
+        if _weapon_loss_msg:
+            self._emit(_weapon_loss_msg)
 
         if self.debug_logger:
             self.debug_logger.log_damage(
@@ -2917,7 +3212,8 @@ class CombatEngine:
                         _pre_bleed_hp, ds_.current_hp, dfr.max_hp,
                     )
         
-        self._check_defender_strategy_only(ds_, as_, minute) # Re-evaluate strategies after HP/endurance changes
+        self._check_defender_strategy_only(ds_, as_, minute)  # defender reacts to own HP drop
+        self._check_defender_strategy_only(as_, ds_, minute)  # attacker reacts to updated foe HP
 
         # Low-HP status commentary
         hp_pct = ds_.current_hp / max(1, dfr.max_hp)
@@ -2945,7 +3241,8 @@ class CombatEngine:
                         ds_.dropped_weapon_name = dfr.primary_weapon
                         dfr.primary_weapon = "Open Hand"
                         self._emit(N.weapon_drop_lines(dfr.name, ds_.dropped_weapon_name, dfr.gender, is_fumble=True))
-                        self._check_defender_strategy_only(ds_, as_, minute)
+                        self._check_defender_strategy_only(ds_, as_, minute)  # fumbled warrior reacts
+                        self._check_defender_strategy_only(as_, ds_, minute)  # attacker: "your foe is weaponless"
 
         # Near-kill tracking
         nk_threshold = int(dfr.max_hp * 0.20)
@@ -2969,7 +3266,8 @@ class CombatEngine:
                     self.debug_logger.log_hp_update(
                         dfr.name, _pre_fall, fall_dmg, ds_.current_hp, dfr.max_hp, "entangle fall"
                     )
-                self._check_defender_strategy_only(ds_, as_, minute)
+                self._check_defender_strategy_only(ds_, as_, minute)  # defender now on ground
+                self._check_defender_strategy_only(as_, ds_, minute)  # attacker: "your foe is on the ground"
         except ValueError:
             pass
 
@@ -3138,8 +3436,9 @@ class CombatEngine:
         except: cat = "Oddball"
         for ln in N.hit_line(att.name, dfr.name, wpn, cat, ax.aim_point, "precise", attacker_race=att.race.name):
             self._emit(ln)
-        # Note: Counterstrike damage is a fixed margin, not a roll.
-        dmg, _ = _calc_damage_hybrid(att, ax, wpn, dfr, 40, style_compat_penalty=penalty_factor)
+        # Gnome counterstrike mastery: higher margin (50 vs 40) — more decisive hit.
+        _cs_margin = 50 if att.race.modifiers.counterstrike_mastery else 40
+        dmg, _ = _calc_damage_hybrid(att, ax, wpn, dfr, _cs_margin, style_compat_penalty=penalty_factor)
         self._emit(N.damage_line(dmg, dfr.max_hp, cat))
         prev       = ds_.current_hp
         ds_.current_hp -= dmg

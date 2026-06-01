@@ -212,6 +212,7 @@ def _load_config():
         "ai_teams_enabled": True,
         "schedule_enabled": False,
         "schedule_slots": [],
+        "github_push_enabled": True,
     }, allow_tampered=True)
     # Ensure new flags exist in old configs
     for key, default in [
@@ -223,6 +224,7 @@ def _load_config():
         ("admin_debug_manager_id", ""),
         ("rerun_count", 0),
         ("rerun_turn", 0),
+        ("github_push_enabled", True),
     ]:
         if key not in cfg:
             cfg[key] = default
@@ -1189,6 +1191,23 @@ def _run_turn(request_password, rerun_turn=None):
         traceback.print_exc()
         print(f"  WARNING: AI team evolution failed: {e}")
 
+    # Generate arena statistics HTML report
+    try:
+        from arena_stats import generate_arena_stats
+        _reports_dir = os.path.join(LEAGUE_DIR, "reports")
+        generate_arena_stats(uploads, team_map, turn_num, _reports_dir)
+    except Exception as _rpt_err:
+        print(f"  WARNING: arena_stats report failed: {_rpt_err}")
+
+    # Generate team roster HTML report
+    try:
+        from team_roster import generate_team_roster_html, write_team_roster
+        _reports_dir = os.path.join(LEAGUE_DIR, "reports")
+        _roster_html = generate_team_roster_html(uploads, team_map, turn_num)
+        write_team_roster(_roster_html, _reports_dir)
+    except Exception as _rpt_err:
+        print(f"  WARNING: team_roster report failed: {_rpt_err}")
+
     # ===================================================================
     # STEP 5: Finalize config and auto-carry
     # ===================================================================
@@ -1492,24 +1511,6 @@ def _filter_results_for_client(results: list, cfg: dict) -> list:
             ]
         filtered.append(tr)
     return filtered
-
-def _filter_results_for_client(results: list, cfg: dict) -> list:
-    """
-    Filter all team results for client download based on feature flags.
-    """
-    filtered = []
-    for team_result in results:
-        tr = team_result.copy()
-        # Filter warriors in the team
-        if "team" in tr and "warriors" in tr["team"]:
-            tr["team"] = tr["team"].copy()
-            tr["team"]["warriors"] = [
-                _filter_warrior_for_client(w, cfg)
-                for w in tr["team"]["warriors"]
-            ]
-        filtered.append(tr)
-    return filtered
-
 
 _SCHED_DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
 
@@ -1940,6 +1941,13 @@ function openTab(evt, tabId) {{
     <span style="cursor:pointer;user-select:none">AI teams participate each turn</span></label>
    <div style="font-size:10px;color:#666;margin-left:20px">
     Uncheck when running live playtester sessions.
+   </div>
+  </div>
+  <div style="margin-top:8px;border-top:1px solid #ddd;padding-top:8px">
+   <label style="display:block;margin:6px 0"><input type="checkbox" id="gh-push" data-flag="github_push_enabled" style="cursor:pointer" {'checked' if cfg.get('github_push_enabled', True) else ''}>
+    <span style="cursor:pointer;user-select:none">Push stats to GitHub Pages after each turn</span></label>
+   <div style="font-size:10px;color:#666;margin-left:20px">
+    Uncheck when running test sims to avoid overwriting live stats on the website.
    </div>
   </div>
   <div style="margin-top:8px;font-size:10px;color:#888">
@@ -3503,11 +3511,9 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                                 if not tid or str(tid) not in tids:
                                     continue # Result for an old/replaced team
 
-                            # Strip only fight_logs (large narratives ~7KB each).
-                            # Keep fight_history on warriors (~230 bytes/entry) --
-                            # the client needs it for the Fights tab and View Fight.
-                            r_slim = {k: v for k, v in r.items() if k != "fight_logs"}
-                            team_results.append(r_slim)
+                            # Include everything including fight_logs for offline viewing.
+                            # Bandwidth increase is negligible (~35KB per team).
+                            team_results.append(r.copy())
             # Include newsletter for this turn if available
             nl_text = ""
             nl_path = os.path.join(_turn_dir(res_turn), "newsletter.txt")
@@ -4455,7 +4461,8 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             if not _check_host_pw(cfg, b.get("host_password","")):
                 self.send_json({"success":False,"error":"Not authorised."}, 401); return
             for bool_key in ("show_favorite_weapon", "show_luck_factor",
-                             "show_max_hp", "ai_teams_enabled", "schedule_enabled"):
+                             "show_max_hp", "ai_teams_enabled", "schedule_enabled",
+                             "github_push_enabled"):
                 if bool_key in b:
                     cfg[bool_key] = bool(b[bool_key])
             if "schedule_slots" in b:

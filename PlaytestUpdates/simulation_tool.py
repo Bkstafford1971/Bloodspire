@@ -124,7 +124,7 @@ class BloodspireSimTool:
     def __init__(self, root):
         self.root = root
         self.root.title("Bloodspire Arena Simulation & Analytics")
-        self.root.geometry("1100x800")
+        self.root.geometry("1200x950")
         
         self.warrior_pool = [] # List of (Warrior, Team)
         self.uploads_folder = tk.StringVar(value=os.path.join(os.getcwd(), "saves", "league", "turn_0001"))
@@ -159,12 +159,42 @@ class BloodspireSimTool:
         self._build_ui()
 
     def _build_ui(self):
+        # Style the notebook tabs so selected/unselected are clearly distinct
+        style = ttk.Style()
+        style.configure("TNotebook",
+            background="#111111",
+            borderwidth=0,
+            tabmargins=[2, 4, 0, 0],
+        )
+        style.configure("TNotebook.Tab",
+            background="#2a2a2a",
+            foreground="#888888",
+            padding=[16, 7],
+            font=("TkDefaultFont", 10, "bold"),
+            borderwidth=1,
+        )
+        style.map("TNotebook.Tab",
+            background=[("selected", "#8b1a1a"), ("active", "#444444")],
+            foreground=[("selected", "#111111"),  ("active",  "#eeeeee")],
+            font=[("selected", ("TkDefaultFont", 10, "bold"))],
+            expand=[("selected", [1, 1, 1, 0])],
+        )
+
         self.notebook = ttk.Notebook(self.root)
         self.notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+
+        # Helper to add visual header to tabs
+        def _add_tab_header(parent_frame, title, icon=""):
+            header = tk.Frame(parent_frame, bg="#1a1a1a", height=40)
+            header.pack(fill=tk.X, pady=(0, 12))
+            header.pack_propagate(False)
+            ttk.Label(header, text=f"  {icon} {title}", font=("TkDefaultFont", 11, "bold"),
+                     background="#1a1a1a", foreground="#cc9900").pack(side=tk.LEFT, padx=8, pady=8)
 
         # TAB 1: GLOBAL SIMS
         global_tab = ttk.Frame(self.notebook, padding="10")
         self.notebook.add(global_tab, text="Global Analytics")
+        _add_tab_header(global_tab, "Global Analytics", "[GLOBAL]")
 
         # Config Area
         config_frame = ttk.LabelFrame(global_tab, text="Simulation Config", padding="10")
@@ -191,6 +221,7 @@ class BloodspireSimTool:
         # TAB 2: 1v1 MATCHUP
         matchup_tab = ttk.Frame(self.notebook, padding="10")
         self.notebook.add(matchup_tab, text="1 v 1 Custom Matchup")
+        _add_tab_header(matchup_tab, "1 v 1 Custom Matchup", "[MATCHUP]")
 
         # Matchup Grid
         m_grid = ttk.Frame(matchup_tab)
@@ -250,6 +281,101 @@ class BloodspireSimTool:
 
         ttk.Button(matchup_tab, text="RUN 1 v 1 SIMULATION", command=self._sim_1v1_matchup).pack(pady=10)
 
+        # TAB 3: RACIAL ABILITY ANALYSIS
+        racial_tab = ttk.Frame(self.notebook, padding="10")
+        self.notebook.add(racial_tab, text="Racial Ability Analysis")
+        _add_tab_header(racial_tab, "Racial Ability Analysis", "[RACIAL]")
+
+        _RACIAL_SIMS = {
+            "Goblin — Thrown Mastery Analysis": {
+                "desc": (
+                    "Tests all 10 throwable weapons across STR 7-14 x DEX 9/11/13/15/17.\n"
+                    "Goblin (thrown_mastery: +10 attack, +4 damage on OT) vs Human (no bonus).\n"
+                    "Each cell shows Hit% / Avg Damage on hit.   Trials per cell: 1,000.\n"
+                    "Defender: Human STR 10 DEX 10, no armor, Strike style."
+                ),
+                "label_text": "Trials per cell:",
+                "run_label":  "RUN THROWN MASTERY SIM",
+                "handler":    "_sim_thrown_mastery",
+            },
+            "Goblin — Scavenger Trait Validation": {
+                "desc": (
+                    "Runs full fights with a Goblin OT warrior to validate the scavenger trait.\n"
+                    "Tracks scan turns, retrieval attempts, successes (own vs arena find),\n"
+                    "bonus throw hit rate, and fight outcomes across all runs.\n"
+                    "Goblin: STR 10 DEX 14 LCK 20 — Javelin + 2 backup Javelins.\n"
+                    "Strategy: 1) You have no throwable weapons -> Strike   2) Always -> OT\n"
+                    "Opponent: Human STR 10 DEX 10, Broad Sword, Strike style."
+                ),
+                "label_text": "Number of fights:",
+                "run_label":  "RUN SCAVENGER SIM",
+                "handler":    "_sim_goblin_scavenger",
+            },
+            "Gnome — Counterstrike Mastery Validation": {
+                "desc": (
+                    "Runs full fights for Gnome (Counterstrike style) vs four opponent styles.\n"
+                    "Tracks mastery CS fires, standard CS fires, win rates per matchup.\n"
+                    "Side-by-side vs Human baseline — mastery CS should always be 0 for Human.\n"
+                    "Gnome/Human: STR 10 DEX 12 LCK 15, Short Sword, Counterstrike (activity 4).\n"
+                    "Opponent: Human STR 12 DEX 11 LCK 15, Long Sword, activity varies by style."
+                ),
+                "label_text": "Fights per matchup:",
+                "run_label":  "RUN GNOME CS SIM",
+                "handler":    "_sim_gnome_counterstrike",
+            },
+            "Gnome — Tactician's Edge Validation": {
+                "desc": (
+                    "Validates tactician_edge: Gnome gets attack/defense bonus vs aggressive styles,\n"
+                    "penalty vs methodical styles. Runs Gnome and Human (same stats) vs 6 opponent\n"
+                    "styles and checks that the win-rate delta is in the expected direction.\n"
+                    "Gnome/Human: STR 10 DEX 12 LCK 15, Short Sword, Counterstrike (activity 4).\n"
+                    "Expected: Gnome >> Human vs aggressors; Gnome ~ Human vs methodical opponents."
+                ),
+                "label_text": "Fights per matchup:",
+                "run_label":  "RUN TACTICIAN SIM",
+                "handler":    "_sim_gnome_tactician",
+            },
+        }
+
+        ra_config = ttk.LabelFrame(racial_tab, text="Simulation Config", padding="10")
+        ra_config.pack(fill=tk.X, pady=(0, 8))
+
+        ttk.Label(ra_config, text="Simulation:").grid(row=0, column=0, sticky=tk.W)
+        self.racial_sim_var = tk.StringVar(value=list(_RACIAL_SIMS.keys())[0])
+        racial_combo = ttk.Combobox(
+            ra_config, textvariable=self.racial_sim_var,
+            values=list(_RACIAL_SIMS.keys()), state="readonly", width=48
+        )
+        racial_combo.grid(row=0, column=1, padx=8, sticky=tk.W)
+
+        ttk.Label(ra_config, text="Fights / trials:").grid(row=1, column=0, sticky=tk.W, pady=6)
+        self.racial_runs_var = tk.StringVar(value="100")
+        ttk.Combobox(
+            ra_config, textvariable=self.racial_runs_var,
+            values=["50", "100", "250", "500"], state="readonly", width=8
+        ).grid(row=1, column=1, sticky=tk.W, padx=8)
+
+        ttk.Button(ra_config, text="RUN RACIAL SIM", command=self._run_racial_sim).grid(row=1, column=2, padx=8)
+
+        # Dynamic description label
+        self._racial_desc_var = tk.StringVar()
+        ra_desc_lbl = ttk.Label(ra_config, textvariable=self._racial_desc_var,
+                                justify=tk.LEFT, foreground="#555555")
+        ra_desc_lbl.grid(row=2, column=0, columnspan=3, sticky=tk.W, pady=(4, 0))
+
+        def _update_racial_desc(*_):
+            key = self.racial_sim_var.get()
+            self._racial_desc_var.set(_RACIAL_SIMS.get(key, {}).get("desc", ""))
+
+        racial_combo.bind("<<ComboboxSelected>>", _update_racial_desc)
+        _update_racial_desc()  # populate on startup
+
+        self._racial_sims_cfg = _RACIAL_SIMS
+
+        # Carry over vars the individual sims still reference
+        self.scav_runs_var  = self.racial_runs_var
+        self.gnome_runs_var = self.racial_runs_var
+
         # Shared Output Area (at the bottom)
         main_frame = ttk.Frame(self.root, padding="15")
         main_frame.pack(fill=tk.BOTH, expand=True)
@@ -301,6 +427,18 @@ class BloodspireSimTool:
                 except Exception as e:
                     self.text_area.insert(tk.END, f"Error loading {fn}: {e}\n")
         return teams
+
+    def _run_racial_sim(self):
+        """Dispatcher for the Racial Ability Analysis tab dropdown."""
+        key = self.racial_sim_var.get()
+        cfg = self._racial_sims_cfg.get(key, {})
+        handler_name = cfg.get("handler", "")
+        handler = getattr(self, handler_name, None)
+        if handler:
+            handler()
+        else:
+            self.text_area.delete(1.0, tk.END)
+            self.text_area.insert(tk.END, f"No handler found for: {key}\n")
 
     def _run_sim(self):
         teams = self._get_warriors_from_uploads()
@@ -1215,6 +1353,604 @@ class BloodspireSimTool:
                 self.text_area.insert(tk.END, f"\n\nError exporting report: {e}")
         else:
             self.text_area.insert(tk.END, "\n\nReport export cancelled.")
+
+    # -----------------------------------------------------------------------
+    # SIM: GOBLIN THROWN MASTERY ANALYSIS
+    # -----------------------------------------------------------------------
+    def _sim_thrown_mastery(self):
+        """
+        For every throwable weapon, test hit% and avg damage at
+        STR 7-14 x DEX 9-17 for a Goblin (thrown_mastery ON) vs a Human
+        (same stats, no racial bonus).  Opponent is a standardized Human
+        with STR 10, DEX 10, no armor, Strike style.
+        1 000 isolated attack/defense/damage trials per cell.
+        """
+        from combat import _attack_roll, _defense_roll, _calc_damage_hybrid, _CState
+        from weapons import WEAPONS
+
+        TRIALS    = 1000
+        STR_VALS  = list(range(7, 15))          # 7-14
+        DEX_VALS  = list(range(9, 18, 2))        # 9,11,13,15,17 — odd steps, readable columns
+        OT_STYLE  = "Opportunity Throw"
+
+        throwables = sorted(
+            [(w.display, w) for w in WEAPONS.values() if w.throwable],
+            key=lambda x: x[1].weight
+        )
+
+        # ── Build a synthetic warrior ──────────────────────────────────────
+        def make_warrior(race_name, str_val, dex_val, wpn_name):
+            w = W.Warrior(
+                name         = race_name[:4].upper(),
+                race_name    = race_name,
+                gender       = "Male",
+                strength     = str_val,
+                dexterity    = dex_val,
+                constitution = 10,
+                intelligence = 10,
+                presence     = 10,
+                size         = 10,
+            )
+            w.primary_weapon   = wpn_name
+            w.secondary_weapon = "Open Hand"
+            w.armor            = None
+            w.helm             = None
+            w.luck             = 15
+            w.strategies = [W.Strategy(
+                trigger      = "Always (Default Loop)",
+                style        = OT_STYLE,
+                activity     = 5,
+                aim_point    = "Chest",
+                defense_point= "Chest",
+            )]
+            return w
+
+        def make_defender():
+            d = W.Warrior(
+                name         = "DUMMY",
+                race_name    = "Human",
+                gender       = "Male",
+                strength     = 10,
+                dexterity    = 10,
+                constitution = 10,
+                intelligence = 10,
+                presence     = 10,
+                size         = 10,
+            )
+            d.primary_weapon   = "Broad Sword"
+            d.secondary_weapon = "Open Hand"
+            d.armor            = None
+            d.helm             = None
+            d.luck             = 15
+            d.strategies = [W.Strategy(
+                trigger      = "Always (Default Loop)",
+                style        = "Strike",
+                activity     = 5,
+                aim_point    = "Chest",
+                defense_point= "Chest",
+            )]
+            return d
+
+        def make_state(warrior):
+            return _CState(
+                warrior   = warrior,
+                current_hp = warrior.max_hp,
+                endurance  = warrior.max_endurance,
+            )
+
+        # ── Run one cell (N trials) ────────────────────────────────────────
+        def run_cell(race_name, str_val, dex_val, wpn_name):
+            att  = make_warrior(race_name, str_val, dex_val, wpn_name)
+            dfr  = make_defender()
+            strat_att = att.strategies[0]
+            strat_dfr = dfr.strategies[0]
+
+            hits = 0
+            total_dmg = 0
+            for _ in range(TRIALS):
+                as_ = make_state(att)
+                ds_ = make_state(dfr)
+                atk = _attack_roll(att, strat_att, as_)
+                dfs = _defense_roll(dfr, strat_dfr, ds_, att,
+                                    aim_point="Chest", atk_style=OT_STYLE, is_parry=False)
+                if atk > dfs:
+                    hits += 1
+                    margin = atk - dfs
+                    dmg, _ = _calc_damage_hybrid(att, strat_att, wpn_name, dfr, margin)
+                    # Apply thrown mastery damage bonus manually for Goblin
+                    if att.race.modifiers.thrown_mastery:
+                        dmg += 4
+                    total_dmg += dmg
+
+            hit_pct  = hits / TRIALS * 100
+            avg_dmg  = total_dmg / hits if hits else 0.0
+            return hit_pct, avg_dmg
+
+        # ── Output ─────────────────────────────────────────────────────────
+        self.text_area.delete(1.0, tk.END)
+        out = []
+        sep = "=" * 110
+
+        out.append(sep)
+        out.append("GOBLIN THROWN MASTERY ANALYSIS")
+        out.append("Goblin (+10 attack / +4 damage on OT)  vs  Human (no bonus)")
+        out.append(f"Trials per cell: {TRIALS:,}  |  Defender: Human STR 10 DEX 10, no armor, Strike style")
+        out.append(sep)
+
+        col_header = f"{'STR':>4} |" + "".join(f"  DEX {d:>2}       " for d in DEX_VALS)
+        sub_header = f"{'':>5}|" + "".join(f" {'Hit%':>5} {'AvgDmg':>6}  " for _ in DEX_VALS)
+
+        total_weapons = len(throwables)
+        for wpn_idx, (wpn_name, wpn_obj) in enumerate(throwables):
+            self.text_area.insert(tk.END,
+                f"\nCalculating {wpn_name} ({wpn_idx+1}/{total_weapons})...\n")
+            self.root.update()
+
+            out.append(f"\n{wpn_name.upper()}  (weight {wpn_obj.weight}, base dmg {wpn_obj.damage_base})")
+            out.append("-" * 110)
+
+            for race_label, race_name in [("GOBLIN  (+10 atk / +4 dmg)", "Goblin"),
+                                           ("HUMAN   (no bonus)        ", "Human")]:
+                out.append(f"  {race_label}")
+                out.append(f"  {col_header}")
+                out.append(f"  {sub_header}")
+                out.append(f"  {'':>5}+" + "-" * (len(sub_header) - 7))
+
+                for str_val in STR_VALS:
+                    row = f"  {str_val:>4} |"
+                    for dex_val in DEX_VALS:
+                        hit_pct, avg_dmg = run_cell(race_name, str_val, dex_val, wpn_name)
+                        row += f" {hit_pct:>5.1f}% {avg_dmg:>6.1f}  "
+                    out.append(row)
+                out.append("")
+
+            # Difference row: avg across all STR for each DEX
+            out.append("  DIFFERENCE (Goblin - Human)  avg across all STR:")
+            diff_row = f"  {'avg':>4} |"
+            for dex_val in DEX_VALS:
+                g_hits, g_dmg, h_hits, h_dmg = [], [], [], []
+                for str_val in STR_VALS:
+                    gh, gd = run_cell("Goblin", str_val, dex_val, wpn_name)
+                    hh, hd = run_cell("Human",  str_val, dex_val, wpn_name)
+                    g_hits.append(gh); g_dmg.append(gd)
+                    h_hits.append(hh); h_dmg.append(hd)
+                d_hit = sum(g_hits)/len(g_hits) - sum(h_hits)/len(h_hits)
+                d_dmg = sum(g_dmg)/len(g_dmg)   - sum(h_dmg)/len(h_dmg)
+                sign_h = "+" if d_hit >= 0 else ""
+                sign_d = "+" if d_dmg >= 0 else ""
+                diff_row += f" {sign_h}{d_hit:>4.1f}% {sign_d}{d_dmg:>5.1f}  "
+            out.append(diff_row)
+            out.append("=" * 110)
+
+        report = "\n".join(out)
+        self.text_area.insert(tk.END, report)
+        self.report_content = report
+
+    # -----------------------------------------------------------------------
+    # SIM: GOBLIN SCAVENGER TRAIT VALIDATION
+    # -----------------------------------------------------------------------
+    def _sim_goblin_scavenger(self):
+        """
+        Run multiple full fights with a Goblin OT warrior to validate the
+        scavenger trait. Tracks scan turns, retrievals, successes, bonus throw
+        hit rate, and fight outcomes.
+        """
+        num_runs = int(self.scav_runs_var.get())
+        self.text_area.delete(1.0, tk.END)
+        self.text_area.insert(tk.END, f"--- Goblin Scavenger Trait Validation ({num_runs} fights) ---\n\n")
+        self.root.update()
+
+        # Build Goblin OT warrior
+        def make_goblin():
+            g = W.Warrior(
+                name='SCAV_GOBLIN', race_name='Goblin', gender='Male',
+                strength=10, dexterity=14, constitution=10,
+                intelligence=10, presence=10, size=10
+            )
+            g.primary_weapon = 'Javelin'
+            g.secondary_weapon = 'Open Hand'
+            g.backup_weapon = 'Javelin'
+            g.luck = 20
+            g.strategies = [
+                W.Strategy(trigger='You have no throwable weapons', style='Strike',
+                          activity=5, aim_point='Chest', defense_point='Chest'),
+                W.Strategy(trigger='Always (Default Loop)', style='Opportunity Throw',
+                          activity=5, aim_point='Chest', defense_point='Chest'),
+            ]
+            return g
+
+        def make_opponent():
+            o = W.Warrior(
+                name='OPPONENT', race_name='Human', gender='Male',
+                strength=10, dexterity=10, constitution=10,
+                intelligence=10, presence=10, size=10
+            )
+            o.primary_weapon = 'Broad Sword'
+            o.secondary_weapon = 'Open Hand'
+            o.luck = 15
+            o.strategies = [
+                W.Strategy(trigger='Always (Default Loop)', style='Strike',
+                          activity=5, aim_point='Chest', defense_point='Chest'),
+            ]
+            return o
+
+        # Track across all runs
+        stats = {
+            'scavenger_activations': 0,
+            'scan_turns': 0,
+            'retrieval_attempts': 0,
+            'retrieval_successes': 0,
+            'own_weapon_recoveries': 0,
+            'arena_finds': 0,
+            'retrieval_failures': 0,
+            'bonus_throws_fired': 0,
+            'bonus_throw_hits': 0,
+            'bonus_throw_total_dmg': 0,
+            'goblin_wins': 0,
+            'opponent_wins': 0,
+            'draws': 0,
+        }
+
+        for run in range(num_runs):
+            goblin = make_goblin()
+            opponent = make_opponent()
+            result = C.run_fight(goblin, opponent)
+            narr = result.narrative.lower()
+
+            # Scavenger was activated if the goblin switched to Strike (weapon trigger fired)
+            if 'you have no throwable weapons' in narr or 'switches to strategy 1' in narr:
+                stats['scavenger_activations'] += 1
+
+            # Count scan turns
+            stats['scan_turns'] += narr.count('sweep') + narr.count('glance') + narr.count('scan')
+
+            # Count retrieval attempts (successful + failed)
+            retrieval_success = 'snatches' in narr or 'reclaim' in narr or 'skids to' in narr or 'darts to' in narr
+            retrieval_fail = 'pulls back' in narr or ('momentary' in narr and 'wrong' in narr)
+
+            if retrieval_success:
+                stats['retrieval_attempts'] += 1
+                stats['retrieval_successes'] += 1
+                if 'javelin' in narr or 'thrown' in narr:
+                    stats['own_weapon_recoveries'] += 1
+                else:
+                    stats['arena_finds'] += 1
+
+            if retrieval_fail:
+                stats['retrieval_attempts'] += 1
+                stats['retrieval_failures'] += 1
+
+            # Bonus throws: count those that succeed after a retrieval
+            # Heuristic: "hurls" or "flings" appearing after a snatches/reclaim line
+            if 'bonus' in narr or ('grab becomes throw' in narr or 'same motion' in narr):
+                stats['bonus_throws_fired'] += 1
+                if 'find the opening' in narr or 'barely gets past' in narr or 'pierces' in narr or 'sinks in' in narr or 'finds meat' in narr:
+                    stats['bonus_throw_hits'] += 1
+                    # Estimate damage from narrative
+                    if any(kw in narr for kw in ['deep wound', 'heavy wound', 'gaping wound', 'freely']):
+                        stats['bonus_throw_total_dmg'] += 12
+                    else:
+                        stats['bonus_throw_total_dmg'] += 8
+
+            # Fight outcome
+            if result.winner and result.winner.name == 'SCAV_GOBLIN':
+                stats['goblin_wins'] += 1
+            elif result.winner and result.winner.name == 'OPPONENT':
+                stats['opponent_wins'] += 1
+            else:
+                stats['draws'] += 1
+
+            if (run + 1) % max(1, num_runs // 10) == 0:
+                self.text_area.insert(tk.END, f"  Progress: {run + 1}/{num_runs}\n")
+                self.root.update()
+
+        # Build report
+        out = []
+        out.append('=' * 80)
+        out.append(f'GOBLIN SCAVENGER TRAIT VALIDATION — {num_runs} fights')
+        out.append('=' * 80)
+        out.append(f'Warrior:   STR 10 DEX 14 LCK 20  Javelin + 2 backup Javelins')
+        out.append(f'Strategy:  1) You have no throwable weapons → Strike')
+        out.append(f'           2) Always (Default Loop) → Opportunity Throw')
+        out.append(f'Opponent:  Human STR 10 DEX 10  Broad Sword  Strike style')
+        out.append('')
+        out.append('SCAVENGER ACTIVATION & ACTIVITY')
+        out.append('-' * 80)
+        out.append(f'  Scavenger activated:        {stats["scavenger_activations"]:>4} fights ({stats["scavenger_activations"]/num_runs*100:>5.1f}%)')
+        out.append(f'  Scan turns (flavor only):   {stats["scan_turns"]:>4} total')
+        out.append('')
+        out.append('RETRIEVAL ATTEMPTS')
+        out.append('-' * 80)
+        out.append(f'  Total attempts:             {stats["retrieval_attempts"]:>4}')
+        out.append(f'  Successful retrievals:      {stats["retrieval_successes"]:>4} ({stats["retrieval_successes"]/max(1,stats["retrieval_attempts"])*100:>5.1f}% of attempts)')
+        out.append(f'    ├─ Own weapon recoveries: {stats["own_weapon_recoveries"]:>4}')
+        out.append(f'    └─ Arena finds:           {stats["arena_finds"]:>4}')
+        out.append(f'  Failed retrievals:          {stats["retrieval_failures"]:>4}')
+        out.append('')
+        out.append('BONUS THROWS (after successful retrieval)')
+        out.append('-' * 80)
+        out.append(f'  Bonus throws fired:         {stats["bonus_throws_fired"]:>4}')
+        out.append(f'  Bonus throw hits:           {stats["bonus_throw_hits"]:>4} ({stats["bonus_throw_hits"]/max(1,stats["bonus_throws_fired"])*100:>5.1f}% of throws)')
+        if stats['bonus_throw_hits'] > 0:
+            out.append(f'  Avg damage per hit:         {stats["bonus_throw_total_dmg"]/stats["bonus_throw_hits"]:>6.1f}')
+        out.append('')
+        out.append('FIGHT OUTCOMES')
+        out.append('-' * 80)
+        out.append(f'  Goblin wins:                {stats["goblin_wins"]:>4} ({stats["goblin_wins"]/num_runs*100:>5.1f}%)')
+        out.append(f'  Opponent wins:              {stats["opponent_wins"]:>4} ({stats["opponent_wins"]/num_runs*100:>5.1f}%)')
+        out.append(f'  Draws:                      {stats["draws"]:>4} ({stats["draws"]/num_runs*100:>5.1f}%)')
+        out.append('=' * 80)
+
+        report = '\n'.join(out)
+        self.text_area.insert(tk.END, report)
+        self.report_content = report
+
+    # -----------------------------------------------------------------------
+    # SIM: GNOME COUNTERSTRIKE MASTERY VALIDATION
+    # -----------------------------------------------------------------------
+    def _sim_gnome_counterstrike(self):
+        """
+        Validate Gnome counterstrike_mastery by running full fights across
+        four opponent types, comparing Gnome vs Human baseline.
+        Tracks mastery CS fires, standard CS fires, win rates.
+        """
+        num_runs = int(self.gnome_runs_var.get())
+        self.text_area.delete(1.0, tk.END)
+        self.text_area.insert(tk.END,
+            f"--- Gnome Counterstrike Mastery Validation ({num_runs} fights per matchup) ---\n\n")
+        self.root.update()
+
+        # Keywords unique to Gnome mastery CS lines (must NOT match standard narrative)
+        MASTERY_KWS  = ["reads the attack perfectly", "flows into a seamless counter",
+                         "punishes the overextension", "surgical riposte at",
+                         "momentum against them with a swift riposte"]
+        # Keywords for standard (non-mastery) counterstrike lines
+        STANDARD_KWS = ["seizes the opening and launches", "turns the parry into an immediate",
+                         "counter-strike catches", "makes", "pay for the reckless"]
+
+        def count_kws(narr, kws):
+            return sum(narr.count(kw) for kw in kws)
+
+        def make_fighter(name, race):
+            w = W.Warrior(name, race, "Male", 10, 12, 10, 10, 10, 10)
+            w.primary_weapon   = "Short Sword"
+            w.secondary_weapon = "Open Hand"
+            w.luck = 15
+            w.strategies = [W.Strategy(
+                trigger="Always (Default Loop)", style="Counterstrike",
+                activity=4, aim_point="Chest", defense_point="Chest"
+            )]
+            return w
+
+        def make_opp(style, activity):
+            o = W.Warrior("OPP", "Human", "Male", 12, 11, 12, 10, 10, 12)
+            o.primary_weapon   = "Long Sword"
+            o.secondary_weapon = "Open Hand"
+            o.luck = 15
+            o.strategies = [W.Strategy(
+                trigger="Always (Default Loop)", style=style,
+                activity=activity, aim_point="Chest", defense_point="Chest"
+            )]
+            return o
+
+        matchups = [
+            ("Total Kill (aggressor)",      "Total Kill",        8),
+            ("Strike (balanced)",           "Strike",            5),
+            ("Calculated Attack (patient)", "Calculated Attack", 4),
+            ("Parry (defensive)",           "Parry",             3),
+        ]
+
+        all_results = []
+
+        for label, opp_style, opp_act in matchups:
+            self.text_area.insert(tk.END, f"  Running: {label} ...\n")
+            self.root.update()
+
+            for race_name in ("Human", "Gnome"):
+                wins = losses = draws = 0
+                mastery_cs  = 0
+                standard_cs = 0
+                total_fights = num_runs
+
+                for _ in range(num_runs):
+                    fighter = make_fighter("FIGHTER", race_name)
+                    opp     = make_opp(opp_style, opp_act)
+                    result  = C.run_fight(fighter, opp)
+                    narr    = result.narrative.lower()
+
+                    if result.winner and result.winner.name == "FIGHTER":
+                        wins += 1
+                    elif result.winner:
+                        losses += 1
+                    else:
+                        draws += 1
+
+                    mastery_cs  += count_kws(narr, MASTERY_KWS)
+                    standard_cs += count_kws(narr, STANDARD_KWS)
+
+                all_results.append({
+                    "label":       label,
+                    "race":        race_name,
+                    "wins":        wins,
+                    "losses":      losses,
+                    "draws":       draws,
+                    "total":       total_fights,
+                    "mastery_cs":  mastery_cs,
+                    "standard_cs": standard_cs,
+                })
+
+        # Build report
+        out = []
+        sep = "=" * 90
+        out.append(sep)
+        out.append("GNOME COUNTERSTRIKE MASTERY VALIDATION")
+        out.append(f"Fights per matchup: {num_runs}   |   CS style, activity 4, Short Sword")
+        out.append("Mastery CS  = Gnome racial ability lines (reads the attack, surgical riposte, etc.)")
+        out.append("Standard CS = Normal riposte/counterstrike lines (all races)")
+        out.append(sep)
+
+        for i in range(0, len(all_results), 2):
+            h_row = all_results[i]      # Human
+            g_row = all_results[i + 1]  # Gnome
+            label = h_row["label"]
+
+            out.append(f"\n{label.upper()}")
+            out.append("-" * 90)
+            out.append(f"  {'':30} {'Human':>14} {'Gnome':>14} {'Delta':>10}")
+            out.append(f"  {'':30} {'-'*14} {'-'*14} {'-'*10}")
+
+            h_wp = round(h_row["wins"] / h_row["total"] * 100)
+            g_wp = round(g_row["wins"] / g_row["total"] * 100)
+            out.append(f"  {'Win rate':<30} {h_wp:>13}% {g_wp:>13}% {g_wp-h_wp:>+10}%")
+
+            h_mc_avg = h_row["mastery_cs"]  / h_row["total"]
+            g_mc_avg = g_row["mastery_cs"]  / g_row["total"]
+            h_sc_avg = h_row["standard_cs"] / h_row["total"]
+            g_sc_avg = g_row["standard_cs"] / g_row["total"]
+
+            out.append(f"  {'Mastery CS fires / fight':<30} {h_mc_avg:>13.2f} {g_mc_avg:>13.2f} {g_mc_avg-h_mc_avg:>+10.2f}")
+            out.append(f"  {'Standard CS fires / fight':<30} {h_sc_avg:>13.2f} {g_sc_avg:>13.2f} {g_sc_avg-h_sc_avg:>+10.2f}")
+            out.append(f"  {'Total CS / fight (combined)':<30} {h_mc_avg+h_sc_avg:>13.2f} {g_mc_avg+g_sc_avg:>13.2f} {(g_mc_avg+g_sc_avg)-(h_mc_avg+h_sc_avg):>+10.2f}")
+
+        out.append("")
+        out.append(sep)
+        out.append("NOTES")
+        out.append("  Human mastery CS should be 0.00 — any non-zero value indicates a keyword collision.")
+        out.append("  Gnome mastery CS should be clearly positive in all matchups.")
+        out.append("  Win rate delta is pre-tactician_edge; patient/defensive opponents will tighten once that is added.")
+        out.append(sep)
+
+        report = "\n".join(out)
+        self.text_area.insert(tk.END, "\n" + report)
+        self.report_content = report
+
+    # -----------------------------------------------------------------------
+    # SIM: GNOME TACTICIAN'S EDGE VALIDATION
+    # -----------------------------------------------------------------------
+    def _sim_gnome_tactician(self):
+        """
+        Validate tactician_edge by running Gnome and Human (baseline) against
+        six opponent styles. Checks that the win-rate delta moves in the
+        expected direction: positive vs aggressive styles, smaller/negative
+        vs methodical styles.
+        """
+        num_runs = int(self.racial_runs_var.get())
+        self.text_area.delete(1.0, tk.END)
+        self.text_area.insert(tk.END,
+            f"--- Gnome Tactician's Edge Validation ({num_runs} fights per matchup) ---\n\n")
+        self.root.update()
+
+        def make_fighter(name, race):
+            w = W.Warrior(name, race, "Male", 10, 12, 10, 10, 10, 10)
+            w.primary_weapon   = "Short Sword"
+            w.secondary_weapon = "Open Hand"
+            w.luck = 15
+            w.strategies = [W.Strategy(
+                trigger="Always (Default Loop)", style="Counterstrike",
+                activity=4, aim_point="Chest", defense_point="Chest"
+            )]
+            return w
+
+        def make_opp(style, activity):
+            o = W.Warrior("OPP", "Human", "Male", 12, 11, 12, 10, 10, 12)
+            o.primary_weapon   = "Long Sword"
+            o.secondary_weapon = "Open Hand"
+            o.luck = 15
+            o.strategies = [W.Strategy(
+                trigger="Always (Default Loop)", style=style,
+                activity=activity, aim_point="Chest", defense_point="Chest"
+            )]
+            return o
+
+        # All six matchups with expected direction for tactician_edge
+        matchups = [
+            ("Total Kill",        8,  "FAVORED",    "Gnome bonus: +8 atk / +5 def"),
+            ("Wall of Steel",     7,  "FAVORED",    "Gnome bonus: +8 atk / +5 def"),
+            ("Strike",            5,  "FAVORED",    "Gnome bonus: +8 atk / +5 def"),
+            ("Sure Strike",       4,  "DISFAVORED", "Gnome penalty: -6 atk / -4 def"),
+            ("Calculated Attack", 4,  "DISFAVORED", "Gnome penalty: -6 atk / -4 def"),
+            ("Parry",             3,  "DISFAVORED", "Gnome penalty: -6 atk / -4 def"),
+        ]
+
+        results = []
+        for style, activity, category, note in matchups:
+            self.text_area.insert(tk.END, f"  Running: {style} ({category}) ...\n")
+            self.root.update()
+
+            h_wins = sum(
+                1 for _ in range(num_runs)
+                if (r := C.run_fight(make_fighter("H", "Human"),
+                                     make_opp(style, activity))).winner
+                and r.winner.name == "H"
+            )
+            g_wins = sum(
+                1 for _ in range(num_runs)
+                if (r := C.run_fight(make_fighter("G", "Gnome"),
+                                     make_opp(style, activity))).winner
+                and r.winner.name == "G"
+            )
+            hp = round(h_wins / num_runs * 100)
+            gp = round(g_wins / num_runs * 100)
+            delta = gp - hp
+            results.append((style, activity, category, note, hp, gp, delta))
+
+        # Build report
+        out = []
+        sep = "=" * 90
+        out.append(sep)
+        out.append("GNOME TACTICIAN'S EDGE VALIDATION")
+        out.append(f"Fights per matchup: {num_runs}   |   Gnome vs Human, both Counterstrike style, Short Sword")
+        out.append("Tactician bonus:  +8 attack / +5 defense vs FAVOURED styles (aggressive)")
+        out.append("Tactician penalty: -6 attack / -4 defense vs DISFAVOURED styles (methodical)")
+        out.append(sep)
+
+        # Favored block
+        out.append("\nFAVOURED OPPONENTS  (Gnome should win more than Human)")
+        out.append("-" * 90)
+        out.append(f"  {'Opponent Style':<22} {'Activity':>9} {'Human%':>8} {'Gnome%':>8} {'Delta':>8}  {'Result'}")
+        out.append(f"  {'-'*22} {'-'*9} {'-'*8} {'-'*8} {'-'*8}  {'-'*20}")
+        for style, act, cat, note, hp, gp, delta in results:
+            if cat != "FAVORED":
+                continue
+            sign = "+" if delta >= 0 else ""
+            check = "PASS  (delta > 0)" if delta > 0 else "WARN  (delta <= 0)"
+            out.append(f"  {style:<22} {act:>9} {hp:>7}% {gp:>7}% {sign}{delta:>7}%  {check}")
+            out.append(f"  {'':>22}  ({note})")
+
+        # Disfavored block
+        out.append("\nDISFAVOURED OPPONENTS  (Gnome delta should be smaller than vs FAVOURED)")
+        out.append("-" * 90)
+        out.append(f"  {'Opponent Style':<22} {'Activity':>9} {'Human%':>8} {'Gnome%':>8} {'Delta':>8}  {'Result'}")
+        out.append(f"  {'-'*22} {'-'*9} {'-'*8} {'-'*8} {'-'*8}  {'-'*20}")
+        for style, act, cat, note, hp, gp, delta in results:
+            if cat != "DISFAVORED":
+                continue
+            sign = "+" if delta >= 0 else ""
+            # Expected: delta should be meaningfully less than the avg favored delta
+            avg_fav_delta = sum(d for _,_,c,_,_,_,d in results if c=="FAVORED") / 3
+            check = "PASS  (delta < avg favoured)" if delta < avg_fav_delta else "WARN  (delta >= avg favoured)"
+            out.append(f"  {style:<22} {act:>9} {hp:>7}% {gp:>7}% {sign}{delta:>7}%  {check}")
+            out.append(f"  {'':>22}  ({note})")
+
+        # Summary
+        avg_fav   = sum(d for _,_,c,_,_,_,d in results if c=="FAVORED")   / 3
+        avg_disfav = sum(d for _,_,c,_,_,_,d in results if c=="DISFAVORED") / 3
+        out.append("")
+        out.append(sep)
+        out.append(f"  Avg delta vs FAVOURED opponents:    {avg_fav:+.1f}%")
+        out.append(f"  Avg delta vs DISFAVOURED opponents: {avg_disfav:+.1f}%")
+        out.append(f"  Spread (should be clearly positive): {avg_fav - avg_disfav:+.1f}%")
+        out.append("")
+        out.append("  VALIDATION: tactician_edge is working if:")
+        out.append("    1. All FAVOURED deltas are positive (Gnome wins more than Human)")
+        out.append("    2. DISFAVOURED deltas are clearly smaller than FAVOURED deltas")
+        out.append("    3. Spread between avg favoured and avg disfavoured > 10%")
+        out.append(sep)
+
+        report = "\n".join(out)
+        self.text_area.insert(tk.END, "\n" + report)
+        self.report_content = report
+
 
 if __name__ == "__main__":
     root = tk.Tk()

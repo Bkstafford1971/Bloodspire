@@ -240,12 +240,33 @@ def _warrior_report_block(w: Warrior) -> list:
 
     # Safely handle armor and helm (convert to string if not already)
     armor_val = w.armor
-    helm_val = w.helm
+    helm_val  = w.helm
+    _has_natural_armor = (
+        hasattr(w, "race")
+        and hasattr(w.race, "modifiers")
+        and w.race.modifiers.natural_armor
+    )
+
     if armor_val:
         armor_val = str(armor_val).strip()
-        armor_part = f"in {armor_val.upper()}" if armor_val and armor_val.lower() != "none" else "unarmored"
+
+    _no_armor = not armor_val or armor_val.lower() == "none"
+
+    if _has_natural_armor:
+        if _no_armor:
+            # Scales only — equivalent to Scale armor protection
+            armor_part = "in NATURAL SCALE ARMOR"
+        elif armor_val.lower() in ("cloth", "leather"):
+            # Cloth/Leather layers over scales and adds a small bonus
+            armor_part = f"in {armor_val.upper()} over natural scales"
+        else:
+            # Cuir Boulli and heavier: describe the physical reality, reveal nothing mechanical
+            armor_part = (
+                f"in {armor_val.upper()}, the metal plates fitted awkwardly"
+                f" over dense reptilian scales"
+            )
     else:
-        armor_part = "unarmored"
+        armor_part = f"in {armor_val.upper()}" if not _no_armor else "unarmored"
 
     if helm_val:
         helm_val = str(helm_val).strip()

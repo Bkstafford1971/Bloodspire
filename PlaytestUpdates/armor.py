@@ -360,6 +360,12 @@ def helm_selection_menu() -> List[str]:
 # RACE-SPECIFIC ARMOR MODIFIERS
 # ---------------------------------------------------------------------------
 
+# Races that have natural armor (scales, hide, etc.).
+# Adding a race here automatically enables natural-armor layering rules
+# in get_effective_defense_for_race and get_effective_dex_for_race.
+_NATURAL_ARMOR_RACES: frozenset = frozenset({"Lizardfolk"})
+
+
 # Lizardfolk armor penalty table.
 # Natural scales = Scale armor equivalent (defense 5). Cloth and Leather can
 # be layered on top; anything heavier gives no additional protection but still
@@ -417,7 +423,7 @@ def get_effective_defense_for_race(
 
     For other races: normal calculation.
     """
-    if race_name != "Lizardfolk":
+    if race_name not in _NATURAL_ARMOR_RACES:
         return total_defense_value(armor_name, helm_name)
 
     helm = get_armor(helm_name or "None")
@@ -453,7 +459,7 @@ def get_effective_dex_for_race(
 
     For other races: normal calculation.
     """
-    if race_name != "Lizardfolk":
+    if race_name not in _NATURAL_ARMOR_RACES:
         return effective_dex(base_dex, armor_name, helm_name)
 
     helm = get_armor(helm_name or "None")
