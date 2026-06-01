@@ -1972,6 +1972,14 @@ function openTab(evt, tabId) {{
   <button onclick="setDebugTeam()" style="margin-top:6px">💾 Set Debug Team</button>
  </div>
  <div class="panel" style="min-width:220px;max-width:280px">
+  <h3>📊 Reports</h3>
+  <p style="font-size:11px;color:#666;margin:0 0 8px">
+   Regenerate and push team roster report to GitHub Pages with current data.
+  </p>
+  <button onclick="regenerateRoster()" style="background-color:#4a7c59;border-color:#4a7c59">📈 Regenerate Rosters</button>
+ </div>
+
+ <div class="panel" style="min-width:220px;max-width:280px">
   <h3>⚠️ Arena Reset</h3>
   <p style="font-size:11px;color:#800;margin:0 0 8px">
    ⚠ Full wipe: deletes ALL turn history, fight records, standings,<br>
@@ -2031,6 +2039,19 @@ async function rerunTurn(t){{
   if(!d.success){{_abortPoll(d.error);return;}}
   _seenRunning=true;
  }}catch(e){{_abortPoll('Connection error: '+e.message);}}
+}}
+async function regenerateRoster(){{
+ const pw=pw_val();
+ if(!pw){{show('Enter the host password first.','err');return;}}
+ show('Regenerating roster...','ok');
+ try{{
+  const r=await fetch('/api/admin/regenerate_roster',{{method:'POST',
+   headers:{{'Content-Type':'application/json'}},
+   body:JSON.stringify({{host_password:pw}})}});
+  const d=await r.json();
+  if(d.success){{show(d.message,'ok');}}
+  else show('Error: '+d.error,'err');
+ }}catch(e){{show('Connection error: '+e.message,'err');}}
 }}
 async function resetArena(){{
  const pw=pw_val();
@@ -5097,6 +5118,39 @@ Or manually:
                         warriors_by_manager[manager_name]["teams"].append(team_name)
 
                 self.send_json({"success": True, "managers": warriors_by_manager, "total_managers": len(warriors_by_manager)}); return
+            except Exception as e:
+                import traceback; traceback.print_exc()
+                self.send_json({"success": False, "error": str(e)}); return
+
+        if path == "/api/admin/regenerate_roster":
+            cfg = _load_config()
+            if not _check_host_pw(cfg, b.get("host_password", "")):
+                self.send_json({"success": False, "error": "Not authorised."}, 401); return
+
+            try:
+                from team_roster import generate_team_roster_html, write_team_roster
+                from save import load_all_teams
+
+                # Load all teams and build team_map keyed by manager+team combo
+                teams = load_all_teams()
+                team_map = {}
+                for team in teams:
+                    # Create a simple key like "manager_id_team_id"
+                    key = f"{team.manager_name}_{team.team_id}"
+                    team_map[key] = team
+
+                # Load current uploads data for the team_map lookup
+                turn_num = cfg.get("current_turn", 1)
+                uploads = _load_uploads(turn_num)
+
+                # Generate the roster HTML
+                roster_html = generate_team_roster_html(uploads, team_map, turn_num)
+
+                # Write and push to GitHub
+                reports_dir = os.path.join(LEAGUE_DIR, "reports")
+                write_team_roster(roster_html, reports_dir)
+
+                self.send_json({"success": True, "message": f"Team roster regenerated and pushed for Turn {turn_num}"}); return
             except Exception as e:
                 import traceback; traceback.print_exc()
                 self.send_json({"success": False, "error": str(e)}); return
