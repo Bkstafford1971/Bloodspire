@@ -240,12 +240,44 @@ def _warrior_report_block(w: Warrior) -> list:
 
     # Safely handle armor and helm (convert to string if not already)
     armor_val = w.armor
-    helm_val = w.helm
+    helm_val  = w.helm
+    _has_natural_armor = (
+        hasattr(w, "race")
+        and hasattr(w.race, "modifiers")
+        and w.race.modifiers.natural_armor
+    )
+
     if armor_val:
         armor_val = str(armor_val).strip()
-        armor_part = f"in {armor_val.upper()}" if armor_val and armor_val.lower() != "none" else "unarmored"
+
+    _no_armor = not armor_val or armor_val.lower() == "none"
+
+    # Determine pronoun for Lizardfolk armor descriptions
+    pronoun = "his" if (hasattr(w, "gender") and w.gender == "Male") else "her"
+
+    if _has_natural_armor:
+        if _no_armor:
+            # Scales only — equivalent to Scale armor protection
+            armor_part = "in NATURAL SCALE ARMOR"
+        elif armor_val.lower() in ("cloth", "leather"):
+            # Cloth/Leather layers over scales and adds a small bonus
+            armor_part = f"in {armor_val.upper()} over {pronoun} natural scales"
+        else:
+            # Armor over scales: armor-type-specific flavor that implies restriction without being explicit
+            armor_lower = armor_val.lower()
+            if armor_lower == "cuir boulli":
+                armor_part = f"in {armor_val.upper()}, rigid leather restricting {pronoun} natural flexibility"
+            elif armor_lower == "brigandine":
+                armor_part = f"in {armor_val.upper()}, plates catching awkwardly over {pronoun} natural scales"
+            elif armor_lower == "scale":
+                armor_part = f"in {armor_val.upper()}, layered awkwardly over {pronoun} natural plating"
+            elif armor_lower == "chain":
+                armor_part = f"in {armor_val.upper()}, links that snag between {pronoun} scales"
+            else:
+                # Half-Plate, Full Plate, and any others
+                armor_part = f"in {armor_val.upper()}, rigid plates constraining {pronoun} natural mobility"
     else:
-        armor_part = "unarmored"
+        armor_part = f"in {armor_val.upper()}" if not _no_armor else "unarmored"
 
     if helm_val:
         helm_val = str(helm_val).strip()
@@ -594,7 +626,7 @@ RACE_KILL_POOLS = {
         "{name} gazes down at the fallen with a mix of curiosity and intense, feline pride.",
         "{name} performs a quick, acrobatic flip over the corpse, a flashy end to a lethal bout.",
         "{name} stands with {his} fur ruffled by the wind, the scent of the kill an intoxicating prize.",
-        "{name} purrs—a low, unsettling rumble that carries surprisingly far in the quieted arena.",
+        "{name} purrs: a low, unsettling rumble that carries surprisingly far in the quieted arena.",
     ],
     "Half-Elf": [
         "{name} stands with a conflicted but proud bearing, the duality of {his} blood clear in victory.",
@@ -1009,8 +1041,8 @@ STYLE_ATTACK_PREFIX: dict[str, list[str]] = {
     "Calculated Attack": ["executes a downward strike at", "makes a precise attack on",
                           "aims a calculated blow at"],
     "Sure Strike"      : ["carefully aims at", "takes a measured swing at"],
-    "Counterstrike"    : ["counters with a blow at", "retaliates against",
-                          "fires back at"],
+    "Counterstrike"    : ["strikes carefully at", "prepares a measured blow at",
+                          "waits for an opening and attacks"],
     "Wall of Steel"    : ["attacks relentlessly at", "relentlessly targets"],
 }
 
@@ -2395,6 +2427,20 @@ GET_UP_LINES = [
     "{warrior} rises from the dust, spitting blood",
 ]
 
+GROUND_STRUGGLE_LINES = [
+    "{warrior} tries to rise but cannot find {his} footing!",
+    "{warrior} scrambles in the dirt, unable to regain {his} feet!",
+    "{warrior} claws at the sand but stays down!",
+    "{warrior} fights to stand, but {his} legs won't cooperate!",
+]
+
+GROUND_ATTACK_LINES = [
+    "{warrior} lashes out desperately from the ground!",
+    "{warrior} strikes upward from {his} knees!",
+    "{warrior} swings wildly from the sand!",
+    "{warrior} attacks from a losing position!",
+]
+
 
 def knockdown_line(warrior_name: str, gender: str) -> str:
     pronoun = "his" if gender == "Male" else "her"
@@ -2406,6 +2452,20 @@ def getup_line(warrior_name: str, gender: str) -> str:
     pronoun = "his" if gender == "Male" else "her"
     template = random.choice(GET_UP_LINES)
     return template.format(warrior=warrior_name.upper(), his=pronoun)
+
+
+def ground_struggle_line(warrior_name: str, gender: str) -> str:
+    """Failed recovery attempt — warrior tries to get up but can't."""
+    pronoun = "his" if gender == "Male" else "her"
+    return random.choice(GROUND_STRUGGLE_LINES).format(
+        warrior=warrior_name.upper(), his=pronoun)
+
+
+def ground_attack_line(warrior_name: str, gender: str) -> str:
+    """Warrior attacks from the ground after failing to rise."""
+    pronoun = "his" if gender == "Male" else "her"
+    return random.choice(GROUND_ATTACK_LINES).format(
+        warrior=warrior_name.upper(), his=pronoun)
 
 
 # ---------------------------------------------------------------------------
