@@ -2861,27 +2861,33 @@ class CombatEngine:
         # Suppress the generic attack_line when an awkward intent already described the attempt;
         # the two lines together are redundant and the second often contradicts the first.
         if not _weak_attack_intent:
-            self._emit(N.attack_line(att.name, dfr.name, wpn, cat, ax.style, aim, att.gender, attacker_race=att.race.name))
+            is_fav_wpn = att.favorite_weapon == wpn
+            self._emit(N.attack_line(att.name, dfr.name, wpn, cat, ax.style, aim, att.gender, attacker_race=att.race.name, is_favorite_weapon=is_fav_wpn))
 
         # Defense reaction line, defender's posture before the result is known
         # Lower probability for awkward attacks - the setup already signals struggle,
         # so adding a crisp defensive read makes hits feel even more contradictory.
         _defense_intent_emitted = False
         _defense_intent_is_parry = False
+        _defensive_narrative_emitted = False  # Track ANY defensive narrative to prevent stacking
         if random.random() < (0.20 if _weak_attack_intent else 0.55):
             props_dx = get_style_props(dx.style)
             _uses_parry = props_dx.parry_bonus >= props_dx.dodge_bonus
             # Disarmed warriors can only dodge, never parry
             if dfr.primary_weapon == "Open Hand":
                 _uses_parry = False
-            self._emit(N.defense_intent_line(dfr.name, dfr.gender, _uses_parry))
-            _defense_intent_emitted = True
-            _defense_intent_is_parry = _uses_parry
+            if not _defensive_narrative_emitted:
+                self._emit(N.defense_intent_line(dfr.name, dfr.gender, _uses_parry))
+                _defense_intent_emitted = True
+                _defensive_narrative_emitted = True
+                _defense_intent_is_parry = _uses_parry
 
         # Favorite weapon flavor, fires on first attack with this weapon, win or lose
-        fav_flavor = _get_favorite_weapon_flavor(att, wpn, as_)
-        if fav_flavor:
-            self._emit(fav_flavor)
+        # Skip if weapon was thrown away - doesn't make sense to praise a weapon that's already gone
+        if not _weapon_thrown_away:
+            fav_flavor = _get_favorite_weapon_flavor(att, wpn, as_)
+            if fav_flavor:
+                self._emit(fav_flavor)
 
         # --- Update attacker's endurance for this action ---
         # This needs to happen before strategy re-evaluation for fatigue triggers
@@ -2920,7 +2926,9 @@ class CombatEngine:
                 decoy_feint_landed = True
                 self._emit(N.decoy_feint_line(att.name, dfr.name))
             elif dx.style == "Counterstrike":
-                self._emit(N.decoy_feint_read_line(att.name, dfr.name))
+                if not _defensive_narrative_emitted:
+                    self._emit(N.decoy_feint_read_line(att.name, dfr.name))
+                    _defensive_narrative_emitted = True
 
         # --- CALCULATED ATTACK PRECISION ---
         ca_precision_landed = False
@@ -3013,10 +3021,12 @@ class CombatEngine:
                 _def_skill_lv = dfr.skills.get("parry" if use_p else "dodge", 0)
                 if random.randint(1, 100) + dfr.luck + _def_skill_lv * 2 >= 85:
                     _crit_def = True
-                    if use_p:
-                        self._emit(N.critical_parry_line(dfr.name, att.name))
-                    else:
-                        self._emit(N.critical_dodge_line(dfr.name, att.name))
+                    if not _defensive_narrative_emitted:
+                        if use_p:
+                            self._emit(N.critical_parry_line(dfr.name, att.name))
+                        else:
+                            self._emit(N.critical_dodge_line(dfr.name, att.name))
+                        _defensive_narrative_emitted = True
 
             # Calculated Attack probe flavor - occasional line when a CA
             # probe fails to find a gap in the defender's guard.
@@ -3028,8 +3038,9 @@ class CombatEngine:
             elif margin <= -30:
                 if use_p:
                     barely = (-margin < 20) and not _weak_attack_intent
-                    if not _crit_def:
+                    if not _crit_def and not _defensive_narrative_emitted:
                         self._emit(N.parry_line(dfr.name, barely=barely, defense_point_active=(dx.defense_point == aim)))
+                        _defensive_narrative_emitted = True
                     
                     # --- CLEAVE/BASH PARRY PENETRATION ---
                     wpn_key_std = wpn.lower().replace(" ", "_").replace("&", "and")
@@ -3086,7 +3097,9 @@ class CombatEngine:
                                 _cs_chance = min(65, _cs_chance + 6)
                             _cs_chance = max(5, _cs_chance - _cleave_reduce)
                             if random.randint(1, 100) <= _cs_chance:
-                                self._emit(_gnome_cs_line(dfr.name, att.name))
+                                if not _defensive_narrative_emitted:
+                                    self._emit(_gnome_cs_line(dfr.name, att.name))
+                                    _defensive_narrative_emitted = True
                                 if _weapon_loss_msg: self._emit(_weapon_loss_msg)
                                 return self._counterstrike(ds_, as_, dx, ax, minute)
 
@@ -3105,13 +3118,15 @@ class CombatEngine:
                                 if _weapon_loss_msg: self._emit(_weapon_loss_msg)
                                 return self._counterstrike(ds_, as_, dx, ax, minute)
                 else:
-                    if not _crit_def:
+                    if not _crit_def and not _defensive_narrative_emitted:
                         self._emit(N.dodge_line(dfr.name))
+                        _defensive_narrative_emitted = True
             else:
                 # Weak parry (margin -1 to -29) or weak dodge
                 if use_p:
-                    if not _crit_def:
+                    if not _crit_def and not _defensive_narrative_emitted:
                         self._emit(N.parry_line(dfr.name, barely=not _weak_attack_intent, defense_point_active=(dx.defense_point == aim)))
+                        _defensive_narrative_emitted = True
 
                     # Gnome counterstrike mastery: weak parries open a small window.
                     # 5% base + 2% per riposte level. No style bonus — weak parries
@@ -3124,8 +3139,9 @@ class CombatEngine:
                             if _weapon_loss_msg: self._emit(_weapon_loss_msg)
                             return self._counterstrike(ds_, as_, dx, ax, minute)
                 else:
-                    if not _crit_def:
+                    if not _crit_def and not _defensive_narrative_emitted:
                         self._emit(N.dodge_line(dfr.name))
+                        _defensive_narrative_emitted = True
 
             # --- Req 4: Heavy Parry Disarm Check ---
             # If it was a parry and the attack subtotal was huge, might drop weapon.

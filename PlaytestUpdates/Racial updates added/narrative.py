@@ -1065,6 +1065,7 @@ def attack_line(
     aim_point      : str,
     attacker_gender: str = "Male",
     attacker_race  : str = None,      # For Lizardfolk special handling
+    is_favorite_weapon: bool = False,  # Include "beloved" if this is their favorite weapon
 ) -> str:
     """Generate the attack declaration line. Lizardfolk with Open Hand get special claw/tail/kick verbs."""
     loc_pool = AIM_POINT_LABELS.get(aim_point, AIM_POINT_LABELS["None"])
@@ -1115,8 +1116,11 @@ def attack_line(
     # Opportunity Throw uses a throw-specific sentence structure
     if style == "Opportunity Throw":
         throw_verb = random.choice(["hurls", "flings", "launches", "sends", "pitches"])
+        wpn_desc = weapon_name.lower()
+        if is_favorite_weapon:
+            wpn_desc = f"beloved {wpn_desc}"
         return (
-            f"{attacker_name.upper()} {throw_verb} {pronoun} {weapon_name.lower()} "
+            f"{attacker_name.upper()} {throw_verb} {pronoun} {wpn_desc} "
             f"at {defender_name.upper()}'s {location}!"
         )
 
