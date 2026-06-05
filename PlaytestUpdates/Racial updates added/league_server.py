@@ -1479,6 +1479,17 @@ def _run_turn(request_password, rerun_turn=None):
         with open(nl_path, "w", encoding="utf-8") as _f:
             _f.write(newsletter_text)
         print(f"  Newsletter written: {nl_path}")
+
+        # Also save to newsletters folder for redownload feature (turn_XXX.txt format)
+        try:
+            nl_folder = os.path.join(LEAGUE_DIR, "newsletters")
+            os.makedirs(nl_folder, exist_ok=True)
+            nl_redownload_path = os.path.join(nl_folder, f"turn_{turn_num:03d}.txt")
+            with open(nl_redownload_path, "w", encoding="utf-8") as _f:
+                _f.write(newsletter_text)
+            print(f"  Newsletter (redownload copy) written: {nl_redownload_path}")
+        except Exception as _e:
+            print(f"  WARNING: Failed to save newsletter redownload copy: {_e}")
     except Exception as _e:
         import traceback
         traceback.print_exc()
@@ -2916,7 +2927,13 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             turn_num = int(q.get("turn", 0))
             if not turn_num: # Newsletter is a text file, not JSON, but should be read-only
                 self.send_json({"success":False,"error":"turn required"}); return
-            nl_path = os.path.join(_turn_dir(turn_num), "newsletter.txt")
+
+            # Try new newsletters folder first (turn_XXX.txt format)
+            nl_path = os.path.join(LEAGUE_DIR, "newsletters", f"turn_{turn_num:03d}.txt")
+            if not os.path.exists(nl_path):
+                # Fall back to old location for backwards compatibility
+                nl_path = os.path.join(_turn_dir(turn_num), "newsletter.txt")
+
             if not os.path.exists(nl_path):
                 self.send_json({"success":False,"error":f"No newsletter for turn {turn_num}"}); return
             make_file_writable(nl_path) # Temporarily make writable to read

@@ -2097,8 +2097,9 @@ function buildMenuBar() {
         Download${S.league.managerId?'':' - configure account first'}
       </div>
       <div style="border-top:1px solid var(--mid); margin:2px 0;"></div>
-      <div class="menu-item" id="act-newsletter" style="padding:3px 12px;">
-        📜 Arena Newsletter
+      <div class="menu-item" id="act-newsletter" style="padding:3px 12px;"
+           onclick="el('action-dropdown').style.display='none'; redownloadNewsletter();">
+        ↺ Redownload Newsletter
       </div>
     </div>
   </span>
@@ -4532,11 +4533,10 @@ function attachEvents() {
     doLeagueDownloadAll();
   });
   bind('act-newsletter', () => {
+    console.log('act-newsletter button clicked');
     const dd = el('action-dropdown');
     if (dd) dd.style.display = 'none';
-    S.newsletters = null;   // force refresh
-    S.newsletterText = null;
-    openNewsletter();
+    redownloadNewsletter();
   });
   bind('btn-league-save', doSaveLeagueSettings);
   // btn-league-register removed - registration now happens automatically in doSaveLeagueSettings
@@ -5673,6 +5673,72 @@ function renderNewsletterText(text) {
   out += esc(text.slice(last));
   if (openSpan) out += '</span>';
   return out;
+}
+
+async function redownloadNewsletter() {
+  console.log('redownloadNewsletter called');
+  const lg = S.league;
+  console.log('League settings:', { url: lg?.url, managerId: lg?.managerId });
+
+  if (!lg.url || !lg.managerId) {
+    setMsg('Configure league settings first (league URL and manager ID required).', 'err');
+    return;
+  }
+
+  setMsg('Redownloading newsletter from league server...', 'ok');
+  render();
+  try {
+    // Get the current turn from league settings/config
+    console.log('Fetching league settings to get current turn...');
+    const settingsResp = await API.get('/api/league_settings');
+    console.log('League settings response:', settingsResp);
+
+    // Try to get the turn from account/game state
+    let latestTurn = S.league.lastTurnRan || null;
+    console.log('Last turn ran from league state:', latestTurn);
+
+    if (!latestTurn) {
+      setMsg('Unable to determine current turn. Run a turn or download results first.', 'err');
+      return;
+    }
+
+    console.log('Latest turn:', latestTurn);
+
+    // Fetch the newsletter for this turn from the league server
+    const nlUrl = `${lg.url}/api/newsletter?turn=${latestTurn}`;
+    console.log('Fetching from:', nlUrl);
+    const nlRes = await fetch(nlUrl);
+    console.log('Fetch response status:', nlRes.status);
+    const nlData = await nlRes.json();
+    console.log('Newsletter data:', nlData);
+
+    if (!nlData.success || !nlData.newsletter) {
+      setMsg('Failed to redownload newsletter: ' + (nlData.error || 'Newsletter not available'), 'err');
+      return;
+    }
+
+    // Save it locally via the API endpoint
+    const saveResp = await API.post('/api/newsletter/save', {
+      turn: latestTurn,
+      text: nlData.newsletter
+    });
+
+    if (!saveResp.success) {
+      setMsg('Failed to save newsletter: ' + (saveResp.error || 'Unknown error'), 'err');
+      return;
+    }
+
+    // Clear cache and open newsletter view
+    S.newsletters = null;
+    S.newsletterText = null;
+    S.newsletterTurn = latestTurn;
+    setMsg('Newsletter redownloaded and saved successfully.', 'ok');
+
+    // Open the newsletter panel
+    await openNewsletter();
+  } catch(e) {
+    setMsg('Error redownloading newsletter: ' + e.message, 'err');
+  }
 }
 
 async function openNewsletter() {
