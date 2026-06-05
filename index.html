@@ -91,7 +91,10 @@
                 <div class="content-box">
                     <p style="text-align: center; margin: 15px 0;">
                         <a href="#" id="viewLatestAnnouncement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            🛡️ JUNE 1, 2026 — OFFLINE FIGHTS & ARENA STATS
+                            🛡️ JUNE 5, 2026 — STATE OF THE ARENA & FUTURE TOURNAMENTS
+                        </a>
+                        <a href="#" id="viewJune1Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            JUNE 1, 2026 — OFFLINE FIGHTS & ARENA STATS
                         </a>
                         <a href="#" id="viewNewAnnouncement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
                             MAY 29, 2026 — ARENA UPDATE
@@ -105,7 +108,59 @@
         </main>
     </div>
 
+    <!-- Latest Announcement Modal (June 5) -->
     <div id="latestAnnouncementModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>STATE OF THE ARENA & UPDATES — JUNE 5, 2026</h2>
+            <div class="modal-scroll-body">
+                <p><strong>Honored Managers,</strong></p>
+                
+                <p style="color: #a31616; font-weight: bold; border: 1px solid #8b1a1a; padding: 10px; background: rgba(139, 26, 26, 0.05); text-align: center;">
+                    ⚠️ ATTENTION: You will need to download and install client version 2.7.4 before downloading the next turn!
+                </p>
+
+                <p>The first 4 turns seem to have run fairly smoothly. There have been some minor issues along the way that I have been working on addressing. The most concerning has been the corruption of the files for a couple of Bloodied Entrails teams. I believe that I have that cleaned up and I think it was a version issue that popped up. Along with that, I have addressed a few other minor issues as well as adding a few enhancements.</p>
+                
+                <h3>Resolved Issues & Logic Tweaks</h3>
+                <ul>
+                    <li><strong>Trigger Positioning & Logic:</strong> Fixed an issue where if a warrior went from medium damage to heavy damage, but only had a medium damage trigger, it was defaulting back to their always strategy. Now, the logic will read it as medium or heavier and stay on that trigger if there is not a Heavy damage trigger set. Also, this is a good time to remind you that trigger positioning is very important in how they are used.</li>
+                    <li><strong>Tab Navigation Memory:</strong> Resolved a problem where if you had multiple replacements on a turn and switched between tabs while working with a replacement before saving it, you would lose all the changes to that replacement. Now, you can go as far as to log off and come back later and your previous changes are remembered.</li>
+                    <li><strong>Turn Challenge Clears:</strong> Corrected an oversight where we were not clearing challenges after each turn. Teams or managers on "auto-pilot" were issuing the same challenges each turn. This is remedied with a simple challenge removal after the turn is processed.</li>
+                </ul>
+
+                <h3>New Enhancements</h3>
+                <ul>
+                    <li><strong>Re-download Newsletter:</strong> Added a Re-download newsletter feature in the Actions menu. If you fail to receive a newsletter, you can simply use that feature and it will download the latest newsletter from the server (effective after turn 5 runs).</li>
+                    <li><strong>Blood Challenge Windows:</strong> Modified the Blood Challenge logic. Now, the 3 turn BC window will last even if a manager tries to sit a team out. The 3 turns are counted when the killer fights. No more trying to avoid retribution; the longer you sit out, the more powerful the opponent gets.</li>
+                    <li><strong>Race Traits & Combat Flavor:</strong> Added a few more individual race special traits. We have also modified some narrative lines to be more grammatically correct, specifically around martial combat. If you kick an opponent, it properly registers the "hit" line as a kick instead of an open hand attack or a generic line.</li>
+                    <li><strong>Claw Attacks:</strong> Added new flavor around claw attacks from Lizardfolk and Tabaxi for Martial Combat. These made sense due to the nature of the race.</li>
+                    <li><strong>Knockdown Formula Tweak:</strong> Modified Knockdown logic so we don't have as many knockdowns in fights. Also added in some logic to reward the knockdown for the sweep skill.</li>
+                    <li><strong>Newsletter Text Fixes:</strong> Corrected the newsletter fight descriptions to show the proper verbiage for a challenge, Blood Challenge, Monster fight, and random matchup.</li>
+                    <li>Several other minor enhancements have been made as well.</li>
+                </ul>
+
+                <h3>Looking to the Future</h3>
+                <p>My next big project for this will be to incorporate a tournament engine. I have been working through the planning stages at this point and I think I have a good outline of how I would want it to look.</p>
+                <p>The prize pool I am thinking of at this time is as follows:</p>
+                <ul>
+                    <li>Removal of 3 levels of Permanent injuries</li>
+                    <li>3 points permanently added to size</li>
+                    <li>Auto max 1 skill to 9</li>
+                    <li>Change and select a new Favorite weapon</li>
+                    <li>+10 permanent HP increase</li>
+                </ul>
+                <p>Winner of each tier of the tournament would have a choice of one of these prizes. Again, this is still in the planning stages and a ways off for now.</p>
+                
+                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
+                    — ILNEVAL
+                </p>
+            </div>
+            <button class="close-modal-btn" id="closeLatestModal">Dismiss</button>
+        </div>
+    </div>
+
+    <!-- June 1 Announcement Modal -->
+    <div id="june1AnnouncementModal" class="modal-overlay">
         <div class="modal-content">
             <h2>ARENA UPDATE — JUNE 1, 2026</h2>
             <div class="modal-scroll-body">
@@ -123,10 +178,11 @@
                     — ILNEVAL
                 </p>
             </div>
-            <button class="close-modal-btn" id="closeLatestModal">Dismiss</button>
+            <button class="close-modal-btn" id="closeJune1Modal">Dismiss</button>
         </div>
     </div>
 
+    <!-- May 29 Announcement Modal -->
     <div id="newAnnouncementModal" class="modal-overlay">
         <div class="modal-content">
             <h2>ARENA UPDATE — MAY 29, 2026</h2>
@@ -164,6 +220,7 @@
         </div>
     </div>
 
+    <!-- May 27 Announcement Modal -->
     <div id="announcementModal" class="modal-overlay">
         <div class="modal-content">
             <h2 id="modalTitle">Official Playtest Proclamation</h2>
@@ -240,20 +297,25 @@
             const closeNew = document.getElementById('closeNewModal');
             const viewNew = document.getElementById('viewNewAnnouncement');
 
-            // Latest Modal (June 1)
+            // June 1 Modal
+            const june1Modal = document.getElementById('june1AnnouncementModal');
+            const closeJune1 = document.getElementById('closeJune1Modal');
+            const viewJune1 = document.getElementById('viewJune1Announcement');
+
+            // Latest Modal (June 5)
             const latestModal = document.getElementById('latestAnnouncementModal');
             const closeLatest = document.getElementById('closeLatestModal');
             const viewLatest = document.getElementById('viewLatestAnnouncement');
 
             // Show latest announcement automatically if not seen
-            if (!localStorage.getItem('bloodspire_update_20260601')) {
+            if (!localStorage.getItem('bloodspire_update_20260605')) {
                 latestModal.style.display = 'block';
             }
 
             // Close latest modal
             closeLatest.onclick = () => { 
                 latestModal.style.display = 'none'; 
-                localStorage.setItem('bloodspire_update_20260601', 'true'); 
+                localStorage.setItem('bloodspire_update_20260605', 'true'); 
             };
 
             // Open latest modal via link
@@ -262,10 +324,20 @@
                 latestModal.style.display = 'block';
             };
 
+            // Close June 1 modal
+            closeJune1.onclick = () => { 
+                june1Modal.style.display = 'none'; 
+            };
+
+            // Open June 1 modal via link
+            viewJune1.onclick = function(e) {
+                e.preventDefault();
+                june1Modal.style.display = 'block';
+            };
+
             // Close mid modal
             closeNew.onclick = () => { 
                 newModal.style.display = 'none'; 
-                localStorage.setItem('bloodspire_update_20260529', 'true'); 
             };
 
             // Open mid modal via link
@@ -277,7 +349,6 @@
             // Original modal logic
             closeOriginal.onclick = () => { 
                 originalModal.style.display = 'none'; 
-                localStorage.setItem('bloodspire_official_playtest_2026', 'true'); 
             };
 
             viewOriginal.onclick = function(e) {
