@@ -2398,6 +2398,7 @@ class CombatEngine:
         self._emit(f"\nMINUTE {minute}")
         if minute == 1:
             self._emit(random.choice(N.FIGHT_OPENERS))
+            self._emit(random.choice(N.FIGHT_ENGAGEMENT_LINES))
             for st in (self.state_a, self.state_b):
                 if st.armor_penalty >= 0.10:
                     self._emit(N.overencumbered_prefight_line(st.warrior.name, st.warrior.gender))
@@ -2848,7 +2849,7 @@ class CombatEngine:
         # Use appropriate intent line (normal or awkward)
         _weak_attack_intent = not is_compatible  # awkward flavor was used - suppress "barely" on parry
         if is_compatible:
-            intent = N.style_intent_line(att.name, dfr.name, ax.style, wpn, att.gender)
+            intent = N.style_intent_line(att.name, dfr.name, ax.style, wpn, att.gender, foe_armor=dfr.armor)
         else:
             intent = N.awkward_style_intent_line(att.name, dfr.name, ax.style, wpn, att.gender)
 
@@ -2869,25 +2870,18 @@ class CombatEngine:
         # so adding a crisp defensive read makes hits feel even more contradictory.
         _defense_intent_emitted = False
         _defense_intent_is_parry = False
-        _defensive_narrative_emitted = False  # Track ANY defensive narrative to prevent stacking
+        _defensive_narrative_emitted = False  # Track actual defense RESULTS (parry/dodge/crit), NOT intents
         if random.random() < (0.20 if _weak_attack_intent else 0.55):
             props_dx = get_style_props(dx.style)
             _uses_parry = props_dx.parry_bonus >= props_dx.dodge_bonus
             # Disarmed warriors can only dodge, never parry
             if dfr.primary_weapon == "Open Hand":
                 _uses_parry = False
-            if not _defensive_narrative_emitted:
-                self._emit(N.defense_intent_line(dfr.name, dfr.gender, _uses_parry))
-                _defense_intent_emitted = True
-                _defensive_narrative_emitted = True
-                _defense_intent_is_parry = _uses_parry
-
-        # Favorite weapon flavor, fires on first attack with this weapon, win or lose
-        # Skip if weapon was thrown away - doesn't make sense to praise a weapon that's already gone
-        if not _weapon_thrown_away:
-            fav_flavor = _get_favorite_weapon_flavor(att, wpn, as_)
-            if fav_flavor:
-                self._emit(fav_flavor)
+            # Emit defense intent before attack roll - doesn't count as "defensive narrative emitted"
+            # because the result is unknown. This allows parry/dodge/etc to be shown after the roll.
+            self._emit(N.defense_intent_line(dfr.name, dfr.gender, _uses_parry))
+            _defense_intent_emitted = True
+            _defense_intent_is_parry = _uses_parry
 
         # --- Update attacker's endurance for this action ---
         # This needs to happen before strategy re-evaluation for fatigue triggers
@@ -3028,13 +3022,14 @@ class CombatEngine:
                             self._emit(N.critical_dodge_line(dfr.name, att.name))
                         _defensive_narrative_emitted = True
 
-            # Calculated Attack probe flavor - occasional line when a CA
-            # probe fails to find a gap in the defender's guard.
-            if (ax.style == "Calculated Attack" and not ca_precision_landed
-                    and random.randint(1, 100) <= CA_PROBE_EMIT_CHANCE):
-                self._emit(N.calculated_probe_line(att.name, dfr.name))
             if margin == 0:
-                self._emit(N.miss_line(att.name, wpn))
+                # Calculated Attack probe flavor - occasional line when a CA
+                # probe fails to find a gap in the defender's guard.
+                if (ax.style == "Calculated Attack" and not ca_precision_landed
+                        and random.randint(1, 100) <= CA_PROBE_EMIT_CHANCE):
+                    self._emit(N.calculated_probe_line(att.name, dfr.name))
+                else:
+                    self._emit(N.miss_line(att.name, wpn))
             elif margin <= -30:
                 if use_p:
                     barely = (-margin < 20) and not _weak_attack_intent
@@ -3277,6 +3272,13 @@ class CombatEngine:
         is_claw = attack_type == "claw"
         self._emit(N.damage_line(dmg, dfr.max_hp, cat, is_claw_attack=is_claw))
 
+        # Favorite weapon flavor - now emitted only on successful hits
+        # Skip if weapon was thrown away - doesn't make sense to praise a weapon that's already gone
+        if not _weapon_thrown_away:
+            fav_flavor = _get_favorite_weapon_flavor(att, wpn, as_)
+            if fav_flavor:
+                self._emit(fav_flavor)
+
         # Weapon swap message: after damage lands, attacker draws their next weapon
         if _weapon_loss_msg:
             self._emit(_weapon_loss_msg)
@@ -3306,7 +3308,7 @@ class CombatEngine:
                 bleed_chance = slash_level * 5
                 if random.randint(1, 100) <= bleed_chance:
                     ds_.bleeding_wounds += 1
-        
+
         # --- Bleeding Damage ---
         if ds_.bleeding_wounds > 0 and random.randint(1, 100) <= 40:
             bleed_dmg = _apply_bleeding_damage(ds_)
@@ -3319,9 +3321,32 @@ class CombatEngine:
                         dfr.name, ds_.bleeding_wounds, bleed_dmg,
                         _pre_bleed_hp, ds_.current_hp, dfr.max_hp,
                     )
-        
-        self._check_defender_strategy_only(ds_, as_, minute)  # defender reacts to own HP drop
-        self._check_defender_strategy_only(as_, ds_, minute)  # attacker reacts to updated foe HP
+
+        # SIMULTANEOUS STRATEGY CHECKS
+        # Both warriors' triggers that depend on this damage event should fire and emit together.
+        # We check and collect both switches BEFORE emitting, ensuring they appear consecutively.
+        fs_defender = ds_.to_fighter_state()
+        fs_attacker = as_.to_fighter_state()
+
+        # Check defender's strategy
+        new_strat_def, new_idx_def = evaluate_triggers(ds_.warrior.strategies, fs_defender, fs_attacker, minute)
+        # Check attacker's strategy
+        new_strat_att, new_idx_att = evaluate_triggers(as_.warrior.strategies, fs_attacker, fs_defender, minute)
+
+        # Emit both switches together (if they occur)
+        if new_idx_def != ds_.active_strat_idx:
+            self._emit(N.strategy_switch_line(ds_.warrior.name, new_idx_def))
+            if self.debug_logger:
+                self.debug_logger.log_strategy_switch(ds_.warrior.name, ds_.active_strat_idx, new_idx_def)
+            ds_.active_strategy = new_strat_def
+            ds_.active_strat_idx = new_idx_def
+
+        if new_idx_att != as_.active_strat_idx:
+            self._emit(N.strategy_switch_line(as_.warrior.name, new_idx_att))
+            if self.debug_logger:
+                self.debug_logger.log_strategy_switch(as_.warrior.name, as_.active_strat_idx, new_idx_att)
+            as_.active_strategy = new_strat_att
+            as_.active_strat_idx = new_idx_att
 
         # Low-HP status commentary
         hp_pct = ds_.current_hp / max(1, dfr.max_hp)
@@ -3561,10 +3586,10 @@ class CombatEngine:
 
     def _counterstrike(self, as_: _CState, ds_: _CState, ax: Strategy, dx: Strategy, minute: int) -> Optional[FightResult]:
         att = as_.warrior;  dfr = ds_.warrior;  wpn = att.primary_weapon
-        
+
         # Check weapon/style compatibility for counterstrike
         is_compatible, penalty_factor = _check_weapon_style_compatibility(wpn, ax.style)
-        
+
         try:    cat = get_weapon(wpn).category
         except: cat = "Oddball"
         for ln in N.hit_line(att.name, dfr.name, wpn, cat, ax.aim_point, "precise", attacker_race=att.race.name):
@@ -3584,7 +3609,8 @@ class CombatEngine:
         if prev > nk_threshold >= ds_.current_hp:
             as_.near_kills_dealt += 1
 
-        self._check_defender_strategy_only(ds_, as_, minute)
+        self._check_defender_strategy_only(ds_, as_, minute)  # defender (original attacker) reacts to their HP drop
+        self._check_defender_strategy_only(as_, ds_, minute)  # counter-attacker reacts to foe's HP
 
         if ds_.current_hp <= 0:
             return self._handle_zero_hp(ds_, as_, prev, dmg, minute)

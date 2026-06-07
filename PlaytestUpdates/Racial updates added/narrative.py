@@ -28,9 +28,9 @@ def _article(word: str) -> str:
 
 POPULARITY_DESCRIPTIONS = [
     (0,  10, "LARGELY UNKNOWN"),
-    (11, 20, "BOOED REGULARLY"),
-    (21, 30, "GENERALLY DISLIKED"),
-    (31, 40, "MOSTLY IGNORED"),
+    (11, 20, "GENERALLY DISLIKED"),
+    (21, 30, "MOSTLY IGNORED"),
+    (31, 40, "HAS A FEW FANS"),
     (41, 50, "KNOWN TO THE CROWD"),
     (51, 60, "POPULAR WITH THE KIDS"),
     (61, 70, "WELL LIKED"),
@@ -445,36 +445,46 @@ def build_fight_header(
 
 
 _CHALLENGE_FLAVOR_NORMAL = [
-    "{n1} dares to challenge {n2}!!",
+    "{n1} issues a Challenge to {n2}!!",
     "{n1} challenges {n2} in an affair of honor!",
-    "{n1} has called out {n2} for this bout!",
+    "{n1} has called out {n2} for this Challenge bout!",
     "{n1} steps forward to challenge {n2}!",
-    "{n1} issued a challenge to {n2} this turn!",
-    "{n1} has singled out {n2} for combat!",
+    "{n1} has issued a Challenge to {n2} this turn!",
+    "{n1} presents a Challenge to {n2}!",
 ]
 
 _CHALLENGE_FLAVOR_BLOOD = [
-    "{n1} seeks blood vengeance against {n2}!!",
+    "{n1} seeks blood vengeance against {n2} in a Blood Challenge!!",
     "{n1} has declared a Blood Challenge against {n2}!!",
-    "This is a blood feud: {n1} challenges {n2} to the death!",
-    "{n1} demands a price in blood from {n2}!",
-    "The air turns cold as {n1} issues a Blood Challenge to {n2}!!",
-    "{n1} swears a vendetta against {n2} this turn!",
+    "This is a blood feud: {n1} issues a Blood Challenge to {n2} to the death!",
+    "{n1} demands a price in blood from {n2} - a Blood Challenge!!",
+    "The air turns cold as {n1} declares a Blood Challenge against {n2}!!",
+    "{n1} swears a Blood Challenge vendetta against {n2} this turn!",
 ]
 
 _CHALLENGE_FLAVOR_MONSTER = [
-    "{n1} has the courage to challenge the beast {n2}!!",
-    "{n1} dares to face the monster {n2}!!",
-    "{n1} steps into the pit to challenge the creature {n2}!!",
-    "{n1} seeks glory by challenging {n2}!!",
-    "{n1} will attempt to survive the monstrous {n2}!!",
+    "{n1} dares to challenge the Monster {n2}!!",
+    "{n1} steps forward to face the Monster {n2} in Challenge!!",
+    "{n1} steps into the pit to challenge the Monster {n2}!!",
+    "{n1} seeks glory by challenging the Monster {n2}!!",
+    "{n1} will attempt to survive a challenge against the Monster {n2}!!",
+    "{n1} issues a Monster Challenge to {n2}!!",
+]
+
+_CHALLENGE_FLAVOR_CHAMPION = [
+    "{n1} challenges {n2} for the Title!!",
+    "{n1} steps forward to challenge for the Title against {n2}!!",
+    "This is a Title Challenge: {n1} seeks to dethrone champion {n2}!!",
+    "{n1} issues a Title Challenge to the champion {n2}!!",
+    "{n1} will attempt to claim the Title from {n2}!!",
+    "{n1} steps into the arena for a Title Challenge against {n2}!!",
 ]
 
 def get_challenge_flavor_line(w1_name: str, w2_name: str, challenger_name: Optional[str], fight_type: str) -> Optional[str]:
     """Return a randomly selected challenge flavor line if appropriate."""
-    if not challenger_name and fight_type != "monster":
+    if not challenger_name and fight_type not in ("monster", "champion"):
         return None
-    
+
     # Identify challenger and challenged (robust case-insensitive check)
     c_name_norm = challenger_name.strip().upper() if challenger_name else ""
     w1_name_norm = w1_name.strip().upper()
@@ -485,16 +495,18 @@ def get_challenge_flavor_line(w1_name: str, w2_name: str, challenger_name: Optio
     elif c_name_norm == w2_name_norm:
         n1, n2 = w2_name_norm, w1_name_norm
     else:
-        # Default for monster fights or if names don't match (fallback)
+        # Default for monster/champion fights or if names don't match (fallback)
         n1, n2 = w1_name_norm, w2_name_norm
 
     if fight_type == "blood_challenge":
         pool = _CHALLENGE_FLAVOR_BLOOD
     elif fight_type == "monster":
         pool = _CHALLENGE_FLAVOR_MONSTER
+    elif fight_type == "champion":
+        pool = _CHALLENGE_FLAVOR_CHAMPION
     else:
         pool = _CHALLENGE_FLAVOR_NORMAL
-        
+
     return random.choice(pool).format(n1=n1, n2=n2)
 
 def presence_hesitation_line(attacker_name: str, defender_name: str) -> str:
@@ -517,6 +529,19 @@ FIGHT_OPENERS = [
     "An eerie silence settles over the AGONY AMPHITHEATRE",
     "The torches flicker as a cold wind sweeps through the arena",
     "The Blood Master raises his fist, the fight begins!",
+]
+
+FIGHT_ENGAGEMENT_LINES = [
+    "Weapons gleam as the warriors circle the pit",
+    "The crowd leans forward as steel meets steel in greeting",
+    "Sand crunches beneath their feet as they close",
+    "A low growl of anticipation rolls through the stands",
+    "The first feint cuts through the air, testing distance",
+    "Breath clouds form as the fighters lock eyes",
+    "The opening stance is taken, nerves stretched tight",
+    "Iron clangs as guards are tested and positions set",
+    "The rhythm of combat begins to establish itself",
+    "Muscles coil as the opening gambit approaches",
 ]
 
 RACE_KILL_POOLS = {
@@ -770,12 +795,12 @@ STYLE_INTENT_POOLS: dict[str, list[str]] = {
         "{name} darts forward, looking for an opening",
         "{name} probes for a weakness in {foe}'s defense",
         "{name} moves with quick, precise footwork",
-        "{name} circles {foe}, waiting for the perfect moment",
+        "{name} circles {foe}, reading the moment to commit",
         "{name} violently explodes forward from a crouch",
         "{name} extends {his} reach to its absolute limit, striking hard",
         "{name} drives a sudden, piercing line of attack",
         "{name} shifts weight instantly to launch a low, flashing strike",
-        "{name} closes the distance in a single, desperate stride",
+        "{name} closes the distance with a committed thrust",
         "{name} throws a cunning feint before committing to a hard stab",
         "{name} lunges cleanly through a sudden gap in the guard",
     ],
@@ -808,13 +833,13 @@ STYLE_INTENT_POOLS: dict[str, list[str]] = {
         "{name} advances with a calculated, standard offensive against the {adj} {foe}",
     ],
     "Engage & Withdraw": [
-        "{name} probes and retreats, looking for an opening",
-        "{name} feints left and prepares to strike",
-        "{name} dances away from {foe}'s reach",
-        "{name} steps in with a quick prick before springing backward out of danger",
-        "{name} tests the line with a sharp advance, then instantly glides out of range",
-        "{name} plays a dangerous game of distance, pulling {foe} out of position",
-        "{name} slips inside the guard for a brief instant before retreating to safety",
+        "{name} probes for weakness, then retreats to reposition",
+        "{name} feints left, striking before pulling back",
+        "{name} dances in close, lashing out before withdrawing",
+        "{name} steps in with a sharp blow before springing backward out of danger",
+        "{name} tests the line with a quick strike, then instantly glides out of range",
+        "{name} plays a dangerous game of distance, striking before pulling back",
+        "{name} slips inside the guard, striking quickly before retreating to safety",
     ],
     "Counterstrike": [
         "{name} waits patiently for {foe} to make a mistake",
@@ -835,7 +860,7 @@ STYLE_INTENT_POOLS: dict[str, list[str]] = {
         "{name} misdirects with a sudden shift in posture, blinding {foe} to the real danger",
     ],
     "Sure Strike": [
-        "{name} waits for absolutely the right moment",
+        "{name} waits for the right moment, then commits fully",
         "{name} carefully prepares a deliberate strike",
         "{name} takes aim at {foe} with methodical precision",
         "{name} narrows {his} focus, blocking out the roaring crowd to ensure a perfect hit",
@@ -890,6 +915,101 @@ STYLE_INTENT_POOLS: dict[str, list[str]] = {
     ],
 }
 
+# ---------------------------------------------------------------------------
+# ARMOR-SPECIFIC INTENT LINES
+# Override generic intent lines based on opponent's armor type.
+# Maps: style -> armor_type -> narratives
+# Armor categories:
+#   "plate"   = Full Plate, Half-Plate, Brigandine (metal plating)
+#   "chain"   = Chain, Scale (interlocking links/rings)
+#   "leather" = Leather, Cuir Boulli (soft/hardened leather, no plates)
+#   "none"    = No armor or unarmored
+# ---------------------------------------------------------------------------
+
+ARMOR_SPECIFIC_INTENT_POOLS: dict[str, dict[str, list[str]]] = {
+    "Bash": {
+        "plate": [
+            "{name} looks to bash through the metal plating with brutal force",
+            "{name} targets the seams between the armor plates",
+            "{name} winds up to shatter the iron protection",
+        ],
+        "chain": [
+            "{name} winds up to pummel the chain links into submission",
+            "{name} looks to break bone beneath the metal mesh",
+        ],
+        "leather": [
+            "{name} looks to cave in the leather and crack ribs",
+            "{name} winds up to shatter bone beneath the hardened leather",
+        ],
+        "none": [
+            "{name} looks to break bone and shatter resolve",
+            "{name} winds up for a crushing blow to bare flesh",
+        ],
+    },
+    "Sure Strike": {
+        "plate": [
+            "{name} takes aim at the gaps between the armor plates",
+            "{name} narrows focus on the seams of the metal protection",
+        ],
+        "chain": [
+            "{name} measures the spacing of the chain links for maximum penetration",
+            "{name} takes aim at the openings in the mesh",
+        ],
+        "leather": [
+            "{name} studies the seams and weak points in the leather",
+            "{name} measures weak points in the hardened hide",
+        ],
+        "none": [
+            "{name} measures the distance for a precise strike to bare skin",
+            "{name} zeroes in on a vital, unprotected target",
+        ],
+    },
+    "Calculated Attack": {
+        "plate": [
+            "{name} analyzes the gaps between the metal plates with surgical precision",
+            "{name} maps out the seams in the armor for maximum lethality",
+            "{name} studies the weak points where the plating overlaps",
+        ],
+        "chain": [
+            "{name} calculates the spacing of the chain links to find an opening",
+            "{name} analyzes gaps in the metal mesh for the perfect strike",
+            "{name} studies the pattern of the links to find maximum vulnerability",
+        ],
+        "leather": [
+            "{name} analyzes the seams in the leather to maximize impending trauma",
+            "{name} studies the weak points where the hardened leather begins to crack",
+            "{name} calculates a strike against the toughest hide",
+        ],
+        "none": [
+            "{name} analyzes the bare, vulnerable target with cold precision",
+            "{name} calculates the perfect strike against unprotected flesh",
+            "{name} studies the vital points with surgical focus",
+        ],
+    },
+}
+
+def _get_armor_category(armor_name: Optional[str]) -> str:
+    """Categorize armor type for narrative selection."""
+    if not armor_name:
+        return "none"
+
+    armor_lower = armor_name.lower()
+
+    # Plate-based armor
+    if any(x in armor_lower for x in ["plate", "brigandine"]):
+        return "plate"
+
+    # Chain-based armor
+    if any(x in armor_lower for x in ["chain", "scale"]):
+        return "chain"
+
+    # Leather-based armor
+    if any(x in armor_lower for x in ["leather", "cuir"]):
+        return "leather"
+
+    # Default to none
+    return "none"
+
 # AWKWARD STYLE INTENT LINES
 # Used when a weapon and fighting style are incompatible.
 # These replace the normal style intent lines for that attack.
@@ -941,14 +1061,28 @@ def style_intent_line(
     style        : str,
     weapon_name  : str,
     gender       : str,
+    foe_armor    : Optional[str] = None,
 ) -> Optional[str]:
     """
     Return a style intent line (or None, ~60% skip chance).
+    Uses armor-specific narratives when available for the style.
     """
     if random.random() < 0.30:
         return None
 
-    pool = STYLE_INTENT_POOLS.get(style, STYLE_INTENT_POOLS["Strike"])
+    # Try to get armor-specific pool first
+    if foe_armor and style in ARMOR_SPECIFIC_INTENT_POOLS:
+        armor_category = _get_armor_category(foe_armor)
+        armor_pools = ARMOR_SPECIFIC_INTENT_POOLS[style]
+        if armor_category in armor_pools:
+            pool = armor_pools[armor_category]
+        else:
+            # Fall back to generic pool if armor category not found
+            pool = STYLE_INTENT_POOLS.get(style, STYLE_INTENT_POOLS["Strike"])
+    else:
+        # Use generic pool if no armor specified or style not in armor-specific pools
+        pool = STYLE_INTENT_POOLS.get(style, STYLE_INTENT_POOLS["Strike"])
+
     template = random.choice(pool)
     pronoun  = "his" if gender == "Male" else "her"
     reflexive= "himself" if gender == "Male" else "herself"
@@ -1269,11 +1403,11 @@ def hit_line(
     else:
         target_pool = HIT_TARGETS.get(aim_point, HIT_TARGETS["None"])
         target = random.choice(target_pool)
-        if style == "Opportunity Throw":
-            verb = random.choice(THROW_HIT_VERBS)
-        elif weapon_name.lower() == "bola":
-            # Bola hits with swinging weighted balls - flail-style, never "punches"
+        if weapon_name.lower() == "bola":
+            # Bola hits with swinging weighted balls - flail-style, never "embeds" or "pierces"
             verb = random.choice(["crashes into", "slams into", "smashes into", "wraps around and strikes"])
+        elif style == "Opportunity Throw":
+            verb = random.choice(THROW_HIT_VERBS)
         else:
             verb_pool = HIT_VERBS.get(weapon_category, HIT_VERBS["Oddball"])
             verb = random.choice(verb_pool)
