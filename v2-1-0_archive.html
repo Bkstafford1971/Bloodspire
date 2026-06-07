@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archived Changelogs</title>
+    <style>
+        :root {
+            --bg-color: #121214;
+            --container-bg: #1a1a1e;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --accent-red: #ef4444;
+            --border-color: #2e2e38;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--container-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #60a5fa;
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin: 0 0 10px 0;
+            color: #fff;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background-color: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        .section {
+            margin-bottom: 35px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: #fff;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title.gameplay { border-bottom-color: var(--accent-purple); }
+        .section-title.ui { border-bottom-color: var(--accent-green); }
+        .section-title.compatibility { border-bottom-color: var(--accent-blue); }
+        .section-title.roadmap { border-bottom-color: var(--accent-red); }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        li::before {
+            content: "•";
+            position: absolute;
+            left: 8px;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            line-height: 1.2;
+        }
+
+        strong {
+            color: #fff;
+        }
+
+        .details {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .date-header {
+            color: var(--accent-blue);
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <a href="updates.html" class="back-link">← Back to Current Updates</a>
+        <h1>Archived Logs & System History</h1>
+        <p class="subtitle">Historical record of previous development milestones and balance cycles.</p>
+        <span class="version-badge">v2.1.0 Archive Base</span>
+    </header>
+
+    <main>
+        <section class="section">
+            <span class="date-header">May 10, 2026</span>
+            <h2 class="section-title compatibility">Naming Collision & Server Logic Fixes</h2>
+            <ul>
+                <li>
+                    <strong>Duplicate Name Collision Resolved</strong>
+                    <span class="details">Fixed an issue where teams or warriors sharing names caused logic failures. Previously, this caused some warriors to miss fights or incorrectly match against normal players instead of monsters.</span>
+                </li>
+                <li>
+                    <strong>Unique ID Implementation</strong>
+                    <span class="details">Added Unique ID strings to all teams and warriors, implementing backend indices for precise identification regardless of shared names.</span>
+                </li>
+                <li>
+                    <strong>Admin Team Deletion</strong>
+                    <span class="details">Implemented backend functionality allowing admins to remove teams at manager request, triggering an API call to clear stale data from the client.</span>
+                </li>
+                <li>
+                    <strong>Locked Text Field Rendering</strong>
+                    <span class="details">Resolved a client-side bug in the "Create New Team" and "Create Replacement Warrior" screens where name fields appeared uneditable until the window was minimized and restored.</span>
+                </li>
+                <li>
+                    <strong>"Run Next Turn" Upload Logic</strong>
+                    <span class="details">Fixed a bug where uploading with the "Run Next Turn" box unchecked would lock the team out of the turn list. The server now allows re-uploads to correctly register the team once the checkbox is selected.</span>
+                </li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title roadmap">Next Planned Updates</h2>
+            <ul>
+                <li>
+                    <strong>Stat Formula Reworks</strong>
+                    <span class="details">Adjusting Endurance and HP formulas to address combat length issues (currently too many fights exceeding 10 minutes).</span>
+                </li>
+                <li>
+                    <strong>Weapon Damage Scaling</strong>
+                    <span class="details">Increasing damage for small finesse and medium-sized weapons to make them more competitive.</span>
+                </li>
+                <li>
+                    <strong>Critical System & Narratives</strong>
+                    <span class="details">Introducing Critical Hits and Critical Parry/Dodge formulas along with associated immersive narrative lines.</span>
+                </li>
+                <li>
+                    <strong>Combat Consistency</strong>
+                    <span class="details">Tweaking the random disarm frequency and refining the "Arena Happenings" report to reduce repetitive statements.</span>
+                </li>
+                <li>
+                    <strong>Newsletter Enhancements</strong>
+                    <span class="details">Updating the "Top Managers" section for a more natural visual flow.</span>
+                </li>
+            </ul>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 40px 0;">
+
+        <section class="section">
+            <h2 class="section-title gameplay">Combat & Gameplay Balance (v1.1.0)</h2>
+            <ul>
+                <li>
+                    <strong>Finesse Weapon Scaling</strong>
+                    <span class="details">Adjusted damage calculations for finesse weapons to match alternative playstyles.</span>
+                </li>
+                <li>
+                    <strong>Blood Challenge Logic</strong>
+                    <span class="details">Updated triggers and scaling backend for Blood Challenges.</span>
+                </li>
+                <li>
+                    <strong>Challenge Selection Save State</strong>
+                    <span class="details">Fixed interface bug where selected challenges failed to commit to local storage.</span>
+                </li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title ui">Interface & User Experience (v1.1.0)</h2>
+            <ul>
+                <li>
+                    <strong>Record Privacy Option</strong>
+                    <span class="details">Added the ability to hide Win-Loss-Kill (W-L-K) records in Preferences.</span>
+                </li>
+                <li>
+                    <strong>Arena Rebranding</strong>
+                    <span class="details">Formally updated all references to <strong>The Agony Amphitheatre</strong>.</span>
+                </li>
+            </ul>
+        </section>
+    </main>
+</div>
+
+</body>
+</html>

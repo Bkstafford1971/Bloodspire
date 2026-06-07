@@ -71,8 +71,8 @@
 
         .version-badge {
             display: inline-block;
-            background-color: rgba(59, 130, 246, 0.15);
-            color: var(--accent-blue);
+            background-color: rgba(139, 92, 246, 0.15);
+            color: var(--accent-purple);
             padding: 4px 12px;
             border-radius: 9999px;
             font-weight: 600;
@@ -95,10 +95,8 @@
             gap: 10px;
         }
 
-        .section-title.gameplay { border-bottom-color: var(--accent-purple); }
-        .section-title.ui { border-bottom-color: var(--accent-green); }
-        .section-title.compatibility { border-bottom-color: var(--accent-blue); }
-        .section-title.roadmap { border-bottom-color: var(--accent-red); }
+        .section-title.narrative { border-bottom-color: var(--accent-purple); }
+        .section-title.archive { border-bottom-color: var(--accent-blue); }
 
         ul {
             list-style: none;
@@ -141,6 +139,14 @@
             margin-bottom: 10px;
             display: block;
         }
+
+        .archive-box {
+            background-color: rgba(59, 130, 246, 0.05);
+            border: 1px dashed var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -150,59 +156,41 @@
         <a href="index.html" class="back-link">← Back to Main Page</a>
         <h1>System Updates & Bug Fixes</h1>
         <p class="subtitle">Latest stability improvements, gameplay adjustments, and engine fixes.</p>
-        <span class="version-badge">v2.1.0 Changelog</span>
+        <span class="version-badge">v2.7.4 Changelog</span>
     </header>
 
     <main>
         <section class="section">
-            <span class="date-header">May 10, 2026</span>
-            <h2 class="section-title compatibility">Naming Collision & Server Logic Fixes</h2>
+            <span class="date-header">June 7, 2026</span>
+            <h2 class="section-title narrative">Combat Narrative & Flow Fixes</h2>
             <ul>
                 <li>
-                    <strong>Duplicate Name Collision Resolved</strong>
-                    <span class="details">Fixed an issue where teams or warriors sharing names caused logic failures. Previously, this caused some warriors to miss fights or incorrectly match against normal players instead of monsters.</span>
+                    <strong>Counter-Attack Weapon Errors</strong>
+                    <span class="details">Fixed a confusing bug where a warrior who successfully parried an attack and executed an immediate counter-strike would be described as hitting the enemy with the opponent's weapon instead of their own. Narratives now properly display the defender's weapon during a riposte.</span>
                 </li>
                 <li>
-                    <strong>Unique ID Implementation</strong>
-                    <span class="details">Added Unique ID strings to all teams and warriors, implementing backend indices for precise identification regardless of shared names.</span>
+                    <strong>Simultaneous Strategy Shifts</strong>
+                    <span class="details">When two combatants changed their combat tactics at the exact same moment due to a major damage event, the text engine would split the descriptions up, showing other atmospheric text in between. These strategy changes are now displayed back-to-back as they happen.</span>
                 </li>
                 <li>
-                    <strong>Admin Team Deletion</strong>
-                    <span class="details">Implemented backend functionality allowing admins to remove teams at manager request, triggering an API call to clear stale data from the client.</span>
+                    <strong>Counter-Attack Strategy Updates</strong>
+                    <span class="details">Resolved an oversight where the warrior initiating a counter-attack would not instantly evaluate tactical options based on the target's newly reduced health. Both fighters now dynamically adjust strategies instantly after counter-strike damage.</span>
                 </li>
                 <li>
-                    <strong>Locked Text Field Rendering</strong>
-                    <span class="details">Resolved a client-side bug in the "Create New Team" and "Create Replacement Warrior" screens where name fields appeared uneditable until the window was minimized and restored.</span>
+                    <strong>Armor-Specific Narrative Inconsistencies</strong>
+                    <span class="details">Combat flavor text will no longer describe an attacker finding gaps in "iron plates" when fighting an opponent wearing soft leather armor. Descriptions are now fully categorized to match the exact armor class the opponent is wearing.</span>
                 </li>
                 <li>
-                    <strong>"Run Next Turn" Upload Logic</strong>
-                    <span class="details">Fixed a bug where uploading with the "Run Next Turn" box unchecked would lock the team out of the turn list. The server now allows re-uploads to correctly register the team once the checkbox is selected.</span>
-                </li>
-            </ul>
-        </section>
-
-        <section class="section">
-            <h2 class="section-title roadmap">Next Planned Updates</h2>
-            <ul>
-                <li>
-                    <strong>Stat Formula Reworks</strong>
-                    <span class="details">Adjusting Endurance and HP formulas to address combat length issues (currently too many fights exceeding 10 minutes).</span>
+                    <strong>Unmistakable Challenge Types</strong>
+                    <span class="details">Challenge declarations have been completely rewritten to explicitly name the type of match occurring. It is now completely transparent whether you are witnessing a Standard Challenge, a Blood Challenge, a Monster Challenge, or a Title Challenge.</span>
                 </li>
                 <li>
-                    <strong>Weapon Damage Scaling</strong>
-                    <span class="details">Increasing damage for small finesse and medium-sized weapons to make them more competitive.</span>
+                    <strong>Missing Thrown Weapon Results</strong>
+                    <span class="details">Fixed an issue where thrown weapon attacks that were cleanly parried or missed entirely would omit their results from the battle log, leaving players confused. All thrown actions now clearly state whether they connected, missed, or were deflected.</span>
                 </li>
                 <li>
-                    <strong>Critical System & Narratives</strong>
-                    <span class="details">Introducing Critical Hits and Critical Parry/Dodge formulas along with associated immersive narrative lines.</span>
-                </li>
-                <li>
-                    <strong>Combat Consistency</strong>
-                    <span class="details">Tweaking the random disarm frequency and refining the "Arena Happenings" report to reduce repetitive statements.</span>
-                </li>
-                <li>
-                    <strong>Newsletter Enhancements</strong>
-                    <span class="details">Updating the "Top Managers" section for a more natural visual flow.</span>
+                    <strong>Favorite Weapon Text Spoilers</strong>
+                    <span class="details">Removed a minor text spoiler where a warrior's weapon flavor text would describe a high-efficiency strike before the game engine actually rolled the attack results. This text has been safely moved to display immediately after a confirmed hit lands.</span>
                 </li>
             </ul>
         </section>
@@ -210,35 +198,15 @@
         <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 40px 0;">
 
         <section class="section">
-            <h2 class="section-title gameplay">Combat & Gameplay Balance (v1.1.0)</h2>
-            <ul>
-                <li>
-                    <strong>Finesse Weapon Scaling</strong>
-                    <span class="details">Adjusted damage calculations for finesse weapons to match alternative playstyles.</span>
-                </li>
-                <li>
-                    <strong>Blood Challenge Logic</strong>
-                    <span class="details">Updated triggers and scaling backend for Blood Challenges.</span>
-                </li>
-                <li>
-                    <strong>Challenge Selection Save State</strong>
-                    <span class="details">Fixed interface bug where selected challenges failed to commit to local storage.</span>
-                </li>
-            </ul>
-        </section>
-
-        <section class="section">
-            <h2 class="section-title ui">Interface & User Experience (v1.1.0)</h2>
-            <ul>
-                <li>
-                    <strong>Record Privacy Option</strong>
-                    <span class="details">Added the ability to hide Win-Loss-Kill (W-L-K) records in Preferences.</span>
-                </li>
-                <li>
-                    <strong>Arena Rebranding</strong>
-                    <span class="details">Formally updated all references to <strong>The Agony Amphitheatre</strong>.</span>
-                </li>
-            </ul>
+            <h2 class="section-title archive">Archived Changelogs</h2>
+            <div class="archive-box">
+                <p style="margin-top: 0; color: var(--text-secondary);">Looking for older performance tweaks, interface modifications, or server history?</p>
+                <ul>
+                    <li>
+                        <a href="v2-1-0_archive.html" class="back-link" style="margin-bottom: 0;">View Version 2.1.0 and Older Changelogs →</a>
+                    </li>
+                </ul>
+            </div>
         </section>
     </main>
 </div>
