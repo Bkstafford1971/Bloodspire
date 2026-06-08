@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v2.7.4</title>
+<title>BLOODSPIRE Client - v2.7.5</title>
 <style>
 /* ============================================================
    WINDOWS CLASSIC - REFINED
@@ -246,7 +246,7 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
-const CLIENT_VERSION = "2.7.4";
+const CLIENT_VERSION = "2.7.5";
 
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
@@ -930,6 +930,12 @@ function mergeResults(localTeam, serverResult, opts = {}) {
     }
   }
 
+  // Regular challenges - server is authoritative (cleared after each turn).
+  // Take them from the server to ensure cleared challenges don't persist.
+  if (serverTeam.challenges !== undefined) {
+    out.challenges = serverTeam.challenges || {};
+  }
+
   // Blood challenges - server is authoritative (creates them on kills, decrements
   // turns_remaining each turn). Preserve any locally-set challenger_name selections
   // so the manager's pick survives the download.
@@ -1600,16 +1606,18 @@ const LocalAPI = {
       if (!team) return { success: false, error: 'Team not found.' };
       const idx = parseInt(body.warrior_idx, 10);
       // Build a replacement warrior skeleton using the stats in body
+      const con = parseInt(body.constitution, 10);
       const w = {
         name:         (body.name || '').toUpperCase(),
         race:         body.race || 'Human',
         gender:       body.gender || 'Male',
         strength:     parseInt(body.strength, 10),
         dexterity:    parseInt(body.dexterity, 10),
-        constitution: parseInt(body.constitution, 10),
+        constitution: con,
         intelligence: parseInt(body.intelligence, 10),
         presence:     parseInt(body.presence, 10),
         size:         parseInt(body.size, 10),
+        max_hp:       Math.floor((con + 8) * 2.5),
         wins: 0, losses: 0, kills: 0, total_fights: 0,
         armor: null, helm: null,
         primary_weapon: 'Open Hand', secondary_weapon: 'Open Hand', backup_weapon: null,
@@ -1624,7 +1632,7 @@ const LocalAPI = {
         initial_stats: {
           strength: parseInt(body.strength, 10),
           dexterity: parseInt(body.dexterity, 10),
-          constitution: parseInt(body.constitution, 10),
+          constitution: con,
           intelligence: parseInt(body.intelligence, 10),
           presence: parseInt(body.presence, 10),
         },
@@ -3214,7 +3222,7 @@ function buildStatsTab(team, w, wIdx) {
 <div style="font-size:10px; color:#555; margin-bottom:4px; display:flex; gap:14px;
      justify-content:flex-end; padding-right:4px; flex-wrap:wrap;">
   ${S.league.flags.show_luck_factor && w.luck!=null ? `<span>Luck: <b>${w.luck}</b>/30</span>` : ''}
-  ${S.league.flags.show_max_hp ? `<span>Max HP: <b>${w.max_hp||'?'}</b></span>` : ''}
+  ${S.league.flags.show_max_hp ? `<span>Max HP: <b>${w.max_hp || (w.constitution ? Math.floor((w.constitution + 8) * 2.5) : '?')}</b></span>` : ''}
   ${S.league.flags.show_favorite_weapon && w.favorite_weapon ? `<span>Favorite: <b>${esc(w.favorite_weapon)}</b></span>` : ''}
   <span>Popularity: <b>${w.popularity||0}</b>/100</span>
   <span>Turns active: <b>${w.turns_active||0}</b></span>
@@ -3922,10 +3930,12 @@ function buildArchivesTab(team) {
     </div>`;
   }
   let cards = '';
-  archived.forEach(a => {
+  archived.forEach((a, idx) => {
     const rec  = `${a.wins||0}-${a.losses||0}-${a.kills||0}`;
     const inj  = formatInjuriesText(a.injuries).join('<br>') || '-';
     const skls = formatSkillsText(a.skills).join('<br>') || '-';
+    const expandId = `arch_expand_${idx}`;
+    const contentId = `arch_content_${idx}`;
 
     // Build fight history table for this archived warrior
     const history = (a.fight_history || []).slice().reverse();
@@ -3968,32 +3978,39 @@ function buildArchivesTab(team) {
 
     cards += `
 <div class="group" style="margin:6px 4px; background:#f9f7f4;">
-  <span class="group-label" style="color:#800;">✝ ${esc(a.name)}</span>
-  <div style="display:flex; gap:20px; font-size:11px; flex-wrap:wrap; padding-top:4px;">
-    <div>
-      <div style="color:#666; margin-bottom:3px;">
-        ${esc(a.race||'')} ${esc(a.gender||'')} &mdash; ${rec} (${a.total_fights||0} fights)<br>
-        Slain by: <b>${esc(a.archived_killed_by||a.killed_by||'Unknown')}</b>
-      </div>
-      <table style="border-collapse:collapse; font-size:11px;">
-        ${['strength','dexterity','constitution','intelligence','presence','size'].map(attr => {
-          const deathVal = a[attr] != null ? a[attr] : '-';
-          const baseVal  = (a.initial_stats && a.initial_stats[attr] != null) ? ` (${a.initial_stats[attr]})` : '';
-          return `<tr><td style="padding:1px 6px; color:#555; width:90px;">${capitalize(attr)}</td>
-               <td style="padding:1px 6px; font-weight:bold;">${deathVal}${baseVal}</td></tr>`;
-        }).join('')}
-      </table>
-    </div>
-    <div>
-      <div style="color:#666; font-weight:bold; margin-bottom:3px;">Skills</div>
-      <div style="color:#333; line-height:1.5;">${skls}</div>
-    </div>
-    <div>
-      <div style="color:#666; font-weight:bold; margin-bottom:3px;">Permanent Injuries</div>
-      <div style="color:#800; line-height:1.5;">${inj}</div>
-    </div>
+  <div style="cursor:pointer; user-select:none; padding:6px 4px; display:flex; align-items:center; gap:8px;" onclick="toggleArchiveExpand('${contentId}', '${expandId}')">
+    <span id="${expandId}" style="font-size:12px; color:#666; min-width:12px;">▶</span>
+    <span style="flex:1; font-weight:500; color:#333;">${esc(a.name)}</span>
+    <span style="color:#888; font-size:11px;">${esc(a.race||'')} ${esc(a.gender||'')}</span>
+    <span style="color:#666; font-size:11px; font-weight:500;">${rec}</span>
+    <span style="color:#999; font-size:11px;">(${a.total_fights||0} fights)</span>
   </div>
-  ${fightSection}
+  <div id="${contentId}" style="display:none; padding:8px 4px; border-top:1px solid #ddd; margin-top:4px;">
+    <div style="display:flex; gap:20px; font-size:11px; flex-wrap:wrap;">
+      <div>
+        <div style="color:#666; margin-bottom:3px;">
+          Slain by: <b>${esc(a.archived_killed_by||a.killed_by||'Unknown')}</b>
+        </div>
+        <table style="border-collapse:collapse; font-size:11px;">
+          ${['strength','dexterity','constitution','intelligence','presence','size'].map(attr => {
+            const deathVal = a[attr] != null ? a[attr] : '-';
+            const baseVal  = (a.initial_stats && a.initial_stats[attr] != null) ? ` (${a.initial_stats[attr]})` : '';
+            return `<tr><td style="padding:1px 6px; color:#555; width:90px;">${capitalize(attr)}</td>
+                 <td style="padding:1px 6px; font-weight:bold;">${deathVal}${baseVal}</td></tr>`;
+          }).join('')}
+        </table>
+      </div>
+      <div>
+        <div style="color:#666; font-weight:bold; margin-bottom:3px;">Skills</div>
+        <div style="color:#333; line-height:1.5;">${skls}</div>
+      </div>
+      <div>
+        <div style="color:#666; font-weight:bold; margin-bottom:3px;">Permanent Injuries</div>
+        <div style="color:#800; line-height:1.5;">${inj}</div>
+      </div>
+    </div>
+    ${fightSection}
+  </div>
 </div>`;
   });
 
@@ -4002,6 +4019,17 @@ function buildArchivesTab(team) {
     ${cards}
   </div>`;
 }
+
+function toggleArchiveExpand(contentId, caretId) {
+  const content = document.getElementById(contentId);
+  const caret = document.getElementById(caretId);
+  if (content && caret) {
+    const isHidden = content.style.display === 'none';
+    content.style.display = isHidden ? 'block' : 'none';
+    caret.textContent = isHidden ? '▼' : '▶';
+  }
+}
+
 function buildReplacementTab(w) {
   // Living warrior - show placeholder
   if (!w.is_dead && !w.ascended_to_monster) {
@@ -6406,12 +6434,13 @@ async function doLeagueDownloadAll() {
 
     _showDownloadProgress(_DL_STEPS, _DL_STEPS.length, null);
 
-    // Turn downloaded - invalidate scout cache so locks clear on next view
+    // Turn downloaded - invalidate scout and challenge caches so they refresh with updated warrior records
     S.scout.loaded     = false;
     S.scout.selections = [];
     S.scout.slotsLeft  = 3;
     S.scout.targets    = null;
     S.scout.report     = null;
+    S.challengeTargets = null;  // Clear challenge targets cache to show updated warrior fight records
 
     const names  = applied.map(a => a.team_name).join(', ');
     const warn   = missed.length ? `  (${missed.length} unmatched: ${missed.join(', ')})` : '';

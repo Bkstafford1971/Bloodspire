@@ -3939,8 +3939,11 @@ def run_fight(
         warrior_a, warrior_b,
         team_a_name, team_b_name,
         manager_a_name, manager_b_name,
+        pos_a=pos_a,
+        pos_b=pos_b,
         is_monster_fight=is_monster_fight,
         challenger_name=challenger_name,
+        fight_type=fight_type,
         debug_logger=debug_logger,
     )
     result = engine.resolve_fight()

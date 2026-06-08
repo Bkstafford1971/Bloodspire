@@ -27,7 +27,7 @@ from file_protection import save_json_protected, load_json_protected, make_file_
 import webbrowser
 from typing import Optional
 
-SERVER_VERSION = "2.7"
+SERVER_VERSION = "2.7.4"
 
 BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
 LEAGUE_DIR   = os.path.join(BASE_DIR, "saves", "league")
@@ -715,6 +715,12 @@ def _run_turn(request_password, rerun_turn=None):
     print(f"  Total warriors: {total_warriors}")
     print(f"  Expected fights: {total_warriors} (one per warrior)\n")
 
+    # Clear challenges from all loaded teams to prevent stale client uploads
+    # from creating duplicate challenge fights (client may upload before downloading
+    # previous turn's results, so their upload could have old challenge data)
+    for team in all_player_teams:
+        team.clear_challenges()
+
     # ===================================================================
     # STEP 2: Build GLOBAL fight card using global pool matchmaking
     # ===================================================================
@@ -805,6 +811,8 @@ def _run_turn(request_password, rerun_turn=None):
                 manager_b_name=fight.opponent_manager,
                 is_monster_fight=(fight.fight_type == "monster"),
                 fight_type=fight.fight_type,
+                pos_a=fight.pos_a,
+                pos_b=fight.pos_b,
                 challenger_name=fight.challenger_name,
                 debug_logger=_dbg_logger,
             )
@@ -1094,6 +1102,8 @@ def _run_turn(request_password, rerun_turn=None):
                 "l": sum(1 for b in res["bouts"] if b.get("result") == "LOSS"),
                 "k": sum(1 for b in res["bouts"] if b.get("opponent_slain")),
             })
+            # Clear regular challenges after turn completes (prevents spam from auto-upload)
+            team.clear_challenges()
             # Decrement and expire any remaining blood challenges for this turn
             team.decrement_blood_challenge_turns()
             # Check for expired BCs before removing them
@@ -1181,14 +1191,12 @@ def _run_turn(request_password, rerun_turn=None):
                 if standings_key not in e["warriors"]:
                     e["warriors"][standings_key] = {"wins": 0, "losses": 0, "kills": 0, "fights": 0}
                 ws = e["warriors"][standings_key]
-                ws.update(
-                    name=wn,
-                    warrior_id=wid,
-                    wins=wd.get("wins", 0),
-                    losses=wd.get("losses", 0),
-                    kills=wd.get("kills", 0),
-                    fights=wd.get("total_fights", 0)
-                )
+                ws["name"] = wn
+                ws["warrior_id"] = wid
+                ws["wins"] = ws.get("wins", 0) + wd.get("wins", 0)
+                ws["losses"] = ws.get("losses", 0) + wd.get("losses", 0)
+                ws["kills"] = ws.get("kills", 0) + wd.get("kills", 0)
+                ws["fights"] = ws.get("fights", 0) + wd.get("total_fights", 0)
         _save_standings(standings)
     except Exception as _se:
         import traceback
@@ -1430,7 +1438,7 @@ def _run_turn(request_password, rerun_turn=None):
         # (not loaded from the start-of-turn state), any fight they were involved in
         # will have been stored as "standard".  Fix those records now and resave.
         _new_champ = champ_state.get("name", "")
-        if _new_champ and _new_champ != _champ_name:
+        if _new_champ and _new_champ != prev_champion_name:
             for _mid, _res in all_results.items():
                 _updated = False
                 for _bout in _res.get("bouts", []):
@@ -1750,7 +1758,7 @@ function openTab(evt, tabId) {{
    {len(mgr_upload_counts)} of {len(managers)} managers uploaded with a total of {len(uploads) + ai_count} teams active.
   </p>
   Host password:<br>
-  <input type="password" id="hp" style="width:200px"><br>
+  <input type="password" id="hp" style="width:200px" oninput="savePwToStorage()" placeholder="Password will be remembered"><br>
   <button onclick="runTurn()">▶ Run Turn {turn}</button>
   <button title="Force unlock if hung" onclick="unlockTurn()" style="background:#eee;border-color:#ccc;color:#666;margin-left:4px">🔓</button>
   <div id="prog-wrap" class="prog-wrap" style="display:none">
@@ -2124,6 +2132,15 @@ async function unlockTurn(){{
  }}catch(e){{show('Connection error: '+e.message,'err');}}
 }}
 function pw_val(){{return document.getElementById('hp')?.value||'';}}
+function savePwToStorage(){{
+  const hp=document.getElementById('hp');
+  if(hp && hp.value){{localStorage.setItem('admin_password',hp.value);}}
+}}
+function loadPwFromStorage(){{
+  const hp=document.getElementById('hp');
+  const saved=localStorage.getItem('admin_password');
+  if(hp && saved){{hp.value=saved;}}
+}}
 function startPoll(){{
  _seenRunning=false;
  document.getElementById('prog-wrap').style.display='block';
@@ -2750,6 +2767,7 @@ function exportUploadedAsJSON() {{
 // =====================================================================
 
 document.addEventListener('DOMContentLoaded',()=>{{
+ loadPwFromStorage();  // Load saved password from localStorage
  initUploadedWarriorsDropdown();
  // Wire feature-flag checkboxes via JS so no inline onchange globals needed
  document.querySelectorAll('input[data-flag]').forEach(el=>{{
@@ -3654,6 +3672,9 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             try:    exclude_tid = int(q.get("team_id","0") or 0)
             except: exclude_tid = 0
             from save import TEAMS_DIR
+            # Load current turn to filter inactive teams
+            cfg = _load_config()
+            current_turn = cfg.get("current_turn", 0)
             warriors = []
             try:
                 fnames = sorted(os.listdir(TEAMS_DIR))
@@ -3672,6 +3693,11 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 tid = tdata.get("team_id", 0)
                 if tid in own_team_ids: continue
                 if exclude_tid and tid == exclude_tid: continue
+                # Only include teams that are still active (participated within last 3 turns)
+                last_turn_ran = tdata.get("last_turn_ran", 0)
+                if current_turn > 0 and last_turn_ran > 0 and (current_turn - last_turn_ran) > 3:
+                    print(f"    Skipping inactive team {fname} (last_turn_ran={last_turn_ran}, current_turn={current_turn})")
+                    continue
                 team_name = tdata.get("team_name", "?")
                 manager_name = tdata.get("manager_name", "?")
                 for w in tdata.get("warriors", []):
@@ -4441,7 +4467,23 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 
                 # 3. Clear standings
                 _save_standings({})
-                
+
+                # 3b. Clear champion (no champion at turn 1)
+                from save import CHAMPION_FILE
+                print(f"  DEBUG: Checking for champion file at: {CHAMPION_FILE}")
+                if os.path.exists(CHAMPION_FILE):
+                    print(f"  DEBUG: Found champion.json, deleting...")
+                    make_file_writable(CHAMPION_FILE)
+                    os.remove(CHAMPION_FILE)
+                    print(f"  DEBUG: champion.json deleted")
+                champion_checksum = CHAMPION_FILE.replace('.json', '.checksum')
+                print(f"  DEBUG: Checking for checksum at: {champion_checksum}")
+                if os.path.exists(champion_checksum):
+                    print(f"  DEBUG: Found champion.checksum, deleting...")
+                    make_file_writable(champion_checksum)
+                    os.remove(champion_checksum)
+                    print(f"  DEBUG: champion.checksum deleted")
+
                 # 4. Clear manager registries to force reset-notification and fresh login state
                 mgrs = _load_managers()
                 for mid in mgrs:
