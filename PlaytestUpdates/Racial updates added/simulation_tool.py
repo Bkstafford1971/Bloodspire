@@ -180,8 +180,13 @@ class BloodspireSimTool:
             expand=[("selected", [1, 1, 1, 0])],
         )
 
-        self.notebook = ttk.Notebook(self.root)
-        self.notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        # Create main paned window for resizable top/bottom layout
+        self.paned_window = tk.PanedWindow(self.root, orient=tk.VERTICAL, sashwidth=5, bg="#333333")
+        self.paned_window.pack(fill=tk.BOTH, expand=True)
+
+        # Top pane: Config tabs
+        self.notebook = ttk.Notebook(self.paned_window)
+        self.paned_window.add(self.notebook, minsize=200)
 
         # Helper to add visual header to tabs
         def _add_tab_header(parent_frame, title, icon=""):
@@ -468,8 +473,8 @@ class BloodspireSimTool:
         self.gnome_runs_var = self.racial_runs_var
 
         # Shared Output Area (at the bottom)
-        main_frame = ttk.Frame(self.root, padding="15")
-        main_frame.pack(fill=tk.BOTH, expand=True)
+        main_frame = ttk.Frame(self.paned_window, padding="15")
+        self.paned_window.add(main_frame, minsize=150)
 
         # Output Area
         self.text_area = scrolledtext.ScrolledText(main_frame, wrap=tk.WORD, font=("Consolas", 10))
