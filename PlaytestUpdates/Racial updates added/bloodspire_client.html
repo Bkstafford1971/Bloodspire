@@ -1590,13 +1590,15 @@ const LocalAPI = {
     if (path === '/api/warrior/avoid_warrior') {
       const team = await Store.readTeam(parseInt(body.team_id, 10));
       if (!team) return { success: false, error: 'Team not found.' };
-      const w = team.warriors[parseInt(body.warrior_idx, 10)];
-      if (!w) return { success: false, error: 'Warrior slot empty.' };
+      // Find warrior by name (sent from client)
+      const w = team.warriors.find(warrior => warrior && warrior.name === body.warrior_name);
+      if (!w) return { success: false, error: 'Warrior not found.' };
       w.avoid_warriors = w.avoid_warriors || [];
+      const targetName = body.avoid_warrior_name || body.target_name;
       if (body.action === 'remove') {
-        w.avoid_warriors = w.avoid_warriors.filter(n => n !== body.target_name);
-      } else if (!w.avoid_warriors.includes(body.target_name)) {
-        w.avoid_warriors.push(body.target_name);
+        w.avoid_warriors = w.avoid_warriors.filter(n => n !== targetName);
+      } else if (!w.avoid_warriors.includes(targetName)) {
+        w.avoid_warriors.push(targetName);
       }
       await Store.writeTeam(team);
       return { success: true, team };
