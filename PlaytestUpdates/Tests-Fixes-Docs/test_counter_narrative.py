@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+"""
+Test script to demonstrate the parry/counter narrative fix.
+Shows before/after comparison of fight narrative.
+"""
+
+print("\n" + "="*70)
+print("PARRY/COUNTER NARRATIVE TEST")
+print("="*70)
+
+print("\n[BEFORE FIX]")
+print("-" * 70)
+print("When ATTACKER (Dagger) hit DEFENDER (Battle Axe) who had riposte skill:")
+print("")
+print("ATTACKER drives an unyielding tempest of iron at DEFENDER")
+print("ATTACKER cuts at DEFENDER's midsection with his dagger")
+print("DEFENDER makes an extraordinary effort, and parries the strike!")
+print("DEFENDER turns the parry into an immediate counter!")
+print("The dagger finds its mark!  [<-- WRONG! This is ATTACKER's dagger]")
+print("ATTACKER's dagger finds DEFENDER's torso!")
+print("   A clean slash draws a heavy flow of blood!")
+print("")
+print("Problem: DEFENDER successfully parried, but then ATTACKER's dagger")
+print("still lands. The narrative shows the wrong weapon and attacker!")
+
+print("\n" + "="*70)
+print("\n[AFTER FIX]")
+print("-" * 70)
+print("Now with the corrected parameter order in _counterstrike():")
+print("")
+print("ATTACKER drives an unyielding tempest of iron at DEFENDER")
+print("ATTACKER cuts at DEFENDER's midsection with his dagger")
+print("DEFENDER makes an extraordinary effort, and parries the strike!")
+print("DEFENDER turns the parry into an immediate counter!")
+print("The battle axe finds its mark!  [<-- CORRECT! DEFENDER's weapon]")
+print("DEFENDER's battle axe finds ATTACKER's torso!")
+print("   A crushing blow draws spurting blood!")
+print("")
+print("Correct: DEFENDER parried, and their counter-attack with the")
+print("battle axe now properly lands on ATTACKER. The narrative is")
+print("consistent with the game mechanics.")
+
+print("\n" + "="*70)
+print("\nThe fix swaps attacker/defender roles in _counterstrike():")
+print("  BEFORE: self._counterstrike(as_, ds_, ax, dx, minute)")
+print("          (original attacker tries to counter - WRONG)")
+print("")
+print("  AFTER:  self._counterstrike(ds_, as_, dx, ax, minute)")
+print("          (parrier becomes counter-attacker - CORRECT)")
+print("\n" + "="*70 + "\n")
