@@ -188,24 +188,33 @@ def _check_trigger(
         return foe_state.is_somewhat_tired
 
     # --- Self damage taken ---
+    # Damage triggers use "at least" threshold logic:
+    # "You have taken slight damage" means slight OR medium OR heavy
+    # "You have taken medium damage" means medium OR heavy
+    # "You have taken heavy damage" means heavy
+    # This ensures warrior stays in damage strategy once threshold is reached
     if t == "You have taken heavy damage":
-        return self_state.damage_category() == "heavy"
+        return self_state.damage_category() in ("heavy",)
     if t == "You have taken medium damage":
-        return self_state.damage_category() == "medium"
+        return self_state.damage_category() in ("medium", "heavy")
     if t == "You have taken slight damage":
-        return self_state.damage_category() == "slight"
+        return self_state.damage_category() in ("slight", "medium", "heavy")
     if t == "You have taken light damage":         # legacy alias
-        return self_state.damage_category() == "slight"
+        return self_state.damage_category() in ("slight", "medium", "heavy")
 
     # --- Foe damage taken ---
+    # Same "at least" threshold logic as self damage:
+    # "Your foe has taken slight damage" means slight OR medium OR heavy
+    # "Your foe has taken medium damage" means medium OR heavy
+    # "Your foe has taken heavy damage" means heavy
     if t == "Your foe has taken heavy damage":
-        return foe_state.damage_category() == "heavy"
+        return foe_state.damage_category() in ("heavy",)
     if t == "Your foe has taken medium damage":
-        return foe_state.damage_category() == "medium"
+        return foe_state.damage_category() in ("medium", "heavy")
     if t == "Your foe has taken slight damage":
-        return foe_state.damage_category() == "slight"
+        return foe_state.damage_category() in ("slight", "medium", "heavy")
     if t == "Your foe has taken light damage":     # legacy alias
-        return foe_state.damage_category() == "slight"
+        return foe_state.damage_category() in ("slight", "medium", "heavy")
 
     # --- Ground state ---
     if t == "You are on the ground":

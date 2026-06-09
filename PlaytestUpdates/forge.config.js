@@ -11,7 +11,7 @@ module.exports = {
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        setupIcon: './bloodspireshortcut.ico',
+       // setupIcon: './bloodspireshortcut.ico',
         loadingGif: './Bloodspire.png',
       },
     },

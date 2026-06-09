@@ -102,18 +102,18 @@ def _build_html(uploads: dict, team_map: dict, turn_num: int) -> str:
             if team_obj is not None:
                 # Post-fight warriors (includes dead from this turn)
                 raw_warriors = team_obj.warriors or []
-                # Add archived warriors (those replaced in previous turns with their final stats)
-                archived = team_obj.archived_warriors or []
+                # Add fallen from upload (warriors replaced in previous turns)
+                fallen = upload_team.get("fallen_warriors") or []
                 tw = tl = tk = 0
                 for w in raw_warriors:
                     if w:
                         ww, wl, wk = _warrior_record(w)
                         tw += ww; tl += wl; tk += wk
-                for aw in archived:
-                    if isinstance(aw, dict):
-                        tw += aw.get("wins", 0)
-                        tl += aw.get("losses", 0)
-                        tk += aw.get("kills", 0)
+                for fw in fallen:
+                    if isinstance(fw, dict):
+                        tw += fw.get("wins", 0)
+                        tl += fw.get("losses", 0)
+                        tk += fw.get("kills", 0)
             else:
                 # Fallback: read from upload data (pre-fight)
                 raw_warriors = upload_team.get("warriors") or []

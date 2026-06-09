@@ -36,6 +36,8 @@ class ScheduledFight:
     fight_type      : str       # "challenge", "standard", "peasant", "blood_challenge"
     result          : Optional[FightResult] = None
     fight_id        : Optional[int]         = None
+    pos_a           : int                   = 1 # Warrior A's rank
+    pos_b           : int                   = 1 # Warrior B's rank
     challenger_name : Optional[str]         = None  # warrior name of who initiated the challenge
     _metadata       : dict                  = field(default_factory=dict)
 
@@ -79,6 +81,8 @@ def build_global_fight_card(
             player_team=e1['team'], opponent_team=e2['team'],
             opponent_manager=e2['team'].manager_name,
             fight_type=ftype, challenger_name=challenger,
+            pos_a=1, # Placeholder: actual ranking logic would go here
+            pos_b=1, # Placeholder: actual ranking logic would go here
         )
         card.append(fight)
         e1['matched'] = True
@@ -132,6 +136,11 @@ def build_global_fight_card(
             if target and not target['matched'] and not _is_same_manager(entry['team'], target['team']):
                 if _challenge_succeeds(challenger['warrior'].presence, target['warrior'].presence, is_blood_challenge=True):
                     _add_fight(challenger, target, "blood_challenge", challenger['warrior'].name)
+                    # Store blood challenge metadata on the fight for later resolution
+                    card[-1]._blood_challenge_info = {
+                        "target_name": bc.get("target_name", ""),
+                        "dead_warrior_name": bc.get("dead_warrior_name", ""),
+                    }
                     break
 
     # STEP 4: CHAMPION CHALLENGES
@@ -918,6 +927,8 @@ def build_fight_card(
                         opponent_team    = champion_team,
                         opponent_manager = champion_team.manager_name,
                         fight_type       = "challenge",
+                pos_a            = 1, # Placeholder
+                pos_b            = 1, # Placeholder
                         challenger_name  = challenger.name,
                     ))
                     matched_players.add(challenger.slot_index)
@@ -1014,6 +1025,8 @@ def build_fight_card(
                     opponent_team    = target_team,
                     opponent_manager = target_team.manager_name,
                     fight_type       = "challenge",
+                    pos_a            = 1, # Placeholder
+                    pos_b            = 1, # Placeholder
                     challenger_name  = challenger.name,
                 ))
                 matched_players.add(slot_idx)
@@ -1045,6 +1058,8 @@ def build_fight_card(
                 opponent_team    = opp_team,
                 opponent_manager = opp_team.manager_name,
                 fight_type       = "standard",
+                pos_a            = 1, # Placeholder
+                pos_b            = 1, # Placeholder
             ))
             matched_players.add(player_warrior.slot_index)
             # Don't add to matched_teams for standard matches - allow multiple warriors
@@ -1072,6 +1087,8 @@ def build_fight_card(
                 opponent_team    = peasant_team,
                 opponent_manager = "The Arena",
                 fight_type       = "peasant",
+                pos_a            = 1, # Placeholder
+                pos_b            = 1, # Placeholder
             ))
             matched_players.add(player_warrior.slot_index)
 
@@ -1124,6 +1141,8 @@ def run_turn(
             manager_b_name   = bout.opponent_manager,
             is_monster_fight = (bout.fight_type == "monster"),
             fight_type       = bout.fight_type,
+            pos_a            = bout.pos_a,
+            pos_b            = bout.pos_b,
             challenger_name  = bout.challenger_name,
         )
         bout.result = result
@@ -1194,8 +1213,8 @@ def run_turn(
             print(f"  [DEBUG] {ow.name}: {ow.wins}-{ow.losses}-{ow.kills} after record_result")
 
             from save import current_turn
-            # Determine fight type: if opponent is champion, mark as 'champion'
-            fight_type_for_record = "champion" if (current_champion and ow.name == current_champion) else bout.fight_type
+            # Determine fight type: if either warrior is champion, mark as 'champion'
+            fight_type_for_record = "champion" if (current_champion and (pw.name == current_champion or ow.name == current_champion)) else bout.fight_type
             pw.fight_history.append({
                 "turn"                 : current_turn(),
                 "opponent_name"        : ow.name,
@@ -1215,8 +1234,8 @@ def run_turn(
             # scouting reports can load the fight log via fight_id.
             if fight_id and bout.fight_type not in ("monster", "peasant"):
                 ow_result = "loss" if pw_won else "win"
-                # Determine fight type: if player_warrior is champion, mark as 'champion'
-                fight_type_for_opp = "champion" if (current_champion and pw.name == current_champion) else bout.fight_type
+                # Determine fight type: if either warrior is champion, mark as 'champion'
+                fight_type_for_opp = "champion" if (current_champion and (pw.name == current_champion or ow.name == current_champion)) else bout.fight_type
                 ow.fight_history.append({
                     "turn"                 : current_turn(),
                     "opponent_name"        : pw.name,

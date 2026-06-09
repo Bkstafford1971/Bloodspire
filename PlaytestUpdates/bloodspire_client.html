@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v2.7.2</title>
+<title>BLOODSPIRE Client - v2.7.5</title>
 <style>
 /* ============================================================
    WINDOWS CLASSIC - REFINED
@@ -246,7 +246,7 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
-const CLIENT_VERSION = "2.7.2";
+const CLIENT_VERSION = "2.7.5";
 
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
@@ -536,7 +536,11 @@ async function resetSaveFolder() {
   S.savedPassword = null;
   S.savedManagerName = null;
   try { localStorage.removeItem(_ROLLUP_KEY); } catch (_) {}
-  try { localStorage.removeItem(_REPLACEMENT_KEY); } catch (_) {}
+  // Clean up all replacement keys (may have multiple from different warriors)
+  try {
+    const keys = Object.keys(localStorage).filter(k => k.startsWith('bp_pending_replacement_'));
+    keys.forEach(k => localStorage.removeItem(k));
+  } catch(_) {}
 
   alert('Save folder has been reset. The folder picker will appear on next launch.');
   S.view = 'login';
@@ -712,17 +716,59 @@ const Store = {
   async deleteTeam(tid) { 
     return await fsaDeleteFile(_teamPath(tid)); 
   },
-  async readFightLog(fightId) {
+  async readFightLog(fightId, turnNum = null) {
+    // 1. Try "fights/" folder first (for locally-run matches)
     const names = await fsaListDir('fights');
     const needle = `fight_${String(fightId).padStart(4, '0')}_`;
     const filename = names.find(n => n.startsWith(needle));
-    if (!filename) return null;
-    return await fsaReadText(`fights/${filename}`);
+    if (filename) return await fsaReadText(`fights/${filename}`);
+
+    if (!turnNum) return null;
+
+    // 2. Search ALL result files for this turn — a manager with multiple teams
+    //    gets one file per team (team_XXXX_turn_YYY.json), so searching only
+    //    turn_YYY.json would miss any team whose result was saved first and
+    //    overwritten by a later team's download.
+    const turnSuffix   = `turn_${String(turnNum).padStart(3, '0')}.json`;
+    const allResultFiles = await fsaListDir('results');
+    const turnFiles = allResultFiles.filter(f => f.endsWith(turnSuffix));
+    for (const f of turnFiles) {
+      const data = await fsaReadJSON(`results/${f}`);
+      if (data && data.fight_logs && data.fight_logs[String(fightId)]) {
+        return data.fight_logs[String(fightId)];
+      }
+    }
+
+    // 3. Try league/turn_XXXX/ (ZIP Restore path)
+    // ZIP restores recreate the server's multi-file structure per turn
+    const turnDir = `league/turn_${String(turnNum).padStart(4, '0')}`;
+    const zipFiles = await fsaListDir(turnDir);
+    const resultFiles = zipFiles.filter(f => f.startsWith('result_') && f.endsWith('.json'));
+    
+    for (const f of resultFiles) {
+      try {
+        const data = await fsaReadJSON(`${turnDir}/${f}`);
+        if (data && data.fight_logs && data.fight_logs[String(fightId)]) {
+          return data.fight_logs[String(fightId)];
+        }
+      } catch (e) {
+        console.warn(`Error reading result file ${f} in ${turnDir}:`, e);
+      }
+    }
+    return null;
   },
 
   // Turn results and Newsletters
-  async writeTurnResult(turn, obj) { 
-    return await fsaWriteJSON(_turnResultPath(turn), obj); 
+  async writeTurnResult(turn, obj) {
+    // Save to a team-specific file so multiple teams owned by the same manager
+    // don't overwrite each other's fight_logs. Falls back to the legacy shared
+    // path when no team_id is present (backward compat).
+    const teamId = obj && obj.team_id;
+    if (teamId) {
+      const path = `results/team_${String(teamId).padStart(4,'0')}_turn_${String(turn).padStart(3,'0')}.json`;
+      return await fsaWriteJSON(path, obj);
+    }
+    return await fsaWriteJSON(_turnResultPath(turn), obj);
   },
   async readNewsletter(turn) { 
     return await fsaReadText(_newsletterPath(turn)); 
@@ -884,6 +930,12 @@ function mergeResults(localTeam, serverResult, opts = {}) {
     }
   }
 
+  // Regular challenges - server is authoritative (cleared after each turn).
+  // Take them from the server to ensure cleared challenges don't persist.
+  if (serverTeam.challenges !== undefined) {
+    out.challenges = serverTeam.challenges || {};
+  }
+
   // Blood challenges - server is authoritative (creates them on kills, decrements
   // turns_remaining each turn). Preserve any locally-set challenger_name selections
   // so the manager's pick survives the download.
@@ -963,8 +1015,12 @@ const S = {
 
 // localStorage key for persisting pending team-creation rollup across reloads
 const _ROLLUP_KEY = 'bp_pending_rollup';
-// localStorage key for persisting a pending warrior replacement rollup across reloads
-const _REPLACEMENT_KEY = 'bp_pending_replacement';
+
+// Generate unique localStorage key for each warrior's replacement rollup.
+// This allows multiple dead warriors in the same team to have independent rollup states.
+function _getReplacementKey(teamId, wIdx) {
+  return `bp_pending_replacement_${teamId}_${wIdx}`;
+}
 
 /* ============================================================
    API - dual-layer router
@@ -1173,8 +1229,9 @@ const LocalAPI = {
 
     if (path === '/api/fight/narrative') {
       const fightId = parseInt(qs.id || '0', 10);
+      const turn    = parseInt(qs.turn || '0', 10);
       if (!fightId) return { success: false, error: 'Fight id required.' };
-      const narrative = await Store.readFightLog(fightId);
+      const narrative = await Store.readFightLog(fightId, turn);
       if (!narrative) return { success: false, error: 'Fight log not found.' };
       return { success: true, narrative, fight_id: fightId };
     }
@@ -1549,16 +1606,18 @@ const LocalAPI = {
       if (!team) return { success: false, error: 'Team not found.' };
       const idx = parseInt(body.warrior_idx, 10);
       // Build a replacement warrior skeleton using the stats in body
+      const con = parseInt(body.constitution, 10);
       const w = {
         name:         (body.name || '').toUpperCase(),
         race:         body.race || 'Human',
         gender:       body.gender || 'Male',
         strength:     parseInt(body.strength, 10),
         dexterity:    parseInt(body.dexterity, 10),
-        constitution: parseInt(body.constitution, 10),
+        constitution: con,
         intelligence: parseInt(body.intelligence, 10),
         presence:     parseInt(body.presence, 10),
         size:         parseInt(body.size, 10),
+        max_hp:       Math.floor((con + 8) * 2.5),
         wins: 0, losses: 0, kills: 0, total_fights: 0,
         armor: null, helm: null,
         primary_weapon: 'Open Hand', secondary_weapon: 'Open Hand', backup_weapon: null,
@@ -1573,7 +1632,7 @@ const LocalAPI = {
         initial_stats: {
           strength: parseInt(body.strength, 10),
           dexterity: parseInt(body.dexterity, 10),
-          constitution: parseInt(body.constitution, 10),
+          constitution: con,
           intelligence: parseInt(body.intelligence, 10),
           presence: parseInt(body.presence, 10),
         },
@@ -2046,8 +2105,9 @@ function buildMenuBar() {
         Download${S.league.managerId?'':' - configure account first'}
       </div>
       <div style="border-top:1px solid var(--mid); margin:2px 0;"></div>
-      <div class="menu-item" id="act-newsletter" style="padding:3px 12px;">
-        📜 Arena Newsletter
+      <div class="menu-item" id="act-newsletter" style="padding:3px 12px;"
+           onclick="el('action-dropdown').style.display='none'; redownloadNewsletter();">
+        ↺ Redownload Newsletter
       </div>
     </div>
   </span>
@@ -2168,6 +2228,11 @@ function treeToggle(tid) {
 async function treeSelectWarrior(tid, idx) {
   if (_pendingWarrior && (S.sel.teamId !== tid || S.sel.wIdx !== idx)) {
     await flushSave();
+  }
+  // Before switching warriors, persist any in-progress replacement for the previous warrior
+  if (S.replacement && (S.sel.teamId !== tid || S.sel.wIdx !== idx)) {
+    _rpSync();
+    _rpPersist();
   }
   S.sel  = {type:'warrior', teamId: tid, wIdx: idx};
   // Fetch fresh data so streak/favorite_weapon always reflect server state
@@ -2992,9 +3057,9 @@ function buildTeamPanel(team) {
 function buildWarriorPanel(team, w, wIdx) {
   const isAscended = w.ascended_to_monster || false;
   const isDead = w.is_dead || false;
-  const tabs = isDead
-    ? ['Stats/Strats', 'Fights', 'Replacement']
-    : ['Stats/Strats', 'Fight Options', 'Fights', 'Challenges', 'Replacement', 'Archives'];
+  // Always show all tabs regardless of death status - don't tip off the manager
+  // that the warrior died until they read the fight narrative
+  const tabs = ['Stats/Strats', 'Fight Options', 'Fights', 'Challenges', 'Replacement', 'Archives'];
   const tabMap = {
     'Stats/Strats':'stats', 'Fight Options':'fight', 'Fights':'fights',
     'Challenges':'challenges', 'Replacement':'replacement', 'Archives':'archives'
@@ -3157,7 +3222,7 @@ function buildStatsTab(team, w, wIdx) {
 <div style="font-size:10px; color:#555; margin-bottom:4px; display:flex; gap:14px;
      justify-content:flex-end; padding-right:4px; flex-wrap:wrap;">
   ${S.league.flags.show_luck_factor && w.luck!=null ? `<span>Luck: <b>${w.luck}</b>/30</span>` : ''}
-  ${S.league.flags.show_max_hp ? `<span>Max HP: <b>${w.max_hp||'?'}</b></span>` : ''}
+  ${S.league.flags.show_max_hp ? `<span>Max HP: <b>${w.max_hp || (w.constitution ? Math.floor((w.constitution + 8) * 2.5) : '?')}</b></span>` : ''}
   ${S.league.flags.show_favorite_weapon && w.favorite_weapon ? `<span>Favorite: <b>${esc(w.favorite_weapon)}</b></span>` : ''}
   <span>Popularity: <b>${w.popularity||0}</b>/100</span>
   <span>Turns active: <b>${w.turns_active||0}</b></span>
@@ -3865,10 +3930,12 @@ function buildArchivesTab(team) {
     </div>`;
   }
   let cards = '';
-  archived.forEach(a => {
+  archived.forEach((a, idx) => {
     const rec  = `${a.wins||0}-${a.losses||0}-${a.kills||0}`;
     const inj  = formatInjuriesText(a.injuries).join('<br>') || '-';
     const skls = formatSkillsText(a.skills).join('<br>') || '-';
+    const expandId = `arch_expand_${idx}`;
+    const contentId = `arch_content_${idx}`;
 
     // Build fight history table for this archived warrior
     const history = (a.fight_history || []).slice().reverse();
@@ -3911,32 +3978,39 @@ function buildArchivesTab(team) {
 
     cards += `
 <div class="group" style="margin:6px 4px; background:#f9f7f4;">
-  <span class="group-label" style="color:#800;">✝ ${esc(a.name)}</span>
-  <div style="display:flex; gap:20px; font-size:11px; flex-wrap:wrap; padding-top:4px;">
-    <div>
-      <div style="color:#666; margin-bottom:3px;">
-        ${esc(a.race||'')} ${esc(a.gender||'')} &mdash; ${rec} (${a.total_fights||0} fights)<br>
-        Slain by: <b>${esc(a.archived_killed_by||a.killed_by||'Unknown')}</b>
-      </div>
-      <table style="border-collapse:collapse; font-size:11px;">
-        ${['strength','dexterity','constitution','intelligence','presence','size'].map(attr => {
-          const deathVal = a[attr] != null ? a[attr] : '-';
-          const baseVal  = (a.initial_stats && a.initial_stats[attr] != null) ? ` (${a.initial_stats[attr]})` : '';
-          return `<tr><td style="padding:1px 6px; color:#555; width:90px;">${capitalize(attr)}</td>
-               <td style="padding:1px 6px; font-weight:bold;">${deathVal}${baseVal}</td></tr>`;
-        }).join('')}
-      </table>
-    </div>
-    <div>
-      <div style="color:#666; font-weight:bold; margin-bottom:3px;">Skills</div>
-      <div style="color:#333; line-height:1.5;">${skls}</div>
-    </div>
-    <div>
-      <div style="color:#666; font-weight:bold; margin-bottom:3px;">Permanent Injuries</div>
-      <div style="color:#800; line-height:1.5;">${inj}</div>
-    </div>
+  <div style="cursor:pointer; user-select:none; padding:6px 4px; display:flex; align-items:center; gap:8px;" onclick="toggleArchiveExpand('${contentId}', '${expandId}')">
+    <span id="${expandId}" style="font-size:12px; color:#666; min-width:12px;">▶</span>
+    <span style="flex:1; font-weight:500; color:#333;">${esc(a.name)}</span>
+    <span style="color:#888; font-size:11px;">${esc(a.race||'')} ${esc(a.gender||'')}</span>
+    <span style="color:#666; font-size:11px; font-weight:500;">${rec}</span>
+    <span style="color:#999; font-size:11px;">(${a.total_fights||0} fights)</span>
   </div>
-  ${fightSection}
+  <div id="${contentId}" style="display:none; padding:8px 4px; border-top:1px solid #ddd; margin-top:4px;">
+    <div style="display:flex; gap:20px; font-size:11px; flex-wrap:wrap;">
+      <div>
+        <div style="color:#666; margin-bottom:3px;">
+          Slain by: <b>${esc(a.archived_killed_by||a.killed_by||'Unknown')}</b>
+        </div>
+        <table style="border-collapse:collapse; font-size:11px;">
+          ${['strength','dexterity','constitution','intelligence','presence','size'].map(attr => {
+            const deathVal = a[attr] != null ? a[attr] : '-';
+            const baseVal  = (a.initial_stats && a.initial_stats[attr] != null) ? ` (${a.initial_stats[attr]})` : '';
+            return `<tr><td style="padding:1px 6px; color:#555; width:90px;">${capitalize(attr)}</td>
+                 <td style="padding:1px 6px; font-weight:bold;">${deathVal}${baseVal}</td></tr>`;
+          }).join('')}
+        </table>
+      </div>
+      <div>
+        <div style="color:#666; font-weight:bold; margin-bottom:3px;">Skills</div>
+        <div style="color:#333; line-height:1.5;">${skls}</div>
+      </div>
+      <div>
+        <div style="color:#666; font-weight:bold; margin-bottom:3px;">Permanent Injuries</div>
+        <div style="color:#800; line-height:1.5;">${inj}</div>
+      </div>
+    </div>
+    ${fightSection}
+  </div>
 </div>`;
   });
 
@@ -3945,6 +4019,17 @@ function buildArchivesTab(team) {
     ${cards}
   </div>`;
 }
+
+function toggleArchiveExpand(contentId, caretId) {
+  const content = document.getElementById(contentId);
+  const caret = document.getElementById(caretId);
+  if (content && caret) {
+    const isHidden = content.style.display === 'none';
+    content.style.display = isHidden ? 'block' : 'none';
+    caret.textContent = isHidden ? '▼' : '▶';
+  }
+}
+
 function buildReplacementTab(w) {
   // Living warrior - show placeholder
   if (!w.is_dead && !w.ascended_to_monster) {
@@ -3969,15 +4054,22 @@ function buildReplacementTab(w) {
   const teamId = S.sel.teamId;
   const wIdx   = S.sel.wIdx;
 
-  // Restore from localStorage if in-memory state was lost (e.g. app restart / tab change)
-  if (!S.replacement) {
+  // Restore from localStorage if in-memory state was lost or doesn't match current warrior
+  // (e.g. app restart / tab change / switching teams or warriors)
+  if (!S.replacement || S.replacement.teamId !== teamId || S.replacement.wIdx !== wIdx) {
     try {
-      const stored = localStorage.getItem(_REPLACEMENT_KEY);
+      const key = _getReplacementKey(teamId, wIdx);
+      const stored = localStorage.getItem(key);
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed.teamId === teamId && parsed.wIdx === wIdx) S.replacement = parsed;
+      } else {
+        // No replacement in localStorage for this warrior - clear in-memory state
+        S.replacement = null;
       }
-    } catch(_) {}
+    } catch(_) {
+      S.replacement = null;
+    }
   }
 
   const rs     = S.replacement;
@@ -4158,8 +4250,10 @@ function _rpSync() {
 
 function _rpPersist() {
   try {
-    if (S.replacement) localStorage.setItem(_REPLACEMENT_KEY, JSON.stringify(S.replacement));
-    else localStorage.removeItem(_REPLACEMENT_KEY);
+    if (S.replacement) {
+      const key = _getReplacementKey(S.replacement.teamId, S.replacement.wIdx);
+      localStorage.setItem(key, JSON.stringify(S.replacement));
+    }
   } catch(_) {}
 }
 
@@ -4185,8 +4279,9 @@ async function rpSave(teamId, wIdx) {
     const r = await API.post('/api/warrior/replace', body);
     if (r.success) {
       S.teams[teamId] = r.team;
+      const key = _getReplacementKey(teamId, wIdx);
       S.replacement   = null;
-      try { localStorage.removeItem(_REPLACEMENT_KEY); } catch(_) {}
+      try { localStorage.removeItem(key); } catch(_) {}
       S.sel  = {type:'team', teamId};
       S.wTab = 'stats';
       setMsg('Replacement warrior saved - ' + nm + ' joins the team.', 'ok');
@@ -4405,7 +4500,11 @@ function attachEvents() {
     S.newsletters = null; S.newsletterText = null;
     S.ct = null;
     try { localStorage.removeItem(_ROLLUP_KEY); } catch(_) {}
-    try { localStorage.removeItem(_REPLACEMENT_KEY); } catch(_) {}
+    // Clean up all replacement keys (may have multiple from different warriors)
+    try {
+      const keys = Object.keys(localStorage).filter(k => k.startsWith('bp_pending_replacement_'));
+      keys.forEach(k => localStorage.removeItem(k));
+    } catch(_) {}
     S.view = 'login'; S.loginTab = 'login'; S.msg = '';
     render();
   });
@@ -4462,11 +4561,10 @@ function attachEvents() {
     doLeagueDownloadAll();
   });
   bind('act-newsletter', () => {
+    console.log('act-newsletter button clicked');
     const dd = el('action-dropdown');
     if (dd) dd.style.display = 'none';
-    S.newsletters = null;   // force refresh
-    S.newsletterText = null;
-    openNewsletter();
+    redownloadNewsletter();
   });
   bind('btn-league-save', doSaveLeagueSettings);
   // btn-league-register removed - registration now happens automatically in doSaveLeagueSettings
@@ -5441,9 +5539,9 @@ function hideNarrativeOverlay() {
 }
 
 async function openNarrative(fightId, turnNum) {
-  // 1. Try local save first (for locally-run turns)
+  // 1. Try local save first (for locally-run turns or cached downloads)
   try {
-    const r = await API.get(`/api/fight/narrative?id=${fightId}`);
+    const r = await API.get(`/api/fight/narrative?id=${fightId}&turn=${turnNum || 0}`);
     if (r.success) {
       S.narrative = { text: r.narrative, title: `Fight #${fightId}` };
       showNarrativeOverlay();
@@ -5537,6 +5635,11 @@ async function doRunTurn(teamId) {
     if (r.success) {
       // Refresh team in local store
       S.teams[teamId] = r.team;
+      // Clear challenges after turn completes (prevents autopilot grinding)
+      // Manager must manually select challenges each turn
+      if (S.teams[teamId].challenges) {
+        S.teams[teamId].challenges = {};
+      }
       S.newsletters = null;     // invalidate newsletter cache
       S.newsletterText = null;  // force fresh load on next view
       S.turnResults = r;
@@ -5598,6 +5701,72 @@ function renderNewsletterText(text) {
   out += esc(text.slice(last));
   if (openSpan) out += '</span>';
   return out;
+}
+
+async function redownloadNewsletter() {
+  console.log('redownloadNewsletter called');
+  const lg = S.league;
+  console.log('League settings:', { url: lg?.url, managerId: lg?.managerId });
+
+  if (!lg.url || !lg.managerId) {
+    setMsg('Configure league settings first (league URL and manager ID required).', 'err');
+    return;
+  }
+
+  setMsg('Redownloading newsletter from league server...', 'ok');
+  render();
+  try {
+    // Get the current turn from league settings/config
+    console.log('Fetching league settings to get current turn...');
+    const settingsResp = await API.get('/api/league_settings');
+    console.log('League settings response:', settingsResp);
+
+    // Try to get the turn from account/game state
+    let latestTurn = S.league.lastTurnRan || null;
+    console.log('Last turn ran from league state:', latestTurn);
+
+    if (!latestTurn) {
+      setMsg('Unable to determine current turn. Run a turn or download results first.', 'err');
+      return;
+    }
+
+    console.log('Latest turn:', latestTurn);
+
+    // Fetch the newsletter for this turn from the league server
+    const nlUrl = `${lg.url}/api/newsletter?turn=${latestTurn}`;
+    console.log('Fetching from:', nlUrl);
+    const nlRes = await fetch(nlUrl);
+    console.log('Fetch response status:', nlRes.status);
+    const nlData = await nlRes.json();
+    console.log('Newsletter data:', nlData);
+
+    if (!nlData.success || !nlData.newsletter) {
+      setMsg('Failed to redownload newsletter: ' + (nlData.error || 'Newsletter not available'), 'err');
+      return;
+    }
+
+    // Save it locally via the API endpoint
+    const saveResp = await API.post('/api/newsletter/save', {
+      turn: latestTurn,
+      text: nlData.newsletter
+    });
+
+    if (!saveResp.success) {
+      setMsg('Failed to save newsletter: ' + (saveResp.error || 'Unknown error'), 'err');
+      return;
+    }
+
+    // Clear cache and open newsletter view
+    S.newsletters = null;
+    S.newsletterText = null;
+    S.newsletterTurn = latestTurn;
+    setMsg('Newsletter redownloaded and saved successfully.', 'ok');
+
+    // Open the newsletter panel
+    await openNewsletter();
+  } catch(e) {
+    setMsg('Error redownloading newsletter: ' + e.message, 'err');
+  }
 }
 
 async function openNewsletter() {
@@ -6265,12 +6434,13 @@ async function doLeagueDownloadAll() {
 
     _showDownloadProgress(_DL_STEPS, _DL_STEPS.length, null);
 
-    // Turn downloaded - invalidate scout cache so locks clear on next view
+    // Turn downloaded - invalidate scout and challenge caches so they refresh with updated warrior records
     S.scout.loaded     = false;
     S.scout.selections = [];
     S.scout.slotsLeft  = 3;
     S.scout.targets    = null;
     S.scout.report     = null;
+    S.challengeTargets = null;  // Clear challenge targets cache to show updated warrior fight records
 
     const names  = applied.map(a => a.team_name).join(', ');
     const warn   = missed.length ? `  (${missed.length} unmatched: ${missed.join(', ')})` : '';
@@ -6392,7 +6562,13 @@ async function runAllTeams() {
   for (const res of r.results || []) {
     if (res.success) {
       const t = await API.get('/api/team?id=' + res.team_id);
-      if (t.success) S.teams[res.team_id] = t.team;
+      if (t.success) {
+        S.teams[res.team_id] = t.team;
+        // Clear challenges after turn completes (prevents autopilot grinding)
+        if (S.teams[res.team_id].challenges) {
+          S.teams[res.team_id].challenges = {};
+        }
+      }
     }
   }
   const wins  = (r.results||[]).reduce((a,x)=>a+(x.bouts||[]).filter(b=>b.result==='WIN').length,0);

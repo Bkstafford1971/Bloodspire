@@ -28,9 +28,9 @@ def _article(word: str) -> str:
 
 POPULARITY_DESCRIPTIONS = [
     (0,  10, "LARGELY UNKNOWN"),
-    (11, 20, "BOOED REGULARLY"),
-    (21, 30, "GENERALLY DISLIKED"),
-    (31, 40, "MOSTLY IGNORED"),
+    (11, 20, "GENERALLY DISLIKED"),
+    (21, 30, "MOSTLY IGNORED"),
+    (31, 40, "HAS A FEW FANS"),
     (41, 50, "KNOWN TO THE CROWD"),
     (51, 60, "POPULAR WITH THE KIDS"),
     (61, 70, "WELL LIKED"),
@@ -445,36 +445,46 @@ def build_fight_header(
 
 
 _CHALLENGE_FLAVOR_NORMAL = [
-    "{n1} dares to challenge {n2}!!",
+    "{n1} issues a Challenge to {n2}!!",
     "{n1} challenges {n2} in an affair of honor!",
-    "{n1} has called out {n2} for this bout!",
+    "{n1} has called out {n2} for this Challenge bout!",
     "{n1} steps forward to challenge {n2}!",
-    "{n1} issued a challenge to {n2} this turn!",
-    "{n1} has singled out {n2} for combat!",
+    "{n1} has issued a Challenge to {n2} this turn!",
+    "{n1} presents a Challenge to {n2}!",
 ]
 
 _CHALLENGE_FLAVOR_BLOOD = [
-    "{n1} seeks blood vengeance against {n2}!!",
+    "{n1} seeks blood vengeance against {n2} in a Blood Challenge!!",
     "{n1} has declared a Blood Challenge against {n2}!!",
-    "This is a blood feud: {n1} challenges {n2} to the death!",
-    "{n1} demands a price in blood from {n2}!",
-    "The air turns cold as {n1} issues a Blood Challenge to {n2}!!",
-    "{n1} swears a vendetta against {n2} this turn!",
+    "This is a blood feud: {n1} issues a Blood Challenge to {n2} to the death!",
+    "{n1} demands a price in blood from {n2} - a Blood Challenge!!",
+    "The air turns cold as {n1} declares a Blood Challenge against {n2}!!",
+    "{n1} swears a Blood Challenge vendetta against {n2} this turn!",
 ]
 
 _CHALLENGE_FLAVOR_MONSTER = [
-    "{n1} has the courage to challenge the beast {n2}!!",
-    "{n1} dares to face the monster {n2}!!",
-    "{n1} steps into the pit to challenge the creature {n2}!!",
-    "{n1} seeks glory by challenging {n2}!!",
-    "{n1} will attempt to survive the monstrous {n2}!!",
+    "{n1} dares to challenge the Monster {n2}!!",
+    "{n1} steps forward to face the Monster {n2} in Challenge!!",
+    "{n1} steps into the pit to challenge the Monster {n2}!!",
+    "{n1} seeks glory by challenging the Monster {n2}!!",
+    "{n1} will attempt to survive a challenge against the Monster {n2}!!",
+    "{n1} issues a Monster Challenge to {n2}!!",
+]
+
+_CHALLENGE_FLAVOR_CHAMPION = [
+    "{n1} challenges {n2} for the Title!!",
+    "{n1} steps forward to challenge for the Title against {n2}!!",
+    "This is a Title Challenge: {n1} seeks to dethrone champion {n2}!!",
+    "{n1} issues a Title Challenge to the champion {n2}!!",
+    "{n1} will attempt to claim the Title from {n2}!!",
+    "{n1} steps into the arena for a Title Challenge against {n2}!!",
 ]
 
 def get_challenge_flavor_line(w1_name: str, w2_name: str, challenger_name: Optional[str], fight_type: str) -> Optional[str]:
     """Return a randomly selected challenge flavor line if appropriate."""
-    if not challenger_name and fight_type != "monster":
+    if not challenger_name and fight_type not in ("monster", "champion"):
         return None
-    
+
     # Identify challenger and challenged (robust case-insensitive check)
     c_name_norm = challenger_name.strip().upper() if challenger_name else ""
     w1_name_norm = w1_name.strip().upper()
@@ -485,16 +495,18 @@ def get_challenge_flavor_line(w1_name: str, w2_name: str, challenger_name: Optio
     elif c_name_norm == w2_name_norm:
         n1, n2 = w2_name_norm, w1_name_norm
     else:
-        # Default for monster fights or if names don't match (fallback)
+        # Default for monster/champion fights or if names don't match (fallback)
         n1, n2 = w1_name_norm, w2_name_norm
 
     if fight_type == "blood_challenge":
         pool = _CHALLENGE_FLAVOR_BLOOD
     elif fight_type == "monster":
         pool = _CHALLENGE_FLAVOR_MONSTER
+    elif fight_type == "champion":
+        pool = _CHALLENGE_FLAVOR_CHAMPION
     else:
         pool = _CHALLENGE_FLAVOR_NORMAL
-        
+
     return random.choice(pool).format(n1=n1, n2=n2)
 
 def presence_hesitation_line(attacker_name: str, defender_name: str) -> str:
@@ -517,6 +529,19 @@ FIGHT_OPENERS = [
     "An eerie silence settles over the AGONY AMPHITHEATRE",
     "The torches flicker as a cold wind sweeps through the arena",
     "The Blood Master raises his fist, the fight begins!",
+]
+
+FIGHT_ENGAGEMENT_LINES = [
+    "Weapons gleam as the warriors circle the pit",
+    "The crowd leans forward as steel meets steel in greeting",
+    "Sand crunches beneath their feet as they close",
+    "A low growl of anticipation rolls through the stands",
+    "The first feint cuts through the air, testing distance",
+    "Breath clouds form as the fighters lock eyes",
+    "The opening stance is taken, nerves stretched tight",
+    "Iron clangs as guards are tested and positions set",
+    "The rhythm of combat begins to establish itself",
+    "Muscles coil as the opening gambit approaches",
 ]
 
 RACE_KILL_POOLS = {
@@ -770,12 +795,12 @@ STYLE_INTENT_POOLS: dict[str, list[str]] = {
         "{name} darts forward, looking for an opening",
         "{name} probes for a weakness in {foe}'s defense",
         "{name} moves with quick, precise footwork",
-        "{name} circles {foe}, waiting for the perfect moment",
+        "{name} circles {foe}, reading the moment to commit",
         "{name} violently explodes forward from a crouch",
         "{name} extends {his} reach to its absolute limit, striking hard",
         "{name} drives a sudden, piercing line of attack",
         "{name} shifts weight instantly to launch a low, flashing strike",
-        "{name} closes the distance in a single, desperate stride",
+        "{name} closes the distance with a committed thrust",
         "{name} throws a cunning feint before committing to a hard stab",
         "{name} lunges cleanly through a sudden gap in the guard",
     ],
@@ -808,13 +833,13 @@ STYLE_INTENT_POOLS: dict[str, list[str]] = {
         "{name} advances with a calculated, standard offensive against the {adj} {foe}",
     ],
     "Engage & Withdraw": [
-        "{name} probes and retreats, looking for an opening",
-        "{name} feints left and prepares to strike",
-        "{name} dances away from {foe}'s reach",
-        "{name} steps in with a quick prick before springing backward out of danger",
-        "{name} tests the line with a sharp advance, then instantly glides out of range",
-        "{name} plays a dangerous game of distance, pulling {foe} out of position",
-        "{name} slips inside the guard for a brief instant before retreating to safety",
+        "{name} probes for weakness, then retreats to reposition",
+        "{name} feints left, striking before pulling back",
+        "{name} dances in close, lashing out before withdrawing",
+        "{name} steps in with a sharp blow before springing backward out of danger",
+        "{name} tests the line with a quick strike, then instantly glides out of range",
+        "{name} plays a dangerous game of distance, striking before pulling back",
+        "{name} slips inside the guard, striking quickly before retreating to safety",
     ],
     "Counterstrike": [
         "{name} waits patiently for {foe} to make a mistake",
@@ -835,7 +860,7 @@ STYLE_INTENT_POOLS: dict[str, list[str]] = {
         "{name} misdirects with a sudden shift in posture, blinding {foe} to the real danger",
     ],
     "Sure Strike": [
-        "{name} waits for absolutely the right moment",
+        "{name} waits for the right moment, then commits fully",
         "{name} carefully prepares a deliberate strike",
         "{name} takes aim at {foe} with methodical precision",
         "{name} narrows {his} focus, blocking out the roaring crowd to ensure a perfect hit",
@@ -890,6 +915,101 @@ STYLE_INTENT_POOLS: dict[str, list[str]] = {
     ],
 }
 
+# ---------------------------------------------------------------------------
+# ARMOR-SPECIFIC INTENT LINES
+# Override generic intent lines based on opponent's armor type.
+# Maps: style -> armor_type -> narratives
+# Armor categories:
+#   "plate"   = Full Plate, Half-Plate, Brigandine (metal plating)
+#   "chain"   = Chain, Scale (interlocking links/rings)
+#   "leather" = Leather, Cuir Boulli (soft/hardened leather, no plates)
+#   "none"    = No armor or unarmored
+# ---------------------------------------------------------------------------
+
+ARMOR_SPECIFIC_INTENT_POOLS: dict[str, dict[str, list[str]]] = {
+    "Bash": {
+        "plate": [
+            "{name} looks to bash through the metal plating with brutal force",
+            "{name} targets the seams between the armor plates",
+            "{name} winds up to shatter the iron protection",
+        ],
+        "chain": [
+            "{name} winds up to pummel the chain links into submission",
+            "{name} looks to break bone beneath the metal mesh",
+        ],
+        "leather": [
+            "{name} looks to cave in the leather and crack ribs",
+            "{name} winds up to shatter bone beneath the hardened leather",
+        ],
+        "none": [
+            "{name} looks to break bone and shatter resolve",
+            "{name} winds up for a crushing blow to bare flesh",
+        ],
+    },
+    "Sure Strike": {
+        "plate": [
+            "{name} takes aim at the gaps between the armor plates",
+            "{name} narrows focus on the seams of the metal protection",
+        ],
+        "chain": [
+            "{name} measures the spacing of the chain links for maximum penetration",
+            "{name} takes aim at the openings in the mesh",
+        ],
+        "leather": [
+            "{name} studies the seams and weak points in the leather",
+            "{name} measures weak points in the hardened hide",
+        ],
+        "none": [
+            "{name} measures the distance for a precise strike to bare skin",
+            "{name} zeroes in on a vital, unprotected target",
+        ],
+    },
+    "Calculated Attack": {
+        "plate": [
+            "{name} analyzes the gaps between the metal plates with surgical precision",
+            "{name} maps out the seams in the armor for maximum lethality",
+            "{name} studies the weak points where the plating overlaps",
+        ],
+        "chain": [
+            "{name} calculates the spacing of the chain links to find an opening",
+            "{name} analyzes gaps in the metal mesh for the perfect strike",
+            "{name} studies the pattern of the links to find maximum vulnerability",
+        ],
+        "leather": [
+            "{name} analyzes the seams in the leather to maximize impending trauma",
+            "{name} studies the weak points where the hardened leather begins to crack",
+            "{name} calculates a strike against the toughest hide",
+        ],
+        "none": [
+            "{name} analyzes the bare, vulnerable target with cold precision",
+            "{name} calculates the perfect strike against unprotected flesh",
+            "{name} studies the vital points with surgical focus",
+        ],
+    },
+}
+
+def _get_armor_category(armor_name: Optional[str]) -> str:
+    """Categorize armor type for narrative selection."""
+    if not armor_name:
+        return "none"
+
+    armor_lower = armor_name.lower()
+
+    # Plate-based armor
+    if any(x in armor_lower for x in ["plate", "brigandine"]):
+        return "plate"
+
+    # Chain-based armor
+    if any(x in armor_lower for x in ["chain", "scale"]):
+        return "chain"
+
+    # Leather-based armor
+    if any(x in armor_lower for x in ["leather", "cuir"]):
+        return "leather"
+
+    # Default to none
+    return "none"
+
 # AWKWARD STYLE INTENT LINES
 # Used when a weapon and fighting style are incompatible.
 # These replace the normal style intent lines for that attack.
@@ -941,14 +1061,28 @@ def style_intent_line(
     style        : str,
     weapon_name  : str,
     gender       : str,
+    foe_armor    : Optional[str] = None,
 ) -> Optional[str]:
     """
     Return a style intent line (or None, ~60% skip chance).
+    Uses armor-specific narratives when available for the style.
     """
     if random.random() < 0.30:
         return None
 
-    pool = STYLE_INTENT_POOLS.get(style, STYLE_INTENT_POOLS["Strike"])
+    # Try to get armor-specific pool first
+    if foe_armor and style in ARMOR_SPECIFIC_INTENT_POOLS:
+        armor_category = _get_armor_category(foe_armor)
+        armor_pools = ARMOR_SPECIFIC_INTENT_POOLS[style]
+        if armor_category in armor_pools:
+            pool = armor_pools[armor_category]
+        else:
+            # Fall back to generic pool if armor category not found
+            pool = STYLE_INTENT_POOLS.get(style, STYLE_INTENT_POOLS["Strike"])
+    else:
+        # Use generic pool if no armor specified or style not in armor-specific pools
+        pool = STYLE_INTENT_POOLS.get(style, STYLE_INTENT_POOLS["Strike"])
+
     template = random.choice(pool)
     pronoun  = "his" if gender == "Male" else "her"
     reflexive= "himself" if gender == "Male" else "herself"
@@ -1025,10 +1159,19 @@ ATTACK_VERBS: dict[str, list[str]] = {
 
 # Lizardfolk-specific attack verbs when using Open Hand/Martial Combat
 # Features claw rakes, tail sweeps, and powerful kicks
+# Note: "claws" (plural) needs plural verbs; "leg/tail" (singular) needs singular verbs
 LIZARDFOLK_ATTACK_VERBS: dict[str, list[str]] = {
-    "claw"  : ["rakes at", "slashes at with claws", "tears at", "rends at with razor claws"],
-    "kick"  : ["kicks at", "stomps toward", "drives a powerful kick at", "lashes out with a kick toward"],
-    "tail"  : ["sweeps at with tail", "lashes at with tail", "swings tail at", "brings tail around toward"],
+    "claw"  : ["rake", "slash", "tear", "rend"],
+    "kick"  : ["kicks", "stomps", "drives a powerful kick", "lashes out with a kick"],
+    "tail"  : ["sweeps", "lashes", "swings", "brings around"],
+}
+
+# Tabaxi-specific attack verbs when using Open Hand/Martial Combat
+# Features claw rakes and powerful kicks
+# Note: "claws" (plural) needs plural verbs; "leg" (singular) needs singular verbs
+TABAXI_ATTACK_VERBS: dict[str, list[str]] = {
+    "claw"  : ["rake", "slash", "tear", "rend"],
+    "kick"  : ["kicks", "stomps", "drives a powerful kick", "lashes out with a kick"],
 }
 
 # Extra style-flavored attack verbs, third-person singular
@@ -1056,30 +1199,62 @@ def attack_line(
     aim_point      : str,
     attacker_gender: str = "Male",
     attacker_race  : str = None,      # For Lizardfolk special handling
+    is_favorite_weapon: bool = False,  # Include "beloved" if this is their favorite weapon
 ) -> str:
     """Generate the attack declaration line. Lizardfolk with Open Hand get special claw/tail/kick verbs."""
     loc_pool = AIM_POINT_LABELS.get(aim_point, AIM_POINT_LABELS["None"])
     location = random.choice(loc_pool)
     pronoun  = "his" if attacker_gender == "Male" else "her"
 
-    # Lizardfolk with Open Hand use special descriptors
+    # Lizardfolk with Open Hand use special descriptors (claws, kicks, tail)
     if attacker_race == "Lizardfolk" and weapon_name == "Open Hand":
         attack_types = ["claw", "kick", "tail"]
-        attack_type = random.choice(attack_types)
-        
+        # Use defender name to seed the choice so attack/hit/damage lines are consistent
+        attack_type = attack_types[sum(ord(c) for c in defender_name) % len(attack_types)]
+
         verb_pool = LIZARDFOLK_ATTACK_VERBS.get(attack_type, LIZARDFOLK_ATTACK_VERBS["claw"])
         verb = random.choice(verb_pool)
-        
-        # Return without weapon mention since it's natural weapons
+
+        # Format with proper weapon descriptor in the sentence (no pronoun prefix)
+        weapon_descriptors = {
+            "claw": "claws",
+            "kick": "leg",
+            "tail": "tail",
+        }
+        weapon_desc = weapon_descriptors.get(attack_type, "claws")
+
         return (
-            f"{attacker_name.upper()} {verb} {defender_name.upper()}'s {location}!"
+            f"{attacker_name.upper()}'s {weapon_desc} {verb} at {defender_name.upper()}'s {location}!"
+        )
+
+    # Tabaxi with Open Hand use special descriptors (claws and kicks)
+    if attacker_race == "Tabaxi" and weapon_name == "Open Hand":
+        attack_types = ["claw", "kick"]
+        # Use defender name to seed the choice so attack/hit/damage lines are consistent
+        attack_type = attack_types[sum(ord(c) for c in defender_name) % len(attack_types)]
+
+        verb_pool = TABAXI_ATTACK_VERBS.get(attack_type, TABAXI_ATTACK_VERBS["claw"])
+        verb = random.choice(verb_pool)
+
+        # Format with proper weapon descriptor in the sentence (no pronoun prefix)
+        weapon_descriptors = {
+            "claw": "claws",
+            "kick": "leg",
+        }
+        weapon_desc = weapon_descriptors.get(attack_type, "claws")
+
+        return (
+            f"{attacker_name.upper()}'s {weapon_desc} {verb} at {defender_name.upper()}'s {location}!"
         )
 
     # Opportunity Throw uses a throw-specific sentence structure
     if style == "Opportunity Throw":
         throw_verb = random.choice(["hurls", "flings", "launches", "sends", "pitches"])
+        wpn_desc = weapon_name.lower()
+        if is_favorite_weapon:
+            wpn_desc = f"beloved {wpn_desc}"
         return (
-            f"{attacker_name.upper()} {throw_verb} {pronoun} {weapon_name.lower()} "
+            f"{attacker_name.upper()} {throw_verb} {pronoun} {wpn_desc} "
             f"at {defender_name.upper()}'s {location}!"
         )
 
@@ -1127,6 +1302,12 @@ LIZARDFOLK_HIT_VERBS: dict[str, list[str]] = {
     "claw"  : ["rakes across", "shreds", "tears into", "slashes across", "rends"],
     "kick"  : ["crashes into", "smashes into", "crushes into", "drives into"],
     "tail"  : ["whips across", "lashes into", "sweeps across", "crashes into"],
+}
+
+# Tabaxi-specific hit verbs when using claws or feet in martial combat
+TABAXI_HIT_VERBS: dict[str, list[str]] = {
+    "claw"  : ["rakes across", "shreds", "tears into", "slashes across", "rends"],
+    "kick"  : ["crashes into", "smashes into", "crushes into", "drives into"],
 }
 
 HIT_TARGETS = {
@@ -1179,7 +1360,8 @@ def hit_line(
     # Lizardfolk with Open Hand use special claw/tail/kick descriptions
     if attacker_race == "Lizardfolk" and weapon_name == "Open Hand":
         attack_types = ["claw", "kick", "tail"]
-        attack_type = random.choice(attack_types)
+        # Use defender name to seed the choice to match attack_line
+        attack_type = attack_types[sum(ord(c) for c in defender_name) % len(attack_types)]
 
         verb_pool = LIZARDFOLK_HIT_VERBS.get(attack_type, LIZARDFOLK_HIT_VERBS["claw"])
         verb = random.choice(verb_pool)
@@ -1192,7 +1374,28 @@ def hit_line(
             "kick": "powerful kick",
             "tail": "lashing tail",
         }.get(attack_type, "claws")
-        
+
+        lines.append(
+            f"{attacker_name.upper()}'s {attack_desc} "
+            f"{verb} {defender_name.upper()}'s {target}!"
+        )
+    # Tabaxi with Open Hand use special claw/kick descriptions
+    elif attacker_race == "Tabaxi" and weapon_name == "Open Hand":
+        attack_types = ["claw", "kick"]
+        # Use defender name to seed the choice to match attack_line
+        attack_type = attack_types[sum(ord(c) for c in defender_name) % len(attack_types)]
+
+        verb_pool = TABAXI_HIT_VERBS.get(attack_type, TABAXI_HIT_VERBS["claw"])
+        verb = random.choice(verb_pool)
+        target_pool = HIT_TARGETS.get(aim_point, HIT_TARGETS["None"])
+        target = random.choice(target_pool)
+
+        # Create attack type descriptor
+        attack_desc = {
+            "claw": "claws",
+            "kick": "powerful kick",
+        }.get(attack_type, "claws")
+
         lines.append(
             f"{attacker_name.upper()}'s {attack_desc} "
             f"{verb} {defender_name.upper()}'s {target}!"
@@ -1200,11 +1403,11 @@ def hit_line(
     else:
         target_pool = HIT_TARGETS.get(aim_point, HIT_TARGETS["None"])
         target = random.choice(target_pool)
-        if style == "Opportunity Throw":
-            verb = random.choice(THROW_HIT_VERBS)
-        elif weapon_name.lower() == "bola":
-            # Bola hits with swinging weighted balls - flail-style, never "punches"
+        if weapon_name.lower() == "bola":
+            # Bola hits with swinging weighted balls - flail-style, never "embeds" or "pierces"
             verb = random.choice(["crashes into", "slams into", "smashes into", "wraps around and strikes"])
+        elif style == "Opportunity Throw":
+            verb = random.choice(THROW_HIT_VERBS)
         else:
             verb_pool = HIT_VERBS.get(weapon_category, HIT_VERBS["Oddball"])
             verb = random.choice(verb_pool)
@@ -1456,14 +1659,28 @@ _WEAPON_DAMAGE_TYPE: dict[str, str] = {
 }
 
 
-def damage_line(damage: int, max_hp: int, weapon_category: str = "Oddball") -> str:
-    """Return a damage description line based on damage severity and weapon type."""
+def damage_line(damage: int, max_hp: int, weapon_category: str = "Oddball",
+                is_claw_attack: bool = False) -> str:
+    """
+    Return a damage description line based on damage severity and weapon type.
+
+    Args:
+        damage: Damage dealt
+        max_hp: Target's max HP
+        weapon_category: Weapon category (Oddball, Sword/Knife, etc.)
+        is_claw_attack: True if this is a claw rake/slash (for Lizardfolk/Tabaxi)
+    """
     pct = damage / max(1, max_hp)
     if   pct < 0.19: severity = "Light"
     elif pct < 0.34: severity = "Medium"
     else:            severity = "Heavy"
 
-    dmg_type = _WEAPON_DAMAGE_TYPE.get(weapon_category, "Generic")
+    # For Lizardfolk/Tabaxi claw attacks, use Slashing descriptions instead of Generic/Bludgeoning
+    if is_claw_attack and weapon_category == "Oddball":
+        dmg_type = "Slashing"
+    else:
+        dmg_type = _WEAPON_DAMAGE_TYPE.get(weapon_category, "Generic")
+
     pool = DAMAGE_LINES[dmg_type][severity]
     return random.choice(pool)
 
@@ -2346,34 +2563,49 @@ def decoy_feint_read_line(attacker_name: str, foe_name: str) -> str:
 
 CALCULATED_PRECISION_LINES = {
     "head": [
-        "{attacker} spots the gap beside {foe}'s helm and drives the {weapon} home!",
-        "{attacker} threads the {weapon} past {foe}'s guard, straight for the temple!",
-        "With cold precision, {attacker} finds the seam at {foe}'s visor!",
-        "{attacker}'s {weapon} slips past {foe}'s helm into the jawline!",
+        "{attacker} spots the gap beside {foe}'s guard and drives {his} {weapon} home!",
+        "{attacker} threads {his} {weapon} past {foe}'s defenses, straight for the temple!",
+        "With cold precision, {attacker} finds a vulnerable opening near {foe}'s eyes!",
+        "{attacker}'s {weapon} slips past {foe}'s high guard into the jawline!",
+        "{attacker} guides {his} {weapon} directly through a vulnerability in {foe}'s upper defenses!",
+        "{attacker} targets the exposed skin right along the edge of {foe}'s neckline!",
+        "{attacker} slips a calculated strike just underneath the lower edge of {foe}'s chin!",
     ],
     "chest": [
-        "{attacker} slips the {weapon} between plates, finding {foe}'s rib line!",
-        "{attacker} spots the seam at {foe}'s breastplate and strikes!",
-        "{attacker}'s {weapon} threads the gap in {foe}'s cuirass!",
-        "{attacker} drives the {weapon} through the armpit gap of {foe}'s armor!",
+        "{attacker} slips {his} {weapon} past the main defenses, finding {foe}'s rib line!",
+        "{attacker} spots a seam in {foe}'s defensive posture and strikes!",
+        "{attacker}'s {weapon} threads a vital gap in {foe}'s upper torso coverage!",
+        "{attacker} drives {his} {weapon} through the open space just beneath {foe}'s armpit!",
+        "{attacker} exploits a momentary opening in the stance right over {foe}'s collarbone!",
+        "{attacker} targets a tiny opening where {foe}'s forward defenses part!",
+        "{attacker} centers {his} weight and threads {his} {weapon} straight past the flank of {foe}'s chest!",
     ],
     "gut": [
-        "{attacker} drives the {weapon} up under {foe}'s ribs!",
-        "{attacker} finds the soft seam at {foe}'s belt line!",
-        "{attacker}'s {weapon} threads the gap beneath {foe}'s cuirass!",
+        "{attacker} drives {his} {weapon} up under {foe}'s ribs!",
+        "{attacker} finds the soft opening at {foe}'s belt line!",
+        "{attacker}'s {weapon} threads the gap beneath {foe}'s midsection defenses!",
         "{attacker} picks the join at {foe}'s waist and strikes clean!",
+        "{attacker} guides the attack straight through a lapse in the center of {foe}'s stance!",
+        "{attacker} finds a vulnerable fold right at the center of {foe}'s torso!",
+        "{attacker} bypasses the main protective posture to strike {foe}'s exposed abdomen!",
     ],
     "arms": [
         "{attacker} picks the gap at {foe}'s shoulder joint!",
         "{attacker}'s {weapon} finds the inside of {foe}'s elbow!",
-        "{attacker} slips the strike past {foe}'s vambrace!",
-        "{attacker}'s measured thrust lands in the gap at {foe}'s bicep!",
+        "{attacker} slips the strike past {foe}'s extended forearm!",
+        "{attacker}'s measured thrust lands in the opening beside {foe}'s bicep!",
+        "{attacker} finds the unshielded inner side of {foe}'s forearm!",
+        "{attacker} snakes {his} {weapon} through the opening where {foe}'s shoulder drops!",
+        "{attacker} spots an exposed patch near {foe}'s wrist and strikes!",
     ],
     "legs": [
-        "{attacker} drives the {weapon} behind {foe}'s knee!",
-        "{attacker} finds the gap above {foe}'s greave!",
-        "{attacker}'s strike threads the seam at {foe}'s thigh!",
-        "{attacker} picks the joint behind {foe}'s knee-cop!",
+        "{attacker} drives {his} {weapon} behind {foe}'s knee!",
+        "{attacker} finds the gap just above {foe}'s lower leg!",
+        "{attacker}'s strike threads the opening at {foe}'s thigh!",
+        "{attacker} picks the joint right at {foe}'s knee!",
+        "{attacker} places a perfect hit right into the unprotected back of {foe}'s thigh!",
+        "{attacker} slips {his} {weapon} through a narrow opening near {foe}'s hip!",
+        "{attacker} catches a vulnerable gap just along the boundary of {foe}'s lower leg!",
     ],
 }
 
@@ -2387,18 +2619,20 @@ CALCULATED_PROBE_LINES = [
 
 
 def calculated_precision_line(
-    attacker_name: str, foe_name: str, weapon_name: str, aim_point: str
+    attacker_name: str, foe_name: str, weapon_name: str, aim_point: str, attacker_gender: str = "Male"
 ) -> str:
     """
     Narrative line for a landed Calculated Attack precision hit.
     Falls back to the chest pool if the aim point isn't keyed.
     """
+    his = "his" if attacker_gender == "Male" else "her"
     key  = (aim_point or "chest").lower()
     pool = CALCULATED_PRECISION_LINES.get(key, CALCULATED_PRECISION_LINES["chest"])
     return random.choice(pool).format(
         attacker=attacker_name.upper(),
         foe=foe_name.upper(),
         weapon=weapon_name.lower(),
+        his=his
     )
 
 
@@ -2413,25 +2647,41 @@ def calculated_probe_line(attacker_name: str, foe_name: str) -> str:
 # ---------------------------------------------------------------------------
 
 KNOCKDOWN_LINES = [
-    "{warrior} plummets downward with great speed!!",
-    "{warrior} goes crashing to the ground!",
-    "{warrior} is knocked off {his} feet!",
-    "{warrior} stumbles and falls heavily!",
-    "{warrior} crashes to the arena floor!",
+    "{warrior} crashes violently onto the arena floor!",
+    "{warrior} goes crashing heavily to the ground!",
+    "{warrior} is knocked completely off {his} feet!",
+    "{warrior} stumbles and falls hard to the sand!",
+    "{warrior} loses {his} footing and slams against the arena floor!",
+    "{warrior} is violently upended and sent eating sand!",
+    "{warrior} loses {his} footing and slams hard against the sand!",
+    "{warrior} collapses like a felled oak under the impact!",
+    "{warrior} is driven down hard onto the arena floor!",
+    "{warrior} buckles under the force and hits the ground with a heavy thud!",
+    "{warrior} is sent reeling before collapsing into the bloodied sands!",
 ]
 
 GET_UP_LINES = [
-    "{warrior} scrambles back to {his} feet",
-    "{warrior} gets up, shaken but ready",
-    "{warrior} staggers upright",
-    "{warrior} rises from the dust, spitting blood",
+    "{warrior} scrambles back to {his} feet.",
+    "{warrior} gets up, shaken but ready.",
+    "{warrior} staggers upright.",
+    "{warrior} rises from the sand, spitting blood.",
+    "{warrior} pushes up from the sand, ready for more!",
+    "{warrior} hauls {his} battered body off the arena floor!",
+    "{warrior} forces {his} way back to a standing guard!",
+    "{warrior} rises defiantly from the bloodied sands!",
+    "{warrior} claws {his} way back up from the ground!",
 ]
 
 GROUND_STRUGGLE_LINES = [
     "{warrior} tries to rise but cannot find {his} footing!",
-    "{warrior} scrambles in the dirt, unable to regain {his} feet!",
+    "{warrior} scrambles in the sand, unable to regain {his} feet!",
     "{warrior} claws at the sand but stays down!",
     "{warrior} fights to stand, but {his} legs won't cooperate!",
+    "{warrior} thrashes on the arena floor but cannot get back up!",
+    "{warrior} struggles to push away from the ground, pinned by an unrelenting assault!",
+    "{warrior} slips on the bloodied sands, failing to lift {his} weight!",
+    "{warrior} desperately tries to haul {his} body up but collapses back down!",
+    "{warrior} writhes on the arena floor, unable to find an opening to rise!",
 ]
 
 GROUND_ATTACK_LINES = [
@@ -2439,6 +2689,11 @@ GROUND_ATTACK_LINES = [
     "{warrior} strikes upward from {his} knees!",
     "{warrior} swings wildly from the sand!",
     "{warrior} attacks from a losing position!",
+    "{warrior} thrusts an attack upward from the arena floor!",
+    "{warrior} launches a sudden counter strike from the sands!",
+    "{warrior} retaliates fiercely while still trapped on the ground!",
+    "{warrior} drives a low blow forward from the sand!",
+    "{warrior} snaps a desperate strike up from the arena floor!",
 ]
 
 

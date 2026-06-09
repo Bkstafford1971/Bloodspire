@@ -485,38 +485,60 @@ def _fights_section(card, champion_state: dict = None) -> str:
         lname  = _trunc(loser.name)
         style  = _fight_style_word(mins)
 
+        # Get original fight type for proper descriptors
+        ft = getattr(bout, "fight_type", "standard")
+
         if eff_type == "champion":
-            # Title fight - call out the championship explicitly
+            # Title fight - determine fight type descriptor
+            if ft == "challenge":
+                fight_descriptor = "Challenge Title fight"
+            elif ft == "blood_challenge":
+                fight_descriptor = "Blood Challenge Title bout"
+            elif ft == "monster":
+                fight_descriptor = "Monster Title fight"
+            else:  # standard random matchup
+                fight_descriptor = "Title fight"
+
+            # Determine if loser WAS the champion before the fight
+            loser_team = bout.opponent_team if pw_won else bout.player_team
+            loser_wid = getattr(loser, "warrior_id", None)
+            loser_was_champ = (
+                (champ_wid and loser_wid and champ_wid == loser_wid) or
+                (not champ_wid and loser.name == champ_name and getattr(loser_team, "team_id", 0) == champ_tid)
+            )
+
             if r.loser_died:
                 line = (f"★ CHAMPION'S TITLE FIGHT ★  {wname} has slain {lname} to claim the"
-                        f" Champion's Title in a {mins} minute {style} battle!")
-            elif winner.name == champ_name:
-                verb = random.choice(["defended the title against", "turned back the challenge of",
-                                      "retained the championship over", "proved superior to"])
-                line = (f"★ CHAMPION'S TITLE FIGHT ★  {wname} {verb} {lname}"
-                        f" in a {mins} minute {style} fight.")
-            else:
+                        f" Champion's Title in a {mins} minute {style} {fight_descriptor}!")
+            elif loser_was_champ:
+                # Loser was the champion, so winner TOOK the title
                 verb = random.choice(["seized the championship from", "dethroned",
                                       "claimed the title from", "unseated champion"])
                 line = (f"★ CHAMPION'S TITLE FIGHT ★  {wname} {verb} {lname}"
-                        f" in a {mins} minute {style} fight!")
-        elif eff_type in ("challenge", "blood_challenge"):
-            label = "Blood Challenge" if eff_type == "blood_challenge" else "Challenge"
-            if r.loser_died:
-                line = f"{wname} savagely slew {lname} in a {mins} minute {style} {label} fight."
+                        f" in a {mins} minute {style} {fight_descriptor}!")
             else:
-                verb = random.choice(["bested","defeated","outlasted","overcame","vanquished"])
-                line = f"{wname} {verb} {lname} in a {mins} minute {style} {label} fight."
+                # Winner was the champion, so they DEFENDED the title
+                verb = random.choice(["defended the title against", "turned back the challenge of",
+                                      "retained the championship over", "proved superior to"])
+                line = (f"★ CHAMPION'S TITLE FIGHT ★  {wname} {verb} {lname}"
+                        f" in a {mins} minute {style} {fight_descriptor}.")
         else:
-            # monster / standard / peasant - no type label for standard/peasant
-            ftype_str = " monster" if eff_type == "monster" else ""
+            # Non-champion fights - determine fight descriptor
+            if ft == "challenge":
+                fight_descriptor = "Challenge fight"
+            elif ft == "blood_challenge":
+                fight_descriptor = "Blood Challenge bout"
+            elif ft == "monster":
+                fight_descriptor = "Monster fight"
+            else:  # standard random matchup or peasant
+                fight_descriptor = "fight"
+
             if r.loser_died:
-                line = (f"{wname} slew {lname} in a {mins} minute {style}{ftype_str} fight."
-                        if pw_won else
-                        f"{lname} was slain by {wname} in a {mins} minute {style}{ftype_str} fight.")
+                verb = _death_verb(mins)
+                line = f"{wname} {verb} {lname} in a {mins} minute {style} {fight_descriptor}."
             else:
-                verb = random.choice(["bested","defeated","outlasted","overcame","vanquished"])
-                line = f"{wname} {verb} {lname} in a {mins} minute {style}{ftype_str} fight."
+                verb = _fight_outcome_verb(mins)
+                line = f"{wname} {verb} {lname} in a {mins} minute {style} {fight_descriptor}."
         lines.append(line)
     return "\n".join(lines)
 
@@ -578,6 +600,34 @@ def _fight_style_word(mins):
     if mins<=3: return random.choice(["competent","solid","clean"])
     if mins>=8: return random.choice(["grueling","brutal","drawn-out","action-packed"])
     return random.choice(["spirited","hard-fought","contested"])
+
+
+def _fight_outcome_verb(mins):
+    """Return victory verb based on fight duration (non-death outcomes)."""
+    if mins <= 2:
+        # Quick, brutal wins
+        return random.choice([
+            "viciously subdued", "narrowly defeated", "handily defeated",
+            "demolished", "vanquished", "overpowered", "bested",
+            "slimly defeated"
+        ])
+    elif mins <= 3:
+        # Moderate duration
+        return random.choice([
+            "bested", "defeated", "overcame", "vanquished", "outwitted"
+        ])
+    else:  # 4+ minutes - true endurance fights
+        return random.choice([
+            "outlasted", "ground down", "exhausted", "wore down", "prevailed over"
+        ])
+
+
+def _death_verb(mins):
+    """Return death verb based on fight duration."""
+    return random.choice([
+        "viciously butchered", "savagely slew", "murdered",
+        "eviscerated", "assassinated", "slaughtered"
+    ])
 
 
 def _race_report(teams) -> str:
@@ -1296,8 +1346,25 @@ def _top_managers(card, teams, turn_num) -> str:
     # Group teams by manager and calculate records
     manager_records = {}
 
-    # First pass: calculate career records from standings.json (includes all teams)
-    for team_key, team_data in standings_data.items():
+    # First pass: calculate career records from actual team files (not standings.json which can accumulate errors)
+    import os
+    from save import TEAMS_DIR
+    try:
+        team_files = sorted([f for f in os.listdir(TEAMS_DIR) if f.startswith("team_") and f.endswith(".json")])
+    except:
+        team_files = []
+
+    # Track which warriors we've already counted (by team_id + warrior_name) to avoid double-counting
+    counted_warriors = set()
+
+    for team_file in team_files:
+        try:
+            team_path = os.path.join(TEAMS_DIR, team_file)
+            with open(team_path, 'r', encoding='utf-8') as f:
+                team_data = json.load(f)
+        except:
+            continue
+
         mgr_name = team_data.get("manager_name", "?")
         if mgr_name == "?" or mgr_name in _NPC_TEAM_NAMES:
             continue
@@ -1306,12 +1373,34 @@ def _top_managers(card, teams, turn_num) -> str:
             manager_records[mgr_name] = {"w": 0, "l": 0, "k": 0,
                                         "cw": 0, "cl": 0, "ck": 0}
 
-        # Add career record from standings data (all warriors for this team)
-        warriors = team_data.get("warriors", {})
-        for warrior_name, warrior_stats in warriors.items():
-            manager_records[mgr_name]["cw"] += warrior_stats.get("wins", 0)
-            manager_records[mgr_name]["cl"] += warrior_stats.get("losses", 0)
-            manager_records[mgr_name]["ck"] += warrior_stats.get("kills", 0)
+        # Add career record from active warriors on this team
+        team_id = team_data.get("team_id", 0)
+        for w in team_data.get("warriors", []):
+            if not w:
+                continue
+            w_name = w.get("name", "")
+            warrior_key = f"{team_id}:{w_name}"
+            # Only count each warrior once (in case they appear in multiple file loads)
+            if warrior_key not in counted_warriors:
+                manager_records[mgr_name]["cw"] += w.get("wins", 0)
+                manager_records[mgr_name]["cl"] += w.get("losses", 0)
+                manager_records[mgr_name]["ck"] += w.get("kills", 0)
+                counted_warriors.add(warrior_key)
+
+        # Also add archived (replaced) warriors for true career totals
+        for aw in team_data.get("archived_warriors", []):
+            if not aw:
+                continue
+            aw_name = aw.get("name", "") if isinstance(aw, dict) else getattr(aw, "name", "")
+            warrior_key = f"{team_id}:{aw_name}"
+            if warrior_key not in counted_warriors:
+                aw_wins = aw.get("wins", 0) if isinstance(aw, dict) else getattr(aw, "wins", 0)
+                aw_losses = aw.get("losses", 0) if isinstance(aw, dict) else getattr(aw, "losses", 0)
+                aw_kills = aw.get("kills", 0) if isinstance(aw, dict) else getattr(aw, "kills", 0)
+                manager_records[mgr_name]["cw"] += aw_wins
+                manager_records[mgr_name]["cl"] += aw_losses
+                manager_records[mgr_name]["ck"] += aw_kills
+                counted_warriors.add(warrior_key)
 
     # Second pass: calculate THIS TURN records from the card (only participating teams)
     for team in teams:

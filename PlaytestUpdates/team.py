@@ -224,6 +224,7 @@ class Team:
                 "target_name": killed_by,
                 "challenger_name": None,  # Manager selects later
                 "turns_remaining": 3,
+                "killer_turns_fought": 0,  # Tracks how many turns the killer has actually participated
                 "status": "active",
             })
             print(
@@ -363,10 +364,11 @@ class Team:
     def get_active_blood_challenges(self) -> list:
         """
         Return list of blood challenges that are still active.
-        Active = status is 'active' AND turns_remaining > 0.
+        Active = status is 'active' AND killer hasn't fought 3+ times yet.
         """
-        return [bc for bc in self.blood_challenges 
-                if bc.get("status") == "active" and bc.get("turns_remaining", 0) > 0]
+        return [bc for bc in self.blood_challenges
+                if (bc.get("status") == "active" and
+                    bc.get("killer_turns_fought", 0) < 3)]
 
     def set_blood_challenge_challenger(self, target_name: str, warrior_name: str) -> bool:
         """
@@ -414,13 +416,34 @@ class Team:
         ]
         return len(self.blood_challenges) < before
 
+    def record_killer_participation(self, target_name: str):
+        """
+        Record that a killer (target of a blood challenge) has participated in a fight.
+        Increments killer_turns_fought counter for all active BCs against this target.
+        Called before each fight if the opponent is a BC target.
+        """
+        for bc in self.blood_challenges:
+            if (bc.get("status") == "active" and
+                bc.get("target_name") == target_name):
+                bc["killer_turns_fought"] = bc.get("killer_turns_fought", 0) + 1
+
     def decrement_blood_challenge_turns(self):
         """
         Decrement turns_remaining for all active blood challenges.
-        Called at end of each turn to expire challenges that hit 0 turns.
+        Also expire challenges where the killer has fought 3+ times without being avenged.
+        Called at end of each turn.
         """
         for bc in self.blood_challenges:
-            if bc.get("status") == "active" and bc.get("turns_remaining", 0) > 0:
+            if bc.get("status") != "active":
+                continue
+
+            # Check if killer has fought 3+ times - BC expires (unresolved)
+            if bc.get("killer_turns_fought", 0) >= 3:
+                bc["status"] = "expired"  # Mark as expired, will be removed
+                continue
+
+            # Otherwise decrement turns as backup (legacy behavior)
+            if bc.get("turns_remaining", 0) > 0:
                 bc["turns_remaining"] -= 1
 
     # =========================================================================

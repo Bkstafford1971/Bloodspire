@@ -381,6 +381,7 @@ RACES: dict[str, Race] = {
             initiative_bonus=5,
             acrobatic_advantage=True,
             frenzy_ability=True,
+            spear_exception=True,
             hp_bonus=-7,
             strength_penalty=3,
             heavy_weapon_penalty=True,
