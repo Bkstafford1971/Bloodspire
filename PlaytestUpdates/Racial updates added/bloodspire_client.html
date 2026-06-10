@@ -3444,9 +3444,7 @@ function buildFightsTab(w) {
     const isChampFight = h.fight_type === 'champion';
     const champStyle = isChampFight ? 'background:#fff8f0; border-left:3px solid #c60;' : `${i%2===0?'background:#f5f4f0;':''}`;
     const killMark = !S.hideRecord && h.is_kill ? '<b style="color:#060">☠</b>' : '';
-    const opponentDisplay = (!S.hideRecord && isChampFight && h.result?.toUpperCase() === 'WIN')
-      ? `${esc(w.name)} defeated ${esc(h.opponent_name)} in an actionpacked ${h.minutes} minute Champion Fight${killedNote}`
-      : `${esc(h.opponent_name)}${killedNote}`;
+    const opponentDisplay = `${esc(h.opponent_name)}${killedNote}`;
 
     if (isChampFight) {
       // Champion fights get special row formatting

@@ -1513,6 +1513,22 @@ def _run_turn(request_password, rerun_turn=None):
                             _h["fight_type"] = "champion"
                 save_team(_team)
 
+            # Re-save result files with the patched fight_type
+            for _mid, _res in all_results.items():
+                if _mid in team_map:
+                    _res["team"] = team_map[_mid].to_dict()
+                    _fname = (f"result_{_mid}_team{_res.get('team_id', '')}.json" if _res.get('team_id')
+                              else f"result_{_mid}.json")
+                    _fpath = os.path.join(_turn_dir(turn_num), _fname)
+                    if os.path.exists(_fpath):
+                        try:
+                            _fdata = _load_json(_fpath, None)
+                            if _fdata:
+                                _fdata["team"] = _res["team"]
+                                _save_json(_fpath, _fdata)
+                        except Exception as _pe:
+                            print(f"  WARNING: could not update result file {_fname}: {_pe}")
+
         date_str = _dt.date.today().strftime("%m/%d/%Y")
         newsletter_text = generate_newsletter(
             turn_num=turn_num,

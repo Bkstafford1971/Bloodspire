@@ -456,7 +456,7 @@ def _warrior_tiers(teams, champion_state: dict, card: list = None, turn_num: int
 
 def _dead_section(deaths: list, turn_num: int) -> str:
     if not deaths: return ""
-    sep="="*95
+    sep="="*109
     lines=["\nTHE DEAD",
            f"{'NAME':<30}{'W':>4}{'L':>4}{'K':>4}  {'TEAM':<30}{'SLAIN BY':<30}{'TURN':>5}",sep]
     for d in deaths:
