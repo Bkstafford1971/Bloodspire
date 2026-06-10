@@ -243,7 +243,7 @@ def _load_config():
 def _save_config(cfg):   _save_json(_config_path(), cfg)
 def _load_managers():    return _load_json(_managers_path(), {}) # Protected
 def _save_managers(m):   _save_json(_managers_path(), m) # Protected
-def _load_standings():   return _load_json(_standings_path(), {}) # Protected
+def _load_standings():   return _load_json(_standings_path(), {}, allow_tampered=True) # Protected (allow admin edits)
 def _save_standings(s):  _save_json(_standings_path(), s) # Protected
 
 def _load_uploads(turn_num):
@@ -678,6 +678,29 @@ def _run_turn(request_password, rerun_turn=None):
     try:
         from save import load_champion_state
         champ_state = load_champion_state()
+
+        # Validate champion exists in current standings
+        # If champion file is out of sync, reset it
+        if champ_state.get("name"):
+            standings_data = _load_standings({})  # Load standings to verify
+            champ_name = champ_state.get("name")
+            champ_tid = champ_state.get("team_id", 0)
+            champ_wid = champ_state.get("warrior_id")
+            found = False
+            for team_key, team_data in standings_data.items():
+                if team_data.get("team_id") == champ_tid:
+                    for warrior in team_data.get("warriors", {}).values():
+                        w_name = warrior.get("name")
+                        w_id = warrior.get("warrior_id")
+                        if (w_name == champ_name) and (champ_wid is None or w_id == champ_wid):
+                            found = True
+                            break
+                if found:
+                    break
+            # If champion not found in standings, reset
+            if not found:
+                print(f"  WARNING: Champion {champ_name} (ID {champ_tid}) not found in standings. Resetting champion state.")
+                champ_state = {}
     except Exception:
         champ_state = {}
 
