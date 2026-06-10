@@ -1144,22 +1144,23 @@ def _run_turn(request_password, rerun_turn=None):
             save_team(team)
             res["team"] = team.to_dict()
 
-        # Create team for client (with fight_history preserved)
-        team_for_client = res["team"]
-        
-        # Update turn_history
-        if "turn_history" not in team_for_client:
-            team_for_client["turn_history"] = []
-        team_for_client["turn_history"] = [
-            e for e in team_for_client["turn_history"]
+        # Update turn_history in res["team"] - must happen for ALL managers, not just team_map
+        # This ensures nl_teams has current turn_history when building the newsletter
+        if "turn_history" not in res["team"]:
+            res["team"]["turn_history"] = []
+        res["team"]["turn_history"] = [
+            e for e in res["team"]["turn_history"]
             if e.get("turn") != turn_num
         ]
-        team_for_client["turn_history"].append({
+        res["team"]["turn_history"].append({
             "turn": turn_num,
             "w": sum(1 for b in res["bouts"] if b.get("result") == "WIN"),
             "l": sum(1 for b in res["bouts"] if b.get("result") == "LOSS"),
             "k": sum(1 for b in res["bouts"] if b.get("opponent_slain")),
         })
+
+        # Prepare team for client response (res["team"] now has updated turn_history)
+        team_for_client = res["team"]
 
         # Create server storage version (strip fight_history)
         team_slim = dict(team_for_client)
@@ -1340,19 +1341,20 @@ def _run_turn(request_password, rerun_turn=None):
             except Exception:
                 pass
 
-        # Add AI teams
-        try:
-            from ai_league_teams import load_ai_teams
-            for at in (load_ai_teams() or []):
-                try:
-                    t = Team.from_dict(at)
-                    if getattr(t, "team_id", 0) not in team_ids:
-                        nl_teams.append(t)
-                        team_ids.add(getattr(t, "team_id", 0))
-                except Exception:
-                    pass
-        except Exception:
-            pass
+        # Add AI teams only if enabled
+        if cfg.get("ai_teams_enabled", True):
+            try:
+                from ai_league_teams import load_ai_teams
+                for at in (load_ai_teams() or []):
+                    try:
+                        t = Team.from_dict(at)
+                        if getattr(t, "team_id", 0) not in team_ids:
+                            nl_teams.append(t)
+                            team_ids.add(getattr(t, "team_id", 0))
+                    except Exception:
+                        pass
+            except Exception:
+                pass
 
         # Keep recently active saved teams for up to 3 turns of inactivity.
         try:
@@ -1446,6 +1448,7 @@ def _run_turn(request_password, rerun_turn=None):
                     break
 
         prev_champion_name = champ_state.get("name", "")
+        prev_champion_state = champ_state.copy()  # Save the BEFORE-fight champion state
         champ_state, is_new_champion = _update_champion(
             nl_teams, champ_state, deaths_nl,
             champion_beaten_by=_champ_beaten_by,
@@ -1457,17 +1460,31 @@ def _run_turn(request_password, rerun_turn=None):
         )
         save_champion_state(champ_state)
 
-        # Retroactively tag champion fights: if the champion was crowned THIS turn
-        # (not loaded from the start-of-turn state), any fight they were involved in
-        # will have been stored as "standard".  Fix those records now and resave.
+        # Determine which champion state to use for the fights section:
+        # - If champion was BEATEN this turn: use BEFORE state (to show correct narrative)
+        # - If champion didn't fight and lost title to recognition: use AFTER state (no change needed)
+        champion_state_for_fights = prev_champion_state if _champ_beaten_by else champ_state
+
+        # Tag champion fights: both for NEW champions (crowned this turn) and EXISTING champions (already champion at start)
         _new_champ = champ_state.get("name", "")
+        _champs_to_tag = set()
+
+        # Add new champion (if one was crowned this turn)
         if _new_champ and _new_champ != prev_champion_name:
+            _champs_to_tag.add(_new_champ)
+
+        # Add existing champion (if they were already champion and fought)
+        if prev_champion_name:
+            _champs_to_tag.add(prev_champion_name)
+
+        # Tag all fights involving any champion
+        if _champs_to_tag:
             for _mid, _res in all_results.items():
                 _updated = False
                 for _bout in _res.get("bouts", []):
                     if (_bout.get("fight_type") != "champion" and (
-                        _bout.get("warrior_name") == _new_champ or
-                        _bout.get("opponent_name") == _new_champ
+                        _bout.get("warrior_name") in _champs_to_tag or
+                        _bout.get("opponent_name") in _champs_to_tag
                     )):
                         _bout["fight_type"] = "champion"
                         _updated = True
@@ -1491,8 +1508,8 @@ def _run_turn(request_password, rerun_turn=None):
                     for _h in (_w.fight_history or []):
                         if (_h.get("turn") == turn_num and
                                 _h.get("fight_type") != "champion" and (
-                                _h.get("opponent_name") == _new_champ or
-                                _w.name == _new_champ)):
+                                _h.get("opponent_name") in _champs_to_tag or
+                                _w.name in _champs_to_tag)):
                             _h["fight_type"] = "champion"
                 save_team(_team)
 
@@ -1505,6 +1522,8 @@ def _run_turn(request_password, rerun_turn=None):
             champion_state=champ_state,
             processed_date=date_str,
             is_new_champion=is_new_champion,
+            champion_state_before=champion_state_for_fights,  # Use correct state for fights identification
+            prev_champion_state=prev_champion_state,  # For detecting newly-crowned champions
         )
         nl_path = os.path.join(_turn_dir(turn_num), "newsletter.txt")
         with open(nl_path, "w", encoding="utf-8") as _f:
@@ -1657,7 +1676,8 @@ def _admin_page():
         ai_count = len(json.loads(open(ai_path).read())) if os.path.exists(ai_path) else 0
     except Exception:
         ai_count = 0
-    if ai_count:
+    # Only show AI teams in uploads if they're actually enabled
+    if ai_count and cfg.get("ai_teams_enabled", True):
         urows += f"<tr><td colspan=2 style='color:#555;font-style:italic'>+ {ai_count} AI teams (auto-included)</td></tr>"
     # Standings rows
     warriors_flat = []

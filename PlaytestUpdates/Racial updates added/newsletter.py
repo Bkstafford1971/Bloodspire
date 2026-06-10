@@ -223,6 +223,11 @@ def _is_npc_team(team) -> bool:
     name = team.team_name if hasattr(team,"team_name") else team.get("team_name","")
     return name in _NPC_TEAM_NAMES
 
+def _is_ai_team(team) -> bool:
+    """AI teams have team_id >= 9000"""
+    tid = getattr(team, "team_id", None) or team.get("team_id")
+    return tid is not None and tid >= 9000
+
 
 def _fmt_date() -> str:
     return datetime.date.today().strftime("%m/%d/%Y")
@@ -463,7 +468,8 @@ def _dead_section(deaths: list, turn_num: int) -> str:
     return "\n".join(lines)
 
 
-def _fights_section(card, champion_state: dict = None) -> str:
+def _fights_section(card, champion_state: Optional[dict] = None,
+                   prev_champion_state: Optional[dict] = None) -> str:
     sep="="*85
     lines=["\nLAST TURN'S FIGHTS",sep]
 
@@ -573,11 +579,32 @@ def _fights_section(card, champion_state: dict = None) -> str:
                 line = (f"★ CHAMPION'S TITLE FIGHT ★  {wname} {verb} {lname}"
                         f" in a {mins} minute {style} {fight_descriptor}!")
             else:
-                # Winner was the champion, so they DEFENDED the title
-                verb = random.choice(["defended the title against", "turned back the challenge of",
-                                      "retained the championship over", "proved superior to"])
-                line = (f"★ CHAMPION'S TITLE FIGHT ★  {wname} {verb} {lname}"
-                        f" in a {mins} minute {style} {fight_descriptor}.")
+                # Check if winner is the newly-crowned champion (via recognition, not by defeating the previous champion)
+                winner_wid = _get_attr(winner, "warrior_id")
+                winner_is_current_champ = (
+                    (champ_wid and winner_wid and champ_wid == winner_wid) or
+                    (not champ_wid and champ_name and _get_attr(winner, "name") == champ_name)
+                )
+
+                # Check if winner was NOT the champion at the start of the turn
+                prev_champ_name = prev_champion_state.get("name", "") if prev_champion_state else ""
+                prev_champ_wid = prev_champion_state.get("warrior_id") if prev_champion_state else None
+                winner_was_prev_champ = (
+                    (prev_champ_wid and winner_wid and prev_champ_wid == winner_wid) or
+                    (not prev_champ_wid and prev_champ_name and _get_attr(winner, "name") == prev_champ_name)
+                )
+
+                if winner_is_current_champ and not winner_was_prev_champ:
+                    # Winner just became champion via recognition - they're claiming their first title
+                    verb = random.choice(["claimed the title against", "took the championship from"])
+                    line = (f"★ CHAMPION'S TITLE FIGHT ★  {wname} {verb} {lname}"
+                            f" in a {mins} minute {style} {fight_descriptor}!")
+                else:
+                    # Winner was already champion, so they DEFENDED the title
+                    verb = random.choice(["defended the title against", "turned back the challenge of",
+                                          "retained the championship over", "proved superior to"])
+                    line = (f"★ CHAMPION'S TITLE FIGHT ★  {wname} {verb} {lname}"
+                            f" in a {mins} minute {style} {fight_descriptor}.")
         else:
             # Non-champion fights - determine fight descriptor
             if ft == "challenge":
@@ -1381,10 +1408,8 @@ def _top_managers(card, teams, turn_num) -> str:
     """
     Generate manager standings sorted by win percentage (best to worst).
     Presents current-turn and career records side by side.
-    Career records include ALL teams managed (from standings.json), even non-participating teams.
+    Career records are calculated from each team's turn_history (cumulative across all turns).
     """
-    # Load complete standings data from JSON for accurate career records
-    standings_data = _load_standings_data()
 
     # Deduplicate by object identity - each ScheduledFight is a unique physical fight.
     # Name-pair deduplication is wrong here: the same two warriors can legitimately
@@ -1402,28 +1427,36 @@ def _top_managers(card, teams, turn_num) -> str:
     # Group teams by manager and calculate records
     manager_records = {}
 
-    # First pass: calculate career records from turn_history (authoritative source)
-    for team in teams:
-        if _is_npc_team(team): continue
+    # First pass: Load career records directly from saved teams on disk
+    # This is the authoritative source and bypasses all object/dict complexity
+    from save import load_all_teams as _load_all_teams_fresh
+    try:
+        all_saved_teams = _load_all_teams_fresh()
+        for team in all_saved_teams:
+            if _is_npc_team(team): continue
+            if _is_ai_team(team): continue
 
-        mgr_name = getattr(team, "manager_name", None) or team.get("manager_name", "?")
-        if mgr_name == "?" or mgr_name in _NPC_TEAM_NAMES:
-            continue
+            mgr_name = getattr(team, "manager_name", None) or "?"
+            if mgr_name == "?" or mgr_name in _NPC_TEAM_NAMES:
+                continue
 
-        if mgr_name not in manager_records:
-            manager_records[mgr_name] = {"w": 0, "l": 0, "k": 0,
-                                        "cw": 0, "cl": 0, "ck": 0}
+            if mgr_name not in manager_records:
+                manager_records[mgr_name] = {"w": 0, "l": 0, "k": 0,
+                                            "cw": 0, "cl": 0, "ck": 0}
 
-        # Add career record from team's turn_history (cumulative across all turns)
-        hist = getattr(team, "turn_history", []) if hasattr(team, "turn_history") else team.get("turn_history", [])
-        for turn in hist:
-            manager_records[mgr_name]["cw"] += turn.get("w", 0)
-            manager_records[mgr_name]["cl"] += turn.get("l", 0)
-            manager_records[mgr_name]["ck"] += turn.get("k", 0)
+            # Sum career record from this team's entire turn_history (all past turns)
+            hist = getattr(team, "turn_history", []) or []
+            for turn_entry in hist:
+                manager_records[mgr_name]["cw"] += turn_entry.get("w", 0)
+                manager_records[mgr_name]["cl"] += turn_entry.get("l", 0)
+                manager_records[mgr_name]["ck"] += turn_entry.get("k", 0)
+    except Exception as e:
+        pass  # Fall back to empty career records if load fails
 
     # Second pass: calculate THIS TURN records from the card (only participating teams)
     for team in teams:
         if _is_npc_team(team): continue
+        if _is_ai_team(team): continue
 
         mgr_name = getattr(team, "manager_name", None) or team.get("manager_name", "?")
         if mgr_name == "?":
@@ -1519,7 +1552,8 @@ def _top_managers(card, teams, turn_num) -> str:
 # ---------------------------------------------------------------------------
 
 def generate_newsletter(turn_num, card, teams, deaths, champion_state,
-                        processed_date=None, is_new_champion=False) -> str:
+                        processed_date=None, is_new_champion=False, champion_state_before=None,
+                        prev_champion_state=None) -> str:
     # Wrap all bouts to handle both dict and object formats uniformly
     wrapped_card = [_BoutWrapper(bout) for bout in card] if card else []
 
@@ -1533,8 +1567,8 @@ def generate_newsletter(turn_num, card, teams, deaths, champion_state,
     monster_kills = _monster_kills_section(wrapped_card)
     if monster_kills:
         sections.append("\n\n" + monster_kills)
-    
-    sections.append("\n\n" + _fights_section(wrapped_card, champion_state))
+
+    sections.append("\n\n" + _fights_section(wrapped_card, champion_state, prev_champion_state))
     dead = _dead_section(deaths, turn_num)
     if dead: sections.append("\n\n" + dead)
     sections.append("\n\n" + _race_report(teams))

@@ -23,6 +23,8 @@ from warrior import TRIGGERS, FIGHTING_STYLES, AIM_DEFENSE_POINTS
 from weapons import WEAPONS
 import weapons as WPN_MOD
 from combat_debug_logger import CombatDebugLogger
+import save as SV
+import newsletter as NL
 
 # ---------------------------------------------------------------------------
 # STRUCTURED DATA LOGGER
@@ -472,6 +474,34 @@ class BloodspireSimTool:
         self.scav_runs_var  = self.racial_runs_var
         self.gnome_runs_var = self.racial_runs_var
 
+        # TAB 4: CHAMPION TESTING
+        champ_tab = ttk.Frame(self.notebook, padding="10")
+        self.notebook.add(champ_tab, text="Champion Testing")
+        _add_tab_header(champ_tab, "Champion Title Fight Testing", "[CHAMPION]")
+
+        # Champion Selection Frame
+        champ_select_frame = ttk.LabelFrame(champ_tab, text="1. Set Champion", padding="10")
+        champ_select_frame.pack(fill=tk.X, pady=(0, 10))
+
+        ttk.Label(champ_select_frame, text="Select Warrior to Set as Champion:").grid(row=0, column=0, sticky=tk.W)
+        self.champ_warrior_var = tk.StringVar()
+        self.champ_warrior_combo = ttk.Combobox(champ_select_frame, textvariable=self.champ_warrior_var, state="readonly", width=60)
+        self.champ_warrior_combo.grid(row=0, column=1, sticky=tk.W, padx=5)
+
+        ttk.Button(champ_select_frame, text="SET AS CHAMPION", command=self._set_champion).grid(row=0, column=2)
+
+        # Current Champion Display
+        self.champ_status_var = tk.StringVar(value="(no champion set)")
+        ttk.Label(champ_select_frame, textvariable=self.champ_status_var, foreground="#c60", font=("TkDefaultFont", 10, "bold")).grid(row=1, column=0, columnspan=3, sticky=tk.W, pady=(8, 0))
+
+        # Fight Control Frame
+        champ_fight_frame = ttk.LabelFrame(champ_tab, text="2. Run Champion Fight", padding="10")
+        champ_fight_frame.pack(fill=tk.X, pady=(0, 10))
+
+        ttk.Button(champ_fight_frame, text="RUN CHAMPION FIGHT", command=self._run_champion_fight).pack(pady=8)
+
+        ttk.Label(champ_fight_frame, text="(Uses matchmaking logic to select opponent)", foreground="#666", font=("TkDefaultFont", 9)).pack()
+
         # Shared Output Area (at the bottom)
         main_frame = ttk.Frame(self.paned_window, padding="15")
         self.paned_window.add(main_frame, minsize=150)
@@ -503,9 +533,18 @@ class BloodspireSimTool:
             for w_obj in team.active_warriors:
                 self.warrior_pool.append((w_obj, team))
                 names.append(f"{w_obj.name} ({team.manager_name}) [{w_obj.race.name}]")
-        
+
         self.w1_combo['values'] = names
         self.w2_combo['values'] = names
+        self.champ_warrior_combo['values'] = names
+
+        # Try to load current champion and update status
+        try:
+            champion_state = SV.load_champion_state()
+            if champion_state and champion_state.get("name"):
+                self.champ_status_var.set(f"★ Champion: {champion_state.get('name')} ({champion_state.get('team_name')}) - ID: {champion_state.get('warrior_id')}")
+        except Exception:
+            pass
 
     def _get_warriors_from_uploads(self) -> List[T.Team]:
         path = self.uploads_folder.get()
@@ -717,6 +756,312 @@ class BloodspireSimTool:
 
         self.report_content = res.narrative
         self.text_area.insert(tk.END, self.report_content)
+
+    # -----------------------------------------------------------------------
+    # CHAMPION TESTING
+    # -----------------------------------------------------------------------
+    def _set_champion(self):
+        """Set selected warrior as the current champion."""
+        idx = self.champ_warrior_combo.current()
+        if idx < 0:
+            messagebox.showwarning("No Selection", "Please select a warrior from the dropdown.")
+            return
+
+        warrior, team = self.warrior_pool[idx]
+
+        # Create champion state
+        champion_state = {
+            "name": warrior.name,
+            "warrior_id": warrior.warrior_id,
+            "team_name": team.team_name,
+            "team_id": team.team_id,
+            "source": "test_set"
+        }
+
+        # Save to champion.json
+        SV.save_champion_state(champion_state)
+
+        # Update status display
+        self.champ_status_var.set(f"★ Champion: {warrior.name} ({team.team_name}) - ID: {warrior.warrior_id}")
+
+        messagebox.showinfo("Champion Set", f"{warrior.name} from {team.team_name} is now the champion!")
+
+    def _run_champion_fight(self):
+        """Run a simulated champion fight and display results."""
+        # Check if champion is set
+        try:
+            champion_state = SV.load_champion_state()
+            if not champion_state or not champion_state.get("name"):
+                messagebox.showwarning("No Champion", "Please set a champion first using the Set as Champion button.")
+                return
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load champion state: {e}")
+            return
+
+        # Load teams for opponent selection
+        try:
+            teams = self._get_warriors_from_uploads()
+            if not teams:
+                messagebox.showerror("No Teams", "No teams found in the uploads folder.")
+                return
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load teams: {e}")
+            return
+
+        # Find the champion warrior and team
+        champion_warrior = None
+        champion_team = None
+        all_warriors = []
+
+        for team in teams:
+            for w in team.active_warriors:
+                all_warriors.append((w, team))
+                if w.warrior_id == champion_state.get("warrior_id") or w.name == champion_state.get("name"):
+                    champion_warrior = w
+                    champion_team = team
+                    # Ensure warrior_id is set from champion_state
+                    if not champion_warrior.warrior_id:
+                        champion_warrior.warrior_id = champion_state.get("warrior_id")
+
+        if not champion_warrior or not champion_team:
+            messagebox.showerror("Champion Not Found", f"Could not find champion '{champion_state.get('name')}' in teams.")
+            return
+
+        # Select a random opponent from another team for testing
+        # (In production, matchmaking would use challenge targets, but for testing we pick randomly)
+        try:
+            opponent_warrior = None
+            opponent_team = None
+
+            # Find an opponent from a different team
+            for team in teams:
+                if team.team_id != champion_team.team_id and team.active_warriors:
+                    opponent_warrior = random.choice(team.active_warriors)
+                    opponent_team = team
+                    break
+
+            if not opponent_warrior or not opponent_team:
+                messagebox.showwarning("No Opponent", "Could not find an opponent from another team.")
+                return
+
+            # Create a champion fight bout directly
+            class ChampionBout:
+                def __init__(self, pw, pt, op, ot, turn=1):
+                    self.player_warrior = pw
+                    self.player_team = pt
+                    self.opponent = op
+                    self.opponent_team = ot
+                    self.fight_type = "champion"
+                    self.turn = turn
+                    self.result = None
+
+            champ_fight = ChampionBout(champion_warrior, champion_team, opponent_warrior, opponent_team)
+
+            # Run the fight
+            w1_copy = copy.deepcopy(champ_fight.player_warrior)
+            w2_copy = copy.deepcopy(champ_fight.opponent)
+
+            result = C.run_fight(
+                w1_copy, w2_copy,
+                team_a_name=champ_fight.player_team.team_name,
+                team_b_name=champ_fight.opponent_team.team_name,
+                manager_a_name=champ_fight.player_team.manager_name,
+                manager_b_name=champ_fight.opponent_team.manager_name
+            )
+
+            # Determine winner and update champion state if necessary
+            prev_champion_name = champion_state.get("name")
+            champion_beaten_by = None
+            champion_beaten_by_wid = None
+            champion_beaten_team = None
+            champion_beaten_team_id = 0
+
+            if result.loser and result.winner:
+                if result.loser.name == champion_warrior.name and result.loser.warrior_id == champion_warrior.warrior_id:
+                    # Champion lost - new champion is the winner
+                    champion_beaten_by = result.winner.name
+                    champion_beaten_by_wid = result.winner.warrior_id
+                    champion_beaten_team = champ_fight.opponent_team.team_name
+                    champion_beaten_team_id = champ_fight.opponent_team.team_id
+
+                    # Update champion state
+                    new_state, _ = NL._update_champion(
+                        teams, champion_state,
+                        deaths_this_turn=[],
+                        champion_beaten_by=champion_beaten_by,
+                        champion_beaten_by_wid=champion_beaten_by_wid,
+                        champion_beaten_team=champion_beaten_team,
+                        champion_beaten_team_id=champion_beaten_team_id,
+                        prev_champion_name=prev_champion_name
+                    )
+                    SV.save_champion_state(new_state)
+                    self.champ_status_var.set(f"★ New Champion: {champion_beaten_by} ({champion_beaten_team})")
+
+            # For fights section: use before-state if champion was beaten, current state otherwise
+            champion_state_for_fights = champion_state if not champion_beaten_by else champion_state
+
+            # Display results (pass champion state from BEFORE the fight if beaten)
+            self._display_champion_results(result, champ_fight, champion_state, champion_state_for_fights)
+
+        except Exception as e:
+            import traceback
+            messagebox.showerror("Error", f"Failed to run champion fight: {e}\n\n{traceback.format_exc()}")
+
+    def _display_champion_results(self, result, bout, champion_state_before, champion_state_for_fights=None):
+        """Display champion fight results in the text area."""
+        self.text_area.delete(1.0, tk.END)
+
+        # Use the provided champion_state_for_fights, or fall back to before state
+        if champion_state_for_fights is None:
+            champion_state_for_fights = champion_state_before
+
+        output = []
+        output.append("=" * 90)
+        output.append("CHAMPION TITLE FIGHT RESULTS")
+        output.append("=" * 90)
+        output.append("")
+
+        # Determine if champion won or lost
+        champion_lost = False
+        old_champion_name = champion_state_before.get('name', '')
+        new_champion_name = old_champion_name
+
+        if result.loser and result.loser.name == bout.player_warrior.name:
+            # Champion lost
+            champion_lost = True
+            new_champion_name = result.winner.name if result.winner else "Unknown"
+
+        # Basic fight info
+        output.append(f"Champion Before: {old_champion_name} (ID: {champion_state_before.get('warrior_id')}, Team ID: {champion_state_before.get('team_id')})")
+        output.append(f"Champion Warrior Object: {bout.player_warrior.name} (ID: {getattr(bout.player_warrior, 'warrior_id', 'N/A')})")
+        output.append(f"Opponent: {bout.opponent.name} (ID: {getattr(bout.opponent, 'warrior_id', 'N/A')})")
+        output.append(f"Duration: {result.minutes_elapsed} minutes")
+        output.append("")
+
+        if result.winner:
+            output.append(f"Winner: {result.winner.name} (ID: {getattr(result.winner, 'warrior_id', 'N/A')})")
+            output.append(f"Loser: {result.loser.name} (ID: {getattr(result.loser, 'warrior_id', 'N/A')})")
+            if champion_lost:
+                output.append(f">>> NEW CHAMPION: {new_champion_name}")
+            else:
+                output.append(f">>> CHAMPION RETAINED TITLE")
+            output.append("")
+
+        # Fight Narrative
+        output.append("FIGHT NARRATIVE:")
+        output.append("-" * 90)
+        if result.narrative:
+            output.append(result.narrative)
+        output.append("")
+
+        # Simulate what would appear in fight tab
+        output.append("=" * 90)
+        output.append("FIGHT TAB DISPLAY (Opponent Section):")
+        output.append("=" * 90)
+        output.append("")
+
+        mins = result.minutes_elapsed
+        winner = result.winner
+        loser = result.loser
+
+        if winner and loser:
+            wname = winner.name[:20]  # Truncate like in the UI
+            lname = loser.name[:20]
+
+            if mins < 6:
+                style = "one-sided"
+            elif mins < 12:
+                style = "decisive"
+            else:
+                style = "protracted"
+
+            output.append("┌─ FIGHT HISTORY ──────────────────────────────────────────────────────────────┐")
+            output.append("│ Turn │ Opponent                       │ Manager      │ Race │ Result │ Kill │ Min │")
+            output.append("├──────┼────────────────────────────────┼──────────────┼──────┼────────┼──────┼─────┤")
+
+            # Format like the UI
+            bg_note = "(background: #fff8f0, border-left: #c60)"
+            if champion_lost:
+                # If champion lost, they were the opponent
+                champ_display = f"{wname} defeated {lname} in an actionpacked {mins} minute Champion Fight"
+            else:
+                # If champion won, they were the player
+                champ_display = f"{wname} defeated {lname} in an actionpacked {mins} minute Champion Fight"
+            output.append(f"│ {bout.turn or '-':^4} │ ★ CHAMPION FIGHT ★             │ {bout.opponent_team.manager_name[:12]:<12} │      │  WIN │      │ {mins:>2}  │")
+            output.append(f"│      │ {champ_display:<30} │              │      │      │      │     │ {bg_note}")
+            output.append("└──────┴────────────────────────────────────────────────────────────────────────┘")
+            output.append("")
+
+        # Newsletter format - CHAMPION TIER
+        output.append("=" * 90)
+        output.append("NEWSLETTER - 'CHAMPION' TIER SECTION:")
+        output.append("=" * 90)
+        output.append("")
+
+        # Load current champion state (which may have been updated)
+        try:
+            current_champ_state = SV.load_champion_state()
+            current_champ_name = current_champ_state.get("name", "")
+            current_champ_team = current_champ_state.get("team_name", "")
+
+            if current_champ_name:
+                output.append("CHAMPION TIER")
+                output.append("-" * 90)
+                output.append(f"  ★  {current_champ_name}  ({current_champ_team})")
+                output.append("")
+            else:
+                output.append("(No champion currently set)")
+                output.append("")
+        except Exception as e:
+            output.append(f"(Error loading champion: {e})")
+            output.append("")
+
+        # Newsletter format - FIGHTS SECTION
+        output.append("=" * 90)
+        output.append("NEWSLETTER - 'LAST TURN'S FIGHTS' SECTION:")
+        output.append("=" * 90)
+        output.append("")
+
+        # Create a fake bout with result for newsletter generation
+        fake_bout = type('obj', (object,), {
+            'player_warrior': bout.player_warrior,
+            'opponent': bout.opponent,
+            'player_team': bout.player_team,
+            'opponent_team': bout.opponent_team,
+            'fight_type': 'champion',
+            'result': result
+        })()
+
+        # Generate newsletter text using the appropriate champion state
+        # Use before-state if champion was beaten (to show correct narrative)
+        # Use current state otherwise
+        try:
+            nl_text = NL._fights_section([fake_bout], champion_state=champion_state_for_fights)
+            output.append(nl_text)
+        except Exception as e:
+            output.append(f"(Error generating newsletter: {e})")
+
+        # Arena Happenings section
+        output.append("")
+        output.append("=" * 90)
+        output.append("NEWSLETTER - 'ARENA HAPPENINGS' SECTION:")
+        output.append("=" * 90)
+        output.append("")
+
+        if champion_lost:
+            output.append("TITLE CHANGE")
+            output.append(f"  {new_champion_name} has claimed the Champion's Title from {old_champion_name}!")
+            output.append("")
+        else:
+            output.append("TITLE RETAINED")
+            output.append(f"  {old_champion_name} successfully defended the Champion's Title!")
+            output.append("")
+
+        output.append("=" * 90)
+
+        full_output = "\n".join(output)
+        self.text_area.insert(tk.END, full_output)
+        self.report_content = full_output
 
     # -----------------------------------------------------------------------
     # SIM 2: ENDURANCE & EXHAUSTION
