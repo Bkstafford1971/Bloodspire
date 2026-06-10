@@ -1590,15 +1590,13 @@ const LocalAPI = {
     if (path === '/api/warrior/avoid_warrior') {
       const team = await Store.readTeam(parseInt(body.team_id, 10));
       if (!team) return { success: false, error: 'Team not found.' };
-      // Find warrior by name (sent from client)
-      const w = team.warriors.find(warrior => warrior && warrior.name === body.warrior_name);
-      if (!w) return { success: false, error: 'Warrior not found.' };
+      const w = team.warriors[parseInt(body.warrior_idx, 10)];
+      if (!w) return { success: false, error: 'Warrior slot empty.' };
       w.avoid_warriors = w.avoid_warriors || [];
-      const targetName = body.avoid_warrior_name || body.target_name;
       if (body.action === 'remove') {
-        w.avoid_warriors = w.avoid_warriors.filter(n => n !== targetName);
-      } else if (!w.avoid_warriors.includes(targetName)) {
-        w.avoid_warriors.push(targetName);
+        w.avoid_warriors = w.avoid_warriors.filter(n => n !== body.target_name);
+      } else if (!w.avoid_warriors.includes(body.target_name)) {
+        w.avoid_warriors.push(body.target_name);
       }
       await Store.writeTeam(team);
       return { success: true, team };
@@ -3259,7 +3257,10 @@ function buildStatsTab(team, w, wIdx) {
 
 <!-- Strategies -->
 <div class="group" style="margin:0 0 6px 0;">
-  <span class="group-label">Strategies</span>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:0 4px;">
+    <span class="group-label">Strategies</span>
+    <button id="templates-btn" onclick="showTemplatesDropdown()" style="font-size:11px;padding:2px 6px;background:var(--bg);border:1px solid var(--mid);cursor:pointer;">Templates ▾</button>
+  </div>
   <table class="strat-table">
     <thead>
       <tr>
@@ -5022,6 +5023,311 @@ async function flushSave() {
   clearTimeout(_saveTimer);
   _saveTimer = null;
   await doSaveWarrior();
+}
+
+/* ============================================================
+   STRATEGY TEMPLATES
+   ============================================================ */
+const TEMPLATES_DIR = 'strategy_templates';
+
+async function saveStrategyTemplate() {
+  const w = S.sel && S.sel.type === 'warrior' ? S.teams[S.sel.teamId].warriors[S.sel.wIdx] : null;
+  if (!w) { alert('No warrior selected'); return; }
+
+  // Suggested name: warrior name + race
+  const suggestedName = w.name && w.race ? `${w.name} ${w.race}` : 'Template';
+
+  // Show save-name modal
+  el('save-template-modal')?.remove();
+  const modal = document.createElement('div');
+  modal.id = 'save-template-modal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:8000;display:flex;align-items:center;justify-content:center;';
+  modal.innerHTML = `
+<div style="background:var(--bg);border:2px solid;border-color:var(--white) var(--mid) var(--mid) var(--white);width:400px;max-width:95vw;">
+  <div style="background:var(--title);color:#fff;padding:3px 8px;display:flex;align-items:center;font-weight:bold;font-size:11px;">
+    Save Strategy Template
+    <button onclick="el('save-template-modal').remove()" style="margin-left:auto;min-width:0;width:16px;height:14px;padding:0;font-size:9px;background:var(--bg);border:1px solid var(--mid);">✕</button>
+  </div>
+  <div style="padding:12px;">
+    <div style="margin-bottom:10px; font-size:11px;">Template name:</div>
+    <input type="text" id="template-name-input" value="${esc(suggestedName)}" style="width:100%; padding:4px; box-sizing:border-box; font-size:11px;" />
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px;">
+      <button onclick="doSaveTemplate()">Save</button>
+      <button onclick="el('save-template-modal').remove()">Cancel</button>
+    </div>
+  </div>
+</div>`;
+  document.body.appendChild(modal);
+  el('template-name-input').focus();
+  el('template-name-input').select();
+}
+
+async function doSaveTemplate() {
+  const name = el('template-name-input')?.value?.trim();
+  if (!name) { alert('Please enter a template name'); return; }
+
+  const w = S.sel && S.sel.type === 'warrior' ? S.teams[S.sel.teamId].warriors[S.sel.wIdx] : null;
+  if (!w) { alert('No warrior selected'); return; }
+
+  try {
+    // Ensure directory exists
+    const dirRes = await window.electronAPI.ensureDir(TEMPLATES_DIR);
+    if (!dirRes.success) throw new Error('Failed to create templates directory');
+
+    // Collect strategies (same logic as doSaveWarrior)
+    const strats = [];
+    for (let i = 0; i < 5; i++) {
+      const trigger = getSelectVal(`#strat-body select[data-si="${i}"][data-sf="trigger"]`);
+      if (!trigger || trigger === 'None') continue;
+      const style    = getSelectVal(`#strat-body select[data-si="${i}"][data-sf="style"]`) || 'Strike';
+      const actRaw   = getInputVal(`#strat-body input[data-si="${i}"][data-sf="activity"]`);
+      const activity = (actRaw !== '' && actRaw !== null) ? parseInt(actRaw) : 5;
+      const aim      = getSelectVal(`#strat-body select[data-si="${i}"][data-sf="aim_point"]`) || 'None';
+      const def      = getSelectVal(`#strat-body select[data-si="${i}"][data-sf="defense_point"]`) || 'None';
+      strats.push({trigger, style, activity, aim_point:aim, defense_point:def});
+    }
+    // D row
+    const dStyle    = getSelectVal('#strat-body select[data-si="D"][data-sf="style"]') || 'Strike';
+    const dActRaw   = getInputVal('#strat-body input[data-si="D"][data-sf="activity"]');
+    const dActivity = (dActRaw !== '' && dActRaw !== null) ? parseInt(dActRaw) : 5;
+    const dAim      = getSelectVal('#strat-body select[data-si="D"][data-sf="aim_point"]') || 'None';
+    const dDef      = getSelectVal('#strat-body select[data-si="D"][data-sf="defense_point"]') || 'None';
+    strats.push({trigger:'Always (Default Loop)', style:dStyle, activity:dActivity, aim_point:dAim, defense_point:dDef});
+
+    // Build template object
+    const template = {
+      name,
+      armor: el('sel-armor')?.value || 'None',
+      helm: el('sel-helm')?.value || 'None',
+      primary_weapon: el('sel-prim')?.value || 'Open Hand',
+      secondary_weapon: el('sel-sec')?.value || 'Open Hand',
+      backup_weapon: el('sel-bkp')?.value || 'None',
+      strategies: strats
+    };
+
+    // Write file
+    const filePath = `${TEMPLATES_DIR}/${name}.json`;
+    const writeRes = await window.electronAPI.writeJson(filePath, template);
+    if (!writeRes.success) throw new Error('Failed to save template');
+
+    el('save-template-modal').remove();
+    alert(`Template "${name}" saved successfully!`);
+
+    // Refresh dropdown if it's open
+    updateTemplatesDropdown();
+  } catch (err) {
+    alert('Error saving template: ' + err.message);
+  }
+}
+
+async function showTemplatesDropdown() {
+  const btn = el('templates-btn');
+  const dropdownId = 'templates-dropdown';
+  const existing = el(dropdownId);
+
+  if (existing) {
+    existing.remove();
+    return;
+  }
+
+  try {
+    // Load templates list
+    const listRes = await window.electronAPI.listDir(TEMPLATES_DIR);
+    const templates = (listRes.success && listRes.files)
+      ? listRes.files.filter(f => f.endsWith('.json')).map(f => f.slice(0, -5))
+      : [];
+
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+
+    // Build dropdown panel
+    const dropdown = document.createElement('div');
+    dropdown.id = dropdownId;
+    dropdown.style.cssText = `position:fixed;top:${rect.bottom}px;left:${rect.left}px;
+      background:var(--bg);border:1px solid var(--mid);z-index:8001;
+      min-width:200px;max-width:300px;box-shadow:0 2px 8px rgba(0,0,0,0.3);`;
+
+    // Save option
+    const saveDiv = document.createElement('div');
+    saveDiv.style.cssText = 'padding:6px 8px;border-bottom:1px solid var(--mid);cursor:pointer;font-size:11px;display:flex;align-items:center;';
+    saveDiv.innerHTML = '💾 Save as Template';
+    saveDiv.onclick = () => { dropdown.remove(); saveStrategyTemplate(); };
+    dropdown.appendChild(saveDiv);
+
+    // Templates list
+    if (templates.length === 0) {
+      const emptyDiv = document.createElement('div');
+      emptyDiv.style.cssText = 'padding:6px 8px;font-size:11px;color:#888;';
+      emptyDiv.textContent = 'No templates saved';
+      dropdown.appendChild(emptyDiv);
+    } else {
+      templates.forEach(tpl => {
+        const tplDiv = document.createElement('div');
+        tplDiv.style.cssText = 'padding:6px 8px;border-bottom:1px solid #e0e0e0;font-size:11px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;';
+        tplDiv.innerHTML = `<span>📂 ${esc(tpl)}</span>`;
+
+        const actionSpan = document.createElement('span');
+        actionSpan.style.cssText = 'display:flex;gap:4px;';
+
+        // Load button
+        const loadBtn = document.createElement('button');
+        loadBtn.style.cssText = 'min-width:0;width:50px;height:18px;font-size:10px;padding:0;background:var(--bg);border:1px solid var(--mid);cursor:pointer;';
+        loadBtn.textContent = 'Load';
+        loadBtn.onclick = (e) => { e.stopPropagation(); dropdown.remove(); loadTemplate(tpl); };
+        actionSpan.appendChild(loadBtn);
+
+        // Delete button
+        const delBtn = document.createElement('button');
+        delBtn.style.cssText = 'min-width:0;width:20px;height:18px;font-size:9px;padding:0;background:var(--bg);border:1px solid var(--mid);cursor:pointer;color:#c84;font-weight:bold;';
+        delBtn.textContent = '✕';
+        delBtn.onclick = (e) => { e.stopPropagation(); deleteTemplate(tpl); };
+        actionSpan.appendChild(delBtn);
+
+        tplDiv.appendChild(actionSpan);
+        dropdown.appendChild(tplDiv);
+      });
+    }
+
+    document.body.appendChild(dropdown);
+
+    // Close dropdown when clicking outside
+    const closeHandler = (e) => {
+      if (!dropdown.contains(e.target) && e.target !== btn) {
+        dropdown.remove();
+        document.removeEventListener('click', closeHandler);
+      }
+    };
+    setTimeout(() => document.addEventListener('click', closeHandler), 0);
+  } catch (err) {
+    alert('Error loading templates: ' + err.message);
+  }
+}
+
+async function updateTemplatesDropdown() {
+  // Refresh dropdown if it's open
+  const dropdown = el('templates-dropdown');
+  if (dropdown) {
+    dropdown.remove();
+    showTemplatesDropdown();
+  }
+}
+
+async function loadTemplate(templateName) {
+  try {
+    // Read template
+    const readRes = await window.electronAPI.readJson(`${TEMPLATES_DIR}/${templateName}.json`);
+    if (!readRes.success) throw new Error('Failed to load template');
+    const template = readRes.data;
+
+    // Show load confirmation modal with gear checkbox
+    el('load-template-modal')?.remove();
+    const modal = document.createElement('div');
+    modal.id = 'load-template-modal';
+    modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:8000;display:flex;align-items:center;justify-content:center;';
+    modal.innerHTML = `
+<div style="background:var(--bg);border:2px solid;border-color:var(--white) var(--mid) var(--mid) var(--white);width:380px;max-width:95vw;">
+  <div style="background:var(--title);color:#fff;padding:3px 8px;display:flex;align-items:center;font-weight:bold;font-size:11px;">
+    Load Template: ${esc(templateName)}
+    <button onclick="el('load-template-modal').remove()" style="margin-left:auto;min-width:0;width:16px;height:14px;padding:0;font-size:9px;background:var(--bg);border:1px solid var(--mid);">✕</button>
+  </div>
+  <div style="padding:12px;">
+    <div style="margin-bottom:10px; font-size:11px; display:flex; align-items:center;">
+      <input type="checkbox" id="load-template-gear" checked style="margin-right:8px;" />
+      <label for="load-template-gear">Include gear (armor, helm, weapons)</label>
+    </div>
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px;">
+      <button onclick="applyTemplate(${esc(JSON.stringify(template))})">Apply</button>
+      <button onclick="el('load-template-modal').remove()">Cancel</button>
+    </div>
+  </div>
+</div>`;
+    document.body.appendChild(modal);
+  } catch (err) {
+    alert('Error loading template: ' + err.message);
+  }
+}
+
+async function applyTemplate(template) {
+  if (!template || !template.strategies) {
+    alert('Invalid template');
+    return;
+  }
+
+  try {
+    const includeGear = el('load-template-gear')?.checked ?? true;
+
+    // Apply gear if checked
+    if (includeGear) {
+      const setSelect = (id, val) => {
+        const elem = el(id);
+        if (elem) elem.value = val || 'None';
+      };
+      setSelect('sel-armor', template.armor);
+      setSelect('sel-helm', template.helm);
+      setSelect('sel-prim', template.primary_weapon);
+      setSelect('sel-sec', template.secondary_weapon);
+      setSelect('sel-bkp', template.backup_weapon);
+    }
+
+    // Apply strategies - separate into numbered rows and D row
+    const isDefaultTrigger = t => t === 'Always' || t === 'Always (Default Loop)';
+    const dRow = template.strategies.find(s => isDefaultTrigger(s.trigger));
+    const numRows = template.strategies.filter(s => !isDefaultTrigger(s.trigger));
+
+    // Apply numbered rows (0-4)
+    for (let i = 0; i < 5; i++) {
+      const s = numRows[i] || { trigger:'', style:'', activity:'', aim_point:'', defense_point:'' };
+
+      const setSelect = (selector, val) => {
+        const elem = document.querySelector(selector);
+        if (elem) elem.value = val || '';
+      };
+      const setInput = (selector, val) => {
+        const elem = document.querySelector(selector);
+        if (elem) elem.value = val || '';
+      };
+
+      setSelect(`#strat-body select[data-si="${i}"][data-sf="trigger"]`, s.trigger);
+      setSelect(`#strat-body select[data-si="${i}"][data-sf="style"]`, s.style);
+      setInput(`#strat-body input[data-si="${i}"][data-sf="activity"]`, s.activity);
+      setSelect(`#strat-body select[data-si="${i}"][data-sf="aim_point"]`, s.aim_point);
+      setSelect(`#strat-body select[data-si="${i}"][data-sf="defense_point"]`, s.defense_point);
+    }
+
+    // Apply D row
+    if (dRow) {
+      const setSelect = (selector, val) => {
+        const elem = document.querySelector(selector);
+        if (elem) elem.value = val || '';
+      };
+      const setInput = (selector, val) => {
+        const elem = document.querySelector(selector);
+        if (elem) elem.value = val || '';
+      };
+
+      setSelect('#strat-body select[data-si="D"][data-sf="style"]', dRow.style);
+      setInput('#strat-body input[data-si="D"][data-sf="activity"]', dRow.activity);
+      setSelect('#strat-body select[data-si="D"][data-sf="aim_point"]', dRow.aim_point);
+      setSelect('#strat-body select[data-si="D"][data-sf="defense_point"]', dRow.defense_point);
+    }
+
+    el('load-template-modal').remove();
+    scheduleAutoSave();
+  } catch (err) {
+    alert('Error applying template: ' + err.message);
+  }
+}
+
+async function deleteTemplate(templateName) {
+  if (!confirm(`Delete template "${templateName}"?`)) return;
+
+  try {
+    const delRes = await window.electronAPI.deleteFile(`${TEMPLATES_DIR}/${templateName}.json`);
+    if (!delRes.success) throw new Error('Failed to delete template');
+    updateTemplatesDropdown();
+  } catch (err) {
+    alert('Error deleting template: ' + err.message);
+  }
 }
 
 /* ============================================================
