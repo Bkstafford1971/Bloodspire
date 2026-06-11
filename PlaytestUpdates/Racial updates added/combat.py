@@ -776,7 +776,8 @@ def _defense_roll(
         act_mod  = (5 - strategy.activity) * 2
         dex_train_parry = int(dex_trained * 2)   # +2 per trained DEX point
         race_parry_bonus = defender.race.modifiers.parry_bonus * 3  # Apply race parry bonus
-        total    = roll + str_b + skill_b + wpn_b + style_b + act_mod + luck_b + dex_train_parry + race_parry_bonus
+        race_parry_penalty = defender.race.modifiers.parry_penalty * 3  # Apply race parry penalty
+        total    = roll + str_b + skill_b + wpn_b + style_b + act_mod + luck_b + dex_train_parry + race_parry_bonus - race_parry_penalty
     else:
         dex      = get_effective_dex_for_race(defender.dexterity, defender.armor or "None", defender.helm or "None", defender.race.name)
         dex_b    = max(-8, min(8, (dex - 10)))
@@ -789,12 +790,13 @@ def _defense_roll(
 
         dex_train_dodge = int(dex_trained * 2.5) # +2.5 per trained DEX point
         race_dodge_bonus = defender.race.modifiers.dodge_bonus * 2  # Apply race dodge bonus
+        race_dodge_penalty = defender.race.modifiers.dodge_penalty * 2  # Apply race dodge penalty
 
         # Acrobatics skill bonus to dodge
         acrobatics_level = defender.skills.get("acrobatics", 0)
         acrobatics_b = acrobatics_level * 2 if acrobatics_level > 0 else 0
 
-        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train_dodge + race_dodge_bonus + acrobatics_b
+        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train_dodge + race_dodge_bonus - race_dodge_penalty + acrobatics_b
 
         # Heavy weapon dodge penalty for Goblins & Tabaxi
         if defender.race.modifiers.heavy_weapon_penalty:
@@ -1096,6 +1098,11 @@ def _calc_damage_hybrid(
         natural_bonus = _get_lizardfolk_natural_weapon_bonus(attacker)
         raw += natural_bonus
 
+    # Racial damage flat bonus/penalty (e.g. Half-Orc +8, Halfling -6)
+    race_dmg_net = attacker.race.modifiers.damage_bonus - attacker.race.modifiers.damage_penalty
+    if race_dmg_net != 0:
+        raw += race_dmg_net
+
     # Calculate armor reduction
     armor_nm = defender.armor or "None"
     helm_nm = defender.helm or "None"
@@ -1274,7 +1281,8 @@ def _defense_roll_verbose(
         act_mod       = (5 - strategy.activity) * 2
         dex_train     = int(dex_trained * 2)
         race_parry    = defender.race.modifiers.parry_bonus * 3
-        total         = roll + str_b + skill_b + wpn_b + style_b + act_mod + luck_b + dex_train + race_parry
+        race_parry_pen = defender.race.modifiers.parry_penalty * 3
+        total         = roll + str_b + skill_b + wpn_b + style_b + act_mod + luck_b + dex_train + race_parry - race_parry_pen
         comps.update({
             "str_bonus": str_b,
             f"parry_skill(lv{defender.skills.get('parry',0)})x4": skill_b,
@@ -1283,6 +1291,7 @@ def _defense_roll_verbose(
             "activity_mod": act_mod,
             "dex_trained_x2": dex_train,
             "race_parry_x3": race_parry,
+            "race_parry_pen_x3": -race_parry_pen,
         })
     else:
         dex      = get_effective_dex_for_race(defender.dexterity, defender.armor or "None", defender.helm or "None", defender.race.name)
@@ -1296,9 +1305,10 @@ def _defense_roll_verbose(
 
         dex_train= int(dex_trained * 2.5)
         race_dg  = defender.race.modifiers.dodge_bonus * 2
+        race_dg_pen = defender.race.modifiers.dodge_penalty * 2
         acro_lv  = defender.skills.get("acrobatics", 0)
         acro_b   = acro_lv * 2 if acro_lv > 0 else 0
-        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train + race_dg + acro_b
+        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train + race_dg - race_dg_pen + acro_b
 
         heavy_pen = 0
         if defender.race.modifiers.heavy_weapon_penalty:
@@ -1319,6 +1329,7 @@ def _defense_roll_verbose(
             "size_diff": size_b,
             "dex_trained_x2.5": dex_train,
             "race_dodge_x2": race_dg,
+            "race_dodge_pen_x2": -race_dg_pen,
             "acrobatics_x2": acro_b if acro_b else 0,
             "heavy_wpn_pen": heavy_pen if heavy_pen else 0,
         })
@@ -1486,7 +1497,13 @@ def _calc_damage_verbose(
         raw += nat_b
     steps["natural_weapon_bonus"] = nat_b
 
-    steps["raw"] = raw - fav_b - prec_b - nat_b
+    # Racial damage flat bonus/penalty (e.g. Half-Orc +8, Halfling -6)
+    race_dmg_net = attacker.race.modifiers.damage_bonus - attacker.race.modifiers.damage_penalty
+    if race_dmg_net != 0:
+        raw += race_dmg_net
+    steps["race_damage"] = race_dmg_net
+
+    steps["raw"] = raw - fav_b - prec_b - nat_b - race_dmg_net
     steps["raw_with_fav"] = raw
 
     # Armor calculation (percentage-based, mirroring _calc_damage_hybrid)
@@ -1919,19 +1936,24 @@ def _calc_apm(warrior: Warrior, strategy: Strategy, state: _CState) -> int:
         if attack_pct > 0:
             base *= (1.0 - attack_pct)
 
-    # Heavy weapon penalty for Goblins & Tabaxi
+    # Apply under-strength weight penalty to all races (skip for Tabaxi with spears)
+    try:
+        weapon = get_weapon(warrior.primary_weapon)
+        effective_str = get_effective_strength_for_weapons(warrior)
+        two_handed_use = (warrior.secondary_weapon == "Open Hand" and weapon.two_hand)
+
+        # All races get weight penalty, except Tabaxi with spear_exception
+        if not (r.spear_exception and weapon.category == "Polearm/Spear"):
+            weight_penalty = strength_penalty(weapon.weight, effective_str, two_handed_use)
+            if weight_penalty > 0:
+                base *= (1.0 - weight_penalty)
+    except ValueError:
+        pass
+
+    # Heavy weapon penalty for Goblins & Tabaxi (additional penalty on top of weight)
     if r.heavy_weapon_penalty:
         try:
             weapon = get_weapon(warrior.primary_weapon)
-            
-            # Apply under-strength weight penalty to APM (skip for Tabaxi with spears)
-            effective_str = get_effective_strength_for_weapons(warrior)
-            two_handed_use = (warrior.secondary_weapon == "Open Hand" and weapon.two_hand)
-            if not (r.spear_exception and weapon.category == "Polearm/Spear"):
-                weight_penalty = strength_penalty(weapon.weight, effective_str, two_handed_use)
-                if weight_penalty > 0:
-                    base *= (1.0 - weight_penalty)
-
             two_handed = (warrior.secondary_weapon == "Open Hand" and weapon.two_hand)
 
             # Check if weapon is heavy (weight 4.0+) or two-handed

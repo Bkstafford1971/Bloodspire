@@ -570,8 +570,23 @@ def _fights_section(card, champion_state: Optional[dict] = None,
             )
 
             if _get_attr(r, "loser_died"):
-                line = (f"★ CHAMPION'S TITLE FIGHT ★  {wname} has slain {lname} to claim the"
-                        f" Champion's Title in a {mins} minute {style} {fight_descriptor}!")
+                # Check if winner was already champion before this fight
+                winner_wid = _get_attr(winner, "warrior_id")
+                prev_champ_name = prev_champion_state.get("name", "") if prev_champion_state else ""
+                prev_champ_wid = prev_champion_state.get("warrior_id") if prev_champion_state else None
+                winner_was_prev_champ = (
+                    (prev_champ_wid and winner_wid and prev_champ_wid == winner_wid) or
+                    (not prev_champ_wid and prev_champ_name and _get_attr(winner, "name") == prev_champ_name)
+                )
+
+                if winner_was_prev_champ:
+                    # Champion retained title by killing opponent
+                    line = (f"★ CHAMPION'S TITLE FIGHT ★  {wname} has slain {lname} to retain the"
+                            f" Champion's Title in a {mins} minute {style} {fight_descriptor}!")
+                else:
+                    # New champion claimed title by killing opponent
+                    line = (f"★ CHAMPION'S TITLE FIGHT ★  {wname} has slain {lname} to claim the"
+                            f" Champion's Title in a {mins} minute {style} {fight_descriptor}!")
             elif loser_was_champ:
                 # Loser was the champion, so winner TOOK the title
                 verb = random.choice(["seized the championship from", "dethroned",
