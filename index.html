@@ -91,7 +91,10 @@
                 <div class="content-box">
                     <p style="text-align: center; margin: 15px 0;">
                         <a href="#" id="viewLatestAnnouncement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            🛡️ JUNE 5, 2026 — STATE OF THE ARENA & FUTURE TOURNAMENTS
+                            🛡️ JUNE 10, 2026 — CLIENT V2.8 & ARCHIVE UPDATES
+                        </a>
+                        <a href="#" id="viewJune5Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            JUNE 5, 2026 — STATE OF THE ARENA & FUTURE TOURNAMENTS
                         </a>
                         <a href="#" id="viewJune1Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
                             JUNE 1, 2026 — OFFLINE FIGHTS & ARENA STATS
@@ -108,8 +111,27 @@
         </main>
     </div>
 
-    <!-- Latest Announcement Modal (June 5) -->
     <div id="latestAnnouncementModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>CLIENT V2.8 & ARCHIVE UPDATES — JUNE 10, 2026</h2>
+            <div class="modal-scroll-body">
+                <p><strong>Honored Managers,</strong></p>
+                
+                <p>Client version 2.8 is available. This version adds in a templates option. Any strategy loadout can now be made into a template and can then be imported at any time into any warrior to speed up the strategy process. This load out does include an option to include the equipment on the import, but can be unselected if you just want the strategy only.</p>
+                
+                <p>Also, I updated the Archive tab to have each warrior be expandable. Now you will see the Deceased warrior name, race/gender and final record in a list format. Select the warrior to expand and have the warrior view with fight history. As more warriors die I wanted to make this less cluttered.</p>
+                
+                <p>There are a couple of other small aesthetic changes I made for visualizations. Most of which you will not even notice.</p>
+                
+                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
+                    — ILNEVAL
+                </p>
+            </div>
+            <button class="close-modal-btn" id="closeLatestModal">Dismiss</button>
+        </div>
+    </div>
+
+    <div id="june5AnnouncementModal" class="modal-overlay">
         <div class="modal-content">
             <h2>STATE OF THE ARENA & UPDATES — JUNE 5, 2026</h2>
             <div class="modal-scroll-body">
@@ -155,11 +177,10 @@
                     — ILNEVAL
                 </p>
             </div>
-            <button class="close-modal-btn" id="closeLatestModal">Dismiss</button>
+            <button class="close-modal-btn" id="closeJune5Modal">Dismiss</button>
         </div>
     </div>
 
-    <!-- June 1 Announcement Modal -->
     <div id="june1AnnouncementModal" class="modal-overlay">
         <div class="modal-content">
             <h2>ARENA UPDATE — JUNE 1, 2026</h2>
@@ -182,7 +203,6 @@
         </div>
     </div>
 
-    <!-- May 29 Announcement Modal -->
     <div id="newAnnouncementModal" class="modal-overlay">
         <div class="modal-content">
             <h2>ARENA UPDATE — MAY 29, 2026</h2>
@@ -220,7 +240,6 @@
         </div>
     </div>
 
-    <!-- May 27 Announcement Modal -->
     <div id="announcementModal" class="modal-overlay">
         <div class="modal-content">
             <h2 id="modalTitle">Official Playtest Proclamation</h2>
@@ -302,26 +321,42 @@
             const closeJune1 = document.getElementById('closeJune1Modal');
             const viewJune1 = document.getElementById('viewJune1Announcement');
 
-            // Latest Modal (June 5)
+            // June 5 Modal
+            const june5Modal = document.getElementById('june5AnnouncementModal');
+            const closeJune5 = document.getElementById('closeJune5Modal');
+            const viewJune5 = document.getElementById('viewJune5Announcement');
+
+            // Latest Modal (June 10)
             const latestModal = document.getElementById('latestAnnouncementModal');
             const closeLatest = document.getElementById('closeLatestModal');
             const viewLatest = document.getElementById('viewLatestAnnouncement');
 
             // Show latest announcement automatically if not seen
-            if (!localStorage.getItem('bloodspire_update_20260605')) {
+            if (!localStorage.getItem('bloodspire_update_20260610')) {
                 latestModal.style.display = 'block';
             }
 
             // Close latest modal
             closeLatest.onclick = () => { 
                 latestModal.style.display = 'none'; 
-                localStorage.setItem('bloodspire_update_20260605', 'true'); 
+                localStorage.setItem('bloodspire_update_20260610', 'true'); 
             };
 
             // Open latest modal via link
             viewLatest.onclick = function(e) {
                 e.preventDefault();
                 latestModal.style.display = 'block';
+            };
+
+            // Close June 5 modal
+            closeJune5.onclick = () => { 
+                june5Modal.style.display = 'none'; 
+            };
+
+            // Open June 5 modal via link
+            viewJune5.onclick = function(e) {
+                e.preventDefault();
+                june5Modal.style.display = 'block';
             };
 
             // Close June 1 modal
