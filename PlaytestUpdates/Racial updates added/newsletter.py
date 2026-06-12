@@ -161,8 +161,23 @@ def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
     champion_fought = False
     if current_champ:
         champion_fought = (current_champ_tid, current_champ) in warriors_who_fought
-    
-    # RULE 4: If champion exists and fought this turn, they keep the title
+
+    # Also check if champion was a winner in any bout (handles peasant/NPC fights)
+    champion_won = False
+    if current_champ and card and not champion_fought:
+        for bout in card:
+            if not bout:
+                continue
+            # Check if champion was the winner
+            winner = bout.get("result", {}).get("winner") if isinstance(bout, dict) else getattr(bout, "result", {}).winner if hasattr(bout, "result") else None
+            if winner:
+                winner_name = winner.name if hasattr(winner, "name") else (winner.get("name") if isinstance(winner, dict) else "")
+                if winner_name == current_champ:
+                    champion_won = True
+                    champion_fought = True
+                    break
+
+    # RULE 4: If champion exists and fought (and won or at least participated), they keep the title
     if current_champ and champion_fought:
         is_new = (current_champ != prev_champ)
         return champion_state, is_new

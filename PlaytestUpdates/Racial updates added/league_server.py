@@ -27,7 +27,7 @@ from file_protection import save_json_protected, load_json_protected, make_file_
 import webbrowser
 from typing import Optional
 
-SERVER_VERSION = "2.7.4"
+SERVER_VERSION = "2.8"
 
 BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
 LEAGUE_DIR   = os.path.join(BASE_DIR, "saves", "league")
@@ -1217,10 +1217,10 @@ def _run_turn(request_password, rerun_turn=None):
                 ws = e["warriors"][standings_key]
                 ws["name"] = wn
                 ws["warrior_id"] = wid
-                ws["wins"] = ws.get("wins", 0) + wd.get("wins", 0)
-                ws["losses"] = ws.get("losses", 0) + wd.get("losses", 0)
-                ws["kills"] = ws.get("kills", 0) + wd.get("kills", 0)
-                ws["fights"] = ws.get("fights", 0) + wd.get("total_fights", 0)
+                ws["wins"] = wd.get("wins", 0)
+                ws["losses"] = wd.get("losses", 0)
+                ws["kills"] = wd.get("kills", 0)
+                ws["fights"] = wd.get("total_fights", 0)
         _save_standings(standings)
     except Exception as _se:
         import traceback
@@ -1441,10 +1441,14 @@ def _run_turn(request_password, rerun_turn=None):
                     (not _cur_champ_wid and _loser.name == _cur_champ and _loser_team.team_id == _cur_champ_tid)
                 )
                 if _loser_is_champ:
-                    _champ_beaten_by = _winner.name
-                    _champ_beaten_by_wid = getattr(_winner, "warrior_id", None)
-                    _champ_beaten_team = _bout.player_team.team_name if _pw_won else _bout.opponent_team.team_name
-                    _champ_beaten_team_id = _bout.player_team.team_id if _pw_won else _bout.opponent_team.team_id
+                    # Only allow player warriors to claim the championship, not NPCs/peasants
+                    _winner_team = _bout.player_team if _pw_won else _bout.opponent_team
+                    _winner_team_name = _winner_team.team_name if hasattr(_winner_team, "team_name") else _winner_team.get("team_name", "")
+                    if _winner_team_name not in ("The Monsters", "The Peasants"):
+                        _champ_beaten_by = _winner.name
+                        _champ_beaten_by_wid = getattr(_winner, "warrior_id", None)
+                        _champ_beaten_team = _bout.player_team.team_name if _pw_won else _bout.opponent_team.team_name
+                        _champ_beaten_team_id = _bout.player_team.team_id if _pw_won else _bout.opponent_team.team_id
                     break
 
         prev_champion_name = champ_state.get("name", "")

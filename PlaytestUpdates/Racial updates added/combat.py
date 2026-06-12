@@ -2618,43 +2618,43 @@ class CombatEngine:
     # WEAPON MANAGEMENT FOR OPPORTUNITY THROW
     # =========================================================================
 
-    def _handle_opportunity_throw_loss(self, warrior: Warrior, state: _CState) -> Optional[str]:
+    def _handle_opportunity_throw_loss(self, warrior: Warrior, state: _CState, thrown_wpn: str) -> Optional[str]:
         """
-        When Opportunity Throw style lands a hit, the thrown weapon is lost.
-        Replace primary weapon with backup (if same type), then secondary, else Open Hand.
-        Return narrative message if weapon was lost, or None if still using same weapon.
+        The thrown weapon is consumed from inventory (it's in the air regardless of hit/miss).
+        Dispatches on which slot held the thrown weapon so inventory always reflects reality.
+        Returns a narrative message only when the primary hand changes; None otherwise.
         """
-        current_primary = warrior.primary_weapon
-        
-        # Determine if weapon is throwable (not already Open Hand, and has weight)
-        try:
-            wpn_obj = get_weapon(current_primary)
-            if wpn_obj.skill_key == "empty_hand":  # Open Hand has no weight
-                return None
-        except ValueError:
-            return None
-
         # Goblin scavenger: track every thrown weapon for potential recovery
         if warrior.race.modifiers.scavenger:
-            state.thrown_pool.append(current_primary)
-        
-        # Check if backup exists and is same weapon type as primary
-        if warrior.backup_weapon and warrior.backup_weapon == current_primary:
-            # Promote backup to primary, clear the old primary slot
-            warrior.primary_weapon = warrior.backup_weapon
-            warrior.backup_weapon = None
-            return f"{warrior.name.upper()} draws {warrior.gender_possessive} backup {current_primary.lower()}!"
+            state.thrown_pool.append(thrown_wpn)
 
-        # No matching backup, try secondary weapon
-        if warrior.secondary_weapon != "Open Hand":
-            old_secondary = warrior.secondary_weapon
-            warrior.primary_weapon = warrior.secondary_weapon
+        if warrior.primary_weapon == thrown_wpn:
+            # Primary was thrown — find the next weapon to fill the primary hand.
+            # 1. Backup of same type (drawn as a ready replacement)
+            if warrior.backup_weapon and warrior.backup_weapon == thrown_wpn:
+                warrior.backup_weapon = None
+                return f"{warrior.name.upper()} draws {warrior.gender_possessive} backup {thrown_wpn.lower()}!"
+            # 2. Secondary promoted to primary
+            if warrior.secondary_weapon and warrior.secondary_weapon != "Open Hand":
+                old_secondary = warrior.secondary_weapon
+                warrior.primary_weapon = warrior.secondary_weapon
+                warrior.secondary_weapon = "Open Hand"
+                return f"{warrior.name.upper()} switches to {warrior.gender_possessive} {old_secondary.lower()}!"
+            # 3. Empty-handed — style override at the call site handles fallback silently
+            warrior.primary_weapon = "Open Hand"
+            return None
+
+        elif warrior.secondary_weapon == thrown_wpn:
+            # Off-hand weapon was thrown — no draw needed, just clear the slot
             warrior.secondary_weapon = "Open Hand"
-            return f"{warrior.name.upper()} switches to {warrior.gender_possessive} {old_secondary.lower()}!"
-        
-        # Fall back to Open Hand
-        warrior.primary_weapon = "Open Hand"
-        return f"{warrior.name.upper()} has no more throwables and resorts to martial combat!"
+            return None
+
+        elif warrior.backup_weapon == thrown_wpn:
+            # Backup was drawn and thrown as a bonus action — clear the slot
+            warrior.backup_weapon = None
+            return None
+
+        return None
 
     # =========================================================================
     # GOBLIN SCAVENGER
@@ -2799,6 +2799,34 @@ class CombatEngine:
         att = as_.warrior;  dfr = ds_.warrior
         wpn = att.primary_weapon;  aim = ax.aim_point
 
+        # ── Opportunity Throw: Swap to throwable weapon if primary isn't ────
+        # If on Opportunity Throw strategy but primary weapon isn't throwable,
+        # try to use secondary or backup weapon instead for the throw.
+        _throw_from_backup = False
+        if ax.style == "Opportunity Throw":
+            try:
+                wpn_obj = get_weapon(wpn)
+                if not wpn_obj.throwable or wpn_obj.skill_key == "empty_hand":
+                    # Primary is not throwable, try secondary
+                    if att.secondary_weapon and att.secondary_weapon != "Open Hand":
+                        try:
+                            sec_wpn_obj = get_weapon(att.secondary_weapon)
+                            if sec_wpn_obj.throwable and sec_wpn_obj.skill_key != "empty_hand":
+                                wpn = att.secondary_weapon
+                        except ValueError:
+                            pass
+                    # If secondary didn't work, try backup
+                    if wpn == att.primary_weapon and att.backup_weapon:
+                        try:
+                            bak_wpn_obj = get_weapon(att.backup_weapon)
+                            if bak_wpn_obj.throwable and bak_wpn_obj.skill_key != "empty_hand":
+                                wpn = att.backup_weapon
+                                _throw_from_backup = True
+                        except ValueError:
+                            pass
+            except ValueError:
+                pass
+
         # ── Ground Recovery: Attacker on ground ────────────────────────────
         # The warrior acting has WON the initiative. If they're on the ground,
         # they get a good chance to get up (60-80% base). Success consumes
@@ -2828,16 +2856,27 @@ class CombatEngine:
                 self._emit(N.ground_struggle_line(att.name, att.gender))
 
         # If a warrior is on Opportunity Throw strategy but their current weapon is
-        # not throwable (e.g. Open Hand after running out of throwables), override
-        # the style to a sensible melee fallback for this action only.  This prevents
-        # "hurls his open hand at..." narrative when the fighter has nothing left to throw.
+        # not throwable (e.g. Open Hand), check if they have a throwable secondary weapon.
+        # If they do, allow the Opportunity Throw to proceed (will use secondary weapon).
+        # If not, override to a sensible melee fallback to prevent "hurls his open hand at..." narrative.
         if ax.style == "Opportunity Throw":
             try:
                 _wpn_check = get_weapon(wpn)
                 if not _wpn_check.throwable:
-                    import copy as _copy
-                    ax = _copy.copy(ax)
-                    ax.style = "Martial Combat" if wpn == "Open Hand" else "Strike"
+                    # Check if secondary weapon is throwable
+                    _has_throwable_secondary = False
+                    try:
+                        _sec_wpn_check = get_weapon(att.secondary_weapon)
+                        if _sec_wpn_check.throwable:
+                            _has_throwable_secondary = True
+                    except ValueError:
+                        pass
+
+                    # Only override style if no throwable secondary weapon available
+                    if not _has_throwable_secondary:
+                        import copy as _copy
+                        ax = _copy.copy(ax)
+                        ax.style = "Martial Combat" if wpn == "Open Hand" else "Strike"
             except ValueError:
                 import copy as _copy
                 ax = _copy.copy(ax)
@@ -2850,20 +2889,16 @@ class CombatEngine:
             if scav_result:
                 return None   # bonus throw already handled; advance to next action
 
-        # Opportunity Throw: consume the weapon before the attack (weapon is gone regardless
-        # of outcome — it's in the air). Defer the swap narrative until after the attack
-        # line so the sequence reads: "throws → [draws next weapon] → result", not
-        # "[draws next weapon] → throws → result".
+        # Track throw state — inventory update is deferred until after the pre-attack
+        # strategy re-evaluation so fatigue triggers fire against the old (unmodified)
+        # inventory. The actual weapon consumption happens just before the attack roll.
         _weapon_thrown_away = False
         _weapon_loss_msg    = None
-        if ax.style == "Opportunity Throw":
-            try:
-                wpn_obj = get_weapon(wpn)
-                if wpn_obj.skill_key != "empty_hand":  # Only consume if throwable
-                    _weapon_thrown_away = True
-                    _weapon_loss_msg = self._handle_opportunity_throw_loss(att, as_)
-            except ValueError:
-                pass  # Invalid weapon, continue without loss
+
+        # Backup draw: warrior is pulling the backup weapon from their belt to throw.
+        # Emit before the throw intent so the sequence reads draw → aim → throw.
+        if _throw_from_backup:
+            self._emit(f"{att.name.upper()} draws {att.gender_possessive} backup {wpn.lower()} from {att.gender_possessive} belt!")
 
         # Check weapon/style compatibility
         is_compatible, penalty_factor = _check_weapon_style_compatibility(wpn, ax.style)
@@ -2913,8 +2948,21 @@ class CombatEngine:
         if self.debug_logger:
             self.debug_logger.log_action_burn(as_.warrior.name, ax.style, _self_burn)
 
-        # Re-evaluate both warriors' strategies after endurance update (fatigue triggers)
+        # Re-evaluate both warriors' strategies after endurance update (fatigue triggers).
+        # The throw weapon is still in inventory here, so no throw-based trigger fires yet.
         self._check_and_switch_strategies(as_, ds_, minute)
+
+        # Opportunity Throw: consume the weapon now — after fatigue-based re-evaluation
+        # but before the attack roll. The weapon is in the air regardless of outcome;
+        # the trigger-based strategy switch fires later via post-resolution checks.
+        if ax.style == "Opportunity Throw":
+            try:
+                wpn_obj = get_weapon(wpn)
+                if wpn_obj.skill_key != "empty_hand":
+                    _weapon_thrown_away = True
+                    _weapon_loss_msg = self._handle_opportunity_throw_loss(att, as_, wpn)
+            except ValueError:
+                pass
 
         # --- Phase III: endurance collapse ---
         if as_.endurance <= 0:
@@ -3050,6 +3098,8 @@ class CombatEngine:
                 if (ax.style == "Calculated Attack" and not ca_precision_landed
                         and random.randint(1, 100) <= CA_PROBE_EMIT_CHANCE):
                     self._emit(N.calculated_probe_line(att.name, dfr.name))
+                elif ax.style == "Opportunity Throw":
+                    self._emit(N.throw_miss_line(att.name, wpn, dfr.name))
                 else:
                     self._emit(N.miss_line(att.name, wpn))
             elif margin <= -30:
@@ -3118,6 +3168,7 @@ class CombatEngine:
                                     self._emit(_gnome_cs_line(dfr.name, att.name))
                                     _defensive_narrative_emitted = True
                                 if _weapon_loss_msg: self._emit(_weapon_loss_msg)
+                                if _weapon_thrown_away: self._check_and_switch_strategies(as_, ds_, minute)
                                 return self._counterstrike(ds_, as_, dx, ax, minute)
 
                         # Standard riposte skill path (all races)
@@ -3126,6 +3177,7 @@ class CombatEngine:
                             if random.randint(1, 100) <= _rip_chance:
                                 self._emit(N.counterstrike_line(dfr.name, att.name))
                                 if _weapon_loss_msg: self._emit(_weapon_loss_msg)
+                                if _weapon_thrown_away: self._check_and_switch_strategies(as_, ds_, minute)
                                 return self._counterstrike(ds_, as_, dx, ax, minute)
 
                         # Counterstrike style path (all races)
@@ -3133,6 +3185,7 @@ class CombatEngine:
                             if random.randint(1, 100) <= 30 + dfr.skills.get("parry", 0) * 5:
                                 self._emit(N.counterstrike_line(dfr.name, att.name))
                                 if _weapon_loss_msg: self._emit(_weapon_loss_msg)
+                                if _weapon_thrown_away: self._check_and_switch_strategies(as_, ds_, minute)
                                 return self._counterstrike(ds_, as_, dx, ax, minute)
                 else:
                     if not _crit_def and not _defensive_narrative_emitted:
@@ -3154,6 +3207,7 @@ class CombatEngine:
                         if random.randint(1, 100) <= _weak_chance:
                             self._emit(_gnome_cs_line(dfr.name, att.name))
                             if _weapon_loss_msg: self._emit(_weapon_loss_msg)
+                            if _weapon_thrown_away: self._check_and_switch_strategies(as_, ds_, minute)
                             return self._counterstrike(ds_, as_, dx, ax, minute)
                 else:
                     if not _crit_def and not _defensive_narrative_emitted:
@@ -3163,7 +3217,10 @@ class CombatEngine:
             # --- Req 4: Heavy Parry Disarm Check ---
             # If it was a parry and the attack subtotal was huge, might drop weapon.
             # Cestus and Open Hand fighters cannot be disarmed - emit numbness instead.
-            if use_p and atk_r > (dfr.strength * 4):
+            # Skip if the defense point was actively covering this aim location — a
+            # "particularly strong" defense should not result in losing the weapon.
+            _dp_shielded = dx.defense_point not in (None, "None") and dx.defense_point == aim
+            if use_p and atk_r > (dfr.strength * 4) and not _dp_shielded:
                 # Reduced base chance (8%) + disarm skill bonus (2% per level)
                 disarm_chance = 8 + (att.skills.get("disarm", 0) * 2)
                 if random.randint(1, 100) <= disarm_chance:
@@ -3214,6 +3271,8 @@ class CombatEngine:
             # Weapon swap message: after the miss/parry/dodge result is clear
             if _weapon_loss_msg:
                 self._emit(_weapon_loss_msg)
+            if _weapon_thrown_away:
+                self._check_and_switch_strategies(as_, ds_, minute)
 
             # Primary missed/was parried - Elf may still find an opening with the off-hand
             return self._try_elf_extra_attack(as_, ds_, ax, dx, minute)
@@ -3227,6 +3286,8 @@ class CombatEngine:
             self._check_defender_strategy_only(ds_, as_, minute)
             if _weapon_loss_msg:
                 self._emit(_weapon_loss_msg)
+            if _weapon_thrown_away:
+                self._check_and_switch_strategies(as_, ds_, minute)
             # Graze - Elf may still follow with the off-hand
             return self._try_elf_extra_attack(as_, ds_, ax, dx, minute)
 
@@ -3289,17 +3350,17 @@ class CombatEngine:
         if ax.style == "Opportunity Throw" and att.race.modifiers.thrown_mastery:
             dmg += 4
 
-        # Determine if this is a claw attack (vs kick or tail which are crushing)
-        attack_type = _get_martial_attack_type(att, dfr.name)
-        is_claw = attack_type == "claw"
-        self._emit(N.damage_line(dmg, dfr.max_hp, cat, is_claw_attack=is_claw))
-
-        # Favorite weapon flavor - now emitted only on successful hits
+        # Favorite weapon flavor - emitted after attack line, before damage line
         # Skip if weapon was thrown away - doesn't make sense to praise a weapon that's already gone
         if not _weapon_thrown_away:
             fav_flavor = _get_favorite_weapon_flavor(att, wpn, as_)
             if fav_flavor:
                 self._emit(fav_flavor)
+
+        # Determine if this is a claw attack (vs kick or tail which are crushing)
+        attack_type = _get_martial_attack_type(att, dfr.name)
+        is_claw = attack_type == "claw"
+        self._emit(N.damage_line(dmg, dfr.max_hp, cat, is_claw_attack=is_claw))
 
         # Weapon swap message: after damage lands, attacker draws their next weapon
         if _weapon_loss_msg:

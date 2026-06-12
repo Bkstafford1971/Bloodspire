@@ -20,8 +20,11 @@ def generate_team_roster_html(uploads: dict, team_map: dict, turn_num: int) -> s
 
     uploads  : raw upload dict (for manager IDs and fallen_warriors)
     team_map : post-fight Team objects keyed by upload key (for live records)
+    turn_num : current turn number
     """
-    return _build_html(uploads, team_map, turn_num)
+    # Load results from the most recent completed turn
+    results = _load_most_recent_results()
+    return _build_html(uploads, team_map, turn_num, results)
 
 
 def write_team_roster(html: str, output_dir: str) -> None:
@@ -63,6 +66,52 @@ def _warrior_record(w_obj) -> tuple:
     return w_obj.get("wins", 0), w_obj.get("losses", 0), w_obj.get("kills", 0)
 
 
+def _load_most_recent_results() -> dict:
+    """Load results from most recent completed turn for EACH team.
+
+    Searches back through turns to find the most recent results for each team.
+    Returns dict keyed by {manager_id}_team{team_id} with (result_data, turn_num).
+    """
+    import re
+
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    league_dir = os.path.join(base_dir, "saves", "league")
+    results = {}  # key -> (data, turn_num)
+
+    # Check turns in descending order
+    for turn in range(9999, -1, -1):
+        turn_dir = os.path.join(league_dir, f"turn_{turn:04d}")
+        if not os.path.exists(turn_dir):
+            continue
+
+        # Look for result files in this turn
+        try:
+            for fname in os.listdir(turn_dir):
+                if fname.startswith("result_") and fname.endswith(".json"):
+                    # Extract manager_id and team_id from filename: result_MANAGER_teamTEAM_teamTEAM.json
+                    match = re.search(r'result_(\d+)_team(\d+)', fname)
+                    if not match:
+                        continue
+
+                    manager_id = int(match.group(1))
+                    team_id = int(match.group(2))
+
+                    fpath = os.path.join(turn_dir, fname)
+                    try:
+                        with open(fpath, "r", encoding="utf-8") as f:
+                            data = json.load(f)
+                            key = f"{manager_id}_team{team_id}"
+                            # Only store if we haven't found results for this team yet
+                            if key not in results:
+                                results[key] = (data, turn)
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+
+    return results
+
+
 def _get_team_record_from_standings(team_id: int) -> tuple:
     """Load team career record from standings.json (includes all historical warriors)."""
     standings_path = os.path.join(os.path.dirname(__file__), "saves", "league", "standings.json")
@@ -83,10 +132,12 @@ def _get_team_record_from_standings(team_id: int) -> tuple:
     return 0, 0, 0
 
 
-def _build_html(uploads: dict, team_map: dict, turn_num: int) -> str:
+def _build_html(uploads: dict, team_map: dict, turn_num: int, results: dict = None) -> str:
+    if results is None:
+        results = {}
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    # ── Load standings.json to get all teams (including those that didn't upload) ─
+    # ── Load all data sources ────────────────────────────────────────────────
     standings_data = {}
     standings_path = os.path.join(os.path.dirname(__file__), "saves", "league", "standings.json")
     try:
@@ -95,57 +146,73 @@ def _build_html(uploads: dict, team_map: dict, turn_num: int) -> str:
     except Exception as e:
         print(f"  Warning: Could not load standings.json: {e}")
 
+    managers_data = {}
+    managers_path = os.path.join(os.path.dirname(__file__), "saves", "league", "managers.json")
+    try:
+        with open(managers_path, "r", encoding="utf-8") as f:
+            managers_data = json.load(f)
+    except Exception as e:
+        print(f"  Warning: Could not load managers.json: {e}")
+
+    # ── Build mapping: team_id -> manager_id ──────────────────────────────
+    team_to_mgr = {}
+    for mid_str, mgr_data in managers_data.items():
+        for team_id in mgr_data.get("team_ids", []):
+            team_to_mgr[int(team_id)] = int(mid_str)
+
     # ── Filter to player uploads ─────────────────────────────────────────────
     player_uploads = {mid: d for mid, d in uploads.items() if not mid.startswith("ai_")}
 
-    # ── Group by manager_id, building from standings data + uploads overlay ─
-    by_manager: Dict[str, List[tuple]] = defaultdict(list)  # real_mid -> [(upload_key, team_data, upload)]
-    manager_names: Dict[str, str]      = {}
+    # ── Group by manager_id (numeric), building from standings + uploads ───
+    by_manager: Dict[int, List[tuple]] = defaultdict(list)  # mgr_id -> [(upload_key, team_data, upload)]
+    manager_names: Dict[int, str]      = {}
+    manager_ids: Dict[int, int]        = {}
 
-    # First, add all teams from standings
+    # First, add all teams from standings (with their manager_id from team_to_mgr)
     for team_key, team_data in standings_data.items():
         team_id = team_data.get("team_id")
         manager_name = team_data.get("manager_name", "")
-        if not team_id or not manager_name:
+        if not team_id or not manager_name or team_id not in team_to_mgr:
             continue
-        # Use manager_name as key since standings.json doesn't have manager_id
-        real_mid = manager_name
-        by_manager[real_mid].append((f"{manager_name}_team{team_id}", team_data, None))
-        manager_names[real_mid] = manager_name
+
+        mgr_id = team_to_mgr[team_id]
+        by_manager[mgr_id].append((f"{mgr_id}_team{team_id}", team_data, None))
+        manager_names[mgr_id] = manager_name
+        manager_ids[mgr_id] = mgr_id
 
     # Then overlay uploads data (to get the latest from this turn)
     for upload_key, upload in player_uploads.items():
         manager_name = upload.get("manager_name", "")
-        if not manager_name:
+        manager_id = upload.get("manager_id")
+        if not manager_name or manager_id is None:
             continue
-        real_mid = manager_name
-        manager_names[real_mid] = manager_name
 
-        # Find and update existing team entry from standings, or add new
+        manager_id = int(manager_id)
+        manager_names[manager_id] = manager_name
+        manager_ids[manager_id] = manager_id
+
+        # Find and update existing team entry from standings
         team_data = upload.get("team", {})
         team_id = team_data.get("team_id")
         if not team_id:
             continue
 
         found = False
-        if real_mid in by_manager:
-            for i, (existing_key, existing_team, _) in enumerate(by_manager[real_mid]):
+        if manager_id in by_manager:
+            for i, (existing_key, existing_team, _) in enumerate(by_manager[manager_id]):
                 if existing_team.get("team_id") == team_id:
-                    by_manager[real_mid][i] = (upload_key, team_data, upload)
+                    by_manager[manager_id][i] = (upload_key, team_data, upload)
                     found = True
                     break
         if not found:
-            by_manager[real_mid].append((upload_key, team_data, upload))
+            by_manager[manager_id].append((upload_key, team_data, upload))
 
-    sorted_mgr_ids = sorted(
-        by_manager.keys(),
-        key=lambda m: int(m) if str(m).isdigit() else float("inf")
-    )
+    sorted_mgr_ids = sorted(by_manager.keys())
 
     # ── Build roster HTML ────────────────────────────────────────────────────
     roster_blocks = ""
     for mgr_id in sorted_mgr_ids:
-        mgr_name = manager_names[mgr_id]
+        mgr_name = manager_names.get(mgr_id, str(mgr_id))
         teams    = sorted(by_manager[mgr_id],
                           key=lambda t: t[1].get("team_id", 0))
 
@@ -153,25 +220,48 @@ def _build_html(uploads: dict, team_map: dict, turn_num: int) -> str:
         for upload_key, team_data, upload in teams:
             team_name   = team_data.get("team_name", "?")
             team_id     = team_data.get("team_id",   "?")
-            last_turn   = team_data.get("last_turn_ran") or "—"
 
-            # Use post-fight Team object from team_map when available
-            team_obj  = team_map.get(upload_key)
+            # Prefer post-fight data from results (most recent completed turn for THIS team)
+            raw_warriors = []
+            last_turn = "-"
 
-            if team_obj is not None:
-                # Post-fight warriors (includes dead from this turn)
-                raw_warriors = team_obj.warriors or []
-            else:
-                # Fallback: read from team data (pre-fight)
-                warriors_data = team_data.get("warriors") or []
-                # Convert dict to list if needed (standings.json uses dict format)
+            if upload_key in results:
+                # Use warriors and turn from most recent results for this team
+                result_data, result_turn = results[upload_key]
+                result_team = result_data.get("team", {})
+                warriors_data = result_team.get("warriors") or []
                 if isinstance(warriors_data, dict):
                     raw_warriors = list(warriors_data.values())
                 else:
                     raw_warriors = warriors_data
+                last_turn = str(result_turn)
+            else:
+                team_obj = team_map.get(upload_key)
+                if team_obj is not None:
+                    # Post-fight Team object from team_map
+                    raw_warriors = team_obj.warriors or []
+                else:
+                    # Fallback: read from team data (standings or upload)
+                    warriors_data = team_data.get("warriors") or []
+                    # Convert dict to list if needed (standings.json uses dict format)
+                    if isinstance(warriors_data, dict):
+                        raw_warriors = list(warriors_data.values())
+                    else:
+                        raw_warriors = warriors_data
 
-            # Get career record from standings.json (includes all historical warriors)
-            tw, tl, tk = _get_team_record_from_standings(int(team_id)) if str(team_id).isdigit() else (0, 0, 0)
+            # Get team record from result's turn_history (includes all warriors from all turns)
+            tw = tl = tk = 0
+            if upload_key in results:
+                result_data, result_turn = results[upload_key]
+                # Sum up all turns from turn_history for career record
+                turn_history = result_data.get("team", {}).get("turn_history", [])
+                for turn_entry in turn_history:
+                    tw += turn_entry.get("w", 0)
+                    tl += turn_entry.get("l", 0)
+                    tk += turn_entry.get("k", 0)
+            else:
+                # Fall back to standings.json career record (includes all warriors)
+                tw, tl, tk = _get_team_record_from_standings(int(team_id)) if str(team_id).isdigit() else (0, 0, 0)
 
             warrior_rows = ""
             for i, w in enumerate(raw_warriors):
