@@ -4989,11 +4989,12 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                             "type": "team"
                         })
 
-                # Add all result files for this manager across all turns
+                # Add all result files and newsletters for this manager across all turns
                 league_dir = os.path.dirname(_config_path())
                 for fname in os.listdir(league_dir):
                     if fname.startswith("turn_") and os.path.isdir(os.path.join(league_dir, fname)):
                         turn_path = os.path.join(league_dir, fname)
+                        turn_num = int(fname.split("_")[1])
                         for result_file in os.listdir(turn_path):
                             if result_file.startswith(f"result_{mid}_") and result_file.endswith(".json"):
                                 full_path = os.path.join(turn_path, result_file)
@@ -5004,8 +5005,19 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                                     "source": arcname,
                                     "target": f"league/{fname}/{result_file}",
                                     "type": "result",
-                                    "turn": int(fname.split("_")[1])
+                                    "turn": turn_num
                                 })
+                        # Include newsletter for this turn if it exists
+                        nl_file = os.path.join(turn_path, "newsletter.txt")
+                        if os.path.exists(nl_file):
+                            arcname = f"newsletters/turn_{turn_num:03d}.txt"
+                            zf.write(nl_file, arcname=arcname)
+                            manifest.append({
+                                "source": arcname,
+                                "target": f"newsletters/turn_{turn_num:03d}.txt",
+                                "type": "newsletter",
+                                "turn": turn_num
+                            })
 
                 # Add manifest file
                 manifest_json = json.dumps(manifest, indent=2)

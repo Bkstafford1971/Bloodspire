@@ -470,14 +470,14 @@ async function extractZipFiles(arrayBuffer) {
         const dirPath = pathParts.join('/');
 
         // Write file using FSA
-        if (window.electronAPI) {
+        if (entry.type === 'newsletter') {
+          const text = new TextDecoder().decode(content);
+          await Store.writeNewsletter(entry.turn, text);
+          extracted++;
+        } else if (window.electronAPI) {
           // Electron mode
           const fullPath = `${baseDir}/${entry.target}`;
-          if (entry.type === 'team') {
-            const result = await window.electronAPI.writeJson(fullPath, JSON.parse(new TextDecoder().decode(content)));
-            if (!result.success) failed.push(filename);
-            else extracted++;
-          } else if (entry.type === 'result') {
+          if (entry.type === 'team' || entry.type === 'result') {
             const result = await window.electronAPI.writeJson(fullPath, JSON.parse(new TextDecoder().decode(content)));
             if (!result.success) failed.push(filename);
             else extracted++;
@@ -500,7 +500,25 @@ async function extractZipFiles(arrayBuffer) {
       }
     }
 
+    // Process raw result files through apply_league_results so the turn
+    // results view works without requiring another server download.
+    const resultEntries = manifest.filter(e => e.type === 'result');
+    let processedTurns = new Set();
+    for (const entry of resultEntries) {
+      try {
+        const sourceFile = loaded.file(entry.source);
+        if (!sourceFile) continue;
+        const data = JSON.parse(await sourceFile.async('string'));
+        if (!data || !data.team_id || !data.turn) continue;
+        const applied = await API.post('/api/apply_league_results', { team_id: data.team_id, result: data });
+        if (applied.success) processedTurns.add(data.turn);
+      } catch (e) {
+        console.warn('ZIP restore: could not process result entry', entry.source, e);
+      }
+    }
+
     let msg = `✓ Extracted ${extracted} file(s)`;
+    if (processedTurns.size > 0) msg += ` and applied turn ${[...processedTurns].sort().join(', ')} results`;
     if (failed.length > 0) {
       msg += ` (${failed.length} failed: ${failed.slice(0, 3).join(', ')}${failed.length > 3 ? '...' : ''})`;
     }
