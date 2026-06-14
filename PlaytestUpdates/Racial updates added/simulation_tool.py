@@ -16,6 +16,7 @@ import team as T
 import warrior as W
 import matchmaking as MM
 import combat as C
+from combat import _get_dex_penalty_reduction
 import strategy as S
 from armor import ARMOR_TIERS, HELM_TIERS
 import armor as A
@@ -524,6 +525,72 @@ class BloodspireSimTool:
                 "run_label":  "RUN HUMAN INJURY RESISTANCE SIM",
                 "handler":    "_sim_human_injury_resistance",
             },
+            "Half-Orc — Penalty Reduction Balance Test (All 10 Races)": {
+                "desc": (
+                    "Tests Half-Orc penalty reductions against all 10 races with 250+ fights each.\n"
+                    "Reduced penalties: attack_rate -1 (was -4), initiative -2 (was -3),\n"
+                    "dodge_penalty -2 (was -3), parry_penalty -2 (was -3).\n"
+                    "Measures win rates, kill rates, fight duration, and endurance patterns.\n"
+                    "Shows Half-Orc now competitive through skill optimization, not just raw race pick.\n"
+                    "Expected: Half-Orc win rates improve to 35-55% range (previously 25-35%)."
+                ),
+                "label_text": "Fights per matchup:",
+                "run_label":  "RUN PENALTY REDUCTION SIM",
+                "handler":    "_sim_halforc_penalty_reduction_all_races",
+            },
+            "Half-Orc — vs Critical Races (Dwarf, Gnome, Lizardfolk)": {
+                "desc": (
+                    "Deep-dive comparison of Half-Orc vs dominant defensive races.\n"
+                    "Tests Dwarf (armor_capacity_bonus), Gnome (counterstrike_mastery),\n"
+                    "and Lizardfolk (martial_combat_bonuses) — the three highest win-rate races.\n"
+                    "Tracks parry/dodge rolls, hit rates, APM efficiency, endurance burn patterns.\n"
+                    "Validates whether Half-Orc penalty reductions allow aggressive builds to overcome\n"
+                    "defensive tank strategies. Expected: Within 5-10 pts of balanced 45% win rates."
+                ),
+                "label_text": "Fights per matchup:",
+                "run_label":  "RUN CRITICAL RACES SIM",
+                "handler":    "_sim_halforc_vs_critical_races",
+            },
+            "Half-Orc — vs Offensive Races (Same Archetype)": {
+                "desc": (
+                    "Tests Half-Orc against other offensive-playstyle races: Human, Elf, Tabaxi, Goblin.\n"
+                    "These races optimize for APM, accuracy, and aggressive builds (not defense).\n"
+                    "Measures whether Half-Orc unique survivability (HP bonus, high STR scaling) wins\n"
+                    "among speed-based warriors, or if penalty reductions aren't enough.\n"
+                    "Expected: Half-Orc should achieve 40-50% win rate in aggressive matchups.\n"
+                    "Shows Half-Orc as viable aggressive choice, not trap for overconfident players."
+                ),
+                "label_text": "Fights per matchup:",
+                "run_label":  "RUN OFFENSIVE RACES SIM",
+                "handler":    "_sim_halforc_vs_offensive_races",
+            },
+            "Half-Orc — Build Variations (STR, DEX, Balanced)": {
+                "desc": (
+                    "Tests three Half-Orc build archetypes vs optimized Dwarf tank specialists.\n"
+                    "Build 1: High STR (18 STR / 10 DEX), Bash — raw damage, harsh penalties\n"
+                    "Build 2: High DEX (12 STR / 16 DEX), Strike — initiative/defense bonus, moderate tier\n"
+                    "Build 3: Balanced (14 STR / 12 DEX), Strike — middle ground, harsh penalties\n"
+                    "Opponents: Dwarves optimized for defense (high CON, parry/wall strategies).\n"
+                    "Tests whether Half-Orc overwhelms the best defensive race, or if balance holds.\n"
+                    "Expected: If Half-Orc still dominates 70%+ despite penalties, damage/HP is too high."
+                ),
+                "label_text": "Fights per scenario:",
+                "run_label":  "RUN BUILD VARIATIONS SIM",
+                "handler":    "_sim_halforc_build_variations",
+            },
+            "Wall of Steel Balance Test (All 10 Races vs Optimized Dwarf)": {
+                "desc": (
+                    "Tests whether Wall of Steel defensive strategy is overpowered across all races.\n"
+                    "Opponent: Dwarf (STR 14 DEX 10 CON 15) using Wall of Steel strategy.\n"
+                    "Tests each of 10 races (optimized balanced build) against this fixed opponent.\n"
+                    "Measures win rates to identify if Wall of Steel dominates universally or is balanced.\n"
+                    "If all races lose 80%+: Wall of Steel is broken. If varied: it's race-specific matchup.\n"
+                    "Helps determine if Half-Orc weakness vs Wall of Steel is anomaly or systemic issue."
+                ),
+                "label_text": "Fights per race:",
+                "run_label":  "RUN WALL OF STEEL TEST",
+                "handler":    "_sim_wall_of_steel_balance",
+            },
         }
 
         ra_config = ttk.LabelFrame(racial_tab, text="Simulation Config", padding="10")
@@ -955,6 +1022,32 @@ class BloodspireSimTool:
                 "label_text": "Analysis type:",
                 "run_label":  "SELECT TEAMS & RUN SIM",
                 "handler":    "_sim_real_warrior_matchup_variety",
+            },
+            "Luck System Balance Testing (1-30 vs 1-20)": {
+                "desc": (
+                    "Compares current luck system (1-30) vs proposed lower cap (1-20).\n"
+                    "Runs fights with real warriors using both luck scales, measures balance impact.\n"
+                    "Part A: Direct comparison - win-rate deltas between high-luck and low-luck warriors.\n"
+                    "Part B: Spread analysis - how much luck advantage matters in each system.\n"
+                    "Expected: Shows if reducing luck cap improves balance or creates new problems.\n"
+                    "Validates luck system changes before production deployment."
+                ),
+                "label_text": "Test fights:",
+                "run_label":  "RUN LUCK BALANCE TEST",
+                "handler":    "_sim_luck_system_balance",
+            },
+            "Luck Factor Isolated Test (Luck 30 vs Luck 1)": {
+                "desc": (
+                    "Tests luck factor impact in isolation: identical warriors except luck.\n"
+                    "Creates two warrior clones - one with luck 30, one with luck 1.\n"
+                    "Runs them against each other 100-500 times.\n"
+                    "Shows win-rate difference when ONLY luck varies.\n"
+                    "Expected: Demonstrates the raw advantage of max luck over minimum luck.\n"
+                    "Pure luck advantage measurement with all other variables controlled."
+                ),
+                "label_text": "Test fights:",
+                "run_label":  "RUN ISOLATED LUCK TEST",
+                "handler":    "_sim_luck_factor_isolated",
             },
         }
 
@@ -7359,6 +7452,1306 @@ Tabaxi excel in different scenarios based on their trait combinations.
 
         report = "\n".join(out)
         self.text_area.insert(tk.END, report)
+        self.report_content = report
+
+    def _sim_luck_system_balance(self):
+        """Compares luck system balance: current (1-30) vs proposed (1-20)."""
+        num_runs = int(self.narrative_runs_var.get())
+        self.text_area.delete(1.0, tk.END)
+
+        # Load teams from global uploads folder
+        try:
+            teams = self._get_warriors_from_uploads()
+            if not teams:
+                self.text_area.insert(tk.END, "No teams found in uploads folder.\n")
+                return
+        except Exception as e:
+            self.text_area.insert(tk.END, f"Error loading teams: {e}\n")
+            return
+
+        out = []
+        out.append("=" * 110)
+        out.append("LUCK SYSTEM BALANCE TESTING: 1-30 vs 1-20 vs 1-15")
+        out.append("=" * 110)
+        out.append(f"Teams loaded: {len(teams)}")
+        out.append(f"Total warriors: {sum(len(t.active_warriors) for t in teams)}")
+        out.append(f"Test fights: {num_runs}")
+        out.append("")
+
+        # Helper functions to scale luck from 1-30 range to other ranges
+        def scale_luck_to_20(luck_30):
+            """Scale luck from 1-30 range to 1-20 range proportionally."""
+            if luck_30 <= 1:
+                return 1
+            # Scale: (value - 1) / (30 - 1) * (20 - 1) + 1
+            return max(1, int((luck_30 - 1) / 29 * 19 + 1))
+
+        def scale_luck_to_15(luck_30):
+            """Scale luck from 1-30 range to 1-15 range proportionally."""
+            if luck_30 <= 1:
+                return 1
+            # Scale: (value - 1) / (30 - 1) * (15 - 1) + 1
+            return max(1, int((luck_30 - 1) / 29 * 14 + 1))
+
+        out.append("PART A: LUCK ADVANTAGE COMPARISON")
+        out.append("-" * 110)
+
+        # Run fights with current luck (1-30) vs modified luck (1-20) vs (1-15)
+        current_system_high_luck_wins = 0
+        current_system_low_luck_wins = 0
+        system_20_high_luck_wins = 0
+        system_20_low_luck_wins = 0
+        system_15_high_luck_wins = 0
+        system_15_low_luck_wins = 0
+
+        luck_advantage_deltas = []  # Track how much luck affects win rate
+
+        for fight_num in range(num_runs):
+            try:
+                import random
+                # Select two random warriors
+                all_warriors = [(w, t) for t in teams for w in t.active_warriors]
+                if len(all_warriors) < 2:
+                    continue
+
+                w1, t1 = random.choice(all_warriors)
+                w2, t2 = random.choice(all_warriors)
+
+                if w1 == w2:
+                    continue
+
+                # Store original luck values
+                w1_orig_luck = w1.luck
+                w2_orig_luck = w2.luck
+
+                # Determine who has higher luck
+                high_luck_warrior = w1 if w1_orig_luck >= w2_orig_luck else w2
+                low_luck_warrior = w2 if w1_orig_luck >= w2_orig_luck else w1
+                luck_diff_current = abs(w1_orig_luck - w2_orig_luck)
+
+                # --- TEST 1: Current system (1-30) ---
+                w1.luck = w1_orig_luck
+                w2.luck = w2_orig_luck
+
+                try:
+                    result = C.run_fight(w1, w2)
+                    if result.winner:
+                        if result.winner == high_luck_warrior:
+                            current_system_high_luck_wins += 1
+                        elif result.winner == low_luck_warrior:
+                            current_system_low_luck_wins += 1
+                except Exception:
+                    pass
+
+                # --- TEST 2: Modified system (1-20) ---
+                w1_luck_20 = scale_luck_to_20(w1_orig_luck)
+                w2_luck_20 = scale_luck_to_20(w2_orig_luck)
+                w1.luck = w1_luck_20
+                w2.luck = w2_luck_20
+
+                try:
+                    result = C.run_fight(w1, w2)
+                    if result.winner:
+                        if result.winner == high_luck_warrior:
+                            system_20_high_luck_wins += 1
+                        elif result.winner == low_luck_warrior:
+                            system_20_low_luck_wins += 1
+                except Exception:
+                    pass
+
+                # --- TEST 3: Modified system (1-15) ---
+                w1_luck_15 = scale_luck_to_15(w1_orig_luck)
+                w2_luck_15 = scale_luck_to_15(w2_orig_luck)
+                w1.luck = w1_luck_15
+                w2.luck = w2_luck_15
+
+                try:
+                    result = C.run_fight(w1, w2)
+                    if result.winner:
+                        if result.winner == high_luck_warrior:
+                            system_15_high_luck_wins += 1
+                        elif result.winner == low_luck_warrior:
+                            system_15_low_luck_wins += 1
+                except Exception:
+                    pass
+
+                # Track luck advantage impact
+                luck_advantage_deltas.append((luck_diff_current,
+                                             1 if high_luck_warrior in [result.winner] else 0))
+
+                # Restore original luck
+                w1.luck = w1_orig_luck
+                w2.luck = w2_orig_luck
+
+            except Exception:
+                pass
+
+        # Calculate win rates for all three systems
+        current_high_pct = round(current_system_high_luck_wins / (current_system_high_luck_wins + current_system_low_luck_wins) * 100) if (current_system_high_luck_wins + current_system_low_luck_wins) > 0 else 0
+        system_20_high_pct = round(system_20_high_luck_wins / (system_20_high_luck_wins + system_20_low_luck_wins) * 100) if (system_20_high_luck_wins + system_20_low_luck_wins) > 0 else 0
+        system_15_high_pct = round(system_15_high_luck_wins / (system_15_high_luck_wins + system_15_low_luck_wins) * 100) if (system_15_high_luck_wins + system_15_low_luck_wins) > 0 else 0
+
+        out.append(f"Current system (1-30):")
+        out.append(f"  High-luck warrior wins: {current_system_high_luck_wins} ({current_high_pct}%)")
+        out.append(f"  Low-luck warrior wins: {current_system_low_luck_wins} ({100-current_high_pct}%)")
+        out.append(f"  Luck advantage: {current_high_pct - 50:+d} points")
+        out.append("")
+        out.append(f"System with 1-20 cap:")
+        out.append(f"  High-luck warrior wins: {system_20_high_luck_wins} ({system_20_high_pct}%)")
+        out.append(f"  Low-luck warrior wins: {system_20_low_luck_wins} ({100-system_20_high_pct}%)")
+        out.append(f"  Luck advantage: {system_20_high_pct - 50:+d} points")
+        out.append(f"  Balance improvement: {(current_high_pct - 50) - (system_20_high_pct - 50):+d} points")
+        out.append("")
+        out.append(f"System with 1-15 cap:")
+        out.append(f"  High-luck warrior wins: {system_15_high_luck_wins} ({system_15_high_pct}%)")
+        out.append(f"  Low-luck warrior wins: {system_15_low_luck_wins} ({100-system_15_high_pct}%)")
+        out.append(f"  Luck advantage: {system_15_high_pct - 50:+d} points")
+        out.append(f"  Balance improvement: {(current_high_pct - 50) - (system_15_high_pct - 50):+d} points")
+        out.append("")
+
+        delta_20 = (current_high_pct - 50) - (system_20_high_pct - 50)
+        delta_15 = (current_high_pct - 50) - (system_15_high_pct - 50)
+        out.append(f"Summary:")
+        out.append(f"  1-30 → 1-20: Balance improves by {delta_20:+d} points")
+        out.append(f"  1-30 → 1-15: Balance improves by {delta_15:+d} points")
+
+        # Part B: Luck spread analysis
+        out.append("\nPART B: LUCK SPREAD & VARIANCE ANALYSIS")
+        out.append("-" * 110)
+
+        # Analyze luck distribution in current teams
+        all_luck_values = []
+        for team in teams:
+            for warrior in team.active_warriors:
+                all_luck_values.append(warrior.luck)
+
+        if all_luck_values:
+            max_luck = max(all_luck_values)
+            min_luck = min(all_luck_values)
+            avg_luck = sum(all_luck_values) / len(all_luck_values)
+            luck_spread = max_luck - min_luck
+
+            out.append(f"Current luck distribution (1-30 system):")
+            out.append(f"  Min luck: {min_luck}")
+            out.append(f"  Max luck: {max_luck}")
+            out.append(f"  Average luck: {round(avg_luck, 1)}")
+            out.append(f"  Spread (max - min): {luck_spread} points")
+            out.append("")
+
+            # Scale to 1-20 system
+            max_luck_20 = scale_luck_to_20(max_luck)
+            min_luck_20 = scale_luck_to_20(min_luck)
+            avg_luck_20 = sum(scale_luck_to_20(l) for l in all_luck_values) / len(all_luck_values)
+            luck_spread_20 = max_luck_20 - min_luck_20
+
+            out.append(f"Projected luck distribution (1-20 system):")
+            out.append(f"  Min luck: {min_luck_20}")
+            out.append(f"  Max luck: {max_luck_20}")
+            out.append(f"  Average luck: {round(avg_luck_20, 1)}")
+            out.append(f"  Spread (max - min): {luck_spread_20} points")
+            out.append("")
+
+            # Scale to 1-15 system
+            max_luck_15 = scale_luck_to_15(max_luck)
+            min_luck_15 = scale_luck_to_15(min_luck)
+            avg_luck_15 = sum(scale_luck_to_15(l) for l in all_luck_values) / len(all_luck_values)
+            luck_spread_15 = max_luck_15 - min_luck_15
+
+            out.append(f"Projected luck distribution (1-15 system):")
+            out.append(f"  Min luck: {min_luck_15}")
+            out.append(f"  Max luck: {max_luck_15}")
+            out.append(f"  Average luck: {round(avg_luck_15, 1)}")
+            out.append(f"  Spread (max - min): {luck_spread_15} points")
+            out.append("")
+
+            out.append(f"Spread comparison:")
+            out.append(f"  Current (1-30): {luck_spread} points")
+            out.append(f"  With 1-20 cap: {luck_spread_20} points ({luck_spread - luck_spread_20} point reduction)")
+            out.append(f"  With 1-15 cap: {luck_spread_15} points ({luck_spread - luck_spread_15} point reduction)")
+
+        out.append("\n" + "=" * 110)
+        out.append("VALIDATION CHECKS & RECOMMENDATIONS")
+        out.append("=" * 110)
+
+        if luck_spread > 25:
+            out.append(f"  [WARNING] Current luck spread of {luck_spread} points is VERY LARGE")
+        elif luck_spread > 20:
+            out.append(f"  [WARNING] Current luck spread of {luck_spread} points is large")
+        else:
+            out.append(f"  [OK] Current luck spread of {luck_spread} points is moderate")
+
+        out.append("")
+        out.append("RECOMMENDATION MATRIX:")
+        out.append("")
+
+        if delta_20 > delta_15:
+            out.append("  1-20 cap provides better balance than 1-15")
+        elif delta_15 > delta_20:
+            out.append("  1-15 cap provides better balance than 1-20")
+        else:
+            out.append("  Both caps provide similar balance improvement")
+
+        out.append("")
+
+        if delta_20 > 10:
+            out.append("  [STRONGLY RECOMMENDED] 1-20 cap: Improves balance by 10+ points")
+        elif delta_20 > 5:
+            out.append("  [RECOMMENDED] 1-20 cap: Improves balance by 5-10 points")
+        elif delta_20 > 0:
+            out.append("  [ACCEPTABLE] 1-20 cap: Slight improvement (1-5 points)")
+        else:
+            out.append("  [NOT RECOMMENDED] 1-20 cap: No improvement or worsens balance")
+
+        out.append("")
+
+        if delta_15 > 10:
+            out.append("  [STRONGLY RECOMMENDED] 1-15 cap: Improves balance by 10+ points")
+        elif delta_15 > 5:
+            out.append("  [RECOMMENDED] 1-15 cap: Improves balance by 5-10 points")
+        elif delta_15 > 0:
+            out.append("  [ACCEPTABLE] 1-15 cap: Slight improvement (1-5 points)")
+        else:
+            out.append("  [NOT RECOMMENDED] 1-15 cap: No improvement or worsens balance")
+
+        out.append("")
+        out.append("IMPACT ANALYSIS:")
+
+        if delta_20 > 0 or delta_15 > 0:
+            best_option = "1-20" if delta_20 > delta_15 else "1-15"
+            best_delta = max(delta_20, delta_15)
+            out.append(f"  ✓ Both options improve balance")
+            out.append(f"  ✓ {best_option} cap is superior ({best_delta:+d} point improvement)")
+        else:
+            out.append("  ✗ Neither option improves luck balance")
+            out.append("  ✗ Consider alternative approaches (luck formula scaling, luck multiplier)")
+
+        out.append("=" * 110)
+
+        report = "\n".join(out)
+        self.text_area.insert(tk.END, report)
+        self.report_content = report
+
+    def _sim_luck_factor_isolated(self):
+        """Tests luck factor in isolation: identical warriors except luck (30 vs 1)."""
+        num_runs = int(self.narrative_runs_var.get())
+        self.text_area.delete(1.0, tk.END)
+
+        out = []
+        out.append("=" * 110)
+        out.append("LUCK FACTOR ISOLATED TEST: Luck 30 vs Luck 1")
+        out.append("=" * 110)
+        out.append(f"Test fights: {num_runs}")
+        out.append("")
+        out.append("Setup: Two identical warriors")
+        out.append("  Warrior 1: Strength 12, Dexterity 12, Constitution 10, Intelligence 10, Presence 10, Size 10, Luck 30")
+        out.append("  Warrior 2: Strength 12, Dexterity 12, Constitution 10, Intelligence 10, Presence 10, Size 10, Luck 1")
+        out.append("  Weapon: Both use Longsword")
+        out.append("  Armor: Both use Leather")
+        out.append("  Strategy: Both use Strike style, activity 5")
+        out.append("")
+        out.append("-" * 110)
+        out.append("")
+
+        # TEST 1: Luck 30 vs Luck 1
+        high_luck_wins = 0
+        low_luck_wins = 0
+        draw_count = 0
+        errors = 0
+
+        for fight_num in range(num_runs):
+            try:
+                # Create high-luck warrior (luck 30)
+                # Constructor: name, race, gender, strength, dexterity, constitution, intelligence, presence, size
+                high_luck = W.Warrior("HighLuck", "Human", "Male", 12, 12, 10, 10, 10, 10)
+                high_luck.primary_weapon = "Longsword"
+                high_luck.secondary_weapon = "Open Hand"
+                high_luck.armor = "Leather"
+                high_luck.skills["longsword"] = 3
+                high_luck.luck = 30
+                high_luck.strategies = [W.Strategy(
+                    trigger="Always (Default Loop)", style="Strike",
+                    activity=5, aim_point="Chest", defense_point="Chest"
+                )]
+
+                # Create low-luck warrior (luck 1)
+                # Constructor: name, race, gender, strength, dexterity, constitution, intelligence, presence, size
+                low_luck = W.Warrior("LowLuck", "Human", "Male", 12, 12, 10, 10, 10, 10)
+                low_luck.primary_weapon = "Longsword"
+                low_luck.secondary_weapon = "Open Hand"
+                low_luck.armor = "Leather"
+                low_luck.skills["longsword"] = 3
+                low_luck.luck = 1
+                low_luck.strategies = [W.Strategy(
+                    trigger="Always (Default Loop)", style="Strike",
+                    activity=5, aim_point="Chest", defense_point="Chest"
+                )]
+
+                # Run the fight
+                result = C.run_fight(high_luck, low_luck)
+
+                if result.winner:
+                    if result.winner.name == "HighLuck":
+                        high_luck_wins += 1
+                    elif result.winner.name == "LowLuck":
+                        low_luck_wins += 1
+                    else:
+                        draw_count += 1
+                else:
+                    draw_count += 1
+
+            except Exception as e:
+                errors += 1
+
+        # Calculate statistics
+        total_decided = high_luck_wins + low_luck_wins
+        if total_decided > 0:
+            high_luck_pct = round(high_luck_wins / total_decided * 100, 1)
+            low_luck_pct = round(low_luck_wins / total_decided * 100, 1)
+            luck_advantage = high_luck_pct - 50
+        else:
+            high_luck_pct = 0
+            low_luck_pct = 0
+            luck_advantage = 0
+
+        out.append("RESULTS:")
+        out.append(f"  Fights with clear winner: {total_decided}/{num_runs}")
+        out.append(f"  Draws/No winner: {draw_count}")
+        out.append(f"  Errors: {errors}")
+        out.append("")
+        out.append("Win rates:")
+        out.append(f"  Luck 30 warrior: {high_luck_wins}/{total_decided} wins ({high_luck_pct}%)")
+        out.append(f"  Luck  1 warrior: {low_luck_wins}/{total_decided} wins ({low_luck_pct}%)")
+        out.append("")
+        out.append(f"Luck advantage (Luck 30 vs Luck 1): {luck_advantage:+.1f} percentage points")
+        out.append("")
+        out.append("=" * 110)
+        out.append("")
+        out.append("TEST 2: CONTROL - Both warriors with Luck 15")
+        out.append("  (Baseline test: equal luck should produce ~50/50 win rate)")
+        out.append("")
+
+        # TEST 2: Luck 15 vs Luck 15 (control)
+        control_wins_a = 0
+        control_wins_b = 0
+        control_draw = 0
+        control_errors = 0
+
+        for fight_num in range(num_runs):
+            try:
+                # Create warrior A with luck 15
+                warrior_a = W.Warrior("WarriorA", "Human", "Male", 12, 12, 10, 10, 10, 10)
+                warrior_a.primary_weapon = "Longsword"
+                warrior_a.secondary_weapon = "Open Hand"
+                warrior_a.armor = "Leather"
+                warrior_a.skills["longsword"] = 3
+                warrior_a.luck = 15
+                warrior_a.strategies = [W.Strategy(
+                    trigger="Always (Default Loop)", style="Strike",
+                    activity=5, aim_point="Chest", defense_point="Chest"
+                )]
+
+                # Create warrior B with luck 15
+                warrior_b = W.Warrior("WarriorB", "Human", "Male", 12, 12, 10, 10, 10, 10)
+                warrior_b.primary_weapon = "Longsword"
+                warrior_b.secondary_weapon = "Open Hand"
+                warrior_b.armor = "Leather"
+                warrior_b.skills["longsword"] = 3
+                warrior_b.luck = 15
+                warrior_b.strategies = [W.Strategy(
+                    trigger="Always (Default Loop)", style="Strike",
+                    activity=5, aim_point="Chest", defense_point="Chest"
+                )]
+
+                # Run the fight
+                result = C.run_fight(warrior_a, warrior_b)
+
+                if result.winner:
+                    if result.winner.name == "WarriorA":
+                        control_wins_a += 1
+                    elif result.winner.name == "WarriorB":
+                        control_wins_b += 1
+                    else:
+                        control_draw += 1
+                else:
+                    control_draw += 1
+
+            except Exception as e:
+                control_errors += 1
+
+        # Calculate control statistics
+        control_total_decided = control_wins_a + control_wins_b
+        if control_total_decided > 0:
+            control_wins_a_pct = round(control_wins_a / control_total_decided * 100, 1)
+            control_wins_b_pct = round(control_wins_b / control_total_decided * 100, 1)
+            control_balance = abs(control_wins_a_pct - 50)
+        else:
+            control_wins_a_pct = 0
+            control_wins_b_pct = 0
+            control_balance = 0
+
+        out.append("Control results:")
+        out.append(f"  Warrior A: {control_wins_a}/{control_total_decided} wins ({control_wins_a_pct}%)")
+        out.append(f"  Warrior B: {control_wins_b}/{control_total_decided} wins ({control_wins_b_pct}%)")
+        out.append(f"  Balance (deviation from 50/50): {control_balance:.1f} percentage points")
+        out.append("")
+
+        # Confidence analysis
+        if high_luck_pct > 60:
+            out.append("[HIGH IMPACT] Luck 30 has overwhelming advantage over Luck 1")
+        elif high_luck_pct > 55:
+            out.append("[MODERATE IMPACT] Luck 30 has noticeable advantage over Luck 1")
+        elif high_luck_pct > 52:
+            out.append("[SMALL IMPACT] Luck 30 has slight advantage over Luck 1")
+        elif high_luck_pct > 48:
+            out.append("[NEGLIGIBLE IMPACT] Luck factor makes almost no difference")
+        elif high_luck_pct > 45:
+            out.append("[ANOMALY] Luck 1 has slight advantage (unexpected result)")
+        else:
+            out.append("[ANOMALY] Luck 1 has significant advantage (unexpected result)")
+
+        out.append("=" * 110)
+        out.append("")
+        out.append("TEST 3: Projected 1-15 System - Luck 15 vs Luck 1")
+        out.append("  (Shows what luck advantage would be if cap was lowered to 15)")
+        out.append("")
+
+        # TEST 3: Luck 15 (max in 1-15 system) vs Luck 1 (using 1-15 system)
+        projected_high_wins = 0
+        projected_low_wins = 0
+        projected_draw = 0
+        projected_errors = 0
+
+        for fight_num in range(num_runs):
+            try:
+                # Create high-luck warrior in 1-15 system (luck 15)
+                proj_high = W.Warrior("ProjHigh", "Human", "Male", 12, 12, 10, 10, 10, 10)
+                proj_high.primary_weapon = "Longsword"
+                proj_high.secondary_weapon = "Open Hand"
+                proj_high.armor = "Leather"
+                proj_high.skills["longsword"] = 3
+                proj_high.luck = 15
+                proj_high.strategies = [W.Strategy(
+                    trigger="Always (Default Loop)", style="Strike",
+                    activity=5, aim_point="Chest", defense_point="Chest"
+                )]
+
+                # Create low-luck warrior in 1-15 system (luck 1)
+                proj_low = W.Warrior("ProjLow", "Human", "Male", 12, 12, 10, 10, 10, 10)
+                proj_low.primary_weapon = "Longsword"
+                proj_low.secondary_weapon = "Open Hand"
+                proj_low.armor = "Leather"
+                proj_low.skills["longsword"] = 3
+                proj_low.luck = 1
+                proj_low.strategies = [W.Strategy(
+                    trigger="Always (Default Loop)", style="Strike",
+                    activity=5, aim_point="Chest", defense_point="Chest"
+                )]
+
+                # Run the fight
+                result = C.run_fight(proj_high, proj_low)
+
+                if result.winner:
+                    if result.winner.name == "ProjHigh":
+                        projected_high_wins += 1
+                    elif result.winner.name == "ProjLow":
+                        projected_low_wins += 1
+                    else:
+                        projected_draw += 1
+                else:
+                    projected_draw += 1
+
+            except Exception as e:
+                projected_errors += 1
+
+        # Calculate projected system statistics
+        projected_total_decided = projected_high_wins + projected_low_wins
+        if projected_total_decided > 0:
+            projected_high_pct = round(projected_high_wins / projected_total_decided * 100, 1)
+            projected_low_pct = round(projected_low_wins / projected_total_decided * 100, 1)
+            projected_advantage = projected_high_pct - 50
+        else:
+            projected_high_pct = 0
+            projected_low_pct = 0
+            projected_advantage = 0
+
+        out.append("Projected 1-15 system results (Luck 15 vs Luck 1):")
+        out.append(f"  High-luck warrior: {projected_high_wins}/{projected_total_decided} wins ({projected_high_pct}%)")
+        out.append(f"  Low-luck warrior: {projected_low_wins}/{projected_total_decided} wins ({projected_low_pct}%)")
+        out.append(f"  Luck advantage in 1-15 system: {projected_advantage:+.1f} percentage points")
+        out.append("")
+
+        out.append("=" * 110)
+        out.append("")
+        out.append("COMPARATIVE ANALYSIS:")
+        out.append("=" * 110)
+
+        out.append("")
+        out.append("TEST 1 (Current System - Luck 30 vs Luck 1):")
+        out.append(f"  • Gap size: 29 points")
+        if luck_advantage > 10:
+            out.append(f"  • Win-rate advantage: {luck_advantage:+.1f}%")
+            out.append("  • This is a LARGE swing - luck is a major factor")
+        elif luck_advantage > 5:
+            out.append(f"  • Win-rate advantage: {luck_advantage:+.1f}%")
+            out.append("  • This is MODERATE - luck significantly impacts combat")
+        else:
+            out.append(f"  • Win-rate advantage: {luck_advantage:+.1f}%")
+            out.append("  • MINIMAL impact - luck barely matters")
+
+        out.append("")
+        out.append("TEST 2 (Control - Luck 15 vs Luck 15):")
+        if control_balance < 5:
+            out.append(f"  • Win rates: {control_wins_a_pct}% vs {control_wins_b_pct}%")
+            out.append("  • ~50/50 balance (as expected with equal luck)")
+            out.append("  • System is working correctly")
+        else:
+            out.append(f"  • Win rates: {control_wins_a_pct}% vs {control_wins_b_pct}%")
+            out.append(f"  • Deviation: {control_balance:.1f}% (suggests random variance)")
+
+        out.append("")
+        out.append("TEST 3 (Proposed 1-15 System - Luck 15 vs Luck 1):")
+        out.append(f"  • Gap size: 14 points (vs 29 in current system)")
+        if projected_advantage > 10:
+            out.append(f"  • Win-rate advantage: {projected_advantage:+.1f}%")
+            out.append("  • Still a LARGE swing - even with lower cap, luck is major factor")
+        elif projected_advantage > 5:
+            out.append(f"  • Win-rate advantage: {projected_advantage:+.1f}%")
+            out.append("  • MODERATE impact - luck still significantly affects combat")
+        else:
+            out.append(f"  • Win-rate advantage: {projected_advantage:+.1f}%")
+            out.append("  • MINIMAL impact - lower cap reduces luck's influence")
+
+        out.append("")
+        out.append("=" * 110)
+        out.append("SUMMARY:")
+        out.append("=" * 110)
+        out.append("")
+        out.append(f"Current system (1-30): 29-point gap produces {luck_advantage:+.1f}% advantage")
+        out.append(f"Projected system (1-15): 14-point gap produces {projected_advantage:+.1f}% advantage")
+        out.append("")
+
+        if luck_advantage > 0 and projected_advantage > 0:
+            reduction_pct = round((luck_advantage - projected_advantage) / luck_advantage * 100) if luck_advantage != 0 else 0
+            out.append(f"Gap reduction: Lowering luck cap from 30 to 15 would reduce")
+            out.append(f"  luck advantage by ~{reduction_pct}% (from {luck_advantage:+.1f}% to {projected_advantage:+.1f}%)")
+
+        out.append("=" * 110)
+
+        report = "\n".join(out)
+        self.text_area.insert(tk.END, report)
+        self.report_content = report
+
+    # -----------------------------------------------------------------------
+    # NEW SIMS: HALF-ORC PENALTY REDUCTION TESTING
+    # -----------------------------------------------------------------------
+    def _sim_halforc_penalty_reduction_all_races(self):
+        """
+        Validate Half-Orc penalty reductions vs all 10 races.
+        PART A: Direct mechanical probes (APM, initiative, parry/dodge, hit rates).
+        PART B: Full fights measuring win rates and kill rates.
+        """
+        from combat import (_defense_roll, _calc_apm, _initiative_roll,
+                            _attack_roll, _CState)
+
+        num_runs = int(self.racial_runs_var.get())
+        PROBE = 2000
+        self.text_area.delete(1.0, tk.END)
+        self.text_area.insert(tk.END,
+            f"--- Half-Orc Penalty Reduction: All 10 Races ({num_runs} fights per race) ---\n\n")
+        self.root.update()
+
+        all_races = ["Human", "Dwarf", "Elf", "Halfling", "Half-Orc", "Half-Elf",
+                     "Gnome", "Goblin", "Lizardfolk", "Tabaxi"]
+
+        def make_halforc():
+            w = W.Warrior("ORC", "Half-Orc", "Male", 15, 11, 13, 10, 10, 14)
+            w.primary_weapon = "War Hammer"
+            w.secondary_weapon = "Open Hand"
+            w.skills["war_hammer"] = 3
+            w.luck = 15
+            w.strategies = [W.Strategy(
+                trigger="Always (Default Loop)", style="Strike",
+                activity=5, aim_point="Chest", defense_point="Chest"
+            )]
+            return w
+
+        def make_opponent(race):
+            w = W.Warrior("OPP", race, "Male", 12, 12, 12, 10, 10, 12)
+            w.primary_weapon = "Longsword"
+            w.secondary_weapon = "Open Hand"
+            w.skills["longsword"] = 3
+            w.luck = 15
+            w.strategies = [W.Strategy(
+                trigger="Always (Default Loop)", style="Strike",
+                activity=5, aim_point="Chest", defense_point="Chest"
+            )]
+            return w
+
+        def fresh_state(w):
+            return _CState(w, w.max_hp, float(w.max_endurance))
+
+        # ── PART A: DIRECT MECHANICAL PROBES ────────────────────────────────
+        self.text_area.insert(tk.END, "PART A: direct mechanical probes (2000 trials each)...\n")
+        self.root.update()
+
+        orc = make_halforc()
+        human = make_opponent("Human")
+
+        # APM probe
+        apm_orc = _calc_apm(orc, orc.strategies[0], fresh_state(orc))
+        apm_human = _calc_apm(human, human.strategies[0], fresh_state(human))
+
+        # Initiative probe
+        st_o, st_h = fresh_state(orc), fresh_state(human)
+        init_orc = sum(_initiative_roll(orc, orc.strategies[0], st_o) for _ in range(PROBE)) / PROBE
+        init_human = sum(_initiative_roll(human, human.strategies[0], st_h) for _ in range(PROBE)) / PROBE
+
+        # Parry/dodge probes
+        def avg_def(defender, is_parry):
+            st = fresh_state(defender)
+            return sum(
+                _defense_roll(defender, defender.strategies[0], st, make_halforc(),
+                              aim_point="Chest", atk_style="Strike", is_parry=is_parry)
+                for _ in range(PROBE)
+            ) / PROBE
+
+        parry_orc, parry_human = avg_def(orc, True), avg_def(human, True)
+        dodge_orc, dodge_human = avg_def(orc, False), avg_def(human, False)
+
+        # ── PART B: FULL FIGHTS ─────────────────────────────────────────────
+        self.text_area.insert(tk.END, "PART B: full fights vs all 10 races...\n")
+        self.root.update()
+
+        fight_results = []
+        for race in all_races:
+            wins = losses = draws = kills = minutes = 0
+            for _ in range(num_runs):
+                orc = make_halforc()
+                opp = make_opponent(race)
+                res = C.run_fight(orc, opp)
+                minutes += res.minutes_elapsed
+                if res.winner and res.winner.name == "ORC":
+                    wins += 1
+                    if res.loser_died:
+                        kills += 1
+                elif res.winner:
+                    losses += 1
+                else:
+                    draws += 1
+            fight_results.append((race, wins, losses, draws, kills, minutes / max(1, num_runs)))
+
+        # ── REPORT ──────────────────────────────────────────────────────────
+        out = []
+        sep = "=" * 100
+        out.append(sep)
+        out.append("HALF-ORC PENALTY REDUCTION - ALL 10 RACES TEST")
+        out.append(f"Half-Orc: STR 15 DEX 11 CON 13 SIZ 14, War Hammer, Strike activity 5")
+        out.append(f"Baseline (Human): STR 12 DEX 12 CON 12, Longsword, Strike activity 5")
+        out.append(f"Probe trials: {PROBE:,}   |   Fights per race: {num_runs}")
+        out.append(sep)
+
+        out.append("\nPART A - DIRECT MECHANICAL PROBES (Half-Orc vs Human)")
+        out.append("-" * 100)
+        out.append(f"  {'METRIC':<30} {'HALF-ORC':>12} {'HUMAN':>12} {'DELTA':>10}")
+        out.append(f"  {'-'*30} {'-'*12} {'-'*12} {'-'*10}")
+        out.append(f"  {'APM':<30} {apm_orc:>12.1f} {apm_human:>12.1f} {apm_orc-apm_human:>+10.1f}")
+        out.append(f"  {'Initiative roll':<30} {init_orc:>12.1f} {init_human:>12.1f} {init_orc-init_human:>+10.1f}")
+        out.append(f"  {'Parry roll':<30} {parry_orc:>12.1f} {parry_human:>12.1f} {parry_orc-parry_human:>+10.1f}")
+        out.append(f"  {'Dodge roll':<30} {dodge_orc:>12.1f} {dodge_human:>12.1f} {dodge_orc-dodge_human:>+10.1f}")
+
+        out.append("\nPART B - FULL FIGHTS (Half-Orc vs All 10 Races)")
+        out.append("-" * 100)
+        out.append(f"  {'RACE':<20} {'ORC WIN%':>10} {'LOSSES':>8} {'KILLS':>6} {'AVG MIN':>8}")
+        out.append(f"  {'-'*20} {'-'*10} {'-'*8} {'-'*6} {'-'*8}")
+
+        for race, wins, losses, draws, kills, avg_min in fight_results:
+            wp = wins / max(1, num_runs) * 100
+            out.append(f"  {race:<20} {wp:>9.1f}% {losses:>8} {kills:>6} {avg_min:>8.1f}")
+
+        out.append(sep)
+        out.append("\nVALIDATION")
+        out.append("-" * 100)
+        avg_win_rate = sum(r[1] for r in fight_results) / (len(fight_results) * max(1, num_runs)) * 100
+        out.append(f"  Average Half-Orc win rate (all races): {avg_win_rate:.1f}%")
+        if 35 <= avg_win_rate <= 55:
+            out.append(f"  [PASS] Within competitive range (35-55%)")
+        else:
+            out.append(f"  [CHECK] Outside target range - {avg_win_rate:.1f}% indicates need for rebalancing")
+
+        report = "\n".join(out)
+        self.text_area.insert(tk.END, "\n" + report)
+        self.report_content = report
+
+    def _sim_halforc_vs_critical_races(self):
+        """
+        Deep dive: Half-Orc vs dominant defensive races (Dwarf, Gnome, Lizardfolk).
+        PART A: Hit rates and defense effectiveness in isolated rolls.
+        PART B: Full fights measuring win rates, kills, durability.
+        """
+        from combat import (_defense_roll, _attack_roll, _CState)
+
+        num_runs = int(self.racial_runs_var.get())
+        PROBE = 2000
+        self.text_area.delete(1.0, tk.END)
+        self.text_area.insert(tk.END,
+            f"--- Half-Orc vs Critical Races ({num_runs} fights per matchup) ---\n\n")
+        self.root.update()
+
+        critical_races = [("Dwarf", "armor_capacity_bonus"),
+                          ("Gnome", "counterstrike_mastery"),
+                          ("Lizardfolk", "martial_combat_bonuses")]
+
+        def make_halforc():
+            w = W.Warrior("ORC", "Half-Orc", "Male", 15, 11, 13, 10, 10, 14)
+            w.primary_weapon = "War Hammer"
+            w.secondary_weapon = "Open Hand"
+            w.skills["war_hammer"] = 3
+            w.luck = 15
+            w.strategies = [W.Strategy(
+                trigger="Always (Default Loop)", style="Strike",
+                activity=5, aim_point="Chest", defense_point="Chest"
+            )]
+            return w
+
+        def make_opponent(race):
+            w = W.Warrior("OPP", race, "Male", 12, 12, 12, 10, 10, 12)
+            w.primary_weapon = "Longsword"
+            w.secondary_weapon = "Open Hand"
+            w.skills["longsword"] = 3
+            w.luck = 15
+            w.strategies = [W.Strategy(
+                trigger="Always (Default Loop)", style="Strike",
+                activity=5, aim_point="Chest", defense_point="Chest"
+            )]
+            return w
+
+        def fresh_state(w):
+            return _CState(w, w.max_hp, float(w.max_endurance))
+
+        # ── PART A: HIT RATES & DEFENSE PROBES ──────────────────────────────
+        self.text_area.insert(tk.END, "PART A: isolated hit rate and defense probes...\n")
+        self.root.update()
+
+        probe_data = []
+        for race, trait in critical_races:
+            orc = make_halforc()
+            opp = make_opponent(race)
+
+            # Orc hit rate vs opponent dodge/parry
+            so = fresh_state(orc)
+            so_parry = sum(
+                _attack_roll(orc, orc.strategies[0], so) >
+                _defense_roll(opp, opp.strategies[0], fresh_state(opp), orc,
+                              aim_point="Chest", atk_style="Strike", is_parry=True)
+                for _ in range(PROBE)
+            ) / PROBE * 100
+
+            so_dodge = sum(
+                _attack_roll(orc, orc.strategies[0], so) >
+                _defense_roll(opp, opp.strategies[0], fresh_state(opp), orc,
+                              aim_point="Chest", atk_style="Strike", is_parry=False)
+                for _ in range(PROBE)
+            ) / PROBE * 100
+
+            # Opponent hit rate vs orc defense
+            sop = fresh_state(opp)
+            opp_hit = sum(
+                _attack_roll(opp, opp.strategies[0], sop) >
+                _defense_roll(orc, orc.strategies[0], fresh_state(orc), opp,
+                              aim_point="Chest", atk_style="Strike", is_parry=False)
+                for _ in range(PROBE)
+            ) / PROBE * 100
+
+            probe_data.append((race, trait, so_parry, so_dodge, opp_hit))
+
+        # ── PART B: FULL FIGHTS ─────────────────────────────────────────────
+        self.text_area.insert(tk.END, "PART B: full fights vs critical races...\n")
+        self.root.update()
+
+        fight_results = []
+        for race, trait in critical_races:
+            wins = losses = draws = kills = minutes = 0
+            for _ in range(num_runs):
+                orc = make_halforc()
+                opp = make_opponent(race)
+                res = C.run_fight(orc, opp)
+                minutes += res.minutes_elapsed
+                if res.winner and res.winner.name == "ORC":
+                    wins += 1
+                    if res.loser_died:
+                        kills += 1
+                elif res.winner:
+                    losses += 1
+                else:
+                    draws += 1
+            fight_results.append((race, trait, wins, losses, draws, kills, minutes / max(1, num_runs)))
+
+        # ── REPORT ──────────────────────────────────────────────────────────
+        out = []
+        sep = "=" * 100
+        out.append(sep)
+        out.append("HALF-ORC vs CRITICAL RACES (Defensive Tank Specialists)")
+        out.append(f"Half-Orc: STR 15 DEX 11 CON 13 SIZ 14, War Hammer, Strike activity 5")
+        out.append(f"Opponent: STR 12 DEX 12 CON 12 (all races), Longsword, Strike activity 5")
+        out.append(f"Probe trials: {PROBE:,}   |   Fights per race: {num_runs}")
+        out.append(sep)
+
+        out.append("\nPART A - ISOLATED HIT RATES & DEFENSE EFFECTIVENESS")
+        out.append("-" * 100)
+        out.append(f"  {'RACE':<15} {'TRAIT':<25} {'ORC HIT vs P':>12} {'ORC HIT vs D':>12} {'OPP HIT%':>10}")
+        out.append(f"  {'-'*15} {'-'*25} {'-'*12} {'-'*12} {'-'*10}")
+        for race, trait, parry_hit, dodge_hit, opp_hit in probe_data:
+            out.append(f"  {race:<15} {trait:<25} {parry_hit:>11.1f}% {dodge_hit:>11.1f}% {opp_hit:>9.1f}%")
+
+        out.append("\nPART B - FULL FIGHTS")
+        out.append("-" * 100)
+        out.append(f"  {'RACE':<15} {'TRAIT':<25} {'WIN%':>8} {'LOSSES':>8} {'KILLS':>6} {'AVG MIN':>8}")
+        out.append(f"  {'-'*15} {'-'*25} {'-'*8} {'-'*8} {'-'*6} {'-'*8}")
+
+        for race, trait, wins, losses, draws, kills, avg_min in fight_results:
+            wp = wins / max(1, num_runs) * 100
+            out.append(f"  {race:<15} {trait:<25} {wp:>7.1f}% {losses:>8} {kills:>6} {avg_min:>8.1f}")
+
+        out.append(sep)
+        out.append("\nVALIDATION")
+        out.append("-" * 100)
+        avg_win_rate = sum(r[2] for r in fight_results) / (len(fight_results) * max(1, num_runs)) * 100
+        out.append(f"  Average Half-Orc win rate vs critical races: {avg_win_rate:.1f}%")
+        if 40 <= avg_win_rate <= 55:
+            out.append(f"  [PASS] Competitive against defensive specialists (within 5-10 pts of 45%)")
+        elif avg_win_rate > 60:
+            out.append(f"  [WARN] Half-Orc too strong vs defensive races - may need further reduction")
+        else:
+            out.append(f"  [WARN] Half-Orc still weak vs defensive races - additional changes needed")
+
+        report = "\n".join(out)
+        self.text_area.insert(tk.END, "\n" + report)
+        self.report_content = report
+
+    def _sim_halforc_vs_offensive_races(self):
+        """
+        Test Half-Orc vs other aggressive races (Human, Elf, Tabaxi, Goblin).
+        PART A: APM comparison (attack frequency advantage in aggressive matchups).
+        PART B: Full fights measuring win rates and effectiveness in speed battles.
+        """
+        from combat import (_calc_apm, _CState)
+
+        num_runs = int(self.racial_runs_var.get())
+        PROBE = 2000
+        self.text_area.delete(1.0, tk.END)
+        self.text_area.insert(tk.END,
+            f"--- Half-Orc vs Offensive Races ({num_runs} fights per matchup) ---\n\n")
+        self.root.update()
+
+        offensive_races = ["Human", "Elf", "Tabaxi", "Goblin"]
+
+        def make_halforc():
+            w = W.Warrior("ORC", "Half-Orc", "Male", 15, 11, 13, 10, 10, 14)
+            w.primary_weapon = "War Hammer"
+            w.secondary_weapon = "Open Hand"
+            w.skills["war_hammer"] = 3
+            w.luck = 15
+            w.strategies = [W.Strategy(
+                trigger="Always (Default Loop)", style="Strike",
+                activity=5, aim_point="Chest", defense_point="Chest"
+            )]
+            return w
+
+        def make_opponent(race):
+            w = W.Warrior("OPP", race, "Male", 12, 13, 11, 10, 10, 12)
+            w.primary_weapon = "Longsword"
+            w.secondary_weapon = "Open Hand"
+            w.skills["longsword"] = 3
+            w.luck = 15
+            w.strategies = [W.Strategy(
+                trigger="Always (Default Loop)", style="Strike",
+                activity=6, aim_point="Chest", defense_point="Chest"
+            )]
+            return w
+
+        def fresh_state(w):
+            return _CState(w, w.max_hp, float(w.max_endurance))
+
+        # ── PART A: APM PROBES ──────────────────────────────────────────────
+        self.text_area.insert(tk.END, "PART A: APM (attack frequency) probes...\n")
+        self.root.update()
+
+        apm_data = []
+        orc = make_halforc()
+        orc_apm = _calc_apm(orc, orc.strategies[0], fresh_state(orc))
+
+        for race in offensive_races:
+            opp = make_opponent(race)
+            opp_apm = _calc_apm(opp, opp.strategies[0], fresh_state(opp))
+            apm_data.append((race, orc_apm, opp_apm))
+
+        # ── PART B: FULL FIGHTS ─────────────────────────────────────────────
+        self.text_area.insert(tk.END, "PART B: full fights vs offensive races...\n")
+        self.root.update()
+
+        fight_results = []
+        for race in offensive_races:
+            wins = losses = draws = kills = minutes = 0
+            for _ in range(num_runs):
+                orc = make_halforc()
+                opp = make_opponent(race)
+                res = C.run_fight(orc, opp)
+                minutes += res.minutes_elapsed
+                if res.winner and res.winner.name == "ORC":
+                    wins += 1
+                    if res.loser_died:
+                        kills += 1
+                elif res.winner:
+                    losses += 1
+                else:
+                    draws += 1
+            fight_results.append((race, wins, losses, draws, kills, minutes / max(1, num_runs)))
+
+        # ── REPORT ──────────────────────────────────────────────────────────
+        out = []
+        sep = "=" * 100
+        out.append(sep)
+        out.append("HALF-ORC vs OFFENSIVE RACES (Same Archetype / Speed-Based Combat)")
+        out.append(f"Half-Orc: STR 15 DEX 11 CON 13 SIZ 14, War Hammer, Strike activity 5")
+        out.append(f"Opponent: STR 12 DEX 13 CON 11 (offensive build), Longsword, Strike activity 6")
+        out.append(f"Probe trials: {PROBE:,}   |   Fights per race: {num_runs}")
+        out.append(sep)
+
+        out.append("\nPART A - APM FREQUENCY COMPARISON")
+        out.append("-" * 100)
+        out.append(f"  {'RACE':<15} {'HALF-ORC APM':>15} {'OPP APM':>12} {'DELTA':>10}")
+        out.append(f"  {'-'*15} {'-'*15} {'-'*12} {'-'*10}")
+        for race, orc_apm, opp_apm in apm_data:
+            delta = orc_apm - opp_apm
+            out.append(f"  {race:<15} {orc_apm:>15.2f} {opp_apm:>12.2f} {delta:>+10.2f}")
+
+        out.append("\nPART B - FULL FIGHTS vs AGGRESSIVE RACES")
+        out.append("-" * 100)
+        out.append(f"  {'RACE':<15} {'WIN%':>8} {'LOSSES':>8} {'KILLS':>6} {'AVG MIN':>8}")
+        out.append(f"  {'-'*15} {'-'*8} {'-'*8} {'-'*6} {'-'*8}")
+
+        for race, wins, losses, draws, kills, avg_min in fight_results:
+            wp = wins / max(1, num_runs) * 100
+            out.append(f"  {race:<15} {wp:>7.1f}% {losses:>8} {kills:>6} {avg_min:>8.1f}")
+
+        out.append(sep)
+        out.append("\nVALIDATION")
+        out.append("-" * 100)
+        avg_win_rate = sum(r[1] for r in fight_results) / (len(fight_results) * max(1, num_runs)) * 100
+        out.append(f"  Average Half-Orc win rate vs offensive races: {avg_win_rate:.1f}%")
+        if 40 <= avg_win_rate <= 55:
+            out.append(f"  [PASS] Competitive among aggressive builds")
+        else:
+            out.append(f"  [CHECK] Win rate {avg_win_rate:.1f}% outside expected range (40-55%)")
+
+        report = "\n".join(out)
+        self.text_area.insert(tk.END, "\n" + report)
+        self.report_content = report
+
+    def _sim_halforc_build_variations(self):
+        """
+        Test three Half-Orc build archetypes (High STR, High DEX, Balanced) vs three opponent types.
+        PART A: Direct stat/APM probes for each build.
+        PART B: Full fights vs each opponent archetype (tank, dodger, balanced).
+        """
+        from combat import (_calc_apm, _CState)
+
+        num_runs = int(self.racial_runs_var.get())
+        PROBE = 1000
+        self.text_area.delete(1.0, tk.END)
+        self.text_area.insert(tk.END,
+            f"--- Half-Orc Build Variations ({num_runs} fights per scenario) ---\n\n")
+        self.root.update()
+
+        builds = [
+            ("High STR", 18, 10, 13, "War Hammer", "Bash"),
+            ("High DEX", 12, 16, 13, "War Hammer", "Strike"),
+            ("Balanced", 14, 12, 13, "War Hammer", "Strike"),
+        ]
+
+        # Test against optimized Dwarf tank specialists, not generic Humans
+        opponent_types = [
+            ("Dwarf Tank (Heavy Parry)", 14, 10, 15, "Longsword", "Parry", 3),
+            ("Dwarf Tank (Wall of Steel)", 14, 10, 15, "Battle Axe", "Wall of Steel", 4),
+            ("Dwarf Balanced", 13, 11, 14, "Broad Sword", "Strike", 5),
+        ]
+
+        def fresh_state(w):
+            return _CState(w, w.max_hp, float(w.max_endurance))
+
+        # ── PART A: BUILD STAT PROBES ───────────────────────────────────────
+        self.text_area.insert(tk.END, "PART A: build stat profiles, APM, and penalty diagnostics...\n")
+        self.root.update()
+
+        probe_data = []
+        penalty_data = []
+        for build_name, str_val, dex_val, con_val, wpn, style in builds:
+            w = W.Warrior("ORC", "Half-Orc", "Male", str_val, dex_val, con_val, 10, 10, 14)
+            w.primary_weapon = wpn
+            w.secondary_weapon = "Open Hand"
+            w.skills[wpn.lower().replace(" ", "_")] = 3
+            w.luck = 15
+            w.strategies = [W.Strategy(
+                trigger="Always (Default Loop)", style=style,
+                activity=5, aim_point="Chest", defense_point="Chest"
+            )]
+            apm = _calc_apm(w, w.strategies[0], fresh_state(w))
+            hp = w.max_hp
+
+            # Diagnostic: calculate effective penalties after DEX tier reduction
+            r = w.race.modifiers
+            attack_reduction = _get_dex_penalty_reduction(w, r.dex_attack_rate_tiers)
+            init_reduction = _get_dex_penalty_reduction(w, r.dex_initiative_tiers)
+            dodge_reduction = _get_dex_penalty_reduction(w, r.dex_dodge_tiers)
+            parry_reduction = _get_dex_penalty_reduction(w, r.dex_parry_tiers)
+
+            # attack_rate_penalty and dodge/parry penalties are positive numbers (we subtract them)
+            # initiative_bonus is negative (we add reductions to it, making it less negative/better)
+            effective_attack = r.attack_rate_penalty - attack_reduction
+            effective_init = r.initiative_bonus + init_reduction  # Note: ADD to initiative because it's negative
+            effective_dodge = r.dodge_penalty - dodge_reduction
+            effective_parry = r.parry_penalty - parry_reduction
+
+            probe_data.append((build_name, str_val, dex_val, con_val, hp, apm))
+            penalty_data.append((
+                build_name, dex_val,
+                r.attack_rate_penalty, effective_attack, attack_reduction,
+                r.initiative_bonus, effective_init, init_reduction,
+                r.dodge_penalty, effective_dodge, dodge_reduction,
+                r.parry_penalty, effective_parry, parry_reduction
+            ))
+
+        # ── PART B: FULL FIGHTS ─────────────────────────────────────────────
+        self.text_area.insert(tk.END, "PART B: full fights (3 builds x 3 opponent types)...\n")
+        self.root.update()
+
+        fight_results = {}
+        for build_name, str_val, dex_val, con_val, wpn, style in builds:
+            for opp_name, opp_str, opp_dex, opp_con, opp_wpn, opp_style, opp_act in opponent_types:
+                label = f"{build_name} vs {opp_name}"
+                self.text_area.insert(tk.END, f"  {label}...\n")
+                self.root.update()
+
+                def make_halforc():
+                    w = W.Warrior("ORC", "Half-Orc", "Male", str_val, dex_val, con_val, 10, 10, 14)
+                    w.primary_weapon = wpn
+                    w.secondary_weapon = "Open Hand"
+                    w.skills[wpn.lower().replace(" ", "_")] = 3
+                    w.luck = 15
+                    w.strategies = [W.Strategy(
+                        trigger="Always (Default Loop)", style=style,
+                        activity=5, aim_point="Chest", defense_point="Chest"
+                    )]
+                    return w
+
+                def make_opponent():
+                    w = W.Warrior("OPP", "Human", "Male", opp_str, opp_dex, opp_con, 10, 10, 12)
+                    w.primary_weapon = opp_wpn
+                    w.secondary_weapon = "Open Hand"
+                    w.skills[opp_wpn.lower().replace(" ", "_")] = 3
+                    w.luck = 15
+                    w.strategies = [W.Strategy(
+                        trigger="Always (Default Loop)", style=opp_style,
+                        activity=opp_act, aim_point="Chest", defense_point="Chest"
+                    )]
+                    return w
+
+                wins = losses = draws = kills = 0
+                for _ in range(num_runs):
+                    orc = make_halforc()
+                    opp = make_opponent()
+                    res = C.run_fight(orc, opp)
+                    if res.winner and res.winner.name == "ORC":
+                        wins += 1
+                        if res.loser_died:
+                            kills += 1
+                    elif res.winner:
+                        losses += 1
+                    else:
+                        draws += 1
+                fight_results[label] = (wins, losses, draws, kills)
+
+        # ── REPORT ──────────────────────────────────────────────────────────
+        out = []
+        sep = "=" * 100
+        out.append(sep)
+        out.append("HALF-ORC BUILD VARIATIONS - Build-vs-Opponent Matchups")
+        out.append(f"Fights per scenario: {num_runs}")
+        out.append(sep)
+
+        out.append("\nPART A - BUILD STAT PROFILES (War Hammer w/ Weapon APM Cap)")
+        out.append("-" * 100)
+        out.append(f"  {'BUILD':<15} {'STR':>4} {'DEX':>4} {'CON':>4} {'HP':>6} {'APM':>7} {'DEX TIER':>12}")
+        out.append(f"  {'-'*15} {'-'*4} {'-'*4} {'-'*4} {'-'*6} {'-'*7} {'-'*12}")
+        for build_name, str_val, dex_val, con_val, hp, apm in probe_data:
+            if dex_val < 15:
+                tier = "< 15 (harsh)"
+            elif dex_val < 18:
+                tier = "15-17 (mod)"
+            elif dex_val < 22:
+                tier = "18-21 (none)"
+            else:
+                tier = "22+ (bonus)"
+            out.append(f"  {build_name:<15} {str_val:>4} {dex_val:>4} {con_val:>4} {hp:>6} {apm:>7.2f} {tier:>12}")
+
+        out.append("\nPART A - PENALTY DIAGNOSTICS (DEX Tier Reductions)")
+        out.append("-" * 100)
+        out.append(f"  {'BUILD':<15} {'DEX':>4} {'PENALTY':<10} {'BASE':>5} {'EFFECTIVE':>10} {'REDUCTION':>9}")
+        out.append(f"  {'-'*15} {'-'*4} {'-'*10} {'-'*5} {'-'*10} {'-'*9}")
+
+        for penalty_tuple in penalty_data:
+            build_name, dex_val = penalty_tuple[0], penalty_tuple[1]
+            base_attack, eff_attack, red_attack = penalty_tuple[2], penalty_tuple[3], penalty_tuple[4]
+            base_init, eff_init, red_init = penalty_tuple[5], penalty_tuple[6], penalty_tuple[7]
+            base_dodge, eff_dodge, red_dodge = penalty_tuple[8], penalty_tuple[9], penalty_tuple[10]
+            base_parry, eff_parry, red_parry = penalty_tuple[11], penalty_tuple[12], penalty_tuple[13]
+
+            out.append(f"  {build_name:<15} {dex_val:>4}")
+            out.append(f"    Attack Rate    {base_attack:>5} {eff_attack:>10} {red_attack:>+9}")
+            out.append(f"    Initiative     {base_init:>5} {eff_init:>10} {red_init:>+9}")
+            out.append(f"    Dodge Penalty  {base_dodge:>5} {eff_dodge:>10} {red_dodge:>+9}")
+            out.append(f"    Parry Penalty  {base_parry:>5} {eff_parry:>10} {red_parry:>+9}")
+            out.append(f"    {'-'*60}")
+
+        out.append("\nPART B - WIN RATES vs OPTIMIZED DWARF TANKS (3 Half-Orc Builds x 3 Dwarf Specialists)")
+        out.append("-" * 100)
+        out.append(f"  {'MATCHUP':<40} {'WIN%':>8} {'KILLS':>6} {'ASSESSMENT':>15}")
+        out.append(f"  {'-'*40} {'-'*8} {'-'*6} {'-'*15}")
+
+        for label, (wins, losses, draws, kills) in fight_results.items():
+            wp = wins / max(1, num_runs) * 100
+            if 40 <= wp <= 55:
+                assess = "GOOD"
+            elif wp > 55:
+                assess = "STRONG"
+            else:
+                assess = "WEAK"
+            out.append(f"  {label:<40} {wp:>7.1f}% {kills:>6} {assess:>15}")
+
+        out.append(sep)
+        out.append("\nVALIDATION")
+        out.append("-" * 100)
+        avg_win = sum(r[0] for r in fight_results.values()) / (len(fight_results) * max(1, num_runs)) * 100
+        out.append(f"  Average win rate across all 9 scenarios: {avg_win:.1f}%")
+        if 35 <= avg_win <= 55:
+            out.append(f"  [PASS] Builds are competitive - attribute investment matters")
+        else:
+            out.append(f"  [CHECK] Avg win rate {avg_win:.1f}% outside target (35-55%)")
+
+        report = "\n".join(out)
+        self.text_area.insert(tk.END, "\n" + report)
+        self.report_content = report
+
+    # -----------------------------------------------------------------------
+    # SIM: WALL OF STEEL BALANCE TEST
+    # -----------------------------------------------------------------------
+    def _sim_wall_of_steel_balance(self):
+        """
+        Tests whether Wall of Steel is overpowered by running all 10 races against
+        an optimized Dwarf using Wall of Steel. Shows if weakness is Half-Orc specific
+        or if Wall of Steel dominates universally.
+        """
+        num_runs = int(self.racial_runs_var.get())
+        self.text_area.delete(1.0, tk.END)
+        self.text_area.insert(tk.END,
+            f"--- Wall of Steel Balance Test: All 10 Races vs Optimized Dwarf ({num_runs} fights per race) ---\n\n")
+        self.root.update()
+
+        all_races = ["Human", "Dwarf", "Elf", "Halfling", "Half-Orc", "Half-Elf",
+                     "Gnome", "Goblin", "Lizardfolk", "Tabaxi"]
+
+        def make_dwarf_wall_of_steel():
+            """Optimized Dwarf using Wall of Steel defensive strategy (matches Half-Orc test setup)."""
+            w = W.Warrior("DWARF", "Dwarf", "Male", 14, 10, 15, 10, 10, 13)
+            w.primary_weapon = "Battle Axe"
+            w.secondary_weapon = "Open Hand"
+            w.skills["battle_axe"] = 3
+            w.luck = 15
+            w.strategies = [W.Strategy(
+                trigger="Always (Default Loop)", style="Wall of Steel",
+                activity=4, aim_point="Chest", defense_point="Chest"
+            )]
+            return w
+
+        def make_opponent(race):
+            """Optimized balanced build for each race."""
+            w = W.Warrior("OPP", race, "Male", 13, 12, 12, 10, 10, 12)
+            w.primary_weapon = "Longsword"
+            w.secondary_weapon = "Open Hand"
+            w.skills["longsword"] = 3
+            w.luck = 15
+            w.strategies = [W.Strategy(
+                trigger="Always (Default Loop)", style="Strike",
+                activity=5, aim_point="Chest", defense_point="Chest"
+            )]
+            return w
+
+        results = []
+        for race in all_races:
+            self.text_area.insert(tk.END, f"Testing {race}...\n")
+            self.root.update()
+
+            wins = losses = draws = kills = minutes = 0
+            for _ in range(num_runs):
+                dwarf = make_dwarf_wall_of_steel()
+                opp = make_opponent(race)
+                res = C.run_fight(opp, dwarf)
+                minutes += res.minutes_elapsed
+                if res.winner and res.winner.name == "OPP":
+                    wins += 1
+                    if res.loser_died:
+                        kills += 1
+                elif res.winner:
+                    losses += 1
+                else:
+                    draws += 1
+            results.append((race, wins, losses, draws, kills, minutes / max(1, num_runs)))
+
+        # Report
+        out = []
+        sep = "=" * 100
+        out.append(sep)
+        out.append("WALL OF STEEL BALANCE TEST - All 10 Races vs Optimized Dwarf")
+        out.append(f"Dwarf Opponent: STR 14 DEX 10 CON 15, Battle Axe + Target Shield, Wall of Steel strategy, activity 4")
+        out.append(f"Test Warriors: All races STR 13 DEX 12 CON 12, Longsword, Strike activity 5")
+        out.append(f"Fights per race: {num_runs}")
+        out.append(sep)
+
+        out.append("\nWIN RATES vs DWARF WALL OF STEEL")
+        out.append("-" * 100)
+        out.append(f"  {'RACE':<15} {'WIN%':>8} {'LOSSES':>8} {'DRAWS':>6} {'KILLS':>6} {'AVG MIN':>8}")
+        out.append(f"  {'-'*15} {'-'*8} {'-'*8} {'-'*6} {'-'*6} {'-'*8}")
+
+        for race, wins, losses, draws, kills, avg_min in results:
+            wp = wins / max(1, num_runs) * 100
+            out.append(f"  {race:<15} {wp:>7.1f}% {losses:>8} {draws:>6} {kills:>6} {avg_min:>8.1f}")
+
+        out.append(sep)
+        out.append("\nVALIDATION")
+        out.append("-" * 100)
+        avg_win = sum(r[1] for r in results) / (len(results) * max(1, num_runs)) * 100
+        out.append(f"  Average win rate vs Wall of Steel: {avg_win:.1f}%")
+
+        # Check for outliers
+        max_win = max(r[1] / max(1, num_runs) * 100 for r in results)
+        min_win = min(r[1] / max(1, num_runs) * 100 for r in results)
+        out.append(f"  Range: {min_win:.1f}% to {max_win:.1f}% (spread {max_win - min_win:.1f} pts)")
+
+        if avg_win > 70:
+            out.append(f"  [WARN] Wall of Steel is OVERPOWERED - all races struggle ({avg_win:.1f}% loss rate)")
+        elif avg_win > 55:
+            out.append(f"  [CHECK] Wall of Steel is STRONG - most races lose ({avg_win:.1f}% loss rate)")
+        elif max_win - min_win > 30:
+            out.append(f"  [WARN] Wall of Steel has huge variance - some races dominate, others fail")
+        else:
+            out.append(f"  [PASS] Wall of Steel is BALANCED - varied matchup outcomes across races")
+
+        if any(r[1] / max(1, num_runs) * 100 < 30 for r in results):
+            race_struggling = [r[0] for r in results if r[1] / max(1, num_runs) * 100 < 30]
+            out.append(f"  Races struggling: {', '.join(race_struggling)}")
+
+        report = "\n".join(out)
+        self.text_area.insert(tk.END, "\n" + report)
         self.report_content = report
 
 

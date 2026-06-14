@@ -50,6 +50,14 @@ class RacialModifiers:
     parry_bonus: int = 0
     parry_penalty: int = 0
 
+    # --- Attribute-Driven Scaling Tiers (DEX-based penalty reduction for Half-Orc) ---
+    # Maps DEX threshold -> penalty reduction. Applied only when attribute >= threshold.
+    # Example: {15: -3, 18: -2} means "at DEX 15+, reduce penalty by 3; at DEX 18+, by 2"
+    dex_attack_rate_tiers: dict = field(default_factory=dict)
+    dex_initiative_tiers: dict = field(default_factory=dict)
+    dex_dodge_tiers: dict = field(default_factory=dict)
+    dex_parry_tiers: dict = field(default_factory=dict)
+
     # --- Special Flags (True/False abilities) ---
     armor_capacity_bonus: bool = False   # Dwarf: can carry heavier armor than STR alone allows
     shield_bonus: bool = False           # Dwarf: extra bonus when a shield is equipped
@@ -142,17 +150,26 @@ RACES: dict[str, Race] = {
         is_playable=True,
         description=(
             "Pure brute force. Devastating damage and high durability, "
-            "but slow, clumsy, and easy to outmaneuver."
+            "but slow, clumsy, and easy to outmaneuver. DEX investment unlocks penalties."
         ),
         base_height_in=75,    # 6'3" male SIZE-12 midpoint (range 5'5"–7'6")
         base_weight_lbs=259,
         modifiers=RacialModifiers(
-            damage_bonus=8,              # Massive offensive payoff
+            damage_bonus=5,              # Significant offensive advantage (reduced from 8)
             hp_bonus=6,                  # Very tough
-            attack_rate_penalty=4,       # Slow swings
-            initiative_bonus=-3,         # Slow to act
-            dodge_penalty=3,
-            parry_penalty=3,
+            attack_rate_penalty=4,       # Harsh baseline (DEX scaling reduces this)
+            initiative_bonus=-3,         # Harsh baseline (DEX scaling reduces this)
+            dodge_penalty=3,             # Harsh baseline (DEX scaling reduces this)
+            parry_penalty=3,             # Harsh baseline (DEX scaling reduces this)
+            # DEX-based penalty reduction/bonus tiers
+            # DEX < 15: full harsh penalties (struggling)
+            # DEX 15-17: moderate reduction (competitive baseline)
+            # DEX 18-21: full removal (strong without bonuses)
+            # DEX 22+: actual bonuses (dominating in speed archetype)
+            dex_attack_rate_tiers={15: 3, 18: 4, 22: -2},      # DEX 15->-1, 18->0, 22->+2
+            dex_initiative_tiers={15: 1, 18: 3, 22: -2},       # DEX 15->-2, 18->0, 22->+2
+            dex_dodge_tiers={15: 2, 18: 3, 22: -2},            # DEX 15->-1, 18->0, 22->+2
+            dex_parry_tiers={15: 1, 18: 3, 22: -2},            # DEX 15->-2, 18->0, 22->+2
             preferred_weapons=[
                 "War Flail", "Great Axe", "Great Sword", "War Hammer",
                 "Battle Flail", "Halberd", "Great Pick", "Tower Shield",

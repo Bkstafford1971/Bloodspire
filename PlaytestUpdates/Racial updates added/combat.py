@@ -45,7 +45,7 @@ from combat_debug_logger import CombatDebugLogger
 from warrior  import Warrior, Strategy, ATTRIBUTES
 from strategy import (
     FighterState, evaluate_triggers, get_style_advantage,
-    get_style_props, AGGRESSIVE_STYLES as _AGGRESSIVE_STYLES,
+    get_style_props, get_active_battle_cries, AGGRESSIVE_STYLES as _AGGRESSIVE_STYLES,
 )
 
 # Gnome tactician_edge — opponents using these styles trigger the bonus/penalty.
@@ -141,6 +141,26 @@ VERSATILE_WEAPONS = {
 FINESSE_DAMAGE_WEAPONS = {
     "stiletto", "cestus", "knife", "dagger", "epee"
 }
+
+
+# ---------------------------------------------------------------------------
+# ATTRIBUTE-DRIVEN PENALTY SCALING (Half-Orc DEX tiers)
+# ---------------------------------------------------------------------------
+
+def _get_dex_penalty_reduction(warrior, tier_dict: dict) -> int:
+    """
+    Calculate penalty reduction based on DEX tiers.
+    Returns the amount to reduce the penalty by (0 if no tier applies).
+    Example: tier_dict = {15: 3, 18: 4} means:
+      - DEX < 15: reduction = 0
+      - DEX 15-17: reduction = 3
+      - DEX 18+: reduction = 4 (highest applicable)
+    """
+    if not tier_dict or not hasattr(warrior, 'dexterity'):
+        return 0
+    dex = warrior.dexterity
+    applicable = [reduction for threshold, reduction in tier_dict.items() if dex >= threshold]
+    return max(applicable) if applicable else 0
 
 
 def _is_cleave_weapon(weapon_key: str) -> bool:
@@ -555,6 +575,8 @@ class _CState:
     used_favorite_weapon_this_fight : bool = False  # Tracks if favorite weapon flavor already shown
     bleeding_wounds    : int     = 0   # Cumulative bleeding damage (tracked each round)
     triggered_injuries : dict    = field(default_factory=dict) # {location: level}
+    triggered_battle_cries: set  = field(default_factory=set)  # indices of battle cries that have fired
+    prev_damage_category: str    = "none"  # track damage state transitions for battle cry triggers
     phase2_entered     : bool    = False  # True once warrior has crossed the 25% endurance threshold
     frenzy_used        : bool    = False  # Tabaxi: frenzy ability has been used this fight
     armor_penalty      : float   = 0.0    # fraction 0.0-1.0 from over-weight armor
@@ -618,7 +640,9 @@ def _initiative_roll(warrior: Warrior, strategy: Strategy, state: _CState) -> in
     skill_bonus  = init_val * 4 if init_val >= 5 else init_val * 3
 
     luck_bonus   = warrior.luck
-    race_init_bonus = warrior.race.modifiers.initiative_bonus
+    # Apply DEX-based penalty reduction for Half-Orc initiative
+    r = warrior.race.modifiers
+    race_init_bonus = r.initiative_bonus + _get_dex_penalty_reduction(warrior, r.dex_initiative_tiers)
     props        = get_style_props(strategy.style)
     style_mod    = int(props.apm_modifier * 4)
     activity_mod = (strategy.activity - 5) * 2
@@ -768,6 +792,7 @@ def _defense_roll(
     # +2.5 per point for dodge (rounded), +2 per point for parry.
     dex_trained = defender.attribute_gains.get("dexterity", 0)
 
+    r = defender.race.modifiers
     if is_parry:
         str_b    = max(-5, min(5, (defender.strength - 10) // 2))
         skill_b  = defender.skills.get("parry", 0) * 4
@@ -775,9 +800,10 @@ def _defense_roll(
         style_b  = props.parry_bonus * 3
         act_mod  = (5 - strategy.activity) * 2
         dex_train_parry = int(dex_trained * 2)   # +2 per trained DEX point
-        race_parry_bonus = defender.race.modifiers.parry_bonus * 3  # Apply race parry bonus
-        race_parry_penalty = defender.race.modifiers.parry_penalty * 3  # Apply race parry penalty
-        total    = roll + str_b + skill_b + wpn_b + style_b + act_mod + luck_b + dex_train_parry + race_parry_bonus - race_parry_penalty
+        race_parry_bonus = r.parry_bonus * 3  # Apply race parry bonus
+        # Apply DEX-based penalty reduction for Half-Orc parry
+        effective_parry_penalty = r.parry_penalty - _get_dex_penalty_reduction(defender, r.dex_parry_tiers)
+        total    = roll + str_b + skill_b + wpn_b + style_b + act_mod + luck_b + dex_train_parry + race_parry_bonus - effective_parry_penalty * 3
     else:
         dex      = get_effective_dex_for_race(defender.dexterity, defender.armor or "None", defender.helm or "None", defender.race.name)
         dex_b    = max(-8, min(8, (dex - 10)))
@@ -789,14 +815,15 @@ def _defense_roll(
         size_b   = 5 if size_diff >= 3 else (-5 if size_diff <= -3 else 0)
 
         dex_train_dodge = int(dex_trained * 2.5) # +2.5 per trained DEX point
-        race_dodge_bonus = defender.race.modifiers.dodge_bonus * 2  # Apply race dodge bonus
-        race_dodge_penalty = defender.race.modifiers.dodge_penalty * 2  # Apply race dodge penalty
+        race_dodge_bonus = r.dodge_bonus * 2  # Apply race dodge bonus
+        # Apply DEX-based penalty reduction for Half-Orc dodge
+        effective_dodge_penalty = r.dodge_penalty - _get_dex_penalty_reduction(defender, r.dex_dodge_tiers)
 
         # Acrobatics skill bonus to dodge
         acrobatics_level = defender.skills.get("acrobatics", 0)
         acrobatics_b = acrobatics_level * 2 if acrobatics_level > 0 else 0
 
-        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train_dodge + race_dodge_bonus - race_dodge_penalty + acrobatics_b
+        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train_dodge + race_dodge_bonus - effective_dodge_penalty * 2 + acrobatics_b
 
         # Heavy weapon dodge penalty for Goblins & Tabaxi
         if defender.race.modifiers.heavy_weapon_penalty:
@@ -1927,7 +1954,9 @@ def _calc_apm(warrior: Warrior, strategy: Strategy, state: _CState) -> int:
     base += strategy.activity * 0.25
     base += warrior.skills.get(wpn, 0) * 0.20
     r    = warrior.race.modifiers
-    base += r.attack_rate_bonus * 0.25 - r.attack_rate_penalty * 0.25
+    # Apply DEX-based penalty reduction for Half-Orc
+    effective_attack_rate_penalty = r.attack_rate_penalty - _get_dex_penalty_reduction(warrior, r.dex_attack_rate_tiers)
+    base += r.attack_rate_bonus * 0.25 - effective_attack_rate_penalty * 0.25
     base += get_style_props(strategy.style).apm_modifier
 
     # Lizardfolk heavy armor attack rate penalty (percentage-based)
@@ -2129,15 +2158,44 @@ class CombatEngine:
             ds_.active_strategy = new_strat_b
             ds_.active_strat_idx = new_idx_b
 
+        # Emit any active battle cries (trigger on state transitions)
+        cries_a, new_dmg_a = get_active_battle_cries(as_.warrior, fs_a, fs_b, minute, as_.triggered_battle_cries, as_.prev_damage_category)
+        for msg, idx in cries_a:
+            self._emit(f'{as_.warrior.name} Shouts "{msg}"')
+            as_.triggered_battle_cries.add(idx)
+        as_.prev_damage_category = new_dmg_a
+
+        cries_b, new_dmg_b = get_active_battle_cries(ds_.warrior, fs_b_for_def, fs_a_for_def, minute, ds_.triggered_battle_cries, ds_.prev_damage_category)
+        for msg, idx in cries_b:
+            self._emit(f'{ds_.warrior.name} Shouts "{msg}"')
+            ds_.triggered_battle_cries.add(idx)
+        ds_.prev_damage_category = new_dmg_b
+
     def _check_defender_strategy_only(self, ds_: _CState, as_: _CState, minute: int):
         """
         Check only the defender's strategy after they take damage.
         The attacker's strategy should not be re-evaluated when they deal damage,
         only when they themselves take damage.
         """
-        # Check defender's strategy
         fs_defender = ds_.to_fighter_state()
-        fs_attacker = as_.to_fighter_state()  # Foe state for defender
+        fs_attacker = as_.to_fighter_state()
+
+        # Emit battle cries first (right after damage is taken)
+        # Evaluate defender's cries about their own state
+        cries, new_dmg = get_active_battle_cries(ds_.warrior, fs_defender, fs_attacker, minute, ds_.triggered_battle_cries, ds_.prev_damage_category)
+        for msg, idx in cries:
+            self._emit(f'{ds_.warrior.name} Shouts "{msg}"')
+            ds_.triggered_battle_cries.add(idx)
+        ds_.prev_damage_category = new_dmg
+
+        # Evaluate attacker's cries about the defender's state
+        cries_att, new_dmg_att = get_active_battle_cries(as_.warrior, fs_attacker, fs_defender, minute, as_.triggered_battle_cries, as_.prev_damage_category)
+        for msg, idx in cries_att:
+            self._emit(f'{as_.warrior.name} Shouts "{msg}"')
+            as_.triggered_battle_cries.add(idx)
+        as_.prev_damage_category = new_dmg_att
+
+        # Check defender's strategy
         new_strat, new_idx = evaluate_triggers(ds_.warrior.strategies, fs_defender, fs_attacker, minute)
         if new_idx != ds_.active_strat_idx:
             self._emit(N.strategy_switch_line(ds_.warrior.name, new_idx))
@@ -2453,6 +2511,19 @@ class CombatEngine:
                 self.debug_logger.log_strategy_switch(self.warrior_b.name, self.state_b.active_strat_idx, idx_b)
         self.state_a.active_strategy  = strat_a;  self.state_a.active_strat_idx = idx_a
         self.state_b.active_strategy  = strat_b;  self.state_b.active_strat_idx = idx_b
+
+        # Emit any active battle cries (trigger on state transitions)
+        cries_a, new_dmg_a = get_active_battle_cries(self.warrior_a, fs_a, fs_b, minute, self.state_a.triggered_battle_cries, self.state_a.prev_damage_category)
+        for msg, idx in cries_a:
+            self._emit(f'{self.warrior_a.name} Shouts "{msg}"')
+            self.state_a.triggered_battle_cries.add(idx)
+        self.state_a.prev_damage_category = new_dmg_a
+
+        cries_b, new_dmg_b = get_active_battle_cries(self.warrior_b, fs_b, fs_a, minute, self.state_b.triggered_battle_cries, self.state_b.prev_damage_category)
+        for msg, idx in cries_b:
+            self._emit(f'{self.warrior_b.name} Shouts "{msg}"')
+            self.state_b.triggered_battle_cries.add(idx)
+        self.state_b.prev_damage_category = new_dmg_b
 
         # Overencumbrance flavor
         for st in (self.state_a, self.state_b):

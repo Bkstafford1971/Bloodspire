@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v2.7.5</title>
+<title>BLOODSPIRE Client - v2.8.1</title>
 <style>
 /* ============================================================
    WINDOWS CLASSIC - REFINED
@@ -246,7 +246,7 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
-const CLIENT_VERSION = "2.7.5";
+const CLIENT_VERSION = "2.8.1";
 
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
@@ -5085,6 +5085,12 @@ async function saveStrategyTemplate() {
   </div>
 </div>`;
   document.body.appendChild(modal);
+
+  // Reclaim OS keyboard focus before focusing the input field
+  if (window.electronAPI && window.electronAPI.focusWindow) {
+    await window.electronAPI.focusWindow();
+  }
+
   el('template-name-input').focus();
   el('template-name-input').select();
 }
@@ -7665,9 +7671,20 @@ document.addEventListener('click', (e) => {
         if (clickedInputId) {
           const inp = el(clickedInputId);
           if (inp) {
-            inp.focus();
-            const l = inp.value.length;
-            if (inp.setSelectionRange) inp.setSelectionRange(l, l);
+            // Use focusWindow to establish OS keyboard routing before focusing
+            if (window.electronAPI?.focusWindow) {
+              window.electronAPI.focusWindow().then(() => {
+                if (inp) {
+                  inp.focus();
+                  const l = inp.value.length;
+                  if (inp.setSelectionRange) inp.setSelectionRange(l, l);
+                }
+              });
+            } else {
+              inp.focus();
+              const l = inp.value.length;
+              if (inp.setSelectionRange) inp.setSelectionRange(l, l);
+            }
           }
         }
       }
