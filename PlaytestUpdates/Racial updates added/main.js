@@ -1,11 +1,9 @@
 if (require('electron-squirrel-startup')) return;
 
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const pathLib = require('path');
 const fs = require('fs-extra');
 const https = require('https');
-const { exec } = require('child_process');
-const os = require('os');
 
 // Disable hardware acceleration to resolve UI focus and rendering issues
 app.disableHardwareAcceleration();
@@ -39,21 +37,6 @@ function fetchVersionInfo() {
   });
 }
 
-function downloadFile(url, destPath) {
-  return new Promise((resolve, reject) => {
-    const file = fs.createWriteStream(destPath);
-    https.get(url, (res) => {
-      res.pipe(file);
-      file.on('finish', () => {
-        file.close();
-        resolve();
-      });
-    }).on('error', (err) => {
-      fs.remove(destPath);
-      reject(err);
-    });
-  });
-}
 
 function compareVersions(v1, v2) {
   // Returns true if v2 > v1
@@ -99,81 +82,39 @@ async function checkForUpdates() {
 }
 
 async function performUpdate(versionInfo) {
+  const { shell } = require('electron');
+
   try {
-    const tempDir = pathLib.join(os.tmpdir(), 'bloodspire-update');
-    await fs.ensureDir(tempDir);
+    console.log('Showing update dialog with download link');
 
-    const installerPath = pathLib.join(tempDir, `BloodspireArena-${versionInfo.version}-Setup.exe`);
-
-    // Show progress dialog
-    const progressWin = new BrowserWindow({
-      width: 400,
-      height: 150,
-      parent: mainWindow,
-      modal: true,
-      show: true,
-      webPreferences: { nodeIntegration: false }
+    const result = await dialog.showMessageBox(mainWindow, {
+      type: 'info',
+      title: 'Download Update',
+      message: `Bloodspire ${versionInfo.version} is ready to download.`,
+      detail: 'Click the button below to download the installer. Run it after download to install the update.',
+      buttons: ['Open Download Link', 'Exit App'],
+      defaultId: 0,
+      cancelId: 1
     });
 
-    progressWin.loadURL(`data:text/html,<html><body style="font-family:Arial;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%;background:#f0f0f0;"><h2>Downloading Update...</h2><p>This will take a moment.</p></body></html>`);
+    if (result.response === 0) {
+      // User clicked "Open Download Link"
+      console.log('Opening download link:', versionInfo.downloadUrl);
+      await shell.openExternal(versionInfo.downloadUrl);
 
-    // Download installer
-    console.log('Downloading from:', versionInfo.downloadUrl);
-    console.log('Saving to:', installerPath);
-    await downloadFile(versionInfo.downloadUrl, installerPath);
-
-    // Verify file exists
-    if (!(await fs.pathExists(installerPath))) {
-      throw new Error(`Installer file not found at ${installerPath}`);
-    }
-
-    console.log('Installer downloaded successfully, size:', (await fs.stat(installerPath)).size, 'bytes');
-
-    if (!progressWin.isDestroyed()) {
-      progressWin.close();
-    }
-
-    // Run installer with silent mode and no restart (we'll restart ourselves)
-    console.log('Running installer:', installerPath);
-
-    // Close the main app before running installer
-    mainWindow.close();
-
-    // Run installer silently - /S for silent, /NORESTART to prevent auto restart
-    try {
-      console.log('Running installer process...');
-      console.log('Installer path:', installerPath);
-      console.log('Path exists:', await fs.pathExists(installerPath));
-
-      // Use exec to run the installer with proper shell handling
-      const command = `"${installerPath}" /S /NORESTART`;
-      console.log('Executing command:', command);
-
-      exec(command, { shell: 'cmd.exe' }, (error, stdout, stderr) => {
-        if (error) {
-          console.error('Installer execution error:', error);
-          console.error('stderr:', stderr);
-        } else {
-          console.log('Installer completed successfully');
-          console.log('stdout:', stdout);
-        }
-      });
-
-      console.log('Installer command sent, exiting app in 2 seconds...');
-
-      // Give installer time to start, then exit
+      // Exit app and let user install
       setTimeout(() => {
-        console.log('Exiting app for installer to run');
-        app.relaunch();
+        console.log('Exiting app, user will install update');
         app.quit();
-      }, 2000);
-    } catch (execErr) {
-      console.error('Execution error:', execErr);
-      throw execErr;
+      }, 1000);
+    } else {
+      // User clicked "Exit App"
+      console.log('User chose to exit');
+      app.quit();
     }
   } catch (err) {
-    console.error('Update error:', err);
-    dialog.showErrorBox('Update Failed', 'Failed to download update: ' + err.message);
+    console.error('Update dialog error:', err);
+    dialog.showErrorBox('Update Error', 'An error occurred: ' + err.message);
   }
 }
 
