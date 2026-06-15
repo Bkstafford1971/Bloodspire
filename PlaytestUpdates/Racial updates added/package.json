@@ -1,6 +1,6 @@
 {
   "name": "bloodspire",
-  "version": "2.7.4",
+  "version": "2.8.2",
   "author": "Ilneval",
   "description": "A desktop client for Bloodspire.",
   "main": ".webpack/main",
