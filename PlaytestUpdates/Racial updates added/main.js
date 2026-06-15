@@ -4,7 +4,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const pathLib = require('path');
 const fs = require('fs-extra');
 const https = require('https');
-const { execFile } = require('child_process');
+const { spawn } = require('child_process');
 const os = require('os');
 
 // Disable hardware acceleration to resolve UI focus and rendering issues
@@ -119,7 +119,15 @@ async function performUpdate(versionInfo) {
 
     // Download installer
     console.log('Downloading from:', versionInfo.downloadUrl);
+    console.log('Saving to:', installerPath);
     await downloadFile(versionInfo.downloadUrl, installerPath);
+
+    // Verify file exists
+    if (!(await fs.pathExists(installerPath))) {
+      throw new Error(`Installer file not found at ${installerPath}`);
+    }
+
+    console.log('Installer downloaded successfully, size:', (await fs.stat(installerPath)).size, 'bytes');
 
     if (!progressWin.isDestroyed()) {
       progressWin.close();
@@ -131,19 +139,24 @@ async function performUpdate(versionInfo) {
     // Close the main app before running installer
     mainWindow.close();
 
-    // Run installer silently - /S for silent, /NORESTART to prevent auto restart
-    execFile(installerPath, ['/S', '/NORESTART'], (error) => {
-      if (error) {
-        console.error('Installer error:', error);
-        dialog.showErrorBox('Update Failed', 'The update failed to install. Please download and install manually.');
-        app.quit();
-      } else {
-        console.log('Installer completed, relaunching app');
-        // NSIS installer will have updated the app, now restart it
-        app.relaunch();
-        app.quit();
-      }
+    // Run installer silently using spawn with shell - /S for silent, /NORESTART to prevent auto restart
+    const proc = spawn('cmd', ['/c', `"${installerPath}" /S /NORESTART`], {
+      detached: true,
+      stdio: 'ignore'
     });
+
+    proc.on('error', (error) => {
+      console.error('Failed to spawn installer:', error);
+      dialog.showErrorBox('Update Failed', 'The update failed to install. Please download and install manually.\n\nError: ' + error.message);
+      app.quit();
+    });
+
+    // Give installer time to start, then exit
+    setTimeout(() => {
+      console.log('Exiting app for installer to run');
+      app.relaunch();
+      app.quit();
+    }, 1000);
   } catch (err) {
     console.error('Update error:', err);
     dialog.showErrorBox('Update Failed', 'Failed to download update: ' + err.message);
