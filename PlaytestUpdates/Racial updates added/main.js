@@ -4,7 +4,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const pathLib = require('path');
 const fs = require('fs-extra');
 const https = require('https');
-const { spawn } = require('child_process');
+const { exec } = require('child_process');
 const os = require('os');
 
 // Disable hardware acceleration to resolve UI focus and rendering issues
@@ -141,35 +141,35 @@ async function performUpdate(versionInfo) {
 
     // Run installer silently - /S for silent, /NORESTART to prevent auto restart
     try {
-      console.log('Spawning installer process...');
+      console.log('Running installer process...');
+      console.log('Installer path:', installerPath);
+      console.log('Path exists:', await fs.pathExists(installerPath));
 
-      // Use shell: true to properly handle Windows paths and quotes
-      const proc = spawn(installerPath, ['/S', '/NORESTART'], {
-        shell: true,
-        detached: true,
-        stdio: 'ignore'
+      // Use exec to run the installer with proper shell handling
+      const command = `"${installerPath}" /S /NORESTART`;
+      console.log('Executing command:', command);
+
+      exec(command, { shell: 'cmd.exe' }, (error, stdout, stderr) => {
+        if (error) {
+          console.error('Installer execution error:', error);
+          console.error('stderr:', stderr);
+        } else {
+          console.log('Installer completed successfully');
+          console.log('stdout:', stdout);
+        }
       });
 
-      proc.on('error', (error) => {
-        console.error('Failed to spawn installer:', error);
-        dialog.showErrorBox('Update Failed', 'The update failed to install. Please download and install manually.\n\nError: ' + error.message);
-        app.quit();
-      });
-
-      // Unref the process so it doesn't keep the parent alive
-      if (proc.unref) proc.unref();
-
-      console.log('Installer spawned, exiting app in 1 second...');
+      console.log('Installer command sent, exiting app in 2 seconds...');
 
       // Give installer time to start, then exit
       setTimeout(() => {
         console.log('Exiting app for installer to run');
         app.relaunch();
         app.quit();
-      }, 1000);
-    } catch (spawnErr) {
-      console.error('Spawn error:', spawnErr);
-      throw spawnErr;
+      }, 2000);
+    } catch (execErr) {
+      console.error('Execution error:', execErr);
+      throw execErr;
     }
   } catch (err) {
     console.error('Update error:', err);
