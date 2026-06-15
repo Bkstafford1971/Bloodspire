@@ -16,7 +16,7 @@ let baseDir = null;
 let mainWindow;
 
 const configPath = pathLib.join(app.getPath('userData'), 'config.json');
-const { version: currentVersion } = require('./package.json');
+const { version: currentVersion } = require('../package.json');
 
 // ============================================================
 // AUTO-UPDATE LOGIC
@@ -139,24 +139,38 @@ async function performUpdate(versionInfo) {
     // Close the main app before running installer
     mainWindow.close();
 
-    // Run installer silently using spawn with shell - /S for silent, /NORESTART to prevent auto restart
-    const proc = spawn('cmd', ['/c', `"${installerPath}" /S /NORESTART`], {
-      detached: true,
-      stdio: 'ignore'
-    });
+    // Run installer silently - /S for silent, /NORESTART to prevent auto restart
+    try {
+      console.log('Spawning installer process...');
 
-    proc.on('error', (error) => {
-      console.error('Failed to spawn installer:', error);
-      dialog.showErrorBox('Update Failed', 'The update failed to install. Please download and install manually.\n\nError: ' + error.message);
-      app.quit();
-    });
+      // Use shell: true to properly handle Windows paths and quotes
+      const proc = spawn(installerPath, ['/S', '/NORESTART'], {
+        shell: true,
+        detached: true,
+        stdio: 'ignore'
+      });
 
-    // Give installer time to start, then exit
-    setTimeout(() => {
-      console.log('Exiting app for installer to run');
-      app.relaunch();
-      app.quit();
-    }, 1000);
+      proc.on('error', (error) => {
+        console.error('Failed to spawn installer:', error);
+        dialog.showErrorBox('Update Failed', 'The update failed to install. Please download and install manually.\n\nError: ' + error.message);
+        app.quit();
+      });
+
+      // Unref the process so it doesn't keep the parent alive
+      if (proc.unref) proc.unref();
+
+      console.log('Installer spawned, exiting app in 1 second...');
+
+      // Give installer time to start, then exit
+      setTimeout(() => {
+        console.log('Exiting app for installer to run');
+        app.relaunch();
+        app.quit();
+      }, 1000);
+    } catch (spawnErr) {
+      console.error('Spawn error:', spawnErr);
+      throw spawnErr;
+    }
   } catch (err) {
     console.error('Update error:', err);
     dialog.showErrorBox('Update Failed', 'Failed to download update: ' + err.message);
@@ -232,7 +246,7 @@ function createWindow() {
     mainWindow.loadFile(pathLib.join(__dirname, '..', 'bloodspire_client.html'));
   }
 // === OPEN DEVTOOLS AUTOMATICALLY ===
-// mainWindow.webContents.openDevTools();
+mainWindow.webContents.openDevTools();
 
   // Optional: Open it on the right side (detached)
   // mainWindow.webContents.openDevTools({ mode: 'detach' });
