@@ -141,11 +141,23 @@ class BloodspireSimTool:
         self.w1_primary = tk.StringVar(value="Short Sword")
         self.w1_secondary = tk.StringVar(value="Open Hand")
         self.w1_backup = tk.StringVar(value="None")
-        self.w1_trigger = tk.StringVar(value="Always")
+        self.w1_trigger = tk.StringVar(value="Always (Default Loop)")
         self.w1_style = tk.StringVar(value="Strike")
         self.w1_activity = tk.IntVar(value=5)
         self.w1_aim = tk.StringVar(value="None")
         self.w1_def = tk.StringVar(value="Chest")
+        # Strategy 2
+        self.w1_trigger2 = tk.StringVar(value="At 75% HP")
+        self.w1_style2 = tk.StringVar(value="Defend")
+        self.w1_activity2 = tk.IntVar(value=5)
+        self.w1_aim2 = tk.StringVar(value="None")
+        self.w1_def2 = tk.StringVar(value="Chest")
+        # Strategy 3
+        self.w1_trigger3 = tk.StringVar(value="At 50% HP")
+        self.w1_style3 = tk.StringVar(value="Total Kill")
+        self.w1_activity3 = tk.IntVar(value=5)
+        self.w1_aim3 = tk.StringVar(value="None")
+        self.w1_def3 = tk.StringVar(value="Chest")
 
         self.w2_base = tk.StringVar()
         self.w2_armor = tk.StringVar(value="Cloth")
@@ -153,12 +165,34 @@ class BloodspireSimTool:
         self.w2_primary = tk.StringVar(value="Short Sword")
         self.w2_secondary = tk.StringVar(value="Open Hand")
         self.w2_backup = tk.StringVar(value="None")
-        self.w2_trigger = tk.StringVar(value="Always")
+        self.w2_trigger = tk.StringVar(value="Always (Default Loop)")
         self.w2_style = tk.StringVar(value="Strike")
         self.w2_activity = tk.IntVar(value=5)
         self.w2_aim = tk.StringVar(value="None")
         self.w2_def = tk.StringVar(value="Chest")
-        
+        # Strategy 2
+        self.w2_trigger2 = tk.StringVar(value="At 75% HP")
+        self.w2_style2 = tk.StringVar(value="Defend")
+        self.w2_activity2 = tk.IntVar(value=5)
+        self.w2_aim2 = tk.StringVar(value="None")
+        self.w2_def2 = tk.StringVar(value="Chest")
+        # Strategy 3
+        self.w2_trigger3 = tk.StringVar(value="At 50% HP")
+        self.w2_style3 = tk.StringVar(value="Total Kill")
+        self.w2_activity3 = tk.IntVar(value=5)
+        self.w2_aim3 = tk.StringVar(value="None")
+        self.w2_def3 = tk.StringVar(value="Chest")
+
+        # Arena 1v1 variables
+        self.arena_save_folder = tk.StringVar(value=SV.SAVES_DIR)
+        self.arena_turn = tk.StringVar(value="Current")
+        self.arena_pool = []  # List of (Warrior, team_name, manager_name)
+        self.arena_turn_combo = None  # set in _build_ui
+
+        # 1v1 Simulation Mode variables
+        self.m1v1_mode = tk.StringVar(value="Single Fight")  # "Single Fight" or "Simulation"
+        self.m1v1_fight_count = tk.IntVar(value=100)  # Number of fights for simulation mode
+
         self._build_ui()
 
     def _build_ui(self):
@@ -231,9 +265,36 @@ class BloodspireSimTool:
         self.notebook.add(matchup_tab, text="1 v 1 Custom Matchup")
         _add_tab_header(matchup_tab, "1 v 1 Custom Matchup", "[MATCHUP]")
 
-        # Matchup Grid
-        m_grid = ttk.Frame(matchup_tab)
-        m_grid.pack(fill=tk.X)
+        # Arena Data Source panel
+        arena_src = ttk.LabelFrame(matchup_tab, text="Arena Data Source  (load real warriors from save files)", padding="8")
+        arena_src.pack(fill=tk.X, pady=(0, 8))
+
+        ttk.Label(arena_src, text="Save Folder:").grid(row=0, column=0, sticky=tk.W, padx=(0, 4))
+        ttk.Entry(arena_src, textvariable=self.arena_save_folder, width=60).grid(row=0, column=1, sticky=tk.W+tk.E, padx=(0, 4))
+        ttk.Button(arena_src, text="Browse", command=self._browse_arena_folder).grid(row=0, column=2)
+
+        ttk.Label(arena_src, text="Turn Snapshot:").grid(row=1, column=0, sticky=tk.W, padx=(0, 4), pady=(6, 0))
+        self.arena_turn_combo = ttk.Combobox(arena_src, textvariable=self.arena_turn, state="readonly", width=15)
+        self.arena_turn_combo['values'] = ["Current"]
+        self.arena_turn_combo.grid(row=1, column=1, sticky=tk.W, pady=(6, 0))
+        ttk.Button(arena_src, text="Load Arena Warriors", command=self._load_arena_warriors).grid(row=1, column=2, pady=(6, 0))
+        arena_src.columnconfigure(1, weight=1)
+
+        # Matchup Grid with Scrollbar
+        scrollbar = ttk.Scrollbar(matchup_tab)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        m_canvas = tk.Canvas(matchup_tab, yscrollcommand=scrollbar.set, bg="#1a1a1a", bd=0, highlightthickness=0)
+        m_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.config(command=m_canvas.yview)
+
+        m_grid = ttk.Frame(m_canvas)
+        m_canvas.create_window((0, 0), window=m_grid, anchor=tk.NW)
+
+        # Bind mousewheel to canvas
+        def _on_mousewheel(event):
+            m_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        m_canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
         wpn_list = sorted([w.display for w in WEAPONS.values()])
         arm_list = ARMOR_TIERS + ["None"]
@@ -246,6 +307,7 @@ class BloodspireSimTool:
             ttk.Label(frame, text="Base Warrior:").grid(row=0, column=0, sticky=tk.W)
             combo = ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_base"), state="readonly", width=40)
             combo.grid(row=0, column=1, sticky=tk.W, pady=2)
+            combo.bind("<<ComboboxSelected>>", lambda e, pfx=var_prefix: self._autofill_warrior(pfx))
             setattr(self, f"{var_prefix}_combo", combo)
 
             # Gear
@@ -267,25 +329,78 @@ class BloodspireSimTool:
             # Strategy
             ttk.Separator(frame, orient=tk.HORIZONTAL).grid(row=6, column=0, columnspan=2, sticky="ew", pady=10)
 
-            ttk.Label(frame, text="Trigger:").grid(row=7, column=0, sticky=tk.W)
-            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_trigger"), values=TRIGGERS, state="readonly").grid(row=7, column=1, sticky=tk.W)
+            # Strategy 1
+            ttk.Label(frame, text="[Strategy 1]", font=("TkDefaultFont", 9, "bold")).grid(row=7, column=0, columnspan=2, sticky=tk.W)
+            ttk.Label(frame, text="Trigger:").grid(row=8, column=0, sticky=tk.W)
+            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_trigger"), values=TRIGGERS, state="readonly").grid(row=8, column=1, sticky=tk.W)
 
-            ttk.Label(frame, text="Style:").grid(row=8, column=0, sticky=tk.W)
-            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_style"), values=FIGHTING_STYLES, state="readonly").grid(row=8, column=1, sticky=tk.W)
+            ttk.Label(frame, text="Style:").grid(row=9, column=0, sticky=tk.W)
+            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_style"), values=FIGHTING_STYLES, state="readonly").grid(row=9, column=1, sticky=tk.W)
 
-            ttk.Label(frame, text="Activity:").grid(row=9, column=0, sticky=tk.W)
-            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_activity"), values=list(range(10)), state="readonly").grid(row=9, column=1, sticky=tk.W)
+            ttk.Label(frame, text="Activity:").grid(row=10, column=0, sticky=tk.W)
+            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_activity"), values=list(range(10)), state="readonly").grid(row=10, column=1, sticky=tk.W)
 
-            ttk.Label(frame, text="Aim Pt:").grid(row=10, column=0, sticky=tk.W)
-            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_aim"), values=AIM_DEFENSE_POINTS, state="readonly").grid(row=10, column=1, sticky=tk.W)
+            ttk.Label(frame, text="Aim Pt:").grid(row=11, column=0, sticky=tk.W)
+            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_aim"), values=AIM_DEFENSE_POINTS, state="readonly").grid(row=11, column=1, sticky=tk.W)
 
-            ttk.Label(frame, text="Def Pt:").grid(row=11, column=0, sticky=tk.W)
-            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_def"), values=AIM_DEFENSE_POINTS, state="readonly").grid(row=11, column=1, sticky=tk.W)
+            ttk.Label(frame, text="Def Pt:").grid(row=12, column=0, sticky=tk.W)
+            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_def"), values=AIM_DEFENSE_POINTS, state="readonly").grid(row=12, column=1, sticky=tk.W)
+
+            # Strategy 2
+            ttk.Separator(frame, orient=tk.HORIZONTAL).grid(row=13, column=0, columnspan=2, sticky="ew", pady=10)
+            ttk.Label(frame, text="[Strategy 2]", font=("TkDefaultFont", 9, "bold")).grid(row=14, column=0, columnspan=2, sticky=tk.W)
+            ttk.Label(frame, text="Trigger:").grid(row=15, column=0, sticky=tk.W)
+            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_trigger2"), values=TRIGGERS, state="readonly").grid(row=15, column=1, sticky=tk.W)
+
+            ttk.Label(frame, text="Style:").grid(row=16, column=0, sticky=tk.W)
+            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_style2"), values=FIGHTING_STYLES, state="readonly").grid(row=16, column=1, sticky=tk.W)
+
+            ttk.Label(frame, text="Activity:").grid(row=17, column=0, sticky=tk.W)
+            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_activity2"), values=list(range(10)), state="readonly").grid(row=17, column=1, sticky=tk.W)
+
+            ttk.Label(frame, text="Aim Pt:").grid(row=18, column=0, sticky=tk.W)
+            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_aim2"), values=AIM_DEFENSE_POINTS, state="readonly").grid(row=18, column=1, sticky=tk.W)
+
+            ttk.Label(frame, text="Def Pt:").grid(row=19, column=0, sticky=tk.W)
+            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_def2"), values=AIM_DEFENSE_POINTS, state="readonly").grid(row=19, column=1, sticky=tk.W)
+
+            # Strategy 3
+            ttk.Separator(frame, orient=tk.HORIZONTAL).grid(row=20, column=0, columnspan=2, sticky="ew", pady=10)
+            ttk.Label(frame, text="[Strategy 3]", font=("TkDefaultFont", 9, "bold")).grid(row=21, column=0, columnspan=2, sticky=tk.W)
+            ttk.Label(frame, text="Trigger:").grid(row=22, column=0, sticky=tk.W)
+            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_trigger3"), values=TRIGGERS, state="readonly").grid(row=22, column=1, sticky=tk.W)
+
+            ttk.Label(frame, text="Style:").grid(row=23, column=0, sticky=tk.W)
+            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_style3"), values=FIGHTING_STYLES, state="readonly").grid(row=23, column=1, sticky=tk.W)
+
+            ttk.Label(frame, text="Activity:").grid(row=24, column=0, sticky=tk.W)
+            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_activity3"), values=list(range(10)), state="readonly").grid(row=24, column=1, sticky=tk.W)
+
+            ttk.Label(frame, text="Aim Pt:").grid(row=25, column=0, sticky=tk.W)
+            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_aim3"), values=AIM_DEFENSE_POINTS, state="readonly").grid(row=25, column=1, sticky=tk.W)
+
+            ttk.Label(frame, text="Def Pt:").grid(row=26, column=0, sticky=tk.W)
+            ttk.Combobox(frame, textvariable=getattr(self, f"{var_prefix}_def3"), values=AIM_DEFENSE_POINTS, state="readonly").grid(row=26, column=1, sticky=tk.W)
             
             return frame
 
         create_w_config(m_grid, "Warrior 1 (Attacker Context)", "w1").grid(row=0, column=0, padx=10, sticky=tk.NSEW)
         create_w_config(m_grid, "Warrior 2 (Opponent Context)", "w2").grid(row=0, column=1, padx=10, sticky=tk.NSEW)
+
+        # Update canvas scroll region after content is laid out
+        m_grid.update_idletasks()
+        m_canvas.config(scrollregion=m_canvas.bbox("all"))
+
+        # Simulation Mode Controls
+        mode_frame = ttk.LabelFrame(matchup_tab, text="Simulation Mode", padding="10")
+        mode_frame.pack(fill=tk.X, padx=10, pady=10)
+
+        ttk.Label(mode_frame, text="Mode:").pack(side=tk.LEFT, padx=(0, 10))
+        ttk.Radiobutton(mode_frame, text="Single Fight (Full Log)", variable=self.m1v1_mode, value="Single Fight").pack(side=tk.LEFT, padx=5)
+        ttk.Radiobutton(mode_frame, text="Simulation (Win/Loss)", variable=self.m1v1_mode, value="Simulation").pack(side=tk.LEFT, padx=5)
+
+        ttk.Label(mode_frame, text="Fights:").pack(side=tk.LEFT, padx=(20, 5))
+        ttk.Spinbox(mode_frame, from_=100, to=500, textvariable=self.m1v1_fight_count, width=10).pack(side=tk.LEFT, padx=5)
 
         ttk.Button(matchup_tab, text="RUN 1 v 1 SIMULATION", command=self._sim_1v1_matchup).pack(pady=10)
 
@@ -1128,6 +1243,7 @@ class BloodspireSimTool:
 
         # Load initial pool
         self._refresh_warrior_pool()
+        self._refresh_arena_turns()
 
     def _browse_folder(self):
         path = filedialog.askdirectory()
@@ -1172,6 +1288,153 @@ class BloodspireSimTool:
                 except Exception as e:
                     self.text_area.insert(tk.END, f"Error loading {fn}: {e}\n")
         return teams
+
+    # -----------------------------------------------------------------------
+    # ARENA WARRIOR LOADING
+    # -----------------------------------------------------------------------
+    def _browse_arena_folder(self):
+        path = filedialog.askdirectory()
+        if path:
+            self.arena_save_folder.set(path)
+            self._refresh_arena_turns()
+
+    def _refresh_arena_turns(self):
+        saves_dir = self.arena_save_folder.get()
+        league_dir = os.path.join(saves_dir, "league")
+        turns = ["Current"]
+        if os.path.isdir(league_dir):
+            for fname in sorted(os.listdir(league_dir)):
+                if fname.startswith("turn_") and os.path.isdir(os.path.join(league_dir, fname)):
+                    try:
+                        t = int(fname.split("_")[1])
+                        turns.append(f"Turn {t}")
+                    except (IndexError, ValueError):
+                        pass
+        if self.arena_turn_combo is not None:
+            self.arena_turn_combo['values'] = turns
+        if self.arena_turn.get() not in turns:
+            self.arena_turn.set("Current")
+
+    def _load_arena_warriors(self):
+        import types
+        saves_dir = self.arena_save_folder.get()
+        turn_str = self.arena_turn.get()
+        self.arena_pool = []
+
+        def _warriors_from_dict(team_dict):
+            team_name = team_dict.get("team_name", "Unknown Team")
+            manager_name = team_dict.get("manager_name", "Unknown")
+            stub = types.SimpleNamespace(team_name=team_name, manager_name=manager_name)
+            entries = []
+            for w_dict in team_dict.get("warriors", []):
+                if not w_dict:
+                    continue
+                try:
+                    w = W.Warrior.from_dict(w_dict)
+                    if w and w.is_alive and not getattr(w, "is_dead", False):
+                        entries.append((w, stub))
+                except Exception as e:
+                    print(f"  Warrior load error: {e}")
+            return entries
+
+        try:
+            if turn_str == "Current":
+                teams_dir = os.path.join(saves_dir, "teams")
+                if not os.path.isdir(teams_dir):
+                    messagebox.showerror("Error", f"Teams folder not found:\n{teams_dir}")
+                    return
+                for fname in sorted(os.listdir(teams_dir)):
+                    if fname.startswith("team_") and fname.endswith(".json"):
+                        try:
+                            with open(os.path.join(teams_dir, fname)) as f:
+                                data = json.load(f)
+                            self.arena_pool.extend(_warriors_from_dict(data))
+                        except Exception as e:
+                            print(f"Error loading {fname}: {e}")
+            else:
+                turn_num = int(turn_str.split()[1])
+                league_dir = os.path.join(saves_dir, "league", f"turn_{turn_num:04d}")
+                if not os.path.isdir(league_dir):
+                    messagebox.showerror("Error", f"Turn folder not found:\n{league_dir}")
+                    return
+                seen_teams = set()
+                for fname in sorted(os.listdir(league_dir)):
+                    if not (fname.startswith("result_") and fname.endswith(".json")):
+                        continue
+                    try:
+                        with open(os.path.join(league_dir, fname)) as f:
+                            data = json.load(f)
+                        team_data = data.get("team", {})
+                        if not team_data:
+                            continue
+                        team_id = team_data.get("team_id", fname)
+                        if team_id in seen_teams:
+                            continue
+                        seen_teams.add(team_id)
+                        self.arena_pool.extend(_warriors_from_dict(team_data))
+                    except Exception as e:
+                        print(f"Error loading {fname}: {e}")
+        except Exception as e:
+            messagebox.showerror("Load Error", str(e))
+            return
+
+        if not self.arena_pool:
+            messagebox.showwarning("No Warriors", "No active warriors found in the selected source.")
+            return
+
+        names = [
+            f"{w.name}  ({t.manager_name} / {t.team_name})  [{w.race.name}]"
+            for w, t in self.arena_pool
+        ]
+        self.w1_combo['values'] = names
+        self.w2_combo['values'] = names
+        self.text_area.delete(1.0, tk.END)
+        self.text_area.insert(tk.END,
+            f"Arena warriors loaded — {len(self.arena_pool)} warriors ({turn_str})\n"
+            "Select a warrior from each dropdown. Gear and strategy will auto-fill from their saved setup.\n"
+        )
+
+    def _autofill_warrior(self, prefix):
+        combo = getattr(self, f"{prefix}_combo")
+        idx = combo.current()
+        pool = self.arena_pool if self.arena_pool else self.warrior_pool
+        if idx < 0 or idx >= len(pool):
+            return
+        w, _ = pool[idx]
+
+        # Auto-fill gear from warrior's saved loadout
+        getattr(self, f"{prefix}_armor").set(w.armor or "Cloth")
+        getattr(self, f"{prefix}_helm").set(w.helm or "None")
+        getattr(self, f"{prefix}_primary").set(w.primary_weapon or "Short Sword")
+        getattr(self, f"{prefix}_secondary").set(w.secondary_weapon or "Open Hand")
+        bak = w.backup_weapon or "None"
+        getattr(self, f"{prefix}_backup").set(bak if bak else "None")
+
+        # Load the warrior's "Always (Default Loop)" strategy from their save file
+        always_strategy = None
+        if w.strategies:
+            # Find the "Always (Default Loop)" strategy
+            for strat in w.strategies:
+                if strat.trigger == "Always (Default Loop)":
+                    always_strategy = strat
+                    break
+
+        # If found, use it; otherwise use the first strategy with "Always (Default Loop)" trigger
+        if always_strategy:
+            strat = always_strategy
+            getattr(self, f"{prefix}_trigger").set(strat.trigger)
+            getattr(self, f"{prefix}_style").set(strat.style or "Strike")
+            act = strat.activity if strat.activity is not None else 5
+            getattr(self, f"{prefix}_activity").set(int(act))
+            getattr(self, f"{prefix}_aim").set(strat.aim_point or "Chest")
+            getattr(self, f"{prefix}_def").set(strat.defense_point or "Chest")
+        else:
+            # Fallback: default to basic "Always (Default Loop)" if not found
+            getattr(self, f"{prefix}_trigger").set("Always (Default Loop)")
+            getattr(self, f"{prefix}_style").set("Strike")
+            getattr(self, f"{prefix}_activity").set(5)
+            getattr(self, f"{prefix}_aim").set("Chest")
+            getattr(self, f"{prefix}_def").set("Chest")
 
     def _add_trigger_row(self, trigger_name="Always (Default Loop)", style="Strike", activity=5):
         """Add a new custom trigger row to the trigger builder."""
@@ -1415,41 +1678,108 @@ class BloodspireSimTool:
             return
 
         self.text_area.delete(1.0, tk.END)
-        self.text_area.insert(tk.END, "--- Initializing 1v1 Custom Matchup ---\n\n")
 
-        # Setup Warriors
+        mode = self.m1v1_mode.get()
+        fight_count = self.m1v1_fight_count.get() if mode == "Simulation" else 1
+
+        # Setup Warriors — use arena_pool if loaded, else fall back to upload-based pool
+        active_pool = self.arena_pool if self.arena_pool else self.warrior_pool
         def setup_sim_warrior(idx, prefix):
-            orig_w, orig_t = self.warrior_pool[idx]
+            orig_w, orig_t = active_pool[idx]
             w = copy.deepcopy(orig_w)
             # Gear Overrides
             w.armor = getattr(self, f"{prefix}_armor").get()
             w.helm = getattr(self, f"{prefix}_helm").get()
             w.primary_weapon = getattr(self, f"{prefix}_primary").get()
             w.secondary_weapon = getattr(self, f"{prefix}_secondary").get()
-            
+
             bak = getattr(self, f"{prefix}_backup").get()
             w.backup_weapon = None if bak == "None" else bak
 
-            # Strategy Override (1 trigger as requested)
-            w.strategies = [W.Strategy(
-                trigger=getattr(self, f"{prefix}_trigger").get(),
-                style=getattr(self, f"{prefix}_style").get(),
-                activity=getattr(self, f"{prefix}_activity").get(),
-                aim_point=getattr(self, f"{prefix}_aim").get(),
-                defense_point=getattr(self, f"{prefix}_def").get()
-            )]
+            # Strategy Override (3 strategies)
+            w.strategies = [
+                W.Strategy(
+                    trigger=getattr(self, f"{prefix}_trigger").get(),
+                    style=getattr(self, f"{prefix}_style").get(),
+                    activity=getattr(self, f"{prefix}_activity").get(),
+                    aim_point=getattr(self, f"{prefix}_aim").get(),
+                    defense_point=getattr(self, f"{prefix}_def").get()
+                ),
+                W.Strategy(
+                    trigger=getattr(self, f"{prefix}_trigger2").get(),
+                    style=getattr(self, f"{prefix}_style2").get(),
+                    activity=getattr(self, f"{prefix}_activity2").get(),
+                    aim_point=getattr(self, f"{prefix}_aim2").get(),
+                    defense_point=getattr(self, f"{prefix}_def2").get()
+                ),
+                W.Strategy(
+                    trigger=getattr(self, f"{prefix}_trigger3").get(),
+                    style=getattr(self, f"{prefix}_style3").get(),
+                    activity=getattr(self, f"{prefix}_activity3").get(),
+                    aim_point=getattr(self, f"{prefix}_aim3").get(),
+                    defense_point=getattr(self, f"{prefix}_def3").get()
+                )
+            ]
             return w, orig_t.manager_name, orig_t.team_name
 
-        sw1, m1, t1 = setup_sim_warrior(idx1, "w1")
-        sw2, m2, t2 = setup_sim_warrior(idx2, "w2")
+        base_w1, m1, t1 = setup_sim_warrior(idx1, "w1")
+        base_w2, m2, t2 = setup_sim_warrior(idx2, "w2")
 
-        res = C.run_fight(
-            sw1, sw2, team_a_name=t1, team_b_name=t2,
-            manager_a_name=m1, manager_b_name=m2
-        )
+        # Debug: Show warrior setup
+        debug_info = f"=== DEBUG: Warrior Setup ===\n"
+        debug_info += f"W1: {base_w1.name} ({base_w1.race}) - Pool Index: {idx1}\n"
+        debug_info += f"    Weapon: {base_w1.primary_weapon}/{base_w1.secondary_weapon}\n"
+        debug_info += f"    Strategy 1: {base_w1.strategies[0].style} (trigger: {base_w1.strategies[0].trigger})\n"
+        debug_info += f"W2: {base_w2.name} ({base_w2.race}) - Pool Index: {idx2}\n"
+        debug_info += f"    Weapon: {base_w2.primary_weapon}/{base_w2.secondary_weapon}\n"
+        debug_info += f"    Strategy 1: {base_w2.strategies[0].style} (trigger: {base_w2.strategies[0].trigger})\n"
+        debug_info += f"============================\n\n"
+        self.text_area.insert(tk.END, debug_info)
 
-        self.report_content = res.narrative
-        self.text_area.insert(tk.END, self.report_content)
+        if mode == "Single Fight":
+            self.text_area.insert(tk.END, "--- Single Fight Mode ---\n\n")
+            res = C.run_fight(
+                copy.deepcopy(base_w1), copy.deepcopy(base_w2),
+                team_a_name=t1, team_b_name=t2,
+                manager_a_name=m1, manager_b_name=m2
+            )
+            self.report_content = res.narrative
+            self.text_area.insert(tk.END, self.report_content)
+        else:
+            # Simulation mode
+            self.text_area.insert(tk.END, f"--- Simulation Mode: {fight_count} Fights ---\n\n")
+            w1_wins = 0
+            w2_wins = 0
+
+            for i in range(fight_count):
+                res = C.run_fight(
+                    copy.deepcopy(base_w1), copy.deepcopy(base_w2),
+                    team_a_name=t1, team_b_name=t2,
+                    manager_a_name=m1, manager_b_name=m2
+                )
+                if res.winner.name == base_w1.name:
+                    w1_wins += 1
+                else:
+                    w2_wins += 1
+
+                # Show progress every 10 fights
+                if (i + 1) % 10 == 0:
+                    progress = f"Progress: {i + 1}/{fight_count} fights completed...\n"
+                    self.text_area.insert(tk.END, progress)
+                    self.text_area.see(tk.END)
+                    self.text_area.update()
+
+            w1_pct = (w1_wins / fight_count) * 100
+            w2_pct = (w2_wins / fight_count) * 100
+
+            results = f"\n{'='*60}\n"
+            results += f"SIMULATION RESULTS ({fight_count} fights)\n"
+            results += f"{'='*60}\n\n"
+            results += f"{base_w1.name:20} ({t1}) : {w1_wins:3}/{fight_count} ({w1_pct:5.1f}%)\n"
+            results += f"{base_w2.name:20} ({t2}) : {w2_wins:3}/{fight_count} ({w2_pct:5.1f}%)\n\n"
+
+            self.report_content = results
+            self.text_area.insert(tk.END, results)
 
     # -----------------------------------------------------------------------
     # CHAMPION TESTING
@@ -1510,10 +1840,17 @@ class BloodspireSimTool:
         for team in teams:
             for w in team.active_warriors:
                 all_warriors.append((w, team))
-                if w.warrior_id == champion_state.get("warrior_id") or w.name == champion_state.get("name"):
+                # Match by warrior_id if available, otherwise match by name+team_id combination
+                is_match = False
+                if champion_state.get("warrior_id") and w.warrior_id == champion_state.get("warrior_id"):
+                    is_match = True
+                elif w.name == champion_state.get("name") and team.team_id == champion_state.get("team_id"):
+                    is_match = True
+
+                if is_match:
                     champion_warrior = w
                     champion_team = team
-                    # Ensure warrior_id is set from champion_state
+                    # Ensure warrior_id is set from champion_state if missing
                     if not champion_warrior.warrior_id:
                         champion_warrior.warrior_id = champion_state.get("warrior_id")
 

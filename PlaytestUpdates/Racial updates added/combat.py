@@ -144,6 +144,29 @@ FINESSE_DAMAGE_WEAPONS = {
 
 
 # ---------------------------------------------------------------------------
+# PROBABILISTIC LUCK SYSTEM
+# ---------------------------------------------------------------------------
+
+def _should_apply_luck(threshold: int = 25) -> bool:
+    """
+    Determine if luck should be applied to this roll.
+    Returns True with <threshold>% probability (default 25%).
+    Each roll independently has a chance to trigger luck for that specific warrior.
+    """
+    return random.randint(1, 100) <= threshold
+
+
+def _apply_conditional_luck(base_value: int, warrior, threshold: int = 25) -> int:
+    """
+    Apply luck bonus to a roll value only if the random check passes.
+    Returns: base_value + warrior.luck if luck triggers, else base_value
+    """
+    if _should_apply_luck(threshold):
+        return base_value + warrior.luck
+    return base_value
+
+
+# ---------------------------------------------------------------------------
 # ATTRIBUTE-DRIVEN PENALTY SCALING (Half-Orc DEX tiers)
 # ---------------------------------------------------------------------------
 
@@ -639,7 +662,8 @@ def _initiative_roll(warrior: Warrior, strategy: Strategy, state: _CState) -> in
     init_val     = warrior.skills.get("initiative", 0)
     skill_bonus  = init_val * 4 if init_val >= 5 else init_val * 3
 
-    luck_bonus   = warrior.luck
+    # Probabilistic luck: 25% chance to apply luck bonus to this roll
+    luck_bonus   = _apply_conditional_luck(0, warrior, threshold=25)
     # Apply DEX-based penalty reduction for Half-Orc initiative
     r = warrior.race.modifiers
     race_init_bonus = r.initiative_bonus + _get_dex_penalty_reduction(warrior, r.dex_initiative_tiers)
@@ -697,7 +721,8 @@ def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState, foe_styl
     wpn_skill = attacker.skills.get(wpn_key, 0)
     wpn_b     = wpn_skill * 5
 
-    luck_b    = attacker.luck
+    # Probabilistic luck: 25% chance to apply luck bonus to this attack roll
+    luck_b    = _apply_conditional_luck(0, attacker, threshold=25)
     props     = get_style_props(strategy.style)
     style_b   = int(props.apm_modifier * 3)
     feint_b   = attacker.skills.get("feint", 0) * 2
@@ -721,11 +746,13 @@ def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState, foe_styl
     if strategy.style == "Opportunity Throw" and attacker.race.modifiers.thrown_mastery:
         thrown_mastery_b = 10
 
-    # Tactician's edge: +8 vs aggressive opponents, -6 vs methodical ones (Gnome racial)
+    # Tactician's edge: +4 vs aggressive opponents, -6 vs methodical ones (Gnome racial)
+    # Tactician's edge: +8 vs aggressive, -6 vs methodical
+    # Reduced to +4 vs Half-Orc only (brute force is unpredictable)
     tactician_b = 0
     if attacker.race.modifiers.tactician_edge and foe_style:
         if foe_style in _TACTICIAN_FAVORED:
-            tactician_b = 8
+            tactician_b = 4 if state.warrior.race.name == "Half-Orc" else 8
         elif foe_style in _TACTICIAN_DISFAVORED:
             tactician_b = -6
 
@@ -783,7 +810,8 @@ def _defense_roll(
     Weapon skill helps both: knowing your weapon improves both blocking and evasion.
     """
     roll      = _d100()
-    luck_b    = defender.luck
+    # Probabilistic luck: 25% chance to apply luck bonus to this defense roll
+    luck_b    = _apply_conditional_luck(0, defender, threshold=25)
     props     = get_style_props(strategy.style)
     wpn_key   = defender.primary_weapon.lower().replace(" ", "_").replace("&", "and")
     wpn_skill = defender.skills.get(wpn_key, 0)
@@ -858,7 +886,8 @@ def _defense_roll(
     try:
         sec_w = get_weapon(defender.secondary_weapon or "Open Hand")
         if sec_w.is_shield:
-            total += 10 if defender.race.modifiers.shield_bonus else 5
+            shield_val = 10 if defender.race.modifiers.shield_bonus else 5
+            total += shield_val
     except ValueError:
         pass
 
@@ -891,9 +920,10 @@ def _defense_roll(
         total = int(total * (1.0 - state.armor_penalty))
 
     # Tactician's edge: +5 defense vs aggressive attackers, -4 vs methodical (Gnome racial)
+    # Reduced to +2 vs Half-Orc only (brute force is unpredictable)
     if defender.race.modifiers.tactician_edge and atk_style:
         if atk_style in _TACTICIAN_FAVORED:
-            total += 5
+            total += 2 if attacker.race.name == "Half-Orc" else 5
         elif atk_style in _TACTICIAN_DISFAVORED:
             total -= 4
 
@@ -1162,6 +1192,11 @@ def _calc_damage_hybrid(
     armor_reduction = min(0.76, defense * 0.04)
     final_damage = int(raw * (1.0 - armor_reduction))
 
+    # Half-Orc Armor Penetration: 15% of raw damage bypasses armor
+    if attacker.race.name == "Half-Orc":
+        penetrating_damage = int(raw * 0.15)
+        final_damage += penetrating_damage
+
     return max(1, final_damage), weapon.category
 
 
@@ -1240,8 +1275,11 @@ def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CSt
     thrown_b = 10 if (strategy.style == "Opportunity Throw" and attacker.race.modifiers.thrown_mastery) else 0
     tactician_b = 0
     if attacker.race.modifiers.tactician_edge and foe_style:
-        if foe_style in _TACTICIAN_FAVORED:    tactician_b =  8
+        if foe_style in _TACTICIAN_FAVORED:
+            # Reduced to +4 vs Half-Orc only (brute force is unpredictable)
+            tactician_b = 4 if state.warrior.race.name == "Half-Orc" else 8
         elif foe_style in _TACTICIAN_DISFAVORED: tactician_b = -6
+
     ground_pen = 25 if state.is_on_ground else 0
 
     # Heavy weapon penalty for Goblins & Tabaxi
@@ -1293,7 +1331,8 @@ def _defense_roll_verbose(
     attacker: "Warrior", aim_point: str, atk_style: str, is_parry: bool = True,
 ):
     roll      = _d100()
-    luck_b    = defender.luck
+    # Probabilistic luck: 25% chance to apply luck bonus to this defense roll
+    luck_b    = _apply_conditional_luck(0, defender, threshold=25)
     props     = get_style_props(strategy.style)
     wpn_key   = defender.primary_weapon.lower().replace(" ", "_").replace("&", "and")
     wpn_skill = defender.skills.get(wpn_key, 0)
@@ -1566,6 +1605,12 @@ def _calc_damage_verbose(
     armor_reduction = min(0.76, defense * 0.04)
     final_damage = max(1, int(raw * (1.0 - armor_reduction)))
 
+    # Half-Orc Armor Penetration: 15% of raw damage bypasses armor
+    half_orc_penetration = 0
+    if attacker.race.name == "Half-Orc":
+        half_orc_penetration = int(raw * 0.15)
+        final_damage += half_orc_penetration
+
     steps.update({
         "armor_name": armor_nm,
         "armor_def": armor_def,
@@ -1575,6 +1620,7 @@ def _calc_damage_verbose(
         "final_armor": defense,
         "armor_reduction": round(armor_reduction, 3),
         "net_pre_mods": final_damage,
+        "half_orc_penetration": half_orc_penetration,
     })
     return final_damage, weapon.category, steps
 
@@ -1585,7 +1631,9 @@ def _concede_check_verbose(warrior: "Warrior", state: "_CState", is_monster_figh
     roll      = _d100()
     presence  = warrior.presence
     pre_b     = max(-6, min(10, presence - 10))
-    luck_half = warrior.luck // 2
+    # Probabilistic luck: 25% chance to apply luck//2 bonus to this concede roll
+    luck_contribution = _apply_conditional_luck(0, warrior, threshold=25)
+    luck_half = luck_contribution // 2
     total     = roll + pre_b + luck_half
     threshold = max(40, 68 - (presence // 3))
     granted   = total >= threshold
@@ -1618,7 +1666,10 @@ def _check_knockdown_verbose(warrior: "Warrior", state: "_CState", damage: int, 
         chance = chance // 2  # 50% knockdown resistance for Tabaxi
     final  = max(1, chance)
     roll   = random.randint(1, 100)
-    return roll <= final, final, roll
+    # Probabilistic luck: 25% chance to apply luck subtraction (lower roll = better for knockdown resistance)
+    luck_reduction = _apply_conditional_luck(0, warrior, threshold=25)
+    adjusted_roll = max(1, roll - luck_reduction)
+    return adjusted_roll <= final, final, roll
 
 
 def _check_perm_injury_verbose(warrior: "Warrior", damage: int, aim_point: str):
@@ -1629,7 +1680,10 @@ def _check_perm_injury_verbose(warrior: "Warrior", damage: int, aim_point: str):
     if warrior.race.modifiers.fewer_perms:
         chance = int(chance * 0.80)
     roll = random.randint(1, 100)
-    if roll > chance:
+    # Probabilistic luck: 25% chance to apply luck subtraction (lower roll = better for injury resistance)
+    luck_reduction = _apply_conditional_luck(0, warrior, threshold=25)
+    adjusted_roll = max(1, roll - luck_reduction)
+    if adjusted_roll > chance:
         return None, threshold, chance, roll
     if aim_point and aim_point != "None":
         loc_map = {
@@ -1667,7 +1721,11 @@ def _check_perm_injury(
     chance = max(5, min(80, int((damage / warrior.max_hp) * 100) - 20))
     if warrior.race.modifiers.fewer_perms:
         chance = int(chance * 0.80)
-    if random.randint(1, 100) > chance:
+    roll = random.randint(1, 100)
+    # Probabilistic luck: 25% chance to apply luck subtraction (lower roll = better for injury resistance)
+    luck_reduction = _apply_conditional_luck(0, warrior, threshold=25)
+    adjusted_roll = max(1, roll - luck_reduction)
+    if adjusted_roll > chance:
         return None
     if aim_point and aim_point != "None":
         # Map targeting to actual injury locations
@@ -1785,7 +1843,11 @@ def _check_knockdown(warrior: Warrior, state: _CState, damage: int, cat: str) ->
     chance -= max(0, (warrior.size - 12)) * 2
     if warrior.race.modifiers.acrobatic_advantage:
         chance = chance // 2  # 50% knockdown resistance for Tabaxi
-    return random.randint(1, 100) <= max(1, chance)
+    roll = random.randint(1, 100)
+    # Probabilistic luck: 25% chance to apply luck subtraction (lower roll = better for knockdown resistance)
+    luck_reduction = _apply_conditional_luck(0, warrior, threshold=25)
+    adjusted_roll = max(1, roll - luck_reduction)
+    return adjusted_roll <= max(1, chance)
 
 
 # ---------------------------------------------------------------------------
@@ -1814,13 +1876,16 @@ def _concede_check(warrior: Warrior, state: _CState, is_monster_fight: bool = Fa
     d100 + PRE_bonus + luck//2 vs threshold (max(40, 68 - PRE//3)).
     High Presence = lower threshold = easier to get mercy.
     Effective mercy rate ~40-55% when triggered; overall fight death ~2.5-3%.
+    Luck is probabilistic: 25% chance to apply luck//2 bonus to concede roll.
     """
     if is_monster_fight:
         return False
     roll      = _d100()
     presence  = warrior.presence
     pre_b     = max(-6, min(10, presence - 10))
-    total     = roll + pre_b + warrior.luck // 2
+    # Probabilistic luck: 25% chance to apply luck//2 bonus to this concede roll
+    luck_contribution = _apply_conditional_luck(0, warrior, threshold=25) // 2
+    total     = roll + pre_b + luck_contribution
     threshold = max(40, 68 - (presence // 3))
     return total >= threshold
 
@@ -3272,7 +3337,8 @@ class CombatEngine:
                     # Gnome counterstrike mastery: weak parries open a small window.
                     # 5% base + 2% per riposte level. No style bonus — weak parries
                     # are barely openings; only practice (riposte skill) improves them.
-                    if dfr.race.modifiers.counterstrike_mastery and not ds_.is_on_ground:
+                    has_counterstrike = dfr.race.modifiers.counterstrike_mastery
+                    if has_counterstrike and not ds_.is_on_ground:
                         _riposte_lv  = dfr.skills.get("riposte", 0)
                         _weak_chance = 4 + (_riposte_lv * 2)
                         if random.randint(1, 100) <= _weak_chance:
@@ -3749,7 +3815,8 @@ class CombatEngine:
         for ln in N.hit_line(att.name, dfr.name, wpn, cat, ax.aim_point, "precise", attacker_race=att.race.name):
             self._emit(ln)
         # Gnome counterstrike mastery: higher margin (50 vs 40) — more decisive hit.
-        _cs_margin = 50 if att.race.modifiers.counterstrike_mastery else 40
+        has_cs_mastery = att.race.modifiers.counterstrike_mastery
+        _cs_margin = 50 if has_cs_mastery else 40
         dmg, _ = _calc_damage_hybrid(att, ax, wpn, dfr, _cs_margin, style_compat_penalty=penalty_factor)
         # Determine if claw attack (for counterstrike with Open Hand only)
         attack_type = _get_martial_attack_type(att, dfr.name)
