@@ -187,7 +187,7 @@ function createWindow() {
     mainWindow.loadFile(pathLib.join(__dirname, '..', 'bloodspire_client.html'));
   }
 // === OPEN DEVTOOLS AUTOMATICALLY ===
-mainWindow.webContents.openDevTools();
+// mainWindow.webContents.openDevTools();
 
   // Optional: Open it on the right side (detached)
   // mainWindow.webContents.openDevTools({ mode: 'detach' });
