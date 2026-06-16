@@ -475,43 +475,107 @@
             <a href="#help">Help</a>
         </nav>
 
-        <!-- Section: Intro -->
+		<!-- Section: Intro -->
         <section id="intro" class="content-section active">
-            <div id="introduction">
-                <div class="intro-text">
-                    <p>Bloodspire represents a lethal arena simulation ecosystem where managers direct stable groups of five active gladiatorial assets across escalating hazards. Individual combatants possess highly specialized physical allocations, study nuanced maneuvers, and must contend with structural anatomical failures resulting from localized combat incidents. Survival dictates careful parsing of underlying systems.</p>
-                </div>
-            </div>
+            <h3>Welcome to the Pit</h3>
+            <p>BLOODSPIRE is an arena combat game where you manage a team of five warriors and guide them through increasingly difficult fights. Each warrior has six core attributes, learns skills over time, and can be injured. The system is deeply mechanical but rewards learning its systems.</p>
 
-            <h3>Core Mechanics Hierarchy</h3>
-            <p><strong>The Operational Loop:</strong></p>
+            <h4>Core Concepts</h4>
+            <p><strong>The Game Loop:</strong></p>
+            <ol>
+                <li>Create and equip your team of 5 warriors</li>
+                <li>Select fights (or let matchmaking choose)</li>
+                <li>Set up strategies before each fight (weapon load-out, combat style, triggers)</li>
+                <li>Watch the fight unfold in real-time</li>
+                <li>Collect rewards, train skills and attributes, manage injuries</li>
+            </ol>
+
+            <p><strong>The Six Attributes:</strong> All warriors have six core attributes ranging from 3 (worst) to 25 (best):</p>
             <ul class="check-list">
-                <li>Assemble, name, and provision an operational baseline configuration of five active gladiators.</li>
-                <li>Evaluate active combat engagements through voluntary tracking or dynamic system matchmaking.</li>
-                <li>Design procedural strategy tables preceding physical encounters, establishing loadouts, actions, and condition thresholds.</li>
-                <li>Observe real-time combat execution sequences.</li>
-                <li>Secure rewards, allocate attribute and skill training variables, and evaluate long-term structural injuries.</li>
+                <li><strong>Strength (STR):</strong> Determines damage output and maximum weapon weight you can wield</li>
+                <li><strong>Dexterity (DEX):</strong> Affects attack and defense accuracy, dodge chance, initiative</li>
+                <li><strong>Constitution (CON):</strong> Determines maximum HP and endurance; crucial for survival</li>
+                <li><strong>Intelligence (INT):</strong> Improves skill training speed; affects strategy</li>
+                <li><strong>Presence (PRE):</strong> Determines charisma in the arena; affects popularity and concede chances</li>
+                <li><strong>Size (SIZ):</strong> Cannot be trained; affects physical measurements and melee interactions</li>
             </ul>
 
-            <p><strong>The Six Core Attributes:</strong> All character assets process actions based on six fundamental values scaling directly from a baseline of 3 up to an elite cap of 25:</p>
-            <ul class="check-list">
-                <li><strong>Strength (STR):</strong> Dictates base damage parameters and upper weapon/armor weight caps before penalties manifest.</li>
-                <li><strong>Dexterity (DEX):</strong> Modifies accuracy, active parry and dodge defense configurations, and initial encounter initiative.</li>
-                <li><strong>Constitution (CON):</strong> Governs structural vitality metrics, maximum hit points, and endurance reserves.</li>
-                <li><strong>Intelligence (INT):</strong> Increases general skill progression velocity and expands strategic capability.</li>
-                <li><strong>Presence (PRE):</strong> Measures public popularity within arena grounds, modifying crowd reaction and opponent concession rolls.</li>
-                <li><strong>Size (SIZ):</strong> A static physical metric defined exclusively at generation; alters base melee calculation weights.</li>
-            </ul>
-            <p><strong>Point Distribution:</strong> At configuration, managers distribute 16 points among the six core statistics, adding a maximum of 7 points to any individual parameter while observing the maximum system ceiling.</p>
+            <p><strong>Wisdom:</strong> During warrior creation, you get 16 points to distribute among the six base stats (max 7 per stat). Choose wisely, attribute training later is slow.</p>
 
-            <h3>Combat Outcomes</h3>
-            <p>Individual records track specific performance resolutions across three strict classifications:</p>
+            <h4>Fight Outcomes</h4>
+            <p>Fights are decided by:</p>
             <ul class="check-list">
-                <li><strong>Wins:</strong> Successful combat resolutions where the assigned gladiator survives the encounter.</li>
-                <li><strong>Losses:</strong> Unsuccessful combat resolutions involving unconsciousness or opponent survival.</li>
-                <li><strong>Kills:</strong> High-lethality victories resulting in the absolute destruction of the opponent asset.</li>
+                <li><strong>Wins =</strong> victories (warrior still alive)</li>
+                <li><strong>Losses =</strong> defeats (warrior knocked unconscious or opponent survives)</li>
+                <li><strong>Kills =</strong> wins where the opponent died</li>
             </ul>
-            <p><strong>Retirement Parameters:</strong> Gladiators remaining operational across 100 full encounters qualify for honorable retirement systems, leaving active stables permanently for fresh replacements.</p>
+
+            <h4>Retirement</h4>
+            <p>Warriors can retire after 100 fights if the player requests it. Retired warriors leave your team permanently and are replaced.</p>
+        </section>
+
+        <!-- Section: Loop -->
+        <section id="loop" class="content-section">
+            <h3>Core Game Loop</h3>
+
+            <h4>Creating a Warrior</h4>
+            <p>Each warrior starts with six randomly-generated base stats that sum to 55 (each stat 3–21). You then distribute 16 additional points (max 7 per stat, respecting the 25-point ceiling) to refine their attributes.</p>
+            <p><strong>Key Decision:</strong> Different races favor different stats. Halflings want Dexterity, Half-Orcs want Strength, Dwarves want Constitution, etc. Choose your race first, then distribute accordingly.</p>
+
+            <h4>Equipping a Warrior</h4>
+            <p>Every warrior has two armor slots and three weapon slots:</p>
+            <p><strong>Armor Slots:</strong></p>
+            <ul class="check-list">
+                <li>Body Armor (0–8 tiers from Cloth to Full Plate)</li>
+                <li>Helm (0–5 tiers from Leather Cap to Full Helm)</li>
+            </ul>
+            <p><strong>Weapon Slots:</strong></p>
+            <ul class="check-list">
+                <li>Primary Weapon (main fighting weapon)</li>
+                <li>Secondary Weapon (off-hand, often a shield or second blade)</li>
+                <li>Backup Weapon (carried but not used; can be swapped in after fights)</li>
+            </ul>
+            <p><strong>Strength Requirement:</strong> Your Strength limits the maximum weight of armor and weapons you can wear without penalty. Higher Strength allows heavier equipment.</p>
+
+            <h4>Training</h4>
+            <p>You may assign up to 3 training actions per turn to each warrior. Training can target:</p>
+            <ul class="check-list">
+                <li><strong>Attributes:</strong> Strength, Dexterity, Constitution, Intelligence and Presence, but NOT Size.</li>
+                <li><strong>Weapon Skills:</strong> one skill per weapon, scales 0–9.</li>
+                <li><strong>Non-Weapon Skills:</strong> Dodge, Parry, Throw, Lunge, Disarm, Initiative, Feint, Brawl, Sweep, Cleave, Bash, Acrobatics, Riposte, Slash, Strike.</li>
+            </ul>
+            <p><strong>Training Success:</strong> Success depends on your Intelligence (for skills) or Constitution (for attributes). Higher stats = higher training success.</p>
+            <p><strong>Training Speed:</strong> Humans and Gnomes train noticeably faster than other races. Later training (at higher levels) becomes progressively harder.</p>
+
+            <h4>Permanent Injuries</h4>
+            <p>When a warrior takes damage, there is a small chance they suffer a permanent injury in a specific body location:</p>
+            <ul class="check-list">
+                <li>Head, Chest, Abdomen, Primary Arm, Secondary Arm, Primary Leg, Secondary Leg</li>
+            </ul>
+            <p>Each location can accumulate up to 9 levels of injury. Level 9 is fatal (warrior dies). Injuries cannot be healed; they are permanent and reduce combat effectiveness in that location.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Name</th>
+                        <th>Effect</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>0</td><td>None</td><td>No injury</td></tr>
+                    <tr><td>1</td><td>Annoying</td><td>Minor penalty</td></tr>
+                    <tr><td>2</td><td>Bothersome</td><td>Minor penalty</td></tr>
+                    <tr><td>3</td><td>Irritating</td><td>Noticeable penalty</td></tr>
+                    <tr><td>4</td><td>Troublesome</td><td>Noticeable penalty</td></tr>
+                    <tr><td>5</td><td>Painful</td><td>Moderate penalty</td></tr>
+                    <tr><td>6</td><td>Dreadful</td><td>Severe penalty</td></tr>
+                    <tr><td>7</td><td>Incapacitating</td><td>Very severe penalty</td></tr>
+                    <tr><td>8</td><td>Devastating</td><td>Extreme penalty</td></tr>
+                    <tr><td>9</td><td>Fatal</td><td>Warrior dies</td></tr>
+                </tbody>
+            </table>
+            <p>Injuries to the arms reduce attack/parry accuracy. Injuries to the legs reduce dodge and mobility. Head injuries reduce all actions. The higher the injury level, the more severe the combat penalty.</p>
         </section>
 
         <!-- Section: Loop -->
@@ -595,288 +659,378 @@
 
             <div id="raceContainer">
                 <div class="race-card" data-race="human">
-                    <h3 style="margin-top:0;">Human Profile</h3>
-                    <p><strong>Physical Averages:</strong> 5'7" height profile, 165 lbs structural mass.</p>
-                    <p><strong>Operational Summary:</strong> Exceptional operational generalists demonstrating rapid baseline adaptability. They excel at programmatic task processing.</p>
-                    <p><strong>System Modifiers:</strong></p>
+                    <h3 style="margin-top:0;">Human</h3>
+                    <p><strong>Physical:</strong> 5'7" average (5'2"–6'4" range), 165 lbs</p>
+                    <p><strong>Lore:</strong> The adaptable everyman. No extreme strengths or weaknesses. Humans train faster and are less prone to injuries.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
                     <ul class="check-list">
-                        <li>Accelerated Learning: Boosts progress rates across all training selections.</li>
-                        <li>Structural Integrity: Reduces overall generation rates for permanent anatomic damage.</li>
+                        <li>Accelerated Training – Humans learn skills and attributes faster than other races</li>
+                        <li>Resilient – Humans suffer permanent injuries less often</li>
                     </ul>
-                    <p><strong>Tactical Alignments:</strong> Highly stable across all potential matchups. Standard configuration favors mid-weight baseline blades like the Short Sword combined with Target Shields.</p>
+                    <p><strong>Favorable Opponents:</strong> Most balanced race; effective against all opponents.</p>
+                    <p><strong>Unfavorable Opponents:</strong> None in particular.</p>
+                    <p><strong>Typical Build:</strong> Jack-of-all-trades. Short Sword with a Target Shield is a popular entry build. Good with many weapon types. Ideal for learning the game.</p>
                 </div>
 
                 <div class="race-card" data-race="halforc">
-                    <h3 style="margin-top:0;">Half-Orc Profile</h3>
-                    <p><strong>Physical Averages:</strong> 6'3" height profile, 259 lbs dense structural mass.</p>
-                    <p><strong>Operational Summary:</strong> Maximized physical force configurations capable of immense single-instance output, offset by low action speed and restricted defense generation.</p>
-                    <p><strong>System Modifiers:</strong></p>
+                    <h3 style="margin-top:0;">Half-Orc</h3>
+                    <p><strong>Physical:</strong> 6'3" average (5'5"–7'6"), 259 lbs (heaviest race)</p>
+                    <p><strong>Lore:</strong> Pure brute force. Devastating damage and durability, but slow, clumsy, and easy to out-maneuver.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
                     <ul class="check-list">
-                        <li>Brutal Strikes: Enhances base output metrics per successful landing.</li>
-                        <li>Thick Hide: Grants high base hit point pools.</li>
-                        <li>Restricted Velocity: Incurs standard swing delay penalties.</li>
+                        <li>Brutal Strikes – Half-Orcs can deal significantly more damage per hit</li>
+                        <li>Thick Hide – Higher maximum HP</li>
+                        <li>Deliberate Swings – Typically attacks slower than other races</li>
+                        <li>Lead Foot – Slower reactions can lead to reduced initiative</li>
+                        <li>Poor Defenses – Below-average dodge and parry capability</li>
                     </ul>
-                    <p><strong>Preferred Weaponry:</strong> War Flail, Great Axe, Great Sword, War Hammer. Requires aggressive strategy setups to capitalize on extreme Strength.</p>
+                    <p><strong>Favorite Weapons:</strong> War Flail, Great Axe, Great Sword, War Hammer, Great Pick, Battle Flail, Maul, Halberd</p>
+                    <p><strong>Typical Build:</strong> Prioritize Strength and Constitution. War Flail or Great Axe are legendary in Half-Orc hands. Two-handed weapons reward high Strength severely. Defensive play is a death trap.</p>
                 </div>
 
                 <div class="race-card" data-race="halfling">
-                    <h3 style="margin-top:0;">Halfling Profile</h3>
-                    <p><strong>Physical Averages:</strong> 3'10" height profile, 49 lbs minimum structural mass.</p>
-                    <p><strong>Operational Summary:</strong> Highly elusive configurations focusing on evasion mechanics. They deliver frequent low-impact instances but lack physical resilience.</p>
-                    <p><strong>System Modifiers:</strong></p>
+                    <h3 style="margin-top:0;">Halfling</h3>
+                    <p><strong>Physical:</strong> 3'10" average (3'1"–5'1"), 49 lbs (lightest race)</p>
+                    <p><strong>Lore:</strong> Infuriatingly hard to hit. Fast and mobile but extremely fragile with light damage output.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
                     <ul class="check-list">
-                        <li>Elusive Frame: Grants the premier base dodge modifier inside the simulation.</li>
-                        <li>Martial Affinity: Enhances efficiency loops when processing Unarmed combat trees.</li>
-                        <li>Frail Structure: Suffers structural vitality penalties.</li>
+                        <li>Elusive – Exceptional dodge bonus; hardest to hit in the game</li>
+                        <li>Lightning Fast – Very high attack rate</li>
+                        <li>Martial Arts Affinity – Extra effectiveness with unarmed style</li>
+                        <li>Lightweight – Rely on Dexterity and precise attacks for dealing damage</li>
+                        <li>Poor Blocker – Below-average parry</li>
+                        <li>Frail – Lower maximum HP</li>
                     </ul>
-                    <p><strong>Preferred Weaponry:</strong> Short Sword, Stiletto, Hatchet, Javelin. Incompatible with heavy two-handed mauls or axes.</p>
+                    <p><strong>Favorite Weapons:</strong> Short Sword, Stiletto, Hatchet, Quarterstaff, Javelin, Bladed Flail, Hammer</p>
+                    <p><strong>Weak Weapons:</strong> Maul, Great Axe, Great Sword, Halberd (too heavy and slow)</p>
+                    <p><strong>Typical Build:</strong> Maximize Dexterity, keep Strength moderate. "Pocket Rocket" builds with a single Short Sword are iconic. Goal is to land many light hits before the opponent can land one heavy hit. Defensive play (Wall of Steel, Parry) doesn't suit them.</p>
                 </div>
 
                 <div class="race-card" data-race="dwarf">
-                    <h3 style="margin-top:0;">Dwarf Profile</h3>
-                    <p><strong>Physical Averages:</strong> 4'2" height profile, 195 lbs heavy dense composition.</p>
-                    <p><strong>Operational Summary:</strong> Exceptional defensive structures designed around shielding techniques and incoming force absorption. They lack viable dodge generation.</p>
-                    <p><strong>System Modifiers:</strong></p>
+                    <h3 style="margin-top:0;">Dwarf</h3>
+                    <p><strong>Physical:</strong> 4'2" average (3'6"–5'2"), 195 lbs (very dense, heavier than height suggests)</p>
+                    <p><strong>Lore:</strong> The ultimate tank. Absorbs massive punishment and parries masterfully, but very slow and poor at dodging.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
                     <ul class="check-list">
-                        <li>Stout Vitality: Highest native health pool indexing inside the game engine.</li>
-                        <li>Master Parrier: Substantial bonus modifiers when resolving active parry mechanics.</li>
-                        <li>Sturdy Frame: Bypasses standard encumbrance limits by one full armor tier.</li>
+                        <li>Stout – Highest maximum HP in the game</li>
+                        <li>Solid Blows – Above-average damage bonus</li>
+                        <li>Master Parrier – Significant parry bonus</li>
+                        <li>Sturdy Frame – Can wear heavier armor than Strength would normally allow</li>
+                        <li>Shield Affinity – Bonus defense when using a shield (greater with their preferred shields)</li>
+                        <li>Deliberate – Somewhat slower attack rate</li>
+                        <li>Poor Dodger – Very poor dodge; should avoid light armor</li>
                     </ul>
-                    <p><strong>Preferred Weaponry:</strong> Battle Axe, Fransisca, Great Axe, War Hammer, Target Shield. Optimized for counter-striking structures.</p>
+                    <p><strong>Favorite Weapons:</strong> Battle Axe, Fransisca, Great Axe, Morningstar, War Hammer, Boar Spear, Target Shield, Net, Trident</p>
+                    <p><strong>Weak Weapons:</strong> Halberd, Pole Axe (doesn't suit the Dwarf style)</p>
+                    <p><strong>Typical Build:</strong> High Strength and Constitution, moderate Dexterity. Dwarves want armor and shields. Counterstrike and Parry are your friends. Target Shield + War Hammer is a classic. Strategy: Let the opponent come to you and parry relentlessly.</p>
                 </div>
 
                 <div class="race-card" data-race="halfelf">
-                    <h3 style="margin-top:0;">Half-Elf Profile</h3>
-                    <p><strong>Physical Averages:</strong> 5'4" height profile, 144 lbs balanced mass.</p>
-                    <p><strong>Operational Summary:</strong> Balanced combat configurations utilizing enhanced equipment weight thresholds.</p>
-                    <p><strong>System Modifiers:</strong></p>
+                    <h3 style="margin-top:0;">Half-Elf</h3>
+                    <p><strong>Physical:</strong> 5'4" average (5'0"–6'0"), 144 lbs</p>
+                    <p><strong>Lore:</strong> Versatile and capable. Slight edge in weapon handling with no major weaknesses.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
                     <ul class="check-list">
-                        <li>Weapon Aptitude: Lowers Strength requirements for heavy weapon configurations.</li>
-                        <li>Quick Hands: Increases raw action velocity metrics.</li>
+                        <li>Weapon Aptitude – Counts as slightly stronger for weapon weight limits</li>
+                        <li>Quick Hands – Slightly faster attack rate</li>
+                        <li>Agile – Decent dodge bonus</li>
+                        <li>Balanced – Mild all-rounder damage bonus</li>
                     </ul>
-                    <p><strong>Preferred Weaponry:</strong> Pole Axe, Bastard Sword, Long Sword, Battle Flail. Highly adaptable setup potential.</p>
+                    <p><strong>Favorite Weapons:</strong> Pole Axe, Bastard Sword, Long Sword, Scimitar, Battle Flail, Scythe, Javelin, Broadsword</p>
+                    <p><strong>Typical Build:</strong> Balanced Strength and Dexterity. Half-Elves can use slightly heavier weapons than their Strength would suggest. Battle Flail is a Half-Elf favorite. Its attack rate pairs well with their quickness. Good entry-level race after Humans.</p>
                 </div>
 
                 <div class="race-card" data-race="elf">
-                    <h3 style="margin-top:0;">Elf Profile</h3>
-                    <p><strong>Physical Averages:</strong> 5'2" height profile, 129 lbs agile frame.</p>
-                    <p><strong>Operational Summary:</strong> High-velocity dual-wielding specialists emphasizing rapid evasion. Extremely vulnerable to concentrated single hits.</p>
-                    <p><strong>System Modifiers:</strong></p>
+                    <h3 style="margin-top:0;">Elf</h3>
+                    <p><strong>Physical:</strong> 5'2" average (4'8"–5'11"), 129 lbs</p>
+                    <p><strong>Lore:</strong> Elusive speed demons. Masters of dual-wielding and evasion, but extremely fragile.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
                     <ul class="check-list">
-                        <li>Graceful Evasion: Enhanced base dodge parameters.</li>
-                        <li>Dual-Wielder: Multiplies effectiveness when holding weapons in both hand slots.</li>
+                        <li>Graceful – High dodge bonus</li>
+                        <li>Whirlwind – Very fast attack rate</li>
+                        <li>Dual-Wielder – Bonus when both hands hold weapons (scales with weapon skill)</li>
+                        <li>Delicate – Lower maximum HP</li>
+                        <li>Light Hitter – Minor damage penalty</li>
                     </ul>
-                    <p><strong>Preferred Weaponry:</strong> Dagger, Short Sword, Scimitar, Scythe, Epee. Requires light configurations.</p>
+                    <p><strong>Favorite Weapons:</strong> Dagger, Short Sword, Scimitar, Scythe, Flail, Javelin, Stiletto, Epee</p>
+                    <p><strong>Typical Build:</strong> Maximize Dexterity, moderate Strength. "Wall of Steel + Dual Short Swords" is the classic Elf build. They can parry very frequently and take multiple light hits. Avoid heavy armor and heavy weapons; focus on high activity level and fast attacks.</p>
                 </div>
 
                 <div class="race-card" data-race="goblin">
-                    <h3 style="margin-top:0;">Goblin Profile</h3>
-                    <p><strong>Physical Averages:</strong> 3'6" height profile, 48 lbs irregular mass.</p>
-                    <p><strong>Operational Summary:</strong> Irregular skirmishers specializing in high initiative metrics and ranged throwable manipulation. They feature weak physical statistics.</p>
-                    <p><strong>System Modifiers:</strong></p>
+                    <h3 style="margin-top:0;">Goblin</h3>
+                    <p><strong>Physical:</strong> 3'6" average, 48 lbs (tiny, light)</p>
+                    <p><strong>Lore:</strong> Tiny dirty fighters. Fast and tricky with thrown weapons, but very weak and fragile.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
                     <ul class="check-list">
-                        <li>First Strike: Exceptional base initiative modifiers.</li>
-                        <li>Thrown Mastery: Reduces weight factors for all missile-typed objects.</li>
-                        <li>Scavenger: High percentage success to claim dropped enemy gear mid-encounter.</li>
+                        <li>Quick Hands – Very fast attack rate</li>
+                        <li>First Strike – Acts first most of the time</li>
+                        <li>Slippery – High dodge bonus</li>
+                        <li>Thrown Mastery – Bonus to Opportunity Throw; thrown weapons are lighter for them</li>
+                        <li>Scavenger – High chance to pick up dropped weapons</li>
+                        <li>Too Small – Severe penalty with heavy or two-handed weapons</li>
+                        <li>Weakling – Significant damage penalty</li>
+                        <li>Brittle – Very low maximum HP and Strength</li>
                     </ul>
-                    <p><strong>Preferred Weaponry:</strong> Dagger, Stiletto, Knife, Bola. Heavily penalized by two-handed loadouts.</p>
+                    <p><strong>Favorite Weapons:</strong> Dagger, Stiletto, Short Sword, Hatchet, Javelin, Knife, Bola, Hammer</p>
+                    <p><strong>Weak Weapons:</strong> Great Axe, Great Sword, Halberd, War Flail (too heavy; suffer penalties)</p>
+                    <p><strong>Typical Build:</strong> Maximize Dexterity. Opportunity Throw specialist or fast hit-and-run. Light weapons only. The Scavenger ability lets you pick up your enemy's dropped weapons and turn them on them. High-risk, high-reward gameplay.</p>
                 </div>
 
                 <div class="race-card" data-race="gnome">
-                    <h3 style="margin-top:0;">Gnome Profile</h3>
-                    <p><strong>Physical Averages:</strong> 3'4" height profile, 85 lbs compact frame.</p>
-                    <p><strong>Operational Summary:</strong> Analytical tactical assets focusing on active parry windows and retaliation loops. They excel against high-aggression enemies.</p>
-                    <p><strong>System Modifiers:</strong></p>
+                    <h3 style="margin-top:0;">Gnome</h3>
+                    <p><strong>Physical:</strong> 3'4" average (smallest playable race), 85 lbs</p>
+                    <p><strong>Lore:</strong> Small, surprisingly tough tacticians. Excel at counterstrikes and turning aggression against opponents.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
                     <ul class="check-list">
-                        <li>Counterstrike Mastery: Enhances hit and damage metrics following successful parries.</li>
-                        <li>Tactician's Edge: Grants defensive bonuses against high-activity opponents.</li>
+                        <li>Surprisingly Sturdy – Decent maximum HP for their size</li>
+                        <li>Quick Study – Slightly faster learning</li>
+                        <li>Adept Blocker – Good parry bonus</li>
+                        <li>Counterstrike Mastery – Strong bonus on successful parries and ripostes</li>
+                        <li>Tactician's Edge – Bonus defense vs aggressive attackers, penalty vs methodical ones</li>
+                        <li>Light Hitter – Minor damage penalty</li>
+                        <li>Deliberate – Somewhat slower attack rate</li>
                     </ul>
-                    <p><strong>Preferred Weaponry:</strong> Short Sword, Long Sword, Epee, War Hammer.</p>
+                    <p><strong>Favorite Weapons:</strong> Short Sword, Long Sword, Epee, Bastard Sword, Hammer, Mace, Morningstar, War Hammer</p>
+                    <p><strong>Weak Weapons:</strong> Great Axe, Battle Axe, Halberd, Great Pick (too large)</p>
+                    <p><strong>Typical Build:</strong> Balanced Strength, Constitution, and Dexterity. Counterstrike specialist. Let the opponent attack you, then riposte viciously. The Tactician's Edge is subtle but powerful. Aggressive opponents find themselves at a disadvantage against you, so play patiently.</p>
                 </div>
 
                 <div class="race-card" data-race="lizardfolk">
-                    <h3 style="margin-top:0;">Lizardfolk Profile</h3>
-                    <p><strong>Physical Averages:</strong> 6'0" height profile, 240 lbs predatory scale mass.</p>
-                    <p><strong>Operational Summary:</strong> Raw brawling configurations utilizing native defensive tissue layers. Strongly optimized for unarmed fighting styles.</p>
-                    <p><strong>System Modifiers:</strong></p>
+                    <h3 style="margin-top:0;">Lizardfolk</h3>
+                    <p><strong>Physical:</strong> 6'0" average, 240 lbs (muscular, dense reptile)</p>
+                    <p><strong>Lore:</strong> Savage reptilian predators. Tough and relentless with natural armor, but cold-blooded and slow to accelerate.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
                     <ul class="check-list">
-                        <li>Tough Scales: Native protection values rendering heavy physical armor redundant.</li>
-                        <li>Natural Weaponry: Amplifies output when utilizing the Open Hand option.</li>
+                        <li>Tough Scales – Good maximum HP and natural armor protection</li>
+                        <li>Natural Weaponry – Bonus damage with Martial Combat or Open Hand</li>
+                        <li>Surprisingly Agile – Decent dodge bonus for their size</li>
+                        <li>Cold-Blooded – Slower attack rate (slow to start fighting)</li>
                     </ul>
-                    <p><strong>Special Rule:</strong> Standard heavy armor options yield zero defense gains while continuing to impose heavy movement and Dexterity penalties. Stick to Cloth, Leather, or empty slots.</p>
+                    <p><strong>Favorite Weapons:</strong> Open Hand, Dagger, Stiletto, Short Sword, Hatchet, Hammer, Mace, Quarterstaff</p>
+                    <p><strong>Weak Weapons:</strong> Epee, Short Sword, Long Sword (not suited to heavy fighting style)</p>
+                    <p><strong>Special Rules:</strong> Natural scales provide inherent defense. Light armor (Cloth, Leather) can add a small bonus, but heavier armor provides no additional protection while still imposing movement penalties. Recommended: No armor, Cloth, or Leather only. Their natural weapon attacks (Open Hand) can be devastating.</p>
+                    <p><strong>Typical Build:</strong> High Strength and Constitution. Martial Combat specialist with Open Hand. Their natural armor means they don't need heavy gear. Use mobility and natural weapon bonuses. Cold-blooded penalty is mitigated by patient, methodical play.</p>
                 </div>
 
                 <div class="race-card" data-race="tabaxi">
-                    <h3 style="margin-top:0;">Tabaxi Profile</h3>
-                    <p><strong>Physical Averages:</strong> 4'10" height profile, 115 lbs lean muscle mass.</p>
-                    <p><strong>Operational Summary:</strong> Acrobatics-focused evasion builds utilizing burst action mechanics. They struggle in protracted wars of attrition.</p>
-                    <p><strong>System Modifiers:</strong></p>
+                    <h3 style="margin-top:0;">Tabaxi</h3>
+                    <p><strong>Physical:</strong> 4'10" average, 115 lbs (lean feline)</p>
+                    <p><strong>Lore:</strong> Lightning-quick acrobatic felines. Best evasion in the game but fragile and tire quickly in long fights.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
                     <ul class="check-list">
-                        <li>Uncanny Dodge: Top-tier absolute evasion coefficient inside the engine.</li>
-                        <li>Frenzy Trigger: Automated single-instance combat execution acceleration.</li>
-                        <li>Spear Exception: Exempts all spear classification weapons from standard small-frame penalties.</li>
+                        <li>Uncanny Dodge – Best pure evasion in the game</li>
+                        <li>Lightning Reflexes – Acts first; determines combat flow</li>
+                        <li>Acrobatic – High resistance to knockdowns; performs acrobatic maneuvers on good rolls</li>
+                        <li>Frenzy – Can unleash a burst of extra attacks once per fight</li>
+                        <li>Spear Exception – Spears are exempt from their heavy weapon penalty</li>
+                        <li>Light Frame – Suffers penalty with heavy weapons (except spears)</li>
+                        <li>Frail – Very low maximum HP and Strength</li>
                     </ul>
-                    <p><strong>Preferred Weaponry:</strong> Dagger, Scimitar, Short Spear, Javelin. Avoid heavy items like the Great Axe.</p>
+                    <p><strong>Favorite Weapons:</strong> Dagger, Short Sword, Scimitar, Epee, Stiletto, Hatchet, Javelin, Scythe, Short Spear</p>
+                    <p><strong>Weak Weapons:</strong> Great Axe, Great Sword, Halberd, Maul, Battle Flail (too heavy; suffer penalties)</p>
+                    <p><strong>Special Rules:</strong> Spears (Short Spear, Boar Spear, Long Spear, Javelin) are exempt from the heavy weapon penalty, allowing Tabaxi to use them without penalty.</p>
+                    <p><strong>Typical Build:</strong> Maximize Dexterity, moderate Strength. Dodge/Evasion specialist. Light weapons only, or spears. The Frenzy ability grants a burst of speed mid-fight (triggered automatically) to finish a weakened opponent, or to turn the tides of a fight. Goal: Dance around the opponent, dodge everything, land many small hits.</p>
                 </div>
             </div>
         </section>
 
         <!-- Section: Styles -->
         <section id="styles" class="content-section">
-            <h3>Fighting Styles Matrix</h3>
-            <p>BLOODSPIRE applies 15 specific fighting configurations altering underlying simulation math and active combat behavior.</p>
-            
-            <div class="controls-panel">
-                <label for="styleSelect">Filter Combat Stance:</label>
-                <select id="styleSelect" onchange="filterStyle()">
-                    <option value="">-- Choose a Stance --</option>
-                    <option value="total-kill">Total Kill (Aggressive)</option>
-                    <option value="wall-steel">Wall of Steel (Defensive/Counter)</option>
-                    <option value="lunge">Lunge (Precision)</option>
-                    <option value="bash">Bash (Power)</option>
-                    <option value="slash">Slash (Aggression)</option>
-                    <option value="strike">Strike (Core)</option>
-                    <option value="engage-withdraw">Engage & Withdraw (Evasion)</option>
-                    <option value="counterstrike">Counterstrike (Reaction)</option>
-                    <option value="decoy">Decoy (Misdirection)</option>
-                    <option value="sure-strike">Sure Strike (Accuracy)</option>
-                    <option value="calculated">Calculated Attack (Precision)</option>
-                    <option value="martial">Martial Combat (Unarmed)</option>
-                    <option value="opportunity-throw">Opportunity Throw (Ranged)</option>
-                    <option value="parry">Parry (Defense)</option>
-                    <option value="defend">Defend (Protection)</option>
-                </select>
-            </div>
+			<h3>Fighting Styles Matrix</h3>
+			<p>BLOODSPIRE applies 15 specific fighting configurations altering underlying simulation math and active combat behavior.</p>
+			
+			<div class="controls-panel">
+				<label for="styleSelect">Filter Combat Stance:</label>
+				<select id="styleSelect" onchange="filterStyle()">
+					<option value="">-- Choose a Stance --</option>
+					<option value="total-kill">Total Kill (Aggressive)</option>
+					<option value="wall-steel">Wall of Steel (Defensive/Counter)</option>
+					<option value="lunge">Lunge (Precision)</option>
+					<option value="bash">Bash (Power)</option>
+					<option value="slash">Slash (Aggression)</option>
+					<option value="strike">Strike (Core)</option>
+					<option value="engage-withdraw">Engage & Withdraw (Evasion)</option>
+					<option value="counterstrike">Counterstrike (Reaction)</option>
+					<option value="decoy">Decoy (Misdirection)</option>
+					<option value="sure-strike">Sure Strike (Accuracy)</option>
+					<option value="calculated">Calculated Attack (Precision)</option>
+					<option value="martial">Martial Combat (Unarmed)</option>
+					<option value="opportunity-throw">Opportunity Throw (Ranged)</option>
+					<option value="parry">Parry (Defense)</option>
+					<option value="defend">Defend (Protection)</option>
+				</select>
+			</div>
 
-            <div id="stylePlaceholder" class="placeholder-text">
-                Select a tactical style configuration from the dropdown menu to examine mechanical values.
-            </div>
+			<div id="stylePlaceholder" class="placeholder-text">
+				Select a tactical style configuration from the dropdown menu to examine mechanical values.
+			</div>
 
-            <div id="styleContainer">
-                <div class="style-card" data-style="total-kill">
-                    <h3 style="margin-top:0;">Total Kill (Aggressive)</h3>
-                    <ul class="check-list">
-                        <li>Intent: Maximum offensive output through total abandonment of personal defense matrices.</li>
-                        <li>Math: Suppresses your active dodge and parry values to absolute minimums.</li>
-                        <li>Weapons: Optimized for massive heavy weaponry like the Great Axe or War Flail.</li>
-                    </ul>
-                </div>
+			<div id="styleContainer">
+				<div class="style-card" data-style="total-kill">
+					<h3 style="margin-top:0;">Total Kill (Aggressive)</h3>
+					<ul class="check-list">
+						<li>Goal: Destroy the opponent; maximum offense, no defense[cite: 1]</li>
+						<li>Special: Ignores all defensive effort; defense rolls are significantly reduced[cite: 1]</li>
+						<li>Use: Only when you have a clear health advantage and want to end the fight fast[cite: 1]</li>
+						<li>Weapons: Prefer heavy weapons (Great Axe, War Flail, Maul, Great Pick)[cite: 1]</li>
+						<li>Risk: If you're losing, this guarantees faster defeat[cite: 1]</li>
+					</ul>
+				</div>
 
-                <div class="style-card" data-style="wall-steel">
-                    <h3 style="margin-top:0;">Wall of Steel (Defensive/Counter)</h3>
-                    <ul class="check-list">
-                        <li>Intent: Establish an unyielding line, maximizing parry instance counts.</li>
-                        <li>Math: Multiplies base parry windows and increases total defensive engagement attempts.</li>
-                        <li>Weapons: Requires functional shielding assets (Target Shield, Tower Shield) paired with light blade groups.</li>
-                    </ul>
-                </div>
+				<div class="style-card" data-style="wall-steel">
+					<h3 style="margin-top:0;">Wall of Steel (Defensive/Counter)</h3>
+					<ul class="check-list">
+						<li>Goal: Form an impenetrable wall; block everything[cite: 1]</li>
+						<li>Mechanics: High parry bonus, increases parry attempts[cite: 1]</li>
+						<li>Use: When facing aggressive opponents; accumulate damage-free turns[cite: 1]</li>
+						<li>Weapons: Shields (especially Tower Shield, Target Shield), Short Sword, Boar Spear[cite: 1]</li>
+						<li>Risk: Low offense; opponent may outlast you[cite: 1]</li>
+					</ul>
+				</div>
 
-                <div class="style-card" data-style="lunge">
-                    <h3 style="margin-top:0;">Lunge (Precision)</h3>
-                    <ul class="check-list">
-                        <li>Intent: High-reach thrust maneuvers augmenting linear accuracy parameters.</li>
-                        <li>Math: Adds distinct precision scaling per active level inside the Lunge skill tree.</li>
-                        <li>Weapons: Perfect fit for Long Spears, Boar Spears, Epees, and Stilettos.</li>
-                    </ul>
-                </div>
+				<div class="style-card" data-style="lunge">
+					<h3 style="margin-top:0;">Lunge (Precision)</h3>
+					<ul class="check-list">
+						<li>Goal: Thrust with precision; bonus accuracy and reach[cite: 1]</li>
+						<li>Special: Accuracy bonus per Lunge skill level; Long Spear, Boar Spear, Javelin favor this[cite: 1]</li>
+						<li>Use: Finesse-focused warriors; effective at range[cite: 1]</li>
+						<li>Weapons: Spears (Short/Boar/Long), Epee, Stiletto, Scimitar[cite: 1]</li>
+						<li>Affinity: Powerful when combined with high Dexterity[cite: 1]</li>
+					</ul>
+				</div>
 
-                <div class="style-card" data-style="bash">
-                    <h3 style="margin-top:0;">Bash (Power)</h3>
-                    <ul class="check-list">
-                        <li>Intent: Concussive application of blunt force designed to compromise standing positions.</li>
-                        <li>Math: Unlocks high secondary knockdown calculations based on weapon mass.</li>
-                        <li>Weapons: Hammer, Mace, Morningstar, War Hammer, Maul.</li>
-                    </ul>
-                </div>
+				<div class="style-card" data-style="bash">
+					<h3 style="margin-top:0;">Bash (Power)</h3>
+					<ul class="check-list">
+						<li>Goal: Blunt force trauma; heavy impact[cite: 1]</li>
+						<li>Special: Bonus with blunt weapons (Hammer, Mace, Morningstar, Club)[cite: 1]</li>
+						<li>Use: When facing light armor; can knock down opponents[cite: 1]</li>
+						<li>Weapons: Blunt weapons (Hammer, Morningstar, War Hammer, Maul)[cite: 1]</li>
+						<li>Affinity: Half-Orcs with War Hammer or Maul[cite: 1]</li>
+					</ul>
+				</div>
 
-                <div class="style-card" data-style="slash">
-                    <h3 style="margin-top:0;">Slash (Aggression)</h3>
-                    <ul class="check-list">
-                        <li>Intent: Sweeping horizontal execution sequences providing flat, stable damage parameters.</li>
-                        <li>Weapons: Bastard Sword, Great Sword, Battle Axe, Scythe.</li>
-                    </ul>
-                </div>
+				<div class="style-card" data-style="slash">
+					<h3 style="margin-top:0;">Slash (Aggression)</h3>
+					<ul class="check-list">
+						<li>Goal: Sweeping cuts; moderate damage[cite: 1]</li>
+						<li>Use: Sword and axe specialists; balanced offense/defense[cite: 1]</li>
+						<li>Weapons: Broad Sword, Bastard Sword, Great Sword, Battle Axe, Great Axe, Scythe[cite: 1]</li>
+						<li>Affinity: Half-Elves with Bastard Sword; Elves with Scythe[cite: 1]</li>
+					</ul>
+				</div>
 
-                <div class="style-card" data-style="strike">
-                    <h3 style="margin-top:0;">Strike (Core)</h3>
-                    <ul class="check-list">
-                        <li>Intent: The standardized balanced combat baseline mixing standard offense with basic defense arrays.</li>
-                        <li>Weapons: Compatible across all standard physical weapon inventories.</li>
-                    </ul>
-                </div>
+				<div class="style-card" data-style="strike">
+					<h3 style="margin-top:0;">Strike (Core)</h3>
+					<ul class="check-list">
+						<li>Goal: Straightforward stabbing and cutting; balanced[cite: 1]</li>
+						<li>Use: Foundation style for many builds[cite: 1]</li>
+						<li>Weapons: Versatile (Short Sword, Longsword, Mace, Hammer, Boar Spear)[cite: 1]</li>
+						<li>Affinity: Works with almost any warrior/weapon combo[cite: 1]</li>
+					</ul>
+				</div>
 
-                <div class="style-card" data-style="engage-withdraw">
-                    <h3 style="margin-top:0;">Engage & Withdraw (Evasion)</h3>
-                    <ul class="check-list">
-                        <li>Intent: Hit-and-run tactics designed to execute an attack before establishing safety distance.</li>
-                        <li>Math: Injects accuracy and damage modifiers during specific retreat movement loops.</li>
-                        <li>Races: Extensively utilized by high-DEX structures like Tabaxi and Elves.</li>
-                    </ul>
-                </div>
+				<div class="style-card" data-style="engage-withdraw">
+					<h3 style="margin-top:0;">Engage & Withdraw (Evasion)</h3>
+					<ul class="check-list">
+						<li>Goal: Attack then retreat; hit-and-run tactics[cite: 1]</li>
+						<li>Special: Bonus damage/accuracy when performing tactical retreats[cite: 1]</li>
+						<li>Use: Against heavy opponents you're outmatched against[cite: 1]</li>
+						<li>Weapons: Light weapons (Dagger, Scimitar, Javelin)[cite: 1]</li>
+						<li>Affinity: Tabaxi, Elves, Halflings[cite: 1]</li>
+					</ul>
+				</div>
 
-                <div class="style-card" data-style="counterstrike">
-                    <h3 style="margin-top:0;">Counterstrike (Reaction)</h3>
-                    <ul class="check-list">
-                        <li>Intent: Absorb or redirect an incoming attack vector, converting momentum into a return strike.</li>
-                        <li>Configurations: Best utilized by sturdy, high-parry assets holding shields.</li>
-                    </ul>
-                </div>
+				<div class="style-card" data-style="counterstrike">
+					<h3 style="margin-top:0;">Counterstrike (Reaction)</h3>
+					<ul class="check-list">
+						<li>Goal: Let opponent attack, then retaliate[cite: 1]</li>
+						<li>Special: Bonus damage/accuracy when responding to attacks[cite: 1]</li>
+						<li>Use: Defensive warriors (Dwarf + Target Shield + Long Sword)[cite: 1]</li>
+						<li>Weapons: Medium weapons paired with shields (Longsword + Target Shield)[cite: 1]</li>
+						<li>Affinity: Gnomes with Counterstrike Mastery ability[cite: 1]</li>
+					</ul>
+				</div>
 
-                <div class="style-card" data-style="decoy">
-                    <h3 style="margin-top:0;">Decoy (Misdirection)</h3>
-                    <ul class="check-list">
-                        <li>Intent: Execute intricate tactical feints to trick an opponent into declaring an improper defense vector.</li>
-                        <li>Counter: Completely nullified if the defending gladiator is operating under Counterstrike settings.</li>
-                    </ul>
-                </div>
+				<div class="style-card" data-style="decoy">
+					<h3 style="margin-top:0;">Decoy (Misdirection)</h3>
+					<ul class="check-list">
+						<li>Goal: Feint and deceive; confuse opponent[cite: 1]</li>
+						<li>Special: Feint attack (moderate chance to land); canceled by Counterstrike opponents[cite: 1]</li>
+						<li>Use: Against opponents who predict your moves[cite: 1]</li>
+						<li>Weapons: Medium weapons (Short Sword, Longsword, Epee)[cite: 1]</li>
+						<li>Risk: Feint fails against clever opponents[cite: 1]</li>
+					</ul>
+				</div>
 
-                <div class="style-card" data-style="sure-strike">
-                    <h3 style="margin-top:0;">Sure Strike (Accuracy)</h3>
-                    <ul class="check-list">
-                        <li>Intent: Absolute accuracy focus, prioritizing land verification over raw power.</li>
-                        <li>Math: Bypasses standard target defense rolls entirely. Used heavily with Nets and Bolas.</li>
-                    </ul>
-                </div>
+				<div class="style-card" data-style="sure-strike">
+					<h3 style="margin-top:0;">Sure Strike (Accuracy)</h3>
+					<ul class="check-list">
+						<li>Goal: Guaranteed accuracy; no misses (very high defense bypass)[cite: 1]</li>
+						<li>Special: Always hits; defense rolls are cancelled[cite: 1]</li>
+						<li>Use: When accuracy matters more than damage[cite: 1]</li>
+						<li>Weapons: Missile weapons (Net, Bola), finesse weapons[cite: 1]</li>
+						<li>Affinity: High Intelligence for precision calculation[cite: 1]</li>
+					</ul>
+				</div>
 
-                <div class="style-card" data-style="calculated">
-                    <h3 style="margin-top:0;">Calculated Attack (Precision)</h3>
-                    <ul class="check-list">
-                        <li>Intent: Precise striking targeting small weak points in heavy protective arrays.</li>
-                        <li>Math: Armor bypass modifiers scale directly from combined Dexterity and Intelligence statistics.</li>
-                    </ul>
-                </div>
+				<div class="style-card" data-style="calculated">
+					<h3 style="margin-top:0;">Calculated Attack (Precision)</h3>
+					<ul class="check-list">
+						<li>Goal: Surgical precision; threads a seam in the armor[cite: 1]</li>
+						<li>Special: Bonus armor bypass based on Dexterity and Intelligence[cite: 1]</li>
+						<li>Use: Finesse builds facing heavily-armored opponents[cite: 1]</li>
+						<li>Weapons: Stiletto, Dagger, Epee, Small Pick, Military Pick[cite: 1]</li>
+						<li>Affinity: High Dexterity + Intelligence[cite: 1]</li>
+					</ul>
+				</div>
 
-                <div class="style-card" data-style="martial">
-                    <h3 style="margin-top:0;">Martial Combat (Unarmed)</h3>
-                    <ul class="check-list">
-                        <li>Intent: Empty-hand brawling or specialized light implement deployment.</li>
-                        <li>Compatible Array: Open Hand, Cestus, Dagger, Knife, Stiletto, Quarterstaff, Net.</li>
-                    </ul>
-                </div>
+				<div class="style-card" data-style="martial">
+					<h3 style="margin-top:0;">Martial Combat (Unarmed)</h3>
+					<ul class="check-list">
+						<li>Goal: Fight with open hand or martial weapons[cite: 1]</li>
+						<li>Special: Bonus damage with unarmed, Open Hand, Dagger, etc.; scales with Martial combat skill[cite: 1]</li>
+						<li>MC-Compatible Weapons: Stiletto, Dagger, Knife, Quarterstaff, Net, Great Staff, Open Hand[cite: 1]</li>
+						<li>Use: Halflings, Lizardfolk, Half-Elves with high Martial Combat skill[cite: 1]</li>
+						<li>Affinity: Races with Martial Combat Bonus; Open Hand scales infinitely with Strength[cite: 1]</li>
+					</ul>
+				</div>
 
-                <div class="style-card" data-style="opportunity-throw">
-                    <h3 style="margin-top:0;">Opportunity Throw (Ranged)</h3>
-                    <ul class="check-list">
-                        <li>Intent: Projectile deployment over distance to soften targets prior to physical contact.</li>
-                        <li>Math: Evaluates using the Throw skill tree, reducing base Strength damage dependencies.</li>
-                    </ul>
-                </div>
+				<div class="style-card" data-style="opportunity-throw">
+					<h3 style="margin-top:0;">Opportunity Throw (Ranged)</h3>
+					<ul class="check-list">
+						<li>Goal: Throw weapons at distance[cite: 1]</li>
+						<li>Special: Uses Throw skill; reduces Strength contribution to damage[cite: 1]</li>
+						<li>Special Goblins: Bonus to Opportunity Throw; throwables weigh less for them[cite: 1]</li>
+						<li>Throwable Weapons: Stiletto, Knife, Dagger, Hatchet, Francisca, Short Spear, Boar Spear, Javelin, Hammer and Bola[cite: 1]</li>
+						<li>Use: Open-range fighting; avoid close-in brawls[cite: 1]</li>
+						<li>Risk: Throwable weapons run out if not managed[cite: 1]</li>
+					</ul>
+				</div>
 
-                <div class="style-card" data-style="parry">
-                    <h3 style="margin-top:0;">Parry (Defense)</h3>
-                    <ul class="check-list">
-                        <li>Intent: Pure blade-on-blade defensive posture prioritizing weapon deflections.</li>
-                    </ul>
-                </div>
+				<div class="style-card" data-style="parry">
+					<h3 style="margin-top:0;">Parry (Defense)</h3>
+					<ul class="check-list">
+						<li>Goal: Block everything; active defense[cite: 1]</li>
+						<li>Special: High parry rolls; bonus to blocking weapons[cite: 1]</li>
+						<li>Use: Defensive warriors who want to reduce damage taken[cite: 1]</li>
+						<li>Weapons: Medium weapons, especially shields[cite: 1]</li>
+						<li>Affinity: Dwarves, high Parry skill[cite: 1]</li>
+					</ul>
+				</div>
 
-                <div class="style-card" data-style="defend">
-                    <h3 style="margin-top:0;">Defend (Protection)</h3>
-                    <ul class="check-list">
-                        <li>Intent: Minimize vital tissue damage through passive shield positioning and absorbing impact force.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+				<div class="style-card" data-style="defend">
+					<h3 style="margin-top:0;">Defend (Protection)</h3>
+					<ul class="check-list">
+						<li>Goal: Minimize injury; damage reduction[cite: 1]</li>
+						<li>Special: Reduces incoming damage by a flat amount (armor improved)[cite: 1]</li>
+						<li>Use: Warriors who are taking consistent damage[cite: 1]</li>
+						<li>Weapons: Shields (especially tower shields)[cite: 1]</li>
+						<li>Affinity: Dwarves with Full Plate + Tower Shield[cite: 1]</li>
+					</ul>
+				</div>
+			</div>
+		</section>
 
         <!-- Section: Equipment -->
         <section id="equipment" class="content-section">
