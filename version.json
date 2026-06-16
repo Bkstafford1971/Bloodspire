@@ -1,5 +1,12 @@
 {
   "version": "2.8.4",
-  "downloadUrl": "https://mega.nz/file/knRUQC5Z#ldyL9FzmwNgivdQ2obv-k9V0SwQPC9NESHpKaBsGnd4",
+  "files": [
+    {
+      "url": "https://mega.nz/file/knRUQC5Z#ldyL9FzmwNgivdQ2obv-k9V0SwQPC9NESHpKaBsGnd4",
+      "sha512": "dummy",
+      "size": 103000000
+    }
+  ],
+  "releaseDate": "2026-06-15",
   "releaseNotes": "Bug fixes and balance updates"
 }
