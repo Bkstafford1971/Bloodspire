@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLOODSPIRE: Complete Player's Guide</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --container-bg: #1e1e1e;
+            --accent-color: #8b0000;
+            --accent-hover: #b22222;
+            --text-color: #e0e0e0;
+            --text-muted: #aaaaaa;
+            --border-color: #333333;
+            --table-header: #2a2a2a;
+            --table-even: #242424;
+            --sidebar-width: 260px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Fixed Left Sidebar Menu */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--container-bg);
+            border-right: 3px solid var(--accent-color);
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px 20px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h1 {
+            color: #ffffff;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: var(--text-muted);
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        .tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 0 10px;
+        }
+
+        .tab-btn {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+            padding: 12px 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .tab-btn:hover {
+            background-color: #252525;
+            color: #ffffff;
+            border-color: var(--border-color);
+        }
+
+        .tab-btn.active {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-color);
+        }
+
+        /* Main Content Layout Adjustments */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 40px;
+            max-width: 1200px;
+        }
+
+        .container {
+            background-color: var(--container-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        /* Section Visibility Layout */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Typography & Layout Elements */
+        h2 {
+            color: #ffffff;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 10px;
+            margin: 0 0 20px 0;
+            font-size: 1.8rem;
+        }
+
+        h3 {
+            color: #ffffff;
+            margin: 25px 0 10px 0;
+            font-size: 1.3rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .check-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .check-list li::before {
+            content: "✓ ";
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .alert-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .alert-list li::before {
+            content: "⚠️ ";
+            margin-right: 5px;
+        }
+
+        /* Data Tables styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--table-header);
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--table-even);
+        }
+
+        /* Dynamic Filter & Interactivity Controls */
+        .controls-panel {
+            background-color: #252525;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        label {
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        select, input {
+            background-color: #121212;
+            color: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--accent-color);
+        }
+
+        .build-card {
+            background-color: #252525;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .build-card strong {
+            color: #ffffff;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        .disclaimer-box {
+            background-color: #2b1a1a;
+            border-left: 4px solid #cc0000;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .disclaimer-box strong {
+            color: #ff4d4d;
+        }
+
+        /* Initially hide item cards in conditional lists */
+        .race-card, .style-card {
+            display: none;
+        }
+
+        .placeholder-text {
+            color: var(--text-muted);
+            font-style: italic;
+            padding: 20px;
+            background-color: #1a1a1a;
+            border: 1px dashed var(--border-color);
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        /* Responsive collapse for small screen heights or widths */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 3px solid var(--accent-color);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h1>BLOODSPIRE</h1>
+        <p>Complete Player's Guide</p>
+    </div>
+    <nav class="tabs">
+        <button class="tab-btn active" onclick="switchTab(event, 'intro')">Introduction & Getting Started</button>
+        <button class="tab-btn" onclick="switchTab(event, 'loop')">Core Game Loop</button>
+        <button class="tab-btn" onclick="switchTab(event, 'races')">Race Guides</button>
+        <button class="tab-btn" onclick="switchTab(event, 'styles')">Fighting Styles</button>
+        <button class="tab-btn" onclick="switchTab(event, 'equipment')">Weapons & Armor Chart</button>
+        <button class="tab-btn" onclick="switchTab(event, 'strategy')">Trigger Ordering & Strategy System</button>
+    </nav>
+</aside>
+
+<main class="main-content">
+    <div class="container">
+        <section id="intro" class="content-section active">
+            <h2>Welcome to the Pit</h2>
+            <p>BLOODSPIRE is an arena combat game where you manage a team of five warriors and guide them through increasingly difficult fights.</p>
+            <p>Each warrior has six core attributes, learns skills over time, and can be injured.</p>
+            <p>The system is deeply mechanical but rewards learning its systems.</p>
+
+            <h3>Core Concepts</h3>
+            <p><strong>The Game Loop:</strong></p>
+            <ul class="check-list">
+                <li>Create and equip your team of 5 warriors</li>
+                <li>Select fights (or let matchmaking choose)</li>
+                <li>Set up strategies before each fight (weapon load-out, combat style, triggers)</li>
+                <li>Watch the fight unfold in real-time</li>
+                <li>Collect rewards, train skills and attributes, manage injuries</li>
+            </ul>
+
+            <p><strong>The Six Attributes:</strong> All warriors have six core attributes ranging from 3 (worst) to 25 (best):</p>
+            <ul class="check-list">
+                <li><strong>Strength (STR) :</strong> Determines damage output and maximum weapon weight you can wield</li>
+                <li><strong>Dexterity (DEX) :</strong> Affects attack and defense accuracy, dodge chance, initiative</li>
+                <li><strong>Constitution (CON) :</strong> Determines maximum HP and endurance; crucial for survival</li>
+                <li><strong>Intelligence (INT) :</strong> Improves skill training speed; affects strategy</li>
+                <li><strong>Presence (PRE) :</strong> Determines charisma in the arena; affects popularity and concede chances</li>
+                <li><strong>Size (SIZ) :</strong> Cannot be trained; affects physical measurements and melee interactions</li>
+            </ul>
+            <p><strong>Wisdom:</strong> During warrior creation, you get 16 points to distribute among the six base stats (max 7 per stat). Choose wisely, attribute training later is slow.</p>
+
+            <h3>Fight Outcomes</h3>
+            <p>Fights are decided by:</p>
+            <ul class="check-list">
+                <li><strong>Wins</strong> = victories (warrior still alive)</li>
+                <li><strong>Losses</strong> = defeats (warrior knocked unconscious or opponent survives)</li>
+                <li><strong>Kills</strong> = wins where the opponent died</li>
+            </ul>
+            <p><strong>Retirement:</strong> Warriors can retire after 100 fights if the player requests it. Retired warriors leave your team permanently and are replaced.</p>
+        </section>
+
+        <section id="loop" class="content-section">
+            <h2>Core Game Loop</h2>
+            
+            <h3>Creating a Warrior</h3>
+            <p>Each warrior starts with randomly-generated base stats that sum to 55 (each stat 3-21).</p>
+            <p>You then distribute 16 additional points (max 7 per stat, respecting the 25-point ceiling) to refine their attributes.</p>
+            <p><strong>Key Decision:</strong> Different races favor different stats. Halflings want Dexterity, Half-Orcs want Strength, Dwarves want Constitution, etc. Choose your race first, then distribute accordingly.</p>
+
+            <h3>Equipping a Warrior</h3>
+            <p>Every warrior has two armor slots and three weapon slots:</p>
+            <p><strong>Armor Slots:</strong></p>
+            <ul class="check-list">
+                <li>Body Armor (0–8 tiers from Cloth to Full Plate)</li>
+                <li>Helm (0–5 tiers from Leather Cap to Full Helm)</li>
+            </ul>
+            <p><strong>Weapon Slots:</strong></p>
+            <ul class="check-list">
+                <li>Primary Weapon (main fighting weapon)</li>
+                <li>Secondary Weapon (off-hand, often a shield or second blade)</li>
+                <li>Backup Weapon (carried but not used; can be swapped in after fights)</li>
+            </ul>
+            <p><strong>Strength Requirement:</strong> Your Strength limits the maximum weight of armor and weapons you can wear without penalty. Higher Strength allows heavier equipment.</p>
+
+            <h3>Training</h3>
+            <p>You may assign up to 3 training actions per turn to each warrior. Training can target:</p>
+            <ul class="check-list">
+                <li>Attributes (Strength, Dexterity, Constitution, Intelligence and Presence, but NOT Size)</li>
+                <li>Weapon Skills (one skill per weapon, scales 0-9)</li>
+                <li>Non-Weapon Skills (Dodge, Parry, Throw, Lunge, Disarm, Initiative, Feint, Brawl, Sweep, Cleave, Bash, Acrobatics, Riposte, Slash, Strike)</li>
+            </ul>
+            <p><strong>Training Success:</strong> Success depends on your Intelligence (for skills) or Constitution (for attributes). Higher stats = higher training success.</p>
+            <p><strong>Training Speed:</strong> Humans and Gnomes train noticeably faster than other races. Later training (at higher levels) becomes progressively harder.</p>
+
+            <h3>Permanent Injuries</h3>
+            <p>When a warrior takes damage, there is a small chance they suffer a permanent injury in a specific body location:</p>
+            <ul class="check-list">
+                <li>Head, Chest, Abdomen, Primary Arm, Secondary Arm, Primary Leg, Secondary Leg</li>
+            </ul>
+            <p>Each location can accumulate up to 9 levels of injury. Level 9 is fatal (warrior dies). Injuries cannot be healed; they are permanent and reduce combat effectiveness in that location.</p>
+            
+            <h3>Injury Levels Table</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Name</th>
+                        <th>Effect</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>0</td><td>None</td><td>No injury</td></tr>
+                    <tr><td>1</td><td>Annoying</td><td>Minor penalty</td></tr>
+                    <tr><td>2</td><td>Bothersome</td><td>Minor penalty</td></tr>
+                    <tr><td>3</td><td>Irritating</td><td>Noticeable penalty</td></tr>
+                    <tr><td>4</td><td>Troublesome</td><td>Noticeable penalty</td></tr>
+                    <tr><td>5</td><td>Painful</td><td>Moderate penalty</td></tr>
+                    <tr><td>6</td><td>Dreadful</td><td>Severe penalty</td></tr>
+                    <tr><td>7</td><td>Incapacitating</td><td>Very severe penalty</td></tr>
+                    <tr><td>8</td><td>Devastating</td><td>Extreme penalty</td></tr>
+                    <tr><td>9</td><td>Fatal</td><td>Warrior dies</td></tr>
+                </tbody>
+            </table>
+            <p>Injuries to the arms reduce attack/parry accuracy. Injuries to the legs reduce dodge and mobility. Head injuries reduce all actions. The higher the injury level, the more severe the combat penalty.</p>
+        </section>
+
+        <section id="races" class="content-section">
+            <h2>Race Guides</h2>
+            
+            <div class="controls-panel">
+                <label for="raceSelect">Select Race Info Display:</label>
+                <select id="raceSelect" onchange="filterRace()">
+                    <option value="">-- Choose a Race --</option>
+                    <option value="human">Human</option>
+                    <option value="halforc">Half-Orc</option>
+                    <option value="halfling">Halfling</option>
+                    <option value="dwarf">Dwarf</option>
+                    <option value="halfelf">Half-Elf</option>
+                    <option value="elf">Elf</option>
+                    <option value="goblin">Goblin</option>
+                    <option value="gnome">Gnome</option>
+                    <option value="lizardfolk">Lizardfolk</option>
+                    <option value="tabaxi">Tabaxi</option>
+                </select>
+            </div>
+
+            <div id="racePlaceholder" class="placeholder-text">
+                Please select a race from the dropdown above to view details.
+            </div>
+
+            <div id="raceContainer">
+                <div class="race-card" data-race="human">
+                    <h3>Human</h3>
+                    <p><strong>Physical:</strong> 5'7" average (5'2"–6'4" range), 165 lbs</p>
+                    <p><strong>Lore:</strong> The adaptable everyman. No extreme strengths or weaknesses. Humans train faster and are less prone to injuries.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
+                    <ul class="check-list">
+                        <li>Accelerated Training – Humans learn skills and attributes faster than other races</li>
+                        <li>Resilient – Humans suffer permanent injuries less often</li>
+                    </ul>
+                    <p><strong>Favorable Opponents:</strong> Most balanced race; effective against all opponents.</p>
+                    <p><strong>Unfavorable Opponents:</strong> None in particular.</p>
+                    <p><strong>Typical Build:</strong> Jack-of-all-trades. Short Sword with a Target Shield is a popular entry build. Good with many weapon types. Ideal for learning the game.</p>
+                </div>
+
+                <div class="race-card" data-race="halforc">
+                    <h3>Half-Orc</h3>
+                    <p><strong>Physical:</strong> 6'3" average (5'5"–7'6"), 259 lbs (heaviest race)</p>
+                    <p><strong>Lore:</strong> Pure brute force. Devastating damage and durability, but slow, clumsy, and easy to out-maneuver.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
+                    <ul class="check-list">
+                        <li>Brutal Strikes – Half-Orcs can deal significantly more damage per hit</li>
+                        <li>Thick Hide – Higher maximum HP</li>
+                        <li>Deliberate Swings – Typically attacks slower than other races</li>
+                        <li>Lead Foot – Slower reactions can lead to reduced initiative</li>
+                        <li>Poor Defenses – Below-average dodge and parry capability</li>
+                    </ul>
+                    <p><strong>Favorite Weapons:</strong> War Flail, Great Axe, Great Sword, War Hammer, Great Pick, Battle Flail, Maul, Halberd</p>
+                    <p><strong>Typical Build:</strong> Prioritize Strength and Constitution. War Flail or Great Axe are legendary in Half-Orc hands. Two-handed weapons reward high Strength severely. Defensive play is a death trap.</p>
+                </div>
+
+                <div class="race-card" data-race="halfling">
+                    <h3>Halfling</h3>
+                    <p><strong>Physical:</strong> 3'10" average (3'1"–5'1"), 49 lbs (lightest race)</p>
+                    <p><strong>Lore:</strong> Infuriatingly hard to hit. Fast and mobile but extremely fragile with light damage output.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
+                    <ul class="check-list">
+                        <li>Elusive – Exceptional dodge bonus; hardest to hit in the game</li>
+                        <li>Lightning Fast – Very high attack rate</li>
+                        <li>Martial Arts Affinity – Extra effectiveness with unarmed style</li>
+                        <li>Lightweight – Rely on Dexterity and precise attacks for dealing damage</li>
+                        <li>Poor Blocker – Below-average parry</li>
+                        <li>Frail – Lower maximum HP</li>
+                    </ul>
+                    <p><strong>Favorite Weapons:</strong> Short Sword, Stiletto, Hatchet, Quarterstaff, Javelin, Bladed Flail, Hammer</p>
+                    <p><strong>Weak Weapons:</strong> Maul, Great Axe, Great Sword, Halberd (too heavy and slow)</p>
+                    <p><strong>Typical Build:</strong> Maximize Dexterity, keep Strength moderate. "Pocket Rocket" builds with a single Short Sword are iconic. Goal is to land many light hits before the opponent can land one heavy hit. Defensive play (Wall of Steel, Parry) doesn't suit them.</p>
+                </div>
+
+                <div class="race-card" data-race="dwarf">
+                    <h3>Dwarf</h3>
+                    <p><strong>Physical:</strong> 4'2" average (3'6"–5'2"), 195 lbs (very dense, heavier than height suggests)</p>
+                    <p><strong>Lore:</strong> The ultimate tank. Absorbs massive punishment and parries masterfully, but very slow and poor at dodging.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
+                    <ul class="check-list">
+                        <li>Stout – Highest maximum HP in the game</li>
+                        <li>Solid Blows – Above-average damage bonus</li>
+                        <li>Master Parrier – Significant parry bonus</li>
+                        <li>Sturdy Frame – Can wear heavier armor than Strength would normally allow</li>
+                        <li>Shield Affinity – Bonus defense when using a shield (greater with their preferred shields)</li>
+                        <li>Deliberate – Somewhat slower attack rate</li>
+                        <li>Poor Dodger – Very poor dodge; should avoid light armor</li>
+                    </ul>
+                    <p><strong>Favorite Weapons:</strong> Battle Axe, Fransisca, Great Axe, Morningstar, War Hammer, Boar Spear, Target Shield, Net, Trident</p>
+                    <p><strong>Weak Weapons:</strong> Halberd, Pole Axe (doesn't suit the Dwarf style)</p>
+                    <p><strong>Typical Build:</strong> High Strength and Constitution, moderate Dexterity. Dwarves want armor and shields. Counterstrike and Parry are your friends. Target Shield + War Hammer is a classic. Strategy: Let the opponent come to you and parry relentlessly.</p>
+                </div>
+
+                <div class="race-card" data-race="halfelf">
+                    <h3>Half-Elf</h3>
+                    <p><strong>Physical:</strong> 5'4" average (5'0"–6'0"), 144 lbs</p>
+                    <p><strong>Lore:</strong> Versatile and capable. Slight edge in weapon handling with no major weaknesses.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
+                    <ul class="check-list">
+                        <li>Weapon Aptitude – Counts as slightly stronger for weapon weight limits</li>
+                        <li>Quick Hands – Slightly faster attack rate</li>
+                        <li>Agile – Decent dodge bonus</li>
+                        <li>Balanced – Mild all-rounder damage bonus</li>
+                    </ul>
+                    <p><strong>Favorite Weapons:</strong> Pole Axe, Bastard Sword, Long Sword, Scimitar, Battle Flail, Scythe, Javelin, Broadsword</p>
+                    <p><strong>Typical Build:</strong> Balanced Strength and Dexterity. Half-Elves can use slightly heavier weapons than their Strength would suggest. Battle Flail is a Half-Elf favorite. Its attack rate pairs well with their quickness. Good entry-level race after Humans.</p>
+                </div>
+
+                <div class="race-card" data-race="elf">
+                    <h3>Elf</h3>
+                    <p><strong>Physical:</strong> 5'2" average (4'8"–5'11"), 129 lbs</p>
+                    <p><strong>Lore:</strong> Elusive speed demons. Masters of dual-wielding and evasion, but extremely fragile.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
+                    <ul class="check-list">
+                        <li>Graceful – High dodge bonus</li>
+                        <li>Whirlwind – Very fast attack rate</li>
+                        <li>Dual-Wielder – Bonus when both hands hold weapons (scales with weapon skill)</li>
+                        <li>Delicate – Lower maximum HP</li>
+                        <li>Light Hitter – Minor damage penalty</li>
+                    </ul>
+                    <p><strong>Favorite Weapons:</strong> Dagger, Short Sword, Scimitar, Scythe, Flail, Javelin, Stiletto, Epee</p>
+                    <p><strong>Typical Build:</strong> Maximize Dexterity, moderate Strength. "Wall of Steel + Dual Short Swords" is the classic Elf build. They can parry very frequently and take multiple light hits. Avoid heavy armor and heavy weapons; focus on high activity level and fast attacks.</p>
+                </div>
+
+                <div class="race-card" data-race="goblin">
+                    <h3>Goblin</h3>
+                    <p><strong>Physical:</strong> 3'6" average, 48 lbs (tiny, light)</p>
+                    <p><strong>Lore:</strong> Tiny dirty fighters. Fast and tricky with thrown weapons, but very weak and fragile.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
+                    <ul class="check-list">
+                        <li>Quick Hands – Very fast attack rate</li>
+                        <li>First Strike – Acts first most of the time</li>
+                        <li>Slippery – High dodge bonus</li>
+                        <li>Thrown Mastery – Bonus to Opportunity Throw; thrown weapons are lighter for them</li>
+                        <li>Scavenger – High chance to pick up dropped weapons</li>
+                        <li>Too Small – Severe penalty with heavy or two-handed weapons</li>
+                        <li>Weakling – Significant damage penalty</li>
+                        <li>Brittle – Very low maximum HP and Strength</li>
+                    </ul>
+                    <p><strong>Favorite Weapons:</strong> Dagger, Stiletto, Short Sword, Hatchet, Javelin, Knife, Bola, Hammer</p>
+                    <p><strong>Weak Weapons:</strong> Great Axe, Great Sword, Halberd, War Flail (too heavy; suffer penalties)</p>
+                    <p><strong>Typical Build:</strong> Maximize Dexterity. Opportunity Throw specialist or fast hit-and-run. Light weapons only. The Scavenger ability lets you pick up your enemy's dropped weapons and turn them on them. High-risk, high-reward gameplay.</p>
+                </div>
+
+                <div class="race-card" data-race="gnome">
+                    <h3>Gnome</h3>
+                    <p><strong>Physical:</strong> 3'4" average (smallest playable race), 85 lbs</p>
+                    <p><strong>Lore:</strong> Small, surprisingly tough tacticians. Excel at counterstrikes and turning aggression against opponents.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
+                    <ul class="check-list">
+                        <li>Surprisingly Sturdy – Decent maximum HP for their size</li>
+                        <li>Quick Study – Slightly faster learning</li>
+                        <li>Adept Blocker – Good parry bonus</li>
+                        <li>Counterstrike Mastery – Strong bonus on successful parries and ripostes</li>
+                        <li>Tactician's Edge – Bonus defense vs aggressive attackers, penalty vs methodical ones</li>
+                        <li>Light Hitter – Minor damage penalty</li>
+                        <li>Deliberate – Somewhat slower attack rate</li>
+                    </ul>
+                    <p><strong>Favorite Weapons:</strong> Short Sword, Long Sword, Epee, Bastard Sword, Hammer, Mace, Morningstar, War Hammer</p>
+                    <p><strong>Weak Weapons:</strong> Great Axe, Battle Axe, Halberd, Great Pick (too large)</p>
+                    <p><strong>Typical Build:</strong> Balanced Strength, Constitution, and Dexterity. Counterstrike specialist. Let the opponent attack you, then riposte viciously. The Tactician's Edge is subtle but powerful. Aggressive opponents find themselves at a disadvantage against you, so play patiently.</p>
+                </div>
+
+                <div class="race-card" data-race="lizardfolk">
+                    <h3>Lizardfolk</h3>
+                    <p><strong>Physical:</strong> 6'0" average, 240 lbs (muscular, dense reptile)</p>
+                    <p><strong>Lore:</strong> Savage reptilian predators. Tough and relentless with natural armor, but cold-blooded and slow to accelerate.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
+                    <ul class="check-list">
+                        <li>Tough Scales – Good maximum HP and natural armor protection</li>
+                        <li>Natural Weaponry – Bonus damage with Martial Combat or Open Hand</li>
+                        <li>Surprisingly Agile – Decent dodge bonus for their size</li>
+                        <li>Cold-Blooded – Slower attack rate (slow to start fighting)</li>
+                    </ul>
+                    <p><strong>Favorite Weapons:</strong> Open Hand, Dagger, Stiletto, Short Sword, Hatchet, Hammer, Mace, Quarterstaff</p>
+                    <p><strong>Weak Weapons:</strong> Epee, Short Sword, Long Sword (not suited to heavy fighting style)</p>
+                    <p><strong>Special Rules:</strong> Natural scales provide inherent defense. Light armor (Cloth, Leather) can add a small bonus, but heavier armor provides no additional protection while still imposing movement penalties. Recommended: No armor, Cloth, or Leather only. Their natural weapon attacks (Open Hand) can be devastating.</p>
+                    <p><strong>Typical Build:</strong> High Strength and Constitution. Martial Combat specialist with Open Hand. Their natural armor means they don't need heavy gear. Use mobility and natural weapon bonuses. Cold-blooded penalty is mitigated by patient, methodical play.</p>
+                </div>
+
+                <div class="race-card" data-race="tabaxi">
+                    <h3>Tabaxi</h3>
+                    <p><strong>Physical:</strong> 4'10" average, 115 lbs (lean feline)</p>
+                    <p><strong>Lore:</strong> Lightning-quick acrobatic felines. Best evasion in the game but fragile and tire quickly in long fights.</p>
+                    <p><strong>Mechanical Benefits:</strong></p>
+                    <ul class="check-list">
+                        <li>Uncanny Dodge – Best pure evasion in the game</li>
+                        <li>Lightning Reflexes – Acts first; determines combat flow</li>
+                        <li>Acrobatic – High resistance to knockdowns; performs acrobatic maneuvers on good rolls</li>
+                        <li>Frenzy – Can unleash a burst of extra attacks once per fight</li>
+                        <li>Spear Exception – Spears are exempt from their heavy weapon penalty</li>
+                        <li>Light Frame – Suffers penalty with heavy weapons (except spears)</li>
+                        <li>Frail – Very low maximum HP and Strength</li>
+                    </ul>
+                    <p><strong>Favorite Weapons:</strong> Dagger, Short Sword, Scimitar, Epee, Stiletto, Hatchet, Javelin, Scythe, Short Spear</p>
+                    <p><strong>Weak Weapons:</strong> Great Axe, Great Sword, Halberd, Maul, Battle Flail (too heavy; suffer penalties)</p>
+                    <p><strong>Special Rules:</strong> Spears (Short Spear, Boar Spear, Long Spear, Javelin) are exempt from the heavy weapon penalty, allowing Tabaxi to use them without penalty.</p>
+                    <p><strong>Typical Build:</strong> Maximize Dexterity, moderate Strength. Dodge/Evasion specialist. Light weapons only, or spears. The Frenzy ability grants a burst of speed mid-fight (triggered automatically) to finish a weakened opponent, or to turn the tides of a fight. Goal: Dance around the opponent, dodge everything, land many small hits.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="styles" class="content-section">
+            <h2>Fighting Styles</h2>
+            <p>There are 15 fighting styles in BLOODSPIRE, each providing distinct strategic values, mechanical behaviors, and optimization targets.</p>
+            
+            <div class="controls-panel">
+                <label for="styleSelect">Select Fighting Style Info Display:</label>
+                <select id="styleSelect" onchange="filterStyle()">
+                    <option value="">-- Choose a Fighting Style --</option>
+                    <option value="total-kill">Total Kill (Aggressive)</option>
+                    <option value="wall-steel">Wall of Steel (Defensive/Counter)</option>
+                    <option value="lunge">Lunge (Precision)</option>
+                    <option value="bash">Bash (Power)</option>
+                    <option value="slash">Slash (Aggression)</option>
+                    <option value="strike">Strike (Core)</option>
+                    <option value="engage-withdraw">Engage & Withdraw (Evasion)</option>
+                    <option value="counterstrike">Counterstrike (Reaction)</option>
+                    <option value="decoy">Decoy (Misdirection)</option>
+                    <option value="sure-strike">Sure Strike (Accuracy)</option>
+                    <option value="calculated">Calculated Attack (Precision)</option>
+                    <option value="martial">Martial Combat (Unarmed)</option>
+                    <option value="opportunity-throw">Opportunity Throw (Ranged)</option>
+                    <option value="parry">Parry (Defense)</option>
+                    <option value="defend">Defend (Protection)</option>
+                </select>
+            </div>
+
+            <div id="stylePlaceholder" class="placeholder-text">
+                Please select a fighting style from the dropdown above to view details.
+            </div>
+
+            <div id="styleContainer">
+                <!-- Active Combat Styles -->
+                <div class="style-card" data-style="total-kill">
+                    <h3>Total Kill (Aggressive)</h3>
+                    <ul class="check-list">
+                        <li>Goal: Destroy the opponent; maximum offense, no defense</li>
+                        <li>Special: Ignores all defensive effort; defense rolls are significantly reduced</li>
+                        <li>Use: Only when you have a clear health advantage and want to end the fight fast</li>
+                        <li>Weapons: Prefer heavy weapons (Great Axe, War Flail, Maul, Great Pick)</li>
+                        <li>Risk: If you're losing, this guarantees faster defeat</li>
+                    </ul>
+                </div>
+
+                <div class="style-card" data-style="wall-steel">
+                    <h3>Wall of Steel (Defensive/Counter)</h3>
+                    <ul class="check-list">
+                        <li>Goal: Form an impenetrable wall; block everything</li>
+                        <li>Mechanics: High parry bonus, increases parry attempts</li>
+                        <li>Use: When facing aggressive opponents; accumulate damage-free turns</li>
+                        <li>Weapons: Shields (especially Tower Shield, Target Shield), Short Sword, Boar Spear</li>
+                        <li>Risk: Low offense; opponent may outlast you</li>
+                    </ul>
+                </div>
+
+                <div class="style-card" data-style="lunge">
+                    <h3>Lunge (Precision)</h3>
+                    <ul class="check-list">
+                        <li>Goal: Thrust with precision; bonus accuracy and reach</li>
+                        <li>Special: Accuracy bonus per Lunge skill level; Long Spear, Boar Spear, Javelin favor this</li>
+                        <li>Use: Finesse-focused warriors; effective at range</li>
+                        <li>Weapons: Spears (Short/Boar/Long), Epee, Stiletto, Scimitar</li>
+                        <li>Affinity: Powerful when combined with high Dexterity</li>
+                    </ul>
+                </div>
+
+                <div class="style-card" data-style="bash">
+                    <h3>Bash (Power)</h3>
+                    <ul class="check-list">
+                        <li>Goal: Blunt force trauma; heavy impact</li>
+                        <li>Special: Bonus with blunt weapons (Hammer, Mace, Morningstar, Club)</li>
+                        <li>Use: When facing light armor; can knock down opponents</li>
+                        <li>Weapons: Blunt weapons (Hammer, Morningstar, War Hammer, Maul)</li>
+                        <li>Affinity: Half-Orcs with War Hammer or Maul</li>
+                    </ul>
+                </div>
+
+                <div class="style-card" data-style="slash">
+                    <h3>Slash (Aggression)</h3>
+                    <ul class="check-list">
+                        <li>Goal: Sweeping cuts; moderate damage</li>
+                        <li>Use: Sword and axe specialists; balanced offense/defense</li>
+                        <li>Weapons: Broad Sword, Bastard Sword, Great Sword, Battle Axe, Great Axe, Scythe</li>
+                        <li>Affinity: Half-Elves with Bastard Sword; Elves with Scythe</li>
+                    </ul>
+                </div>
+
+                <div class="style-card" data-style="strike">
+                    <h3>Strike (Core)</h3>
+                    <ul class="check-list">
+                        <li>Goal: Straightforward stabbing and cutting; balanced</li>
+                        <li>Use: Foundation style for many builds</li>
+                        <li>Weapons: Versatile (Short Sword, Longsword, Mace, Hammer, Boar Spear)</li>
+                        <li>Affinity: Works with almost any warrior/weapon combo</li>
+                    </ul>
+                </div>
+
+                <!-- Opportunistic Styles -->
+                <div class="style-card" data-style="engage-withdraw">
+                    <h3>Engage & Withdraw (Evasion)</h3>
+                    <ul class="check-list">
+                        <li>Goal: Attack then retreat; hit-and-run tactics</li>
+                        <li>Special: Bonus damage/accuracy when performing tactical retreats</li>
+                        <li>Use: Against heavy opponents you're outmatched against</li>
+                        <li>Weapons: Light weapons (Dagger, Scimitar, Javelin)</li>
+                        <li>Affinity: Tabaxi, Elves, Halflings</li>
+                    </ul>
+                </div>
+
+                <div class="style-card" data-style="counterstrike">
+                    <h3>Counterstrike (Reaction)</h3>
+                    <ul class="check-list">
+                        <li>Goal: Let opponent attack, then retaliate</li>
+                        <li>Special: Bonus damage/accuracy when responding to attacks</li>
+                        <li>Use: Defensive warriors (Dwarf + Target Shield + Long Sword)</li>
+                        <li>Weapons: Medium weapons paired with shields (Longsword + Target Shield)</li>
+                        <li>Affinity: Gnomes with Counterstrike Mastery ability</li>
+                    </ul>
+                </div>
+
+                <div class="style-card" data-style="decoy">
+                    <h3>Decoy (Misdirection)</h3>
+                    <ul class="check-list">
+                        <li>Goal: Feint and deceive; confuse opponent</li>
+                        <li>Special: Feint attack (moderate chance to land); canceled by Counterstrike opponents</li>
+                        <li>Use: Against opponents who predict your moves</li>
+                        <li>Weapons: Medium weapons (Short Sword, Longsword, Epee)</li>
+                        <li>Risk: Feint fails against clever opponents</li>
+                    </ul>
+                </div>
+
+                <div class="style-card" data-style="sure-strike">
+                    <h3>Sure Strike (Accuracy)</h3>
+                    <ul class="check-list">
+                        <li>Goal: Guaranteed accuracy; no misses (very high defense bypass)</li>
+                        <li>Special: Always hits; defense rolls are cancelled</li>
+                        <li>Use: When accuracy matters more than damage</li>
+                        <li>Weapons: Missile weapons (Net, Bola), finesse weapons</li>
+                        <li>Affinity: High Intelligence for precision calculation</li>
+                    </ul>
+                </div>
+
+                <div class="style-card" data-style="calculated">
+                    <h3>Calculated Attack (Precision)</h3>
+                    <ul class="check-list">
+                        <li>Goal: Surgical precision; threads a seam in the armor</li>
+                        <li>Special: Bonus armor bypass based on Dexterity and Intelligence</li>
+                        <li>Use: Finesse builds facing heavily-armored opponents</li>
+                        <li>Weapons: Stiletto, Dagger, Epee, Small Pick, Military Pick</li>
+                        <li>Affinity: High Dexterity + Intelligence</li>
+                    </ul>
+                </div>
+
+                <div class="style-card" data-style="martial">
+                    <h3>Martial Combat (Unarmed)</h3>
+                    <ul class="check-list">
+                        <li>Goal: Fight with open hand or martial weapons</li>
+                        <li>Special: Bonus damage with unarmed, Open Hand, Dagger, etc.; scales with Martial combat skill</li>
+                        <li>MC-Compatible Weapons: Stiletto, Dagger, Knife, Quarterstaff, Net, Great Staff, Open Hand</li>
+                        <li>Use: Halflings, Lizardfolk, Half-Elves with high Martial Combat skill</li>
+                        <li>Affinity: Races with Martial Combat Bonus; Open Hand scales infinitely with Strength</li>
+                    </ul>
+                </div>
+
+                <!-- Ranged Style -->
+                <div class="style-card" data-style="opportunity-throw">
+                    <h3>Opportunity Throw (Ranged)</h3>
+                    <ul class="check-list">
+                        <li>Goal: Throw weapons at distance</li>
+                        <li>Special: Uses Throw skill; reduces Strength contribution to damage</li>
+                        <li>Special Goblins: Bonus to Opportunity Throw; throwables weigh less for them</li>
+                        <li>Throwable Weapons: Stiletto, Knife, Dagger, Hatchet, Francisca, Short Spear, Boar Spear, Javelin, Hammer and Bola (see weapons table)</li>
+                        <li>Use: Open-range fighting; avoid close-in brawls</li>
+                        <li>Risk: Throwable weapons run out if not managed</li>
+                    </ul>
+                </div>
+
+                <!-- Defensive Styles -->
+                <div class="style-card" data-style="parry">
+                    <h3>Parry (Defense)</h3>
+                    <ul class="check-list">
+                        <li>Goal: Block everything; active defense</li>
+                        <li>Special: High parry rolls; bonus to blocking weapons</li>
+                        <li>Use: Defensive warriors who want to reduce damage taken</li>
+                        <li>Weapons: Medium weapons, especially shields</li>
+                        <li>Affinity: Dwarves, high Parry skill</li>
+                    </ul>
+                </div>
+
+                <div class="style-card" data-style="defend">
+                    <h3>Defend (Protection)</h3>
+                    <ul class="check-list">
+                        <li>Goal: Minimize injury; damage reduction</li>
+                        <li>Special: Reductions incoming damage by a flat amount (armor improved)</li>
+                        <li>Use: Warriors who are taking consistent damage</li>
+                        <li>Weapons: Shields (especially tower shields)</li>
+                        <li>Affinity: Dwarves with Full Plate + Tower Shield</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="equipment" class="content-section">
+            <h2>Weapons & Armor Chart</h2>
+            
+            <h3>Weapon Table Format Columns</h3>
+            <ul class="check-list">
+                <li><strong>Name:</strong> Display name in the game</li>
+                <li><strong>Weight:</strong> Encumbrance value</li>
+                <li><strong>Base APM:</strong> Attacks Per Minute before race/style/activity modifiers (higher = more attacks)</li>
+                <li><strong>Base Damage:</strong> Min–Max damage before race/style/strength/skill modifiers</li>
+                <li><strong>Min STR:</strong> Minimum Strength required to wield without penalty. Values in parentheses (e.g., 17 (15)) indicate the Strength needed when wielding two-handed vs one-handed</li>
+                <li><strong>Throw:</strong> Can be used with Opportunity Throw</li>
+                <li><strong>2H:</strong> Designed for two hands (Open Hand in secondary if using two-handed)</li>
+                <li><strong>Martial:</strong> Compatible with Martial Combat style</li>
+                <li><strong>AP:</strong> Armor-piercing (extra damage vs Scale, Chain, Half-Plate, Full Plate armor)</li>
+            </ul>
+
+            <div class="disclaimer-box">
+                <strong>⚠️ Important Disclaimer:</strong> The Base APM and Base Damage values shown are raw weapon statistics before any modifiers. Actual performance in combat varies significantly based on: Racial bonuses/penalties, Fighting Style, Activity Level, Attributes, and Equipment load. Use these base values as a reference point, not absolute predictions.
+            </div>
+
+            <h3>Strength-to-Weight Reference</h3>
+            <p>As a general rule:</p>
+            <ul class="check-list">
+                <li>Very Light (0.0–1.5): Low Strength (3–5)</li>
+                <li>Light (2.0–3.5): Moderate Strength (6–10)</li>
+                <li>Medium (3.8–4.8): High Strength (11–14)</li>
+                <li>Heavy (5.0+): Very High Strength (15+)</li>
+                <li>Massive (7.5+): Extreme Strength (20+)</li>
+            </ul>
+            <p>Note: Wielding a weapon two-handed effectively increases your carrying capacity, reducing the Strength requirement.</p>
+
+            <h3>All Weapons (45 Total)</h3>
+            
+            <h4>Swords & Knives</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th><th>Wgt</th><th>Base APM</th><th>Base Dmg</th><th>Min STR</th><th>Throw</th><th>2H</th><th>Martial</th><th>AP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Stiletto</td><td>1.0</td><td>7</td><td>6–8</td><td>4</td><td>Yes</td><td>No</td><td>Yes</td><td>Yes</td></tr>
+                    <tr><td>Knife</td><td>1.5</td><td>7</td><td>8–10</td><td>5</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td></tr>
+                    <tr><td>Dagger</td><td>2.0</td><td>6</td><td>8–11</td><td>7</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td></tr>
+                    <tr><td>Short Sword</td><td>3.0</td><td>6</td><td>10–12</td><td>10</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Epee</td><td>3.0</td><td>6</td><td>12–16</td><td>10</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Scimitar</td><td>3.5</td><td>5</td><td>13–15</td><td>12</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Long Sword</td><td>3.2</td><td>6</td><td>12–13</td><td>11</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Broad Sword</td><td>3.8</td><td>5</td><td>15–18</td><td>12</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Bastard Sword</td><td>4.8</td><td>4</td><td>19–23</td><td>14 (12)</td><td>No</td><td>Yes</td><td>No</td><td>No</td></tr>
+                    <tr><td>Great Sword</td><td>6.8</td><td>3</td><td>25–29</td><td>17 (16)</td><td>No</td><td>Yes</td><td>No</td><td>No</td></tr>
+                    <tr><td>Swordbreaker</td><td>2.6</td><td>6</td><td>9–12</td><td>9</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Notes:</strong> Stiletto is good for weak warriors vs heavy armor but lacks late game damage. Halflings like it. Short Sword is one of the ultimate weapons for any warrior. Scimitar is a natural Elf weapon. Bastard Sword goes well with Slash; Half-Elves love it. Great Sword is incredible in Half-Orc hands. Swordbreaker excels in off-hand if you predict blades.</p>
+
+            <h4>Axes & Picks</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th><th>Wgt</th><th>Base APM</th><th>Base Dmg</th><th>Min STR</th><th>Throw</th><th>2H</th><th>Martial</th><th>AP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Hatchet</td><td>1.8</td><td>7</td><td>8–10</td><td>6</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Fransisca</td><td>2.5</td><td>6</td><td>9–12</td><td>9</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Battle Axe</td><td>4.5</td><td>4</td><td>17–21</td><td>14</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Great Axe</td><td>6.0</td><td>3</td><td>24–28</td><td>16 (15)</td><td>No</td><td>Yes</td><td>No</td><td>No</td></tr>
+                    <tr><td>Small Pick</td><td>2.8</td><td>6</td><td>9–12</td><td>10</td><td>No</td><td>No</td><td>No</td><td>AP</td></tr>
+                    <tr><td>Military Pick</td><td>3.5</td><td>5</td><td>13–15</td><td>12</td><td>No</td><td>No</td><td>No</td><td>AP</td></tr>
+                    <tr><td>Pick Axe</td><td>4.8</td><td>4</td><td>18–22</td><td>15 (12)</td><td>No</td><td>Yes</td><td>No</td><td>AP</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Notes:</strong> Hatchet is fast early but fails late. Battle Axe is excellent for low-DEX, high-STR Dwarves. Great Axe delivers staggering damage for Half-Orcs. Military Pick is a Human favorite when opponents wear Scale+ armor.</p>
+
+            <h4>Hammers & Maces</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th><th>Wgt</th><th>Base APM</th><th>Base Dmg</th><th>Min STR</th><th>Throw</th><th>2H</th><th>Martial</th><th>AP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Hammer</td><td>2.0</td><td>6</td><td>8–11</td><td>7</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Mace</td><td>3.0</td><td>6</td><td>15–19</td><td>10</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Morningstar</td><td>4.0</td><td>4</td><td>15–18</td><td>13</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>War Hammer</td><td>4.5</td><td>4</td><td>17–21</td><td>14</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Maul</td><td>7.5</td><td>3</td><td>26–30</td><td>17</td><td>No</td><td>Yes</td><td>No</td><td>No</td></tr>
+                    <tr><td>Club</td><td>2.7</td><td>6</td><td>9–12</td><td>9</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Notes:</strong> Morningstar offers consistent high damage for all races. War Hammer is a Half-Orc favorite but requires high STR. Maul is too slow to be effective. Club is used by beginners and dirty fighters.</p>
+
+            <h4>Polearms & Spears</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th><th>Wgt</th><th>Base APM</th><th>Base Dmg</th><th>Min STR</th><th>Throw</th><th>2H</th><th>Martial</th><th>AP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Short Spear</td><td>3.0</td><td>6</td><td>13–16</td><td>10</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Boar Spear</td><td>3.8</td><td>5</td><td>15–18</td><td>12</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Long Spear</td><td>4.2</td><td>4</td><td>16–19</td><td>13</td><td>No</td><td>Yes</td><td>No</td><td>No</td></tr>
+                    <tr><td>Pole Axe</td><td>5.5</td><td>4</td><td>22–26</td><td>15</td><td>No</td><td>Yes</td><td>No</td><td>No</td></tr>
+                    <tr><td>Halberd</td><td>7.5</td><td>3</td><td>26–30</td><td>17</td><td>No</td><td>Yes</td><td>No</td><td>No</td></tr>
+                    <tr><td>Javelin</td><td>2.5</td><td>6</td><td>10–14</td><td>9</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Notes:</strong> Boar Spear is arguably the best weapon in the game; effective with shield in Lunge/Wall of Steel/Strike. Pole Axe is a Half-Elf favorite. Halberd requires extreme Strength but works with Engage & Withdraw.</p>
+
+            <h4>Flails</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th><th>Wgt</th><th>Base APM</th><th>Base Dmg</th><th>Min STR</th><th>Throw</th><th>2H</th><th>Martial</th><th>AP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Flail</td><td>2.6</td><td>6</td><td>9–12</td><td>9</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Bladed Flail</td><td>4.0</td><td>4</td><td>15–18</td><td>13</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>War Flail</td><td>5.0</td><td>4</td><td>18–22</td><td>15</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Battle Flail</td><td>6.5</td><td>3</td><td>25–29</td><td>17 (15)</td><td>No</td><td>Yes</td><td>No</td><td>No</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Notes:</strong> Flail damage scales based on SIZE instead of Strength. War Flail is one of the best weapons for Half-Orcs. Battle Flail is a Half-Elf favorite granting an extra attack.</p>
+
+            <h4>Staves</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th><th>Wgt</th><th>Base APM</th><th>Base Dmg</th><th>Min STR</th><th>Throw</th><th>2H</th><th>Martial</th><th>AP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Quarterstaff</td><td>3.0</td><td>6</td><td>10–12</td><td>10 (7)</td><td>No</td><td>Yes</td><td>Yes</td><td>No</td></tr>
+                    <tr><td>Great Staff</td><td>5.5</td><td>4</td><td>22–26</td><td>15</td><td>No</td><td>Yes</td><td>Yes</td><td>No</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Notes:</strong> Quarterstaff is a Halfling favorite but underwhelming in the Pit. Great Staff is too slow for a reliable parry.</p>
+
+            <h4>Shields</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th><th>Wgt</th><th>Base APM</th><th>Base Dmg</th><th>Min STR</th><th>Throw</th><th>2H</th><th>Martial</th><th>AP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Buckler</td><td>2.2</td><td>6</td><td>9–11</td><td>8</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Target Shield</td><td>4.2</td><td>4</td><td>16–19</td><td>13</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Tower Shield</td><td>5.5</td><td>4</td><td>22–26</td><td>15</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Notes:</strong> Buckler is fairly weak. Target Shield is the sweet-spot shield for Dwarves. Tower Shield helps against very skilled opponents and is preferred by Half-Orcs.</p>
+
+            <h4>Oddballs & Special</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th><th>Wgt</th><th>Base APM</th><th>Base Dmg</th><th>Min STR</th><th>Throw</th><th>2H</th><th>Martial</th><th>AP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Cestus</td><td>1.0</td><td>7</td><td>7–9</td><td>4</td><td>No</td><td>No</td><td>Yes</td><td>No</td></tr>
+                    <tr><td>Trident</td><td>4.3</td><td>4</td><td>15–19</td><td>13</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Net</td><td>2.5</td><td>6</td><td>9–12</td><td>9</td><td>No</td><td>No</td><td>Yes</td><td>No</td></tr>
+                    <tr><td>Scythe</td><td>3.5</td><td>5</td><td>13–15</td><td>12</td><td>No</td><td>No</td><td>No</td><td>AP</td></tr>
+                    <tr><td>Great Pick</td><td>7.5</td><td>3</td><td>27–31</td><td>17</td><td>No</td><td>Yes</td><td>No</td><td>AP</td></tr>
+                    <tr><td>Ball & Chain</td><td>7.5</td><td>3</td><td>30–34</td><td>17</td><td>No</td><td>Yes</td><td>No</td><td>No</td></tr>
+                    <tr><td>Bola</td><td>3.1</td><td>6</td><td>10–12</td><td>10</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Heavy Barbed Whip</td><td>2.1</td><td>6</td><td>8–11</td><td>8</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+                    <tr><td>Open Hand</td><td>0.0</td><td>7</td><td>6–10</td><td>3</td><td>No</td><td>No</td><td>Yes</td><td>No</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Notes:</strong> Cestus blocks the hand but delivers high damage for Half-Elf Martial Artists. Net entangles targets and works well with Sure Strike. Scythe sings in Elf hands. Great Pick is a monster in Half-Orc/Dwarf hands but awful against light armor. Open Hand baseline damage scales infinitely with Strength bonus, receiving a Lizardfolk natural bonus.</p>
+
+            <h3>Body Armor Table</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th><th>Weight</th><th>Defense</th><th>STR Req</th><th>Dex Penalty</th><th>AP-Vulnerable</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Cloth</td><td>8.0</td><td>1</td><td>4</td><td>0</td><td>No</td></tr>
+                    <tr><td>Leather</td><td>12.0</td><td>2</td><td>6</td><td>0</td><td>No</td></tr>
+                    <tr><td>Cuir Boulli</td><td>17.0</td><td>3</td><td>8</td><td>1</td><td>No</td></tr>
+                    <tr><td>Brigandine</td><td>24.0</td><td>4</td><td>11</td><td>1</td><td>No</td></tr>
+                    <tr><td>Scale</td><td>35.0</td><td>5</td><td>14</td><td>2</td><td>Yes</td></tr>
+                    <tr><td>Chain</td><td>44.0</td><td>6</td><td>16</td><td>2</td><td>Yes</td></tr>
+                    <tr><td>Half-Plate</td><td>63.0</td><td>8</td><td>19</td><td>3</td><td>Yes</td></tr>
+                    <tr><td>Full Plate</td><td>80.0</td><td>10</td><td>23</td><td>5</td><td>Yes</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Helms Table</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th><th>Weight</th><th>Defense</th><th>STR Req</th><th>Dex Penalty</th><th>AP-Vulnerable</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Leather Cap</td><td>1.0</td><td>1</td><td>4</td><td>0</td><td>No</td></tr>
+                    <tr><td>Steel Cap</td><td>3.0</td><td>2</td><td>4</td><td>0</td><td>No</td></tr>
+                    <tr><td>Helm</td><td>5.0</td><td>3</td><td>4</td><td>1</td><td>No</td></tr>
+                    <tr><td>Camail</td><td>7.0</td><td>4</td><td>4</td><td>1</td><td>No</td></tr>
+                    <tr><td>Full Helm</td><td>9.0</td><td>5</td><td>4</td><td>2</td><td>Yes</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Special Armor Rules</h3>
+            <ul class="check-list">
+                <li><strong>Armor Penalty:</strong> If your Strength is insufficient for the armor weight, you suffer a proportional attack rate and accuracy penalty.</li>
+                <li><strong>Dex Penalty:</strong> Armor reduces your effective Dexterity for dodge and initiative. This can be mitigated by training Dexterity to counter the penalty.</li>
+                <li><strong>Armor-Piercing (AP) Vulnerability:</strong> Some weapons (Stiletto, Picks, Scythe, Great Pick) do bonus damage vs Scale, Chain, Half-Plate, and Full Plate. Against AP-vulnerable armor, these weapons' armor reduction is halved (defense is cut in half when calculating damage reduction).</li>
+                <li><strong>Dwarf Rule:</strong> Dwarves can wear one tier of body armor heavier than their Strength normally allows without penalty.</li>
+                <li><strong>Lizardfolk Rule:</strong> Natural scales provide inherent defense. Light armor (Cloth, Leather) can add a small bonus, but heavier armor provides no additional protection while still imposing movement penalties. Recommended: No armor, Cloth, or Leather only.</li>
+            </ul>
+        </section>
+
+        <section id="strategy" class="content-section">
+            <h2>Trigger Ordering & Strategy System</h2>
+            
+            <h3>What is a Trigger?</h3>
+            <p>A trigger is a condition that activates a strategy row. Each minute, the game evaluates your strategy rows top-to-bottom and selects the FIRST one whose trigger condition is true. That strategy (style, activity level, aiming, defense) is then used for the entire minute.</p>
+            <p><strong>Critical:</strong> Order matters. Triggers are read from top to bottom; place your most specific triggers first and your fallback (Always) last.</p>
+
+            <h3>All Triggers (Listed in Evaluation Check Order)</h3>
+            <ol>
+                <li>None – This trigger never activates; skip the row</li>
+                <li>Minute 1 through Minute 10 – Activates only in that specific minute (Minute 1-10)</li>
+                <li>You are very tired – Your endurance is very low</li>
+                <li>Your foe is very tired – Opponent endurance is very low</li>
+                <li>You are somewhat tired – Your endurance is moderately low</li>
+                <li>Your foe is somewhat tired – Opponent endurance is moderately low</li>
+                <li>You are slightly tired – Your endurance is a bit low</li>
+                <li>Your foe is slightly tired – Opponent endurance is a bit low</li>
+                <li>You have taken heavy damage – Your HP is critically low</li>
+                <li>Your foe has taken heavy damage – Opponent HP is critically low</li>
+                <li>You have taken medium damage – Your HP is moderately low</li>
+                <li>Your foe has taken medium damage – Opponent HP is moderately low</li>
+                <li>You have taken slight damage – Your HP is a bit low</li>
+                <li>Your foe has taken slight damage – Opponent HP is a bit low</li>
+                <li>You challenged your foe – You initiated the fight (if applicable)</li>
+                <li>Your foe challenged you – Opponent initiated</li>
+                <li>You blood challenged your foe – You initiated with high Presence hesitation roll success</li>
+                <li>Your foe blood challenged you – Opponent initiated with high Presence</li>
+                <li>You are on the ground – You've been knocked down</li>
+                <li>Your foe is on the ground – Opponent knocked down</li>
+                <li>You are weaponless – Primary weapon has been disarmed/dropped</li>
+                <li>Your foe is weaponless – Opponent has no weapon</li>
+                <li>You have no throwable weapons – All Opportunity Throw weapons have been used</li>
+                <li>You have at least one throwable weapon – At least one throwable in inventory</li>
+                <li>You have exactly one throwable weapon – Exactly one left</li>
+                <li>You have exactly one weapon – Only primary, secondary is Open Hand</li>
+                <li>You have exactly 2 weapons – Both primary and secondary are weapons (no shields)</li>
+                <li>You have more than 2 weapons – Carrying backup weapon in addition to equipped pair</li>
+                <li>Your foe is wearing light armor – Cloth or Leather</li>
+                <li>Your foe is wearing medium armor – Cuir Boulli, Brigandine, or Scale</li>
+                <li>Your foe is wearing heavy armor – Chain, Half-Plate, or Full Plate</li>
+                <li>Always (Default Loop) – Fallback; always true if nothing above matches</li>
+            </ol>
+
+            <h3>Strategy Components Matrix</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Component</th><th>Options</th><th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Trigger</td><td>32 conditions (above)</td><td>When to use this row</td></tr>
+                    <tr><td>Style</td><td>15 fighting styles</td><td>How you fight (Total Kill, Lunge, Wall of Steel, etc.)</td></tr>
+                    <tr><td>Activity</td><td>0–9</td><td>Aggression level (0=defensive, 5=balanced, 9=all-out)</td></tr>
+                    <tr><td>Aim Point</td><td>None, Head, Chest, Abdomen, Arm, Leg</td><td>Where you try to hit (for injury targeting)</td></tr>
+                    <tr><td>Defense Point</td><td>Chest, Head, etc.</td><td>Where you protect (if defender matches your strategy)</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Optimal Trigger Ordering Example Setup</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th><th>Trigger</th><th>Style</th><th>Activity</th><th>Aim</th><th>Defense</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>You are on the ground</td><td>Wall of Steel</td><td>3</td><td>Chest</td><td>Head</td></tr>
+                    <tr><td>2</td><td>You have no throwable weapons</td><td>Wall of Steel</td><td>5</td><td>None</td><td>Chest</td></tr>
+                    <tr><td>3</td><td>You are very tired</td><td>Defend</td><td>2</td><td>None</td><td>Chest</td></tr>
+                    <tr><td>4</td><td>Your foe is very tired</td><td>Total Kill</td><td>8</td><td>Head</td><td>Chest</td></tr>
+                    <tr><td>5</td><td>You have taken heavy damage</td><td>Parry</td><td>4</td><td>None</td><td>Chest</td></tr>
+                    <tr><td>6</td><td>Always</td><td>Strike</td><td>5</td><td>Chest</td><td>Chest</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Example Rationale:</strong> Row 1 protects you on knockdown. Row 2 safely switches styles when throwables are out. Row 3 saves endurance when tired. Row 4 hits hard when enemy breaks down. Row 5 survives high damage, and Row 6 acts as the default system.</p>
+
+            <h3>Sample Build Presets</h3>
+            <div class="build-card">
+                <strong>"Patient Dwarf" (Defensive tank)</strong><br>
+                1. You are on the ground → Wall of Steel, Act 3, Aim None, Defense Chest<br>
+                2. You have taken heavy damage → Defend, Act 2, Aim None, Defense Chest<br>
+                3. Your foe is very tired → Counterstrike, Act 6, Aim None, Defense Chest<br>
+                4. Always → Parry, Act 5, Aim None, Defense Chest
+            </div>
+            <div class="build-card">
+                <strong>"Aggressive Halfling" (Hit-and-run)</strong><br>
+                1. You are on the ground → Engage & Withdraw, Act 7, Aim Legs, Defense Chest<br>
+                2. You have no throwable weapons → Lunge, Act 8, Aim Head, Defense Chest<br>
+                3. Your foe is very tired → Total Kill, Act 9, Aim Head, Defense Chest<br>
+                4. Always → Strike, Act 7, Aim Chest, Defense Chest
+            </div>
+            <div class="build-card">
+                <strong>"Decoy Expert" (Misdirection)</strong><br>
+                1. You are on the ground → Wall of Steel, Act 3, Aim None, Defense Chest<br>
+                2. Your foe has taken heavy damage → Total Kill, Act 8, Aim Head, Defense None<br>
+                3. Always → Decoy, Act 5, Aim Chest, Defense Abdomen
+            </div>
+
+            <h3>Favorite Weapon Mechanics</h3>
+            <p>Every warrior has a fixed, unchangeable favorite weapon assigned at creation based on race and stat weights (High STR weights heavy weapons, High DEX weights light weapons). It provides a <strong>+5 Attack Accuracy Bonus</strong> and <strong>+1 Raw Damage</strong> when used. It is discovered by landing a successful hit in combat, triggering a special narrative combat log entry.</p>
+
+            <h3>Advanced Combat Mechanics</h3>
+            <p><strong>Hit Resolution System:</strong></p>
+            <p>Attacker rolls: <code>d100 + DEX_bonus + weapon_skill*5 + luck + style_mod + feint_bonus</code></p>
+            <p>Defender rolls: <code>d100 + STR_or_DEX_bonus + parry/dodge_skill*4 + weapon_skill_bonus + luck</code></p>
+            <p>Margin Calculation = Attack - Defense</p>
+            <ul class="check-list">
+                <li>Margin ≤ 0: Miss/Parry/Dodge (no damage)</li>
+                <li>Margin 1–9: Graze (minor damage, no effects)</li>
+                <li>Margin ≥ 10: Hit (full damage calculation)</li>
+            </ul>
+            <p><strong>Concede System:</strong> At low HP, opponents make a Concede roll via <code>d100 + PRE_bonus + luck modifiers</code> checking against a threshold determined by Presence. Monsters never concede.</p>
+            <p><strong>Death Check & Luck:</strong> Negative HP checks trigger death or permanent injuries. The Luck factor (1-30) is assigned at creation and dynamically adds to every single mechanical roll in the game.</p>
+        </section>
+    </div>
+</main>
+
+<script>
+    // Tab switching engine
+    function switchTab(evt, sectionId) {
+        const sections = document.querySelectorAll('.content-section');
+        sections.forEach(sec => sec.classList.remove('active'));
+
+        const tabs = document.querySelectorAll('.tab-btn');
+        tabs.forEach(tab => tab.classList.remove('active'));
+
+        document.getElementById(sectionId).classList.add('active');
+        evt.currentTarget.classList.add('active');
+    }
+
+    // Race filtration engine
+    function filterRace() {
+        const selected = document.getElementById('raceSelect').value;
+        const cards = document.querySelectorAll('.race-card');
+        const placeholder = document.getElementById('racePlaceholder');
+        
+        if (selected === "") {
+            placeholder.style.display = 'block';
+            cards.forEach(card => card.style.display = 'none');
+        } else {
+            placeholder.style.display = 'none';
+            cards.forEach(card => {
+                if (card.getAttribute('data-race') === selected) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    }
+
+    // Fighting Style filtration engine
+    function filterStyle() {
+        const selected = document.getElementById('styleSelect').value;
+        const cards = document.querySelectorAll('.style-card');
+        const placeholder = document.getElementById('stylePlaceholder');
+
+        if (selected === "") {
+            placeholder.style.display = 'block';
+            cards.forEach(card => card.style.display = 'none');
+        } else {
+            placeholder.style.display = 'none';
+            cards.forEach(card => {
+                if (card.getAttribute('data-style') === selected) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    }
+</script>
+
+</body>
+</html>
