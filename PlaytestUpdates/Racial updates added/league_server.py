@@ -3734,10 +3734,13 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             # (the attacking team itself - its own warriors can't be challenged).
             try:    exclude_tid = int(q.get("team_id","0") or 0)
             except: exclude_tid = 0
-            from save import TEAMS_DIR
+            from save import TEAMS_DIR, load_champion_state
             # Load current turn to filter inactive teams
             cfg = _load_config()
             current_turn = cfg.get("current_turn", 0)
+            # Load champion name so we can flag that warrior in the response
+            champ_state   = load_champion_state()
+            champion_name = (champ_state.get("name") or "").lower()
             warriors = []
             try:
                 fnames = sorted(os.listdir(TEAMS_DIR))
@@ -3765,8 +3768,9 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 manager_name = tdata.get("manager_name", "?")
                 for w in tdata.get("warriors", []):
                     if not w or w.get("is_dead"): continue
+                    wname = w.get("name", "?")
                     warriors.append({
-                        "name"        : w.get("name", "?"),
+                        "name"        : wname,
                         "team_name"   : team_name,
                         "team_id"     : tid,
                         "manager_name": manager_name,
@@ -3779,9 +3783,29 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                         "height_in"   : w.get("height_in", 0),
                         "weight_lbs"  : w.get("weight_lbs", 0),
                         "total_fights": w.get("total_fights", 0),
+                        "recognition" : w.get("recognition", 0),
+                        "is_champion" : bool(champion_name and wname.lower() == champion_name),
                     })
             print(f"  [Scout] Found {len(warriors)} warriors available to scout")
-            self.send_json({"success": True, "warriors": warriors}); return
+
+            # Calculate top 2 tiers for champion challenge eligibility
+            from warrior import get_warrior_tier, TIER_ORDER, TIER_CHAMPION
+            tiers_present = set()
+            for w_data in warriors:
+                # Create a minimal object for get_warrior_tier
+                class TempWarrior:
+                    def __init__(self, data):
+                        self.total_fights = data.get("total_fights", 0)
+                        self.recognition = data.get("recognition", 0)
+                temp_w = TempWarrior(w_data)
+                tier = get_warrior_tier(temp_w)
+                if tier != TIER_CHAMPION:
+                    tiers_present.add(tier)
+
+            sorted_tiers = sorted(tiers_present, key=lambda t: TIER_ORDER.index(t) if t in TIER_ORDER else 999)
+            eligible_champion_tiers = sorted_tiers[:2]
+
+            self.send_json({"success": True, "warriors": warriors, "eligible_champion_tiers": eligible_champion_tiers}); return
 
         if path == "/api/scout/report":
             q = self.qs()

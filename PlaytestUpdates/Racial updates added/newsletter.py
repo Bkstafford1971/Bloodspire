@@ -11,6 +11,7 @@ _NPC_RACES      = {"Monster", "Peasant"}
 
 TIER_CHAMPION  = "CHAMPION"
 TIER_ELITES    = "ELITES"
+TIER_EXPERTS   = "EXPERTS"
 TIER_VETERANS  = "VETERANS"
 TIER_ADEPTS    = "ADEPTS"
 TIER_INITIATES = "INITIATES"
@@ -71,25 +72,25 @@ def _trunc(name: str, n: int = NAME_LIMIT) -> str:
 
 
 def _warrior_tier(w, is_champion: bool) -> str:
-    """Assign a warrior to a tier based on recognition rating (0-99).
+    """Assign a warrior to a tier based on recognition rating (0-100).
 
     Champion: determined externally (is_champion flag)
-    Elite:    67 - 99
-    Veteran:  57 - 66
-    Adept:    34 - 56
-    Initiate: 24 - 33
-    Rookie:   0  - 23
-    Recruit:  <= 5 fights
+    Elites:   87 - 100
+    Experts:  71 - 86
+    Veterans: 56 - 70
+    Adepts:   41 - 55
+    Initiates: 26 - 40
+    Rookies:  13 - 25
+    Recruits: 0  - 12
     """
     if is_champion: return TIER_CHAMPION
-    fights = getattr(w, "total_fights", 0)
-    rec    = getattr(w, "recognition", 0)
-    if fights <= 5: return TIER_RECRUITS
-    if rec >= 67:   return TIER_ELITES
-    if rec >= 57:   return TIER_VETERANS
-    if rec >= 34:   return TIER_ADEPTS
-    if rec >= 24:   return TIER_INITIATES
-    if rec >= 0:    return TIER_ROOKIES
+    rec = getattr(w, "recognition", 0)
+    if rec >= 87:   return TIER_ELITES
+    if rec >= 71:   return TIER_EXPERTS
+    if rec >= 56:   return TIER_VETERANS
+    if rec >= 41:   return TIER_ADEPTS
+    if rec >= 26:   return TIER_INITIATES
+    if rec >= 13:   return TIER_ROOKIES
     return TIER_RECRUITS
 
 
@@ -407,7 +408,7 @@ def _warrior_tiers(teams, champion_state: dict, card: list = None, turn_num: int
             warriors_that_fought.add((ptid, pw.name))
             warriors_that_fought.add((otid, ow.name))
 
-    tiers={t:[] for t in [TIER_CHAMPION,TIER_ELITES,TIER_VETERANS,TIER_ADEPTS,
+    tiers={t:[] for t in [TIER_CHAMPION,TIER_ELITES,TIER_EXPERTS,TIER_VETERANS,TIER_ADEPTS,
                            TIER_INITIATES,TIER_ROOKIES,TIER_RECRUITS]}
     for team in teams:
         if _is_npc_team(team): continue
@@ -448,7 +449,7 @@ def _warrior_tiers(teams, champion_state: dict, card: list = None, turn_num: int
     # Fixed columns: name(30) + W(4) + L(4) + K(4) + Rec(4) + team
     COL_HDR = f"{'NAME':<30}{'W':>4}{'L':>4}{'K':>4}  {'REC':>3}  TEAM"
     sections=[]
-    for tier in [TIER_CHAMPION,TIER_ELITES,TIER_VETERANS,TIER_ADEPTS,TIER_INITIATES,TIER_ROOKIES,TIER_RECRUITS]:
+    for tier in [TIER_CHAMPION,TIER_ELITES,TIER_EXPERTS,TIER_VETERANS,TIER_ADEPTS,TIER_INITIATES,TIER_ROOKIES,TIER_RECRUITS]:
         wlist=tiers[tier]
         if not wlist and tier==TIER_CHAMPION:
             sections.append(f"\n{tier}\n{COL_HDR}\n{SEP}\n  (vacant this turn)"); continue
