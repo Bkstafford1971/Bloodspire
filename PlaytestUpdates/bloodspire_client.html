@@ -1,8 +1,8 @@
-﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v2.7.5</title>
+<title>BLOODSPIRE Client - v2.8.6</title>
 <style>
 /* ============================================================
    WINDOWS CLASSIC - REFINED
@@ -146,8 +146,10 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 
 /* Menu bar */
 #menu-bar { background: var(--bg); border-bottom: 1px solid var(--mid); display: flex; padding: 1px 4px; gap: 0; }
-.menu-item { padding: 3px 10px; cursor: default; font-size: 12px; }
+.menu-item { padding: 3px 10px; cursor: default; font-size: 12px; color: #000; }
 .menu-item:hover { background: var(--sel); color: var(--sel-tx); }
+#action-dropdown .menu-item { font-weight: bold; color: #000; }
+#action-dropdown .menu-item:hover { background: var(--sel); color: var(--sel-tx); font-weight: bold; }
 
 /* Main layout */
 #app { display: flex; flex-direction: column; height: 100vh; }
@@ -242,11 +244,25 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 <div id="app"></div>
 
 <script>
+// Debug: Manual update check test
+window.testUpdateCheck = async () => {
+  console.log('🔄 Manually testing update check...');
+  try {
+    const result = await window.electronAPI.checkForUpdates();
+    console.log('✓ Update check result:', result);
+    return result;
+  } catch (err) {
+    console.error('✗ Update check failed:', err);
+    throw err;
+  }
+};
+</script>
+<script>
 "use strict";
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
-const CLIENT_VERSION = "2.7.5";
+const CLIENT_VERSION = "2.8.6";
 
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
@@ -470,14 +486,14 @@ async function extractZipFiles(arrayBuffer) {
         const dirPath = pathParts.join('/');
 
         // Write file using FSA
-        if (window.electronAPI) {
+        if (entry.type === 'newsletter') {
+          const text = new TextDecoder().decode(content);
+          await Store.writeNewsletter(entry.turn, text);
+          extracted++;
+        } else if (window.electronAPI) {
           // Electron mode
           const fullPath = `${baseDir}/${entry.target}`;
-          if (entry.type === 'team') {
-            const result = await window.electronAPI.writeJson(fullPath, JSON.parse(new TextDecoder().decode(content)));
-            if (!result.success) failed.push(filename);
-            else extracted++;
-          } else if (entry.type === 'result') {
+          if (entry.type === 'team' || entry.type === 'result') {
             const result = await window.electronAPI.writeJson(fullPath, JSON.parse(new TextDecoder().decode(content)));
             if (!result.success) failed.push(filename);
             else extracted++;
@@ -500,7 +516,25 @@ async function extractZipFiles(arrayBuffer) {
       }
     }
 
+    // Process raw result files through apply_league_results so the turn
+    // results view works without requiring another server download.
+    const resultEntries = manifest.filter(e => e.type === 'result');
+    let processedTurns = new Set();
+    for (const entry of resultEntries) {
+      try {
+        const sourceFile = loaded.file(entry.source);
+        if (!sourceFile) continue;
+        const data = JSON.parse(await sourceFile.async('string'));
+        if (!data || !data.team_id || !data.turn) continue;
+        const applied = await API.post('/api/apply_league_results', { team_id: data.team_id, result: data });
+        if (applied.success) processedTurns.add(data.turn);
+      } catch (e) {
+        console.warn('ZIP restore: could not process result entry', entry.source, e);
+      }
+    }
+
     let msg = `✓ Extracted ${extracted} file(s)`;
+    if (processedTurns.size > 0) msg += ` and applied turn ${[...processedTurns].sort().join(', ')} results`;
     if (failed.length > 0) {
       msg += ` (${failed.length} failed: ${failed.slice(0, 3).join(', ')}${failed.length > 3 ? '...' : ''})`;
     }
@@ -578,6 +612,10 @@ async function fsaGetOrPickFolder() {
 
 async function fsaWriteJSON(relPath, obj) {
   if (window.electronAPI) {
+    if (!baseDir) {
+      console.warn(`Skipping local write to ${relPath} (no folder selected)`);
+      return; // Skip write if no folder is selected
+    }
     const fullPath = `${baseDir}/${relPath}`;
     const result = await window.electronAPI.writeJson(fullPath, obj);
     if (!result.success) { console.error("Save failed:", result.error); throw new Error(result.error); }
@@ -852,6 +890,9 @@ function mergeResults(localTeam, serverResult, opts = {}) {
     const lw = out.warriors[idx];
     if (!lw) { out.warriors[idx] = sw; continue; }
 
+    // Skip merge if it's a different warrior in the same slot (dead warrior replaced by recruit)
+    if (sw.name && lw.name && sw.name !== lw.name) continue;
+
     // Authoritative from server
     lw.wins          = sw.wins          ?? lw.wins;
     lw.losses        = sw.losses        ?? lw.losses;
@@ -894,6 +935,14 @@ function mergeResults(localTeam, serverResult, opts = {}) {
         if (sw[attr] != null && sw[attr] > (lw[attr]||0)) lw[attr] = sw[attr];
       }
     }
+
+    // Derived stats - always take from server (these are recalculated after training)
+    // These must be updated even if attributes haven't changed, because training
+    // recalculates max_hp, weight, endurance based on attribute gains
+    if (sw.max_hp != null) lw.max_hp = sw.max_hp;
+    if (sw.height_in != null) lw.height_in = sw.height_in;
+    if (sw.weight_lbs != null) lw.weight_lbs = sw.weight_lbs;
+    if (sw.training_weight_bonus != null) lw.training_weight_bonus = sw.training_weight_bonus;
 
     // Fight history - replace any local entries for turns the server ran
     const srcHistory = sw.fight_history || [];
@@ -1002,6 +1051,8 @@ const S = {
   hideRecord:      localStorage.getItem('bp_hide_record') === 'true',
   replacingTeam:   null,  // {old_team_id, manager_id} when replacing
   legacyTeams:     null,  // cached list of archived/replaced teams
+  managerRecord:   null,  // cached manager record data
+  dataFactsLoading:false, // whether data facts is currently loading
   league: {               // league server connection settings
     url:         '',      // e.g. http://192.168.1.5:8766
     managerId:   '',
@@ -2284,7 +2335,7 @@ function buildManagerPanel() {
   const acc    = S.account || {};
   const tab    = S.mgrTab || 'account';
   const canAdd = acc.team_ids && acc.team_ids.length < 5; // Max 5 teams per manager
-  const tabs   = [['account','Account'],['newsletters','Newsletters'],['scouting','Scouting'],['legacy','Legacy'],['new_team','New Team']];
+  const tabs   = [['account','Account'],['newsletters','Newsletters'],['scouting','Scouting'],['legacy','Legacy'],['data_facts','Proving Grounds'],['new_team','New Team']];
 	let tabHtml  = '<div class="tabs">';
 	tabs.forEach(([key,lbl]) => {
 	  const isDisabled = key === 'new_team' && !canAdd;
@@ -2444,6 +2495,10 @@ function buildManagerPanel() {
     body = buildLegacyTab();
   }
 
+  else if (activeTab === 'data_facts') {
+    body = buildDataFactsTab();
+  }
+
   else if (activeTab === 'new_team') {
     body = `<div style="padding:12px;">
       <p style="color:#555; font-size:11px;">Use <b>Action → New Team</b> to create a team.</p>
@@ -2475,6 +2530,19 @@ function setMgrTab(tab) {
   if (tab === 'legacy') {
     S.legacyTeams = null; // force reload each time the tab is opened
     _loadLegacyTeams().then(() => { if (S.mgrTab === 'legacy') refreshContent(); });
+  }
+  if (tab === 'data_facts') {
+    S.dataFactsLoading = true;
+    refreshContent();
+    _loadManagerRecord().then(() => {
+      S.dataFactsLoading = false;
+      if (S.mgrTab === 'data_facts') refreshContent();
+    }).catch(err => {
+      console.error('Error loading manager record:', err);
+      S.dataFactsLoading = false;
+      S.managerRecord = { error: err.message };
+      if (S.mgrTab === 'data_facts') refreshContent();
+    });
   }
   refreshContent();
 }
@@ -2575,6 +2643,289 @@ function buildLegacyTab() {
     <div style="font-weight:bold; margin-bottom:8px;">Legacy - Replaced Teams</div>
     ${sections}
   </div>`;
+}
+
+/* ============================================================
+   DATA FACTS TAB
+   ============================================================ */
+async function _loadManagerRecord() {
+  const acc = S.account || {};
+  const managerName = acc.manager_name;
+
+  if (!managerName) {
+    S.managerRecord = { error: 'No manager name found' };
+    return Promise.resolve();
+  }
+
+  try {
+    console.log('Fetching manager record for:', managerName);
+    const result = await window.electronAPI.getManagerRecord(managerName);
+    console.log('Got manager record:', result);
+    S.managerRecord = result;
+  } catch (err) {
+    console.error('Error loading manager record:', err);
+    S.managerRecord = { error: err.message };
+  }
+}
+
+function buildDataFactsTab() {
+  const acc = S.account || {};
+  const managerName = acc.manager_name;
+  const record = S.managerRecord || {};
+
+  if (S.dataFactsLoading) {
+    return '<div style="padding:20px; color:#666;">Loading manager record...</div>';
+  }
+
+  if (record.error) {
+    return `<div style="padding:20px;">
+      <button onclick="refreshDataFacts()" style="margin-bottom:12px;">🔄 Retry</button>
+      <div style="color:#c00; font-size:12px;">Error: ${esc(record.error)}</div>
+    </div>`;
+  }
+
+  if (!record.success) {
+    return `<div style="padding:20px;">
+      <button onclick="refreshDataFacts()" style="margin-bottom:12px;">🔄 Retry</button>
+      <div style="color:#666; font-size:12px;">Failed to load manager record.</div>
+    </div>`;
+  }
+
+  const records = record.records || [];
+  const raceRecords = record.race_records || [];
+  const totals = record.totals || {};
+
+  if (!S.expandedDataFactsSections) S.expandedDataFactsSections = {};
+
+  let html = '<div style="padding:12px;">';
+  html += '<div style="margin-bottom:12px;"><button onclick="refreshDataFacts()" style="padding:4px 12px;">🔄 Update Stats</button></div>';
+
+  // Manager Records Section (Collapsible)
+  const managerExpanded = S.expandedDataFactsSections.managers === true;
+  html += '<div style="margin-bottom:20px; border:1px solid #999; border-radius:3px; background:#f9f9f9;">';
+  html += '<div style="padding:8px; cursor:pointer; background:#e0ddd6; border-radius:3px 3px 0 0; display:flex; justify-content:space-between;"';
+  html += ' onclick="toggleDataFactsSection(\'managers\')">';
+  html += '<span style="font-weight:bold; font-size:11px;">' + (managerExpanded ? '▼' : '▶') + ' ' + esc(managerName) + ' &mdash; Record vs Manager</span>';
+  html += '</div>';
+
+  if (managerExpanded) {
+    html += '<div style="padding:12px;"><table style="border-collapse:collapse; width:100%; font-size:11px;"><thead>';
+    html += '<tr style="background:#e0ddd6; border-bottom:1px solid #999;"><th style="text-align:left; padding:4px 8px; width:35%;">Opponent Manager</th>';
+    html += '<th style="text-align:center; padding:4px 8px; width:12%;">W</th><th style="text-align:center; padding:4px 8px; width:3%;">-</th>';
+    html += '<th style="text-align:center; padding:4px 8px; width:12%;">L</th><th style="text-align:center; padding:4px 8px; width:3%;">-</th>';
+    html += '<th style="text-align:center; padding:4px 8px; width:12%;">K</th><th style="text-align:center; padding:4px 8px; width:15%;">Deaths</th></tr></thead><tbody>';
+
+    for (const r of records) {
+      html += '<tr style="border-bottom:1px solid #ddd;"><td style="padding:4px 8px;">' + esc(r.opponent) + '</td>';
+      html += '<td style="text-align:center; padding:4px 8px;">' + r.wins + '</td><td style="text-align:center; padding:4px 8px;">-</td>';
+      html += '<td style="text-align:center; padding:4px 8px;">' + r.losses + '</td><td style="text-align:center; padding:4px 8px;">-</td>';
+      html += '<td style="text-align:center; padding:4px 8px;">' + r.kills + '</td><td style="text-align:center; padding:4px 8px;">' + r.deaths + '</td></tr>';
+    }
+
+    html += '<tr style="background:#f0ece8; border:1px solid #999; font-weight:bold;"><td style="padding:4px 8px;">TOTAL</td>';
+    html += '<td style="text-align:center; padding:4px 8px;">' + (totals.wins || 0) + '</td><td style="text-align:center; padding:4px 8px;">-</td>';
+    html += '<td style="text-align:center; padding:4px 8px;">' + (totals.losses || 0) + '</td><td style="text-align:center; padding:4px 8px;">-</td>';
+    html += '<td style="text-align:center; padding:4px 8px;">' + (totals.kills || 0) + '</td><td style="text-align:center; padding:4px 8px;">' + (totals.deaths || 0) + '</td></tr>';
+    html += '</tbody></table></div>';
+  }
+  html += '</div>';
+
+  // Race Records Section (Collapsible)
+  const racesExpanded = S.expandedDataFactsSections.races === true;
+  html += '<div style="margin-bottom:20px; border:1px solid #999; border-radius:3px; background:#f9f9f9;">';
+  html += '<div style="padding:8px; cursor:pointer; background:#e0ddd6; border-radius:3px 3px 0 0; display:flex; justify-content:space-between;"';
+  html += ' onclick="toggleDataFactsSection(\'races\')">';
+  html += '<span style="font-weight:bold; font-size:11px;">' + (racesExpanded ? '▼' : '▶') + ' Performance by Warrior Race</span>';
+  html += '</div>';
+
+  if (racesExpanded) {
+    html += '<div style="padding:12px;">';
+    if (raceRecords.length === 0) {
+      html += '<div style="color:#999; font-size:11px;">No race-specific records available</div>';
+    } else {
+      html += buildRaceRecordsList(raceRecords);
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Race vs Race Section (Collapsible)
+  const raceVsRaceExpanded = S.expandedDataFactsSections.raceVsRace || false;
+  const raceVsRaceData = record.race_vs_race || [];
+  html += '<div style="margin-bottom:20px; border:1px solid #999; border-radius:3px; background:#f9f9f9;">';
+  html += '<div style="padding:8px; cursor:pointer; background:#e0ddd6; border-radius:3px 3px 0 0; display:flex; justify-content:space-between;"';
+  html += ' onclick="toggleDataFactsSection(\'raceVsRace\')">';
+  html += '<span style="font-weight:bold; font-size:11px;">' + (raceVsRaceExpanded ? '▼' : '▶') + ' Race vs Race Performance</span>';
+  html += '</div>';
+
+  if (raceVsRaceExpanded) {
+    html += '<div style="padding:12px;">';
+    if (raceVsRaceData.length === 0) {
+      html += '<div style="color:#999; font-size:11px;">No race vs race records available</div>';
+    } else {
+      html += buildRaceVsRaceList(raceVsRaceData);
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Weapon Performance Section (Collapsible)
+  const weaponExpanded = S.expandedDataFactsSections.weapons || false;
+  const weaponData = record.weapon_records || [];
+  html += '<div style="margin-bottom:20px; border:1px solid #999; border-radius:3px; background:#f9f9f9;">';
+  html += '<div style="padding:8px; cursor:pointer; background:#e0ddd6; border-radius:3px 3px 0 0; display:flex; justify-content:space-between;"';
+  html += ' onclick="toggleDataFactsSection(\'weapons\')">';
+  html += '<span style="font-weight:bold; font-size:11px;">' + (weaponExpanded ? '▼' : '▶') + ' Weapon Performance</span>';
+  html += '</div>';
+
+  if (weaponExpanded) {
+    html += '<div style="padding:12px;">';
+    if (weaponData.length === 0) {
+      html += '<div style="color:#999; font-size:11px;">No weapon records available</div>';
+    } else {
+      html += buildWeaponRecordsList(weaponData);
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+
+  html += '</div>';
+  return html;
+}
+
+function toggleDataFactsSection(section) {
+  if (!S.expandedDataFactsSections) S.expandedDataFactsSections = {};
+  S.expandedDataFactsSections[section] = !S.expandedDataFactsSections[section];
+  refreshContent();
+}
+
+function buildRaceRecordsList(raceRecords) {
+  let html = '';
+  for (const rec of raceRecords) {
+    html += '<div style="padding:8px; border-bottom:1px solid #ddd; display:flex; justify-content:space-between; align-items:center;">';
+    html += '<span style="font-weight:bold; font-size:11px;">' + esc(rec.race) + '</span>';
+    html += '<span style="font-size:11px; color:#666;">' + rec.wins + '-' + rec.losses + '-' + rec.kills + ' (' + rec.slain + ' slain)</span>';
+    html += '</div>';
+  }
+  return html;
+}
+
+function buildRaceVsRaceList(raceVsRaceData) {
+  if (!S.expandedRaceVsRace) S.expandedRaceVsRace = {};
+
+  let html = '';
+  for (const raceData of raceVsRaceData) {
+    const race = raceData.race;
+    const isExpanded = S.expandedRaceVsRace[race] || false;
+
+    html += '<div style="margin-bottom:8px; border:1px solid #ddd; border-radius:3px; background:#fff;">';
+    html += '<div style="padding:8px; cursor:pointer; background:#f0f0f0; display:flex; justify-content:space-between; align-items:center;"';
+    html += ' onclick="toggleRaceVsRace(\'' + esc(race) + '\')">';
+    html += '<span style="font-weight:bold; font-size:11px;">' + (isExpanded ? '▼' : '▶') + ' ' + esc(race) + '</span>';
+    html += '</div>';
+
+    if (isExpanded) {
+      html += '<div style="padding:8px; border-top:1px solid #ddd;">';
+      for (const matchup of raceData.matchups) {
+        html += '<div style="padding:6px 8px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; margin-left:12px;">';
+        html += '<span style="font-size:11px;">vs ' + esc(matchup.opponent_race) + '</span>';
+        html += '<span style="font-size:11px; color:#666;">' + matchup.wins + '-' + matchup.losses + '-' + matchup.kills + '</span>';
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  return html;
+}
+
+function toggleRaceVsRace(race) {
+  if (!S.expandedRaceVsRace) S.expandedRaceVsRace = {};
+  S.expandedRaceVsRace[race] = !S.expandedRaceVsRace[race];
+  refreshContent();
+}
+
+function buildWeaponRecordsList(weaponRecords) {
+  if (!S.expandedWeapons) S.expandedWeapons = {};
+  if (!S.expandedRaces) S.expandedRaces = {};
+
+  let html = '';
+  for (const rec of weaponRecords) {
+    const isUnknown = rec.weapon === 'Unknown';
+    const weaponExpanded = S.expandedWeapons[rec.weapon] || false;
+    const winRate = (rec.wins + rec.losses > 0) ? ((rec.wins / (rec.wins + rec.losses)) * 100).toFixed(1) : '0.0';
+    const displayName = isUnknown ? 'Total Record' : rec.weapon;
+
+    html += '<div style="margin-bottom:8px; border:1px solid #ddd; border-radius:3px; background:#fff;">';
+
+    if (isUnknown) {
+      // Non-expandable Total Record
+      html += '<div style="padding:8px; background:#f0f0f0; display:flex; justify-content:space-between; align-items:center;">';
+      html += '<span style="font-weight:bold; font-size:11px;">' + displayName + '</span>';
+      html += '<span style="font-size:11px; color:#666;">' + rec.wins + '-' + rec.losses + '-' + rec.kills + ' (' + winRate + '%)</span>';
+      html += '</div>';
+    } else {
+      // Expandable weapon entry
+      html += '<div style="padding:8px; cursor:pointer; background:#f0f0f0; display:flex; justify-content:space-between; align-items:center;"';
+      html += ' onclick="toggleWeapon(\'' + esc(rec.weapon) + '\')">';
+      html += '<span style="font-weight:bold; font-size:11px;">' + (weaponExpanded ? '▼' : '▶') + ' ' + displayName + '</span>';
+      html += '<span style="font-size:11px; color:#666;">' + rec.wins + '-' + rec.losses + '-' + rec.kills + ' (' + winRate + '%)</span>';
+      html += '</div>';
+
+      if (weaponExpanded && rec.race_breakdown && rec.race_breakdown.length > 0) {
+        html += '<div style="padding:8px; border-top:1px solid #ddd;">';
+        for (const raceRec of rec.race_breakdown) {
+          const raceKey = rec.weapon + '|' + raceRec.race;
+          const raceExpanded = S.expandedRaces[raceKey] || false;
+          const raceWinRate = (raceRec.wins + raceRec.losses > 0) ? ((raceRec.wins / (raceRec.wins + raceRec.losses)) * 100).toFixed(1) : '0.0';
+
+          html += '<div style="margin-bottom:6px; border:1px solid #f0f0f0; border-radius:2px; background:#fafafa; margin-left:8px;">';
+          html += '<div style="padding:6px 8px; cursor:pointer; background:#f5f5f5; display:flex; justify-content:space-between; align-items:center;"';
+          html += ' onclick="toggleRaceInWeapon(\'' + esc(raceKey) + '\')">';
+          html += '<span style="font-size:11px;">' + (raceExpanded ? '▼' : '▶') + ' ' + esc(raceRec.race) + '</span>';
+          html += '<span style="font-size:11px; color:#666;">' + raceRec.wins + '-' + raceRec.losses + '-' + raceRec.kills + ' (' + raceWinRate + '%)</span>';
+          html += '</div>';
+
+          if (raceExpanded && raceRec.warrior_breakdown && raceRec.warrior_breakdown.length > 0) {
+            html += '<div style="padding:6px 8px; border-top:1px solid #f0f0f0;">';
+            for (const warriorRec of raceRec.warrior_breakdown) {
+              const warriorWinRate = (warriorRec.wins + warriorRec.losses > 0) ? ((warriorRec.wins / (warriorRec.wins + warriorRec.losses)) * 100).toFixed(1) : '0.0';
+              html += '<div style="padding:4px 8px; border-bottom:1px solid #efefef; display:flex; justify-content:space-between; align-items:center; margin-left:12px;">';
+              html += '<span style="font-size:10px; font-style:italic;">' + esc(warriorRec.warrior) + '</span>';
+              html += '<span style="font-size:10px; color:#888;">' + warriorRec.wins + '-' + warriorRec.losses + '-' + warriorRec.kills + ' (' + warriorWinRate + '%)</span>';
+              html += '</div>';
+            }
+            html += '</div>';
+          }
+          html += '</div>';
+        }
+        html += '</div>';
+      }
+    }
+    html += '</div>';
+  }
+  return html;
+}
+
+function toggleWeapon(weapon) {
+  if (!S.expandedWeapons) S.expandedWeapons = {};
+  S.expandedWeapons[weapon] = !S.expandedWeapons[weapon];
+  refreshContent();
+}
+
+function toggleRaceInWeapon(raceKey) {
+  if (!S.expandedRaces) S.expandedRaces = {};
+  S.expandedRaces[raceKey] = !S.expandedRaces[raceKey];
+  refreshContent();
+}
+
+function refreshDataFacts() {
+  S.dataFactsLoading = true;
+  refreshContent();
+  _loadManagerRecord().then(() => {
+    S.dataFactsLoading = false;
+    if (S.mgrTab === 'data_facts') refreshContent();
+  });
 }
 
 /* ============================================================
@@ -2894,7 +3245,8 @@ async function loadChallengeTargets() {
   try {
     const r = await API.get(`/api/challenge/targets?manager_id=${mid}&team_id=${teamId}`);
     S.challengeTargets = r.success ? (r.warriors || []) : [];
-  } catch(e) { S.challengeTargets = []; }
+    S._eligibleChampionTiers = r.success ? (r.eligible_champion_tiers || []) : [];
+  } catch(e) { S.challengeTargets = []; S._eligibleChampionTiers = []; }
   refreshContent();
 }
 
@@ -3059,10 +3411,10 @@ function buildWarriorPanel(team, w, wIdx) {
   const isDead = w.is_dead || false;
   // Always show all tabs regardless of death status - don't tip off the manager
   // that the warrior died until they read the fight narrative
-  const tabs = ['Stats/Strats', 'Fight Options', 'Fights', 'Challenges', 'Replacement', 'Archives'];
+  const tabs = ['Stats/Strats', 'Fight Options', 'Fights', 'Challenges', 'Replacement', 'The Crypts'];
   const tabMap = {
     'Stats/Strats':'stats', 'Fight Options':'fight', 'Fights':'fights',
-    'Challenges':'challenges', 'Replacement':'replacement', 'Archives':'archives'
+    'Challenges':'challenges', 'Replacement':'replacement', 'The Crypts':'archives'
   };
   let tabsHtml = `<div class="tabs">`;
   tabs.forEach(t => {
@@ -3257,7 +3609,10 @@ function buildStatsTab(team, w, wIdx) {
 
 <!-- Strategies -->
 <div class="group" style="margin:0 0 6px 0;">
-  <span class="group-label">Strategies</span>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:0 4px;">
+    <span class="group-label">Strategies</span>
+    <button id="templates-btn" onclick="showTemplatesDropdown()" style="font-size:11px;padding:2px 6px;background:var(--bg);border:1px solid var(--mid);cursor:pointer;">Templates ▾</button>
+  </div>
   <table class="strat-table">
     <thead>
       <tr>
@@ -3294,14 +3649,41 @@ function buildStatsTab(team, w, wIdx) {
 </div>`; // end stats tab
 }
 
+/* ---- Tier helpers (mirrors warrior.py tier system) ---- */
+const TIER_ORDER = ['CHAMPION','ELITES','EXPERTS','VETERANS','ADEPTS','INITIATES','ROOKIES','RECRUITS'];
+const TIER_LABELS = {
+  CHAMPION:'Champion', ELITES:'Elite', EXPERTS:'Expert', VETERANS:'Veteran',
+  ADEPTS:'Adept', INITIATES:'Initiate', ROOKIES:'Rookie', RECRUITS:'Recruit'
+};
+function warriorTier(w) {
+  if (w.is_champion) return 'CHAMPION';
+  const rec = w.recognition || 0;
+  if (rec >= 87)  return 'ELITES';
+  if (rec >= 71)  return 'EXPERTS';
+  if (rec >= 56)  return 'VETERANS';
+  if (rec >= 41)  return 'ADEPTS';
+  if (rec >= 26)  return 'INITIATES';
+  if (rec >= 13)  return 'ROOKIES';
+  return 'RECRUITS';
+}
+function canChallengeTier(challengerTier, targetTier) {
+  if (targetTier === 'CHAMPION') return false; // champion path is separate
+  const ci = TIER_ORDER.indexOf(challengerTier);
+  const ti = TIER_ORDER.indexOf(targetTier);
+  return ci - 1 <= ti && ti <= ci;
+}
+function canChallengeChampion(challengerTier) {
+  return true; // Server enforces top 2 tiers dynamically
+}
+
 /* ---- Other tabs (stubs) ---- */
 function buildFightOptionsTab(w) {
-  const canRetire = (w.total_fights||0) >= 100;
+  const canRetire = (w.total_fights||0) >= 50;
   const isMonster = w.want_monster_fight || false;
   const isRetire  = w.want_retire        || false;
   const retireLabel = canRetire
     ? 'Retire Warrior - submit retirement papers this turn'
-    : `Retire Warrior - not eligible yet (${w.total_fights||0}/100 fights)`;
+    : `Retire Warrior - not eligible yet (${w.total_fights||0}/50 fights)`;
 
   return `
 <div style="padding:12px;">
@@ -3339,7 +3721,7 @@ function buildFightOptionsTab(w) {
           ${canRetire
             ? `${esc(w.name)} has earned a hero&#39;s retirement after ${w.total_fights} fights.
                They leave the team this turn and a new recruit takes their place.`
-            : `Warriors must complete 100 fights to be eligible for retirement.`
+            : `Warriors must complete 50 fights to be eligible for retirement.`
           }
         </span>
       </span>
@@ -3366,7 +3748,7 @@ function buildFightOptionsTab(w) {
         <td style="padding:3px 8px;" colspan="3">
           ${canRetire
             ? '<b style="color:#060">Yes</b>'
-            : `<span style="color:#555">No &mdash; needs ${100-(w.total_fights||0)} more fight(s)</span>`}
+            : `<span style="color:#555">No &mdash; needs ${50-(w.total_fights||0)} more fight(s)</span>`}
         </td>
       </tr>
     </table>
@@ -3433,9 +3815,7 @@ function buildFightsTab(w) {
     const isChampFight = h.fight_type === 'champion';
     const champStyle = isChampFight ? 'background:#fff8f0; border-left:3px solid #c60;' : `${i%2===0?'background:#f5f4f0;':''}`;
     const killMark = !S.hideRecord && h.is_kill ? '<b style="color:#060">☠</b>' : '';
-    const opponentDisplay = (!S.hideRecord && isChampFight && h.result === 'WIN')
-      ? `${esc(w.name)} defeated ${esc(h.opponent_name)} in an actionpacked ${h.minutes} minute Champion Fight${killedNote}`
-      : `${esc(h.opponent_name)}${killedNote}`;
+    const opponentDisplay = `${esc(h.opponent_name)}${killedNote}`;
 
     if (isChampFight) {
       // Champion fights get special row formatting
@@ -3489,9 +3869,7 @@ function buildFightsTab(w) {
 </div>`;
 }
 function buildChallengesTab(team, w) {
-  const fights    = w.total_fights || 0;
-  const minFights = Math.floor(fights * 0.90);
-  const maxFights = Math.floor(fights * 1.30);
+  const myTier = warriorTier(w);
 
   // Current challenges queued for this warrior
   const pendingMap  = team.challenges || {};
@@ -3500,7 +3878,7 @@ function buildChallengesTab(team, w) {
   const slotsLeft   = 3 - slotsUsed;
 
   // Blood challenges available for this team
-  const activeBloodChallenges = (team.blood_challenges || []).filter(bc => 
+  const activeBloodChallenges = (team.blood_challenges || []).filter(bc =>
     bc.status === "active" && bc.turns_remaining > 0
   );
 
@@ -3514,20 +3892,32 @@ function buildChallengesTab(team, w) {
     return '<div style="padding:20px; color:#555;">Loading challenge targets...</div>';
   }
   const opponents = [];
+  const eligible_champ_tiers = S._eligibleChampionTiers || [];
+
   for (const ow of S.challengeTargets) {
-    const owFights = ow.total_fights || 0;
-    if (owFights >= minFights && owFights <= maxFights) {
+    const owTier = warriorTier(ow);
+
+    // For Champion: only show if challenger is in the top 2 eligible tiers
+    if (ow.is_champion) {
+      if (eligible_champ_tiers.includes(myTier)) {
+        opponents.push({
+          name: ow.name, teamName: ow.team_name, managerName: ow.manager_name || '-',
+          race: ow.race || '-',
+          record: S.hideRecord ? '-' : `${ow.wins||0}-${ow.losses||0}-${ow.kills||0}`,
+          fights: ow.total_fights || 0, tier: 'CHAMPION', isChampion: true,
+        });
+      }
+    } else if (canChallengeTier(myTier, owTier)) {
       opponents.push({
-        name     : ow.name,
-        teamName : ow.team_name,
-        managerName : ow.manager_name || '-',
-        race     : ow.race || '-',
-        record   : S.hideRecord ? '-' : `${ow.wins||0}-${ow.losses||0}-${ow.kills||0}`,
-        fights   : owFights,
+        name: ow.name, teamName: ow.team_name, managerName: ow.manager_name || '-',
+        race: ow.race || '-',
+        record: S.hideRecord ? '-' : `${ow.wins||0}-${ow.losses||0}-${ow.kills||0}`,
+        fights: ow.total_fights || 0, tier: owTier, isChampion: false,
       });
     }
   }
   opponents.sort((a, b) => b.fights - a.fights || a.name.localeCompare(b.name));
+  const allOpponents = opponents;
 
   // ── Pending challenges rows ──────────────────────────────────────────────
   let pendingRows = '';
@@ -3572,8 +3962,8 @@ function buildChallengesTab(team, w) {
 
   // ── Available opponents rows ─────────────────────────────────────────────
   let oppRows = '';
-  if (opponents.length) {
-    opponents.forEach(op => {
+  if (allOpponents.length) {
+    allOpponents.forEach(op => {
       const alreadyQueued = myPending.includes(op.name);
       let btn;
       if (alreadyQueued) {
@@ -3584,6 +3974,7 @@ function buildChallengesTab(team, w) {
       } else {
         btn = `<button disabled style="font-size:11px; padding:1px 6px; opacity:0.5;" title="3 challenges already queued">Full</button>`;
       }
+      const tierStyle = op.isChampion ? 'color:#c60; font-weight:bold;' : 'color:#555;';
       oppRows += `
       <tr style="border-bottom:1px solid #eee;">
         <td style="padding:3px 8px;">${esc(op.name)}</td>
@@ -3591,18 +3982,20 @@ function buildChallengesTab(team, w) {
         <td style="padding:3px 8px; color:#555;">${esc(op.managerName)}</td>
         <td style="padding:3px 8px; color:#555;">${esc(op.race)}</td>
         <td style="padding:3px 8px; text-align:center;">${esc(op.record)}</td>
-        <td style="padding:3px 8px; text-align:center;">${op.fights}</td>
+        <td style="padding:3px 8px; text-align:center; ${tierStyle}">${TIER_LABELS[op.tier] || op.tier}</td>
         <td style="padding:3px 8px;">${btn}</td>
       </tr>`;
     });
   } else {
     oppRows = `<tr><td colspan="7" style="padding:10px; color:#888; text-align:center; font-style:italic;">
-      No warriors from other teams fall within this warrior's challenge range.</td></tr>`;
+      No warriors in ${esc(TIER_LABELS[myTier] || myTier)} or the tier above are available to challenge.</td></tr>`;
   }
 
-  const rangeDesc = fights === 0
-    ? `0 fights (rookie bracket - only other rookies)`
-    : `${minFights}–${maxFights} fights`;
+  const tierAbove = TIER_ORDER[TIER_ORDER.indexOf(myTier) - 1];
+  const tierAboveLabel = tierAbove ? TIER_LABELS[tierAbove] : null;
+  const rangeDesc = tierAboveLabel
+    ? `${TIER_LABELS[myTier]} and ${tierAboveLabel} tier warriors`
+    : `${TIER_LABELS[myTier]} tier warriors only`;
 
   const pendingSection = (myPending.length || bloodList.length) ? `
   <div class="group" style="margin:0 0 12px;">
@@ -3754,9 +4147,8 @@ function buildChallengesTab(team, w) {
   <div class="group" style="margin:0 0 12px;">
     <span class="group-label">Challenge Range - ${esc(w.name)}</span>
     <p style="font-size:11px; color:#555; margin:4px 0 0;">
-      ${esc(w.name)} has <b>${fights}</b> fight${fights === 1 ? '' : 's'}.
-      Eligible targets: <b>${rangeDesc}</b>
-      (up to 30% more experience, down to 10% less).
+      ${esc(w.name)} is in the <b>${TIER_LABELS[myTier] || myTier}</b> tier.
+      Eligible targets: <b>${rangeDesc}</b>.
       Up to <b>3</b> challenges may be queued per warrior per turn.
       Challenges are not guaranteed - success depends on warrior presence.
     </p>
@@ -3766,7 +4158,7 @@ function buildChallengesTab(team, w) {
   ${avoidWarriorsSection}
   ${pendingSection}
   <div class="group" style="margin:0;">
-    <span class="group-label">Available to Challenge${opponents.length ? ` - ${opponents.length} warrior${opponents.length === 1 ? '' : 's'} in range` : ''}</span>
+    <span class="group-label">Available to Challenge${allOpponents.length ? ` - ${allOpponents.length} warrior${allOpponents.length === 1 ? '' : 's'} in range` : ''}</span>
     <table style="border-collapse:collapse; width:100%; font-size:12px;">
       <thead>
         <tr style="border-bottom:2px solid #ccc; color:#666; font-size:11px;">
@@ -3775,7 +4167,7 @@ function buildChallengesTab(team, w) {
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Manager</th>
           <th style="padding:4px 8px; text-align:left; font-weight:600;">Race</th>
           <th style="padding:4px 8px; text-align:center; font-weight:600;">Record</th>
-          <th style="padding:4px 8px; text-align:center; font-weight:600;">Fights</th>
+          <th style="padding:4px 8px; text-align:center; font-weight:600;">Tier</th>
           <th style="padding:4px 8px;"></th>
         </tr>
       </thead>
@@ -5020,6 +5412,317 @@ async function flushSave() {
   clearTimeout(_saveTimer);
   _saveTimer = null;
   await doSaveWarrior();
+}
+
+/* ============================================================
+   STRATEGY TEMPLATES
+   ============================================================ */
+const TEMPLATES_DIR = 'strategy_templates';
+
+async function saveStrategyTemplate() {
+  const w = S.sel && S.sel.type === 'warrior' ? S.teams[S.sel.teamId].warriors[S.sel.wIdx] : null;
+  if (!w) { alert('No warrior selected'); return; }
+
+  // Suggested name: warrior name + race
+  const suggestedName = w.name && w.race ? `${w.name} ${w.race}` : 'Template';
+
+  // Show save-name modal
+  el('save-template-modal')?.remove();
+  const modal = document.createElement('div');
+  modal.id = 'save-template-modal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:8000;display:flex;align-items:center;justify-content:center;';
+  modal.innerHTML = `
+<div style="background:var(--bg);border:2px solid;border-color:var(--white) var(--mid) var(--mid) var(--white);width:400px;max-width:95vw;">
+  <div style="background:var(--title);color:#fff;padding:3px 8px;display:flex;align-items:center;font-weight:bold;font-size:11px;">
+    Save Strategy Template
+    <button onclick="el('save-template-modal').remove()" style="margin-left:auto;min-width:0;width:16px;height:14px;padding:0;font-size:9px;background:var(--bg);border:1px solid var(--mid);">✕</button>
+  </div>
+  <div style="padding:12px;">
+    <div style="margin-bottom:10px; font-size:11px;">Template name:</div>
+    <input type="text" id="template-name-input" value="${esc(suggestedName)}" style="width:100%; padding:4px; box-sizing:border-box; font-size:11px;" />
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px;">
+      <button onclick="doSaveTemplate()">Save</button>
+      <button onclick="el('save-template-modal').remove()">Cancel</button>
+    </div>
+  </div>
+</div>`;
+  document.body.appendChild(modal);
+
+  // Reclaim OS keyboard focus before focusing the input field
+  if (window.electronAPI && window.electronAPI.focusWindow) {
+    await window.electronAPI.focusWindow();
+  }
+
+  el('template-name-input').focus();
+  el('template-name-input').select();
+}
+
+async function doSaveTemplate() {
+  const name = el('template-name-input')?.value?.trim();
+  if (!name) { alert('Please enter a template name'); return; }
+
+  const w = S.sel && S.sel.type === 'warrior' ? S.teams[S.sel.teamId].warriors[S.sel.wIdx] : null;
+  if (!w) { alert('No warrior selected'); return; }
+
+  try {
+    // Ensure directory exists
+    const dirRes = await window.electronAPI.ensureDir(TEMPLATES_DIR);
+    if (!dirRes.success) throw new Error('Failed to create templates directory');
+
+    // Collect strategies (same logic as doSaveWarrior)
+    const strats = [];
+    for (let i = 0; i < 5; i++) {
+      const trigger = getSelectVal(`#strat-body select[data-si="${i}"][data-sf="trigger"]`);
+      if (!trigger || trigger === 'None') continue;
+      const style    = getSelectVal(`#strat-body select[data-si="${i}"][data-sf="style"]`) || 'Strike';
+      const actRaw   = getInputVal(`#strat-body input[data-si="${i}"][data-sf="activity"]`);
+      const activity = (actRaw !== '' && actRaw !== null) ? parseInt(actRaw) : 5;
+      const aim      = getSelectVal(`#strat-body select[data-si="${i}"][data-sf="aim_point"]`) || 'None';
+      const def      = getSelectVal(`#strat-body select[data-si="${i}"][data-sf="defense_point"]`) || 'None';
+      strats.push({trigger, style, activity, aim_point:aim, defense_point:def});
+    }
+    // D row
+    const dStyle    = getSelectVal('#strat-body select[data-si="D"][data-sf="style"]') || 'Strike';
+    const dActRaw   = getInputVal('#strat-body input[data-si="D"][data-sf="activity"]');
+    const dActivity = (dActRaw !== '' && dActRaw !== null) ? parseInt(dActRaw) : 5;
+    const dAim      = getSelectVal('#strat-body select[data-si="D"][data-sf="aim_point"]') || 'None';
+    const dDef      = getSelectVal('#strat-body select[data-si="D"][data-sf="defense_point"]') || 'None';
+    strats.push({trigger:'Always (Default Loop)', style:dStyle, activity:dActivity, aim_point:dAim, defense_point:dDef});
+
+    // Build template object
+    const template = {
+      name,
+      armor: el('sel-armor')?.value || 'None',
+      helm: el('sel-helm')?.value || 'None',
+      primary_weapon: el('sel-prim')?.value || 'Open Hand',
+      secondary_weapon: el('sel-sec')?.value || 'Open Hand',
+      backup_weapon: el('sel-bkp')?.value || 'None',
+      strategies: strats
+    };
+
+    // Write file
+    const filePath = `${TEMPLATES_DIR}/${name}.json`;
+    const writeRes = await window.electronAPI.writeJson(filePath, template);
+    if (!writeRes.success) throw new Error('Failed to save template');
+
+    el('save-template-modal').remove();
+    alert(`Template "${name}" saved successfully!`);
+
+    // Refresh dropdown if it's open
+    updateTemplatesDropdown();
+  } catch (err) {
+    alert('Error saving template: ' + err.message);
+  }
+}
+
+async function showTemplatesDropdown() {
+  const btn = el('templates-btn');
+  const dropdownId = 'templates-dropdown';
+  const existing = el(dropdownId);
+
+  if (existing) {
+    existing.remove();
+    return;
+  }
+
+  try {
+    // Load templates list
+    const listRes = await window.electronAPI.listDir(TEMPLATES_DIR);
+    const templates = (listRes.success && listRes.files)
+      ? listRes.files.filter(f => f.endsWith('.json')).map(f => f.slice(0, -5))
+      : [];
+
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+
+    // Build dropdown panel
+    const dropdown = document.createElement('div');
+    dropdown.id = dropdownId;
+    dropdown.style.cssText = `position:fixed;top:${rect.bottom}px;left:${rect.left}px;
+      background:var(--bg);border:1px solid var(--mid);z-index:8001;
+      min-width:200px;max-width:300px;box-shadow:0 2px 8px rgba(0,0,0,0.3);`;
+
+    // Save option
+    const saveDiv = document.createElement('div');
+    saveDiv.style.cssText = 'padding:6px 8px;border-bottom:1px solid var(--mid);cursor:pointer;font-size:11px;display:flex;align-items:center;';
+    saveDiv.innerHTML = '💾 Save as Template';
+    saveDiv.onclick = () => { dropdown.remove(); saveStrategyTemplate(); };
+    dropdown.appendChild(saveDiv);
+
+    // Templates list
+    if (templates.length === 0) {
+      const emptyDiv = document.createElement('div');
+      emptyDiv.style.cssText = 'padding:6px 8px;font-size:11px;color:#888;';
+      emptyDiv.textContent = 'No templates saved';
+      dropdown.appendChild(emptyDiv);
+    } else {
+      templates.forEach(tpl => {
+        const tplDiv = document.createElement('div');
+        tplDiv.style.cssText = 'padding:6px 8px;border-bottom:1px solid #e0e0e0;font-size:11px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;';
+        tplDiv.innerHTML = `<span>📂 ${esc(tpl)}</span>`;
+
+        const actionSpan = document.createElement('span');
+        actionSpan.style.cssText = 'display:flex;gap:4px;';
+
+        // Load button
+        const loadBtn = document.createElement('button');
+        loadBtn.style.cssText = 'min-width:0;width:50px;height:18px;font-size:10px;padding:0;background:var(--bg);border:1px solid var(--mid);cursor:pointer;';
+        loadBtn.textContent = 'Load';
+        loadBtn.onclick = (e) => { e.stopPropagation(); dropdown.remove(); loadTemplate(tpl); };
+        actionSpan.appendChild(loadBtn);
+
+        // Delete button
+        const delBtn = document.createElement('button');
+        delBtn.style.cssText = 'min-width:0;width:20px;height:18px;font-size:9px;padding:0;background:var(--bg);border:1px solid var(--mid);cursor:pointer;color:#c84;font-weight:bold;';
+        delBtn.textContent = '✕';
+        delBtn.onclick = (e) => { e.stopPropagation(); deleteTemplate(tpl); };
+        actionSpan.appendChild(delBtn);
+
+        tplDiv.appendChild(actionSpan);
+        dropdown.appendChild(tplDiv);
+      });
+    }
+
+    document.body.appendChild(dropdown);
+
+    // Close dropdown when clicking outside
+    const closeHandler = (e) => {
+      if (!dropdown.contains(e.target) && e.target !== btn) {
+        dropdown.remove();
+        document.removeEventListener('click', closeHandler);
+      }
+    };
+    setTimeout(() => document.addEventListener('click', closeHandler), 0);
+  } catch (err) {
+    alert('Error loading templates: ' + err.message);
+  }
+}
+
+async function updateTemplatesDropdown() {
+  // Refresh dropdown if it's open
+  const dropdown = el('templates-dropdown');
+  if (dropdown) {
+    dropdown.remove();
+    showTemplatesDropdown();
+  }
+}
+
+async function loadTemplate(templateName) {
+  try {
+    // Read template
+    const readRes = await window.electronAPI.readJson(`${TEMPLATES_DIR}/${templateName}.json`);
+    if (!readRes.success) throw new Error('Failed to load template');
+    const template = readRes.data;
+
+    // Show load confirmation modal with gear checkbox
+    el('load-template-modal')?.remove();
+    const modal = document.createElement('div');
+    modal.id = 'load-template-modal';
+    modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:8000;display:flex;align-items:center;justify-content:center;';
+    modal.innerHTML = `
+<div style="background:var(--bg);border:2px solid;border-color:var(--white) var(--mid) var(--mid) var(--white);width:380px;max-width:95vw;">
+  <div style="background:var(--title);color:#fff;padding:3px 8px;display:flex;align-items:center;font-weight:bold;font-size:11px;">
+    Load Template: ${esc(templateName)}
+    <button onclick="el('load-template-modal').remove()" style="margin-left:auto;min-width:0;width:16px;height:14px;padding:0;font-size:9px;background:var(--bg);border:1px solid var(--mid);">✕</button>
+  </div>
+  <div style="padding:12px;">
+    <div style="margin-bottom:10px; font-size:11px; display:flex; align-items:center;">
+      <input type="checkbox" id="load-template-gear" checked style="margin-right:8px;" />
+      <label for="load-template-gear">Include gear (armor, helm, weapons)</label>
+    </div>
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px;">
+      <button onclick="applyTemplate(${esc(JSON.stringify(template))})">Apply</button>
+      <button onclick="el('load-template-modal').remove()">Cancel</button>
+    </div>
+  </div>
+</div>`;
+    document.body.appendChild(modal);
+  } catch (err) {
+    alert('Error loading template: ' + err.message);
+  }
+}
+
+async function applyTemplate(template) {
+  if (!template || !template.strategies) {
+    alert('Invalid template');
+    return;
+  }
+
+  try {
+    const includeGear = el('load-template-gear')?.checked ?? true;
+
+    // Apply gear if checked
+    if (includeGear) {
+      const setSelect = (id, val) => {
+        const elem = el(id);
+        if (elem) elem.value = val || 'None';
+      };
+      setSelect('sel-armor', template.armor);
+      setSelect('sel-helm', template.helm);
+      setSelect('sel-prim', template.primary_weapon);
+      setSelect('sel-sec', template.secondary_weapon);
+      setSelect('sel-bkp', template.backup_weapon);
+    }
+
+    // Apply strategies - separate into numbered rows and D row
+    const isDefaultTrigger = t => t === 'Always' || t === 'Always (Default Loop)';
+    const dRow = template.strategies.find(s => isDefaultTrigger(s.trigger));
+    const numRows = template.strategies.filter(s => !isDefaultTrigger(s.trigger));
+
+    // Apply numbered rows (0-4)
+    for (let i = 0; i < 5; i++) {
+      const s = numRows[i] || { trigger:'', style:'', activity:'', aim_point:'', defense_point:'' };
+
+      const setSelect = (selector, val) => {
+        const elem = document.querySelector(selector);
+        if (elem) elem.value = val || '';
+      };
+      const setInput = (selector, val) => {
+        const elem = document.querySelector(selector);
+        if (elem) elem.value = val || '';
+      };
+
+      setSelect(`#strat-body select[data-si="${i}"][data-sf="trigger"]`, s.trigger);
+      setSelect(`#strat-body select[data-si="${i}"][data-sf="style"]`, s.style);
+      setInput(`#strat-body input[data-si="${i}"][data-sf="activity"]`, s.activity);
+      setSelect(`#strat-body select[data-si="${i}"][data-sf="aim_point"]`, s.aim_point);
+      setSelect(`#strat-body select[data-si="${i}"][data-sf="defense_point"]`, s.defense_point);
+    }
+
+    // Apply D row
+    if (dRow) {
+      const setSelect = (selector, val) => {
+        const elem = document.querySelector(selector);
+        if (elem) elem.value = val || '';
+      };
+      const setInput = (selector, val) => {
+        const elem = document.querySelector(selector);
+        if (elem) elem.value = val || '';
+      };
+
+      setSelect('#strat-body select[data-si="D"][data-sf="style"]', dRow.style);
+      setInput('#strat-body input[data-si="D"][data-sf="activity"]', dRow.activity);
+      setSelect('#strat-body select[data-si="D"][data-sf="aim_point"]', dRow.aim_point);
+      setSelect('#strat-body select[data-si="D"][data-sf="defense_point"]', dRow.defense_point);
+    }
+
+    el('load-template-modal').remove();
+    scheduleAutoSave();
+  } catch (err) {
+    alert('Error applying template: ' + err.message);
+  }
+}
+
+async function deleteTemplate(templateName) {
+  if (!confirm(`Delete template "${templateName}"?`)) return;
+
+  try {
+    const delRes = await window.electronAPI.deleteFile(`${TEMPLATES_DIR}/${templateName}.json`);
+    if (!delRes.success) throw new Error('Failed to delete template');
+    updateTemplatesDropdown();
+  } catch (err) {
+    alert('Error deleting template: ' + err.message);
+  }
 }
 
 /* ============================================================
@@ -7330,9 +8033,20 @@ document.addEventListener('click', (e) => {
         if (clickedInputId) {
           const inp = el(clickedInputId);
           if (inp) {
-            inp.focus();
-            const l = inp.value.length;
-            if (inp.setSelectionRange) inp.setSelectionRange(l, l);
+            // Use focusWindow to establish OS keyboard routing before focusing
+            if (window.electronAPI?.focusWindow) {
+              window.electronAPI.focusWindow().then(() => {
+                if (inp) {
+                  inp.focus();
+                  const l = inp.value.length;
+                  if (inp.setSelectionRange) inp.setSelectionRange(l, l);
+                }
+              });
+            } else {
+              inp.focus();
+              const l = inp.value.length;
+              if (inp.setSelectionRange) inp.setSelectionRange(l, l);
+            }
           }
         }
       }

@@ -15,7 +15,7 @@ import math
 from dataclasses import dataclass, field
 from typing import List, Optional, Tuple, Dict
 
-from warrior   import Warrior
+from warrior   import Warrior, get_warrior_tier, challenge_tier_allowed, TIER_ORDER, TIER_CHAMPION
 from team      import Team, create_peasant_team, create_monster_team
 from combat    import run_fight, FightResult
 from save      import save_team, save_fight_log, load_all_teams
@@ -149,11 +149,19 @@ def build_global_fight_card(
         unmatched = _get_unmatched()
         champ_e = next((e for e in master_pool if e['warrior'].name.lower() == current_champion.lower()), None)
         if champ_e and not champ_e['matched']:
+            # Determine top 2 tiers that can challenge the champion
+            all_warriors = [e['warrior'] for e in master_pool]
+            eligible_tiers = _get_top_two_tiers(all_warriors)
+
             challengers = []
             for entry in unmatched:
                 if entry['matched']: continue
                 targets = entry['team'].challenges.get(entry['warrior'].slot_index, [])
                 if any(t.lower() == current_champion.lower() or t.lower() == champ_e['team'].team_name.lower() for t in targets):
+                    tier = get_warrior_tier(entry['warrior'])
+                    if tier not in eligible_tiers:
+                        print(f"  CHAMPION CHALLENGE REJECTED: {entry['warrior'].name} is {tier} (only {eligible_tiers} can challenge).")
+                        continue
                     challengers.append(entry)
             if challengers:
                 challengers.sort(key=lambda e: (-e['warrior'].presence, -getattr(e['warrior'], 'recognition', 0)))
@@ -173,7 +181,7 @@ def build_global_fight_card(
                                 target_name.lower() in e['team'].manager_name.lower())
                            and not _is_same_manager(entry['team'], e['team'])), None)
             if target and not _attempt_avoid_challenge(target['warrior'], target['team'], entry['warrior'].name, entry['team'].manager_name):
-                if _challenge_in_bracket(entry['warrior'].total_fights, target['warrior'].total_fights):
+                if _challenge_in_bracket(entry['warrior'], target['warrior']):
                     if _challenge_succeeds(entry['warrior'].presence, target['warrior'].presence):
                         _add_fight(entry, target, "challenge", entry['warrior'].name)
                         break
@@ -312,17 +320,15 @@ def _in_bracket(player_fights: int, opponent_fights: int) -> bool:
     return lower <= opponent_fights <= upper
 
 
-def _challenge_in_bracket(challenger_fights: int, target_fights: int) -> bool:
-    """
-    Challenges ignore the upper bracket limit (warriors can punch up freely),
-    but bully-prevention applies: cannot challenge someone with fewer than
-    90% of the challenger's fights.
+def _challenge_in_bracket(challenger: Warrior, target: Warrior) -> bool:
+    """Return True if challenger's tier permits a regular challenge against target.
+
+    Rule: same tier or one tier above. Champion challenges are handled separately.
     Blood challenges skip this check entirely.
     """
-    if challenger_fights <= ROOKIE_THRESHOLD:
-        return True   # rookies can challenge anyone
-    floor = int(challenger_fights * CHALLENGE_FLOOR)
-    return target_fights >= floor
+    challenger_tier = get_warrior_tier(challenger)
+    target_tier     = get_warrior_tier(target)
+    return challenge_tier_allowed(challenger_tier, target_tier)
 
 
 def _team_avg_rating(team: Team) -> float:
@@ -330,6 +336,28 @@ def _team_avg_rating(team: Team) -> float:
     if not active:
         return 0.0
     return sum(_warrior_rating(w) for w in active) / len(active)
+
+
+def _get_top_two_tiers(warriors: list) -> list:
+    """Return the top 2 populated tiers from a list of warriors.
+
+    Used to dynamically determine which tiers can challenge the champion.
+    If only a few tiers are represented, we allow the top 2 that exist.
+    """
+    tiers_present = set()
+    for w in warriors:
+        tier = get_warrior_tier(w)
+        if tier != TIER_CHAMPION:
+            tiers_present.add(tier)
+
+    # Sort by TIER_ORDER index (lower = higher rank)
+    sorted_tiers = sorted(tiers_present, key=lambda t: TIER_ORDER.index(t) if t in TIER_ORDER else 999)
+    top_two = sorted_tiers[:2]
+
+    # Debug log
+    print(f"  [CHAMPION TIER CHECK] Tiers present: {sorted_tiers}, Top 2: {top_two}")
+
+    return top_two
 
 
 # ---------------------------------------------------------------------------
@@ -859,7 +887,7 @@ def build_fight_card(
         if not pw.want_retire:
             continue
         if not pw.can_retire:
-            print(f"  RETIRE REJECTED: {pw.name} only has {pw.total_fights} fights (need 100).")
+            print(f"  RETIRE REJECTED: {pw.name} only has {pw.total_fights} fights (need 50).")
             pw.want_retire = False
             continue
         replacement = player_team.retire_warrior(pw)
@@ -887,6 +915,10 @@ def build_fight_card(
                 break
 
         if champion_warrior and champion_team:
+            # Determine top 2 tiers that can challenge the champion
+            all_warriors = player_team.active_warriors + [w for ot in opponent_teams for w in ot.active_warriors]
+            eligible_tiers = _get_top_two_tiers(all_warriors)
+
             champ_challengers = []
             for slot_idx, targets in player_team.challenges.items():
                 if slot_idx in matched_players or (player_team.team_id, slot_idx) in global_used:
@@ -899,6 +931,10 @@ def build_fight_card(
                     if (target_name.lower() == current_champion.lower() or
                         target_name.lower() == champion_team.manager_name.lower() or
                         target_name.lower() == champion_team.team_name.lower()):
+                        tier = get_warrior_tier(challenger)
+                        if tier not in eligible_tiers:
+                            print(f"  CHAMPION CHALLENGE REJECTED: {challenger.name} is {tier} (only {eligible_tiers} can challenge).")
+                            break
                         champ_challengers.append((challenger, slot_idx, target_name))
                         break
 
@@ -981,13 +1017,11 @@ def build_fight_card(
                         if (ot.team_id, w.slot_index) in global_used:
                             print(f"  Challenge target '{w.name}' already fighting this turn. Skipping.")
                             break
-                        if not _challenge_in_bracket(challenger.total_fights,
-                                                     w.total_fights):
+                        if not _challenge_in_bracket(challenger, w):
                             print(
                                 f"  Challenge {challenger.name} → {w.name} "
-                                f"REJECTED: target has too little experience "
-                                f"({w.total_fights} fights vs "
-                                f"{challenger.total_fights} needed)."
+                                f"REJECTED: tier mismatch "
+                                f"({get_warrior_tier(challenger)} cannot challenge {get_warrior_tier(w)})."
                             )
                             target_warrior = None
                             break
@@ -1228,6 +1262,7 @@ def run_turn(
                 "opponent_slain"       : result.loser_died and (result.winner is not None)
                                           and result.winner.name == pw.name,
                 "fight_type"           : fight_type_for_record,
+                "primary_weapon"       : pw.primary_weapon,
             })
 
             # Also record this fight in the opponent warrior's history so
@@ -1248,6 +1283,7 @@ def run_turn(
                     "warrior_slain"        : result.loser_died and result.loser is ow,
                     "opponent_slain"       : result.loser_died and result.loser is pw,
                     "fight_type"           : fight_type_for_opp,
+                    "primary_weapon"       : ow.primary_weapon,
                 })
 
         # Handle player warrior death
