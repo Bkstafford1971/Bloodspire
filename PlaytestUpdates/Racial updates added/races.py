@@ -157,10 +157,10 @@ RACES: dict[str, Race] = {
         modifiers=RacialModifiers(
             damage_bonus=5,              # Significant offensive advantage (reduced from 8)
             hp_bonus=6,                  # Very tough
-            attack_rate_penalty=4,       # Harsh baseline (DEX scaling reduces this)
+            attack_rate_penalty=0,       # No penalty (heavy weapons already slow them down)
             initiative_bonus=-3,         # Harsh baseline (DEX scaling reduces this)
             dodge_penalty=3,             # Harsh baseline (DEX scaling reduces this)
-            parry_penalty=3,             # Harsh baseline (DEX scaling reduces this)
+            parry_penalty=2,             # Reduced from 3 (parry penalty from large weapons)
             # DEX-based penalty reduction/bonus tiers
             # DEX < 15: full harsh penalties (struggling)
             # DEX 15-17: moderate reduction (competitive baseline)
@@ -277,10 +277,10 @@ RACES: dict[str, Race] = {
         base_weight_lbs=129,
         modifiers=RacialModifiers(
             dodge_bonus=5,
+            parry_bonus=5,
             attack_rate_bonus=5,
             dual_weapon_bonus=True,
-            hp_bonus=-7,                 # Most fragile race
-            damage_penalty=2,
+            hp_bonus=-4,
             preferred_weapons=[
                 "Dagger", "Short Sword", "Scimitar", "Scythe", "Flail",
                 "Javelin", "Stiletto", "Epee",
@@ -399,8 +399,7 @@ RACES: dict[str, Race] = {
             acrobatic_advantage=True,
             frenzy_ability=True,
             spear_exception=True,
-            hp_bonus=-7,
-            strength_penalty=3,
+            hp_bonus=-4,
             heavy_weapon_penalty=True,
             preferred_weapons=[
                 "Dagger", "Short Sword", "Scimitar", "Epee", "Stiletto",

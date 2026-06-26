@@ -254,8 +254,14 @@ def _is_elf_dual_wielding_finesse(attacker: Warrior) -> bool:
 def _calculate_elf_extra_attack_chance(attacker: Warrior, defender: Warrior = None) -> int:
     """
     Calculate the percentage chance (0-100) for an Elf extra attack from dual-wielding.
-    Base 7%, up to 20% based on secondary weapon skill level.
-    Adjusted by skill differential: +/- 2.5% per skill point difference.
+
+    Base (15-30%): Secondary weapon skill (required for dual-wield)
+    Bonuses:
+      - Riposte: +0.5% per skill level (up to +4.5%)
+      - Feint: +0.3% per skill level (up to +2.7%)
+      - Initiative: +0.4% per skill level (up to +3.6%)
+
+    Total range: 15% (skill 0 in all) to 40% (skill 9 in all)
     """
     if not _is_elf_dual_wielding_finesse(attacker):
         return 0
@@ -263,13 +269,19 @@ def _calculate_elf_extra_attack_chance(attacker: Warrior, defender: Warrior = No
     secondary_key = attacker.secondary_weapon.lower().replace(" ", "_").replace("&", "and")
     secondary_skill = attacker.skills.get(secondary_key, 0)
 
-    # Scale from 7% (skill 0) to 20% (skill 9)
-    # 7% + (20% - 7%) * (skill / 9) = 7 + 1.44... * skill
-    base_chance = 7
-    max_chance = 20
-    chance_per_level = (max_chance - base_chance) / 9.0
+    # Base from secondary weapon: 15% (skill 0) to 30% (skill 9)
+    base_chance = 15 + (secondary_skill / 9.0) * 15
 
-    chance = base_chance + (secondary_skill * chance_per_level)
+    # Bonuses from complementary skills
+    riposte_skill = attacker.skills.get("riposte", 0)
+    feint_skill = attacker.skills.get("feint", 0)
+    initiative_skill = attacker.skills.get("initiative", 0)
+
+    riposte_bonus = (riposte_skill / 9.0) * 4.5    # Up to +4.5%
+    feint_bonus = (feint_skill / 9.0) * 2.7       # Up to +2.7%
+    initiative_bonus = (initiative_skill / 9.0) * 3.6  # Up to +3.6%
+
+    chance = base_chance + riposte_bonus + feint_bonus + initiative_bonus
 
     # Apply skill differential modifier if defender is provided
     if defender:
@@ -278,7 +290,8 @@ def _calculate_elf_extra_attack_chance(attacker: Warrior, defender: Warrior = No
         differential_modifier = _calculate_skill_differential_modifier(secondary_skill, defender_skill)
         chance *= (1.0 + differential_modifier)
 
-    return int(max(base_chance, min(max_chance, chance)))
+    # Cap at 40%
+    return int(max(15, min(40, chance)))
 
 
 def _has_martial_combat_bonus(warrior: Warrior) -> bool:
@@ -460,25 +473,25 @@ def _gnome_cs_line(defender_name: str, attacker_name: str) -> str:
 def _get_tabaxi_frenzy_damage_bonus(attacker: Warrior) -> int:
     """
     Get Tabaxi frenzy damage bonus based on primary weapon skill.
-    Scales from +3 (skill 0) to +6 (skill 9)
+    Scales from +5 (skill 0) to +7 (skill 9)
     """
     wpn_key = attacker.primary_weapon.lower().replace(" ", "_").replace("&", "and")
     wpn_skill = attacker.skills.get(wpn_key, 0)
-    # Scale from 3 to 6: base 3 + (3 * skill/9)
-    bonus = 3 + int((3.0 * wpn_skill) / 9.0)
+    # Scale from 5 to 7: base 5 + (2 * skill/9)
+    bonus = 5 + int((2.0 * wpn_skill) / 9.0)
     return bonus
 
 
 def _calculate_tabaxi_frenzy_trigger_chance(attacker: Warrior, defender: Warrior = None) -> int:
     """
     Calculate the percentage chance (0-100) for Tabaxi frenzy to trigger.
-    Base 25%, scaled by primary weapon skill.
+    Base 50% (natural feline instincts), scaled by primary weapon skill.
     Adjusted by skill differential: +/- 2.5% per skill point difference.
     """
     wpn_key = attacker.primary_weapon.lower().replace(" ", "_").replace("&", "and")
     wpn_skill = attacker.skills.get(wpn_key, 0)
 
-    chance = 35
+    chance = 50
 
     # Apply skill differential modifier if defender is provided
     if defender:
@@ -487,7 +500,7 @@ def _calculate_tabaxi_frenzy_trigger_chance(attacker: Warrior, defender: Warrior
         differential_modifier = _calculate_skill_differential_modifier(wpn_skill, defender_skill)
         chance *= (1.0 + differential_modifier)
 
-    return int(max(10, min(40, chance)))  # Clamp between 10% and 40%
+    return int(max(20, min(60, chance)))  # Clamp between 20% and 60%
 
 
 def _get_defender_primary_defense_skill(defender: Warrior, defender_style: Strategy) -> tuple[int, str]:
@@ -851,7 +864,17 @@ def _defense_roll(
         acrobatics_level = defender.skills.get("acrobatics", 0)
         acrobatics_b = acrobatics_level * 2 if acrobatics_level > 0 else 0
 
-        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train_dodge + race_dodge_bonus - effective_dodge_penalty * 2 + acrobatics_b
+        # Tabaxi gain +1 additional acrobatics bonus per level (natural agility synergy)
+        if defender.race.name == "Tabaxi" and acrobatics_level > 0:
+            acrobatics_b += acrobatics_level
+
+        # Tabaxi natural engagement/withdrawal bonus: bonus dodge when using Engage or Withdraw styles
+        engage_withdraw_bonus = 0
+        if defender.race.name == "Tabaxi":
+            if strategy.style in ("Engage", "Withdraw"):
+                engage_withdraw_bonus = acrobatics_level  # Bonus dodge equal to acrobatics skill level
+
+        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train_dodge + race_dodge_bonus - effective_dodge_penalty * 2 + acrobatics_b + engage_withdraw_bonus
 
         # Heavy weapon dodge penalty for Goblins & Tabaxi
         if defender.race.modifiers.heavy_weapon_penalty:
@@ -1374,7 +1397,19 @@ def _defense_roll_verbose(
         race_dg_pen = defender.race.modifiers.dodge_penalty * 2
         acro_lv  = defender.skills.get("acrobatics", 0)
         acro_b   = acro_lv * 2 if acro_lv > 0 else 0
-        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train + race_dg - race_dg_pen + acro_b
+
+        # Tabaxi gain +1 additional acrobatics bonus per level
+        tabaxi_acro_bonus = 0
+        if defender.race.name == "Tabaxi" and acro_lv > 0:
+            tabaxi_acro_bonus = acro_lv
+            acro_b += tabaxi_acro_bonus
+
+        # Tabaxi engage/withdraw bonus
+        engage_withdraw_bonus = 0
+        if defender.race.name == "Tabaxi" and strategy.style in ("Engage", "Withdraw"):
+            engage_withdraw_bonus = acro_lv
+
+        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train + race_dg - race_dg_pen + acro_b + engage_withdraw_bonus
 
         heavy_pen = 0
         if defender.race.modifiers.heavy_weapon_penalty:
@@ -1396,7 +1431,9 @@ def _defense_roll_verbose(
             "dex_trained_x2.5": dex_train,
             "race_dodge_x2": race_dg,
             "race_dodge_pen_x2": -race_dg_pen,
-            "acrobatics_x2": acro_b if acro_b else 0,
+            "acrobatics_x2": acro_lv * 2 if acro_lv > 0 else 0,
+            "tabaxi_acro_bonus": tabaxi_acro_bonus if tabaxi_acro_bonus else 0,
+            "tabaxi_engage_withdraw": engage_withdraw_bonus if engage_withdraw_bonus else 0,
             "heavy_wpn_pen": heavy_pen if heavy_pen else 0,
         })
 
@@ -2006,7 +2043,19 @@ def _update_endurance(
 # APM
 # ---------------------------------------------------------------------------
 
-def _calc_apm(warrior: Warrior, strategy: Strategy, state: _CState) -> int:
+def _calc_apm_with_fraction(warrior: Warrior, strategy: Strategy, state: _CState) -> tuple:
+    """
+    Calculate APM for a warrior with fractional component.
+    Returns: (base_apm, fraction) where fraction is 0.0-0.99
+    The fraction represents the chance (as a percentage) to gain an extra action that minute.
+
+    Heavy weapons (4.0+ weight) gain APM bonuses from skill:
+      Skill 1-2: +0.5 APM per level
+      Skill 3-4: +1.0 APM per level
+      Skill 5-6: +1.5 APM per level
+      Skill 7-8: +2.0 APM per level
+      Skill 9: +3.0 APM
+    """
     dex = get_effective_dex_for_race(
         warrior.dexterity,
         warrior.armor or "None",
@@ -2029,6 +2078,28 @@ def _calc_apm(warrior: Warrior, strategy: Strategy, state: _CState) -> int:
         attack_pct = get_lizardfolk_armor_penalties(warrior.armor or "None")["attack_pct"]
         if attack_pct > 0:
             base *= (1.0 - attack_pct)
+
+    # Heavy weapon APM bonus based on weapon skill
+    try:
+        weapon = get_weapon(warrior.primary_weapon)
+        two_handed = (warrior.secondary_weapon == "Open Hand" and weapon.two_hand)
+        is_heavy = weapon.weight >= 4.0 or (weapon.two_hand and two_handed)
+
+        if is_heavy:
+            wpn_skill = warrior.skills.get(wpn, 0)
+            if wpn_skill > 0:
+                if wpn_skill == 9:
+                    base += 3.0
+                elif wpn_skill >= 7:
+                    base += 2.0
+                elif wpn_skill >= 5:
+                    base += 1.5
+                elif wpn_skill >= 3:
+                    base += 1.0
+                else:  # 1-2
+                    base += 0.5
+    except ValueError:
+        pass
 
     # Apply under-strength weight penalty to all races (skip for Tabaxi with spears)
     try:
@@ -2069,19 +2140,37 @@ def _calc_apm(warrior: Warrior, strategy: Strategy, state: _CState) -> int:
     if state.armor_penalty > 0:
         base *= (1.0 - state.armor_penalty)
 
-    # Warrior APM calculated, now combine with weapon APM
-    warrior_apm = max(1, min(10, int(round(base))))
+    # Clamp and split into base + fraction
+    base = max(1.0, min(10.0, base))
+    base_apm = int(base)
+    fraction = base - base_apm
+    return (base_apm, fraction)
 
-    # Get weapon APM and combine using minimum
-    try:
-        weapon = get_weapon(warrior.primary_weapon)
-        weapon_apm = weapon.apm
-        # Final APM is the minimum of warrior and weapon APM
-        final_apm = min(warrior_apm, weapon_apm)
-        return final_apm
-    except ValueError:
-        # If weapon not found, just return warrior APM
-        return warrior_apm
+
+def _resolve_fractional_apm(base_apm: int, fraction: float) -> int:
+    """
+    Given a base APM and a fraction (0.0-0.99), roll to determine if the
+    warrior gets a bonus action that minute.
+
+    fraction is converted to a percentage chance (0-99%).
+    Returns the actual APM for this minute (either base_apm or base_apm + 1).
+    """
+    if fraction <= 0.0:
+        return base_apm
+    chance_pct = int(fraction * 100)
+    if random.randint(1, 100) <= chance_pct:
+        return base_apm + 1
+    return base_apm
+
+
+def _calc_apm(warrior: Warrior, strategy: Strategy, state: _CState) -> int:
+    """
+    Backward-compatible APM calculation. Calls _calc_apm_with_fraction
+    and immediately rolls for the bonus, returning final APM for this minute.
+    This is used for old code that expects a simple integer return.
+    """
+    base_apm, fraction = _calc_apm_with_fraction(warrior, strategy, state)
+    return _resolve_fractional_apm(base_apm, fraction)
 
 
 # ---------------------------------------------------------------------------
@@ -2468,14 +2557,14 @@ class CombatEngine:
     def _execute_tabaxi_frenzy(self, fst: _CState, ost: _CState,
                                fstrat: Strategy, ostrat: Strategy,
                                minute: int) -> Optional[FightResult]:
-        """Execute the Tabaxi frenzy burst - 3 rapid attacks with escalating defense penalties."""
+        """Execute the Tabaxi frenzy burst - 4 rapid attacks with escalating defense penalties (blur of claws and speed)."""
         fst.frenzy_used = True
         att = fst.warrior
         dfr = ost.warrior
 
         self._emit(N.tabaxi_frenzy_intro_line(att.name, att.gender))
 
-        defense_penalties = [0, 15, 30]
+        defense_penalties = [10, 25, 40, 50]
         _pre_frenzy = ost.current_hp
 
         try:
@@ -3128,7 +3217,6 @@ class CombatEngine:
             elif dx.style == "Counterstrike":
                 if not _defensive_narrative_emitted:
                     self._emit(N.decoy_feint_read_line(att.name, dfr.name))
-                    _defensive_narrative_emitted = True
 
         # --- CALCULATED ATTACK PRECISION ---
         ca_precision_landed = False
@@ -3300,9 +3388,7 @@ class CombatEngine:
                                 _cs_chance = min(65, _cs_chance + 6)
                             _cs_chance = max(5, _cs_chance - _cleave_reduce)
                             if random.randint(1, 100) <= _cs_chance:
-                                if not _defensive_narrative_emitted:
-                                    self._emit(_gnome_cs_line(dfr.name, att.name))
-                                    _defensive_narrative_emitted = True
+                                self._emit(_gnome_cs_line(dfr.name, att.name))
                                 if _weapon_loss_msg: self._emit(_weapon_loss_msg)
                                 if _weapon_thrown_away: self._check_and_switch_strategies(as_, ds_, minute)
                                 return self._counterstrike(ds_, as_, dx, ax, minute)
@@ -3499,10 +3585,6 @@ class CombatEngine:
         is_claw = attack_type == "claw"
         self._emit(N.damage_line(dmg, dfr.max_hp, cat, is_claw_attack=is_claw))
 
-        # Weapon swap message: after damage lands, attacker draws their next weapon
-        if _weapon_loss_msg:
-            self._emit(_weapon_loss_msg)
-
         if self.debug_logger:
             self.debug_logger.log_damage(
                 att.name, dfr.name, margin, _dmg_steps,
@@ -3623,6 +3705,11 @@ class CombatEngine:
                 self._check_defender_strategy_only(as_, ds_, minute)  # attacker: "your foe is on the ground"
         except ValueError:
             pass
+
+        # Weapon draw: emit after entangle so the throw's full effect (trip + fall) resolves
+        # before showing that the attacker drew a replacement weapon
+        if _weapon_loss_msg:
+            self._emit(_weapon_loss_msg)
 
         # Knockdown
         if self.debug_logger:

@@ -205,9 +205,11 @@ def build_global_fight_card(
             if idx == 0 or unmatched[idx-1]['matched'] == False:
                 pass  # Expected, skip matched warriors
             continue
+        # Find eligible opponents: tier-based matching within unmatched pool
+        # Tier is primary constraint; experience bracket is ignored to prioritize player-vs-player over peasant fights
         eligible = [e for e in unmatched if not e['matched']
                     and not _is_same_manager(entry['team'], e['team'])
-                    and _in_bracket(entry['warrior'].total_fights, e['warrior'].total_fights)]
+                    and challenge_tier_allowed(get_warrior_tier(entry['warrior']), get_warrior_tier(e['warrior']))]
         if eligible:
             self_rating = _warrior_rating(entry['warrior'])
             eligible.sort(key=lambda e: abs(_warrior_rating(e['warrior']) - self_rating))
@@ -1262,6 +1264,7 @@ def run_turn(
                 "opponent_slain"       : result.loser_died and (result.winner is not None)
                                           and result.winner.name == pw.name,
                 "fight_type"           : fight_type_for_record,
+                "primary_weapon"       : pw.primary_weapon,
             })
 
             # Also record this fight in the opponent warrior's history so
@@ -1282,6 +1285,7 @@ def run_turn(
                     "warrior_slain"        : result.loser_died and result.loser is ow,
                     "opponent_slain"       : result.loser_died and result.loser is pw,
                     "fight_type"           : fight_type_for_opp,
+                    "primary_weapon"       : ow.primary_weapon,
                 })
 
         # Handle player warrior death

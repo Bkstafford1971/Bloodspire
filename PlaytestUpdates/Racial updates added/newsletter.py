@@ -1435,11 +1435,50 @@ def _block_commentary(card, teams, deaths, turn_num: int, champion_state: dict, 
 # TOP MANAGERS SECTION
 # ---------------------------------------------------------------------------
 
-def _top_managers(card, teams, turn_num) -> str:
+def _save_manager_records(turn_num, manager_records):
+    """
+    Save manager records for this turn to manager_records.json.
+    Records include career (cw, cl, ck) and this turn (w, l, k).
+    """
+    import os
+    import json
+
+    try:
+        league_dir = os.path.dirname(os.path.abspath(__file__))
+        manager_records_file = os.path.join(league_dir, "manager_records.json")
+
+        # Load existing records or create new
+        all_records = {}
+        if os.path.exists(manager_records_file):
+            with open(manager_records_file, "r", encoding="utf-8") as f:
+                all_records = json.load(f)
+
+        # Store this turn's records
+        all_records[str(turn_num)] = {}
+        for mgr_name, rec in manager_records.items():
+            all_records[str(turn_num)][mgr_name] = {
+                "w": rec.get("w", 0),
+                "l": rec.get("l", 0),
+                "k": rec.get("k", 0),
+                "cw": rec.get("cw", 0),
+                "cl": rec.get("cl", 0),
+                "ck": rec.get("ck", 0)
+            }
+
+        # Write back
+        with open(manager_records_file, "w", encoding="utf-8") as f:
+            json.dump(all_records, f, indent=2)
+    except Exception as e:
+        print(f"WARNING: Failed to save manager records: {e}")
+
+def _top_managers(card, teams, turn_num, return_records=False):
     """
     Generate manager standings sorted by win percentage (best to worst).
     Presents current-turn and career records side by side.
-    Career records are calculated from each team's turn_history (cumulative across all turns).
+    Career records are loaded from previous turn's saved records, then current turn is added.
+
+    If return_records=True, returns (text, manager_records) tuple.
+    Otherwise returns just the text string.
     """
 
     # Deduplicate by object identity - each ScheduledFight is a unique physical fight.
@@ -1458,76 +1497,90 @@ def _top_managers(card, teams, turn_num) -> str:
     # Group teams by manager and calculate records
     manager_records = {}
 
-    # First pass: Load career records directly from saved teams on disk
-    # This is the authoritative source and bypasses all object/dict complexity
-    from save import load_all_teams as _load_all_teams_fresh
+    # First pass: Load career records from previous turn's saved records
+    # This is the authoritative source - previous turn's career record + current turn's record = new career record
+    import os
+    import json
+    from pathlib import Path
+
+    prev_turn_num = turn_num - 1
     try:
-        all_saved_teams = _load_all_teams_fresh()
-        for team in all_saved_teams:
-            if _is_npc_team(team): continue
-            if _is_ai_team(team): continue
+        league_dir = os.path.dirname(os.path.abspath(__file__))
+        manager_records_file = os.path.join(league_dir, "manager_records.json")
 
-            mgr_name = getattr(team, "manager_name", None) or "?"
-            if mgr_name == "?" or mgr_name in _NPC_TEAM_NAMES:
+        if os.path.exists(manager_records_file):
+            with open(manager_records_file, "r", encoding="utf-8") as f:
+                saved_records = json.load(f)
+                # Use records from previous turn as baseline
+                if str(prev_turn_num) in saved_records:
+                    for mgr_name, rec in saved_records[str(prev_turn_num)].items():
+                        manager_records[mgr_name] = {
+                            "cw": rec.get("cw", 0),
+                            "cl": rec.get("cl", 0),
+                            "ck": rec.get("ck", 0),
+                            "w": 0,
+                            "l": 0,
+                            "k": 0
+                        }
+
+        # Initialize any managers not yet in records
+        for team in teams:
+            if _is_npc_team(team) or _is_ai_team(team):
                 continue
-
-            if mgr_name not in manager_records:
-                manager_records[mgr_name] = {"w": 0, "l": 0, "k": 0,
-                                            "cw": 0, "cl": 0, "ck": 0}
-
-            # Sum career record from this team's entire turn_history (all past turns)
-            hist = getattr(team, "turn_history", []) or []
-            for turn_entry in hist:
-                manager_records[mgr_name]["cw"] += turn_entry.get("w", 0)
-                manager_records[mgr_name]["cl"] += turn_entry.get("l", 0)
-                manager_records[mgr_name]["ck"] += turn_entry.get("k", 0)
+            mgr_name = getattr(team, "manager_name", None) or team.get("manager_name", "?")
+            if mgr_name != "?" and mgr_name not in _NPC_TEAM_NAMES:
+                if mgr_name not in manager_records:
+                    manager_records[mgr_name] = {"w": 0, "l": 0, "k": 0, "cw": 0, "cl": 0, "ck": 0}
     except Exception as e:
-        pass  # Fall back to empty career records if load fails
+        # Fallback: initialize empty records for all managers
+        for team in teams:
+            if _is_npc_team(team) or _is_ai_team(team):
+                continue
+            mgr_name = getattr(team, "manager_name", None) or team.get("manager_name", "?")
+            if mgr_name != "?" and mgr_name not in _NPC_TEAM_NAMES:
+                if mgr_name not in manager_records:
+                    manager_records[mgr_name] = {"w": 0, "l": 0, "k": 0, "cw": 0, "cl": 0, "ck": 0}
 
-    # Second pass: calculate THIS TURN records from the card (only participating teams)
+    # Second pass: calculate THIS TURN records from the card
+    # Iterate through fights (not teams) to avoid double-counting when a manager has multiple teams
+    team_mgr_map = {}  # Cache team_name -> manager_name lookups
     for team in teams:
-        if _is_npc_team(team): continue
-        if _is_ai_team(team): continue
-
-        mgr_name = getattr(team, "manager_name", None) or team.get("manager_name", "?")
-        if mgr_name == "?":
+        if _is_npc_team(team) or _is_ai_team(team):
             continue
-
-        if mgr_name not in manager_records:
-            manager_records[mgr_name] = {"w": 0, "l": 0, "k": 0,
-                                        "cw": 0, "cl": 0, "ck": 0}
-        else:
-            # Ensure turn records (w, l, k) are initialized, but preserve career records (cw, cl, ck)
-            if "w" not in manager_records[mgr_name]:
-                manager_records[mgr_name]["w"] = 0
-            if "l" not in manager_records[mgr_name]:
-                manager_records[mgr_name]["l"] = 0
-            if "k" not in manager_records[mgr_name]:
-                manager_records[mgr_name]["k"] = 0
-
-        # Calculate this team's record for the turn
         tname = getattr(team, "team_name", None) or team.get("team_name", "?")
-        for bout in unique_bouts:
-            pt = bout.player_team
-            ot = bout.opponent_team
-            ptname = getattr(pt, "team_name", None) or pt.get("team_name", "?")
-            otname = getattr(ot, "team_name", None) or ot.get("team_name", "?")
-            pw_won = bout.result.winner and bout.result.winner.name == bout.player_warrior.name
+        mgr = getattr(team, "manager_name", None) or team.get("manager_name", "?")
+        if mgr != "?" and mgr not in _NPC_TEAM_NAMES:
+            team_mgr_map[tname] = mgr
+            if mgr not in manager_records:
+                manager_records[mgr] = {"w": 0, "l": 0, "k": 0, "cw": 0, "cl": 0, "ck": 0}
 
-            if ptname == tname:
-                if pw_won:
-                    manager_records[mgr_name]["w"] += 1
-                    if bout.result.loser_died:
-                        manager_records[mgr_name]["k"] += 1
-                else:
-                    manager_records[mgr_name]["l"] += 1
-            elif otname == tname:
-                if not pw_won:
-                    manager_records[mgr_name]["w"] += 1
-                    if bout.result.loser_died:
-                        manager_records[mgr_name]["k"] += 1
-                else:
-                    manager_records[mgr_name]["l"] += 1
+    # Process each fight once
+    for bout in unique_bouts:
+        pt = bout.player_team
+        ot = bout.opponent_team
+        ptname = getattr(pt, "team_name", None) or pt.get("team_name", "?")
+        otname = getattr(ot, "team_name", None) or ot.get("team_name", "?")
+        pw_won = bout.result.winner and bout.result.winner.name == bout.player_warrior.name
+
+        # Credit player_team's manager
+        if ptname in team_mgr_map:
+            mgr = team_mgr_map[ptname]
+            if pw_won:
+                manager_records[mgr]["w"] += 1
+                if bout.result.loser_died:
+                    manager_records[mgr]["k"] += 1
+            else:
+                manager_records[mgr]["l"] += 1
+
+        # Credit opponent_team's manager
+        if otname in team_mgr_map:
+            mgr = team_mgr_map[otname]
+            if not pw_won:
+                manager_records[mgr]["w"] += 1
+                if bout.result.loser_died:
+                    manager_records[mgr]["k"] += 1
+            else:
+                manager_records[mgr]["l"] += 1
 
     # Calculate win percentages and sort
     manager_list = []
@@ -1575,6 +1628,10 @@ def _top_managers(card, teams, turn_num) -> str:
 
     lines.append(SEP)
     result = "\n".join(lines)
+
+    if return_records:
+        # Return both text and the final manager records (career + current turn)
+        return result, manager_records
     return result
 
 
@@ -1590,7 +1647,25 @@ def generate_newsletter(turn_num, card, teams, deaths, champion_state,
 
     sections = [_header(turn_num, processed_date)]
     sections.append(_team_standings(teams, turn_num, wrapped_card))
-    sections.append("\n\n" + _top_managers(wrapped_card, teams, turn_num))
+
+    # Get manager standings and save records
+    result = _top_managers(wrapped_card, teams, turn_num, return_records=True)
+    print(f"DEBUG: _top_managers returned type {type(result)}, is tuple: {isinstance(result, tuple)}")
+    if isinstance(result, tuple):
+        managers_text, manager_records = result
+        sections.append("\n\n" + managers_text)
+        try:
+            _save_manager_records(turn_num, manager_records)
+            print(f"DEBUG: Successfully saved manager records for turn {turn_num}")
+        except Exception as e:
+            print(f"ERROR saving manager records: {e}")
+            import traceback
+            traceback.print_exc()
+    else:
+        # Backwards compatibility: old code path returned just text
+        sections.append("\n\n" + result)
+        print("DEBUG: _top_managers returned text only (not tuple)")
+
     sections.append("\n\n" + _block_commentary(wrapped_card, teams, deaths, turn_num, champion_state, is_new_champion))
     sections.append("\n\n" + _warrior_tiers(teams, champion_state, wrapped_card, turn_num))
 
