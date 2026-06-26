@@ -158,7 +158,7 @@ RACES: dict[str, Race] = {
             damage_bonus=5,              # Significant offensive advantage (reduced from 8)
             hp_bonus=6,                  # Very tough
             attack_rate_penalty=0,       # No penalty (heavy weapons already slow them down)
-            initiative_bonus=-3,         # Harsh baseline (DEX scaling reduces this)
+            initiative_bonus=-2,         # Reduced from -3
             dodge_penalty=3,             # Harsh baseline (DEX scaling reduces this)
             parry_penalty=2,             # Reduced from 3 (parry penalty from large weapons)
             # DEX-based penalty reduction/bonus tiers
@@ -193,9 +193,9 @@ RACES: dict[str, Race] = {
             dodge_bonus=7,               # Hardest to hit in the game
             attack_rate_bonus=4,         # Very fast
             martial_combat_bonus=True,
-            damage_penalty=6,            # Biggest damage penalty in game
+            damage_penalty=2,            # Reduced from 6 for balance
             parry_penalty=3,
-            hp_bonus=-6,                 # Extremely fragile
+            hp_bonus=-3,                 # Reduced from -6 for balance
             preferred_weapons=[
                 "Short Sword", "Stiletto", "Hatchet", "Quarterstaff",
                 "Javelin", "Bladed Flail", "Hammer",
@@ -220,12 +220,12 @@ RACES: dict[str, Race] = {
         base_height_in=50,    # 4'2" male SIZE-12 midpoint (range 3'6"–5'2")
         base_weight_lbs=195,  # Dense - notably heavier than height implies
         modifiers=RacialModifiers(
-            hp_bonus=12,                 # Highest HP in game
+            hp_bonus=8,                  # Reduced from 12 for balance
             damage_bonus=3,
-            parry_bonus=6,               # Master parriers
+            parry_bonus=3,               # Reduced from 6
             armor_capacity_bonus=True,
             shield_bonus=True,
-            attack_rate_penalty=3,
+            attack_rate_penalty=2,       # Reduced from 3
             dodge_penalty=4,             # Very poor dodge
             preferred_weapons=[
                 "Battle Axe", "Fransisca", "Great Axe", "Morningstar",
@@ -304,8 +304,8 @@ RACES: dict[str, Race] = {
             attack_rate_bonus=5,
             initiative_bonus=5,
             dodge_bonus=4,
-            damage_penalty=6,
-            hp_bonus=-7,
+            damage_penalty=2,            # Reduced from 6 for balance
+            hp_bonus=-4,                 # Reduced from -7 for balance
             strength_penalty=4,
             thrown_mastery=True,
             scavenger=True,
@@ -339,8 +339,9 @@ RACES: dict[str, Race] = {
             parry_bonus=5,
             counterstrike_mastery=True,
             tactician_edge=True,
-            damage_penalty=3,
-            attack_rate_penalty=2,
+            damage_penalty=2,            # Reduced from 3
+            attack_rate_penalty=1,       # Reduced from 2
+            dodge_bonus=2,               # Added for balance
             preferred_weapons=[
                 "Short Sword", "Long Sword", "Epee", "Bastard Sword",
                 "Hammer", "Mace", "Morningstar", "War Hammer",
@@ -365,12 +366,12 @@ RACES: dict[str, Race] = {
         base_height_in=72,    # 6'0" male - larger than humans, muscular
         base_weight_lbs=240,  # Muscular / dense
         modifiers=RacialModifiers(
-            hp_bonus=9,
+            hp_bonus=6,                  # Reduced from 9
             natural_weapon_bonus=True,   # +3 with Martial Combat / claws
             martial_combat_bonus=True,
             natural_armor=True,
             dodge_bonus=2,
-            attack_rate_penalty=3,       # Cold-blooded = slower start
+            attack_rate_penalty=1,       # Reduced from 3
             preferred_weapons=[
                 "Open Hand", "Dagger", "Stiletto", "Short Sword", "Hatchet",
                 "Hammer", "Mace", "Quarterstaff",
