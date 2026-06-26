@@ -26,7 +26,52 @@ ROLLUP_POINTS       = 16   # Total points distributed during warrior creation
 ROLLUP_MAX_PER_STAT = 7    # Hard cap: no single stat can receive more than this
 STAT_MIN            = 3    # Absolute floor for any attribute
 STAT_MAX            = 25   # Absolute ceiling (theoretical; hard to reach in practice)
-MAX_FIGHTS          = 100  # Retirement eligibility threshold
+MAX_FIGHTS          = 50   # Retirement eligibility threshold
+
+# ---------------------------------------------------------------------------
+# TIER SYSTEM (shared with matchmaking; mirrors newsletter.py constants)
+# ---------------------------------------------------------------------------
+TIER_CHAMPION  = "CHAMPION"
+TIER_ELITES    = "ELITES"
+TIER_EXPERTS   = "EXPERTS"
+TIER_VETERANS  = "VETERANS"
+TIER_ADEPTS    = "ADEPTS"
+TIER_INITIATES = "INITIATES"
+TIER_ROOKIES   = "ROOKIES"
+TIER_RECRUITS  = "RECRUITS"
+
+# Ordered highest → lowest rank; index 0 = Champion
+TIER_ORDER = [TIER_CHAMPION, TIER_ELITES, TIER_EXPERTS, TIER_VETERANS,
+              TIER_ADEPTS, TIER_INITIATES, TIER_ROOKIES, TIER_RECRUITS]
+
+
+def get_warrior_tier(warrior, is_champion: bool = False) -> str:
+    """Return the tier name for a warrior based on recognition rating."""
+    if is_champion:
+        return TIER_CHAMPION
+    rec = getattr(warrior, "recognition", 0)
+    if rec >= 87:   return TIER_ELITES
+    if rec >= 71:   return TIER_EXPERTS
+    if rec >= 56:   return TIER_VETERANS
+    if rec >= 41:   return TIER_ADEPTS
+    if rec >= 26:   return TIER_INITIATES
+    if rec >= 13:   return TIER_ROOKIES
+    return TIER_RECRUITS
+
+
+def challenge_tier_allowed(challenger_tier: str, target_tier: str) -> bool:
+    """Return True if challenger_tier may issue a regular challenge to target_tier.
+
+    Rule: challenger may target warriors in their own tier or one tier above.
+    Champion challenges are handled separately and always return False here.
+    """
+    if target_tier == TIER_CHAMPION:
+        return False  # use the champion-challenge path, not regular challenges
+    ci = TIER_ORDER.index(challenger_tier)
+    ti = TIER_ORDER.index(target_tier)
+    # ti must be same tier (ci) or one rank higher (ci - 1)
+    return ci - 1 <= ti <= ci
+
 
 # HP Multipliers
 HP_MULT_CON  = 2.5
@@ -462,7 +507,7 @@ class Warrior:
         self.losses      = 0
         self.kills       = 0   # How many opponents this warrior has slain
         self.monster_kills = 0 # How many monsters this warrior has slain
-        self.total_fights= 0   # Retirement unlocks at MAX_FIGHTS (100)
+        self.total_fights= 0   # Retirement unlocks at MAX_FIGHTS (50)
 
         # --- Equipment ---
         self.armor           : Optional[str] = None         # e.g. "Brigandine"
@@ -529,7 +574,7 @@ class Warrior:
 
         # --- Fight-option flags (set by manager each turn, cleared after processing) ---
         self.want_monster_fight: bool = False   # opt-in for Monster bout this turn
-        self.want_retire:        bool = False   # request retirement (requires 100+ fights)
+        self.want_retire:        bool = False   # request retirement (requires 50+ fights)
 
         # --- Avoidance System (max 2 slots each) ---
         self.avoid_warriors: List[str] = []
@@ -802,7 +847,7 @@ class Warrior:
 
     @property
     def can_retire(self) -> bool:
-        """Retirement becomes available at 100 fights."""
+        """Retirement becomes available at 50 fights."""
         return self.total_fights >= MAX_FIGHTS
 
     @property

@@ -809,7 +809,7 @@ WEAPONS: dict[str, Weapon] = {
         flail_bypass  = True,
         can_sweep     = True,
         notes="One of the best weapons in the game, especially for Half-Orcs. Damage tuned down slightly from original legendary status.",
-        preferred_styles=["Total Kill", "Bash", "Strike"],
+        preferred_styles=["Total Kill", "Bash", "Strike", "Wall of Steel"],
     ),
 
     "battle_flail": Weapon(
@@ -828,7 +828,7 @@ WEAPONS: dict[str, Weapon] = {
             "Half-Elf favorite (extra attack with it). Attack rate too low vs "
             "damage rate compared to War Flail. Half-Orcs also succeed."
         ),
-        preferred_styles=["Bash", "Total Kill"],
+        preferred_styles=["Bash", "Total Kill", "Wall of Steel"],
         weak_styles   =["Lunge", "Calculated Attack"],
     ),
 
@@ -1421,11 +1421,11 @@ FAVORITE_WEAPON_LINES = {
         "{name}'s great pick moves with unstoppable piercing purpose. {name}'s true favorite.",
     ],
     "Javelin": [
-        "{name}'s javelin flies forward with hunting precision. This is clearly {name}'s favored weapon.",
-        "{name}'s javelin cuts the air with deadly speed. A thrown spear seeking its mark. {name}'s weapon of choice.",
-        "{name}'s javelin launches with the intent to impale and end the threat. The arena sees {name}'s favorite.",
-        "With practiced form {name}'s javelin seeks a vital point from a distance. This is {name}'s true favorite.",
-        "{name}'s javelin strikes like a bolt from the sky sudden and final. {name}'s bond with this javelin is obvious.",
+        "{name}'s javelin is precision and reach in a single weapon. This is clearly {name}'s favored weapon.",
+        "{name}'s javelin moves with deadly speed and lethal intent. {name}'s weapon of choice.",
+        "{name}'s javelin demands expert technique, and {name} has mastered it. The arena sees {name}'s favorite.",
+        "With practiced form {name}'s javelin finds the vital point with deadly precision. This is {name}'s true favorite.",
+        "{name}'s javelin strikes with sudden, lethal purpose. {name}'s bond with this weapon is obvious.",
     ],
     "Ball & Chain": [
         "{name}'s ball and chain swings in a heavy crushing arc. This is clearly {name}'s favored weapon.",

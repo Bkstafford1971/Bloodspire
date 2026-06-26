@@ -27,7 +27,7 @@ from file_protection import save_json_protected, load_json_protected, make_file_
 import webbrowser
 from typing import Optional
 
-SERVER_VERSION = "2.7.4"
+SERVER_VERSION = "2.8"
 
 BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
 LEAGUE_DIR   = os.path.join(BASE_DIR, "saves", "league")
@@ -243,7 +243,7 @@ def _load_config():
 def _save_config(cfg):   _save_json(_config_path(), cfg)
 def _load_managers():    return _load_json(_managers_path(), {}) # Protected
 def _save_managers(m):   _save_json(_managers_path(), m) # Protected
-def _load_standings():   return _load_json(_standings_path(), {}) # Protected
+def _load_standings():   return _load_json(_standings_path(), {}, allow_tampered=True) # Protected (allow admin edits)
 def _save_standings(s):  _save_json(_standings_path(), s) # Protected
 
 def _load_uploads(turn_num):
@@ -678,6 +678,29 @@ def _run_turn(request_password, rerun_turn=None):
     try:
         from save import load_champion_state
         champ_state = load_champion_state()
+
+        # Validate champion exists in current standings
+        # If champion file is out of sync, reset it
+        if champ_state.get("name"):
+            standings_data = _load_standings({})  # Load standings to verify
+            champ_name = champ_state.get("name")
+            champ_tid = champ_state.get("team_id", 0)
+            champ_wid = champ_state.get("warrior_id")
+            found = False
+            for team_key, team_data in standings_data.items():
+                if team_data.get("team_id") == champ_tid:
+                    for warrior in team_data.get("warriors", {}).values():
+                        w_name = warrior.get("name")
+                        w_id = warrior.get("warrior_id")
+                        if (w_name == champ_name) and (champ_wid is None or w_id == champ_wid):
+                            found = True
+                            break
+                if found:
+                    break
+            # If champion not found in standings, reset
+            if not found:
+                print(f"  WARNING: Champion {champ_name} (ID {champ_tid}) not found in standings. Resetting champion state.")
+                champ_state = {}
     except Exception:
         champ_state = {}
 
@@ -1121,22 +1144,23 @@ def _run_turn(request_password, rerun_turn=None):
             save_team(team)
             res["team"] = team.to_dict()
 
-        # Create team for client (with fight_history preserved)
-        team_for_client = res["team"]
-        
-        # Update turn_history
-        if "turn_history" not in team_for_client:
-            team_for_client["turn_history"] = []
-        team_for_client["turn_history"] = [
-            e for e in team_for_client["turn_history"]
+        # Update turn_history in res["team"] - must happen for ALL managers, not just team_map
+        # This ensures nl_teams has current turn_history when building the newsletter
+        if "turn_history" not in res["team"]:
+            res["team"]["turn_history"] = []
+        res["team"]["turn_history"] = [
+            e for e in res["team"]["turn_history"]
             if e.get("turn") != turn_num
         ]
-        team_for_client["turn_history"].append({
+        res["team"]["turn_history"].append({
             "turn": turn_num,
             "w": sum(1 for b in res["bouts"] if b.get("result") == "WIN"),
             "l": sum(1 for b in res["bouts"] if b.get("result") == "LOSS"),
             "k": sum(1 for b in res["bouts"] if b.get("opponent_slain")),
         })
+
+        # Prepare team for client response (res["team"] now has updated turn_history)
+        team_for_client = res["team"]
 
         # Create server storage version (strip fight_history)
         team_slim = dict(team_for_client)
@@ -1193,10 +1217,10 @@ def _run_turn(request_password, rerun_turn=None):
                 ws = e["warriors"][standings_key]
                 ws["name"] = wn
                 ws["warrior_id"] = wid
-                ws["wins"] = ws.get("wins", 0) + wd.get("wins", 0)
-                ws["losses"] = ws.get("losses", 0) + wd.get("losses", 0)
-                ws["kills"] = ws.get("kills", 0) + wd.get("kills", 0)
-                ws["fights"] = ws.get("fights", 0) + wd.get("total_fights", 0)
+                ws["wins"] = wd.get("wins", 0)
+                ws["losses"] = wd.get("losses", 0)
+                ws["kills"] = wd.get("kills", 0)
+                ws["fights"] = wd.get("total_fights", 0)
         _save_standings(standings)
     except Exception as _se:
         import traceback
@@ -1317,19 +1341,20 @@ def _run_turn(request_password, rerun_turn=None):
             except Exception:
                 pass
 
-        # Add AI teams
-        try:
-            from ai_league_teams import load_ai_teams
-            for at in (load_ai_teams() or []):
-                try:
-                    t = Team.from_dict(at)
-                    if getattr(t, "team_id", 0) not in team_ids:
-                        nl_teams.append(t)
-                        team_ids.add(getattr(t, "team_id", 0))
-                except Exception:
-                    pass
-        except Exception:
-            pass
+        # Add AI teams only if enabled
+        if cfg.get("ai_teams_enabled", True):
+            try:
+                from ai_league_teams import load_ai_teams
+                for at in (load_ai_teams() or []):
+                    try:
+                        t = Team.from_dict(at)
+                        if getattr(t, "team_id", 0) not in team_ids:
+                            nl_teams.append(t)
+                            team_ids.add(getattr(t, "team_id", 0))
+                    except Exception:
+                        pass
+            except Exception:
+                pass
 
         # Keep recently active saved teams for up to 3 turns of inactivity.
         try:
@@ -1416,13 +1441,18 @@ def _run_turn(request_password, rerun_turn=None):
                     (not _cur_champ_wid and _loser.name == _cur_champ and _loser_team.team_id == _cur_champ_tid)
                 )
                 if _loser_is_champ:
-                    _champ_beaten_by = _winner.name
-                    _champ_beaten_by_wid = getattr(_winner, "warrior_id", None)
-                    _champ_beaten_team = _bout.player_team.team_name if _pw_won else _bout.opponent_team.team_name
-                    _champ_beaten_team_id = _bout.player_team.team_id if _pw_won else _bout.opponent_team.team_id
+                    # Only allow player warriors to claim the championship, not NPCs/peasants
+                    _winner_team = _bout.player_team if _pw_won else _bout.opponent_team
+                    _winner_team_name = _winner_team.team_name if hasattr(_winner_team, "team_name") else _winner_team.get("team_name", "")
+                    if _winner_team_name not in ("The Monsters", "The Peasants"):
+                        _champ_beaten_by = _winner.name
+                        _champ_beaten_by_wid = getattr(_winner, "warrior_id", None)
+                        _champ_beaten_team = _bout.player_team.team_name if _pw_won else _bout.opponent_team.team_name
+                        _champ_beaten_team_id = _bout.player_team.team_id if _pw_won else _bout.opponent_team.team_id
                     break
 
         prev_champion_name = champ_state.get("name", "")
+        prev_champion_state = champ_state.copy()  # Save the BEFORE-fight champion state
         champ_state, is_new_champion = _update_champion(
             nl_teams, champ_state, deaths_nl,
             champion_beaten_by=_champ_beaten_by,
@@ -1434,17 +1464,31 @@ def _run_turn(request_password, rerun_turn=None):
         )
         save_champion_state(champ_state)
 
-        # Retroactively tag champion fights: if the champion was crowned THIS turn
-        # (not loaded from the start-of-turn state), any fight they were involved in
-        # will have been stored as "standard".  Fix those records now and resave.
+        # Determine which champion state to use for the fights section:
+        # - If champion was BEATEN this turn: use BEFORE state (to show correct narrative)
+        # - If champion didn't fight and lost title to recognition: use AFTER state (no change needed)
+        champion_state_for_fights = prev_champion_state if _champ_beaten_by else champ_state
+
+        # Tag champion fights: both for NEW champions (crowned this turn) and EXISTING champions (already champion at start)
         _new_champ = champ_state.get("name", "")
+        _champs_to_tag = set()
+
+        # Add new champion (if one was crowned this turn)
         if _new_champ and _new_champ != prev_champion_name:
+            _champs_to_tag.add(_new_champ)
+
+        # Add existing champion (if they were already champion and fought)
+        if prev_champion_name:
+            _champs_to_tag.add(prev_champion_name)
+
+        # Tag all fights involving any champion
+        if _champs_to_tag:
             for _mid, _res in all_results.items():
                 _updated = False
                 for _bout in _res.get("bouts", []):
                     if (_bout.get("fight_type") != "champion" and (
-                        _bout.get("warrior_name") == _new_champ or
-                        _bout.get("opponent_name") == _new_champ
+                        _bout.get("warrior_name") in _champs_to_tag or
+                        _bout.get("opponent_name") in _champs_to_tag
                     )):
                         _bout["fight_type"] = "champion"
                         _updated = True
@@ -1468,10 +1512,26 @@ def _run_turn(request_password, rerun_turn=None):
                     for _h in (_w.fight_history or []):
                         if (_h.get("turn") == turn_num and
                                 _h.get("fight_type") != "champion" and (
-                                _h.get("opponent_name") == _new_champ or
-                                _w.name == _new_champ)):
+                                _h.get("opponent_name") in _champs_to_tag or
+                                _w.name in _champs_to_tag)):
                             _h["fight_type"] = "champion"
                 save_team(_team)
+
+            # Re-save result files with the patched fight_type
+            for _mid, _res in all_results.items():
+                if _mid in team_map:
+                    _res["team"] = team_map[_mid].to_dict()
+                    _fname = (f"result_{_mid}_team{_res.get('team_id', '')}.json" if _res.get('team_id')
+                              else f"result_{_mid}.json")
+                    _fpath = os.path.join(_turn_dir(turn_num), _fname)
+                    if os.path.exists(_fpath):
+                        try:
+                            _fdata = _load_json(_fpath, None)
+                            if _fdata:
+                                _fdata["team"] = _res["team"]
+                                _save_json(_fpath, _fdata)
+                        except Exception as _pe:
+                            print(f"  WARNING: could not update result file {_fname}: {_pe}")
 
         date_str = _dt.date.today().strftime("%m/%d/%Y")
         newsletter_text = generate_newsletter(
@@ -1482,6 +1542,8 @@ def _run_turn(request_password, rerun_turn=None):
             champion_state=champ_state,
             processed_date=date_str,
             is_new_champion=is_new_champion,
+            champion_state_before=champion_state_for_fights,  # Use correct state for fights identification
+            prev_champion_state=prev_champion_state,  # For detecting newly-crowned champions
         )
         nl_path = os.path.join(_turn_dir(turn_num), "newsletter.txt")
         with open(nl_path, "w", encoding="utf-8") as _f:
@@ -1634,7 +1696,8 @@ def _admin_page():
         ai_count = len(json.loads(open(ai_path).read())) if os.path.exists(ai_path) else 0
     except Exception:
         ai_count = 0
-    if ai_count:
+    # Only show AI teams in uploads if they're actually enabled
+    if ai_count and cfg.get("ai_teams_enabled", True):
         urows += f"<tr><td colspan=2 style='color:#555;font-style:italic'>+ {ai_count} AI teams (auto-included)</td></tr>"
     # Standings rows
     warriors_flat = []
@@ -3671,10 +3734,13 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             # (the attacking team itself - its own warriors can't be challenged).
             try:    exclude_tid = int(q.get("team_id","0") or 0)
             except: exclude_tid = 0
-            from save import TEAMS_DIR
+            from save import TEAMS_DIR, load_champion_state
             # Load current turn to filter inactive teams
             cfg = _load_config()
             current_turn = cfg.get("current_turn", 0)
+            # Load champion name so we can flag that warrior in the response
+            champ_state   = load_champion_state()
+            champion_name = (champ_state.get("name") or "").lower()
             warriors = []
             try:
                 fnames = sorted(os.listdir(TEAMS_DIR))
@@ -3702,8 +3768,9 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 manager_name = tdata.get("manager_name", "?")
                 for w in tdata.get("warriors", []):
                     if not w or w.get("is_dead"): continue
+                    wname = w.get("name", "?")
                     warriors.append({
-                        "name"        : w.get("name", "?"),
+                        "name"        : wname,
                         "team_name"   : team_name,
                         "team_id"     : tid,
                         "manager_name": manager_name,
@@ -3716,9 +3783,29 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                         "height_in"   : w.get("height_in", 0),
                         "weight_lbs"  : w.get("weight_lbs", 0),
                         "total_fights": w.get("total_fights", 0),
+                        "recognition" : w.get("recognition", 0),
+                        "is_champion" : bool(champion_name and wname.lower() == champion_name),
                     })
             print(f"  [Scout] Found {len(warriors)} warriors available to scout")
-            self.send_json({"success": True, "warriors": warriors}); return
+
+            # Calculate top 2 tiers for champion challenge eligibility
+            from warrior import get_warrior_tier, TIER_ORDER, TIER_CHAMPION
+            tiers_present = set()
+            for w_data in warriors:
+                # Create a minimal object for get_warrior_tier
+                class TempWarrior:
+                    def __init__(self, data):
+                        self.total_fights = data.get("total_fights", 0)
+                        self.recognition = data.get("recognition", 0)
+                temp_w = TempWarrior(w_data)
+                tier = get_warrior_tier(temp_w)
+                if tier != TIER_CHAMPION:
+                    tiers_present.add(tier)
+
+            sorted_tiers = sorted(tiers_present, key=lambda t: TIER_ORDER.index(t) if t in TIER_ORDER else 999)
+            eligible_champion_tiers = sorted_tiers[:2]
+
+            self.send_json({"success": True, "warriors": warriors, "eligible_champion_tiers": eligible_champion_tiers}); return
 
         if path == "/api/scout/report":
             q = self.qs()
@@ -4926,11 +5013,12 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                             "type": "team"
                         })
 
-                # Add all result files for this manager across all turns
+                # Add all result files and newsletters for this manager across all turns
                 league_dir = os.path.dirname(_config_path())
                 for fname in os.listdir(league_dir):
                     if fname.startswith("turn_") and os.path.isdir(os.path.join(league_dir, fname)):
                         turn_path = os.path.join(league_dir, fname)
+                        turn_num = int(fname.split("_")[1])
                         for result_file in os.listdir(turn_path):
                             if result_file.startswith(f"result_{mid}_") and result_file.endswith(".json"):
                                 full_path = os.path.join(turn_path, result_file)
@@ -4941,8 +5029,19 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                                     "source": arcname,
                                     "target": f"league/{fname}/{result_file}",
                                     "type": "result",
-                                    "turn": int(fname.split("_")[1])
+                                    "turn": turn_num
                                 })
+                        # Include newsletter for this turn if it exists
+                        nl_file = os.path.join(turn_path, "newsletter.txt")
+                        if os.path.exists(nl_file):
+                            arcname = f"newsletters/turn_{turn_num:03d}.txt"
+                            zf.write(nl_file, arcname=arcname)
+                            manifest.append({
+                                "source": arcname,
+                                "target": f"newsletters/turn_{turn_num:03d}.txt",
+                                "type": "newsletter",
+                                "turn": turn_num
+                            })
 
                 # Add manifest file
                 manifest_json = json.dumps(manifest, indent=2)

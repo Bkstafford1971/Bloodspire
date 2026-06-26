@@ -821,7 +821,6 @@ def reset_arena_state():
       - Warriors' injuries, popularity, streak, turns_active
       - Turn counter reset to 0
       - Next fight ID reset to 1
-      - Champion state (no champion at turn 1)
     Keeps:
       - Accounts and passwords
       - Teams and their warrior rosters (names, stats, gear, strategies, trains)
@@ -846,25 +845,7 @@ def reset_arena_state():
     state["next_fight_id"] = 1
     save_game_state(state)
 
-    # 4. Remove champion file and checksum (no champion at the start of turn 1)
-    print(f"  DEBUG: Checking for champion file at: {CHAMPION_FILE}")
-    if os.path.exists(CHAMPION_FILE):
-        print(f"  DEBUG: Found champion.json, deleting...")
-        os.remove(CHAMPION_FILE)
-        print(f"  DEBUG: champion.json deleted")
-    else:
-        print(f"  DEBUG: champion.json not found")
-
-    champion_checksum = CHAMPION_FILE.replace('.json', '.checksum')
-    print(f"  DEBUG: Checking for checksum at: {champion_checksum}")
-    if os.path.exists(champion_checksum):
-        print(f"  DEBUG: Found champion.checksum, deleting...")
-        os.remove(champion_checksum)
-        print(f"  DEBUG: champion.checksum deleted")
-    else:
-        print(f"  DEBUG: champion.checksum not found")
-
-    # 5. Wipe records on all team warriors
+    # 4. Wipe records on all team warriors
     if os.path.exists(TEAMS_DIR):
         for fname in os.listdir(TEAMS_DIR):
             if not fname.endswith(".json"): continue

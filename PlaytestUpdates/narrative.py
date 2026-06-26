@@ -257,7 +257,7 @@ def _warrior_report_block(w: Warrior) -> list:
 
     if _has_natural_armor:
         if _no_armor:
-            # Scales only — equivalent to Scale armor protection
+            # Scales only - equivalent to Scale armor protection
             armor_part = "in NATURAL SCALE ARMOR"
         elif armor_val.lower() in ("cloth", "leather"):
             # Cloth/Leather layers over scales and adds a small bonus
@@ -456,7 +456,7 @@ _CHALLENGE_FLAVOR_NORMAL = [
 _CHALLENGE_FLAVOR_BLOOD = [
     "{n1} seeks blood vengeance against {n2} in a Blood Challenge!!",
     "{n1} has declared a Blood Challenge against {n2}!!",
-    "This is a blood feud: {n1} issues a Blood Challenge to {n2} to the death!",
+    "{n1} issues a Blood Challenge to {n2}!",
     "{n1} demands a price in blood from {n2} - a Blood Challenge!!",
     "The air turns cold as {n1} declares a Blood Challenge against {n2}!!",
     "{n1} swears a Blood Challenge vendetta against {n2} this turn!",
@@ -1163,7 +1163,7 @@ ATTACK_VERBS: dict[str, list[str]] = {
 LIZARDFOLK_ATTACK_VERBS: dict[str, list[str]] = {
     "claw"  : ["rake", "slash", "tear", "rend"],
     "kick"  : ["kicks", "stomps", "drives a powerful kick", "lashes out with a kick"],
-    "tail"  : ["sweeps", "lashes", "swings", "brings around"],
+    "tail"  : ["sweeps", "lashes", "swings", "whips"],
 }
 
 # Tabaxi-specific attack verbs when using Open Hand/Martial Combat
@@ -2313,12 +2313,30 @@ MISS_LINES = [
     "{attacker}'s aim is off, the blow finds nothing",
 ]
 
+THROW_MISS_LINES = [
+    "{attacker}'s {weapon} sails wide of the mark!",
+    "The thrown {weapon} arcs well clear of its target!",
+    "{attacker}'s aim is off, the {weapon} flies harmlessly past!",
+    "The {weapon} tumbles end-over-end, but clears {attacker_foe} entirely!",
+    "{attacker}'s throw is wide, the {weapon} clattering across the sand!",
+    "The {weapon} whistles past, finding nothing but air!",
+]
+
 
 def miss_line(attacker_name: str, weapon_name: str) -> str:
     template = random.choice(MISS_LINES)
     return template.format(
         attacker=attacker_name.upper(),
         weapon  =weapon_name.lower(),
+    )
+
+
+def throw_miss_line(attacker_name: str, weapon_name: str, defender_name: str) -> str:
+    template = random.choice(THROW_MISS_LINES)
+    return template.format(
+        attacker     =attacker_name.upper(),
+        weapon       =weapon_name.lower(),
+        attacker_foe =defender_name.upper(),
     )
 
 
@@ -2343,9 +2361,10 @@ PARRY_LINES_BARELY = [
 ]
 
 DEFENSE_POINT_LINES = [
-    "{defender} is paying special attention to not being hit there!",
-    "{defender}'s plan is not to get hit!",
-    "{defender} has that area well covered!",
+    "{defender} had that area covered, the defense holds!",
+    "{defender}'s focus there pays off, turning the strike aside!",
+    "That spot was well protected, {defender} deflects cleanly!",
+    "{defender}'s guard on that area proves its worth!",
 ]
 
 
@@ -2710,7 +2729,7 @@ def getup_line(warrior_name: str, gender: str) -> str:
 
 
 def ground_struggle_line(warrior_name: str, gender: str) -> str:
-    """Failed recovery attempt — warrior tries to get up but can't."""
+    """Failed recovery attempt - warrior tries to get up but can't."""
     pronoun = "his" if gender == "Male" else "her"
     return random.choice(GROUND_STRUGGLE_LINES).format(
         warrior=warrior_name.upper(), his=pronoun)
@@ -2773,7 +2792,7 @@ PERM_PAIN_LINES: dict[str, list[str]] = {
         "{w}'s shield arm goes partially numb!!",
     ],
     "primary_leg"  : [
-        "{w}'s leg spasms in pain, causing {him} to roll around in the dirt, wracked with extreme pain!!",
+        "{w}'s leg seizes up with blinding pain, every step a desperate struggle!!",
         "{w}'s leg gives way completely!!",
     ],
     "secondary_leg": [
@@ -2984,7 +3003,7 @@ CRITICAL_HIT_PIERCING = [
     "{attacker}'s attack looks like a probe until it isn't, and {his_her} {weapon} sinks to striking depth before {defender} can react.",
     "{attacker} waits for the gap, driving the point through a vital junction with mechanical precision.",
     "One perfectly timed thrust from {attacker} catches {defender} at the worst possible moment, the point driving home into a critical area.",
-    "{attacker} moves the weapon on a line that looks impossible until it arrives -threading through the guard to find the soft tissue beyond.",
+    "{attacker} moves the weapon on a line that looks impossible until it arrives, threading through the guard to find the soft tissue beyond.",
 ]
 
 CRITICAL_HIT_CRUSHING = [

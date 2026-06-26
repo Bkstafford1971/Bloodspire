@@ -45,7 +45,7 @@ from combat_debug_logger import CombatDebugLogger
 from warrior  import Warrior, Strategy, ATTRIBUTES
 from strategy import (
     FighterState, evaluate_triggers, get_style_advantage,
-    get_style_props, AGGRESSIVE_STYLES as _AGGRESSIVE_STYLES,
+    get_style_props, get_active_battle_cries, AGGRESSIVE_STYLES as _AGGRESSIVE_STYLES,
 )
 
 # Gnome tactician_edge — opponents using these styles trigger the bonus/penalty.
@@ -141,6 +141,49 @@ VERSATILE_WEAPONS = {
 FINESSE_DAMAGE_WEAPONS = {
     "stiletto", "cestus", "knife", "dagger", "epee"
 }
+
+
+# ---------------------------------------------------------------------------
+# PROBABILISTIC LUCK SYSTEM
+# ---------------------------------------------------------------------------
+
+def _should_apply_luck(threshold: int = 25) -> bool:
+    """
+    Determine if luck should be applied to this roll.
+    Returns True with <threshold>% probability (default 25%).
+    Each roll independently has a chance to trigger luck for that specific warrior.
+    """
+    return random.randint(1, 100) <= threshold
+
+
+def _apply_conditional_luck(base_value: int, warrior, threshold: int = 25) -> int:
+    """
+    Apply luck bonus to a roll value only if the random check passes.
+    Returns: base_value + warrior.luck if luck triggers, else base_value
+    """
+    if _should_apply_luck(threshold):
+        return base_value + warrior.luck
+    return base_value
+
+
+# ---------------------------------------------------------------------------
+# ATTRIBUTE-DRIVEN PENALTY SCALING (Half-Orc DEX tiers)
+# ---------------------------------------------------------------------------
+
+def _get_dex_penalty_reduction(warrior, tier_dict: dict) -> int:
+    """
+    Calculate penalty reduction based on DEX tiers.
+    Returns the amount to reduce the penalty by (0 if no tier applies).
+    Example: tier_dict = {15: 3, 18: 4} means:
+      - DEX < 15: reduction = 0
+      - DEX 15-17: reduction = 3
+      - DEX 18+: reduction = 4 (highest applicable)
+    """
+    if not tier_dict or not hasattr(warrior, 'dexterity'):
+        return 0
+    dex = warrior.dexterity
+    applicable = [reduction for threshold, reduction in tier_dict.items() if dex >= threshold]
+    return max(applicable) if applicable else 0
 
 
 def _is_cleave_weapon(weapon_key: str) -> bool:
@@ -555,6 +598,8 @@ class _CState:
     used_favorite_weapon_this_fight : bool = False  # Tracks if favorite weapon flavor already shown
     bleeding_wounds    : int     = 0   # Cumulative bleeding damage (tracked each round)
     triggered_injuries : dict    = field(default_factory=dict) # {location: level}
+    triggered_battle_cries: set  = field(default_factory=set)  # indices of battle cries that have fired
+    prev_damage_category: str    = "none"  # track damage state transitions for battle cry triggers
     phase2_entered     : bool    = False  # True once warrior has crossed the 25% endurance threshold
     frenzy_used        : bool    = False  # Tabaxi: frenzy ability has been used this fight
     armor_penalty      : float   = 0.0    # fraction 0.0-1.0 from over-weight armor
@@ -617,8 +662,11 @@ def _initiative_roll(warrior: Warrior, strategy: Strategy, state: _CState) -> in
     init_val     = warrior.skills.get("initiative", 0)
     skill_bonus  = init_val * 4 if init_val >= 5 else init_val * 3
 
-    luck_bonus   = warrior.luck
-    race_init_bonus = warrior.race.modifiers.initiative_bonus
+    # Probabilistic luck: 25% chance to apply luck bonus to this roll
+    luck_bonus   = _apply_conditional_luck(0, warrior, threshold=25)
+    # Apply DEX-based penalty reduction for Half-Orc initiative
+    r = warrior.race.modifiers
+    race_init_bonus = r.initiative_bonus + _get_dex_penalty_reduction(warrior, r.dex_initiative_tiers)
     props        = get_style_props(strategy.style)
     style_mod    = int(props.apm_modifier * 4)
     activity_mod = (strategy.activity - 5) * 2
@@ -673,7 +721,8 @@ def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState, foe_styl
     wpn_skill = attacker.skills.get(wpn_key, 0)
     wpn_b     = wpn_skill * 5
 
-    luck_b    = attacker.luck
+    # Probabilistic luck: 25% chance to apply luck bonus to this attack roll
+    luck_b    = _apply_conditional_luck(0, attacker, threshold=25)
     props     = get_style_props(strategy.style)
     style_b   = int(props.apm_modifier * 3)
     feint_b   = attacker.skills.get("feint", 0) * 2
@@ -697,11 +746,13 @@ def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState, foe_styl
     if strategy.style == "Opportunity Throw" and attacker.race.modifiers.thrown_mastery:
         thrown_mastery_b = 10
 
-    # Tactician's edge: +8 vs aggressive opponents, -6 vs methodical ones (Gnome racial)
+    # Tactician's edge: +4 vs aggressive opponents, -6 vs methodical ones (Gnome racial)
+    # Tactician's edge: +8 vs aggressive, -6 vs methodical
+    # Reduced to +4 vs Half-Orc only (brute force is unpredictable)
     tactician_b = 0
     if attacker.race.modifiers.tactician_edge and foe_style:
         if foe_style in _TACTICIAN_FAVORED:
-            tactician_b = 8
+            tactician_b = 4 if state.warrior.race.name == "Half-Orc" else 8
         elif foe_style in _TACTICIAN_DISFAVORED:
             tactician_b = -6
 
@@ -759,7 +810,8 @@ def _defense_roll(
     Weapon skill helps both: knowing your weapon improves both blocking and evasion.
     """
     roll      = _d100()
-    luck_b    = defender.luck
+    # Probabilistic luck: 25% chance to apply luck bonus to this defense roll
+    luck_b    = _apply_conditional_luck(0, defender, threshold=25)
     props     = get_style_props(strategy.style)
     wpn_key   = defender.primary_weapon.lower().replace(" ", "_").replace("&", "and")
     wpn_skill = defender.skills.get(wpn_key, 0)
@@ -768,6 +820,7 @@ def _defense_roll(
     # +2.5 per point for dodge (rounded), +2 per point for parry.
     dex_trained = defender.attribute_gains.get("dexterity", 0)
 
+    r = defender.race.modifiers
     if is_parry:
         str_b    = max(-5, min(5, (defender.strength - 10) // 2))
         skill_b  = defender.skills.get("parry", 0) * 4
@@ -775,8 +828,10 @@ def _defense_roll(
         style_b  = props.parry_bonus * 3
         act_mod  = (5 - strategy.activity) * 2
         dex_train_parry = int(dex_trained * 2)   # +2 per trained DEX point
-        race_parry_bonus = defender.race.modifiers.parry_bonus * 3  # Apply race parry bonus
-        total    = roll + str_b + skill_b + wpn_b + style_b + act_mod + luck_b + dex_train_parry + race_parry_bonus
+        race_parry_bonus = r.parry_bonus * 3  # Apply race parry bonus
+        # Apply DEX-based penalty reduction for Half-Orc parry
+        effective_parry_penalty = r.parry_penalty - _get_dex_penalty_reduction(defender, r.dex_parry_tiers)
+        total    = roll + str_b + skill_b + wpn_b + style_b + act_mod + luck_b + dex_train_parry + race_parry_bonus - effective_parry_penalty * 3
     else:
         dex      = get_effective_dex_for_race(defender.dexterity, defender.armor or "None", defender.helm or "None", defender.race.name)
         dex_b    = max(-8, min(8, (dex - 10)))
@@ -788,13 +843,15 @@ def _defense_roll(
         size_b   = 5 if size_diff >= 3 else (-5 if size_diff <= -3 else 0)
 
         dex_train_dodge = int(dex_trained * 2.5) # +2.5 per trained DEX point
-        race_dodge_bonus = defender.race.modifiers.dodge_bonus * 2  # Apply race dodge bonus
+        race_dodge_bonus = r.dodge_bonus * 2  # Apply race dodge bonus
+        # Apply DEX-based penalty reduction for Half-Orc dodge
+        effective_dodge_penalty = r.dodge_penalty - _get_dex_penalty_reduction(defender, r.dex_dodge_tiers)
 
         # Acrobatics skill bonus to dodge
         acrobatics_level = defender.skills.get("acrobatics", 0)
         acrobatics_b = acrobatics_level * 2 if acrobatics_level > 0 else 0
 
-        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train_dodge + race_dodge_bonus + acrobatics_b
+        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train_dodge + race_dodge_bonus - effective_dodge_penalty * 2 + acrobatics_b
 
         # Heavy weapon dodge penalty for Goblins & Tabaxi
         if defender.race.modifiers.heavy_weapon_penalty:
@@ -829,7 +886,8 @@ def _defense_roll(
     try:
         sec_w = get_weapon(defender.secondary_weapon or "Open Hand")
         if sec_w.is_shield:
-            total += 10 if defender.race.modifiers.shield_bonus else 5
+            shield_val = 10 if defender.race.modifiers.shield_bonus else 5
+            total += shield_val
     except ValueError:
         pass
 
@@ -862,9 +920,10 @@ def _defense_roll(
         total = int(total * (1.0 - state.armor_penalty))
 
     # Tactician's edge: +5 defense vs aggressive attackers, -4 vs methodical (Gnome racial)
+    # Reduced to +2 vs Half-Orc only (brute force is unpredictable)
     if defender.race.modifiers.tactician_edge and atk_style:
         if atk_style in _TACTICIAN_FAVORED:
-            total += 5
+            total += 2 if attacker.race.name == "Half-Orc" else 5
         elif atk_style in _TACTICIAN_DISFAVORED:
             total -= 4
 
@@ -1096,6 +1155,11 @@ def _calc_damage_hybrid(
         natural_bonus = _get_lizardfolk_natural_weapon_bonus(attacker)
         raw += natural_bonus
 
+    # Racial damage flat bonus/penalty (e.g. Half-Orc +8, Halfling -6)
+    race_dmg_net = attacker.race.modifiers.damage_bonus - attacker.race.modifiers.damage_penalty
+    if race_dmg_net != 0:
+        raw += race_dmg_net
+
     # Calculate armor reduction
     armor_nm = defender.armor or "None"
     helm_nm = defender.helm or "None"
@@ -1127,6 +1191,11 @@ def _calc_damage_hybrid(
     # Apply percentage-based armor reduction (4% per defense point, capped at 76%)
     armor_reduction = min(0.76, defense * 0.04)
     final_damage = int(raw * (1.0 - armor_reduction))
+
+    # Half-Orc Armor Penetration: 15% of raw damage bypasses armor
+    if attacker.race.name == "Half-Orc":
+        penetrating_damage = int(raw * 0.15)
+        final_damage += penetrating_damage
 
     return max(1, final_damage), weapon.category
 
@@ -1206,8 +1275,11 @@ def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CSt
     thrown_b = 10 if (strategy.style == "Opportunity Throw" and attacker.race.modifiers.thrown_mastery) else 0
     tactician_b = 0
     if attacker.race.modifiers.tactician_edge and foe_style:
-        if foe_style in _TACTICIAN_FAVORED:    tactician_b =  8
+        if foe_style in _TACTICIAN_FAVORED:
+            # Reduced to +4 vs Half-Orc only (brute force is unpredictable)
+            tactician_b = 4 if state.warrior.race.name == "Half-Orc" else 8
         elif foe_style in _TACTICIAN_DISFAVORED: tactician_b = -6
+
     ground_pen = 25 if state.is_on_ground else 0
 
     # Heavy weapon penalty for Goblins & Tabaxi
@@ -1259,7 +1331,8 @@ def _defense_roll_verbose(
     attacker: "Warrior", aim_point: str, atk_style: str, is_parry: bool = True,
 ):
     roll      = _d100()
-    luck_b    = defender.luck
+    # Probabilistic luck: 25% chance to apply luck bonus to this defense roll
+    luck_b    = _apply_conditional_luck(0, defender, threshold=25)
     props     = get_style_props(strategy.style)
     wpn_key   = defender.primary_weapon.lower().replace(" ", "_").replace("&", "and")
     wpn_skill = defender.skills.get(wpn_key, 0)
@@ -1274,7 +1347,8 @@ def _defense_roll_verbose(
         act_mod       = (5 - strategy.activity) * 2
         dex_train     = int(dex_trained * 2)
         race_parry    = defender.race.modifiers.parry_bonus * 3
-        total         = roll + str_b + skill_b + wpn_b + style_b + act_mod + luck_b + dex_train + race_parry
+        race_parry_pen = defender.race.modifiers.parry_penalty * 3
+        total         = roll + str_b + skill_b + wpn_b + style_b + act_mod + luck_b + dex_train + race_parry - race_parry_pen
         comps.update({
             "str_bonus": str_b,
             f"parry_skill(lv{defender.skills.get('parry',0)})x4": skill_b,
@@ -1283,6 +1357,7 @@ def _defense_roll_verbose(
             "activity_mod": act_mod,
             "dex_trained_x2": dex_train,
             "race_parry_x3": race_parry,
+            "race_parry_pen_x3": -race_parry_pen,
         })
     else:
         dex      = get_effective_dex_for_race(defender.dexterity, defender.armor or "None", defender.helm or "None", defender.race.name)
@@ -1296,9 +1371,10 @@ def _defense_roll_verbose(
 
         dex_train= int(dex_trained * 2.5)
         race_dg  = defender.race.modifiers.dodge_bonus * 2
+        race_dg_pen = defender.race.modifiers.dodge_penalty * 2
         acro_lv  = defender.skills.get("acrobatics", 0)
         acro_b   = acro_lv * 2 if acro_lv > 0 else 0
-        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train + race_dg + acro_b
+        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train + race_dg - race_dg_pen + acro_b
 
         heavy_pen = 0
         if defender.race.modifiers.heavy_weapon_penalty:
@@ -1319,6 +1395,7 @@ def _defense_roll_verbose(
             "size_diff": size_b,
             "dex_trained_x2.5": dex_train,
             "race_dodge_x2": race_dg,
+            "race_dodge_pen_x2": -race_dg_pen,
             "acrobatics_x2": acro_b if acro_b else 0,
             "heavy_wpn_pen": heavy_pen if heavy_pen else 0,
         })
@@ -1486,7 +1563,13 @@ def _calc_damage_verbose(
         raw += nat_b
     steps["natural_weapon_bonus"] = nat_b
 
-    steps["raw"] = raw - fav_b - prec_b - nat_b
+    # Racial damage flat bonus/penalty (e.g. Half-Orc +8, Halfling -6)
+    race_dmg_net = attacker.race.modifiers.damage_bonus - attacker.race.modifiers.damage_penalty
+    if race_dmg_net != 0:
+        raw += race_dmg_net
+    steps["race_damage"] = race_dmg_net
+
+    steps["raw"] = raw - fav_b - prec_b - nat_b - race_dmg_net
     steps["raw_with_fav"] = raw
 
     # Armor calculation (percentage-based, mirroring _calc_damage_hybrid)
@@ -1522,6 +1605,12 @@ def _calc_damage_verbose(
     armor_reduction = min(0.76, defense * 0.04)
     final_damage = max(1, int(raw * (1.0 - armor_reduction)))
 
+    # Half-Orc Armor Penetration: 15% of raw damage bypasses armor
+    half_orc_penetration = 0
+    if attacker.race.name == "Half-Orc":
+        half_orc_penetration = int(raw * 0.15)
+        final_damage += half_orc_penetration
+
     steps.update({
         "armor_name": armor_nm,
         "armor_def": armor_def,
@@ -1531,6 +1620,7 @@ def _calc_damage_verbose(
         "final_armor": defense,
         "armor_reduction": round(armor_reduction, 3),
         "net_pre_mods": final_damage,
+        "half_orc_penetration": half_orc_penetration,
     })
     return final_damage, weapon.category, steps
 
@@ -1541,7 +1631,9 @@ def _concede_check_verbose(warrior: "Warrior", state: "_CState", is_monster_figh
     roll      = _d100()
     presence  = warrior.presence
     pre_b     = max(-6, min(10, presence - 10))
-    luck_half = warrior.luck // 2
+    # Probabilistic luck: 25% chance to apply luck//2 bonus to this concede roll
+    luck_contribution = _apply_conditional_luck(0, warrior, threshold=25)
+    luck_half = luck_contribution // 2
     total     = roll + pre_b + luck_half
     threshold = max(40, 68 - (presence // 3))
     granted   = total >= threshold
@@ -1574,7 +1666,10 @@ def _check_knockdown_verbose(warrior: "Warrior", state: "_CState", damage: int, 
         chance = chance // 2  # 50% knockdown resistance for Tabaxi
     final  = max(1, chance)
     roll   = random.randint(1, 100)
-    return roll <= final, final, roll
+    # Probabilistic luck: 25% chance to apply luck subtraction (lower roll = better for knockdown resistance)
+    luck_reduction = _apply_conditional_luck(0, warrior, threshold=25)
+    adjusted_roll = max(1, roll - luck_reduction)
+    return adjusted_roll <= final, final, roll
 
 
 def _check_perm_injury_verbose(warrior: "Warrior", damage: int, aim_point: str):
@@ -1585,7 +1680,10 @@ def _check_perm_injury_verbose(warrior: "Warrior", damage: int, aim_point: str):
     if warrior.race.modifiers.fewer_perms:
         chance = int(chance * 0.80)
     roll = random.randint(1, 100)
-    if roll > chance:
+    # Probabilistic luck: 25% chance to apply luck subtraction (lower roll = better for injury resistance)
+    luck_reduction = _apply_conditional_luck(0, warrior, threshold=25)
+    adjusted_roll = max(1, roll - luck_reduction)
+    if adjusted_roll > chance:
         return None, threshold, chance, roll
     if aim_point and aim_point != "None":
         loc_map = {
@@ -1623,7 +1721,11 @@ def _check_perm_injury(
     chance = max(5, min(80, int((damage / warrior.max_hp) * 100) - 20))
     if warrior.race.modifiers.fewer_perms:
         chance = int(chance * 0.80)
-    if random.randint(1, 100) > chance:
+    roll = random.randint(1, 100)
+    # Probabilistic luck: 25% chance to apply luck subtraction (lower roll = better for injury resistance)
+    luck_reduction = _apply_conditional_luck(0, warrior, threshold=25)
+    adjusted_roll = max(1, roll - luck_reduction)
+    if adjusted_roll > chance:
         return None
     if aim_point and aim_point != "None":
         # Map targeting to actual injury locations
@@ -1741,7 +1843,11 @@ def _check_knockdown(warrior: Warrior, state: _CState, damage: int, cat: str) ->
     chance -= max(0, (warrior.size - 12)) * 2
     if warrior.race.modifiers.acrobatic_advantage:
         chance = chance // 2  # 50% knockdown resistance for Tabaxi
-    return random.randint(1, 100) <= max(1, chance)
+    roll = random.randint(1, 100)
+    # Probabilistic luck: 25% chance to apply luck subtraction (lower roll = better for knockdown resistance)
+    luck_reduction = _apply_conditional_luck(0, warrior, threshold=25)
+    adjusted_roll = max(1, roll - luck_reduction)
+    return adjusted_roll <= max(1, chance)
 
 
 # ---------------------------------------------------------------------------
@@ -1770,13 +1876,16 @@ def _concede_check(warrior: Warrior, state: _CState, is_monster_fight: bool = Fa
     d100 + PRE_bonus + luck//2 vs threshold (max(40, 68 - PRE//3)).
     High Presence = lower threshold = easier to get mercy.
     Effective mercy rate ~40-55% when triggered; overall fight death ~2.5-3%.
+    Luck is probabilistic: 25% chance to apply luck//2 bonus to concede roll.
     """
     if is_monster_fight:
         return False
     roll      = _d100()
     presence  = warrior.presence
     pre_b     = max(-6, min(10, presence - 10))
-    total     = roll + pre_b + warrior.luck // 2
+    # Probabilistic luck: 25% chance to apply luck//2 bonus to this concede roll
+    luck_contribution = _apply_conditional_luck(0, warrior, threshold=25) // 2
+    total     = roll + pre_b + luck_contribution
     threshold = max(40, 68 - (presence // 3))
     return total >= threshold
 
@@ -1897,7 +2006,19 @@ def _update_endurance(
 # APM
 # ---------------------------------------------------------------------------
 
-def _calc_apm(warrior: Warrior, strategy: Strategy, state: _CState) -> int:
+def _calc_apm_with_fraction(warrior: Warrior, strategy: Strategy, state: _CState) -> tuple:
+    """
+    Calculate APM for a warrior with fractional component.
+    Returns: (base_apm, fraction) where fraction is 0.0-0.99
+    The fraction represents the chance (as a percentage) to gain an extra action that minute.
+
+    Heavy weapons (4.0+ weight) gain APM bonuses from skill:
+      Skill 1-2: +0.5 APM per level
+      Skill 3-4: +1.0 APM per level
+      Skill 5-6: +1.5 APM per level
+      Skill 7-8: +2.0 APM per level
+      Skill 9: +3.0 APM
+    """
     dex = get_effective_dex_for_race(
         warrior.dexterity,
         warrior.armor or "None",
@@ -1910,7 +2031,9 @@ def _calc_apm(warrior: Warrior, strategy: Strategy, state: _CState) -> int:
     base += strategy.activity * 0.25
     base += warrior.skills.get(wpn, 0) * 0.20
     r    = warrior.race.modifiers
-    base += r.attack_rate_bonus * 0.25 - r.attack_rate_penalty * 0.25
+    # Apply DEX-based penalty reduction for Half-Orc
+    effective_attack_rate_penalty = r.attack_rate_penalty - _get_dex_penalty_reduction(warrior, r.dex_attack_rate_tiers)
+    base += r.attack_rate_bonus * 0.25 - effective_attack_rate_penalty * 0.25
     base += get_style_props(strategy.style).apm_modifier
 
     # Lizardfolk heavy armor attack rate penalty (percentage-based)
@@ -1919,19 +2042,46 @@ def _calc_apm(warrior: Warrior, strategy: Strategy, state: _CState) -> int:
         if attack_pct > 0:
             base *= (1.0 - attack_pct)
 
-    # Heavy weapon penalty for Goblins & Tabaxi
+    # Heavy weapon APM bonus based on weapon skill
+    try:
+        weapon = get_weapon(warrior.primary_weapon)
+        two_handed = (warrior.secondary_weapon == "Open Hand" and weapon.two_hand)
+        is_heavy = weapon.weight >= 4.0 or (weapon.two_hand and two_handed)
+
+        if is_heavy:
+            wpn_skill = warrior.skills.get(wpn, 0)
+            if wpn_skill > 0:
+                if wpn_skill == 9:
+                    base += 3.0
+                elif wpn_skill >= 7:
+                    base += 2.0
+                elif wpn_skill >= 5:
+                    base += 1.5
+                elif wpn_skill >= 3:
+                    base += 1.0
+                else:  # 1-2
+                    base += 0.5
+    except ValueError:
+        pass
+
+    # Apply under-strength weight penalty to all races (skip for Tabaxi with spears)
+    try:
+        weapon = get_weapon(warrior.primary_weapon)
+        effective_str = get_effective_strength_for_weapons(warrior)
+        two_handed_use = (warrior.secondary_weapon == "Open Hand" and weapon.two_hand)
+
+        # All races get weight penalty, except Tabaxi with spear_exception
+        if not (r.spear_exception and weapon.category == "Polearm/Spear"):
+            weight_penalty = strength_penalty(weapon.weight, effective_str, two_handed_use)
+            if weight_penalty > 0:
+                base *= (1.0 - weight_penalty)
+    except ValueError:
+        pass
+
+    # Heavy weapon penalty for Goblins & Tabaxi (additional penalty on top of weight)
     if r.heavy_weapon_penalty:
         try:
             weapon = get_weapon(warrior.primary_weapon)
-            
-            # Apply under-strength weight penalty to APM (skip for Tabaxi with spears)
-            effective_str = get_effective_strength_for_weapons(warrior)
-            two_handed_use = (warrior.secondary_weapon == "Open Hand" and weapon.two_hand)
-            if not (r.spear_exception and weapon.category == "Polearm/Spear"):
-                weight_penalty = strength_penalty(weapon.weight, effective_str, two_handed_use)
-                if weight_penalty > 0:
-                    base *= (1.0 - weight_penalty)
-
             two_handed = (warrior.secondary_weapon == "Open Hand" and weapon.two_hand)
 
             # Check if weapon is heavy (weight 4.0+) or two-handed
@@ -1953,19 +2103,37 @@ def _calc_apm(warrior: Warrior, strategy: Strategy, state: _CState) -> int:
     if state.armor_penalty > 0:
         base *= (1.0 - state.armor_penalty)
 
-    # Warrior APM calculated, now combine with weapon APM
-    warrior_apm = max(1, min(10, int(round(base))))
+    # Clamp and split into base + fraction
+    base = max(1.0, min(10.0, base))
+    base_apm = int(base)
+    fraction = base - base_apm
+    return (base_apm, fraction)
 
-    # Get weapon APM and combine using minimum
-    try:
-        weapon = get_weapon(warrior.primary_weapon)
-        weapon_apm = weapon.apm
-        # Final APM is the minimum of warrior and weapon APM
-        final_apm = min(warrior_apm, weapon_apm)
-        return final_apm
-    except ValueError:
-        # If weapon not found, just return warrior APM
-        return warrior_apm
+
+def _resolve_fractional_apm(base_apm: int, fraction: float) -> int:
+    """
+    Given a base APM and a fraction (0.0-0.99), roll to determine if the
+    warrior gets a bonus action that minute.
+
+    fraction is converted to a percentage chance (0-99%).
+    Returns the actual APM for this minute (either base_apm or base_apm + 1).
+    """
+    if fraction <= 0.0:
+        return base_apm
+    chance_pct = int(fraction * 100)
+    if random.randint(1, 100) <= chance_pct:
+        return base_apm + 1
+    return base_apm
+
+
+def _calc_apm(warrior: Warrior, strategy: Strategy, state: _CState) -> int:
+    """
+    Backward-compatible APM calculation. Calls _calc_apm_with_fraction
+    and immediately rolls for the bonus, returning final APM for this minute.
+    This is used for old code that expects a simple integer return.
+    """
+    base_apm, fraction = _calc_apm_with_fraction(warrior, strategy, state)
+    return _resolve_fractional_apm(base_apm, fraction)
 
 
 # ---------------------------------------------------------------------------
@@ -2107,15 +2275,44 @@ class CombatEngine:
             ds_.active_strategy = new_strat_b
             ds_.active_strat_idx = new_idx_b
 
+        # Emit any active battle cries (trigger on state transitions)
+        cries_a, new_dmg_a = get_active_battle_cries(as_.warrior, fs_a, fs_b, minute, as_.triggered_battle_cries, as_.prev_damage_category)
+        for msg, idx in cries_a:
+            self._emit(f'{as_.warrior.name} Shouts "{msg}"')
+            as_.triggered_battle_cries.add(idx)
+        as_.prev_damage_category = new_dmg_a
+
+        cries_b, new_dmg_b = get_active_battle_cries(ds_.warrior, fs_b_for_def, fs_a_for_def, minute, ds_.triggered_battle_cries, ds_.prev_damage_category)
+        for msg, idx in cries_b:
+            self._emit(f'{ds_.warrior.name} Shouts "{msg}"')
+            ds_.triggered_battle_cries.add(idx)
+        ds_.prev_damage_category = new_dmg_b
+
     def _check_defender_strategy_only(self, ds_: _CState, as_: _CState, minute: int):
         """
         Check only the defender's strategy after they take damage.
         The attacker's strategy should not be re-evaluated when they deal damage,
         only when they themselves take damage.
         """
-        # Check defender's strategy
         fs_defender = ds_.to_fighter_state()
-        fs_attacker = as_.to_fighter_state()  # Foe state for defender
+        fs_attacker = as_.to_fighter_state()
+
+        # Emit battle cries first (right after damage is taken)
+        # Evaluate defender's cries about their own state
+        cries, new_dmg = get_active_battle_cries(ds_.warrior, fs_defender, fs_attacker, minute, ds_.triggered_battle_cries, ds_.prev_damage_category)
+        for msg, idx in cries:
+            self._emit(f'{ds_.warrior.name} Shouts "{msg}"')
+            ds_.triggered_battle_cries.add(idx)
+        ds_.prev_damage_category = new_dmg
+
+        # Evaluate attacker's cries about the defender's state
+        cries_att, new_dmg_att = get_active_battle_cries(as_.warrior, fs_attacker, fs_defender, minute, as_.triggered_battle_cries, as_.prev_damage_category)
+        for msg, idx in cries_att:
+            self._emit(f'{as_.warrior.name} Shouts "{msg}"')
+            as_.triggered_battle_cries.add(idx)
+        as_.prev_damage_category = new_dmg_att
+
+        # Check defender's strategy
         new_strat, new_idx = evaluate_triggers(ds_.warrior.strategies, fs_defender, fs_attacker, minute)
         if new_idx != ds_.active_strat_idx:
             self._emit(N.strategy_switch_line(ds_.warrior.name, new_idx))
@@ -2432,6 +2629,19 @@ class CombatEngine:
         self.state_a.active_strategy  = strat_a;  self.state_a.active_strat_idx = idx_a
         self.state_b.active_strategy  = strat_b;  self.state_b.active_strat_idx = idx_b
 
+        # Emit any active battle cries (trigger on state transitions)
+        cries_a, new_dmg_a = get_active_battle_cries(self.warrior_a, fs_a, fs_b, minute, self.state_a.triggered_battle_cries, self.state_a.prev_damage_category)
+        for msg, idx in cries_a:
+            self._emit(f'{self.warrior_a.name} Shouts "{msg}"')
+            self.state_a.triggered_battle_cries.add(idx)
+        self.state_a.prev_damage_category = new_dmg_a
+
+        cries_b, new_dmg_b = get_active_battle_cries(self.warrior_b, fs_b, fs_a, minute, self.state_b.triggered_battle_cries, self.state_b.prev_damage_category)
+        for msg, idx in cries_b:
+            self._emit(f'{self.warrior_b.name} Shouts "{msg}"')
+            self.state_b.triggered_battle_cries.add(idx)
+        self.state_b.prev_damage_category = new_dmg_b
+
         # Overencumbrance flavor
         for st in (self.state_a, self.state_b):
             if st.armor_penalty >= 0.10 and random.random() < 0.25:
@@ -2596,43 +2806,43 @@ class CombatEngine:
     # WEAPON MANAGEMENT FOR OPPORTUNITY THROW
     # =========================================================================
 
-    def _handle_opportunity_throw_loss(self, warrior: Warrior, state: _CState) -> Optional[str]:
+    def _handle_opportunity_throw_loss(self, warrior: Warrior, state: _CState, thrown_wpn: str) -> Optional[str]:
         """
-        When Opportunity Throw style lands a hit, the thrown weapon is lost.
-        Replace primary weapon with backup (if same type), then secondary, else Open Hand.
-        Return narrative message if weapon was lost, or None if still using same weapon.
+        The thrown weapon is consumed from inventory (it's in the air regardless of hit/miss).
+        Dispatches on which slot held the thrown weapon so inventory always reflects reality.
+        Returns a narrative message only when the primary hand changes; None otherwise.
         """
-        current_primary = warrior.primary_weapon
-        
-        # Determine if weapon is throwable (not already Open Hand, and has weight)
-        try:
-            wpn_obj = get_weapon(current_primary)
-            if wpn_obj.skill_key == "empty_hand":  # Open Hand has no weight
-                return None
-        except ValueError:
-            return None
-
         # Goblin scavenger: track every thrown weapon for potential recovery
         if warrior.race.modifiers.scavenger:
-            state.thrown_pool.append(current_primary)
-        
-        # Check if backup exists and is same weapon type as primary
-        if warrior.backup_weapon and warrior.backup_weapon == current_primary:
-            # Promote backup to primary, clear the old primary slot
-            warrior.primary_weapon = warrior.backup_weapon
-            warrior.backup_weapon = None
-            return f"{warrior.name.upper()} draws {warrior.gender_possessive} backup {current_primary.lower()}!"
+            state.thrown_pool.append(thrown_wpn)
 
-        # No matching backup, try secondary weapon
-        if warrior.secondary_weapon != "Open Hand":
-            old_secondary = warrior.secondary_weapon
-            warrior.primary_weapon = warrior.secondary_weapon
+        if warrior.primary_weapon == thrown_wpn:
+            # Primary was thrown — find the next weapon to fill the primary hand.
+            # 1. Backup of same type (drawn as a ready replacement)
+            if warrior.backup_weapon and warrior.backup_weapon == thrown_wpn:
+                warrior.backup_weapon = None
+                return f"{warrior.name.upper()} draws {warrior.gender_possessive} backup {thrown_wpn.lower()}!"
+            # 2. Secondary promoted to primary
+            if warrior.secondary_weapon and warrior.secondary_weapon != "Open Hand":
+                old_secondary = warrior.secondary_weapon
+                warrior.primary_weapon = warrior.secondary_weapon
+                warrior.secondary_weapon = "Open Hand"
+                return f"{warrior.name.upper()} switches to {warrior.gender_possessive} {old_secondary.lower()}!"
+            # 3. Empty-handed — style override at the call site handles fallback silently
+            warrior.primary_weapon = "Open Hand"
+            return None
+
+        elif warrior.secondary_weapon == thrown_wpn:
+            # Off-hand weapon was thrown — no draw needed, just clear the slot
             warrior.secondary_weapon = "Open Hand"
-            return f"{warrior.name.upper()} switches to {warrior.gender_possessive} {old_secondary.lower()}!"
-        
-        # Fall back to Open Hand
-        warrior.primary_weapon = "Open Hand"
-        return f"{warrior.name.upper()} has no more throwables and resorts to martial combat!"
+            return None
+
+        elif warrior.backup_weapon == thrown_wpn:
+            # Backup was drawn and thrown as a bonus action — clear the slot
+            warrior.backup_weapon = None
+            return None
+
+        return None
 
     # =========================================================================
     # GOBLIN SCAVENGER
@@ -2777,6 +2987,34 @@ class CombatEngine:
         att = as_.warrior;  dfr = ds_.warrior
         wpn = att.primary_weapon;  aim = ax.aim_point
 
+        # ── Opportunity Throw: Swap to throwable weapon if primary isn't ────
+        # If on Opportunity Throw strategy but primary weapon isn't throwable,
+        # try to use secondary or backup weapon instead for the throw.
+        _throw_from_backup = False
+        if ax.style == "Opportunity Throw":
+            try:
+                wpn_obj = get_weapon(wpn)
+                if not wpn_obj.throwable or wpn_obj.skill_key == "empty_hand":
+                    # Primary is not throwable, try secondary
+                    if att.secondary_weapon and att.secondary_weapon != "Open Hand":
+                        try:
+                            sec_wpn_obj = get_weapon(att.secondary_weapon)
+                            if sec_wpn_obj.throwable and sec_wpn_obj.skill_key != "empty_hand":
+                                wpn = att.secondary_weapon
+                        except ValueError:
+                            pass
+                    # If secondary didn't work, try backup
+                    if wpn == att.primary_weapon and att.backup_weapon:
+                        try:
+                            bak_wpn_obj = get_weapon(att.backup_weapon)
+                            if bak_wpn_obj.throwable and bak_wpn_obj.skill_key != "empty_hand":
+                                wpn = att.backup_weapon
+                                _throw_from_backup = True
+                        except ValueError:
+                            pass
+            except ValueError:
+                pass
+
         # ── Ground Recovery: Attacker on ground ────────────────────────────
         # The warrior acting has WON the initiative. If they're on the ground,
         # they get a good chance to get up (60-80% base). Success consumes
@@ -2806,16 +3044,27 @@ class CombatEngine:
                 self._emit(N.ground_struggle_line(att.name, att.gender))
 
         # If a warrior is on Opportunity Throw strategy but their current weapon is
-        # not throwable (e.g. Open Hand after running out of throwables), override
-        # the style to a sensible melee fallback for this action only.  This prevents
-        # "hurls his open hand at..." narrative when the fighter has nothing left to throw.
+        # not throwable (e.g. Open Hand), check if they have a throwable secondary weapon.
+        # If they do, allow the Opportunity Throw to proceed (will use secondary weapon).
+        # If not, override to a sensible melee fallback to prevent "hurls his open hand at..." narrative.
         if ax.style == "Opportunity Throw":
             try:
                 _wpn_check = get_weapon(wpn)
                 if not _wpn_check.throwable:
-                    import copy as _copy
-                    ax = _copy.copy(ax)
-                    ax.style = "Martial Combat" if wpn == "Open Hand" else "Strike"
+                    # Check if secondary weapon is throwable
+                    _has_throwable_secondary = False
+                    try:
+                        _sec_wpn_check = get_weapon(att.secondary_weapon)
+                        if _sec_wpn_check.throwable:
+                            _has_throwable_secondary = True
+                    except ValueError:
+                        pass
+
+                    # Only override style if no throwable secondary weapon available
+                    if not _has_throwable_secondary:
+                        import copy as _copy
+                        ax = _copy.copy(ax)
+                        ax.style = "Martial Combat" if wpn == "Open Hand" else "Strike"
             except ValueError:
                 import copy as _copy
                 ax = _copy.copy(ax)
@@ -2828,20 +3077,16 @@ class CombatEngine:
             if scav_result:
                 return None   # bonus throw already handled; advance to next action
 
-        # Opportunity Throw: consume the weapon before the attack (weapon is gone regardless
-        # of outcome — it's in the air). Defer the swap narrative until after the attack
-        # line so the sequence reads: "throws → [draws next weapon] → result", not
-        # "[draws next weapon] → throws → result".
+        # Track throw state — inventory update is deferred until after the pre-attack
+        # strategy re-evaluation so fatigue triggers fire against the old (unmodified)
+        # inventory. The actual weapon consumption happens just before the attack roll.
         _weapon_thrown_away = False
         _weapon_loss_msg    = None
-        if ax.style == "Opportunity Throw":
-            try:
-                wpn_obj = get_weapon(wpn)
-                if wpn_obj.skill_key != "empty_hand":  # Only consume if throwable
-                    _weapon_thrown_away = True
-                    _weapon_loss_msg = self._handle_opportunity_throw_loss(att, as_)
-            except ValueError:
-                pass  # Invalid weapon, continue without loss
+
+        # Backup draw: warrior is pulling the backup weapon from their belt to throw.
+        # Emit before the throw intent so the sequence reads draw → aim → throw.
+        if _throw_from_backup:
+            self._emit(f"{att.name.upper()} draws {att.gender_possessive} backup {wpn.lower()} from {att.gender_possessive} belt!")
 
         # Check weapon/style compatibility
         is_compatible, penalty_factor = _check_weapon_style_compatibility(wpn, ax.style)
@@ -2891,8 +3136,21 @@ class CombatEngine:
         if self.debug_logger:
             self.debug_logger.log_action_burn(as_.warrior.name, ax.style, _self_burn)
 
-        # Re-evaluate both warriors' strategies after endurance update (fatigue triggers)
+        # Re-evaluate both warriors' strategies after endurance update (fatigue triggers).
+        # The throw weapon is still in inventory here, so no throw-based trigger fires yet.
         self._check_and_switch_strategies(as_, ds_, minute)
+
+        # Opportunity Throw: consume the weapon now — after fatigue-based re-evaluation
+        # but before the attack roll. The weapon is in the air regardless of outcome;
+        # the trigger-based strategy switch fires later via post-resolution checks.
+        if ax.style == "Opportunity Throw":
+            try:
+                wpn_obj = get_weapon(wpn)
+                if wpn_obj.skill_key != "empty_hand":
+                    _weapon_thrown_away = True
+                    _weapon_loss_msg = self._handle_opportunity_throw_loss(att, as_, wpn)
+            except ValueError:
+                pass
 
         # --- Phase III: endurance collapse ---
         if as_.endurance <= 0:
@@ -2922,7 +3180,6 @@ class CombatEngine:
             elif dx.style == "Counterstrike":
                 if not _defensive_narrative_emitted:
                     self._emit(N.decoy_feint_read_line(att.name, dfr.name))
-                    _defensive_narrative_emitted = True
 
         # --- CALCULATED ATTACK PRECISION ---
         ca_precision_landed = False
@@ -3028,6 +3285,8 @@ class CombatEngine:
                 if (ax.style == "Calculated Attack" and not ca_precision_landed
                         and random.randint(1, 100) <= CA_PROBE_EMIT_CHANCE):
                     self._emit(N.calculated_probe_line(att.name, dfr.name))
+                elif ax.style == "Opportunity Throw":
+                    self._emit(N.throw_miss_line(att.name, wpn, dfr.name))
                 else:
                     self._emit(N.miss_line(att.name, wpn))
             elif margin <= -30:
@@ -3092,10 +3351,9 @@ class CombatEngine:
                                 _cs_chance = min(65, _cs_chance + 6)
                             _cs_chance = max(5, _cs_chance - _cleave_reduce)
                             if random.randint(1, 100) <= _cs_chance:
-                                if not _defensive_narrative_emitted:
-                                    self._emit(_gnome_cs_line(dfr.name, att.name))
-                                    _defensive_narrative_emitted = True
+                                self._emit(_gnome_cs_line(dfr.name, att.name))
                                 if _weapon_loss_msg: self._emit(_weapon_loss_msg)
+                                if _weapon_thrown_away: self._check_and_switch_strategies(as_, ds_, minute)
                                 return self._counterstrike(ds_, as_, dx, ax, minute)
 
                         # Standard riposte skill path (all races)
@@ -3104,6 +3362,7 @@ class CombatEngine:
                             if random.randint(1, 100) <= _rip_chance:
                                 self._emit(N.counterstrike_line(dfr.name, att.name))
                                 if _weapon_loss_msg: self._emit(_weapon_loss_msg)
+                                if _weapon_thrown_away: self._check_and_switch_strategies(as_, ds_, minute)
                                 return self._counterstrike(ds_, as_, dx, ax, minute)
 
                         # Counterstrike style path (all races)
@@ -3111,6 +3370,7 @@ class CombatEngine:
                             if random.randint(1, 100) <= 30 + dfr.skills.get("parry", 0) * 5:
                                 self._emit(N.counterstrike_line(dfr.name, att.name))
                                 if _weapon_loss_msg: self._emit(_weapon_loss_msg)
+                                if _weapon_thrown_away: self._check_and_switch_strategies(as_, ds_, minute)
                                 return self._counterstrike(ds_, as_, dx, ax, minute)
                 else:
                     if not _crit_def and not _defensive_narrative_emitted:
@@ -3126,12 +3386,14 @@ class CombatEngine:
                     # Gnome counterstrike mastery: weak parries open a small window.
                     # 5% base + 2% per riposte level. No style bonus — weak parries
                     # are barely openings; only practice (riposte skill) improves them.
-                    if dfr.race.modifiers.counterstrike_mastery and not ds_.is_on_ground:
+                    has_counterstrike = dfr.race.modifiers.counterstrike_mastery
+                    if has_counterstrike and not ds_.is_on_ground:
                         _riposte_lv  = dfr.skills.get("riposte", 0)
                         _weak_chance = 4 + (_riposte_lv * 2)
                         if random.randint(1, 100) <= _weak_chance:
                             self._emit(_gnome_cs_line(dfr.name, att.name))
                             if _weapon_loss_msg: self._emit(_weapon_loss_msg)
+                            if _weapon_thrown_away: self._check_and_switch_strategies(as_, ds_, minute)
                             return self._counterstrike(ds_, as_, dx, ax, minute)
                 else:
                     if not _crit_def and not _defensive_narrative_emitted:
@@ -3141,7 +3403,10 @@ class CombatEngine:
             # --- Req 4: Heavy Parry Disarm Check ---
             # If it was a parry and the attack subtotal was huge, might drop weapon.
             # Cestus and Open Hand fighters cannot be disarmed - emit numbness instead.
-            if use_p and atk_r > (dfr.strength * 4):
+            # Skip if the defense point was actively covering this aim location — a
+            # "particularly strong" defense should not result in losing the weapon.
+            _dp_shielded = dx.defense_point not in (None, "None") and dx.defense_point == aim
+            if use_p and atk_r > (dfr.strength * 4) and not _dp_shielded:
                 # Reduced base chance (8%) + disarm skill bonus (2% per level)
                 disarm_chance = 8 + (att.skills.get("disarm", 0) * 2)
                 if random.randint(1, 100) <= disarm_chance:
@@ -3192,6 +3457,8 @@ class CombatEngine:
             # Weapon swap message: after the miss/parry/dodge result is clear
             if _weapon_loss_msg:
                 self._emit(_weapon_loss_msg)
+            if _weapon_thrown_away:
+                self._check_and_switch_strategies(as_, ds_, minute)
 
             # Primary missed/was parried - Elf may still find an opening with the off-hand
             return self._try_elf_extra_attack(as_, ds_, ax, dx, minute)
@@ -3205,6 +3472,8 @@ class CombatEngine:
             self._check_defender_strategy_only(ds_, as_, minute)
             if _weapon_loss_msg:
                 self._emit(_weapon_loss_msg)
+            if _weapon_thrown_away:
+                self._check_and_switch_strategies(as_, ds_, minute)
             # Graze - Elf may still follow with the off-hand
             return self._try_elf_extra_attack(as_, ds_, ax, dx, minute)
 
@@ -3267,21 +3536,17 @@ class CombatEngine:
         if ax.style == "Opportunity Throw" and att.race.modifiers.thrown_mastery:
             dmg += 4
 
-        # Determine if this is a claw attack (vs kick or tail which are crushing)
-        attack_type = _get_martial_attack_type(att, dfr.name)
-        is_claw = attack_type == "claw"
-        self._emit(N.damage_line(dmg, dfr.max_hp, cat, is_claw_attack=is_claw))
-
-        # Favorite weapon flavor - now emitted only on successful hits
+        # Favorite weapon flavor - emitted after attack line, before damage line
         # Skip if weapon was thrown away - doesn't make sense to praise a weapon that's already gone
         if not _weapon_thrown_away:
             fav_flavor = _get_favorite_weapon_flavor(att, wpn, as_)
             if fav_flavor:
                 self._emit(fav_flavor)
 
-        # Weapon swap message: after damage lands, attacker draws their next weapon
-        if _weapon_loss_msg:
-            self._emit(_weapon_loss_msg)
+        # Determine if this is a claw attack (vs kick or tail which are crushing)
+        attack_type = _get_martial_attack_type(att, dfr.name)
+        is_claw = attack_type == "claw"
+        self._emit(N.damage_line(dmg, dfr.max_hp, cat, is_claw_attack=is_claw))
 
         if self.debug_logger:
             self.debug_logger.log_damage(
@@ -3403,6 +3668,11 @@ class CombatEngine:
                 self._check_defender_strategy_only(as_, ds_, minute)  # attacker: "your foe is on the ground"
         except ValueError:
             pass
+
+        # Weapon draw: emit after entangle so the throw's full effect (trip + fall) resolves
+        # before showing that the attacker drew a replacement weapon
+        if _weapon_loss_msg:
+            self._emit(_weapon_loss_msg)
 
         # Knockdown
         if self.debug_logger:
@@ -3595,7 +3865,8 @@ class CombatEngine:
         for ln in N.hit_line(att.name, dfr.name, wpn, cat, ax.aim_point, "precise", attacker_race=att.race.name):
             self._emit(ln)
         # Gnome counterstrike mastery: higher margin (50 vs 40) — more decisive hit.
-        _cs_margin = 50 if att.race.modifiers.counterstrike_mastery else 40
+        has_cs_mastery = att.race.modifiers.counterstrike_mastery
+        _cs_margin = 50 if has_cs_mastery else 40
         dmg, _ = _calc_damage_hybrid(att, ax, wpn, dfr, _cs_margin, style_compat_penalty=penalty_factor)
         # Determine if claw attack (for counterstrike with Open Hand only)
         attack_type = _get_martial_attack_type(att, dfr.name)

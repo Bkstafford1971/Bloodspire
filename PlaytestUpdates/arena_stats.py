@@ -239,13 +239,30 @@ def _generate(uploads: dict, team_map: dict, turn_num: int, output_dir: str) -> 
         f.write(html)
     print(f"  Arena stats report written: {out_path}")
 
-    # ── Push arena stats + hub to GitHub Pages ──────────────────────────────
+    # ── Push arena stats + hub + stat pages to GitHub Pages ──────────────────────────────
     try:
         from github_push import push_to_github_pages
+
+        # Load standings for stat pages
+        standings = _load_standings_data()
+
         hub_html = _render_hub_html(turn_num)
+        top_teams_html = _generate_top_teams_page(standings, turn_num)
+        top_wins_html = _generate_top_warriors_page(standings, "wins", "Top 10 Warriors by Wins", turn_num)
+        top_kills_html = _generate_top_warriors_by_kills_page(standings, turn_num)
+        top_losses_html = _generate_top_warriors_page(standings, "losses", "Top 10 Warriors by Losses", turn_num)
+        top_popularity_html = _generate_top_popularity_page(standings, turn_num)
+        race_dist_html = _generate_race_distribution_page(standings, turn_num)
+
         push_to_github_pages({
             "arena_stats.html": html,
-            "stats_hub.html":   hub_html,
+            "stats_hub.html": hub_html,
+            "top_teams.html": top_teams_html,
+            "top_warriors_wins.html": top_wins_html,
+            "top_warriors_kills.html": top_kills_html,
+            "top_warriors_losses.html": top_losses_html,
+            "top_warriors_popularity.html": top_popularity_html,
+            "race_distribution.html": race_dist_html,
         })
     except Exception as _gh_err:
         import traceback
@@ -536,12 +553,12 @@ def _render_html(
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bloodspire — Arena Statistics Turn {turn_num}</title>
+  <title>Bloodspire Arena — Arena Statistics Turn {turn_num}</title>
   <style>{css}</style>
 </head>
 <body>
   <div class="site-header">
-    <div class="site-name">BLOODSPIRE</div>
+    <div class="site-name">BLOODSPIRE ARENA</div>
     <div class="site-subtitle">THE AGONY AMPHITHEATRE</div>
   </div>
   <div class="content">
@@ -572,14 +589,439 @@ def _render_html(
 
 # ── Hub landing page ───────────────────────────────────────────────────────────
 
+def _load_standings_data():
+    """Load standings.json data for stats."""
+    try:
+        import json
+        league_dir = os.path.join(os.path.dirname(__file__), "saves", "league")
+        standings_path = os.path.join(league_dir, "standings.json")
+        with open(standings_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        return {}
+
+
+def _get_top_teams(standings, limit=10):
+    """Get top teams by win percentage from most recent turn results.
+
+    Returns tuple of (teams_list, most_recent_turn_with_results)
+    """
+    import re
+    import json
+
+    # Load most recent results to get accurate records including fallen warriors
+    results = {}
+    most_recent_turn = 0
+    league_dir = os.path.join(os.path.dirname(__file__), "saves", "league")
+
+    for turn in range(9999, -1, -1):
+        turn_dir = os.path.join(league_dir, f"turn_{turn:04d}")
+        if not os.path.exists(turn_dir):
+            continue
+
+        try:
+            for fname in os.listdir(turn_dir):
+                if fname.startswith("result_") and fname.endswith(".json"):
+                    match = re.search(r'result_(\d+)_team(\d+)', fname)
+                    if not match:
+                        continue
+
+                    mgr_id = int(match.group(1))
+                    team_id = int(match.group(2))
+
+                    fpath = os.path.join(turn_dir, fname)
+                    try:
+                        with open(fpath, "r", encoding="utf-8") as f:
+                            data = json.load(f)
+                            key = f"{mgr_id}_team{team_id}"
+                            if key not in results:
+                                results[key] = (data, turn)
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+
+        if results:
+            # Get the turn from the first result found
+            most_recent_turn = next(iter(results.values()))[1]
+            break  # Found most recent turn with results
+
+    # Build teams list with records from results
+    teams = []
+    seen_teams = set()  # Track unique teams to avoid duplicates
+
+    for team_key, team_data in standings.items():
+        team_name = team_data.get("team_name", "?")
+        team_id = team_data.get("team_id", "?")
+        manager = team_data.get("manager_name", "?")
+
+        # Skip invalid teams (missing names or AI teams without proper names)
+        if team_name == "?" or not team_name:
+            continue
+
+        # Try to get records from most recent results
+        w = l = k = 0
+        found_in_results = False
+
+        for upload_key, (result_data, result_turn) in results.items():
+            if str(team_id) in upload_key:
+                # Sum from turn_history for accurate cumulative record
+                turn_history = result_data.get("team", {}).get("turn_history", [])
+                for turn_entry in turn_history:
+                    w += turn_entry.get("w", 0)
+                    l += turn_entry.get("l", 0)
+                    k += turn_entry.get("k", 0)
+                found_in_results = True
+                break
+
+        # Fallback to standings if not in results
+        if not found_in_results:
+            for warrior in team_data.get("warriors", {}).values():
+                w += warrior.get("wins", 0)
+                l += warrior.get("losses", 0)
+                k += warrior.get("kills", 0)
+
+        total = w + l
+        pct = (w / total * 100) if total > 0 else 0
+
+        # Create unique key to avoid duplicates (manager + record)
+        unique_key = (manager, w, l, k)
+        if unique_key not in seen_teams:
+            teams.append({"name": team_name, "id": team_id, "manager": manager, "w": w, "l": l, "k": k, "pct": pct})
+            seen_teams.add(unique_key)
+
+    teams.sort(key=lambda x: (-x["pct"], -x["w"]))
+    return teams[:limit], most_recent_turn
+
+
+def _extract_warrior_data_from_newsletter(newsletter_path):
+    """Extract warrior recognition scores and team names from newsletter file."""
+    recognition = {}
+    warrior_teams = {}
+    try:
+        with open(newsletter_path, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+
+        in_warrior_section = False
+        for line in lines:
+            line = line.rstrip()
+
+            # Detect section headers
+            if "NAME" in line and "W" in line and "L" in line and "K" in line and "REC" in line:
+                in_warrior_section = True
+                continue
+            elif in_warrior_section and line.startswith("="):
+                continue
+            elif in_warrior_section and not line.strip():
+                # Blank line ends the section; "-" prefixed lines are non-fighting warriors (kept)
+                in_warrior_section = False
+                continue
+
+            if in_warrior_section and line.strip():
+                # Parse warrior line: NAME W L K REC TEAM(ID)
+                # Lines may start with "- " for warriors who didn't fight this turn — strip it.
+                parse_line = line.lstrip()
+                if parse_line.startswith("- "):
+                    parse_line = parse_line[2:].lstrip()
+
+                parts = parse_line.split()
+
+                if len(parts) >= 6:  # At least: NAME, W, L, K, REC, TEAM_WORD, (ID)
+                    try:
+                        # Find 4 consecutive numbers (W L K REC)
+                        stats_start_idx = -1
+                        for i in range(len(parts) - 1):
+                            if i + 3 < len(parts):
+                                try:
+                                    int(parts[i])
+                                    int(parts[i + 1])
+                                    int(parts[i + 2])
+                                    int(parts[i + 3])
+                                    # Next part must not be a number (should be team name)
+                                    try:
+                                        int(parts[i + 4])
+                                        continue  # Too many consecutive numbers
+                                    except ValueError:
+                                        stats_start_idx = i
+                                        break
+                                except ValueError:
+                                    pass
+
+                        if stats_start_idx > 0:
+                            rec_val = int(parts[stats_start_idx + 3])
+                            warrior_name = " ".join(parts[:stats_start_idx]).strip()
+
+                            # Find team ID (has parentheses)
+                            team_id_idx = -1
+                            for i in range(len(parts) - 1, -1, -1):
+                                if "(" in parts[i]:
+                                    team_id_idx = i
+                                    break
+
+                            team_str = ""
+                            if team_id_idx > stats_start_idx + 4:
+                                team_str = " ".join(parts[stats_start_idx + 4:team_id_idx]).strip()
+
+                            if warrior_name:
+                                recognition[warrior_name] = rec_val
+                                if team_str:
+                                    warrior_teams[warrior_name] = team_str
+                    except (ValueError, IndexError):
+                        pass
+    except Exception as e:
+        pass
+
+    return recognition, warrior_teams
+
+
+def _get_top_warriors(standings, stat_field, limit=10):
+    """Get top warriors by a specific stat (wins, losses, kills).
+
+    For ties in the stat_field, break ties by recognition ranking (from newsletter).
+    Return results sorted by recognition ranking within the top limit.
+    """
+    import json
+    import os
+
+    # Get current turn from config
+    league_dir = os.path.join(os.path.dirname(__file__), "saves", "league")
+    current_turn = 1
+    try:
+        config_path = os.path.join(league_dir, "config.json")
+        with open(config_path, "r", encoding="utf-8") as f:
+            config = json.load(f)
+            current_turn = config.get("current_turn", 1)
+    except Exception:
+        pass
+
+    # Load recognition scores and team names from most recent newsletter
+    recognition_scores = {}
+    newsletter_warrior_teams = {}
+    try:
+        # Find the most recent newsletter that exists
+        newsletter_path = None
+        for turn in range(current_turn, 0, -1):
+            candidate = os.path.join(league_dir, f"turn_{int(turn):04d}", "newsletter.txt")
+            if os.path.exists(candidate):
+                newsletter_path = candidate
+                break
+
+        if newsletter_path:
+            recognition_scores, newsletter_warrior_teams = _extract_warrior_data_from_newsletter(newsletter_path)
+    except Exception:
+        pass
+
+    # Load managers data
+    managers = {}
+    try:
+        managers_path = os.path.join(league_dir, "managers.json")
+        with open(managers_path, "r", encoding="utf-8") as f:
+            managers_data = json.load(f)
+            for mgr_id, mgr_info in managers_data.items():
+                managers[mgr_id] = mgr_info.get("manager_name", f"Manager {mgr_id}")
+    except Exception:
+        pass
+
+    # Build warriors list with recognition ranking
+    # Use dict to deduplicate by warrior name, keeping the one with most wins
+    warriors_dict = {}
+    for team_key, team_data in standings.items():
+        team_name = team_data.get("team_name", "?")
+        manager_name = team_data.get("manager_name", "?")
+
+        for warrior_id, warrior_data in team_data.get("warriors", {}).items():
+            name = warrior_data.get("name", "?")
+            if name == "?":
+                continue  # Skip unnamed warriors
+
+            w = warrior_data.get("wins", 0)
+            l = warrior_data.get("losses", 0)
+            k = warrior_data.get("kills", 0)
+
+            # Get recognition score from newsletter (default 0)
+            recognition = recognition_scores.get(name, 0)
+
+            # Use team name from newsletter if available, otherwise from standings
+            display_team = newsletter_warrior_teams.get(name, team_name)
+
+            entry = {
+                "name": name, "team": display_team, "wins": w, "losses": l, "kills": k,
+                "recognition": recognition, "manager": manager_name
+            }
+
+            # Keep only the warrior entry with the most wins (or best record)
+            if name not in warriors_dict or w > warriors_dict[name]["wins"]:
+                warriors_dict[name] = entry
+
+    # Exclude warriors not in the current newsletter (recognition == 0 means died a prior turn)
+    warriors = [w for w in warriors_dict.values() if w["recognition"] > 0]
+
+    warriors.sort(key=lambda x: (-x[stat_field], -x["wins"], -x["recognition"]))
+
+    top_warriors = warriors[:limit]
+
+    return top_warriors
+
+
+def _get_top_warriors_by_kills(standings, limit=10):
+    """Get top warriors by kills (primary), then wins, then recognition."""
+    import json
+    import os
+    import re
+
+    # Get current turn from config
+    league_dir = os.path.join(os.path.dirname(__file__), "saves", "league")
+    current_turn = 1
+    try:
+        config_path = os.path.join(league_dir, "config.json")
+        with open(config_path, "r", encoding="utf-8") as f:
+            config = json.load(f)
+            current_turn = config.get("current_turn", 1)
+    except Exception:
+        pass
+
+    # Load recognition scores and team names from most recent newsletter
+    recognition_scores = {}
+    newsletter_warrior_teams = {}
+    try:
+        # Find the most recent newsletter that exists
+        newsletter_path = None
+        for turn in range(current_turn, 0, -1):
+            candidate = os.path.join(league_dir, f"turn_{int(turn):04d}", "newsletter.txt")
+            if os.path.exists(candidate):
+                newsletter_path = candidate
+                break
+
+        if newsletter_path:
+            recognition_scores, newsletter_warrior_teams = _extract_warrior_data_from_newsletter(newsletter_path)
+    except Exception:
+        pass
+
+    # Load managers data
+    managers = {}
+    try:
+        managers_path = os.path.join(league_dir, "managers.json")
+        with open(managers_path, "r", encoding="utf-8") as f:
+            managers_data = json.load(f)
+            for mgr_id, mgr_info in managers_data.items():
+                managers[mgr_id] = mgr_info.get("manager_name", f"Manager {mgr_id}")
+    except Exception:
+        pass
+
+    # Build warrior records from standings (using the entry with most fights as most current)
+    # Use dict to deduplicate by warrior name, keeping the entry with most fights
+    # Also track entries with proper team names for fallback
+    warrior_records = {}
+    warrior_teams = {}
+    warrior_managers = {}
+    for team_key, team_data in standings.items():
+        team_name = team_data.get("team_name", "?")
+        manager_name = team_data.get("manager_name", "?")
+
+        for warrior_id, warrior_data in team_data.get("warriors", {}).items():
+            name = warrior_data.get("name", "?")
+            if name == "?" or not name:
+                continue
+
+            w = warrior_data.get("wins", 0)
+            l = warrior_data.get("losses", 0)
+            k = warrior_data.get("kills", 0)
+            fights = warrior_data.get("fights", 0)
+
+            entry = {
+                "wins": w,
+                "losses": l,
+                "kills": k,
+                "fights": fights
+            }
+
+            # Keep the entry with the most fights (most recent/current data)
+            if name not in warrior_records or fights > warrior_records[name]["fights"]:
+                warrior_records[name] = entry
+
+            # Track best team name for this warrior
+            if team_name != "?" and (name not in warrior_teams or fights > warrior_teams[name].get("fights", 0)):
+                warrior_teams[name] = {"team": team_name, "fights": fights}
+
+            # Track manager for this warrior
+            if name not in warrior_managers or fights > warrior_managers[name].get("fights", 0):
+                warrior_managers[name] = {"manager": manager_name, "fights": fights}
+
+    # Build warriors list from records
+    warriors = []
+    for warrior_name, records in warrior_records.items():
+        if warrior_name == "?" or not warrior_name:
+            continue
+
+        recognition = recognition_scores.get(warrior_name, 0)
+        # Prefer newsletter team, then tracked team with valid name, then fallback
+        if warrior_name in newsletter_warrior_teams:
+            display_team = newsletter_warrior_teams[warrior_name]
+        elif warrior_name in warrior_teams:
+            display_team = warrior_teams[warrior_name]["team"]
+        else:
+            display_team = "?"
+
+        manager_display = warrior_managers.get(warrior_name, {}).get("manager", "?")
+
+        entry = {
+            "name": warrior_name,
+            "team": display_team,
+            "wins": records.get("wins", 0),
+            "losses": records.get("losses", 0),
+            "kills": records.get("kills", 0),
+            "recognition": recognition,
+            "manager": manager_display
+        }
+        warriors.append(entry)
+
+    # Exclude warriors not in the current newsletter (recognition == 0 means died a prior turn)
+    warriors = [w for w in warriors if w["recognition"] > 0]
+
+    warriors.sort(key=lambda x: (-x["kills"], -x["wins"], -x["recognition"]))
+
+    top_warriors = warriors[:limit]
+
+    return top_warriors
+
+
+def _get_top_warriors_by_popularity(standings, limit=10):
+    """Get top warriors by popularity."""
+    warriors = []
+    for team_key, team_data in standings.items():
+        team_name = team_data.get("team_name", "?")
+        for warrior_id, warrior_data in team_data.get("warriors", {}).items():
+            name = warrior_data.get("name", "?")
+            pop = warrior_data.get("popularity", 0)
+            warriors.append({"name": name, "team": team_name, "popularity": pop})
+
+    warriors.sort(key=lambda x: -x["popularity"])
+    return warriors[:limit]
+
+
+def _get_top_warriors_by_race(standings, limit=10):
+    """Get race distribution."""
+    races = {}
+    for team_key, team_data in standings.items():
+        for warrior_id, warrior_data in team_data.get("warriors", {}).items():
+            race = warrior_data.get("race", "Unknown")
+            if race not in races:
+                races[race] = 0
+            races[race] += 1
+
+    race_list = [{"race": race, "count": count} for race, count in races.items()]
+    race_list.sort(key=lambda x: -x["count"])
+    return race_list[:limit]
+
+
 def _render_hub_html(turn_num: int) -> str:
     """
-    Generate the stats_hub.html landing page that links to all reports.
+    Generate the stats_hub.html landing page with statistics.
     Styled to match the Bloodspire aesthetic.
-    Add new reports here as they are created.
     """
     from datetime import datetime
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+
 
     css = """
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -658,13 +1100,13 @@ def _render_hub_html(turn_num: int) -> str:
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bloodspire — Arena Facts</title>
+  <title>Bloodspire Arena — Arena Facts</title>
   <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
   <style>{css}</style>
 </head>
 <body>
   <div class="site-header">
-    <div class="site-name">BLOODSPIRE</div>
+    <div class="site-name">BLOODSPIRE ARENA</div>
     <div class="site-subtitle">The Agony Amphitheatre</div>
   </div>
 
@@ -700,7 +1142,21 @@ def _render_hub_html(turn_num: int) -> str:
         </ul>
       </div>
 
-      <!-- Add new report sections here as they are created -->
+      <div class="section">
+        <div class="section-title">Top Warriors &amp; Teams</div>
+        <div class="section-desc">
+          Rankings and statistics for top teams and individual warriors.
+          Wins, kills, losses, popularity, and racial composition.
+        </div>
+        <ul class="report-links">
+          <li><a href="top_teams.html">Top 10 Teams</a></li>
+          <li><a href="top_warriors_wins.html">Top 10 Warriors by Wins</a></li>
+          <li><a href="top_warriors_kills.html">Top 10 Warriors by Kills</a></li>
+          <li><a href="top_warriors_losses.html">Top 10 Warriors by Losses</a></li>
+          <li><a href="top_warriors_popularity.html">Top 10 Warriors by Popularity</a></li>
+          <li><a href="race_distribution.html">Race Distribution</a></li>
+        </ul>
+      </div>
 
     </div>
   </div>
@@ -712,3 +1168,525 @@ def _render_hub_html(turn_num: int) -> str:
 </body>
 </html>
 """
+
+
+def _render_stat_page(title: str, headers: list, rows: list, turn_num: int, dead_rows: list = None) -> str:
+    """Generate a generic stat page with a table."""
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    header_html = "".join(f'<th style="text-align: left; padding: 8px; color: #ffcc00; border-bottom: 1px solid #440000;">{h}</th>' for h in headers)
+
+    row_html = ""
+    for i, row in enumerate(rows):
+        is_dead = dead_rows is not None and i < len(dead_rows) and dead_rows[i]
+        row_style = ' style="opacity:0.65; color:#888;"' if is_dead else ''
+        cells = "".join(f'<td style="padding: 6px; border-bottom: 1px solid #220000;">{cell}</td>' for cell in row)
+        row_html += f"<tr{row_style}>{cells}</tr>"
+
+    css = """
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        background: #000; color: #fff;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 14px; line-height: 1.6;
+    }
+    .site-header {
+        background: #000;
+        border-bottom: 2px solid #880000;
+        padding: 20px 40px 16px;
+    }
+    .site-name {
+        font-family: 'Metal Mania', cursive;
+        font-size: 3.2em; letter-spacing: 3px; text-transform: uppercase;
+        background: linear-gradient(to bottom, #3a0000 0%, #8b1a1a 40%, #a31616 60%, #2a0000 100%);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        display: inline-block;
+        filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.8));
+    }
+    .content {
+        padding: 36px 40px 60px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    .page-title {
+        font-size: 1.8em; font-weight: bold; color: #fff;
+        margin-bottom: 12px; letter-spacing: 1px;
+    }
+    .page-intro {
+        color: #999; font-size: 0.85em; margin-bottom: 24px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    .back-link {
+        color: #ffcc00; text-decoration: none; margin-bottom: 20px; display: inline-block;
+    }
+    .back-link:hover { text-decoration: underline; }
+    table {
+        width: 100%; border-collapse: collapse;
+        font-family: 'Courier New', monospace; font-size: 0.9em;
+    }
+    .footer {
+        border-top: 1px solid #220000;
+        padding: 14px 40px;
+        color: #444; font-size: 0.75em;
+        font-family: 'Courier New', Courier, monospace;
+        text-align: center;
+        margin-top: 40px;
+    }
+    """
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bloodspire Arena — {title}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+  <style>{css}</style>
+</head>
+<body>
+  <div class="site-header">
+    <div class="site-name">BLOODSPIRE ARENA</div>
+  </div>
+  <div class="content">
+    <a class="back-link" href="stats_hub.html">&lt;&lt; Back to Stats Hub</a>
+    <div class="page-title">{title}</div>
+    <div class="page-intro">Turn {turn_num} | Updated: {timestamp}</div>
+    <table>
+      <tr>{header_html}</tr>
+      {row_html}
+    </table>
+  </div>
+  <div class="footer">All data as of Turn {turn_num}</div>
+</body>
+</html>
+"""
+
+
+def _generate_top_teams_page(standings: dict, turn_num: int) -> str:
+    """Generate top teams page using data from most recent completed turn."""
+    teams, results_turn = _get_top_teams(standings)
+    headers = ["Team", "Manager", "W", "L", "K", "%"]
+    rows = [[f"{t['name']}", t['manager'], str(t['w']), str(t['l']), str(t['k']), f"{t['pct']:.1f}%"] for t in teams]
+    # Use the turn from results, not the current turn
+    return _render_stat_page("Top 10 Teams", headers, rows, results_turn if results_turn > 0 else turn_num)
+
+
+def _generate_top_warriors_page(standings: dict, stat_field: str, title: str, turn_num: int) -> str:
+    """Generate top warriors page sorted by wins, then recognition."""
+    warriors = _get_top_warriors(standings, stat_field)
+    headers = ["Warrior", "Team", "Record", "Recognition", "Manager"]
+    rows = []
+    for w in warriors:
+        rows.append([w['name'], w['team'], f"{w['wins']}-{w['losses']}-{w['kills']}", str(w.get('recognition', 0)), w.get('manager', '?')])
+    return _render_stat_page(title, headers, rows, turn_num)
+
+
+def _generate_top_warriors_by_kills_page(standings: dict, turn_num: int) -> str:
+    """Generate top warriors by kills page sorted by kills, then wins, then recognition."""
+    warriors = _get_top_warriors_by_kills(standings)
+    headers = ["Warrior", "Team", "Record", "Recognition", "Manager"]
+    rows = []
+    for w in warriors:
+        rows.append([w['name'], w['team'], f"{w['wins']}-{w['losses']}-{w['kills']}", str(w.get('recognition', 0)), w.get('manager', '?')])
+    return _render_stat_page("Top 10 Warriors by Kills", headers, rows, turn_num)
+
+
+def _get_top_warriors_by_losses(standings, limit=10):
+    """Get top warriors by losses (primary), then wins, then recognition."""
+    import json
+    import os
+
+    # Get current turn from config
+    league_dir = os.path.join(os.path.dirname(__file__), "saves", "league")
+    current_turn = 1
+    try:
+        config_path = os.path.join(league_dir, "config.json")
+        with open(config_path, "r", encoding="utf-8") as f:
+            config = json.load(f)
+            current_turn = config.get("current_turn", 1)
+    except Exception:
+        pass
+
+    # Load recognition scores and team names from most recent newsletter
+    recognition_scores = {}
+    newsletter_warrior_teams = {}
+    try:
+        # Find the most recent newsletter that exists
+        newsletter_path = None
+        for turn in range(current_turn, 0, -1):
+            candidate = os.path.join(league_dir, f"turn_{int(turn):04d}", "newsletter.txt")
+            if os.path.exists(candidate):
+                newsletter_path = candidate
+                break
+
+        if newsletter_path:
+            recognition_scores, newsletter_warrior_teams = _extract_warrior_data_from_newsletter(newsletter_path)
+    except Exception:
+        pass
+
+    # Load managers data
+    managers = {}
+    try:
+        managers_path = os.path.join(league_dir, "managers.json")
+        with open(managers_path, "r", encoding="utf-8") as f:
+            managers_data = json.load(f)
+            for mgr_id, mgr_info in managers_data.items():
+                managers[mgr_id] = mgr_info.get("manager_name", f"Manager {mgr_id}")
+    except Exception:
+        pass
+
+    # Build warrior records from standings (using the entry with most fights as most current)
+    # Use dict to deduplicate by warrior name, keeping the entry with most fights
+    # Also track entries with proper team names for fallback
+    warrior_records = {}
+    warrior_teams = {}
+    warrior_managers = {}
+    for team_key, team_data in standings.items():
+        team_name = team_data.get("team_name", "?")
+        manager_name = team_data.get("manager_name", "?")
+
+        for warrior_id, warrior_data in team_data.get("warriors", {}).items():
+            name = warrior_data.get("name", "?")
+            if name == "?" or not name:
+                continue
+
+            w = warrior_data.get("wins", 0)
+            l = warrior_data.get("losses", 0)
+            k = warrior_data.get("kills", 0)
+            fights = warrior_data.get("fights", 0)
+
+            entry = {
+                "wins": w,
+                "losses": l,
+                "kills": k,
+                "fights": fights
+            }
+
+            # Keep the entry with the most fights (most recent/current data)
+            if name not in warrior_records or fights > warrior_records[name]["fights"]:
+                warrior_records[name] = entry
+
+            # Track best team name for this warrior
+            if team_name != "?" and (name not in warrior_teams or fights > warrior_teams[name].get("fights", 0)):
+                warrior_teams[name] = {"team": team_name, "fights": fights}
+
+            # Track manager for this warrior
+            if name not in warrior_managers or fights > warrior_managers[name].get("fights", 0):
+                warrior_managers[name] = {"manager": manager_name, "fights": fights}
+
+    # Build warriors list from records
+    warriors = []
+    for warrior_name, records in warrior_records.items():
+        if warrior_name == "?" or not warrior_name:
+            continue
+
+        recognition = recognition_scores.get(warrior_name, 0)
+        # Prefer newsletter team, then tracked team with valid name, then fallback
+        if warrior_name in newsletter_warrior_teams:
+            display_team = newsletter_warrior_teams[warrior_name]
+        elif warrior_name in warrior_teams:
+            display_team = warrior_teams[warrior_name]["team"]
+        else:
+            display_team = "?"
+
+        manager_display = warrior_managers.get(warrior_name, {}).get("manager", "?")
+
+        entry = {
+            "name": warrior_name,
+            "team": display_team,
+            "wins": records.get("wins", 0),
+            "losses": records.get("losses", 0),
+            "kills": records.get("kills", 0),
+            "recognition": recognition,
+            "manager": manager_display
+        }
+        warriors.append(entry)
+
+    # Exclude warriors not in the current newsletter (recognition == 0 means died a prior turn)
+    warriors = [w for w in warriors if w["recognition"] > 0]
+
+    warriors.sort(key=lambda x: (-x["losses"], -x["wins"], -x["recognition"]))
+
+    top_warriors = warriors[:limit]
+
+    return top_warriors
+
+
+def _generate_top_warriors_by_losses_page(standings: dict, turn_num: int) -> str:
+    """Generate top warriors by losses page sorted by losses, then wins, then recognition."""
+    warriors = _get_top_warriors_by_losses(standings)
+    headers = ["Warrior", "Team", "Record", "Recognition", "Manager"]
+    rows = []
+    for w in warriors:
+        rows.append([w['name'], w['team'], f"{w['wins']}-{w['losses']}-{w['kills']}", str(w.get('recognition', 0)), w.get('manager', '?')])
+    return _render_stat_page("Top 10 Warriors by Losses", headers, rows, turn_num)
+
+
+def _generate_race_distribution_page(standings: dict, turn_num: int) -> str:
+    """Generate warriors by race page with top 10 per race sorted by recognition."""
+    import json
+    import os
+
+    # Get current turn from config
+    league_dir = os.path.join(os.path.dirname(__file__), "saves", "league")
+    current_turn = 1
+    try:
+        config_path = os.path.join(league_dir, "config.json")
+        with open(config_path, "r", encoding="utf-8") as f:
+            config = json.load(f)
+            current_turn = config.get("current_turn", 1)
+    except Exception:
+        pass
+
+    # Load recognition scores from most recent newsletter (go back further to find one)
+    recognition_scores = {}
+    try:
+        newsletter_path = None
+        for turn in range(current_turn + 5, 0, -1):  # Look back further
+            candidate = os.path.join(league_dir, f"turn_{int(turn):04d}", "newsletter.txt")
+            if os.path.exists(candidate):
+                newsletter_path = candidate
+                break
+
+        if newsletter_path:
+            recognition_scores, _ = _extract_warrior_data_from_newsletter(newsletter_path)
+    except Exception:
+        pass
+
+    # Load managers data
+    managers = {}
+    try:
+        managers_path = os.path.join(league_dir, "managers.json")
+        with open(managers_path, "r", encoding="utf-8") as f:
+            managers_data = json.load(f)
+            for mgr_id, mgr_info in managers_data.items():
+                managers[mgr_id] = mgr_info.get("manager_name", f"Manager {mgr_id}")
+    except Exception:
+        pass
+
+    # Build warrior records grouped by race (from result files for accurate race data)
+    warriors_by_race = {}
+    for race in PLAYABLE_RACES:
+        warriors_by_race[race] = []
+
+    # Collect warrior data with race and stats from result files
+    warriors_with_race = {}
+    for turn in range(current_turn, 0, -1):
+        turn_dir = os.path.join(league_dir, f"turn_{int(turn):04d}")
+        if not os.path.exists(turn_dir):
+            continue
+
+        try:
+            result_files = [f for f in os.listdir(turn_dir) if f.startswith("result_") and f.endswith(".json")]
+        except Exception:
+            continue
+
+        for result_file in result_files:
+            try:
+                with open(os.path.join(turn_dir, result_file), "r", encoding="utf-8") as f:
+                    result_data = json.load(f)
+                    team_data = result_data.get("team", {})
+                    team_name = team_data.get("team_name", "?")
+                    team_id = team_data.get("team_id", "?")
+                    turn_history = result_data.get("turn_history", {})
+
+                    # Extract manager ID from result filename
+                    parts = result_file.replace("result_", "").replace(".json", "").split("_")
+                    manager_id = parts[0] if parts else "?"
+                    manager_name = managers.get(manager_id, f"Manager {manager_id}")
+
+                    for warrior in team_data.get("warriors", []):
+                        name = warrior.get("name", "?")
+                        if name == "?" or not name:
+                            continue
+
+                        race = warrior.get("race", "?")
+                        gender = warrior.get("gender", "?")
+
+                        # Get cumulative stats from warrior object in result file
+                        w = warrior.get("wins", 0)
+                        l = warrior.get("losses", 0)
+                        k = warrior.get("kills", 0)
+                        fights = w + l  # Calculate fights from wins + losses
+
+                        recognition = recognition_scores.get(name, 0)
+
+                        entry = {
+                            "name": name,
+                            "race": race,
+                            "gender": gender,
+                            "wins": w,
+                            "losses": l,
+                            "kills": k,
+                            "recognition": recognition,
+                            "team_name": team_name,
+                            "team_id": team_id,
+                            "manager_name": manager_name,
+                            "manager_id": manager_id,
+                            "fights": fights
+                        }
+
+                        # Keep entry with most fights (most complete record)
+                        if name not in warriors_with_race or fights > warriors_with_race[name]["fights"]:
+                            warriors_with_race[name] = entry
+            except Exception:
+                pass
+
+    # Group into races
+    for warrior_name, warrior_entry in warriors_with_race.items():
+        race = warrior_entry["race"]
+        if race in warriors_by_race:
+            warriors_by_race[race].append(warrior_entry)
+
+    # Sort each race by recognition (descending) and take top 10
+    for race in warriors_by_race:
+        warriors_by_race[race].sort(key=lambda x: (-x["recognition"], -x["wins"]))
+        warriors_by_race[race] = warriors_by_race[race][:10]
+
+    # Generate HTML
+    html_parts = []
+    html_parts.append(_render_page_header(f"Warriors by Race as of turn {turn_num}"))
+
+    # Plural mapping for races
+    race_plural = {
+        "Human": "Humans",
+        "Half-Orc": "Half-Orcs",
+        "Halfling": "Halflings",
+        "Dwarf": "Dwarves",
+        "Half-Elf": "Half-Elves",
+        "Elf": "Elves",
+        "Goblin": "Goblins",
+        "Gnome": "Gnomes",
+        "Lizardfolk": "Lizardfolk",
+        "Tabaxi": "Tabaxi",
+    }
+
+    for race in PLAYABLE_RACES:
+        if not warriors_by_race[race]:
+            continue
+
+        race_name_plural = race_plural.get(race, f"{race}s")
+        html_parts.append(f"<h2>Top 10 {race_name_plural} by Ranking</h2>")
+        html_parts.append("<table style=\"width: 100%; border-collapse: collapse; font-family: 'Courier New', monospace; font-size: 0.85em; margin-bottom: 40px;\">")
+        html_parts.append("<tr style=\"background-color: #1a1a1a; border-bottom: 2px solid #440000;\">")
+        html_parts.append("<th style=\"text-align: left; padding: 8px; color: #ffcc00;\">Warrior Name</th>")
+        html_parts.append("<th style=\"text-align: center; padding: 8px; color: #ffcc00; width: 40px;\">Win</th>")
+        html_parts.append("<th style=\"text-align: center; padding: 8px; color: #ffcc00; width: 40px;\">Loss</th>")
+        html_parts.append("<th style=\"text-align: center; padding: 8px; color: #ffcc00; width: 40px;\">Kill</th>")
+        html_parts.append("<th style=\"text-align: center; padding: 8px; color: #ffcc00; width: 50px;\">Ranked</th>")
+        html_parts.append("<th style=\"text-align: left; padding: 8px; color: #ffcc00;\">Team Name (Team#)</th>")
+        html_parts.append("<th style=\"text-align: left; padding: 8px; color: #ffcc00;\">Manager Name (Manager#)</th>")
+        html_parts.append("</tr>")
+
+        for warrior in warriors_by_race[race]:
+            # Grey out entire row for dead warriors (recognition = 0)
+            row_style = "color: #666;" if warrior['recognition'] == 0 else ""
+            html_parts.append(f"<tr style=\"border-bottom: 1px solid #220000; {row_style}\">")
+            html_parts.append(f"<td style=\"padding: 6px;\">{warrior['name']}</td>")
+            html_parts.append(f"<td style=\"padding: 6px; text-align: center;\">{warrior['wins']}</td>")
+            html_parts.append(f"<td style=\"padding: 6px; text-align: center;\">{warrior['losses']}</td>")
+            html_parts.append(f"<td style=\"padding: 6px; text-align: center;\">{warrior['kills']}</td>")
+            html_parts.append(f"<td style=\"padding: 6px; text-align: center;\">{warrior['recognition']}</td>")
+            html_parts.append(f"<td style=\"padding: 6px;\">{warrior['team_name']} ({warrior['team_id']})</td>")
+            html_parts.append(f"<td style=\"padding: 6px;\">{warrior['manager_name']} ({warrior['manager_id']})</td>")
+            html_parts.append("</tr>")
+
+        html_parts.append("</table>")
+
+    html_parts.append(_render_page_footer(turn_num))
+
+    return "\n".join(html_parts)
+
+
+def _render_page_header(title: str) -> str:
+    """Render the HTML page header."""
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bloodspire Arena — {title}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+    body {{
+        background: #000; color: #fff;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 14px; line-height: 1.6;
+    }}
+    .site-header {{
+        background: #000;
+        border-bottom: 2px solid #880000;
+        padding: 20px 40px 16px;
+    }}
+    .site-name {{
+        font-family: 'Metal Mania', cursive;
+        font-size: 3.2em; letter-spacing: 3px; text-transform: uppercase;
+        background: linear-gradient(to bottom, #3a0000 0%, #8b1a1a 40%, #a31616 60%, #2a0000 100%);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        display: inline-block;
+        filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.8));
+    }}
+    .content {{
+        padding: 36px 40px 60px;
+        max-width: 100%;
+    }}
+    .page-title {{
+        font-size: 1.8em; font-weight: bold; color: #fff;
+        margin-bottom: 12px; letter-spacing: 1px;
+    }}
+    .page-intro {{
+        color: #999; font-size: 0.85em; margin-bottom: 24px;
+        font-family: 'Courier New', Courier, monospace;
+    }}
+    .back-link {{
+        color: #ffcc00; text-decoration: none; margin-bottom: 20px; display: inline-block;
+    }}
+    .back-link:hover {{ text-decoration: underline; }}
+    h2 {{
+        color: #fff; font-size: 1.3em; margin-top: 40px; margin-bottom: 16px;
+        letter-spacing: 1px;
+    }}
+    .footer {{
+        border-top: 1px solid #220000;
+        padding: 14px 40px;
+        color: #444; font-size: 0.75em;
+        font-family: 'Courier New', Courier, monospace;
+        text-align: center;
+        margin-top: 40px;
+    }}
+  </style>
+</head>
+<body>
+  <div class="site-header">
+    <div class="site-name">BLOODSPIRE ARENA</div>
+  </div>
+  <div class="content">
+    <a class="back-link" href="stats_hub.html">&lt;&lt; Back to Stats Hub</a>
+    <div class="page-title">{title}</div>
+    <div class="page-intro">Updated: {timestamp}</div>
+"""
+
+
+def _render_page_footer(turn_num: int) -> str:
+    """Render the HTML page footer."""
+    return f"""
+  </div>
+  <div class="footer">All data as of Turn {turn_num}</div>
+</body>
+</html>
+"""
+
+
+def _generate_top_popularity_page(standings: dict, turn_num: int) -> str:
+    """Generate top popularity page."""
+    warriors = _get_top_warriors_by_popularity(standings)
+    headers = ["Warrior", "Team", "Popularity"]
+    rows = [[w['name'], w['team'], str(w['popularity'])] for w in warriors]
+    return _render_stat_page("Top 10 Warriors by Popularity", headers, rows, turn_num)
+
+

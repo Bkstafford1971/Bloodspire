@@ -283,6 +283,11 @@ def evaluate_triggers(
     return strategies[-1], len(strategies)
 
 
+def get_active_battle_cries(warrior, fs_self, fs_foe, minute, triggered_battle_cries, prev_damage_category):
+    # Feature not yet active — returns no cries and leaves damage tracking unchanged
+    return [], prev_damage_category
+
+
 # ---------------------------------------------------------------------------
 # STYLE COMBAT MECHANICS TABLES
 # ---------------------------------------------------------------------------
