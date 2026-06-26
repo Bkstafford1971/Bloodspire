@@ -139,7 +139,9 @@ VERSATILE_WEAPONS = {
 
 # Weapons that use finesse/precision damage calculation (small weapon skill bonus)
 FINESSE_DAMAGE_WEAPONS = {
-    "stiletto", "cestus", "knife", "dagger", "epee"
+    "stiletto", "knife", "dagger", "short_sword", "epee", "scimitar",
+    "hatchet", "francisca", "hammer", "short_spear", "flail",
+    "cestus", "javelin", "swordbreaker", "bola"
 }
 
 
