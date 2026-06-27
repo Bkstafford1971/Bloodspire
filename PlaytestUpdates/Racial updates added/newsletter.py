@@ -1435,6 +1435,47 @@ def _block_commentary(card, teams, deaths, turn_num: int, champion_state: dict, 
 # TOP MANAGERS SECTION
 # ---------------------------------------------------------------------------
 
+def _should_hide_manager(mgr_name, turn_num, manager_records_file):
+    """
+    Check if a manager should be hidden from the newsletter.
+    They are hidden if they missed 3+ consecutive turns.
+    """
+    import os
+    import json
+
+    try:
+        if not os.path.exists(manager_records_file):
+            return False
+
+        with open(manager_records_file, "r", encoding="utf-8") as f:
+            all_records = json.load(f)
+
+        # Check if manager participated this turn
+        if str(turn_num) not in all_records or mgr_name not in all_records[str(turn_num)]:
+            # Manager didn't participate this turn
+            missed_turns = 1
+            # Count consecutive missed turns going backwards
+            for past_turn in range(turn_num - 1, 0, -1):
+                if str(past_turn) in all_records and mgr_name in all_records[str(past_turn)]:
+                    # Manager participated in this past turn, check if they fought
+                    rec = all_records[str(past_turn)][mgr_name]
+                    total_fights = rec.get("w", 0) + rec.get("l", 0)
+                    if total_fights > 0:
+                        # They fought in this turn, so streak ends
+                        break
+                missed_turns += 1
+
+            # Hide if 3+ consecutive turns missed
+            return missed_turns >= 3
+        else:
+            # Manager participated this turn, don't hide
+            return False
+
+    except Exception as e:
+        # On error, don't hide manager
+        return False
+
+
 def _save_manager_records(turn_num, manager_records):
     """
     Save manager records for this turn to manager_records.json.
@@ -1583,8 +1624,15 @@ def _top_managers(card, teams, turn_num, return_records=False):
                 manager_records[mgr]["l"] += 1
 
     # Calculate win percentages and sort
+    league_dir = os.path.dirname(os.path.abspath(__file__))
+    manager_records_file = os.path.join(league_dir, "manager_records.json")
+
     manager_list = []
     for mgr_name, rec in manager_records.items():
+        # Skip managers who missed 3+ consecutive turns
+        if _should_hide_manager(mgr_name, turn_num, manager_records_file):
+            continue
+
         total_fights = rec["w"] + rec["l"]
         win_pct = (rec["w"] / total_fights * 100) if total_fights > 0 else 0
         career_total = rec["cw"] + rec["cl"]
