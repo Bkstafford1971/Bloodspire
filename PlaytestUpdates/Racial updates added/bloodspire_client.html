@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>BLOODSPIRE Client - v2.8.6</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&display=swap');
 /* ============================================================
    WINDOWS CLASSIC - REFINED
    ============================================================ */
@@ -213,7 +214,7 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 .nar-col-l     { flex:1; }
 .nar-col-vs    { flex:0 0 48px; text-align:center; color:#555; font-size:22px; font-weight:bold; align-self:center; }
 .nar-col-r     { flex:1; font-size:12px; color:#333; }
-.nar-wname     { font-weight:bold; font-size:24px; color:#000; }
+.nar-wname     { font-weight:bold; font-size:21px; color:#000; font-family:'Cinzel', serif; }
 .nar-wrec      { font-weight:bold; color:#555; font-size:16px; }
 .nar-prose     { font-family:'Courier New',monospace; font-size:12px; line-height:1.5; margin:1px 0; color:#000; }
 /* Strategy table */
@@ -6186,7 +6187,7 @@ function narrativeToHtml(text) {
       }
 
       // Prose lines - bold warrior name prefix + any ALL-CAPS items (armor, weapons)
-      const pm = ln.match(/^([A-Z][A-Z ']{2,}?)(\s+(?:is |weighs |Has |enters |fights |has |wears |carries ))/);
+      const pm = ln.match(/^([A-Z][A-Z ']{2,}?)(\s+(?:is |weighs |Has |enters |fights |has |wears |carries |[A-Z][a-z]))/);
       if (pm) {
         const name = pm[1];
         const rest = ln.slice(name.length);
