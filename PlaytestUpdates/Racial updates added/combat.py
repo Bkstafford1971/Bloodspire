@@ -1666,18 +1666,28 @@ def _calc_damage_verbose(
 
 def _concede_check_verbose(warrior: "Warrior", state: "_CState", is_monster_fight: bool = False):
     if is_monster_fight:
-        return False, {"monster_fight": True, "d100": 0, "PRE_bonus": 0, "luck_half": 0, "total": 0, "threshold": 0}
+        return False, {"monster_fight": True, "d100": 0, "PRE_bonus": 0, "popularity_bonus": 0, "luck_half": 0, "total": 0, "threshold": 0}
     roll      = _d100()
     presence  = warrior.presence
     pre_b     = max(-6, min(10, presence - 10))
+
+    # Popularity bonus to concede odds (fans cheer for their favorites, capped at +15)
+    pop_bonus = 0
+    if warrior.popularity >= 91:
+        pop_bonus = 15
+    elif warrior.popularity >= 81:
+        pop_bonus = 10
+    elif warrior.popularity >= 71:
+        pop_bonus = 6
+
     # Probabilistic luck: 25% chance to apply luck//2 bonus to this concede roll
     luck_contribution = _apply_conditional_luck(0, warrior, threshold=25)
     luck_half = luck_contribution // 2
-    total     = roll + pre_b + luck_half
+    total     = roll + pre_b + pop_bonus + luck_half
     threshold = max(40, 68 - (presence // 3))
     granted   = total >= threshold
     return granted, {
-        "d100": roll, "PRE_bonus": pre_b, "luck_half": luck_half,
+        "d100": roll, "PRE_bonus": pre_b, "popularity_bonus": pop_bonus, "luck_half": luck_half,
         "total": total, "threshold": threshold,
     }
 
@@ -1912,8 +1922,12 @@ def _death_check(prev_hp: int, damage: int) -> bool:
 
 def _concede_check(warrior: Warrior, state: _CState, is_monster_fight: bool = False) -> bool:
     """
-    d100 + PRE_bonus + luck//2 vs threshold (max(40, 68 - PRE//3)).
+    d100 + PRE_bonus + popularity_bonus + luck//2 vs threshold (max(40, 68 - PRE//3)).
     High Presence = lower threshold = easier to get mercy.
+    High Popularity = further bonus to roll (star athletes get mercy, capped at +15).
+    Popular warriors (71-80): +6 to roll
+    Very popular (81-90): +10 to roll
+    Legendary (91-100): +15 to roll (capped - death remains possible)
     Effective mercy rate ~40-55% when triggered; overall fight death ~2.5-3%.
     Luck is probabilistic: 25% chance to apply luck//2 bonus to concede roll.
     """
@@ -1922,9 +1936,19 @@ def _concede_check(warrior: Warrior, state: _CState, is_monster_fight: bool = Fa
     roll      = _d100()
     presence  = warrior.presence
     pre_b     = max(-6, min(10, presence - 10))
+
+    # Popularity bonus to concede odds (fans cheer for their favorites, capped at +15)
+    pop_bonus = 0
+    if warrior.popularity >= 91:
+        pop_bonus = 15
+    elif warrior.popularity >= 81:
+        pop_bonus = 10
+    elif warrior.popularity >= 71:
+        pop_bonus = 6
+
     # Probabilistic luck: 25% chance to apply luck//2 bonus to this concede roll
     luck_contribution = _apply_conditional_luck(0, warrior, threshold=25) // 2
-    total     = roll + pre_b + luck_contribution
+    total     = roll + pre_b + pop_bonus + luck_contribution
     threshold = max(40, 68 - (presence // 3))
     return total >= threshold
 
@@ -1977,6 +2001,15 @@ def _update_endurance(
     # Overencumbrance burn penalty
     if state.armor_penalty > 0:
         burn *= (1.0 + state.armor_penalty)
+
+    # Heavy armor endurance burn penalty (Chain and heavier)
+    heavy_armor_burn_multipliers = {
+        "Chain": 1.12,
+        "Half-Plate": 1.18,
+        "Full Plate": 1.25,
+    }
+    if warrior.armor in heavy_armor_burn_multipliers:
+        burn *= heavy_armor_burn_multipliers[warrior.armor]
 
     # Phase II feedback spiral: already exhausted → reserves drain 25% faster
     phase2 = warrior.max_endurance * 0.25
@@ -2141,6 +2174,15 @@ def _calc_apm_with_fraction(warrior: Warrior, strategy: Strategy, state: _CState
     # Under-strength armor penalty to APM
     if state.armor_penalty > 0:
         base *= (1.0 - state.armor_penalty)
+
+    # Heavy armor APM penalty (Chain and heavier)
+    heavy_armor_apm_penalties = {
+        "Chain": 0.03,
+        "Half-Plate": 0.05,
+        "Full Plate": 0.08,
+    }
+    if warrior.armor in heavy_armor_apm_penalties:
+        base *= (1.0 - heavy_armor_apm_penalties[warrior.armor])
 
     # Clamp and split into base + fraction
     base = max(1.0, min(10.0, base))
