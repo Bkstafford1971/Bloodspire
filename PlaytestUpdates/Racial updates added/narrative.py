@@ -236,7 +236,7 @@ def _warrior_report_block(w: Warrior) -> list:
     lines = []
     lines.append(f"{w.name.upper()} is {h_ft}'{h_in}\"")
     lines.append(f"{w.name.upper()} weighs {w.weight_lbs} lbs.")
-    lines.append(f"{w.name.upper()} {popularity_desc(w.popularity).title()}.")
+    lines.append(f"{w.name.upper()} {popularity_desc(w.popularity).title()}. (pop. {w.popularity})")
 
     # Safely handle armor and helm (convert to string if not already)
     armor_val = w.armor
@@ -342,7 +342,7 @@ def _warrior_report_block(w: Warrior) -> list:
 
     # ALWAYS add weapon description line - this should NEVER be skipped
     if off and off != "OPEN HAND":
-        lines.append(f"{w.name.upper()} fights using {_article(main)} {main} with an off-hand {off.lower()}.")
+        lines.append(f"{w.name.upper()} fights using {_article(main)} {main} with an off-hand {off}.")
     else:
         lines.append(f"{w.name.upper()} fights using {_article(main)} {main}.")
 
@@ -350,7 +350,11 @@ def _warrior_report_block(w: Warrior) -> list:
     if bak:
         try:
             backup_desc = _backup_weapon_description(bak, w.gender)
-            lines.append(f"{w.name.upper()} {backup_desc}.")
+            # Convert description to lowercase, then keep weapon name in ALL CAPS for client bolding
+            backup_desc_lower = backup_desc.lower()
+            bak_upper = bak.upper()
+            backup_desc_final = backup_desc_lower.replace(bak_upper.lower(), bak_upper)
+            lines.append(f"{w.name.upper()} {backup_desc_final}.")
         except Exception:
             lines.append(f"{w.name.upper()} carries a spare {bak.upper()} as backup.")
 
@@ -408,18 +412,32 @@ def build_fight_header(
 
     lines = [SEP]
 
-    # Matchup title - warrior names with contextual separator
-    left  = f"{warrior_a.name.upper()} ({warrior_a.record_str})"
-    right = f"{warrior_b.name.upper()} ({warrior_b.record_str})"
-
-    # Always use 'vs' for the top header as per user request
-    lines.append(_hdr(left, "vs", right))
-
+    # Matchup title - warrior names on top, record below
     lines.append(_hdr(
-        f"{team_a_name.upper()} ({manager_a_name.upper()})",
+        f"{warrior_a.name.upper()}",
         "vs",
-        f"{team_b_name.upper()} ({manager_b_name.upper()})",
+        f"{warrior_b.name.upper()}",
     ))
+
+    # Record line (separate, larger in client CSS)
+    lines.append(_hdr(
+        f"{warrior_a.record_str}",
+        "vs",
+        f"{warrior_b.record_str}",
+    ))
+
+    # Team and Manager separated to individual lines
+    lines.append(_hdr(
+        f"TEAM: {team_a_name.upper()}",
+        "vs",
+        f"TEAM: {team_b_name.upper()}",
+    ))
+    lines.append(_hdr(
+        f"MANAGER: {manager_a_name.upper()}",
+        "vs",
+        f"MANAGER: {manager_b_name.upper()}",
+    ))
+
     lines.append(_hdr(
         f"{warrior_a.race.name} {warrior_a.gender}",
         "vs",
@@ -2792,7 +2810,7 @@ PERM_PAIN_LINES: dict[str, list[str]] = {
         "{w}'s shield arm goes partially numb!!",
     ],
     "primary_leg"  : [
-        "{w}'s leg spasms in pain, causing {him} to roll around in the dirt, wracked with extreme pain!!",
+        "{w}'s leg seizes up with blinding pain, every step a desperate struggle!!",
         "{w}'s leg gives way completely!!",
     ],
     "secondary_leg": [
@@ -3003,7 +3021,7 @@ CRITICAL_HIT_PIERCING = [
     "{attacker}'s attack looks like a probe until it isn't, and {his_her} {weapon} sinks to striking depth before {defender} can react.",
     "{attacker} waits for the gap, driving the point through a vital junction with mechanical precision.",
     "One perfectly timed thrust from {attacker} catches {defender} at the worst possible moment, the point driving home into a critical area.",
-    "{attacker} moves the weapon on a line that looks impossible until it arrives -threading through the guard to find the soft tissue beyond.",
+    "{attacker} moves the weapon on a line that looks impossible until it arrives, threading through the guard to find the soft tissue beyond.",
 ]
 
 CRITICAL_HIT_CRUSHING = [

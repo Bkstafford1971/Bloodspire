@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v2.8.4</title>
+<title>BLOODSPIRE Client - v2.8.6</title>
 <style>
 /* ============================================================
    WINDOWS CLASSIC - REFINED
@@ -146,8 +146,10 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 
 /* Menu bar */
 #menu-bar { background: var(--bg); border-bottom: 1px solid var(--mid); display: flex; padding: 1px 4px; gap: 0; }
-.menu-item { padding: 3px 10px; cursor: default; font-size: 12px; }
+.menu-item { padding: 3px 10px; cursor: default; font-size: 12px; color: #000; }
 .menu-item:hover { background: var(--sel); color: var(--sel-tx); }
+#action-dropdown .menu-item { font-weight: bold; color: #000; }
+#action-dropdown .menu-item:hover { background: var(--sel); color: var(--sel-tx); font-weight: bold; }
 
 /* Main layout */
 #app { display: flex; flex-direction: column; height: 100vh; }
@@ -209,10 +211,10 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 .nar-sep       { border-top:2px solid #aaa; margin:8px 0; }
 .nar-row       { display:flex; align-items:baseline; font-family:'Courier New',monospace; margin:1px 0; }
 .nar-col-l     { flex:1; }
-.nar-col-vs    { flex:0 0 48px; text-align:center; color:#555; font-size:15px; font-weight:bold; align-self:center; }
+.nar-col-vs    { flex:0 0 48px; text-align:center; color:#555; font-size:22px; font-weight:bold; align-self:center; }
 .nar-col-r     { flex:1; font-size:12px; color:#333; }
-.nar-wname     { font-weight:bold; font-size:15px; color:#000; }
-.nar-wrec      { color:#555; font-size:12px; }
+.nar-wname     { font-weight:bold; font-size:24px; color:#000; }
+.nar-wrec      { font-weight:bold; color:#555; font-size:16px; }
 .nar-prose     { font-family:'Courier New',monospace; font-size:12px; line-height:1.5; margin:1px 0; color:#000; }
 /* Strategy table */
 .nar-strat-tbl           { width:100%; border-collapse:collapse; font-family:'Courier New',monospace; font-size:11px; margin:6px 0; }
@@ -260,7 +262,7 @@ window.testUpdateCheck = async () => {
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
-const CLIENT_VERSION = "2.8.4";
+const CLIENT_VERSION = "2.8.6";
 
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
@@ -1049,6 +1051,8 @@ const S = {
   hideRecord:      localStorage.getItem('bp_hide_record') === 'true',
   replacingTeam:   null,  // {old_team_id, manager_id} when replacing
   legacyTeams:     null,  // cached list of archived/replaced teams
+  managerRecord:   null,  // cached manager record data
+  dataFactsLoading:false, // whether data facts is currently loading
   league: {               // league server connection settings
     url:         '',      // e.g. http://192.168.1.5:8766
     managerId:   '',
@@ -2331,7 +2335,7 @@ function buildManagerPanel() {
   const acc    = S.account || {};
   const tab    = S.mgrTab || 'account';
   const canAdd = acc.team_ids && acc.team_ids.length < 5; // Max 5 teams per manager
-  const tabs   = [['account','Account'],['newsletters','Newsletters'],['scouting','Scouting'],['legacy','Legacy'],['new_team','New Team']];
+  const tabs   = [['account','Account'],['newsletters','Newsletters'],['scouting','Scouting'],['legacy','Legacy'],['data_facts','Proving Grounds'],['new_team','New Team']];
 	let tabHtml  = '<div class="tabs">';
 	tabs.forEach(([key,lbl]) => {
 	  const isDisabled = key === 'new_team' && !canAdd;
@@ -2491,6 +2495,10 @@ function buildManagerPanel() {
     body = buildLegacyTab();
   }
 
+  else if (activeTab === 'data_facts') {
+    body = buildDataFactsTab();
+  }
+
   else if (activeTab === 'new_team') {
     body = `<div style="padding:12px;">
       <p style="color:#555; font-size:11px;">Use <b>Action → New Team</b> to create a team.</p>
@@ -2522,6 +2530,19 @@ function setMgrTab(tab) {
   if (tab === 'legacy') {
     S.legacyTeams = null; // force reload each time the tab is opened
     _loadLegacyTeams().then(() => { if (S.mgrTab === 'legacy') refreshContent(); });
+  }
+  if (tab === 'data_facts') {
+    S.dataFactsLoading = true;
+    refreshContent();
+    _loadManagerRecord().then(() => {
+      S.dataFactsLoading = false;
+      if (S.mgrTab === 'data_facts') refreshContent();
+    }).catch(err => {
+      console.error('Error loading manager record:', err);
+      S.dataFactsLoading = false;
+      S.managerRecord = { error: err.message };
+      if (S.mgrTab === 'data_facts') refreshContent();
+    });
   }
   refreshContent();
 }
@@ -2622,6 +2643,289 @@ function buildLegacyTab() {
     <div style="font-weight:bold; margin-bottom:8px;">Legacy - Replaced Teams</div>
     ${sections}
   </div>`;
+}
+
+/* ============================================================
+   DATA FACTS TAB
+   ============================================================ */
+async function _loadManagerRecord() {
+  const acc = S.account || {};
+  const managerName = acc.manager_name;
+
+  if (!managerName) {
+    S.managerRecord = { error: 'No manager name found' };
+    return Promise.resolve();
+  }
+
+  try {
+    console.log('Fetching manager record for:', managerName);
+    const result = await window.electronAPI.getManagerRecord(managerName);
+    console.log('Got manager record:', result);
+    S.managerRecord = result;
+  } catch (err) {
+    console.error('Error loading manager record:', err);
+    S.managerRecord = { error: err.message };
+  }
+}
+
+function buildDataFactsTab() {
+  const acc = S.account || {};
+  const managerName = acc.manager_name;
+  const record = S.managerRecord || {};
+
+  if (S.dataFactsLoading) {
+    return '<div style="padding:20px; color:#666;">Loading manager record...</div>';
+  }
+
+  if (record.error) {
+    return `<div style="padding:20px;">
+      <button onclick="refreshDataFacts()" style="margin-bottom:12px;">🔄 Retry</button>
+      <div style="color:#c00; font-size:12px;">Error: ${esc(record.error)}</div>
+    </div>`;
+  }
+
+  if (!record.success) {
+    return `<div style="padding:20px;">
+      <button onclick="refreshDataFacts()" style="margin-bottom:12px;">🔄 Retry</button>
+      <div style="color:#666; font-size:12px;">Failed to load manager record.</div>
+    </div>`;
+  }
+
+  const records = record.records || [];
+  const raceRecords = record.race_records || [];
+  const totals = record.totals || {};
+
+  if (!S.expandedDataFactsSections) S.expandedDataFactsSections = {};
+
+  let html = '<div style="padding:12px;">';
+  html += '<div style="margin-bottom:12px;"><button onclick="refreshDataFacts()" style="padding:4px 12px;">🔄 Update Stats</button></div>';
+
+  // Manager Records Section (Collapsible)
+  const managerExpanded = S.expandedDataFactsSections.managers === true;
+  html += '<div style="margin-bottom:20px; border:1px solid #999; border-radius:3px; background:#f9f9f9;">';
+  html += '<div style="padding:8px; cursor:pointer; background:#e0ddd6; border-radius:3px 3px 0 0; display:flex; justify-content:space-between;"';
+  html += ' onclick="toggleDataFactsSection(\'managers\')">';
+  html += '<span style="font-weight:bold; font-size:11px;">' + (managerExpanded ? '▼' : '▶') + ' ' + esc(managerName) + ' &mdash; Record vs Manager</span>';
+  html += '</div>';
+
+  if (managerExpanded) {
+    html += '<div style="padding:12px;"><table style="border-collapse:collapse; width:100%; font-size:11px;"><thead>';
+    html += '<tr style="background:#e0ddd6; border-bottom:1px solid #999;"><th style="text-align:left; padding:4px 8px; width:35%;">Opponent Manager</th>';
+    html += '<th style="text-align:center; padding:4px 8px; width:12%;">W</th><th style="text-align:center; padding:4px 8px; width:3%;">-</th>';
+    html += '<th style="text-align:center; padding:4px 8px; width:12%;">L</th><th style="text-align:center; padding:4px 8px; width:3%;">-</th>';
+    html += '<th style="text-align:center; padding:4px 8px; width:12%;">K</th><th style="text-align:center; padding:4px 8px; width:15%;">Deaths</th></tr></thead><tbody>';
+
+    for (const r of records) {
+      html += '<tr style="border-bottom:1px solid #ddd;"><td style="padding:4px 8px;">' + esc(r.opponent) + '</td>';
+      html += '<td style="text-align:center; padding:4px 8px;">' + r.wins + '</td><td style="text-align:center; padding:4px 8px;">-</td>';
+      html += '<td style="text-align:center; padding:4px 8px;">' + r.losses + '</td><td style="text-align:center; padding:4px 8px;">-</td>';
+      html += '<td style="text-align:center; padding:4px 8px;">' + r.kills + '</td><td style="text-align:center; padding:4px 8px;">' + r.deaths + '</td></tr>';
+    }
+
+    html += '<tr style="background:#f0ece8; border:1px solid #999; font-weight:bold;"><td style="padding:4px 8px;">TOTAL</td>';
+    html += '<td style="text-align:center; padding:4px 8px;">' + (totals.wins || 0) + '</td><td style="text-align:center; padding:4px 8px;">-</td>';
+    html += '<td style="text-align:center; padding:4px 8px;">' + (totals.losses || 0) + '</td><td style="text-align:center; padding:4px 8px;">-</td>';
+    html += '<td style="text-align:center; padding:4px 8px;">' + (totals.kills || 0) + '</td><td style="text-align:center; padding:4px 8px;">' + (totals.deaths || 0) + '</td></tr>';
+    html += '</tbody></table></div>';
+  }
+  html += '</div>';
+
+  // Race Records Section (Collapsible)
+  const racesExpanded = S.expandedDataFactsSections.races === true;
+  html += '<div style="margin-bottom:20px; border:1px solid #999; border-radius:3px; background:#f9f9f9;">';
+  html += '<div style="padding:8px; cursor:pointer; background:#e0ddd6; border-radius:3px 3px 0 0; display:flex; justify-content:space-between;"';
+  html += ' onclick="toggleDataFactsSection(\'races\')">';
+  html += '<span style="font-weight:bold; font-size:11px;">' + (racesExpanded ? '▼' : '▶') + ' Performance by Warrior Race</span>';
+  html += '</div>';
+
+  if (racesExpanded) {
+    html += '<div style="padding:12px;">';
+    if (raceRecords.length === 0) {
+      html += '<div style="color:#999; font-size:11px;">No race-specific records available</div>';
+    } else {
+      html += buildRaceRecordsList(raceRecords);
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Race vs Race Section (Collapsible)
+  const raceVsRaceExpanded = S.expandedDataFactsSections.raceVsRace || false;
+  const raceVsRaceData = record.race_vs_race || [];
+  html += '<div style="margin-bottom:20px; border:1px solid #999; border-radius:3px; background:#f9f9f9;">';
+  html += '<div style="padding:8px; cursor:pointer; background:#e0ddd6; border-radius:3px 3px 0 0; display:flex; justify-content:space-between;"';
+  html += ' onclick="toggleDataFactsSection(\'raceVsRace\')">';
+  html += '<span style="font-weight:bold; font-size:11px;">' + (raceVsRaceExpanded ? '▼' : '▶') + ' Race vs Race Performance</span>';
+  html += '</div>';
+
+  if (raceVsRaceExpanded) {
+    html += '<div style="padding:12px;">';
+    if (raceVsRaceData.length === 0) {
+      html += '<div style="color:#999; font-size:11px;">No race vs race records available</div>';
+    } else {
+      html += buildRaceVsRaceList(raceVsRaceData);
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Weapon Performance Section (Collapsible)
+  const weaponExpanded = S.expandedDataFactsSections.weapons || false;
+  const weaponData = record.weapon_records || [];
+  html += '<div style="margin-bottom:20px; border:1px solid #999; border-radius:3px; background:#f9f9f9;">';
+  html += '<div style="padding:8px; cursor:pointer; background:#e0ddd6; border-radius:3px 3px 0 0; display:flex; justify-content:space-between;"';
+  html += ' onclick="toggleDataFactsSection(\'weapons\')">';
+  html += '<span style="font-weight:bold; font-size:11px;">' + (weaponExpanded ? '▼' : '▶') + ' Weapon Performance</span>';
+  html += '</div>';
+
+  if (weaponExpanded) {
+    html += '<div style="padding:12px;">';
+    if (weaponData.length === 0) {
+      html += '<div style="color:#999; font-size:11px;">No weapon records available</div>';
+    } else {
+      html += buildWeaponRecordsList(weaponData);
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+
+  html += '</div>';
+  return html;
+}
+
+function toggleDataFactsSection(section) {
+  if (!S.expandedDataFactsSections) S.expandedDataFactsSections = {};
+  S.expandedDataFactsSections[section] = !S.expandedDataFactsSections[section];
+  refreshContent();
+}
+
+function buildRaceRecordsList(raceRecords) {
+  let html = '';
+  for (const rec of raceRecords) {
+    html += '<div style="padding:8px; border-bottom:1px solid #ddd; display:flex; justify-content:space-between; align-items:center;">';
+    html += '<span style="font-weight:bold; font-size:11px;">' + esc(rec.race) + '</span>';
+    html += '<span style="font-size:11px; color:#666;">' + rec.wins + '-' + rec.losses + '-' + rec.kills + ' (' + rec.slain + ' slain)</span>';
+    html += '</div>';
+  }
+  return html;
+}
+
+function buildRaceVsRaceList(raceVsRaceData) {
+  if (!S.expandedRaceVsRace) S.expandedRaceVsRace = {};
+
+  let html = '';
+  for (const raceData of raceVsRaceData) {
+    const race = raceData.race;
+    const isExpanded = S.expandedRaceVsRace[race] || false;
+
+    html += '<div style="margin-bottom:8px; border:1px solid #ddd; border-radius:3px; background:#fff;">';
+    html += '<div style="padding:8px; cursor:pointer; background:#f0f0f0; display:flex; justify-content:space-between; align-items:center;"';
+    html += ' onclick="toggleRaceVsRace(\'' + esc(race) + '\')">';
+    html += '<span style="font-weight:bold; font-size:11px;">' + (isExpanded ? '▼' : '▶') + ' ' + esc(race) + '</span>';
+    html += '</div>';
+
+    if (isExpanded) {
+      html += '<div style="padding:8px; border-top:1px solid #ddd;">';
+      for (const matchup of raceData.matchups) {
+        html += '<div style="padding:6px 8px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; margin-left:12px;">';
+        html += '<span style="font-size:11px;">vs ' + esc(matchup.opponent_race) + '</span>';
+        html += '<span style="font-size:11px; color:#666;">' + matchup.wins + '-' + matchup.losses + '-' + matchup.kills + '</span>';
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  return html;
+}
+
+function toggleRaceVsRace(race) {
+  if (!S.expandedRaceVsRace) S.expandedRaceVsRace = {};
+  S.expandedRaceVsRace[race] = !S.expandedRaceVsRace[race];
+  refreshContent();
+}
+
+function buildWeaponRecordsList(weaponRecords) {
+  if (!S.expandedWeapons) S.expandedWeapons = {};
+  if (!S.expandedRaces) S.expandedRaces = {};
+
+  let html = '';
+  for (const rec of weaponRecords) {
+    const isUnknown = rec.weapon === 'Unknown';
+    const weaponExpanded = S.expandedWeapons[rec.weapon] || false;
+    const winRate = (rec.wins + rec.losses > 0) ? ((rec.wins / (rec.wins + rec.losses)) * 100).toFixed(1) : '0.0';
+    const displayName = isUnknown ? 'Total Record' : rec.weapon;
+
+    html += '<div style="margin-bottom:8px; border:1px solid #ddd; border-radius:3px; background:#fff;">';
+
+    if (isUnknown) {
+      // Non-expandable Total Record
+      html += '<div style="padding:8px; background:#f0f0f0; display:flex; justify-content:space-between; align-items:center;">';
+      html += '<span style="font-weight:bold; font-size:11px;">' + displayName + '</span>';
+      html += '<span style="font-size:11px; color:#666;">' + rec.wins + '-' + rec.losses + '-' + rec.kills + ' (' + winRate + '%)</span>';
+      html += '</div>';
+    } else {
+      // Expandable weapon entry
+      html += '<div style="padding:8px; cursor:pointer; background:#f0f0f0; display:flex; justify-content:space-between; align-items:center;"';
+      html += ' onclick="toggleWeapon(\'' + esc(rec.weapon) + '\')">';
+      html += '<span style="font-weight:bold; font-size:11px;">' + (weaponExpanded ? '▼' : '▶') + ' ' + displayName + '</span>';
+      html += '<span style="font-size:11px; color:#666;">' + rec.wins + '-' + rec.losses + '-' + rec.kills + ' (' + winRate + '%)</span>';
+      html += '</div>';
+
+      if (weaponExpanded && rec.race_breakdown && rec.race_breakdown.length > 0) {
+        html += '<div style="padding:8px; border-top:1px solid #ddd;">';
+        for (const raceRec of rec.race_breakdown) {
+          const raceKey = rec.weapon + '|' + raceRec.race;
+          const raceExpanded = S.expandedRaces[raceKey] || false;
+          const raceWinRate = (raceRec.wins + raceRec.losses > 0) ? ((raceRec.wins / (raceRec.wins + raceRec.losses)) * 100).toFixed(1) : '0.0';
+
+          html += '<div style="margin-bottom:6px; border:1px solid #f0f0f0; border-radius:2px; background:#fafafa; margin-left:8px;">';
+          html += '<div style="padding:6px 8px; cursor:pointer; background:#f5f5f5; display:flex; justify-content:space-between; align-items:center;"';
+          html += ' onclick="toggleRaceInWeapon(\'' + esc(raceKey) + '\')">';
+          html += '<span style="font-size:11px;">' + (raceExpanded ? '▼' : '▶') + ' ' + esc(raceRec.race) + '</span>';
+          html += '<span style="font-size:11px; color:#666;">' + raceRec.wins + '-' + raceRec.losses + '-' + raceRec.kills + ' (' + raceWinRate + '%)</span>';
+          html += '</div>';
+
+          if (raceExpanded && raceRec.warrior_breakdown && raceRec.warrior_breakdown.length > 0) {
+            html += '<div style="padding:6px 8px; border-top:1px solid #f0f0f0;">';
+            for (const warriorRec of raceRec.warrior_breakdown) {
+              const warriorWinRate = (warriorRec.wins + warriorRec.losses > 0) ? ((warriorRec.wins / (warriorRec.wins + warriorRec.losses)) * 100).toFixed(1) : '0.0';
+              html += '<div style="padding:4px 8px; border-bottom:1px solid #efefef; display:flex; justify-content:space-between; align-items:center; margin-left:12px;">';
+              html += '<span style="font-size:10px; font-style:italic;">' + esc(warriorRec.warrior) + '</span>';
+              html += '<span style="font-size:10px; color:#888;">' + warriorRec.wins + '-' + warriorRec.losses + '-' + warriorRec.kills + ' (' + warriorWinRate + '%)</span>';
+              html += '</div>';
+            }
+            html += '</div>';
+          }
+          html += '</div>';
+        }
+        html += '</div>';
+      }
+    }
+    html += '</div>';
+  }
+  return html;
+}
+
+function toggleWeapon(weapon) {
+  if (!S.expandedWeapons) S.expandedWeapons = {};
+  S.expandedWeapons[weapon] = !S.expandedWeapons[weapon];
+  refreshContent();
+}
+
+function toggleRaceInWeapon(raceKey) {
+  if (!S.expandedRaces) S.expandedRaces = {};
+  S.expandedRaces[raceKey] = !S.expandedRaces[raceKey];
+  refreshContent();
+}
+
+function refreshDataFacts() {
+  S.dataFactsLoading = true;
+  refreshContent();
+  _loadManagerRecord().then(() => {
+    S.dataFactsLoading = false;
+    if (S.mgrTab === 'data_facts') refreshContent();
+  });
 }
 
 /* ============================================================
@@ -3107,10 +3411,10 @@ function buildWarriorPanel(team, w, wIdx) {
   const isDead = w.is_dead || false;
   // Always show all tabs regardless of death status - don't tip off the manager
   // that the warrior died until they read the fight narrative
-  const tabs = ['Stats/Strats', 'Fight Options', 'Fights', 'Challenges', 'Replacement', 'Archives'];
+  const tabs = ['Stats/Strats', 'Fight Options', 'Fights', 'Challenges', 'Replacement', 'The Crypts'];
   const tabMap = {
     'Stats/Strats':'stats', 'Fight Options':'fight', 'Fights':'fights',
-    'Challenges':'challenges', 'Replacement':'replacement', 'Archives':'archives'
+    'Challenges':'challenges', 'Replacement':'replacement', 'The Crypts':'archives'
   };
   let tabsHtml = `<div class="tabs">`;
   tabs.forEach(t => {
@@ -5816,18 +6120,25 @@ function narrativeToHtml(text) {
         if (vsIdx >= 0) {
           const L = ln.slice(0, vsIdx).trim();
           const R = ln.slice(vsIdx + 8).trim();
-          if (/\(\d+[-–]\d+/.test(L)) {
+
+          // Detect line type: warrior name, record, team, manager, or race
+          const isRecord = /^\d+[-–]\d+[-–]\d+$/.test(L);
+          const isTeam = /^TEAM:\s*/i.test(L);
+          const isManager = /^MANAGER:\s*/i.test(L);
+
+          if (isRecord) {
+            // Record line - bold + larger
+            out.push(`<div class="nar-row"><span class="nar-col-l"><span class="nar-wrec">${esc(L)}</span></span><span class="nar-col-vs"></span><span class="nar-col-r"><span class="nar-wrec">${esc(R)}</span></span></div>`);
+          } else if (isTeam || isManager) {
+            // Team/Manager lines - bold
+            const fw = p => `<strong>${esc(p)}</strong>`;
+            out.push(`<div class="nar-row"><span class="nar-col-l">${fw(L)}</span><span class="nar-col-vs"></span><span class="nar-col-r">${fw(R)}</span></div>`);
+          } else if (/^[A-Z][A-Z\s']+$/.test(L) || L.includes("'")) {
             // Warrior name line - bold + larger
-            const fw = p => {
-              const m = p.match(/^(.*?)\s+(\([^)]+\))$/);
-              return m
-                ? `<span class="nar-wname">${esc(m[1])}</span> <span class="nar-wrec">${esc(m[2])}</span>`
-                : `<span class="nar-wname">${esc(p)}</span>`;
-            };
-            out.push(`<div class="nar-row" style="margin:6px 0"><span class="nar-col-l">${fw(L)}</span><span class="nar-col-vs">vs</span><span class="nar-col-r">${fw(R)}</span></div>`);
+            out.push(`<div class="nar-row" style="margin:6px 0"><span class="nar-col-l"><span class="nar-wname">${esc(L)}</span></span><span class="nar-col-vs">vs</span><span class="nar-col-r"><span class="nar-wname">${esc(R)}</span></span></div>`);
           } else {
-            // Team / race lines - same column structure, empty vs cell so columns align
-            out.push(`<div class="nar-row"><span class="nar-col-l">${esc(L)}</span><span class="nar-col-vs"></span><span class="nar-col-r">${esc(R)}</span></div>`);
+            // Race / other lines - normal formatting
+            out.push(`<div class="nar-row"><span class="nar-col-l"><strong>${esc(L)}</strong></span><span class="nar-col-vs"></span><span class="nar-col-r"><strong>${esc(R)}</strong></span></div>`);
           }
         } else {
           out.push(`<div class="nar-line">${esc(ln)}</div>`);
