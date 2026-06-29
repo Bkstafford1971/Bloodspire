@@ -658,56 +658,108 @@ def create_ai_team(
 
 # ---------------------------------------------------------------------------
 # NAMED PEASANT TEAM
-# 10 named NPCs ordered from most difficult (1) to least difficult (10).
-# Players should win roughly 70-75% of the time against a matching peasant.
-# Stats are fixed per character for consistency; the matchmaker selects
-# the appropriate tier(s) based on the player warrior's fight count.
-# Names are original - deliberately distinct from any copyrighted sources.
+# 10 named NPCs whose stats and skills scale with the opponent's experience.
+# Any peasant can fight any warrior; the player should win ~75-80% regardless
+# of experience level. Names are original — distinct from copyrighted sources.
 # ---------------------------------------------------------------------------
 
-# Each entry: (name, gender, STR, DEX, CON, INT, PRE, SIZ, armor, weapon)
-# Tier 1 = hardest, Tier 10 = easiest.
-# Peasant stats bumped slightly from v1 - they should present a real threat
-# but still be clearly beatable. Target: player wins ~65-70% (was 70-75%).
-# Each stat raised by 2-3 points across the board.
+# Fights at which a peasant reaches their maximum (peak) stats and skills.
+_PEASANT_EXP_CAP = 35
+
+# ±variance applied after scaling so repeated fights feel slightly different.
+_PEASANT_VARIANCE = 2
+
+# Each entry:
+#   (name, gender, armor, weapon,
+#    (STR_b, DEX_b, CON_b, INT_b, PRE_b, SIZ_b),   # base stats at 0 fights (~tier 6-7 feel)
+#    (STR_m, DEX_m, CON_m, INT_m, PRE_m, SIZ_m),   # max stats at EXP_CAP fights
+#    wpn_skill_max, def_skill_max, def_skill_key)
+#
+# Weapon and defense skills both scale from 0 → their max over EXP_CAP fights.
+# def_skill_key is "parry" for heavy/weapon-focused fighters, "dodge" for agile ones.
 PEASANT_ROSTER = [
-    # Tier 1 - Crom the Bell-Keeper: big and mean, likes to bash
-    ("Crom the Bell-Keeper",  "Male",   19, 15, 17, 11, 10, 17, "Brigandine",  "Morningstar"),
-    # Tier 2 - Bawdy Nell: fast and sneaky, dagger in the ribs
-    ("Bawdy Nell",            "Female", 14, 18, 14, 14, 12, 11, "Cuir Boulli", "Short Sword"),
-    # Tier 3 - Vernon the Versifier: surprisingly capable with a spear
-    ("Vernon the Versifier",  "Male",   15, 16, 15, 13, 11, 13, "Leather",     "Boar Spear"),
-    # Tier 4 - Hilda the Fishmonger: tough as old boots
-    ("Hilda the Fishmonger",  "Female", 16, 13, 17, 11, 10, 14, "Brigandine",  "War Flail"),
-    # Tier 5 - Grub the Coinless: desperate fighter, nothing to lose
-    ("Grub the Coinless",     "Male",   14, 14, 14, 11,  9, 13, "Leather",     "Battle Axe"),
-    # Tier 6 - Mort the Ditch-Digger: slow but surprisingly durable
-    ("Mort the Ditch-Digger", "Male",   15, 12, 15, 10,  9, 15, "Cloth",       "Morningstar"),
-    # Tier 7 - Wandering Wanda: slippery and hard to pin down
-    ("Wandering Wanda",       "Female", 12, 16, 13, 13, 10, 11, "Leather",     "Flail"),
-    # Tier 8 - Oswald the Soothsayer: more prophet than fighter
-    ("Oswald the Soothsayer", "Male",   12, 13, 13, 13, 12, 12, "Cloth",       "Short Sword"),
-    # Tier 9 - Crackers McGee: unpredictable but fragile
-    ("Crackers McGee",        "Male",   11, 14, 12, 11,  9, 10, "Cloth",       "Hatchet"),
-    # Tier 10 - Wilbur the Weed-Puller: not totally helpless now
-    ("Wilbur the Weed-Puller","Male",   10, 11, 11, 10,  8, 10, "Cloth",       "Short Sword"),
+    # Biff Watson: big and mean, STR/SIZ heavy, likes to bash
+    ("Biff Watson",  "Male",   "Brigandine",  "Morningstar",
+     (14, 11, 13,  9,  8, 14),
+     (22, 17, 20, 12, 10, 20),
+     5, 3, "parry"),
+    # The Skunk Lady: fast and sneaky, DEX/INT heavy, dagger in the ribs
+    ("The Skunk Lady",            "Female", "Cuir Boulli", "Short Sword",
+     (11, 15, 11, 12, 10,  9),
+     (15, 21, 15, 17, 13, 12),
+     5, 4, "dodge"),
+    # Sheriff Craig: balanced DEX/INT, surprisingly capable with a spear
+    ("Sheriff Craig",  "Male",   "Leather",     "Boar Spear",
+     (12, 13, 12, 11,  9, 11),
+     (17, 19, 17, 15, 12, 15),
+     5, 3, "parry"),
+    # Matt the Basement Dweller: STR/CON heavy, tough as old boots
+    ("Matt the Basement Dweller",  "Male", "Brigandine",  "War Flail",
+     (13, 10, 13,  9,  8, 12),
+     (19, 15, 21, 12, 11, 16),
+     4, 3, "parry"),
+    # Jim the Hooligan: balanced, desperate fighter, nothing to lose
+    ("Jim the Hooligan",     "Male",   "Leather",     "Battle Axe",
+     (11, 11, 11,  9,  8, 11),
+     (17, 17, 17, 13, 10, 16),
+     5, 2, "parry"),
+    # Spooky Wendell: STR/CON/SIZ, slow but surprisingly durable
+    ("Spooky Wendell", "Male",   "Cloth",       "Morningstar",
+     (13,  9, 12,  8,  7, 13),
+     (18, 14, 18, 11,  9, 19),
+     4, 2, "parry"),
+    # Wandering Wanda: DEX/INT heavy, slippery and hard to pin down
+    ("Wandering Wanda",       "Female", "Leather",     "Flail",
+     (10, 13, 11, 11,  9,  9),
+     (13, 20, 15, 17, 12, 13),
+     5, 5, "dodge"),
+    # Oswald the Soothsayer: balanced INT/PRE, more prophet than fighter
+    ("Oswald the Soothsayer", "Male",   "Cloth",       "Short Sword",
+     (10, 11, 11, 11, 10, 10),
+     (14, 15, 16, 17, 14, 14),
+     4, 3, "parry"),
+    # Crackers McGee: DEX heavy but fragile and unpredictable
+    ("Crackers McGee",        "Male",   "Cloth",       "Hatchet",
+     ( 9, 12, 10,  9,  7,  8),
+     (13, 18, 14, 13, 10, 12),
+     4, 2, "dodge"),
+    # Wilbur the Weed-Puller: weak all-around but not totally hopeless
+    ("Wilbur the Weed-Puller","Male",   "Cloth",       "Short Sword",
+     ( 8,  9,  9,  8,  6,  8),
+     (12, 13, 13, 12, 10, 12),
+     2, 2, "parry"),
 ]
 
-# Variance range applied to peasant stats so each fight feels slightly different.
-_PEASANT_VARIANCE = 2   # ±2 on each stat
+
+def _scale_peasant_stat(base: int, max_val: int, experience: int) -> int:
+    """Linearly interpolate from base (0 fights) to max_val (EXP_CAP fights)."""
+    t = min(experience / _PEASANT_EXP_CAP, 1.0)
+    return round(base + (max_val - base) * t)
 
 
-def _make_peasant(tier_index: int) -> Warrior:
+def _make_peasant(roster_index: int, experience_level: int = 0) -> Warrior:
     """
-    Build a single Warrior from PEASANT_ROSTER at the given index (0-based).
-    Applies small random variance so repeated fights feel different.
+    Build a single Warrior from PEASANT_ROSTER, scaling stats and skills to
+    the opponent's experience level (total fights fought).
     """
     from warrior import STAT_MIN, STAT_MAX
-    name, gender, STR, DEX, CON, INT, PRE, SIZ, armor, weapon = PEASANT_ROSTER[tier_index]
+    name, gender, armor, weapon, base_stats, max_stats, wpn_sk_max, def_sk_max, def_sk_key = \
+        PEASANT_ROSTER[roster_index]
+
+    sb, db, cb, ib, pb, szb = base_stats
+    sm, dm, cm, im, pm, szm = max_stats
+
+    STR = _scale_peasant_stat(sb, sm, experience_level)
+    DEX = _scale_peasant_stat(db, dm, experience_level)
+    CON = _scale_peasant_stat(cb, cm, experience_level)
+    INT = _scale_peasant_stat(ib, im, experience_level)
+    PRE = _scale_peasant_stat(pb, pm, experience_level)
+    SIZ = _scale_peasant_stat(szb, szm, experience_level)
+
     v = _PEASANT_VARIANCE
 
-    def jitter(base: int) -> int:
-        return max(STAT_MIN, min(STAT_MAX, base + random.randint(-v, v)))
+    def jitter(val: int) -> int:
+        return max(STAT_MIN, min(STAT_MAX, val + random.randint(-v, v)))
 
     w = Warrior(
         name         = name,
@@ -723,7 +775,10 @@ def _make_peasant(tier_index: int) -> Warrior:
     w.armor          = armor
     w.primary_weapon = weapon
 
-    # Add a simple strategy so they actually fight back
+    wpn_key = weapon.lower().replace(" ", "_")
+    w.skills[wpn_key]    = _scale_peasant_stat(0, wpn_sk_max, experience_level)
+    w.skills[def_sk_key] = _scale_peasant_stat(0, def_sk_max, experience_level)
+
     from warrior import Strategy
     w.strategies = [Strategy(trigger="Always", style="Strike", activity=5,
                               aim_point="Chest", defense_point="Chest")]
@@ -732,45 +787,32 @@ def _make_peasant(tier_index: int) -> Warrior:
 
 def create_peasant_team(target_fight_count: int = 0) -> Team:
     """
-    Create a Peasant team of 5, selecting tier-appropriate NPCs based on
-    the player warrior's fight count.
-
-    Fight count mapping:
-      0-10  fights → use tiers 6-10 (easiest tier)
-      11-30 fights → use tiers 4-8
-      31-60 fights → use tiers 2-6
-      61+   fights → use tiers 1-5 (hardest tier)
-
-    Players should win roughly 70-75% of the time against appropriate tiers.
+    Create a Peasant team of TEAM_SIZE. Any of the 10 peasants may be selected;
+    all stats and skills are scaled to the opponent's fight count so the player
+    maintains a ~75-80% win rate at any experience level.
     """
-    if   target_fight_count <= 10: tier_range = (5, 9)   # indices 5-9 = tiers 6-10
-    elif target_fight_count <= 30: tier_range = (3, 7)   # indices 3-7 = tiers 4-8
-    elif target_fight_count <= 60: tier_range = (1, 5)   # indices 1-5 = tiers 2-6
-    else:                           tier_range = (0, 4)  # indices 0-4 = tiers 1-5
-
     team = Team(
         team_name    = "The Peasants",
         manager_name = "The Arena",
         team_id      = 0,
     )
 
-    # Pick TEAM_SIZE peasants from the eligible tier range (no repeats if possible)
-    available = list(range(tier_range[0], tier_range[1] + 1))
+    available = list(range(len(PEASANT_ROSTER)))
     if len(available) < TEAM_SIZE:
         available = available * (TEAM_SIZE // len(available) + 1)
     indices = random.sample(available, TEAM_SIZE)
 
     for idx in indices:
-        team.add_warrior(_make_peasant(idx))
+        team.add_warrior(_make_peasant(idx, experience_level=target_fight_count))
 
     return team
 
 
-def get_peasant_by_name(name: str) -> Optional[Warrior]:
-    """Return a fresh peasant warrior by name (case-insensitive)."""
+def get_peasant_by_name(name: str, experience_level: int = 0) -> Optional[Warrior]:
+    """Return a fresh peasant warrior by name (case-insensitive), scaled to experience."""
     for i, row in enumerate(PEASANT_ROSTER):
         if row[0].lower() == name.lower():
-            return _make_peasant(i)
+            return _make_peasant(i, experience_level=experience_level)
     return None
 
 

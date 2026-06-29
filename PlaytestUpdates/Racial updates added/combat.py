@@ -2320,9 +2320,7 @@ class CombatEngine:
         def get_warrior_strategies(warrior):
             cse = getattr(warrior, 'challenge_strategy_enabled', False)
             cs  = getattr(warrior, 'challenge_strategies', [])
-            print(f"  [CHAL_STRAT] {warrior.name}: fight_type={fight_type}, is_challenge={_is_challenge}, cse={cse}, cs_count={len(cs)}")
             if _is_challenge and cse and cs:
-                print(f"  [CHAL_STRAT] Using CHALLENGE strategies for {warrior.name}")
                 return cs
             return warrior.strategies
 
