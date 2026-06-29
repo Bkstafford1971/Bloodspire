@@ -91,7 +91,10 @@
                 <div class="content-box">
                     <p style="text-align: center; margin: 15px 0;">
                         <a href="#" id="viewLatestAnnouncement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            🛡️ JUNE 10, 2026 — CLIENT V2.8 & ARCHIVE UPDATES
+                            🛡️ JUNE 28, 2026 — BALANCE MODIFICATIONS & PROVING GROUNDS UPDATE
+                        </a>
+                        <a href="#" id="viewJune10Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            JUNE 10, 2026 — CLIENT V2.8 & ARCHIVE UPDATES
                         </a>
                         <a href="#" id="viewJune5Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
                             JUNE 5, 2026 — STATE OF THE ARENA & FUTURE TOURNAMENTS
@@ -113,6 +116,48 @@
 
     <div id="latestAnnouncementModal" class="modal-overlay">
         <div class="modal-content">
+            <h2>BALANCE MODIFICATIONS & PROVING GROUNDS — JUNE 28, 2026</h2>
+            <div class="modal-scroll-body">
+                <p><strong>Honored Managers,</strong></p>
+                
+                <h3>Racial Balancing</h3>
+                <p>Six races received targeted balance corrections based on a comprehensive win-rate audit. Dwarf was significantly overperforming; Halfling and Goblin were significantly underperforming.</p>
+
+                <h3>Weapon Adjustments</h3>
+                <p>Adjustments made to a few weapons. Longsword and Scimitar were given a slight base damage bump to be consistent with other weapons of the same weight. Large weapons in the 6.0 - 7.0 weight range were bumped to 3.5 APM average. These include the Great Sword, Great Axe and Battle Flail to name a few.</p>
+
+                <h3>Armor Dexterity Penalties</h3>
+                <p>Armor dexterity penalties rebalanced. Wearing armor that is too heavy for your build is penalized more naturally against Init, Dodge and Parry rolls. These will also affect your endurance scores more. Over armoring will have a drawback now.</p>
+
+                <h3>New Features</h3>
+                <ul>
+                    <li><strong>Proving Grounds tab:</strong> This is a managers ledger for important stats to track. This will track a managers record versus other managers, what the cumulative record for each race is, what the record for race vs race is, and a weapon performance chart that tracks the effectiveness of each weapon and what race and warrior wields them the best.</li>
+                    <li><strong>The Crypts:</strong> Renamed the Archives tab to The Crypts to be more immersive with the game theme. No changes were made to the tab contents here.</li>
+                    <li><strong>Challenge Mode Strategy Option:</strong> This will allow a warrior to have a completely separate strategy loadout for challenges if they choose. No longer just a single trigger option, you can set up a completely new strategy for a challenge to a warrior. If the challenge is successful and the Challenge Mode option is selected, then you will use that strategy for the fight. If the challenge is unsuccessful, your gladiator will default to the standard strategy. If the checkbox is selected, but a challenge is not made, the standard strategy will be used. This new "alternate" strategy will only be used if you initiate a successful challenge or Blood challenge and have the option selected.</li>
+                    <li><strong>Fight Headers:</strong> Modified the fight headers to increase the font size to make the matchup names stand out a little more, and added the current popularity score into the warrior description.</li>
+                </ul>
+
+                <h3>Minor Bugs and Fixes</h3>
+                <ul>
+                    <li><strong>Tab Focus:</strong> Fixed tab focus issues. Now when you switch warriors, you will stay on the current tab you were on. For example, if you are on the Fights tab, and switch to a new warrior, you will be taken to the fights tab for the warrior you switched to.</li>
+                    <li><strong>Activity Level:</strong> Fixed an Activity level bug where you were not allowed to set an activity level of 0.</li>
+                    <li><strong>Ranking Tiers:</strong> Updated the ranking tiers and removed the 5 fight requirement needed to leave the recruit tier. Now recruits are set to 10 recognition or less. Along with this, updated the challenge range to be the current tier that your warrior is in and one tier above. Hoping this will balance the random matchups more.</li>
+                    <li><strong>Champion Challenges:</strong> Champion can be challenged only by warriors in the top 2 active tiers, or by anyone on a Blood Challenge.</li>
+                </ul>
+
+                <h3>Coming Soon</h3>
+                <p>New peasant names. Please submit your peasant names that you want. Remember, as a thank you from me, I am allowing the playtesters to rename the peasants, so each of you will get at least 1 peasant to rename.</p>
+
+                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
+                    — ILNEVAL
+                </p>
+            </div>
+            <button class="close-modal-btn" id="closeLatestModal">Dismiss</button>
+        </div>
+    </div>
+
+    <div id="june10AnnouncementModal" class="modal-overlay">
+        <div class="modal-content">
             <h2>CLIENT V2.8 & ARCHIVE UPDATES — JUNE 10, 2026</h2>
             <div class="modal-scroll-body">
                 <p><strong>Honored Managers,</strong></p>
@@ -127,7 +172,7 @@
                     — ILNEVAL
                 </p>
             </div>
-            <button class="close-modal-btn" id="closeLatestModal">Dismiss</button>
+            <button class="close-modal-btn" id="closeJune10Modal">Dismiss</button>
         </div>
     </div>
 
@@ -326,26 +371,42 @@
             const closeJune5 = document.getElementById('closeJune5Modal');
             const viewJune5 = document.getElementById('viewJune5Announcement');
 
-            // Latest Modal (June 10)
+            // June 10 Modal
+            const june10Modal = document.getElementById('june10AnnouncementModal');
+            const closeJune10 = document.getElementById('closeJune10Modal');
+            const viewJune10 = document.getElementById('viewJune10Announcement');
+
+            // Latest Modal (June 28)
             const latestModal = document.getElementById('latestAnnouncementModal');
             const closeLatest = document.getElementById('closeLatestModal');
             const viewLatest = document.getElementById('viewLatestAnnouncement');
 
             // Show latest announcement automatically if not seen
-            if (!localStorage.getItem('bloodspire_update_20260610')) {
+            if (!localStorage.getItem('bloodspire_update_20260628')) {
                 latestModal.style.display = 'block';
             }
 
             // Close latest modal
             closeLatest.onclick = () => { 
                 latestModal.style.display = 'none'; 
-                localStorage.setItem('bloodspire_update_20260610', 'true'); 
+                localStorage.setItem('bloodspire_update_20260628', 'true'); 
             };
 
             // Open latest modal via link
             viewLatest.onclick = function(e) {
                 e.preventDefault();
                 latestModal.style.display = 'block';
+            };
+
+            // Close June 10 modal
+            closeJune10.onclick = () => { 
+                june10Modal.style.display = 'none'; 
+            };
+
+            // Open June 10 modal via link
+            viewJune10.onclick = function(e) {
+                e.preventDefault();
+                june10Modal.style.display = 'block';
             };
 
             // Close June 5 modal
