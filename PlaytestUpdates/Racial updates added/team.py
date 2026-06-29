@@ -22,7 +22,7 @@ class Team:
     Key rules enforced here:
       - Roster is always exactly TEAM_SIZE (5) warriors.
       - Dead warriors are replaced immediately with fresh beginners.
-      - Warriors who have fought 100 fights may be retired (same as death for now).
+      - Warriors who have fought 50 fights may be retired (same as death for now).
       - Up to 3 challenges may be issued per warrior per turn.
       - Blood challenges are available from any team member when a teammate
         is killed (killer must have 5+ fights).
@@ -310,13 +310,13 @@ class Team:
 
     def retire_warrior(self, warrior: Warrior) -> Optional[Warrior]:
         """
-        Retire a warrior who has reached 100 fights.
+        Retire a warrior who has reached 50 fights.
         Returns the replacement, or None if the warrior is not eligible.
         """
         if not warrior.can_retire:
             print(
                 f"  {warrior.name} is not eligible for retirement "
-                f"({warrior.total_fights} fights; need {100})."
+                f"({warrior.total_fights} fights; need {50})."
             )
             return None
 
@@ -353,9 +353,17 @@ class Team:
         existing.append(target)
         print(f"  Challenge added: slot {slot_idx} → {target}")
 
-    def clear_challenges(self):
-        """Clear all pending challenges (called after each turn is processed)."""
+    def clear_challenges(self, reset_strategy_mode: bool = False):
+        """Clear pending challenge requests.
+
+        reset_strategy_mode=True also resets challenge_strategy_enabled on all
+        warriors (call this after the turn's fights have completed, not before).
+        """
         self.challenges.clear()
+        if reset_strategy_mode:
+            for w in self.warriors:
+                if w is not None:
+                    w.challenge_strategy_enabled = False
 
     # =========================================================================
     # BLOOD CHALLENGE MANAGEMENT

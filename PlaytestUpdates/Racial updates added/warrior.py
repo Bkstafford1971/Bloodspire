@@ -527,6 +527,10 @@ class Warrior:
             )
         ]
 
+        # --- Challenge Strategies (alternate strategy set for challenge fights) ---
+        self.challenge_strategy_enabled: bool = False
+        self.challenge_strategies: List[Strategy] = []
+
         # --- Training Queue (up to 3 trains per turn) ---
         # Each entry is a skill or attribute name.
         # e.g. ["constitution", "war_flail", "dodge"]
@@ -1223,26 +1227,71 @@ class Warrior:
     # POPULARITY
     # =========================================================================
 
-    def update_popularity(self, won: bool = True):
+    def update_popularity(self, won: bool = True, fight_result=None):
         """
-        Recalculate popularity after a fight.
-        APPROX:
-          win   → +3 base, +1 per kill streak length (max +5), +PRE bonus, +acrobatics bonus
-          loss  → -2 base, -1 per loss streak length (max -5), -PRE penalty
-          PRE modifier: (presence - 10) * 0.2 (crowd loves charismatic fighters)
-          Acrobatics bonus: +2% per acrobatics level (max +18% at level 9)
+        Recalculate popularity after a fight based on fight quality metrics.
+
+        Popularity is driven by fight entertainment value and dominance:
+        - Exciting fights (3+ min, back-and-forth): both warriors gain popularity
+        - Dominant victories (quick one-sided): winner gains significant popularity
+        - Boring grindy fights (5+ min, low action): minimal/negative gains
+        - Flawless victories (<10% damage taken): major popularity gain
+        - Kills: +3 to +5 bonus (fans love decisive action)
+
         Clamped 1-100.
         """
-        pre_mod = int((self.presence - 10) * 0.2)
-        acrobatics_level = self.skills.get("acrobatics", 0)
-        acrobatics_bonus = int(acrobatics_level * 0.2) if acrobatics_level > 0 else 0  # +2% per level (as integer add to popularity)
-        
-        if won:
-            streak_bonus = min(5, max(0, self.streak))
-            delta = 3 + streak_bonus + pre_mod + acrobatics_bonus
+        delta = 0
+
+        if fight_result is None:
+            # Fallback for when fight result not available (shouldn't happen)
+            if won:
+                delta = 3
+            else:
+                delta = -2
         else:
-            streak_penalty = min(5, max(0, -self.streak))
-            delta = -2 - streak_penalty + pre_mod
+            minutes = fight_result.minutes_elapsed
+            winner_hp = fight_result.winner_hp_pct if won else fight_result.loser_hp_pct
+            loser_hp = fight_result.loser_hp_pct if won else fight_result.winner_hp_pct
+            is_kill = fight_result.loser_died
+
+            if won:
+                # --- WINNING FIGHT CLASSIFICATION ---
+
+                # Flawless victory: <10% damage taken
+                if winner_hp > 0.90:
+                    delta = 8
+                # Dominant victory: 1-2 minutes, opponent crushed (<30% HP)
+                elif minutes <= 2 and loser_hp < 0.30:
+                    delta = 6
+                # Exciting fight: 3+ minutes, back-and-forth (opponent got low but recovered somewhat)
+                elif minutes >= 3 and loser_hp < 0.20:
+                    delta = 5
+                # Exciting fight: 3+ minutes, both warriors took decent damage
+                elif minutes >= 3 and winner_hp < 0.70:
+                    delta = 4
+                # Quick win but not dominant: 2-3 minutes
+                elif minutes <= 3:
+                    delta = 5
+                # Moderate fight: 4-5 minutes
+                elif minutes <= 5:
+                    delta = 3
+                # Grindy/boring fight: 5+ minutes, minimal damage dealt
+                else:
+                    delta = 1
+
+                # Kill bonus: crowd loves executions
+                if is_kill:
+                    delta += 4
+            else:
+                # --- LOSING FIGHT CLASSIFICATION ---
+
+                # Brave loss: fought hard despite losing (5+ min or got opponent low)
+                if minutes >= 5 or loser_hp < 0.30:
+                    delta = 2  # small gain for effort
+                # Standard loss: typical fight
+                else:
+                    delta = -1  # small penalty for losing
+
         self.popularity = max(1, min(100, self.popularity + delta))
 
     # =========================================================================
@@ -1423,6 +1472,8 @@ class Warrior:
             "injuries":        self.injuries.to_dict(),
             "injuries_text":   self._build_injuries_text(),
             "strategies": [s.to_dict() for s in self.strategies],
+            "challenge_strategy_enabled": self.challenge_strategy_enabled,
+            "challenge_strategies": [s.to_dict() for s in self.challenge_strategies],
             "trains":          self.trains,
             "blood_cry":       self.blood_cry,
             "luck":            self.luck,
@@ -1511,6 +1562,12 @@ class Warrior:
         strat_data = data.get("strategies", [])
         if strat_data:
             w.strategies = [Strategy.from_dict(s) for s in strat_data]
+
+        # Load challenge strategies
+        w.challenge_strategy_enabled = data.get("challenge_strategy_enabled", False)
+        chal_strat_data = data.get("challenge_strategies", [])
+        if chal_strat_data:
+            w.challenge_strategies = [Strategy.from_dict(s) for s in chal_strat_data]
 
         # Recalculate all derived values
         w.max_hp = w._calc_max_hp()

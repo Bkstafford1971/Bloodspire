@@ -914,6 +914,9 @@ function mergeResults(localTeam, serverResult, opts = {}) {
     lw.ascended_to_monster = sw.ascended_to_monster ?? lw.ascended_to_monster ?? false;
     lw.monster_kills = sw.monster_kills ?? lw.monster_kills ?? 0;
     if (sw.favorite_weapon) lw.favorite_weapon = sw.favorite_weapon;
+    // Server resets challenge_strategy_enabled to false after each turn (post-fight).
+    // Take this from the server so the checkbox auto-resets between turns.
+    if ('challenge_strategy_enabled' in sw) lw.challenge_strategy_enabled = sw.challenge_strategy_enabled;
 
     if (rerun) {
       // Re-run: server is fully authoritative - replace skills and attributes
@@ -1459,7 +1462,11 @@ const LocalAPI = {
     if (path === '/api/league/upload_one') {
       // Upload a single team to the league server. Called by "Upload All".
       const tid  = parseInt(body.team_id, 10);
-      const team = await Store.readTeam(tid);
+      // Use in-memory team if available so challenge_strategy_enabled and other
+      // recently-toggled flags are included even if a disk write is still in flight.
+      let team = (S.teams && S.teams[tid])
+        ? JSON.parse(JSON.stringify(S.teams[tid]))
+        : await Store.readTeam(tid);
       if (!team) return { success: false, team_id: tid, error: 'Team not found locally.' };
       try {
         const url = (body.league_url || S.serverUrl).replace(/\/+$/,'');
@@ -1523,6 +1530,7 @@ const LocalAPI = {
       }
       if ('want_monster_fight' in body) w.want_monster_fight = !!body.want_monster_fight;
       if ('want_retire'        in body) w.want_retire        = !!body.want_retire;
+      if ('challenge_strategy_enabled' in body) w.challenge_strategy_enabled = !!body.challenge_strategy_enabled;
       if (Array.isArray(body.trains)) {
         w.trains = body.trains
           .filter(t => t && t !== '-')
@@ -1546,6 +1554,19 @@ const LocalAPI = {
             trigger: 'Always (Default Loop)', style: 'Strike',
             activity: 5, aim_point: 'None', defense_point: 'None',
           }];
+        }
+      }
+      if (Array.isArray(body.challenge_strategies)) {
+        w.challenge_strategies = [];
+        for (const sd of body.challenge_strategies) {
+          if (!sd.trigger) continue;
+          w.challenge_strategies.push({
+            trigger      : sd.trigger,
+            style        : sd.style || 'Strike',
+            activity     : parseInt(sd.activity ?? 5, 10),
+            aim_point    : sd.aim_point || 'None',
+            defense_point: sd.defense_point || 'None',
+          });
         }
       }
       await Store.writeTeam(team);
@@ -1602,13 +1623,27 @@ const LocalAPI = {
       const team = await Store.readTeam(parseInt(body.team_id, 10));
       if (!team) return { success: false, error: 'Team not found.' };
       team.challenges = team.challenges || {};
+
+      // Find warrior slot index from warrior name
+      let slotIndex = -1;
+      for (let i = 0; i < team.warriors.length; i++) {
+        if (team.warriors[i] && team.warriors[i].name === body.warrior_name) {
+          slotIndex = i;
+          break;
+        }
+      }
+      if (slotIndex === -1) {
+        return { success: false, error: `Warrior "${body.warrior_name}" not found in team.` };
+      }
+
+      // Store/remove challenges by slot index
       if (body.action === 'remove') {
-        const list = team.challenges[body.warrior_name] || [];
-        team.challenges[body.warrior_name] = list.filter(t => t !== body.target_name);
+        const list = team.challenges[slotIndex] || [];
+        team.challenges[slotIndex] = list.filter(t => t !== body.target_name);
       } else {
-        const list = team.challenges[body.warrior_name] || [];
+        const list = team.challenges[slotIndex] || [];
         if (!list.includes(body.target_name)) list.push(body.target_name);
-        team.challenges[body.warrior_name] = list;
+        team.challenges[slotIndex] = list;
       }
       await Store.writeTeam(team);
       return { success: true, team };
@@ -1937,6 +1972,7 @@ function _focusAutofocusEl() {
 function render() {
   const app = el('app');
   clearTimeout(_saveTimer);
+  _saveTimer = null;
   if      (S.view === 'folder_pick') app.innerHTML = buildFolderPick();
   else if (S.view === 'login')       app.innerHTML = buildLogin();
   else if (S.view === 'main')        app.innerHTML = buildMain();
@@ -2289,14 +2325,16 @@ async function treeSelectWarrior(tid, idx) {
   S.sel  = {type:'warrior', teamId: tid, wIdx: idx};
   // Fetch fresh data so streak/favorite_weapon always reflect server state
   await Promise.all([reloadTeam(tid), refreshLeagueFlags()]);
-  // Dead warriors open straight to the Replacement tab
   const team = S.teams[tid];
   const w    = team && team.warriors && team.warriors[idx];
-  // Dead warriors go to Replacement - unless HideRecord is on and the fatal
-  // fight hasn't been read yet, in which case steer them to Fights first.
-  S.wTab = (w && w.is_dead)
-    ? (S.hideRecord && w.death_fight_id_unread ? 'fights' : 'replacement')
-    : 'stats';
+  // Override tab only for special cases: dead warrior with unread death fight (HideRecord on)
+  // Otherwise preserve the current tab when switching warriors
+  if (w && w.is_dead && S.hideRecord && w.death_fight_id_unread) {
+    S.wTab = 'fights';
+  } else if (!S.wTab) {
+    // If no tab is set yet, default to stats
+    S.wTab = 'stats';
+  }
   refreshTree();
   refreshContent();
 }
@@ -2773,10 +2811,12 @@ function buildDataFactsTab() {
   // Weapon Performance Section (Collapsible)
   const weaponExpanded = S.expandedDataFactsSections.weapons || false;
   const weaponData = record.weapon_records || [];
+  const cumulativeRecord = record.cumulative_record || { wins: 0, losses: 0, kills: 0 };
+  const cumulativeDisplay = cumulativeRecord.wins + '-' + cumulativeRecord.losses + '-' + cumulativeRecord.kills;
   html += '<div style="margin-bottom:20px; border:1px solid #999; border-radius:3px; background:#f9f9f9;">';
   html += '<div style="padding:8px; cursor:pointer; background:#e0ddd6; border-radius:3px 3px 0 0; display:flex; justify-content:space-between;"';
   html += ' onclick="toggleDataFactsSection(\'weapons\')">';
-  html += '<span style="font-weight:bold; font-size:11px;">' + (weaponExpanded ? '▼' : '▶') + ' Weapon Performance</span>';
+  html += '<span style="font-weight:bold; font-size:11px;">' + (weaponExpanded ? '▼' : '▶') + ' Weapon Performance — ' + cumulativeDisplay + ' (cumulative)</span>';
   html += '</div>';
 
   if (weaponExpanded) {
@@ -3428,7 +3468,7 @@ function buildWarriorPanel(team, w, wIdx) {
   if      (S.wTab === 'stats')       body = buildStatsTab(team, w, wIdx);
   else if (S.wTab === 'fight')       body = buildFightOptionsTab(w);
   else if (S.wTab === 'fights')      body = buildFightsTab(w);
-  else if (S.wTab === 'challenges')  body = buildChallengesTab(team, w);
+  else if (S.wTab === 'challenges')  body = buildChallengesTab(team, w, wIdx);
   else if (S.wTab === 'replacement') body = buildReplacementTab(w);
   else if (S.wTab === 'archives')    body = buildArchivesTab(team);
 
@@ -3507,9 +3547,9 @@ function buildStatsTab(team, w, wIdx) {
   const aimPts   = gd.aim_points||[];
   const OC = 'onchange="scheduleAutoSave()"';
 
-  // Build 5 regular strat rows + 1 default
-  let stratRows = '';
-  const strats = w.strategies || [];
+  // Determine which strategy array to display
+  const challengeMode = w.challenge_strategy_enabled || false;
+  const strats = challengeMode ? (w.challenge_strategies || []) : (w.strategies || []);
 
   // Separate Always/default row from numbered trigger rows
   const isDefaultTrigger = t => t === 'Always' || t === 'Always (Default Loop)';
@@ -3523,13 +3563,14 @@ function buildStatsTab(team, w, wIdx) {
     return h;
   }
 
+  let stratRows = '';
   for (let i = 0; i < 5; i++) {
     const s = numbered[i] || { trigger:'', style:'', activity:'', aim_point:'', defense_point:'' };
     stratRows += `<tr>
       <td class="row-num">${i+1}</td>
       <td><select data-si="${i}" data-sf="trigger" ${OC}>${stratOpts(triggers, s.trigger)}</select></td>
       <td><select data-si="${i}" data-sf="style" ${OC}>${stratOpts(styles, s.style)}</select></td>
-      <td style="text-align:center;"><input type="number" min="0" max="9" value="${s.activity||''}" placeholder="" data-si="${i}" data-sf="activity" onchange="scheduleAutoSave()" style="width:36px;"></td>
+      <td style="text-align:center;"><input type="number" min="0" max="9" value="${s.activity??''}" placeholder="" data-si="${i}" data-sf="activity" onchange="scheduleAutoSave()" style="width:36px;"></td>
       <td><select data-si="${i}" data-sf="aim_point" ${OC}>${stratOpts(aimPts, s.aim_point)}</select></td>
       <td><select data-si="${i}" data-sf="defense_point" ${OC}>${stratOpts(aimPts, s.defense_point)}</select></td>
     </tr>`;
@@ -3539,7 +3580,7 @@ function buildStatsTab(team, w, wIdx) {
     <td class="row-num" style="font-weight:bold;">D</td>
     <td style="padding:2px 4px; background:#ececec; font-style:italic; color:#444;">Always (Default Loop)</td>
     <td><select data-si="D" data-sf="style" ${OC}>${stratOpts(styles, always.style)}</select></td>
-    <td style="text-align:center;"><input type="number" min="0" max="9" value="${always.activity||''}" placeholder="" data-si="D" data-sf="activity" onchange="scheduleAutoSave()" style="width:36px;"></td>
+    <td style="text-align:center;"><input type="number" min="0" max="9" value="${always.activity??''}" placeholder="" data-si="D" data-sf="activity" onchange="scheduleAutoSave()" style="width:36px;"></td>
     <td><select data-si="D" data-sf="aim_point" ${OC}>${stratOpts(aimPts, always.aim_point)}</select></td>
     <td><select data-si="D" data-sf="defense_point" ${OC}>${stratOpts(aimPts, always.defense_point)}</select></td>
   </tr>`;
@@ -3611,8 +3652,14 @@ function buildStatsTab(team, w, wIdx) {
 <!-- Strategies -->
 <div class="group" style="margin:0 0 6px 0;">
   <div style="display:flex;align-items:center;justify-content:space-between;padding:0 4px;">
-    <span class="group-label">Strategies</span>
-    <button id="templates-btn" onclick="showTemplatesDropdown()" style="font-size:11px;padding:2px 6px;background:var(--bg);border:1px solid var(--mid);cursor:pointer;">Templates ▾</button>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="group-label">Strategies</span>
+      <button id="templates-btn" onclick="showTemplatesDropdown()" style="font-size:11px;padding:2px 6px;background:var(--bg);border:1px solid var(--mid);cursor:pointer;">Templates ▾</button>
+    </div>
+    <label style="font-size:11px;display:flex;align-items:center;gap:4px;">
+      <input type="checkbox" id="challenge-strat-toggle" ${challengeMode ? 'checked' : ''} onchange="toggleChallengeStrategy()" style="cursor:pointer;">
+      Challenge Mode
+    </label>
   </div>
   <table class="strat-table">
     <thead>
@@ -3869,12 +3916,12 @@ function buildFightsTab(w) {
   </div>
 </div>`;
 }
-function buildChallengesTab(team, w) {
+function buildChallengesTab(team, w, wIdx) {
   const myTier = warriorTier(w);
 
-  // Current challenges queued for this warrior
+  // Current challenges queued for this warrior (stored by slot index)
   const pendingMap  = team.challenges || {};
-  const myPending   = pendingMap[w.name] || [];
+  const myPending   = pendingMap[wIdx] || [];
   const slotsUsed   = myPending.length;
   const slotsLeft   = 3 - slotsUsed;
 
@@ -4181,16 +4228,29 @@ function buildChallengesTab(team, w) {
 }
 
 async function addChallenge(warriorName, targetName) {
+  console.log('[addChallenge] Called with:', {warriorName, targetName});
   const {teamId} = S.sel;
-  if (teamId == null) return;
-  const r = await API.post('/api/team/challenge', {
-    team_id: teamId, warrior_name: warriorName, target_name: targetName, action: 'add',
-  });
-  if (r.success) {
-    S.teams[teamId] = r.team;
-    render();
-  } else {
-    alert('Could not add challenge: ' + r.error);
+  console.log('[addChallenge] teamId:', teamId);
+  if (teamId == null) {
+    console.log('[addChallenge] No teamId, returning');
+    return;
+  }
+  try {
+    console.log('[addChallenge] Posting to /api/team/challenge');
+    const r = await API.post('/api/team/challenge', {
+      team_id: teamId, warrior_name: warriorName, target_name: targetName, action: 'add',
+    });
+    console.log('[addChallenge] Response:', r);
+    if (r.success) {
+      S.teams[teamId] = r.team;
+      render();
+    } else {
+      alert('Could not add challenge: ' + (r.error || 'Unknown error'));
+      console.error('Challenge error:', r);
+    }
+  } catch (e) {
+    alert('Challenge error: ' + e.message);
+    console.error('Challenge exception:', e);
   }
 }
 
@@ -4990,7 +5050,19 @@ function refreshTree() {
   if (wrap) { wrap.innerHTML = buildTree(); }
   // No tree-wrap = not on main screen, nothing to do
 }
-function refreshContent() { const c = el('content'); if (c) { c.innerHTML = buildContent(); _focusAutofocusEl(); } }
+function refreshContent() {
+  const c = el('content');
+  if (c) {
+    c.innerHTML = buildContent();
+    _focusAutofocusEl();
+    // Initialize challenge strategy checkbox state from the selected warrior's flag
+    const checkbox = el('challenge-strat-toggle');
+    if (checkbox) {
+      const w = getSelWarrior();
+      checkbox.checked = (w && w.challenge_strategy_enabled) || false;
+    }
+  }
+}
 
 /* ============================================================
    LOGIN ACTIONS
@@ -5353,6 +5425,9 @@ async function doSaveWarrior() {
     getSelectVal('#sel-t1'), getSelectVal('#sel-t2'), getSelectVal('#sel-t3')
   ].filter(t => t && t !== '-');
 
+  const w = S.teams[teamId] && S.teams[teamId].warriors[wIdx];
+  const challengeMode = w && w.challenge_strategy_enabled || false;
+
   const body = {
     team_id     : teamId,
     warrior_idx : wIdx,
@@ -5362,8 +5437,15 @@ async function doSaveWarrior() {
     secondary_weapon : el('sel-sec')?.value||'Open Hand',
     backup_weapon    : el('sel-bkp')?.value||'None',
     trains,
-    strategies  : strats,
+    challenge_strategy_enabled: challengeMode,
   };
+
+  // Save strategies to the appropriate field based on challenge mode
+  if (challengeMode) {
+    body.challenge_strategies = strats;
+  } else {
+    body.strategies = strats;
+  }
 
   try {
     const r = await API.put('/api/warrior', body);
@@ -5381,6 +5463,42 @@ async function doSaveWarrior() {
 
 function getSelectVal(selector) { const e = document.querySelector(selector); return e ? e.value : null; }
 function getInputVal(selector)  { const e = document.querySelector(selector); return e ? e.value : null; }
+
+async function toggleChallengeStrategy() {
+  const checkbox = el('challenge-strat-toggle');
+  if (!checkbox) return;
+  const enabled = checkbox.checked;
+  const {teamId, wIdx} = S.sel;
+  if (teamId == null || wIdx == null) return;
+
+  // Flush any pending auto-save FIRST so it runs while the DOM is still in the
+  // current mode. If we don't do this, the timer might fire during our API.put
+  // yield, call reloadTeam(), and replace S.teams[teamId] with a stale disk
+  // version — making our in-memory flag set a no-op on an orphaned object.
+  if (_saveTimer) await flushSave();
+
+  // Get a FRESH warrior reference after the flush (flushSave → doSaveWarrior
+  // → reloadTeam may have replaced S.teams[teamId] with a new object).
+  const w = S.teams[teamId] && S.teams[teamId].warriors[wIdx];
+  if (!w) return;
+
+  // Set in-memory flag on the current (non-orphaned) warrior object.
+  w.challenge_strategy_enabled = enabled;
+
+  // Persist the flag to disk.
+  await API.put('/api/warrior', {
+    team_id: teamId,
+    warrior_idx: wIdx,
+    challenge_strategy_enabled: enabled,
+  });
+
+  // Reload from disk so S.teams reflects what was just written.
+  // Without this, a subsequent doSaveWarrior → reloadTeam could read the old
+  // disk version and reset the flag back to false in S.teams.
+  await reloadTeam(teamId);
+
+  refreshContent();
+}
 
 // Debounced auto-save: any change schedules a save 700ms later.
 // _pendingWarrior tracks which warrior the pending save belongs to,
@@ -6785,13 +6903,16 @@ async function doReRegisterLeague() {
 }
 
 async function doLeagueUpload(teamId) {
+  // Flush any pending warrior save so challenge strategies are persisted before upload
+  await flushSave();
+
   const lg = S.league;
 
   // 1. Validation: Ensure required settings exist before attempting connection
-  if (!lg.url || !lg.managerId) { 
-    setMsg('Configure league settings first (Action → League Settings).', 'err'); 
-    render(); 
-    return; 
+  if (!lg.url || !lg.managerId) {
+    setMsg('Configure league settings first (Action → League Settings).', 'err');
+    render();
+    return;
   }
 
   // 2. Security: Ensure password is present or prompted
@@ -6803,13 +6924,21 @@ async function doLeagueUpload(teamId) {
   render();
 
   try {
-    // 3. Disk Access: Retrieve the actual team file from the 'teams' folder
-    const teamData = await Store.readTeam(teamId); 
-    
-    if (!teamData || !teamData.warriors || teamData.warriors.length === 0) { 
-      setMsg('Upload aborted: No warrior data found in local file.', 'err'); 
-      render(); 
-      return; 
+    // 3. Use in-memory team state as the upload source so that fields like
+    // challenge_strategy_enabled always reflect what the user configured in
+    // the current session, even if an async disk write is still in flight.
+    // Fall back to disk only when the team isn't loaded in memory.
+    let teamData = null;
+    if (S.teams && S.teams[teamId]) {
+      teamData = JSON.parse(JSON.stringify(S.teams[teamId]));
+    } else {
+      teamData = await Store.readTeam(teamId);
+    }
+
+    if (!teamData || !teamData.warriors || teamData.warriors.length === 0) {
+      setMsg('Upload aborted: No warrior data found in local file.', 'err');
+      render();
+      return;
     }
 
     setMsg('Connecting to Arena server...', 'ok'); 
@@ -7454,10 +7583,13 @@ async function applyLeagueRerun(rerunTurn, rerunCount) {
    ============================================================ */
 
 async function uploadAllTeams() {
+  // Flush any pending warrior save so challenge strategies are persisted before upload
+  await flushSave();
+
   const lg = S.league;
-  
+
   console.log('UploadAllTeams called', { url: lg.url, managerId: lg.managerId });
-  
+
   // 1. Validate league settings
   if (!lg.url || !lg.managerId) {
     setMsg('Configure league settings first (Action → League Settings).', 'err');

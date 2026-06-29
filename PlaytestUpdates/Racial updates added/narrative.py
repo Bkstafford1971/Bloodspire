@@ -361,16 +361,21 @@ def _warrior_report_block(w: Warrior) -> list:
     return lines
 
 
-def _strategy_table(w: Warrior) -> list:
-    """Return the strategy table lines for the player warrior."""
-    if not w.strategies:
+def _strategy_table(w: Warrior, strats=None) -> list:
+    """Return the strategy table lines for the player warrior.
+
+    strats: the actual strategy list being used in this fight (challenge or
+            regular). Falls back to w.strategies when not provided.
+    """
+    strategies = strats if strats is not None else w.strategies
+    if not strategies:
         return []
     hdr = f"{'TRIGGER':<42}{'FIGHTING STYLE':<20}{'LEVEL':>5}  {'AIMING POINT':<16}{'DEFENSE POINT'}"
     sep = "-" * len(hdr)
     lines = ["", hdr, sep]
-    for i, s in enumerate(w.strategies, 1):
-        is_default = (not s.trigger) or s.trigger.lower() == "always"
-        trig = "D: Always" if is_default else f"{i}: {s.trigger}"
+    for i, s in enumerate(strategies, 1):
+        is_default = (not s.trigger) or s.trigger.lower().startswith("always")
+        trig = "D: Always (Default Loop)" if is_default else f"{i}: {s.trigger}"
         aim  = s.aim_point    if s.aim_point    else "None"
         dfe  = s.defense_point if s.defense_point else "None"
         sty  = s.style        if s.style        else "None"
@@ -388,6 +393,7 @@ def build_fight_header(
     pos_a: int = 1,
     pos_b: int = 1,
     challenger_name: str = None,
+    strats_a=None,
 ) -> str:
     """
     Generate the fight header in report/narrative style.
@@ -454,8 +460,9 @@ def build_fight_header(
     lines.extend(_warrior_report_block(warrior_b))
     lines.append("")
 
-    # Player strategy table only
-    lines.extend(_strategy_table(warrior_a))
+    # Player strategy table — use the actual strategies for this fight
+    # (challenge strategies when challenge mode is active, otherwise regular)
+    lines.extend(_strategy_table(warrior_a, strats_a))
 
     lines.append("")
     lines.append(SEP)

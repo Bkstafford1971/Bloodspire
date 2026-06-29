@@ -738,12 +738,6 @@ def _run_turn(request_password, rerun_turn=None):
     print(f"  Total warriors: {total_warriors}")
     print(f"  Expected fights: {total_warriors} (one per warrior)\n")
 
-    # Clear challenges from all loaded teams to prevent stale client uploads
-    # from creating duplicate challenge fights (client may upload before downloading
-    # previous turn's results, so their upload could have old challenge data)
-    for team in all_player_teams:
-        team.clear_challenges()
-
     # ===================================================================
     # STEP 2: Build GLOBAL fight card using global pool matchmaking
     # ===================================================================
@@ -756,6 +750,12 @@ def _run_turn(request_password, rerun_turn=None):
         opponent_teams=[],  # Empty - all warriors come from player_teams
         champion_state=champ_state
     )
+
+    # Clear the pending challenge requests now that the fight card is built.
+    # Do NOT reset challenge_strategy_enabled yet — warriors need that flag
+    # intact so the combat engine can apply their challenge strategies during fights.
+    for team in all_player_teams:
+        team.clear_challenges(reset_strategy_mode=False)
 
     print(f"\n  Global fight card built: {len(global_card)} fights scheduled")
     print(f"  Expected fights: {total_warriors}")
@@ -901,6 +901,7 @@ def _run_turn(request_password, rerun_turn=None):
             "opponent_slain": killed,
             "is_kill": killed,
             "fight_type": fight_type_to_record,
+            "primary_weapon": fight.player_warrior.primary_weapon or 'Unknown',
         })
 
         # Update opponent warrior stats
@@ -938,6 +939,7 @@ def _run_turn(request_password, rerun_turn=None):
                 "opponent_slain": opp_killed,
                 "is_kill": opp_killed,
                 "fight_type": fight_type_to_record,
+                "weapon_name": fight.opponent.primary_weapon or 'Unknown',
             })
 
         # Handle deaths
@@ -1125,8 +1127,8 @@ def _run_turn(request_password, rerun_turn=None):
                 "l": sum(1 for b in res["bouts"] if b.get("result") == "LOSS"),
                 "k": sum(1 for b in res["bouts"] if b.get("opponent_slain")),
             })
-            # Clear regular challenges after turn completes (prevents spam from auto-upload)
-            team.clear_challenges()
+            # Clear challenges and reset challenge strategy mode now that all fights are done.
+            team.clear_challenges(reset_strategy_mode=True)
             # Decrement and expire any remaining blood challenges for this turn
             team.decrement_blood_challenge_turns()
             # Check for expired BCs before removing them

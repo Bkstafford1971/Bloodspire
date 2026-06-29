@@ -2314,12 +2314,32 @@ class CombatEngine:
             # Take the worst penalty
             st.armor_penalty = max(p_body, p_helm)
 
-        if warrior_a.strategies:
-            self.state_a.active_strategy  = warrior_a.strategies[-1]
-            self.state_a.active_strat_idx = len(warrior_a.strategies)
-        if warrior_b.strategies:
-            self.state_b.active_strategy  = warrior_b.strategies[-1]
-            self.state_b.active_strat_idx = len(warrior_b.strategies)
+        # Select strategy: use challenge_strategies if this is a challenge/blood_challenge fight
+        # and the warrior has challenge_strategy_enabled set
+        _is_challenge = fight_type in ('challenge', 'blood_challenge')
+        def get_warrior_strategies(warrior):
+            cse = getattr(warrior, 'challenge_strategy_enabled', False)
+            cs  = getattr(warrior, 'challenge_strategies', [])
+            print(f"  [CHAL_STRAT] {warrior.name}: fight_type={fight_type}, is_challenge={_is_challenge}, cse={cse}, cs_count={len(cs)}")
+            if _is_challenge and cse and cs:
+                print(f"  [CHAL_STRAT] Using CHALLENGE strategies for {warrior.name}")
+                return cs
+            return warrior.strategies
+
+        strats_a = get_warrior_strategies(warrior_a)
+        strats_b = get_warrior_strategies(warrior_b)
+
+        # Store chosen strategy lists for use throughout the fight so every
+        # strategy re-evaluation uses the same set (challenge or regular).
+        self._strats_a = strats_a
+        self._strats_b = strats_b
+
+        if strats_a:
+            self.state_a.active_strategy  = strats_a[-1]
+            self.state_a.active_strat_idx = len(strats_a)
+        if strats_b:
+            self.state_b.active_strategy  = strats_b[-1]
+            self.state_b.active_strat_idx = len(strats_b)
 
         self._lines: List[str] = []
         self._prev_attacks_a: int = 0
@@ -2337,7 +2357,9 @@ class CombatEngine:
         # Check attacker's strategy
         fs_a = as_.to_fighter_state()
         fs_b = ds_.to_fighter_state() # Foe state for attacker
-        new_strat_a, new_idx_a = evaluate_triggers(as_.warrior.strategies, fs_a, fs_b, minute)
+        _is_chal = self.fight_type in ('challenge', 'blood_challenge')
+        strats_a = (getattr(as_.warrior, 'challenge_strategies', None) or as_.warrior.strategies) if (_is_chal and getattr(as_.warrior, 'challenge_strategy_enabled', False)) else as_.warrior.strategies
+        new_strat_a, new_idx_a = evaluate_triggers(strats_a, fs_a, fs_b, minute)
         if new_idx_a != as_.active_strat_idx:
             self._emit(N.strategy_switch_line(as_.warrior.name, new_idx_a))
             if self.debug_logger:
@@ -2348,7 +2370,8 @@ class CombatEngine:
         # Check defender's strategy
         fs_b_for_def = ds_.to_fighter_state()
         fs_a_for_def = as_.to_fighter_state() # Foe state for defender
-        new_strat_b, new_idx_b = evaluate_triggers(ds_.warrior.strategies, fs_b_for_def, fs_a_for_def, minute)
+        strats_b = (getattr(ds_.warrior, 'challenge_strategies', None) or ds_.warrior.strategies) if (_is_chal and getattr(ds_.warrior, 'challenge_strategy_enabled', False)) else ds_.warrior.strategies
+        new_strat_b, new_idx_b = evaluate_triggers(strats_b, fs_b_for_def, fs_a_for_def, minute)
         if new_idx_b != ds_.active_strat_idx:
             self._emit(N.strategy_switch_line(ds_.warrior.name, new_idx_b))
             if self.debug_logger:
@@ -2394,13 +2417,17 @@ class CombatEngine:
         as_.prev_damage_category = new_dmg_att
 
         # Check defender's strategy
-        new_strat, new_idx = evaluate_triggers(ds_.warrior.strategies, fs_defender, fs_attacker, minute)
+        new_strat, new_idx = evaluate_triggers(self._get_strats(ds_), fs_defender, fs_attacker, minute)
         if new_idx != ds_.active_strat_idx:
             self._emit(N.strategy_switch_line(ds_.warrior.name, new_idx))
             if self.debug_logger:
                 self.debug_logger.log_strategy_switch(ds_.warrior.name, ds_.active_strat_idx, new_idx)
             ds_.active_strategy = new_strat
             ds_.active_strat_idx = new_idx
+
+    def _get_strats(self, state: "_CState") -> list:
+        """Return the stored strategy list for this fighter (challenge or regular)."""
+        return self._strats_a if state is self.state_a else self._strats_b
 
     # =========================================================================
     # MAIN LOOP
@@ -2420,6 +2447,7 @@ class CombatEngine:
             self.manager_a_name, self.manager_b_name,
             self.pos_a, self.pos_b,
             challenger_name=self.challenger_name,
+            strats_a=self._strats_a,
         ))
         self._lines.append("")
 
@@ -2696,8 +2724,8 @@ class CombatEngine:
 
         fs_a = self.state_a.to_fighter_state()
         fs_b = self.state_b.to_fighter_state()
-        strat_a, idx_a = evaluate_triggers(self.warrior_a.strategies, fs_a, fs_b, minute)
-        strat_b, idx_b = evaluate_triggers(self.warrior_b.strategies, fs_b, fs_a, minute)
+        strat_a, idx_a = evaluate_triggers(self._strats_a, fs_a, fs_b, minute)
+        strat_b, idx_b = evaluate_triggers(self._strats_b, fs_b, fs_a, minute)
 
         if idx_a != self.state_a.active_strat_idx:
             self._emit(N.strategy_switch_line(self.warrior_a.name, idx_a))
@@ -3675,9 +3703,9 @@ class CombatEngine:
         fs_attacker = as_.to_fighter_state()
 
         # Check defender's strategy
-        new_strat_def, new_idx_def = evaluate_triggers(ds_.warrior.strategies, fs_defender, fs_attacker, minute)
+        new_strat_def, new_idx_def = evaluate_triggers(self._get_strats(ds_), fs_defender, fs_attacker, minute)
         # Check attacker's strategy
-        new_strat_att, new_idx_att = evaluate_triggers(as_.warrior.strategies, fs_attacker, fs_defender, minute)
+        new_strat_att, new_idx_att = evaluate_triggers(self._get_strats(as_), fs_attacker, fs_defender, minute)
 
         # Emit both switches together (if they occur)
         if new_idx_def != ds_.active_strat_idx:
