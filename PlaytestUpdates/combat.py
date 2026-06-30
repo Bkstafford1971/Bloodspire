@@ -139,7 +139,9 @@ VERSATILE_WEAPONS = {
 
 # Weapons that use finesse/precision damage calculation (small weapon skill bonus)
 FINESSE_DAMAGE_WEAPONS = {
-    "stiletto", "cestus", "knife", "dagger", "epee"
+    "stiletto", "knife", "dagger", "short_sword", "epee", "scimitar",
+    "hatchet", "francisca", "hammer", "short_spear", "flail",
+    "cestus", "javelin", "swordbreaker", "bola"
 }
 
 
@@ -254,8 +256,14 @@ def _is_elf_dual_wielding_finesse(attacker: Warrior) -> bool:
 def _calculate_elf_extra_attack_chance(attacker: Warrior, defender: Warrior = None) -> int:
     """
     Calculate the percentage chance (0-100) for an Elf extra attack from dual-wielding.
-    Base 7%, up to 20% based on secondary weapon skill level.
-    Adjusted by skill differential: +/- 2.5% per skill point difference.
+
+    Base (15-30%): Secondary weapon skill (required for dual-wield)
+    Bonuses:
+      - Riposte: +0.5% per skill level (up to +4.5%)
+      - Feint: +0.3% per skill level (up to +2.7%)
+      - Initiative: +0.4% per skill level (up to +3.6%)
+
+    Total range: 15% (skill 0 in all) to 40% (skill 9 in all)
     """
     if not _is_elf_dual_wielding_finesse(attacker):
         return 0
@@ -263,13 +271,19 @@ def _calculate_elf_extra_attack_chance(attacker: Warrior, defender: Warrior = No
     secondary_key = attacker.secondary_weapon.lower().replace(" ", "_").replace("&", "and")
     secondary_skill = attacker.skills.get(secondary_key, 0)
 
-    # Scale from 7% (skill 0) to 20% (skill 9)
-    # 7% + (20% - 7%) * (skill / 9) = 7 + 1.44... * skill
-    base_chance = 7
-    max_chance = 20
-    chance_per_level = (max_chance - base_chance) / 9.0
+    # Base from secondary weapon: 15% (skill 0) to 30% (skill 9)
+    base_chance = 15 + (secondary_skill / 9.0) * 15
 
-    chance = base_chance + (secondary_skill * chance_per_level)
+    # Bonuses from complementary skills
+    riposte_skill = attacker.skills.get("riposte", 0)
+    feint_skill = attacker.skills.get("feint", 0)
+    initiative_skill = attacker.skills.get("initiative", 0)
+
+    riposte_bonus = (riposte_skill / 9.0) * 4.5    # Up to +4.5%
+    feint_bonus = (feint_skill / 9.0) * 2.7       # Up to +2.7%
+    initiative_bonus = (initiative_skill / 9.0) * 3.6  # Up to +3.6%
+
+    chance = base_chance + riposte_bonus + feint_bonus + initiative_bonus
 
     # Apply skill differential modifier if defender is provided
     if defender:
@@ -278,7 +292,8 @@ def _calculate_elf_extra_attack_chance(attacker: Warrior, defender: Warrior = No
         differential_modifier = _calculate_skill_differential_modifier(secondary_skill, defender_skill)
         chance *= (1.0 + differential_modifier)
 
-    return int(max(base_chance, min(max_chance, chance)))
+    # Cap at 40%
+    return int(max(15, min(40, chance)))
 
 
 def _has_martial_combat_bonus(warrior: Warrior) -> bool:
@@ -460,25 +475,25 @@ def _gnome_cs_line(defender_name: str, attacker_name: str) -> str:
 def _get_tabaxi_frenzy_damage_bonus(attacker: Warrior) -> int:
     """
     Get Tabaxi frenzy damage bonus based on primary weapon skill.
-    Scales from +3 (skill 0) to +6 (skill 9)
+    Scales from +5 (skill 0) to +7 (skill 9)
     """
     wpn_key = attacker.primary_weapon.lower().replace(" ", "_").replace("&", "and")
     wpn_skill = attacker.skills.get(wpn_key, 0)
-    # Scale from 3 to 6: base 3 + (3 * skill/9)
-    bonus = 3 + int((3.0 * wpn_skill) / 9.0)
+    # Scale from 5 to 7: base 5 + (2 * skill/9)
+    bonus = 5 + int((2.0 * wpn_skill) / 9.0)
     return bonus
 
 
 def _calculate_tabaxi_frenzy_trigger_chance(attacker: Warrior, defender: Warrior = None) -> int:
     """
     Calculate the percentage chance (0-100) for Tabaxi frenzy to trigger.
-    Base 25%, scaled by primary weapon skill.
+    Base 50% (natural feline instincts), scaled by primary weapon skill.
     Adjusted by skill differential: +/- 2.5% per skill point difference.
     """
     wpn_key = attacker.primary_weapon.lower().replace(" ", "_").replace("&", "and")
     wpn_skill = attacker.skills.get(wpn_key, 0)
 
-    chance = 35
+    chance = 50
 
     # Apply skill differential modifier if defender is provided
     if defender:
@@ -487,7 +502,7 @@ def _calculate_tabaxi_frenzy_trigger_chance(attacker: Warrior, defender: Warrior
         differential_modifier = _calculate_skill_differential_modifier(wpn_skill, defender_skill)
         chance *= (1.0 + differential_modifier)
 
-    return int(max(10, min(40, chance)))  # Clamp between 10% and 40%
+    return int(max(20, min(60, chance)))  # Clamp between 20% and 60%
 
 
 def _get_defender_primary_defense_skill(defender: Warrior, defender_style: Strategy) -> tuple[int, str]:
@@ -851,7 +866,17 @@ def _defense_roll(
         acrobatics_level = defender.skills.get("acrobatics", 0)
         acrobatics_b = acrobatics_level * 2 if acrobatics_level > 0 else 0
 
-        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train_dodge + race_dodge_bonus - effective_dodge_penalty * 2 + acrobatics_b
+        # Tabaxi gain +1 additional acrobatics bonus per level (natural agility synergy)
+        if defender.race.name == "Tabaxi" and acrobatics_level > 0:
+            acrobatics_b += acrobatics_level
+
+        # Tabaxi natural engagement/withdrawal bonus: bonus dodge when using Engage or Withdraw styles
+        engage_withdraw_bonus = 0
+        if defender.race.name == "Tabaxi":
+            if strategy.style in ("Engage", "Withdraw"):
+                engage_withdraw_bonus = acrobatics_level  # Bonus dodge equal to acrobatics skill level
+
+        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train_dodge + race_dodge_bonus - effective_dodge_penalty * 2 + acrobatics_b + engage_withdraw_bonus
 
         # Heavy weapon dodge penalty for Goblins & Tabaxi
         if defender.race.modifiers.heavy_weapon_penalty:
@@ -1374,7 +1399,19 @@ def _defense_roll_verbose(
         race_dg_pen = defender.race.modifiers.dodge_penalty * 2
         acro_lv  = defender.skills.get("acrobatics", 0)
         acro_b   = acro_lv * 2 if acro_lv > 0 else 0
-        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train + race_dg - race_dg_pen + acro_b
+
+        # Tabaxi gain +1 additional acrobatics bonus per level
+        tabaxi_acro_bonus = 0
+        if defender.race.name == "Tabaxi" and acro_lv > 0:
+            tabaxi_acro_bonus = acro_lv
+            acro_b += tabaxi_acro_bonus
+
+        # Tabaxi engage/withdraw bonus
+        engage_withdraw_bonus = 0
+        if defender.race.name == "Tabaxi" and strategy.style in ("Engage", "Withdraw"):
+            engage_withdraw_bonus = acro_lv
+
+        total    = roll + dex_b + skill_b + wpn_b + style_b + act_mod + size_b + luck_b + dex_train + race_dg - race_dg_pen + acro_b + engage_withdraw_bonus
 
         heavy_pen = 0
         if defender.race.modifiers.heavy_weapon_penalty:
@@ -1396,7 +1433,9 @@ def _defense_roll_verbose(
             "dex_trained_x2.5": dex_train,
             "race_dodge_x2": race_dg,
             "race_dodge_pen_x2": -race_dg_pen,
-            "acrobatics_x2": acro_b if acro_b else 0,
+            "acrobatics_x2": acro_lv * 2 if acro_lv > 0 else 0,
+            "tabaxi_acro_bonus": tabaxi_acro_bonus if tabaxi_acro_bonus else 0,
+            "tabaxi_engage_withdraw": engage_withdraw_bonus if engage_withdraw_bonus else 0,
             "heavy_wpn_pen": heavy_pen if heavy_pen else 0,
         })
 
@@ -1627,18 +1666,28 @@ def _calc_damage_verbose(
 
 def _concede_check_verbose(warrior: "Warrior", state: "_CState", is_monster_fight: bool = False):
     if is_monster_fight:
-        return False, {"monster_fight": True, "d100": 0, "PRE_bonus": 0, "luck_half": 0, "total": 0, "threshold": 0}
+        return False, {"monster_fight": True, "d100": 0, "PRE_bonus": 0, "popularity_bonus": 0, "luck_half": 0, "total": 0, "threshold": 0}
     roll      = _d100()
     presence  = warrior.presence
     pre_b     = max(-6, min(10, presence - 10))
+
+    # Popularity bonus to concede odds (fans cheer for their favorites, capped at +15)
+    pop_bonus = 0
+    if warrior.popularity >= 91:
+        pop_bonus = 15
+    elif warrior.popularity >= 81:
+        pop_bonus = 10
+    elif warrior.popularity >= 71:
+        pop_bonus = 6
+
     # Probabilistic luck: 25% chance to apply luck//2 bonus to this concede roll
     luck_contribution = _apply_conditional_luck(0, warrior, threshold=25)
     luck_half = luck_contribution // 2
-    total     = roll + pre_b + luck_half
+    total     = roll + pre_b + pop_bonus + luck_half
     threshold = max(40, 68 - (presence // 3))
     granted   = total >= threshold
     return granted, {
-        "d100": roll, "PRE_bonus": pre_b, "luck_half": luck_half,
+        "d100": roll, "PRE_bonus": pre_b, "popularity_bonus": pop_bonus, "luck_half": luck_half,
         "total": total, "threshold": threshold,
     }
 
@@ -1873,8 +1922,12 @@ def _death_check(prev_hp: int, damage: int) -> bool:
 
 def _concede_check(warrior: Warrior, state: _CState, is_monster_fight: bool = False) -> bool:
     """
-    d100 + PRE_bonus + luck//2 vs threshold (max(40, 68 - PRE//3)).
+    d100 + PRE_bonus + popularity_bonus + luck//2 vs threshold (max(40, 68 - PRE//3)).
     High Presence = lower threshold = easier to get mercy.
+    High Popularity = further bonus to roll (star athletes get mercy, capped at +15).
+    Popular warriors (71-80): +6 to roll
+    Very popular (81-90): +10 to roll
+    Legendary (91-100): +15 to roll (capped - death remains possible)
     Effective mercy rate ~40-55% when triggered; overall fight death ~2.5-3%.
     Luck is probabilistic: 25% chance to apply luck//2 bonus to concede roll.
     """
@@ -1883,9 +1936,19 @@ def _concede_check(warrior: Warrior, state: _CState, is_monster_fight: bool = Fa
     roll      = _d100()
     presence  = warrior.presence
     pre_b     = max(-6, min(10, presence - 10))
+
+    # Popularity bonus to concede odds (fans cheer for their favorites, capped at +15)
+    pop_bonus = 0
+    if warrior.popularity >= 91:
+        pop_bonus = 15
+    elif warrior.popularity >= 81:
+        pop_bonus = 10
+    elif warrior.popularity >= 71:
+        pop_bonus = 6
+
     # Probabilistic luck: 25% chance to apply luck//2 bonus to this concede roll
     luck_contribution = _apply_conditional_luck(0, warrior, threshold=25) // 2
-    total     = roll + pre_b + luck_contribution
+    total     = roll + pre_b + pop_bonus + luck_contribution
     threshold = max(40, 68 - (presence // 3))
     return total >= threshold
 
@@ -1938,6 +2001,15 @@ def _update_endurance(
     # Overencumbrance burn penalty
     if state.armor_penalty > 0:
         burn *= (1.0 + state.armor_penalty)
+
+    # Heavy armor endurance burn penalty (Chain and heavier)
+    heavy_armor_burn_multipliers = {
+        "Chain": 1.12,
+        "Half-Plate": 1.18,
+        "Full Plate": 1.25,
+    }
+    if warrior.armor in heavy_armor_burn_multipliers:
+        burn *= heavy_armor_burn_multipliers[warrior.armor]
 
     # Phase II feedback spiral: already exhausted → reserves drain 25% faster
     phase2 = warrior.max_endurance * 0.25
@@ -2103,6 +2175,15 @@ def _calc_apm_with_fraction(warrior: Warrior, strategy: Strategy, state: _CState
     if state.armor_penalty > 0:
         base *= (1.0 - state.armor_penalty)
 
+    # Heavy armor APM penalty (Chain and heavier)
+    heavy_armor_apm_penalties = {
+        "Chain": 0.03,
+        "Half-Plate": 0.05,
+        "Full Plate": 0.08,
+    }
+    if warrior.armor in heavy_armor_apm_penalties:
+        base *= (1.0 - heavy_armor_apm_penalties[warrior.armor])
+
     # Clamp and split into base + fraction
     base = max(1.0, min(10.0, base))
     base_apm = int(base)
@@ -2233,12 +2314,30 @@ class CombatEngine:
             # Take the worst penalty
             st.armor_penalty = max(p_body, p_helm)
 
-        if warrior_a.strategies:
-            self.state_a.active_strategy  = warrior_a.strategies[-1]
-            self.state_a.active_strat_idx = len(warrior_a.strategies)
-        if warrior_b.strategies:
-            self.state_b.active_strategy  = warrior_b.strategies[-1]
-            self.state_b.active_strat_idx = len(warrior_b.strategies)
+        # Select strategy: use challenge_strategies if this is a challenge/blood_challenge fight
+        # and the warrior has challenge_strategy_enabled set
+        _is_challenge = fight_type in ('challenge', 'blood_challenge')
+        def get_warrior_strategies(warrior):
+            cse = getattr(warrior, 'challenge_strategy_enabled', False)
+            cs  = getattr(warrior, 'challenge_strategies', [])
+            if _is_challenge and cse and cs:
+                return cs
+            return warrior.strategies
+
+        strats_a = get_warrior_strategies(warrior_a)
+        strats_b = get_warrior_strategies(warrior_b)
+
+        # Store chosen strategy lists for use throughout the fight so every
+        # strategy re-evaluation uses the same set (challenge or regular).
+        self._strats_a = strats_a
+        self._strats_b = strats_b
+
+        if strats_a:
+            self.state_a.active_strategy  = strats_a[-1]
+            self.state_a.active_strat_idx = len(strats_a)
+        if strats_b:
+            self.state_b.active_strategy  = strats_b[-1]
+            self.state_b.active_strat_idx = len(strats_b)
 
         self._lines: List[str] = []
         self._prev_attacks_a: int = 0
@@ -2256,7 +2355,9 @@ class CombatEngine:
         # Check attacker's strategy
         fs_a = as_.to_fighter_state()
         fs_b = ds_.to_fighter_state() # Foe state for attacker
-        new_strat_a, new_idx_a = evaluate_triggers(as_.warrior.strategies, fs_a, fs_b, minute)
+        _is_chal = self.fight_type in ('challenge', 'blood_challenge')
+        strats_a = (getattr(as_.warrior, 'challenge_strategies', None) or as_.warrior.strategies) if (_is_chal and getattr(as_.warrior, 'challenge_strategy_enabled', False)) else as_.warrior.strategies
+        new_strat_a, new_idx_a = evaluate_triggers(strats_a, fs_a, fs_b, minute)
         if new_idx_a != as_.active_strat_idx:
             self._emit(N.strategy_switch_line(as_.warrior.name, new_idx_a))
             if self.debug_logger:
@@ -2267,7 +2368,8 @@ class CombatEngine:
         # Check defender's strategy
         fs_b_for_def = ds_.to_fighter_state()
         fs_a_for_def = as_.to_fighter_state() # Foe state for defender
-        new_strat_b, new_idx_b = evaluate_triggers(ds_.warrior.strategies, fs_b_for_def, fs_a_for_def, minute)
+        strats_b = (getattr(ds_.warrior, 'challenge_strategies', None) or ds_.warrior.strategies) if (_is_chal and getattr(ds_.warrior, 'challenge_strategy_enabled', False)) else ds_.warrior.strategies
+        new_strat_b, new_idx_b = evaluate_triggers(strats_b, fs_b_for_def, fs_a_for_def, minute)
         if new_idx_b != ds_.active_strat_idx:
             self._emit(N.strategy_switch_line(ds_.warrior.name, new_idx_b))
             if self.debug_logger:
@@ -2313,13 +2415,17 @@ class CombatEngine:
         as_.prev_damage_category = new_dmg_att
 
         # Check defender's strategy
-        new_strat, new_idx = evaluate_triggers(ds_.warrior.strategies, fs_defender, fs_attacker, minute)
+        new_strat, new_idx = evaluate_triggers(self._get_strats(ds_), fs_defender, fs_attacker, minute)
         if new_idx != ds_.active_strat_idx:
             self._emit(N.strategy_switch_line(ds_.warrior.name, new_idx))
             if self.debug_logger:
                 self.debug_logger.log_strategy_switch(ds_.warrior.name, ds_.active_strat_idx, new_idx)
             ds_.active_strategy = new_strat
             ds_.active_strat_idx = new_idx
+
+    def _get_strats(self, state: "_CState") -> list:
+        """Return the stored strategy list for this fighter (challenge or regular)."""
+        return self._strats_a if state is self.state_a else self._strats_b
 
     # =========================================================================
     # MAIN LOOP
@@ -2339,6 +2445,7 @@ class CombatEngine:
             self.manager_a_name, self.manager_b_name,
             self.pos_a, self.pos_b,
             challenger_name=self.challenger_name,
+            strats_a=self._strats_a,
         ))
         self._lines.append("")
 
@@ -2520,14 +2627,14 @@ class CombatEngine:
     def _execute_tabaxi_frenzy(self, fst: _CState, ost: _CState,
                                fstrat: Strategy, ostrat: Strategy,
                                minute: int) -> Optional[FightResult]:
-        """Execute the Tabaxi frenzy burst - 3 rapid attacks with escalating defense penalties."""
+        """Execute the Tabaxi frenzy burst - 4 rapid attacks with escalating defense penalties (blur of claws and speed)."""
         fst.frenzy_used = True
         att = fst.warrior
         dfr = ost.warrior
 
         self._emit(N.tabaxi_frenzy_intro_line(att.name, att.gender))
 
-        defense_penalties = [0, 15, 30]
+        defense_penalties = [10, 25, 40, 50]
         _pre_frenzy = ost.current_hp
 
         try:
@@ -2599,6 +2706,11 @@ class CombatEngine:
             for st in (self.state_a, self.state_b):
                 if st.armor_penalty >= 0.10:
                     self._emit(N.overencumbered_prefight_line(st.warrior.name, st.warrior.gender))
+            for _w in (self.warrior_a, self.warrior_b):
+                _cry = getattr(_w, "battle_cry", None)
+                if _cry:
+                    self._emit(f'{_w.name} shouts: "{_cry}"')
+                    break
         else:
             tier, winner_name, loser_name = self._calc_minute_advantage()
             adv_line = N.minute_status_line(
@@ -2615,8 +2727,8 @@ class CombatEngine:
 
         fs_a = self.state_a.to_fighter_state()
         fs_b = self.state_b.to_fighter_state()
-        strat_a, idx_a = evaluate_triggers(self.warrior_a.strategies, fs_a, fs_b, minute)
-        strat_b, idx_b = evaluate_triggers(self.warrior_b.strategies, fs_b, fs_a, minute)
+        strat_a, idx_a = evaluate_triggers(self._strats_a, fs_a, fs_b, minute)
+        strat_b, idx_b = evaluate_triggers(self._strats_b, fs_b, fs_a, minute)
 
         if idx_a != self.state_a.active_strat_idx:
             self._emit(N.strategy_switch_line(self.warrior_a.name, idx_a))
@@ -3594,9 +3706,9 @@ class CombatEngine:
         fs_attacker = as_.to_fighter_state()
 
         # Check defender's strategy
-        new_strat_def, new_idx_def = evaluate_triggers(ds_.warrior.strategies, fs_defender, fs_attacker, minute)
+        new_strat_def, new_idx_def = evaluate_triggers(self._get_strats(ds_), fs_defender, fs_attacker, minute)
         # Check attacker's strategy
-        new_strat_att, new_idx_att = evaluate_triggers(as_.warrior.strategies, fs_attacker, fs_defender, minute)
+        new_strat_att, new_idx_att = evaluate_triggers(self._get_strats(as_), fs_attacker, fs_defender, minute)
 
         # Emit both switches together (if they occur)
         if new_idx_def != ds_.active_strat_idx:
