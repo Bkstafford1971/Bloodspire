@@ -583,6 +583,95 @@ async function resetSaveFolder() {
   render();
 }
 
+async function changeFolder() {
+  try {
+    const newPath = await window.electronAPI.selectFolder();
+    if (newPath) {
+      baseDir = newPath;
+      localStorage.setItem('bloodspire_base_dir', newPath);
+      S.folderReady = true;
+      alert(`Folder changed to:\n${newPath}`);
+      refreshSavedFolders();
+      render();
+    }
+  } catch (err) {
+    console.error('Error changing folder:', err);
+    alert('Error changing folder: ' + err.message);
+  }
+}
+
+async function addCurrentFolderToSaved() {
+  if (!baseDir) {
+    alert('No folder selected');
+    return;
+  }
+  try {
+    const folderName = baseDir.split(/[/\\]/).pop() || baseDir;
+    const result = await window.electronAPI.addSavedFolder(baseDir, folderName);
+    if (result.success) {
+      alert(`Folder added to saved list: ${folderName}`);
+      await refreshSavedFolders();
+      render();
+    } else {
+      alert('Error: ' + result.error);
+    }
+  } catch (err) {
+    console.error('Error adding folder:', err);
+    alert('Error adding folder: ' + err.message);
+  }
+}
+
+async function switchToSavedFolder(folderPath) {
+  if (!confirm(`Switch to folder?\n${folderPath}`)) {
+    return;
+  }
+  try {
+    const result = await window.electronAPI.switchToFolder(folderPath);
+    if (result.success) {
+      baseDir = folderPath;
+      localStorage.setItem('bloodspire_base_dir', folderPath);
+      S.folderReady = true;
+      alert(`Switched to:\n${folderPath}`);
+      S.view = 'login';
+      S.msg = '';
+      await refreshSavedFolders();
+      render();
+    } else {
+      alert('Error: ' + result.error);
+    }
+  } catch (err) {
+    console.error('Error switching folder:', err);
+    alert('Error switching folder: ' + err.message);
+  }
+}
+
+async function removeSavedFolder(folderPath) {
+  if (!confirm(`Remove from saved folders?\n${folderPath}`)) {
+    return;
+  }
+  try {
+    const result = await window.electronAPI.removeSavedFolder(folderPath);
+    if (result.success) {
+      await refreshSavedFolders();
+      render();
+    } else {
+      alert('Error: ' + result.error);
+    }
+  } catch (err) {
+    console.error('Error removing folder:', err);
+    alert('Error removing folder: ' + err.message);
+  }
+}
+
+async function refreshSavedFolders() {
+  try {
+    S.savedFolders = await window.electronAPI.getSavedFolders();
+  } catch (err) {
+    console.error('Error loading saved folders:', err);
+    S.savedFolders = [];
+  }
+}
+
 // Browser mode: use File System Access API to pick a folder
 async function fsaPickFolder() {
   if (!window.showDirectoryPicker) {
@@ -1018,6 +1107,7 @@ const S = {
   folderHandle:    null,                // FileSystemDirectoryHandle for local saves
   folderReady:     false,               // true once the user has granted permission
   savedFolderName: null,                // display name of the last-selected folder
+  savedFolders:    [],                  // list of saved folders {path, name}
   view:        'folder_pick',        // 'folder_pick' | 'login' | 'main' | 'create_team' | 'turn_results'
   loginTab:    'new',     // 'login' | 'new'
   account:     null,
@@ -2166,8 +2256,35 @@ function buildMenuBar() {
       <div class="menu-item" onclick="triggerRestoreFromZip()" style="padding:4px 12px; color:#080;">
         📦 Restore from ZIP...
       </div>
+      <div style="border-top:1px solid var(--mid); margin:2px 0;"></div>
+      <div style="padding:6px 12px; font-size:11px; font-weight:bold; color:var(--mid);">
+        Saves Folder
+      </div>
+      <div style="padding:4px 12px; font-size:11px; word-break:break-all; max-width:280px;">
+        <strong>Current:</strong> ${baseDir || '(none)'}
+      </div>
+      <div class="menu-item" onclick="changeFolder()" style="padding:4px 12px; color:#008;">
+        📂 Change Folder...
+      </div>
+      <div class="menu-item" onclick="addCurrentFolderToSaved()" style="padding:4px 12px; color:#080;">
+        ✓ Save Current Folder
+      </div>
+      ${S.savedFolders && S.savedFolders.length > 0 ? `
+      <div style="border-top:1px solid var(--mid); margin:2px 0;"></div>
+      <div style="padding:4px 12px; font-size:11px; font-weight:bold; color:var(--mid);">
+        Saved Folders
+      </div>
+      ${S.savedFolders.map(f => `
+        <div style="padding:4px 12px; display:flex; gap:4px; align-items:center; font-size:11px;">
+          <div style="flex:1; word-break:break-all;">${f.name || f.path}</div>
+          <button class="sm" onclick="switchToSavedFolder('${f.path.replace(/'/g, "\\'")}'); event.stopPropagation();" title="Switch to this folder">➤</button>
+          <button class="sm" onclick="removeSavedFolder('${f.path.replace(/'/g, "\\'")}'); event.stopPropagation();" title="Remove from list">✕</button>
+        </div>
+      `).join('')}
+      ` : ''}
+      <div style="border-top:1px solid var(--mid); margin:2px 0;"></div>
       <div class="menu-item" onclick="resetSaveFolder()" style="padding:4px 12px; color:#800;">
-        Reset Save Folder...
+        🔄 Reset Save Folder...
       </div>
     </div>
   </span>
@@ -8017,15 +8134,26 @@ async function init() {
   // ============================================================
   // STEP 2: Check for saved folder path (Electron mode)
   // ============================================================
+
+  // Load saved folders list for folder switching feature
+  if (window.electronAPI) {
+    try {
+      await refreshSavedFolders();
+      console.log('Loaded saved folders:', S.savedFolders.length);
+    } catch (err) {
+      console.error('Failed to load saved folders:', err);
+    }
+  }
+
   const savedPath = localStorage.getItem('bloodspire_base_dir');
   console.log('Checking for saved folder path:', savedPath || 'none found');
-  
+
   if (savedPath) {
     // We have a saved folder! Use it directly.
     baseDir = savedPath;
     S.folderReady = true;
     console.log('Using saved folder:', baseDir);
-    
+
     // Tell main process about this folder
     try {
       await window.electronAPI.setBaseDir(baseDir);
