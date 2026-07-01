@@ -1495,15 +1495,21 @@ def _save_manager_records(turn_num, manager_records):
                 all_records = json.load(f)
 
         # Store this turn's records
+        # IMPORTANT: Update career totals to reflect this turn's results
         all_records[str(turn_num)] = {}
         for mgr_name, rec in manager_records.items():
+            # Career total = previous career total + this turn's record
+            updated_cw = rec.get("cw", 0) + rec.get("w", 0)
+            updated_cl = rec.get("cl", 0) + rec.get("l", 0)
+            updated_ck = rec.get("ck", 0) + rec.get("k", 0)
+
             all_records[str(turn_num)][mgr_name] = {
                 "w": rec.get("w", 0),
                 "l": rec.get("l", 0),
                 "k": rec.get("k", 0),
-                "cw": rec.get("cw", 0),
-                "cl": rec.get("cl", 0),
-                "ck": rec.get("ck", 0)
+                "cw": updated_cw,  # Career wins = old career + this turn's wins
+                "cl": updated_cl,  # Career losses = old career + this turn's losses
+                "ck": updated_ck   # Career kills = old career + this turn's kills
             }
 
         # Write back
@@ -1552,14 +1558,17 @@ def _top_managers(card, teams, turn_num, return_records=False):
         if os.path.exists(manager_records_file):
             with open(manager_records_file, "r", encoding="utf-8") as f:
                 saved_records = json.load(f)
-                # Use records from previous turn as baseline
+                # Use records from previous turn as the new career baseline.
+                # The previous turn's "cw", "cl", "ck" ARE the career totals.
+                # Current turn's "w", "l", "k" will be added to calculate new career totals.
                 if str(prev_turn_num) in saved_records:
                     for mgr_name, rec in saved_records[str(prev_turn_num)].items():
+                        # Career baseline = previous turn's career totals
                         manager_records[mgr_name] = {
                             "cw": rec.get("cw", 0),
                             "cl": rec.get("cl", 0),
                             "ck": rec.get("ck", 0),
-                            "w": 0,
+                            "w": 0,    # Current turn's record (will be calculated below)
                             "l": 0,
                             "k": 0
                         }
@@ -1582,46 +1591,36 @@ def _top_managers(card, teams, turn_num, return_records=False):
                 if mgr_name not in manager_records:
                     manager_records[mgr_name] = {"w": 0, "l": 0, "k": 0, "cw": 0, "cl": 0, "ck": 0}
 
-    # Second pass: calculate THIS TURN records from the card
-    # Iterate through fights (not teams) to avoid double-counting when a manager has multiple teams
-    team_mgr_map = {}  # Cache team_name -> manager_name lookups
+    # Second pass: calculate THIS TURN records from teams' turn_history
+    # This is more reliable than trying to aggregate from the card
     for team in teams:
         if _is_npc_team(team) or _is_ai_team(team):
             continue
-        tname = getattr(team, "team_name", None) or team.get("team_name", "?")
+
         mgr = getattr(team, "manager_name", None) or team.get("manager_name", "?")
-        if mgr != "?" and mgr not in _NPC_TEAM_NAMES:
-            team_mgr_map[tname] = mgr
-            if mgr not in manager_records:
-                manager_records[mgr] = {"w": 0, "l": 0, "k": 0, "cw": 0, "cl": 0, "ck": 0}
+        if mgr == "?" or mgr in _NPC_TEAM_NAMES:
+            continue
 
-    # Process each fight once
-    for bout in unique_bouts:
-        pt = bout.player_team
-        ot = bout.opponent_team
-        ptname = getattr(pt, "team_name", None) or pt.get("team_name", "?")
-        otname = getattr(ot, "team_name", None) or ot.get("team_name", "?")
-        pw_won = bout.result.winner and bout.result.winner.name == bout.player_warrior.name
+        # Initialize manager if not already present
+        if mgr not in manager_records:
+            manager_records[mgr] = {"w": 0, "l": 0, "k": 0, "cw": 0, "cl": 0, "ck": 0}
 
-        # Credit player_team's manager
-        if ptname in team_mgr_map:
-            mgr = team_mgr_map[ptname]
-            if pw_won:
-                manager_records[mgr]["w"] += 1
-                if bout.result.loser_died:
-                    manager_records[mgr]["k"] += 1
-            else:
-                manager_records[mgr]["l"] += 1
+        # Get this team's turn history
+        hist = getattr(team, "turn_history", []) or team.get("turn_history", [])
 
-        # Credit opponent_team's manager
-        if otname in team_mgr_map:
-            mgr = team_mgr_map[otname]
-            if not pw_won:
-                manager_records[mgr]["w"] += 1
-                if bout.result.loser_died:
-                    manager_records[mgr]["k"] += 1
-            else:
-                manager_records[mgr]["l"] += 1
+        # The last entry in turn_history should be the current turn (Turn 15)
+        if hist and len(hist) > 0:
+            latest = hist[-1]
+            w = latest.get("w", 0)
+            l = latest.get("l", 0)
+            k = latest.get("k", 0)
+
+            # Add to this manager's totals
+            manager_records[mgr]["w"] += w
+            manager_records[mgr]["l"] += l
+            manager_records[mgr]["k"] += k
+
+            print(f"  [TURN CALC] {mgr} team {getattr(team, 'team_name', team.get('team_name', '?'))}: +{w}w +{l}l +{k}k")
 
     # Calculate win percentages and sort
     league_dir = os.path.dirname(os.path.abspath(__file__))
@@ -1667,11 +1666,22 @@ def _top_managers(card, teams, turn_num, return_records=False):
 
     lines = [f"\n{left_title:<61}{gap}{right_title}", HDR, SEP]
 
-    for mgr_turn, mgr_career in zip(manager_list_turn, manager_list_career):
-        left_data = (f" {mgr_turn['name']:<34}{mgr_turn['w']:>4}{mgr_turn['l']:>4}{mgr_turn['k']:>4}"
-                     f"{mgr_turn['pct']:>6.1f}%{mgr_turn['total']:>6}")
-        right_data = (f" {mgr_career['name']:<34}{mgr_career['cw']:>4}{mgr_career['cl']:>4}{mgr_career['ck']:>4}"
-                      f"{mgr_career['cpct']:>6.1f}%{mgr_career['ctotal']:>6}")
+    max_rows = max(len(manager_list_turn), len(manager_list_career))
+    for i in range(max_rows):
+        left_data = ""
+        if i < len(manager_list_turn):
+            mgr = manager_list_turn[i]
+            left_data = (f" {mgr['name']:<34}{mgr['w']:>4}{mgr['l']:>4}{mgr['k']:>4}"
+                        f"{mgr['pct']:>6.1f}%{mgr['total']:>6}")
+        else:
+            left_data = " " * 56  # Empty row on left side
+
+        right_data = ""
+        if i < len(manager_list_career):
+            mgr = manager_list_career[i]
+            right_data = (f" {mgr['name']:<34}{mgr['cw']:>4}{mgr['cl']:>4}{mgr['ck']:>4}"
+                         f"{mgr['cpct']:>6.1f}%{mgr['ctotal']:>6}")
+
         lines.append(left_data + gap + right_data)
 
     lines.append(SEP)
