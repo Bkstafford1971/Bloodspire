@@ -124,169 +124,267 @@ def get_attribute_description(stat_name, stat_value):
     """Get a human-readable description for an attribute value."""
     descriptions = {
         "strength": {
-            3: "Is pathetically weak", 6: "Is quite weak", 9: "Is below average in strength",
-            12: "Has average strength", 15: "Is of muscular strength", 18: "Is very strong",
-            21: "Is extremely powerful"
+            (3,  3):  "Jelly-fish like",
+            (4,  6):  "Is of feeble strength",
+            (7,  8):  "Is of weak strength",
+            (9,  11): "Is of ordinary strength",
+            (12, 13): "Is of sturdy strength",
+            (14, 16): "Is of muscular strength",
+            (17, 18): "Is of formidable strength",
+            (19, 21): "Is of powerful strength",
+            (22, 23): "Is of Mighty strength",
+            (24, 25): "Possesses Beastly strength",
         },
         "dexterity": {
-            3: "Has clumsy movements", 6: "Has slow movements", 9: "Has below average reflexes",
-            12: "Has average reflexes", 15: "Has quick movements", 18: "Has very quick reflexes",
-            21: "Has lightning reflexes"
+            (3,  3):  "Has inert movements",
+            (4,  6):  "Has sluggish movements",
+            (7,  8):  "Has slow movements",
+            (9,  11): "Has stable movements",
+            (12, 13): "Has quick movements",
+            (14, 16): "Has agile movements",
+            (17, 18): "Has nimble movements",
+            (19, 21): "Has swift movements",
+            (22, 23): "Has blur-like movements",
+            (24, 25): "Has lightning quick movements",
         },
         "constitution": {
-            3: "Is quite sickly", 6: "Has poor health", 9: "Has below average constitution",
-            12: "Has an average constitution", 15: "Has a healthy constitution", 18: "Is very hardy",
-            21: "Is extremely tough"
+            (3,  3):  "Has a Flimsy constitution",
+            (4,  6):  "Has a puny constitution",
+            (7,  8):  "Has a frail constitution",
+            (9,  11): "Has a delicate constitution",
+            (12, 13): "Has a healthy constitution",
+            (14, 16): "Has a tough constitution",
+            (17, 18): "Has a brawny constitution",
+            (19, 21): "Has a resilient constitution",
+            (22, 23): "Has a rugged constitution",
+            (24, 25): "Has iron-like constitution",
         },
         "intelligence": {
-            3: "Is quite dim-witted", 6: "Is below average in intelligence", 9: "Is somewhat simple",
-            12: "Is of average intelligence", 15: "Is fairly bright", 18: "Is very intelligent",
-            21: "Is a genius"
+            (3,  3):  "Is as Dumb as a bedpost",
+            (4,  6):  "Sometimes forgets to breathe",
+            (7,  8):  "Is just plain dumb",
+            (9,  11): "Depends on muscle over mind",
+            (12, 13): "Has average intelligence",
+            (14, 16): "Is fairly bright",
+            (17, 18): "Is a quick thinker",
+            (19, 21): "Is a gifted strategist",
+            (22, 23): "Possesses great intellect",
+            (24, 25): "Is a genius",
         },
         "presence": {
-            3: "Is barely noticed", 6: "Is easily overlooked", 9: "Has a forgettable presence",
-            12: "Has an average presence", 15: "Has a commanding presence", 18: "Is very charismatic",
-            21: "Is extremely charismatic"
+            (3,  3):  "Has no presence whatsoever",
+            (4,  6):  "Is easily overlooked",
+            (7,  8):  "Makes little impression",
+            (9,  11): "Is somewhat noticed",
+            (12, 13): "Commands some attention",
+            (14, 16): "Has a notable presence",
+            (17, 18): "Is quite impressive",
+            (19, 21): "Commands great respect",
+            (22, 23): "Is supremely commanding",
+            (24, 25): "Is a legendary figure",
         },
         "size": {
-            3: "Is very frail", 6: "Is a small frame", 9: "Has a wiry frame",
-            12: "Has an average frame", 15: "Has a sturdy frame", 18: "Is quite large",
-            21: "Is enormous"
+            (3,  3):  "Is grossly thin",
+            (4,  6):  "Could blow away in the wind",
+            (7,  8):  "Has a slight build",
+            (9,  11): "Has a wiry frame",
+            (12, 13): "Is of average build",
+            (14, 16): "Is somewhat large",
+            (17, 18): "Has a large frame",
+            (19, 21): "Is a huge and imposing figure",
+            (22, 23): "Is built like a gorilla",
+            (24, 25): "Is bigger than a barn",
         }
     }
 
     key = stat_name.lower()
     if key in descriptions:
-        # Find closest match
-        values = sorted(descriptions[key].keys())
-        closest = min(values, key=lambda x: abs(x - stat_value))
-        return descriptions[key][closest]
+        table = descriptions[key]
+        for (lo, hi), description in table.items():
+            if lo <= stat_value <= hi:
+                return description
     return ""
 
 
 def get_skill_description(skill_level):
     """Get description for skill level."""
     descriptions = {
-        0: "No training",
-        1: "Has Some Skill (1)",
-        2: "Has Some Skill (2)",
-        3: "Has Good Skill (3)",
-        4: "Has Good Skill (4)",
-        5: "Has Excellent Skill (5)",
-        6: "Has Excellent Skill (6)",
-        7: "Has Master Level Skill (7)",
-        8: "Has Master Level Skill (8)",
-        9: "Has Expert Master Skill (9)"
+        0: "No Skill",
+        1: "Novice",
+        2: "Some Skill",
+        3: "Skilled",
+        4: "Good Skill",
+        5: "Very Skilled",
+        6: "Excellent Skill",
+        7: "Expert Skill",
+        8: "Incredible Skill",
+        9: "Master Skill"
     }
-    return descriptions.get(skill_level, f"Has Skill ({skill_level})")
+    desc = descriptions.get(skill_level, f"Skill Level {skill_level}")
+    return f"{desc} ({skill_level})"
 
 
 def get_injury_description(severity):
     """Get description for injury severity."""
     descriptions = {
-        1: "Annoying (1)",
-        2: "Minor (2)",
-        3: "Moderate (3)",
-        4: "Troublesome (4)",
-        5: "Serious (5)",
-        6: "Grievous (6)"
+        0: "None",
+        1: "Annoying",
+        2: "Bothersome",
+        3: "Irritating",
+        4: "Troublesome",
+        5: "Painful",
+        6: "Dreadful",
+        7: "Incapacitating",
+        8: "Devastating",
+        9: "Fatal"
     }
-    return descriptions.get(severity, f"Level {severity}")
+    desc = descriptions.get(severity, f"Level {severity}")
+    return f"{desc} ({severity})"
 
 
 def get_race_traits_html(race_name):
-    """Get comprehensive racial traits as HTML list items."""
+    """Get comprehensive racial traits separated into bonuses and penalties."""
     try:
         from races import get_race
         race = get_race(race_name)
         if not race:
-            return ""
+            return {"bonuses": [], "penalties": []}
 
         mods = race.modifiers
-        traits = []
+        bonuses = []
+        penalties = []
 
         # Stat bonuses/penalties
         if mods.hp_bonus != 0:
-            traits.append(f"HP Bonus: {mods.hp_bonus:+d}")
+            bonuses.append(f"HP Bonus: {mods.hp_bonus:+d}")
         if mods.damage_bonus != 0:
-            traits.append(f"Damage Bonus: {mods.damage_bonus:+d}")
+            bonuses.append(f"Damage Bonus: {mods.damage_bonus:+d}")
         if mods.damage_penalty != 0:
-            traits.append(f"Damage Penalty: {mods.damage_penalty:+d}")
+            penalties.append(f"Damage Penalty: {mods.damage_penalty}")
         if mods.strength_penalty != 0:
-            traits.append(f"Strength Penalty: {mods.strength_penalty:+d}")
+            penalties.append(f"Strength Penalty: {mods.strength_penalty}")
 
         # Combat modifiers
         if mods.attack_rate_bonus != 0:
-            traits.append(f"Attack Rate Bonus: {mods.attack_rate_bonus:+d}")
+            bonuses.append(f"Attack Rate Bonus: {mods.attack_rate_bonus:+d}")
         if mods.attack_rate_penalty != 0:
-            traits.append(f"Attack Rate Penalty: {mods.attack_rate_penalty:+d}")
+            penalties.append(f"Attack Rate Penalty: {mods.attack_rate_penalty}")
         if mods.initiative_bonus != 0:
-            traits.append(f"Initiative Bonus: {mods.initiative_bonus:+d}")
+            bonuses.append(f"Initiative Bonus: {mods.initiative_bonus:+d}")
         if mods.dodge_bonus != 0:
-            traits.append(f"Dodge Bonus: {mods.dodge_bonus:+d}")
+            bonuses.append(f"Dodge Bonus: {mods.dodge_bonus:+d}")
         if mods.dodge_penalty != 0:
-            traits.append(f"Dodge Penalty: {mods.dodge_penalty:+d}")
+            penalties.append(f"Dodge Penalty: {mods.dodge_penalty}")
         if mods.parry_bonus != 0:
-            traits.append(f"Parry Bonus: {mods.parry_bonus:+d}")
+            bonuses.append(f"Parry Bonus: {mods.parry_bonus:+d}")
         if mods.parry_penalty != 0:
-            traits.append(f"Parry Penalty: {mods.parry_penalty:+d}")
+            penalties.append(f"Parry Penalty: {mods.parry_penalty}")
 
         # Special abilities
         if mods.armor_capacity_bonus:
-            traits.append("Armor Capacity Bonus: Can wear heavier armor")
+            bonuses.append("Armor Capacity Bonus: Can wear heavier armor")
         if mods.shield_bonus:
-            traits.append("Shield Bonus: Extra protection with shields")
+            bonuses.append("Shield Bonus: Extra protection with shields")
         if mods.dual_weapon_bonus:
-            traits.append("Dual Weapon Bonus: Enhanced dual-wield attacks")
+            bonuses.append("Dual Weapon Bonus: Enhanced dual-wield attacks")
         if mods.martial_combat_bonus:
-            traits.append("Martial Combat Bonus: Extra effectiveness in hand-to-hand")
+            bonuses.append("Martial Combat Bonus: Extra effectiveness in hand-to-hand")
         if mods.trains_stats_faster:
-            traits.append("Fast Training: Attributes improve more quickly")
+            bonuses.append("Fast Training: Attributes improve more quickly")
         if mods.fewer_perms:
-            traits.append("Injury Resistance: Lower chance of permanent injuries")
+            bonuses.append("Injury Resistance: Lower chance of permanent injuries")
         if mods.bigger_weapons_bonus:
-            traits.append("Bigger Weapons: Can wield heavier weapons more easily")
+            bonuses.append("Bigger Weapons: Can wield heavier weapons more easily")
         if mods.thrown_mastery:
-            traits.append("Thrown Mastery: Bonus to throwing attacks")
+            bonuses.append("Thrown Mastery: Bonus to throwing attacks")
         if mods.scavenger:
-            traits.append("Scavenger: Can pick up dropped weapons during combat")
+            bonuses.append("Scavenger: Can pick up dropped weapons during combat")
         if mods.heavy_weapon_penalty:
-            traits.append("Light Weapons Preference: Heavy weapons incur penalties")
+            penalties.append("Heavy Weapon Penalty: Heavy weapons incur penalties")
         if mods.counterstrike_mastery:
-            traits.append("Counterstrike Mastery: Strong ripostes after successful parries")
+            bonuses.append("Counterstrike Mastery: Strong ripostes after successful parries")
         if mods.tactician_edge:
-            traits.append("Tactician's Edge: Better vs aggressive foes, worse vs methodical")
+            bonuses.append("Tactician's Edge: Better vs aggressive foes, worse vs methodical")
         if mods.natural_armor:
-            traits.append("Natural Armor: Scales provide innate armor protection")
+            bonuses.append("Natural Armor: Scales provide innate armor protection")
         if mods.natural_weapon_bonus:
-            traits.append("Natural Weapons: Bonus damage with claws and natural attacks")
+            bonuses.append("Natural Weapons: Bonus damage with claws and natural attacks")
         if mods.acrobatic_advantage:
-            traits.append("Acrobatic Advantage: Highly resistant to knockdowns")
+            bonuses.append("Acrobatic Advantage: Highly resistant to knockdowns")
         if mods.frenzy_ability:
-            traits.append("Frenzy: Once per fight, gain +3 attack rate burst (3-4 actions)")
+            bonuses.append("Frenzy: Once per fight, gain +3 attack rate burst (3-4 actions)")
         if mods.spear_exception:
-            traits.append("Spear Mastery: Spears exempt from heavy weapon penalties")
+            bonuses.append("Spear Mastery: Spears exempt from heavy weapon penalties")
 
         # Preferred/weak weapons
         if mods.preferred_weapons:
             weapons_str = ", ".join(mods.preferred_weapons[:5])
             if len(mods.preferred_weapons) > 5:
                 weapons_str += f", +{len(mods.preferred_weapons) - 5} more"
-            traits.append(f"Preferred Weapons: {weapons_str}")
+            bonuses.append(f"Preferred Weapons: {weapons_str}")
         if mods.weak_weapons:
             weapons_str = ", ".join(mods.weak_weapons[:3])
-            traits.append(f"Weak Against: {weapons_str}")
+            penalties.append(f"Weak Against: {weapons_str}")
 
         # Opponent matchups
         if mods.favored_opponents:
-            traits.append(f"Favored Matchups: {mods.favored_opponents}")
+            bonuses.append(f"Favored Matchups: {mods.favored_opponents}")
         if mods.disfavored_opponents:
-            traits.append(f"Difficult Matchups: {mods.disfavored_opponents}")
+            penalties.append(f"Difficult Matchups: {mods.disfavored_opponents}")
 
-        return traits
+        return {"bonuses": bonuses, "penalties": penalties}
     except Exception as e:
         print(f"Warning: Could not load race info for {race_name}: {e}")
-        return []
+        return {"bonuses": [], "penalties": []}
+
+
+def get_weapon_analysis(weapon_name, warrior_strength, warrior_size=10):
+    """
+    Analyze weapon compatibility with warrior's strength.
+    Returns dict with weapon info, requirements, and any penalties/bonuses.
+    """
+    try:
+        from weapons import get_weapon, min_str_for_weight, strength_penalty
+        weapon = get_weapon(weapon_name)
+
+        if not weapon:
+            return {"analysis": [], "warnings": []}
+
+        analysis = []
+        warnings = []
+
+        # Get minimum strength required for this weapon
+        min_str = min_str_for_weight(weapon.weight, weapon.two_hand)
+
+        # Calculate strength penalty
+        penalty_fraction = strength_penalty(weapon.weight, warrior_strength, weapon.two_hand)
+
+        # Determine if there are penalties
+        if warrior_strength < min_str:
+            str_deficit = min_str - warrior_strength
+            analysis.append(f"Strength Deficit: {str_deficit} points below requirement ({warrior_strength}/{min_str})")
+
+            # Calculate penalty percentage
+            penalty_pct = int(penalty_fraction * 100)
+            if penalty_pct > 0:
+                analysis.append(f"Attack Rate Penalty: -{penalty_pct}%")
+                analysis.append(f"Damage Penalty: -{penalty_pct}%")
+                warnings.append("This weapon is too heavy for your current strength!")
+        else:
+            str_surplus = warrior_strength - min_str
+            if str_surplus >= 3:
+                analysis.append(f"Strength Surplus: {str_surplus} points above requirement")
+                analysis.append("Bonus: Effective weapon handling")
+            else:
+                analysis.append(f"Meets Strength Requirement: {warrior_strength}/{min_str}")
+
+        # Check for size considerations if applicable
+        if weapon.two_hand:
+            analysis.append("Two-handed weapon: Grants +1 to effective strength capacity")
+
+        return {"analysis": analysis, "warnings": warnings}
+    except Exception as e:
+        return {"analysis": [f"Could not analyze weapon: {weapon_name}"], "warnings": [str(e)]}
 
 
 def get_warrior_record(warrior):
@@ -336,7 +434,7 @@ def generate_html_character_sheet(warrior_data, team_name, manager_name):
     }
 
     # Get favorite weapon
-    favorite_weapon = warrior.get('favorite_weapon', 'Open Hand')
+    favorite_weapon = warrior.get('primary_weapon', 'Open Hand')
 
     # Get skills
     skills = warrior.get('skills', {})
@@ -345,10 +443,9 @@ def generate_html_character_sheet(warrior_data, team_name, manager_name):
     injuries = warrior.get('injuries', {})
 
     # Get race traits
-    traits_list = get_race_traits_html(race_name)
-    race_traits = ""
-    if traits_list:
-        race_traits = "\n".join([f"<li>{trait}</li>" for trait in traits_list])
+    traits_dict = get_race_traits_html(race_name)
+    bonuses = traits_dict.get("bonuses", [])
+    penalties = traits_dict.get("penalties", [])
 
     # Build HTML
     html = f"""<!DOCTYPE html>
@@ -377,7 +474,7 @@ def generate_html_character_sheet(warrior_data, team_name, manager_name):
             font-size: 32px;
             text-align: center;
             margin-bottom: 10px;
-            color: #000;
+            color: #8B0000;
             letter-spacing: 2px;
         }}
         .header-line {{
@@ -390,9 +487,7 @@ def generate_html_character_sheet(warrior_data, team_name, manager_name):
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #8b7355;
+            margin-bottom: 15px;
         }}
         .info-block {{ padding: 10px 0; }}
         .info-label {{ font-weight: bold; margin-right: 10px; }}
@@ -401,27 +496,46 @@ def generate_html_character_sheet(warrior_data, team_name, manager_name):
             font-weight: bold;
             margin-top: 25px;
             margin-bottom: 15px;
-            border-bottom: 1px solid #8b7355;
-            padding-bottom: 5px;
             color: #000;
         }}
-        .attribute-row {{
-            display: grid;
-            grid-template-columns: 150px 60px 1fr;
-            gap: 20px;
-            margin-bottom: 10px;
-            padding: 8px;
-            background-color: #fafafa;
-            border-radius: 3px;
+        .attributes-table {{
+            margin-left: 20px;
+            font-family: 'Georgia', serif;
+            font-size: 16px;
+            margin-bottom: 20px;
+            margin-top: 15px;
         }}
-        .attribute-name {{ font-weight: bold; }}
+        .attributes-row {{
+            display: flex;
+            margin-bottom: 2px;
+        }}
+        .attribute-name {{
+            font-weight: bold;
+            width: 15ch;
+            text-align: left;
+        }}
         .attribute-value {{
-            text-align: center;
             font-weight: bold;
             color: #8b4513;
-            font-size: 16px;
+            width: 4ch;
+            text-align: right;
         }}
-        .attribute-desc {{ font-style: italic; color: #666; }}
+        .attribute-original {{
+            font-weight: bold;
+            color: #8b4513;
+            width: 4ch;
+            text-align: right;
+        }}
+        .attribute-descs {{
+            margin-left: 20px;
+            list-style-type: none;
+            padding: 0;
+        }}
+        .attribute-descs li {{
+            margin-bottom: 4px;
+            font-style: italic;
+            color: #666;
+        }}
         .skills-list, .injuries-list {{
             margin-left: 20px;
             list-style-type: none;
@@ -446,6 +560,44 @@ def generate_html_character_sheet(warrior_data, team_name, manager_name):
         .race-traits li {{
             margin-bottom: 5px;
             padding-left: 0;
+        }}
+        .race-penalties {{
+            background-color: #ffe6e6;
+            padding: 15px;
+            border-left: 4px solid #8b0000;
+            margin: 15px 0;
+        }}
+        .race-penalties ul {{
+            list-style-type: none;
+            margin-left: 0;
+        }}
+        .race-penalties li {{
+            margin-bottom: 5px;
+            padding-left: 0;
+            color: #8b0000;
+            font-weight: bold;
+        }}
+        .weapon-warnings {{
+            background-color: #ffe6e6;
+            padding: 15px;
+            border-left: 4px solid #8b0000;
+            margin: 15px 0;
+        }}
+        .weapon-warnings p {{
+            margin: 5px 0;
+            color: #8b0000;
+        }}
+        .weapon-analysis {{
+            margin-left: 20px;
+            list-style-type: none;
+            padding: 0;
+        }}
+        .weapon-analysis li {{
+            margin-bottom: 6px;
+            padding: 5px;
+            background-color: #f0f8ff;
+            border-left: 3px solid #4169e1;
+            padding-left: 10px;
         }}
         .empty-section {{
             font-style: italic;
@@ -489,39 +641,74 @@ def generate_html_character_sheet(warrior_data, team_name, manager_name):
         <div class="section-title">ATTRIBUTES</div>
 """
 
+    # Build attribute descriptions first
+    html += '        <ul class="attribute-descs">\n'
+    for attr_name, attr_value in attributes.items():
+        desc = get_attribute_description(attr_name, attr_value)
+        desc_with_name = f"{warrior_name} {desc}"
+        html += f'            <li>{desc_with_name}</li>\n'
+    html += '        </ul>\n'
+
+    # Then build attributes table
+    html += '        <div class="attributes-table">\n'
     for attr_name, attr_value in attributes.items():
         initial_value = initial_attributes.get(attr_name, attr_value)
-        desc = get_attribute_description(attr_name, attr_value)
-        # Show current (initial) format
-        if initial_value != attr_value:
-            value_display = f"{attr_value} ({initial_value})"
-        else:
-            value_display = str(attr_value)
-        html += f"""        <div class="attribute-row">
-            <div class="attribute-name">{attr_name}</div>
-            <div class="attribute-value">{value_display}</div>
-            <div class="attribute-desc">{desc}</div>
-        </div>
-"""
+        value_str = str(attr_value)
+        original_str = f"({initial_value})" if initial_value != attr_value else ""
+        html += f'            <div class="attributes-row">\n'
+        html += f'                <div class="attribute-name">{attr_name}:</div>\n'
+        html += f'                <div class="attribute-value">{value_str}</div>\n'
+        html += f'                <div class="attribute-original">{original_str}</div>\n'
+        html += f'            </div>\n'
+    html += '        </div>\n'
 
-    # Race traits
-    if race_traits:
+    # Race traits and penalties
+    if bonuses or penalties:
         html += f"""
         <div class="section-title">RACIAL TRAITS & BONUSES</div>
-        <div class="race-traits">
-            <ul>
-{race_traits}
-            </ul>
-        </div>
 """
+        if bonuses:
+            html += '        <div class="race-traits">\n'
+            html += '            <ul>\n'
+            for bonus in bonuses:
+                html += f'                <li>{bonus}</li>\n'
+            html += '            </ul>\n'
+            html += '        </div>\n'
 
-    # Favorite weapon
+        if penalties:
+            html += f"""        <div class="section-title">RACIAL PENALTIES</div>
+"""
+            html += '        <div class="race-penalties">\n'
+            html += '            <ul>\n'
+            for penalty in penalties:
+                html += f'                <li>- {penalty}</li>\n'
+            html += '            </ul>\n'
+            html += '        </div>\n'
+
+    # Favorite weapon and analysis
     html += f"""
         <div class="section-title">FAVORITE WEAPON</div>
         <div style="margin-left: 20px;">
             <strong>{favorite_weapon}</strong>
         </div>
 """
+
+    # Get weapon analysis
+    weapon_analysis = get_weapon_analysis(favorite_weapon, attributes.get('Strength', 10))
+    if weapon_analysis["analysis"]:
+        html += f"""
+        <div class="section-title">WEAPON ANALYSIS</div>
+"""
+        if weapon_analysis["warnings"]:
+            html += '        <div class="weapon-warnings">\n'
+            for warning in weapon_analysis["warnings"]:
+                html += f'            <p><strong>⚠️ {warning}</strong></p>\n'
+            html += '        </div>\n'
+
+        html += '        <ul class="weapon-analysis">\n'
+        for item in weapon_analysis["analysis"]:
+            html += f'            <li>{item}</li>\n'
+        html += '        </ul>\n'
 
     # Skills
     html += f"""

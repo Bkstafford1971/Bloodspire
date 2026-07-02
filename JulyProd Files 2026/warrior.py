@@ -101,8 +101,8 @@ STRENGTH_DESCRIPTIONS = {
     (14, 16): "Is of muscular strength",
     (17, 18): "Is of formidable strength",
     (19, 21): "Is of powerful strength",
-    (22, 23): "Mighty strength",
-    (24, 25): "Beastly strength",
+    (22, 23): "Is of Mighty strength",
+    (24, 25): "Possesses Beastly strength",
 }
 
 DEXTERITY_DESCRIPTIONS = {
@@ -119,7 +119,7 @@ DEXTERITY_DESCRIPTIONS = {
 }
 
 CONSTITUTION_DESCRIPTIONS = {
-    (3,  3):  "Flimsy constitution",
+    (3,  3):  "Has a Flimsy constitution",
     (4,  6):  "Has a puny constitution",
     (7,  8):  "Has a frail constitution",
     (9,  11): "Has a delicate constitution",
@@ -132,7 +132,7 @@ CONSTITUTION_DESCRIPTIONS = {
 }
 
 INTELLIGENCE_DESCRIPTIONS = {
-    (3,  3):  "Dumb as a bedpost",
+    (3,  3):  "Is as Dumb as a bedpost",
     (4,  6):  "Sometimes forgets to breathe",
     (7,  8):  "Is just plain dumb",
     (9,  11): "Depends on muscle over mind",
