@@ -380,7 +380,7 @@ class Strategy:
         style: str     = "Strike",
         activity: int  = 5,
         aim_point: str = "None",
-        defense_point: str = "Chest",
+        defense_point: str = "None",
     ):
         self.trigger       = trigger
         self.style         = style
@@ -404,7 +404,7 @@ class Strategy:
             style        = data.get("style",         "Strike"),
             activity     = data.get("activity",      5),
             aim_point    = data.get("aim_point",     "None"),
-            defense_point= data.get("defense_point", "Chest"),
+            defense_point= data.get("defense_point", "None"),
         )
 
     def display(self, index: str) -> str:
@@ -523,7 +523,7 @@ class Warrior:
                 style        ="Strike",
                 activity     =5,
                 aim_point    ="None",
-                defense_point="Chest",
+                defense_point="None",
             )
         ]
 
