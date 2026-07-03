@@ -696,7 +696,7 @@ PEASANT_ROSTER = [
      (12, 13, 12, 11,  9, 15),
      (17, 19, 17, 15, 12, 15),
      5, 3, "parry",
-     "By the authority vested in me by absolutely nobody, you are hereby beaten."),
+     "You're gonna go to jail for that, you whippersnapper!"),
     # Matt the Basement Dweller: STR/CON heavy, tough as old boots
     ("Matt the Basement Dweller",  "Male", "Brigandine",  "Flail",
      (13, 10, 13,  9,  8, 16),
@@ -714,19 +714,19 @@ PEASANT_ROSTER = [
      (13,  9, 12,  8,  7, 16),
      (18, 14, 18, 11,  9, 16),
      4, 2, "parry",
-     "...I've been waiting."),
+     "Spooktacular!...I've been waiting for this."),
     # Mr. Polyester Pants: DEX/INT heavy, slippery and hard to pin down
     ("Mr. Polyester Pants",       "Male", "Leather",     "Flail",
      (10, 13, 11, 11,  9, 13),
      (13, 20, 15, 17, 12, 13),
      5, 5, "dodge",
-     "Laugh at the pants. Everyone does. It's the last thing they remember."),
-    # The Masked Madman: balanced INT/PRE, more prophet than fighter
-    ("The Masked Madman", "Male",   "Cloth",       "Short Sword",
+     "Hey, do you know Sharky or Boss Rat?  I know them both!"),
+    # The Redmasked Madman: balanced INT/PRE, more prophet than fighter
+    ("The Redmasked Madman", "Male",   "Cloth",       "Short Sword",
      (10, 11, 11, 11, 14, 14),
      (14, 15, 16, 17, 14, 14),
      4, 3, "parry",
-     "I have foreseen your defeat. Would you care to hear the details?"),
+     "After this fight, I'll be making rough love to a tree!  Waaahahahahaoooooo!"),
     # Crackers McGee: DEX heavy but fragile and unpredictable
     ("Crackers McGee",        "Male",   "Cloth",       "Hatchet",
      ( 9, 12, 10,  9, 10, 12),

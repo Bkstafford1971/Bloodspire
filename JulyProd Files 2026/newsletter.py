@@ -1480,6 +1480,9 @@ def _save_manager_records(turn_num, manager_records):
     """
     Save manager records for this turn to manager_records.json.
     Records include career (cw, cl, ck) and this turn (w, l, k).
+
+    IMPORTANT: _top_managers already calculates the final career totals.
+    This function just saves them as-is; no additional accumulation needed.
     """
     import os
     import json
@@ -1494,22 +1497,16 @@ def _save_manager_records(turn_num, manager_records):
             with open(manager_records_file, "r", encoding="utf-8") as f:
                 all_records = json.load(f)
 
-        # Store this turn's records
-        # IMPORTANT: Update career totals to reflect this turn's results
+        # Store this turn's records as-is (career totals already calculated by _top_managers)
         all_records[str(turn_num)] = {}
         for mgr_name, rec in manager_records.items():
-            # Career total = previous career total + this turn's record
-            updated_cw = rec.get("cw", 0) + rec.get("w", 0)
-            updated_cl = rec.get("cl", 0) + rec.get("l", 0)
-            updated_ck = rec.get("ck", 0) + rec.get("k", 0)
-
             all_records[str(turn_num)][mgr_name] = {
-                "w": rec.get("w", 0),
-                "l": rec.get("l", 0),
-                "k": rec.get("k", 0),
-                "cw": updated_cw,  # Career wins = old career + this turn's wins
-                "cl": updated_cl,  # Career losses = old career + this turn's losses
-                "ck": updated_ck   # Career kills = old career + this turn's kills
+                "w": rec.get("w", 0),     # This turn's wins
+                "l": rec.get("l", 0),     # This turn's losses
+                "k": rec.get("k", 0),     # This turn's kills
+                "cw": rec.get("cw", 0),   # Career wins (already final from _top_managers)
+                "cl": rec.get("cl", 0),   # Career losses (already final from _top_managers)
+                "ck": rec.get("ck", 0)    # Career kills (already final from _top_managers)
             }
 
         # Write back
@@ -1606,23 +1603,44 @@ def _top_managers(card, teams, turn_num, return_records=False):
             manager_records[mgr] = {"w": 0, "l": 0, "k": 0, "cw": 0, "cl": 0, "ck": 0}
 
         # Get this team's turn history
-        hist = getattr(team, "turn_history", []) or team.get("turn_history", [])
+        hist = getattr(team, "turn_history", None)
+        if hist is None:
+            hist = team.get("turn_history", []) if isinstance(team, dict) else []
 
-        # The last entry in turn_history should be the current turn (Turn 15)
+        # Find the entry for the current turn (explicitly check turn number)
+        turn_entry = None
         if hist and len(hist) > 0:
-            latest = hist[-1]
-            w = latest.get("w", 0)
-            l = latest.get("l", 0)
-            k = latest.get("k", 0)
+            # Search backwards to find entry for current turn
+            for entry in reversed(hist):
+                if entry.get("turn") == turn_num:
+                    turn_entry = entry
+                    break
+
+        if turn_entry:
+            w = turn_entry.get("w", 0)
+            l = turn_entry.get("l", 0)
+            k = turn_entry.get("k", 0)
 
             # Add to this manager's totals
             manager_records[mgr]["w"] += w
             manager_records[mgr]["l"] += l
             manager_records[mgr]["k"] += k
 
-            print(f"  [TURN CALC] {mgr} team {getattr(team, 'team_name', team.get('team_name', '?'))}: +{w}w +{l}l +{k}k")
+            team_name = getattr(team, 'team_name', '?') or team.get('team_name', '?')
+            print(f"  [TURN CALC] {mgr} team {team_name}: +{w}w +{l}l +{k}k")
+        else:
+            # Missing data for this turn - could indicate a processing issue
+            team_name = getattr(team, 'team_name', '?') or team.get('team_name', '?')
+            print(f"  [TURN CALC WARNING] {mgr} team {team_name}: NO TURN {turn_num} DATA in turn_history")
 
     # Calculate win percentages and sort
+    # IMPORTANT: At this point, rec["cw/cl/ck"] are the PREVIOUS turn's career totals.
+    # We need to add this turn's results (rec["w/l/k"]) to get the NEW career totals.
+    for mgr_name, rec in manager_records.items():
+        rec["cw"] += rec["w"]  # New career wins = old career wins + this turn's wins
+        rec["cl"] += rec["l"]  # New career losses = old career losses + this turn's losses
+        rec["ck"] += rec["k"]  # New career kills = old career kills + this turn's kills
+
     league_dir = os.path.dirname(os.path.abspath(__file__))
     manager_records_file = os.path.join(league_dir, "manager_records.json")
 
