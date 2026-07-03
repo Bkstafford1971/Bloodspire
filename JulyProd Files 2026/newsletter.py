@@ -651,7 +651,7 @@ def _fights_section(card, champion_state: Optional[dict] = None,
                 verb = _death_verb(mins)
                 line = f"{wname} {verb} {lname} in a {mins} minute {style} {fight_descriptor}."
             else:
-                verb = _fight_outcome_verb(mins)
+                verb = _fight_outcome_verb(mins, r.winner_hp_pct)
                 line = f"{wname} {verb} {lname} in a {mins} minute {style} {fight_descriptor}."
         lines.append(line)
     return "\n".join(lines)
@@ -716,24 +716,64 @@ def _fight_style_word(mins):
     return random.choice(["spirited","hard-fought","contested"])
 
 
-def _fight_outcome_verb(mins):
-    """Return victory verb based on fight duration (non-death outcomes)."""
+def _fight_outcome_verb(mins, winner_hp_pct=1.0):
+    """
+    Return victory verb based on fight duration AND dominance.
+    winner_hp_pct: winner's remaining HP (1.0 = unscathed, 0.5 = half health, etc.)
+    """
+    # Classify dominance: how much health the winner retained
+    if winner_hp_pct >= 0.85:
+        dominance = "dominant"
+    elif winner_hp_pct >= 0.65:
+        dominance = "solid"
+    else:
+        dominance = "close"
+
     if mins <= 2:
-        # Quick, brutal wins
-        return random.choice([
-            "viciously subdued", "narrowly defeated", "handily defeated",
-            "demolished", "vanquished", "overpowered", "bested",
-            "slimly defeated"
-        ])
+        # Quick fights - verb selection depends on how badly the winner was hit
+        if dominance == "dominant":
+            return random.choice([
+                "demolished", "vanquished", "overpowered", "decimated",
+                "crushed", "obliterated"
+            ])
+        elif dominance == "solid":
+            return random.choice([
+                "handily defeated", "soundly defeated", "bested", "dispatched",
+                "firmly defeated"
+            ])
+        else:
+            return random.choice([
+                "narrowly defeated", "barely defeated", "slimly defeated",
+                "edged out", "eked out a win against"
+            ])
     elif mins <= 3:
         # Moderate duration
-        return random.choice([
-            "bested", "defeated", "overcame", "vanquished", "outwitted"
-        ])
+        if dominance == "dominant":
+            return random.choice([
+                "dominated", "overpowered", "overwhelmed", "subdued", "mastered"
+            ])
+        elif dominance == "solid":
+            return random.choice([
+                "bested", "defeated", "overcame", "vanquished", "outwitted"
+            ])
+        else:
+            return random.choice([
+                "squeaked past", "narrowly overcame", "barely defeated"
+            ])
     else:  # 4+ minutes - true endurance fights
-        return random.choice([
-            "outlasted", "ground down", "exhausted", "wore down", "prevailed over"
-        ])
+        if dominance == "dominant":
+            return random.choice([
+                "dominated the endurance battle against", "thoroughly ground down",
+                "exhausted", "relentlessly wore down"
+            ])
+        elif dominance == "solid":
+            return random.choice([
+                "outlasted", "ground down", "exhausted", "wore down", "prevailed over"
+            ])
+        else:
+            return random.choice([
+                "narrowly outlasted", "barely outlasted", "edged out in endurance"
+            ])
 
 
 def _death_verb(mins):

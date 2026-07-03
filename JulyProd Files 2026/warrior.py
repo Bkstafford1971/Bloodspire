@@ -425,17 +425,17 @@ NON_WEAPON_SKILLS = [
     "cleave", "bash", "acrobatics", "riposte", "slash", "strike",
 ]
 
-# 45 weapon skills - one per weapon in the game.
+# 48 weapon skills - one per weapon in the game.
 WEAPON_SKILLS = [
     "stiletto", "cestus", "knife", "dagger", "javelin", "hatchet",
     "short_sword", "epee", "hammer", "net", "small_pick", "buckler",
-    "swordbreaker", "longsword", "scythe", "flail", "francisca", "mace",
+    "swordbreaker", "long_sword", "scythe", "flail", "francisca", "mace",
     "short_spear", "boar_spear", "quarterstaff", "trident", "military_pick", "scimitar",
     "broad_sword", "morningstar", "war_hammer", "target_shield",
     "bladed_flail", "war_flail", "bastard_sword", "pick_axe", "long_spear",
     "tower_shield", "battle_axe", "battle_flail", "great_staff", "pole_axe",
     "great_sword", "ball_and_chain", "great_axe", "maul", "great_pick",
-    "halberd", "open_hand",
+    "halberd", "club", "bola", "heavy_whip", "open_hand",
 ]
 
 ALL_SKILLS = NON_WEAPON_SKILLS + WEAPON_SKILLS

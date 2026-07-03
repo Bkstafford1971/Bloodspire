@@ -117,7 +117,7 @@ BASH_WEAPONS = {
 }
 
 SLASH_WEAPONS = {
-    "short_sword", "longsword", "broad_sword", "bastard_sword", "battle_axe",
+    "short_sword", "long_sword", "broad_sword", "bastard_sword", "battle_axe",
     "great_axe", "hatchet", "francisca", "dagger", "epee", "knife",
     "scimitar", "scythe", "swordbreaker"
 }

@@ -4776,7 +4776,7 @@ positioning and recovery mechanics.
             w = W.Warrior(name, "Human", "Male", 15, 12, 14, 10, 10, 14)
             w.primary_weapon = "Longsword"
             w.secondary_weapon = "Open Hand"
-            w.skills["longsword"] = 4
+            w.skills["long_sword"] = 4
             w.luck = 10
             w.strategies = [S.Strategy(
                 trigger="Always (Default Loop)", style="Slash",
@@ -4983,7 +4983,7 @@ positioning and recovery mechanics.
             w = W.Warrior(name, "Human", "Male", 15, 12, 14, 10, 10, 14)
             w.primary_weapon = "Longsword"
             w.secondary_weapon = "Open Hand"
-            w.skills["longsword"] = 4
+            w.skills["long_sword"] = 4
             w.luck = 10
             w.strategies = [S.Strategy(
                 trigger="Always (Default Loop)", style="Slash",
@@ -5070,7 +5070,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 dwarf.secondary_weapon = "Open Hand"
                 dwarf.armor = "Brigandine"
                 dwarf.helm = "Steel Cap"
-                dwarf.skills["longsword"] = 3
+                dwarf.skills["long_sword"] = 3
                 dwarf.luck = 15
                 dwarf.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -5082,7 +5082,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 human.secondary_weapon = "Open Hand"
                 human.armor = "Plate Armor"
                 human.helm = "Steel Cap"
-                human.skills["longsword"] = 3
+                human.skills["long_sword"] = 3
                 human.luck = 15
                 human.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -5127,7 +5127,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 dwarf.secondary_weapon = "Open Hand"
                 dwarf.armor = "Brigandine"
                 dwarf.helm = "Steel Cap"
-                dwarf.skills["longsword"] = 3
+                dwarf.skills["long_sword"] = 3
                 dwarf.luck = 15
                 dwarf.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Parry",
@@ -5357,7 +5357,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 half_elf = W.Warrior(f"HE{trial}", "Half-Elf", "Male", test_str, 12, 12, 10, 10, 10)
                 half_elf.primary_weapon = "Longsword"
                 half_elf.secondary_weapon = "Open Hand"
-                half_elf.skills["longsword"] = 3
+                half_elf.skills["long_sword"] = 3
                 half_elf.luck = 15
                 half_elf.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -5368,7 +5368,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 human = W.Warrior(f"H{trial}", "Human", "Male", test_str, 12, 12, 10, 10, 10)
                 human.primary_weapon = "Longsword"
                 human.secondary_weapon = "Open Hand"
-                human.skills["longsword"] = 3
+                human.skills["long_sword"] = 3
                 human.luck = 15
                 human.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -5396,7 +5396,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
         out.append("-" * 110)
 
         weapon_tests = [
-            ("Longsword", "longsword"),
+            ("Longsword", "long_sword"),
             ("Great Axe", "great_axe"),
         ]
 
@@ -5505,7 +5505,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 human = W.Warrior(f"H{i}", "Human", "Male", 12, 12, 12, int_val, 10, 10)
                 human.primary_weapon = "Longsword"
                 human.secondary_weapon = "Open Hand"
-                human.skills["longsword"] = max(0, int_val - 8)
+                human.skills["long_sword"] = max(0, int_val - 8)
                 human.luck = 15
                 human.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -5515,7 +5515,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 opponent = W.Warrior(f"O{i}", "Dwarf", "Male", 12, 12, 12, 10, 10, 10)
                 opponent.primary_weapon = "Longsword"
                 opponent.secondary_weapon = "Open Hand"
-                opponent.skills["longsword"] = 2
+                opponent.skills["long_sword"] = 2
                 opponent.luck = 15
                 opponent.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Parry",
@@ -5589,7 +5589,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
             human = W.Warrior(f"H{i}", "Human", "Male", 12, 12, 12, 10, 10, 10)
             human.primary_weapon = "Longsword"
             human.secondary_weapon = "Open Hand"
-            human.skills["longsword"] = 3
+            human.skills["long_sword"] = 3
             human.luck = 15
             human.strategies = [W.Strategy(
                 trigger="Always (Default Loop)", style="Strike",
@@ -5619,7 +5619,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
             dwarf = W.Warrior(f"D{i}", "Dwarf", "Male", 12, 12, 12, 10, 10, 10)
             dwarf.primary_weapon = "Longsword"
             dwarf.secondary_weapon = "Open Hand"
-            dwarf.skills["longsword"] = 3
+            dwarf.skills["long_sword"] = 3
             dwarf.luck = 15
             dwarf.strategies = [W.Strategy(
                 trigger="Always (Default Loop)", style="Strike",
@@ -6031,7 +6031,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
             opponent = W.Warrior(f"O{i}", "Human", "Male", 14, 12, 12, 10, 10, 10)
             opponent.primary_weapon = "Longsword"
             opponent.secondary_weapon = "Open Hand"
-            opponent.skills["longsword"] = 4
+            opponent.skills["long_sword"] = 4
             opponent.luck = 15
             opponent.strategies = [W.Strategy(
                 trigger="Always (Default Loop)", style="Strike",
@@ -6105,7 +6105,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                     w = W.Warrior(f"S{size}_T{trial}", "Human", "Male", size, 14, 10, 10, 10, 10)
                     w.primary_weapon = "Longsword"
                     w.armor = "Plate Armor"
-                    w.skills["longsword"] = 3
+                    w.skills["long_sword"] = 3
                     w.strategies = [W.Strategy(
                         trigger="Always (Default Loop)", style="Strike",
                         activity=5, aim_point="Chest", defense_point="Chest"
@@ -6129,7 +6129,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 small = W.Warrior(f"S8_{i}", "Human", "Male", 8, 14, 10, 10, 10, 10)
                 small.primary_weapon = "Longsword"
                 small.armor = "Plate Armor"
-                small.skills["longsword"] = 3
+                small.skills["long_sword"] = 3
                 small.luck = 15
                 small.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -6139,7 +6139,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 big = W.Warrior(f"S12_{i}", "Human", "Male", 12, 14, 10, 10, 10, 10)
                 big.primary_weapon = "Longsword"
                 big.armor = "Plate Armor"
-                big.skills["longsword"] = 3
+                big.skills["long_sword"] = 3
                 big.luck = 15
                 big.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -6201,7 +6201,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 male = W.Warrior(f"M{trial}", "Human", "Male", 10, 14, 10, 10, 10, 10)
                 male.primary_weapon = "Longsword"
                 male.armor = "Chain"
-                male.skills["longsword"] = 3
+                male.skills["long_sword"] = 3
                 male.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
                     activity=5, aim_point="Chest", defense_point="Chest"
@@ -6213,7 +6213,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 female = W.Warrior(f"F{trial}", "Human", "Female", 10, 14, 10, 10, 10, 10)
                 female.primary_weapon = "Longsword"
                 female.armor = "Chain"
-                female.skills["longsword"] = 3
+                female.skills["long_sword"] = 3
                 female.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
                     activity=5, aim_point="Chest", defense_point="Chest"
@@ -6243,7 +6243,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 male = W.Warrior(f"M{i}", "Human", "Male", 10, 14, 10, 10, 10, 10)
                 male.primary_weapon = "Longsword"
                 male.armor = "Chain"
-                male.skills["longsword"] = 3
+                male.skills["long_sword"] = 3
                 male.luck = 15
                 male.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -6253,7 +6253,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 female = W.Warrior(f"F{i}", "Human", "Female", 10, 14, 10, 10, 10, 10)
                 female.primary_weapon = "Longsword"
                 female.armor = "Chain"
-                female.skills["longsword"] = 3
+                female.skills["long_sword"] = 3
                 female.luck = 15
                 female.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -6443,7 +6443,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 shield = W.Warrior(f"SH{trial}", "Human", "Male", 12, 12, 10, 10, 10, 10)
                 shield.primary_weapon = "Longsword"
                 shield.secondary_weapon = "Shield"
-                shield.skills["longsword"] = 3
+                shield.skills["long_sword"] = 3
                 shield.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
                     activity=5, aim_point="Chest", defense_point="Chest"
@@ -6496,7 +6496,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 shield = W.Warrior(f"SH{i}", "Human", "Male", 12, 12, 10, 10, 10, 10)
                 shield.primary_weapon = "Longsword"
                 shield.secondary_weapon = "Shield"
-                shield.skills["longsword"] = 3
+                shield.skills["long_sword"] = 3
                 shield.luck = 15
                 shield.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Parry",
@@ -6583,7 +6583,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                     one = W.Warrior(f"OH{trial}", "Human", "Male", str_val, 12, 10, 10, 10, 10)
                     one.primary_weapon = "Longsword"
                     one.secondary_weapon = "Open Hand"
-                    one.skills["longsword"] = 3
+                    one.skills["long_sword"] = 3
                     one.strategies = [W.Strategy(
                         trigger="Always (Default Loop)", style="Strike",
                         activity=5, aim_point="Chest", defense_point="Chest"
@@ -6621,7 +6621,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 one = W.Warrior(f"OH{i}", "Human", "Male", 14, 12, 10, 10, 10, 10)
                 one.primary_weapon = "Longsword"
                 one.secondary_weapon = "Shield"
-                one.skills["longsword"] = 3
+                one.skills["long_sword"] = 3
                 one.luck = 15
                 one.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -6770,7 +6770,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 w1 = W.Warrior(f"Fighter_{i}", "Human", "Male", 12, 12, 10, 10, 10, 10)
                 w1.primary_weapon = "Longsword"
                 w1.secondary_weapon = "Open Hand"
-                w1.skills["longsword"] = 3
+                w1.skills["long_sword"] = 3
                 w1.luck = 15
                 w1.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -6822,7 +6822,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 w1 = W.Warrior(f"CheckFight_{i}_A", "Human", "Male", 12, 12, 10, 10, 10, 10)
                 w1.primary_weapon = "Longsword"
                 w1.secondary_weapon = "Open Hand"
-                w1.skills["longsword"] = 3
+                w1.skills["long_sword"] = 3
                 w1.luck = 15
                 w1.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -6889,7 +6889,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 warrior = W.Warrior(f"Warrior_{t}_{w}", "Human", "Male", 12, 12, 10, 10, 10, 10)
                 warrior.primary_weapon = "Longsword"
                 warrior.secondary_weapon = "Open Hand"
-                warrior.skills["longsword"] = 3
+                warrior.skills["long_sword"] = 3
                 warrior.luck = 15
                 warrior.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -7076,7 +7076,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 killer = W.Warrior(f"BC_Killer_{scenario}", "Human", "Male", 12, 12, 10, 10, 10, 10)
                 killer.primary_weapon = "Longsword"
                 killer.secondary_weapon = "Open Hand"
-                killer.skills["longsword"] = 3
+                killer.skills["long_sword"] = 3
                 killer.luck = 15
                 killer.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Total Kill",
@@ -7102,7 +7102,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 avenger = W.Warrior(f"BC_Avenger_{scenario}", "Human", "Male", 12, 12, 10, 10, 10, 10)
                 avenger.primary_weapon = "Longsword"
                 avenger.secondary_weapon = "Open Hand"
-                avenger.skills["longsword"] = 3
+                avenger.skills["long_sword"] = 3
                 avenger.luck = 15
                 avenger.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -7158,7 +7158,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 champion = W.Warrior(f"Champion_{i}", "Human", "Male", 14, 12, 10, 10, 10, 10)
                 champion.primary_weapon = "Longsword"
                 champion.secondary_weapon = "Open Hand"
-                champion.skills["longsword"] = 3
+                champion.skills["long_sword"] = 3
                 champion.luck = 18
                 champion.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Total Kill",
@@ -7207,7 +7207,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 current_champion = W.Warrior(f"Champ_S{series_num}_0", "Human", "Male", 14, 12, 10, 10, 10, 10)
                 current_champion.primary_weapon = "Longsword"
                 current_champion.secondary_weapon = "Open Hand"
-                current_champion.skills["longsword"] = 3
+                current_champion.skills["long_sword"] = 3
                 current_champion.luck = 18
                 current_champion.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Total Kill",
@@ -7311,7 +7311,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 warrior = W.Warrior(f"W_{i}_{w}", "Human", "Male", 12, 12, 10, 10, 10, 10)
                 warrior.primary_weapon = "Longsword"
                 warrior.secondary_weapon = "Open Hand"
-                warrior.skills["longsword"] = 3
+                warrior.skills["long_sword"] = 3
                 warrior.luck = 15
                 warrior.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -8182,7 +8182,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 high_luck.primary_weapon = "Longsword"
                 high_luck.secondary_weapon = "Open Hand"
                 high_luck.armor = "Leather"
-                high_luck.skills["longsword"] = 3
+                high_luck.skills["long_sword"] = 3
                 high_luck.luck = 30
                 high_luck.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -8195,7 +8195,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 low_luck.primary_weapon = "Longsword"
                 low_luck.secondary_weapon = "Open Hand"
                 low_luck.armor = "Leather"
-                low_luck.skills["longsword"] = 3
+                low_luck.skills["long_sword"] = 3
                 low_luck.luck = 1
                 low_luck.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -8259,7 +8259,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 warrior_a.primary_weapon = "Longsword"
                 warrior_a.secondary_weapon = "Open Hand"
                 warrior_a.armor = "Leather"
-                warrior_a.skills["longsword"] = 3
+                warrior_a.skills["long_sword"] = 3
                 warrior_a.luck = 15
                 warrior_a.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -8271,7 +8271,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 warrior_b.primary_weapon = "Longsword"
                 warrior_b.secondary_weapon = "Open Hand"
                 warrior_b.armor = "Leather"
-                warrior_b.skills["longsword"] = 3
+                warrior_b.skills["long_sword"] = 3
                 warrior_b.luck = 15
                 warrior_b.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -8344,7 +8344,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 proj_high.primary_weapon = "Longsword"
                 proj_high.secondary_weapon = "Open Hand"
                 proj_high.armor = "Leather"
-                proj_high.skills["longsword"] = 3
+                proj_high.skills["long_sword"] = 3
                 proj_high.luck = 15
                 proj_high.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -8356,7 +8356,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
                 proj_low.primary_weapon = "Longsword"
                 proj_low.secondary_weapon = "Open Hand"
                 proj_low.armor = "Leather"
-                proj_low.skills["longsword"] = 3
+                proj_low.skills["long_sword"] = 3
                 proj_low.luck = 1
                 proj_low.strategies = [W.Strategy(
                     trigger="Always (Default Loop)", style="Strike",
@@ -8495,7 +8495,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
             w = W.Warrior("OPP", race, "Male", 12, 12, 12, 10, 10, 12)
             w.primary_weapon = "Longsword"
             w.secondary_weapon = "Open Hand"
-            w.skills["longsword"] = 3
+            w.skills["long_sword"] = 3
             w.luck = 15
             w.strategies = [W.Strategy(
                 trigger="Always (Default Loop)", style="Strike",
@@ -8633,7 +8633,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
             w = W.Warrior("OPP", race, "Male", 12, 12, 12, 10, 10, 12)
             w.primary_weapon = "Longsword"
             w.secondary_weapon = "Open Hand"
-            w.skills["longsword"] = 3
+            w.skills["long_sword"] = 3
             w.luck = 15
             w.strategies = [W.Strategy(
                 trigger="Always (Default Loop)", style="Strike",
@@ -8777,7 +8777,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
             w = W.Warrior("OPP", race, "Male", 12, 13, 11, 10, 10, 12)
             w.primary_weapon = "Longsword"
             w.secondary_weapon = "Open Hand"
-            w.skills["longsword"] = 3
+            w.skills["long_sword"] = 3
             w.luck = 15
             w.strategies = [W.Strategy(
                 trigger="Always (Default Loop)", style="Strike",
@@ -9094,7 +9094,7 @@ Tabaxi excel in different scenarios based on their trait combinations.
             w = W.Warrior("OPP", race, "Male", 13, 12, 12, 10, 10, 12)
             w.primary_weapon = "Longsword"
             w.secondary_weapon = "Open Hand"
-            w.skills["longsword"] = 3
+            w.skills["long_sword"] = 3
             w.luck = 15
             w.strategies = [W.Strategy(
                 trigger="Always (Default Loop)", style="Strike",

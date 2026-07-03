@@ -372,8 +372,8 @@ WEAPONS: dict[str, Weapon] = {
         preferred_styles=["Slash", "Lunge", "Wall of Steel"],
     ),
 
-    "longsword": Weapon(
-        skill_key     = "longsword",
+    "long_sword": Weapon(
+        skill_key     = "long_sword",
         display       = "Long Sword",
         weight        = 3.2,
         apm           = 6,

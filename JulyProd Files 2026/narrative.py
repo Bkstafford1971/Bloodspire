@@ -2989,7 +2989,7 @@ _WEAPON_DAMAGE_TYPES: dict[str, str] = {
     "small_pick": "piercing", "military_pick": "piercing", "pick_axe": "piercing",
     "great_pick": "piercing",
     # Slashing
-    "short_sword": "slashing", "scimitar": "slashing", "longsword": "slashing",
+    "short_sword": "slashing", "scimitar": "slashing", "long_sword": "slashing",
     "broad_sword": "slashing", "bastard_sword": "slashing", "great_sword": "slashing",
     "hatchet": "slashing", "francisca": "slashing", "battle_axe": "slashing",
     "great_axe": "slashing", "pole_axe": "slashing", "halberd": "slashing",
