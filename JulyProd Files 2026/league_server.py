@@ -362,6 +362,79 @@ def _save_result(turn_num, manager_id, data):
         import traceback
         traceback.print_exc()
 
+def _load_deaths_from_results(turn_num):
+    """
+    Load all deaths from saved result files for a turn.
+    This is the authoritative source - each result file contains all bouts
+    that were executed, with warrior_slain and opponent_slain flags.
+
+    Peasants and monsters can die multiple times in a single turn if they
+    fight multiple times. We capture all deaths, even if the same peasant
+    name appears multiple times (distinguished by fight_id).
+    """
+    deaths = []
+    seen_deaths = set()  # Use (name, fight_id) tuple to allow multiple deaths of same name
+    turn_path = _turn_dir(turn_num)
+
+    try:
+        if not os.path.isdir(turn_path):
+            print(f"  WARNING: Turn directory not found: {turn_path}")
+            return deaths
+
+        # Load all result_*.json files from the turn directory
+        for fname in os.listdir(turn_path):
+            if fname.startswith("result_") and fname.endswith(".json"):
+                fpath = os.path.join(turn_path, fname)
+                res = _load_json(fpath, None)
+                if not res:
+                    continue
+
+                # Extract deaths from all bouts in this result file
+                for bout in res.get("bouts", []):
+                    # Check if player warrior was slain
+                    if bout.get("warrior_slain"):
+                        wname = bout.get("warrior_name", "?")
+                        fight_id = bout.get("fight_id", 0)
+                        # Use (name, fight_id) as unique key to allow multiple deaths of same name
+                        death_key = (wname, fight_id)
+                        if death_key not in seen_deaths:
+                            seen_deaths.add(death_key)
+                            deaths.append({
+                                "name": wname,
+                                "team": res.get("team_name", "?"),
+                                "team_id": res.get("team_id", 0),
+                                "w": bout.get("wins", 0),
+                                "l": bout.get("losses", 0),
+                                "k": bout.get("kills", 0),
+                                "killed_by": bout.get("opponent_name", "?"),
+                                "turn": turn_num,
+                            })
+
+                    # Check if opponent was slain
+                    if bout.get("opponent_slain"):
+                        oname = bout.get("opponent_name", "?")
+                        fight_id = bout.get("fight_id", 0)
+                        # Use (name, fight_id) as unique key to allow multiple deaths of same name
+                        death_key = (oname, fight_id)
+                        if death_key not in seen_deaths:
+                            seen_deaths.add(death_key)
+                            deaths.append({
+                                "name": oname,
+                                "team": bout.get("opponent_team", "?"),
+                                "team_id": bout.get("opponent_team_id", 0),
+                                "w": bout.get("opponent_wins", 0),
+                                "l": bout.get("opponent_losses", 0),
+                                "k": bout.get("opponent_kills", 0),
+                                "killed_by": bout.get("warrior_name", "?"),
+                                "turn": turn_num,
+                            })
+    except Exception as e:
+        print(f"  ERROR loading deaths from results: {e}")
+        import traceback
+        traceback.print_exc()
+
+    return deaths
+
 def _write_execution_log(turn_num, exec_log):
     """Write a human-readable table of turn execution status for all warriors."""
     exec_log_path = os.path.join(_turn_dir(turn_num), "execution_log.txt")
@@ -1384,38 +1457,8 @@ def _run_turn(request_password, rerun_turn=None):
             pass
 
         # Collect deaths
-        deaths_nl = []
-        _seen_deaths = set()
-        for mid, res in all_results.items():
-            for b in res.get("bouts", []):
-                if b.get("warrior_slain"):
-                    wname = b.get("warrior_name", "?")
-                    if wname in _seen_deaths:
-                        continue
-                    _seen_deaths.add(wname)
-                    deaths_nl.append({
-                        "name": wname,
-                        "team": res.get("team_name", "?"),
-                        "team_id": res.get("team_id", 0),
-                        "w": b.get("wins", 0),
-                        "l": b.get("losses", 0),
-                        "k": b.get("kills", 0),
-                        "killed_by": b.get("opponent_name", "?"),
-                    })
-                elif b.get("opponent_slain"):
-                    oname = b.get("opponent_name", "?")
-                    if oname in _seen_deaths:
-                        continue
-                    _seen_deaths.add(oname)
-                    deaths_nl.append({
-                        "name": oname,
-                        "team": b.get("opponent_team", "?"),
-                        "team_id": b.get("opponent_team_id", 0),
-                        "w": b.get("opponent_wins", 0),
-                        "l": b.get("opponent_losses", 0),
-                        "k": b.get("opponent_kills", 0),
-                        "killed_by": b.get("warrior_name", "?"),
-                    })
+        # Load deaths from saved result files (authoritative source)
+        deaths_nl = _load_deaths_from_results(turn_num)
 
         # Use the actual global_card for the newsletter instead of building a fake one.
         # This ensures each physical fight is listed exactly once and has correct statistics.
