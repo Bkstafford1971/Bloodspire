@@ -24,11 +24,16 @@
 #   Net      = max(1, int(ceiling * fraction) - armor)
 #
 # CONCEDE SYSTEM:
-#   Triggered at <=25% HP. d100 + PRE_bonus + luck//2 vs threshold.
+#   Triggered at <=25% HP, or immediately on the blow that drops a warrior to
+#   <=0 HP (guaranteed appeal on the potential finishing blow, before the
+#   death check ever rolls). d100 + PRE_bonus + pop_bonus + luck//2 +
+#   desperation_bonus (+5 per prior failed appeal this fight, cap +15) vs
+#   threshold = max(30, 58 - PRE//3).
 #   Presence determines how often the Pitmaster grants mercy.
 #   Monster fights: no concede, always to the death.
 #
 # DEATH CHECK:
+#   Only rolled if the concede appeal on the finishing blow is denied.
 #   overshoot = max(0, -new_hp)
 #   death_chance = 0.5% + overshoot% (capped 50%)
 #
@@ -41,7 +46,6 @@ from dataclasses import dataclass, field
 from typing import Optional, List, Tuple
 
 from combat_debug_logger import CombatDebugLogger
-import training_log
 
 from warrior  import Warrior, Strategy, ATTRIBUTES
 from strategy import (
@@ -640,10 +644,11 @@ class _CState:
 
     @property
     def wants_to_concede(self) -> bool:
-        """True when at <=25% HP and HP has dropped since last concede attempt."""
-        if self.current_hp <= 0:
-            return True
-        if self.hp_pct > 0.25:
+        """True when at <=25% HP (or at/below 0) and HP has dropped since last appeal.
+        Note: the blow that first drops a warrior to <=0 HP is handled by an explicit
+        appeal inside _handle_zero_hp, which also stamps hp_at_last_concede - so this
+        only re-fires here on a *further* drop, not a second time for the same blow."""
+        if self.hp_pct > 0.25 and self.current_hp > 0:
             return False
         return self.current_hp < self.hp_at_last_concede
 
@@ -1667,7 +1672,7 @@ def _calc_damage_verbose(
 
 def _concede_check_verbose(warrior: "Warrior", state: "_CState", is_monster_fight: bool = False):
     if is_monster_fight:
-        return False, {"monster_fight": True, "d100": 0, "PRE_bonus": 0, "popularity_bonus": 0, "luck_half": 0, "total": 0, "threshold": 0}
+        return False, {"monster_fight": True, "d100": 0, "PRE_bonus": 0, "popularity_bonus": 0, "luck_half": 0, "desperation_bonus": 0, "total": 0, "threshold": 0}
     roll      = _d100()
     presence  = warrior.presence
     pre_b     = max(-6, min(10, presence - 10))
@@ -1681,15 +1686,19 @@ def _concede_check_verbose(warrior: "Warrior", state: "_CState", is_monster_figh
     elif warrior.popularity >= 71:
         pop_bonus = 6
 
+    # Desperation bonus: each prior failed appeal this fight makes the crowd/Pitmaster
+    # more inclined to call it, capped at +15 (concede_attempts is 1-indexed at call time).
+    desperation_bonus = min(15, max(0, (state.concede_attempts - 1) * 5))
+
     # Probabilistic luck: 25% chance to apply luck//2 bonus to this concede roll
     luck_contribution = _apply_conditional_luck(0, warrior, threshold=25)
     luck_half = luck_contribution // 2
-    total     = roll + pre_b + pop_bonus + luck_half
-    threshold = max(40, 68 - (presence // 3))
+    total     = roll + pre_b + pop_bonus + luck_half + desperation_bonus
+    threshold = max(30, 58 - (presence // 3))
     granted   = total >= threshold
     return granted, {
         "d100": roll, "PRE_bonus": pre_b, "popularity_bonus": pop_bonus, "luck_half": luck_half,
-        "total": total, "threshold": threshold,
+        "desperation_bonus": desperation_bonus, "total": total, "threshold": threshold,
     }
 
 
@@ -1923,13 +1932,13 @@ def _death_check(prev_hp: int, damage: int) -> bool:
 
 def _concede_check(warrior: Warrior, state: _CState, is_monster_fight: bool = False) -> bool:
     """
-    d100 + PRE_bonus + popularity_bonus + luck//2 vs threshold (max(40, 68 - PRE//3)).
+    d100 + PRE_bonus + popularity_bonus + luck//2 + desperation_bonus vs threshold (max(30, 58 - PRE//3)).
     High Presence = lower threshold = easier to get mercy.
     High Popularity = further bonus to roll (star athletes get mercy, capped at +15).
     Popular warriors (71-80): +6 to roll
     Very popular (81-90): +10 to roll
     Legendary (91-100): +15 to roll (capped - death remains possible)
-    Effective mercy rate ~40-55% when triggered; overall fight death ~2.5-3%.
+    Desperation bonus: +5 per prior failed appeal this fight, capped at +15.
     Luck is probabilistic: 25% chance to apply luck//2 bonus to concede roll.
     """
     if is_monster_fight:
@@ -1947,10 +1956,14 @@ def _concede_check(warrior: Warrior, state: _CState, is_monster_fight: bool = Fa
     elif warrior.popularity >= 71:
         pop_bonus = 6
 
+    # Desperation bonus: each prior failed appeal this fight makes the crowd/Pitmaster
+    # more inclined to call it, capped at +15 (concede_attempts is 1-indexed at call time).
+    desperation_bonus = min(15, max(0, (state.concede_attempts - 1) * 5))
+
     # Probabilistic luck: 25% chance to apply luck//2 bonus to this concede roll
     luck_contribution = _apply_conditional_luck(0, warrior, threshold=25) // 2
-    total     = roll + pre_b + pop_bonus + luck_contribution
-    threshold = max(40, 68 - (presence // 3))
+    total     = roll + pre_b + pop_bonus + luck_contribution + desperation_bonus
+    threshold = max(30, 58 - (presence // 3))
     return total >= threshold
 
 
@@ -2288,9 +2301,6 @@ class CombatEngine:
         challenger_name : str  = None,
         fight_type      : str  = "standard",
         debug_logger    : Optional[CombatDebugLogger] = None,
-        turn_num        : int  = 0,
-        team_a_id       : int  = 0,
-        team_b_id       : int  = 0,
     ):
         self.warrior_a        = warrior_a
         self.warrior_b        = warrior_b
@@ -2304,9 +2314,6 @@ class CombatEngine:
         self.challenger_name  = challenger_name
         self.fight_type       = fight_type
         self.debug_logger     = debug_logger
-        self.turn_num         = turn_num
-        self.team_a_id        = team_a_id
-        self.team_b_id        = team_b_id
 
         self.state_a = _CState(warrior=warrior_a, current_hp=warrior_a.max_hp, endurance=float(warrior_a.max_endurance))
         self.state_b = _CState(warrior=warrior_b, current_hp=warrior_b.max_hp, endurance=float(warrior_b.max_endurance))
@@ -2524,23 +2531,6 @@ class CombatEngine:
                 self.debug_logger.log_training(w.name, _detail)
             else:
                 res = self._apply_training(w, opponent=opp)
-                _detail = []
-
-            # Log training to training_log files (for audit purposes)
-            if self.turn_num > 0:
-                manager_name = self.manager_a_name if is_player else self.manager_b_name
-                team_name = self.team_a_name if is_player else self.team_b_name
-                team_id = self.team_a_id if is_player else self.team_b_id
-
-                # Write manager header on first warrior for this manager
-                training_log.write_manager_header(self.turn_num, manager_name, team_id)
-
-                # Log this warrior's training details
-                if _detail or res:  # Log if we have details or results
-                    training_log.log_warrior_training(
-                        self.turn_num, w.name, manager_name, team_name, team_id, _detail
-                    )
-
             # Key by position ("warrior_a"/"warrior_b") to avoid collision when
             # both fighters share the same name.  Callers that need the training
             # list for warrior_a (always the player warrior) use "warrior_a".
@@ -4036,6 +4026,17 @@ class CombatEngine:
             self._emit(N.race_kill_line(kw.name, kw.race.name, kw.gender))
             self._emit(""); self._emit(N.victory_line(kw.name, dw.name))
             return self._make_result(kw, dw, True, minute)
+
+        # Give the warrior a chance to yield on the very blow that dropped them,
+        # before rolling to see if that blow was fatal. This matters most for a
+        # one-shot: a warrior who was above the 25% HP threshold a moment ago
+        # never otherwise gets an appeal before the finishing roll.
+        dying.hp_at_last_concede = dying.current_hp
+        r = self._attempt_concede(dying, killer, minute)
+        if r:
+            return r
+
+        # Mercy denied - the blow stands; see if it was outright fatal.
         if self.debug_logger:
             died, _dc = _death_check_verbose(prev, dmg)
             _overshoot    = _dc.get("overshoot", 0)
@@ -4049,7 +4050,8 @@ class CombatEngine:
             self._emit(N.race_kill_line(kw.name, kw.race.name, kw.gender))
             self._emit(""); self._emit(N.victory_line(kw.name, dw.name))
             return self._make_result(kw, dw, True, minute)
-        # Survived: concede system takes over via wants_to_concede
+        # Survived: outer-loop concede system continues to watch this warrior
+        # in case they take further damage before the fight ends.
         return None
 
     # =========================================================================
@@ -4067,6 +4069,7 @@ class CombatEngine:
                 _cc.get("d100", 0), _cc.get("PRE_bonus", 0),
                 _cc.get("luck_half", 0), _cc.get("total", 0),
                 _cc.get("threshold", 0), granted,
+                _cc.get("desperation_bonus", 0),
             )
         else:
             granted = _concede_check(dw, dying, self.is_monster_fight)
@@ -4341,9 +4344,6 @@ def run_fight(
     debug_logger    : Optional[CombatDebugLogger] = None,
     pos_a           : int  = 1,
     pos_b           : int  = 1,
-    turn_num        : int  = 0,
-    team_a_id       : int  = 0,
-    team_b_id       : int  = 0,
 ) -> FightResult:
     engine = CombatEngine(
         warrior_a, warrior_b,
@@ -4355,9 +4355,6 @@ def run_fight(
         challenger_name=challenger_name,
         fight_type=fight_type,
         debug_logger=debug_logger,
-        turn_num=turn_num,
-        team_a_id=team_a_id,
-        team_b_id=team_b_id,
     )
     result = engine.resolve_fight()
     if result.winner and result.loser:
