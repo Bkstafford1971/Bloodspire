@@ -41,6 +41,7 @@ from dataclasses import dataclass, field
 from typing import Optional, List, Tuple
 
 from combat_debug_logger import CombatDebugLogger
+import training_log
 
 from warrior  import Warrior, Strategy, ATTRIBUTES
 from strategy import (
@@ -2287,6 +2288,9 @@ class CombatEngine:
         challenger_name : str  = None,
         fight_type      : str  = "standard",
         debug_logger    : Optional[CombatDebugLogger] = None,
+        turn_num        : int  = 0,
+        team_a_id       : int  = 0,
+        team_b_id       : int  = 0,
     ):
         self.warrior_a        = warrior_a
         self.warrior_b        = warrior_b
@@ -2300,6 +2304,9 @@ class CombatEngine:
         self.challenger_name  = challenger_name
         self.fight_type       = fight_type
         self.debug_logger     = debug_logger
+        self.turn_num         = turn_num
+        self.team_a_id        = team_a_id
+        self.team_b_id        = team_b_id
 
         self.state_a = _CState(warrior=warrior_a, current_hp=warrior_a.max_hp, endurance=float(warrior_a.max_endurance))
         self.state_b = _CState(warrior=warrior_b, current_hp=warrior_b.max_hp, endurance=float(warrior_b.max_endurance))
@@ -2517,6 +2524,23 @@ class CombatEngine:
                 self.debug_logger.log_training(w.name, _detail)
             else:
                 res = self._apply_training(w, opponent=opp)
+                _detail = []
+
+            # Log training to training_log files (for audit purposes)
+            if self.turn_num > 0:
+                manager_name = self.manager_a_name if is_player else self.manager_b_name
+                team_name = self.team_a_name if is_player else self.team_b_name
+                team_id = self.team_a_id if is_player else self.team_b_id
+
+                # Write manager header on first warrior for this manager
+                training_log.write_manager_header(self.turn_num, manager_name, team_id)
+
+                # Log this warrior's training details
+                if _detail or res:  # Log if we have details or results
+                    training_log.log_warrior_training(
+                        self.turn_num, w.name, manager_name, team_name, team_id, _detail
+                    )
+
             # Key by position ("warrior_a"/"warrior_b") to avoid collision when
             # both fighters share the same name.  Callers that need the training
             # list for warrior_a (always the player warrior) use "warrior_a".
@@ -4317,6 +4341,9 @@ def run_fight(
     debug_logger    : Optional[CombatDebugLogger] = None,
     pos_a           : int  = 1,
     pos_b           : int  = 1,
+    turn_num        : int  = 0,
+    team_a_id       : int  = 0,
+    team_b_id       : int  = 0,
 ) -> FightResult:
     engine = CombatEngine(
         warrior_a, warrior_b,
@@ -4328,6 +4355,9 @@ def run_fight(
         challenger_name=challenger_name,
         fight_type=fight_type,
         debug_logger=debug_logger,
+        turn_num=turn_num,
+        team_a_id=team_a_id,
+        team_b_id=team_b_id,
     )
     result = engine.resolve_fight()
     if result.winner and result.loser:

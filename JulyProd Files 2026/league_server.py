@@ -667,6 +667,10 @@ def _run_turn(request_password, rerun_turn=None):
                 return {"success": False,
                         "error": f"Only turn {last_completed} (the last completed turn) can be re-run."}
         turn_num = rerun_turn if rerun_turn else cfg["current_turn"]
+
+        # Clear previous turn's training logs before starting new turn
+        clear_turn_logs(turn_num)
+
         uploads = _load_uploads(turn_num)
 
         # Inject AI teams as pseudo-uploads
@@ -720,6 +724,7 @@ def _run_turn(request_password, rerun_turn=None):
 
     from team import Team
     from combat import run_fight, set_show_favorite_weapon, set_show_luck_factor, set_show_max_hp
+    from training_log import clear_turn_logs
 
     # Apply feature flags
     cfg = _load_config()
@@ -911,6 +916,9 @@ def _run_turn(request_password, rerun_turn=None):
                 pos_b=fight.pos_b,
                 challenger_name=fight.challenger_name,
                 debug_logger=_dbg_logger,
+                turn_num=turn_num,
+                team_a_id=fight.player_team.manager_id,
+                team_b_id=fight.opponent_team.manager_id,
             )
             # CRITICAL: Attach the result to the fight object so it can be used for the newsletter
             fight.result = result

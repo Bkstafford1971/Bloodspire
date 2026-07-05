@@ -147,8 +147,9 @@ def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
         new_state = {"name": champion_beaten_by, "warrior_id": champion_beaten_by_wid,
                      "team_name": champion_beaten_team or "Unknown",
                      "team_id": champion_beaten_team_id,
-                     "source": "beat_champion"}
+                     "source": "defeated_champion"}
         is_new = (champion_beaten_by != prev_champ)
+        print(f"[DEBUG CHAMPION] RULE 1: {champion_beaten_by} defeated champion and claims title")
         return new_state, is_new
     
     current_champ = champion_state.get("name", "")
@@ -162,10 +163,16 @@ def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
     champion_fought = False
     if current_champ:
         champion_fought = (current_champ_tid, current_champ) in warriors_who_fought
+        if not champion_fought:
+            print(f"\n[DEBUG CHAMPION] Current champion {current_champ} (tid={current_champ_tid}) NOT found in warriors_who_fought")
+            print(f"[DEBUG CHAMPION] warriors_who_fought set contains: {warriors_who_fought}")
+        else:
+            print(f"\n[DEBUG CHAMPION] Current champion {current_champ} (tid={current_champ_tid}) FOUND in warriors_who_fought")
 
     # Also check if champion was a winner in any bout (handles peasant/NPC fights)
     champion_won = False
     if current_champ and card and not champion_fought:
+        print(f"[DEBUG CHAMPION] Checking if {current_champ} won any bouts...")
         for bout in card:
             if not bout:
                 continue
@@ -174,14 +181,20 @@ def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
             if winner:
                 winner_name = winner.name if hasattr(winner, "name") else (winner.get("name") if isinstance(winner, dict) else "")
                 if winner_name == current_champ:
+                    print(f"[DEBUG CHAMPION] Found {current_champ} as winner in a bout!")
                     champion_won = True
                     champion_fought = True
                     break
 
     # RULE 4: If champion exists and fought (and won or at least participated), they keep the title
     if current_champ and champion_fought:
+        print(f"[DEBUG CHAMPION] RULE 4: Champion {current_champ} fought and retains title")
+        # Update the source to indicate retention, not original coronation
+        champion_state["source"] = "retained"
         is_new = (current_champ != prev_champ)
         return champion_state, is_new
+    elif current_champ:
+        print(f"[DEBUG CHAMPION] Champion {current_champ} did NOT fight - will evaluate for replacement")
     
     # RULES 2 & 3: No champion OR champion didn't fight - find warrior with highest recognition
     # Find all eligible warriors
@@ -225,6 +238,8 @@ def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
     new_state = {"name": champ_w.name, "warrior_id": getattr(champ_w, "warrior_id", None),
                  "team_name": champ_t, "team_id": champ_tid, "source": "recognition"}
     is_new = (champ_w.name != prev_champ)
+    if is_new:
+        print(f"[DEBUG CHAMPION] New champion {champ_w.name} awarded by recognition")
     return new_state, is_new
 
 
@@ -394,6 +409,9 @@ def _warrior_tiers(teams, champion_state: dict, card: list = None, turn_num: int
     champ_tid  = champion_state.get("team_id", 0)
     champ_wid  = champion_state.get("warrior_id")
 
+    print(f"\n[DEBUG TIERS] _warrior_tiers called with champion_state: {champion_state}")
+    print(f"[DEBUG TIERS] Looking for: champ_name={champ_name}, champ_tid={champ_tid}, champ_wid={champ_wid}")
+
     # Identify warriors that participated in this turn from the card
     warriors_that_fought = set()
     if card:
@@ -433,8 +451,12 @@ def _warrior_tiers(teams, champion_state: dict, card: list = None, turn_num: int
             w_wid = getattr(wobj, "warrior_id", None)
             if champ_wid and w_wid:
                 is_champ = (champ_wid == w_wid)
+                if is_champ:
+                    print(f"[DEBUG TIERS] FOUND CHAMPION: {wobj.name} by warrior_id match ({champ_wid})")
             else:
                 is_champ = (wobj.name == champ_name and tid == champ_tid)
+                if is_champ:
+                    print(f"[DEBUG TIERS] FOUND CHAMPION: {wobj.name} by name+team_id match")
             tier = _warrior_tier(wobj, is_champ)
             # Mark warriors that didn't fight this turn with a "-" prefix (but keep them visible)
             warrior_display_name = wobj.name if (tid, wobj.name) in warriors_that_fought else f"- {wobj.name}"
@@ -452,6 +474,7 @@ def _warrior_tiers(teams, champion_state: dict, card: list = None, turn_num: int
     for tier in [TIER_CHAMPION,TIER_ELITES,TIER_EXPERTS,TIER_VETERANS,TIER_ADEPTS,TIER_INITIATES,TIER_ROOKIES,TIER_RECRUITS]:
         wlist=tiers[tier]
         if not wlist and tier==TIER_CHAMPION:
+            print(f"[DEBUG TIERS] CHAMPION tier is empty! champion_state was: {champion_state}")
             sections.append(f"\n{tier}\n{COL_HDR}\n{SEP}\n  (vacant this turn)"); continue
         if not wlist: continue
         wlist.sort(key=lambda x:(-x["rec"],-(x["w"]/max(1,x["w"]+x["l"]))))
@@ -1516,6 +1539,74 @@ def _should_hide_manager(mgr_name, turn_num, manager_records_file):
         return False
 
 
+def _validate_manager_records_before_save(turn_num, manager_records):
+    """
+    Validate manager records before they are used in the newsletter or saved.
+    This is critical - ensures the newsletter text matches the saved data.
+
+    Raises an exception if validation fails (preventing both newsletter generation and save).
+    """
+    import os
+    import json
+
+    errors = []
+
+    # Load previous turn's data to verify accumulation
+    try:
+        league_dir = os.path.dirname(os.path.abspath(__file__))
+        manager_records_file = os.path.join(league_dir, "manager_records.json")
+
+        prev_turn_num = turn_num - 1
+        prev_records = {}
+
+        if prev_turn_num >= 1 and os.path.exists(manager_records_file):
+            with open(manager_records_file, "r", encoding="utf-8") as f:
+                all_records = json.load(f)
+                if str(prev_turn_num) in all_records:
+                    prev_records = all_records[str(prev_turn_num)]
+
+        # Validate each manager's records
+        for mgr_name, rec in manager_records.items():
+            this_w = rec.get("w", 0)
+            this_l = rec.get("l", 0)
+            this_k = rec.get("k", 0)
+            career_w = rec.get("cw", 0)
+            career_l = rec.get("cl", 0)
+            career_k = rec.get("ck", 0)
+
+            # Check 1: Career must be >= this turn (career is cumulative)
+            if career_w < this_w or career_l < this_l or career_k < this_k:
+                errors.append(
+                    f"{mgr_name}: Career {career_w}-{career_l}-{career_k} < This Turn {this_w}-{this_l}-{this_k} (INVALID)"
+                )
+
+            # Check 2: Verify accumulation from previous turn
+            if turn_num > 1 and mgr_name in prev_records:
+                prev_rec = prev_records[mgr_name]
+                prev_cw = prev_rec.get("cw", 0)
+                prev_cl = prev_rec.get("cl", 0)
+                prev_ck = prev_rec.get("ck", 0)
+
+                expected_cw = prev_cw + this_w
+                expected_cl = prev_cl + this_l
+                expected_ck = prev_ck + this_k
+
+                if career_w != expected_cw or career_l != expected_cl or career_k != expected_ck:
+                    errors.append(
+                        f"{mgr_name}: Accumulation failed - "
+                        f"Prev {prev_cw}-{prev_cl}-{prev_ck} + This {this_w}-{this_l}-{this_k} "
+                        f"= Expected {expected_cw}-{expected_cl}-{expected_ck} "
+                        f"but got {career_w}-{career_l}-{career_k}"
+                    )
+
+    except Exception as e:
+        errors.append(f"Exception during validation: {e}")
+
+    if errors:
+        error_text = "\n  ".join(errors)
+        raise Exception(f"Manager records validation FAILED:\n  {error_text}")
+
+
 def _save_manager_records(turn_num, manager_records):
     """
     Save manager records for this turn to manager_records.json.
@@ -1539,21 +1630,74 @@ def _save_manager_records(turn_num, manager_records):
 
         # Store this turn's records as-is (career totals already calculated by _top_managers)
         all_records[str(turn_num)] = {}
+
+        # CRITICAL: Validate all records before saving
+        validation_errors = []
+
         for mgr_name, rec in manager_records.items():
+            this_turn_w = rec.get("w", 0)
+            this_turn_l = rec.get("l", 0)
+            this_turn_k = rec.get("k", 0)
+            career_w = rec.get("cw", 0)
+            career_l = rec.get("cl", 0)
+            career_k = rec.get("ck", 0)
+
+            # VALIDATION 1: Career totals must be >= this turn's results
+            # (career is cumulative, so it should never be less than current turn)
+            if career_w < this_turn_w or career_l < this_turn_l or career_k < this_turn_k:
+                msg = f"CRITICAL: {mgr_name} Turn {turn_num} - career < this turn!"
+                msg += f"\n  This turn: {this_turn_w}-{this_turn_l}-{this_turn_k}"
+                msg += f"\n  Career: {career_w}-{career_l}-{career_k}"
+                validation_errors.append(msg)
+                print(msg)
+
+            # VALIDATION 2: If previous turn exists, verify accumulation
+            prev_turn_key = str(turn_num - 1)
+            if prev_turn_key in all_records and mgr_name in all_records[prev_turn_key]:
+                prev_rec = all_records[prev_turn_key][mgr_name]
+                prev_career_w = prev_rec.get("cw", 0)
+                prev_career_l = prev_rec.get("cl", 0)
+                prev_career_k = prev_rec.get("ck", 0)
+
+                expected_w = prev_career_w + this_turn_w
+                expected_l = prev_career_l + this_turn_l
+                expected_k = prev_career_k + this_turn_k
+
+                if career_w != expected_w or career_l != expected_l or career_k != expected_k:
+                    msg = f"CRITICAL: {mgr_name} Turn {turn_num} - accumulation mismatch!"
+                    msg += f"\n  Prev Career: {prev_career_w}-{prev_career_l}-{prev_career_k}"
+                    msg += f"\n  This Turn: {this_turn_w}-{this_turn_l}-{this_turn_k}"
+                    msg += f"\n  Expected: {expected_w}-{expected_l}-{expected_k}"
+                    msg += f"\n  Actual: {career_w}-{career_l}-{career_k}"
+                    validation_errors.append(msg)
+                    print(msg)
+
             all_records[str(turn_num)][mgr_name] = {
-                "w": rec.get("w", 0),     # This turn's wins
-                "l": rec.get("l", 0),     # This turn's losses
-                "k": rec.get("k", 0),     # This turn's kills
-                "cw": rec.get("cw", 0),   # Career wins (already final from _top_managers)
-                "cl": rec.get("cl", 0),   # Career losses (already final from _top_managers)
-                "ck": rec.get("ck", 0)    # Career kills (already final from _top_managers)
+                "w": this_turn_w,
+                "l": this_turn_l,
+                "k": this_turn_k,
+                "cw": career_w,
+                "cl": career_l,
+                "ck": career_k
             }
+
+        # If there are validation errors, log them but still save
+        # (Newsletter already generated, and we need the records for next turn's calculation)
+        if validation_errors:
+            print("\n" + "="*80)
+            print("WARNING: Manager records validation found issues (see above)")
+            print("="*80)
+            print("Records will be saved anyway - you can review and fix with validate_manager_records.py")
 
         # Write back
         with open(manager_records_file, "w", encoding="utf-8") as f:
             json.dump(all_records, f, indent=2)
+
+        print(f"INFO: Saved manager records for turn {turn_num}")
     except Exception as e:
-        print(f"WARNING: Failed to save manager records: {e}")
+        print(f"ERROR: Failed to save manager records: {e}")
+        import traceback
+        traceback.print_exc()
 
 def _top_managers(card, teams, turn_num, return_records=False):
     """
@@ -1600,11 +1744,22 @@ def _top_managers(card, teams, turn_num, return_records=False):
                 # Current turn's "w", "l", "k" will be added to calculate new career totals.
                 if str(prev_turn_num) in saved_records:
                     for mgr_name, rec in saved_records[str(prev_turn_num)].items():
+                        cw = rec.get("cw", 0)
+                        cl = rec.get("cl", 0)
+                        ck = rec.get("ck", 0)
+
+                        # VALIDATION: Check if career baseline looks reasonable
+                        # If career totals are 0 for a manager who fought previous turn, something is wrong
+                        prev_w = rec.get("w", 0)
+                        if prev_w > 0 and cw == 0:
+                            print(f"WARNING: {mgr_name} fought in Turn {prev_turn_num} (w={prev_w}) but career total is 0!")
+                            print(f"  This suggests career data wasn't loaded correctly last turn")
+
                         # Career baseline = previous turn's career totals
                         manager_records[mgr_name] = {
-                            "cw": rec.get("cw", 0),
-                            "cl": rec.get("cl", 0),
-                            "ck": rec.get("ck", 0),
+                            "cw": cw,
+                            "cl": cl,
+                            "ck": ck,
                             "w": 0,    # Current turn's record (will be calculated below)
                             "l": 0,
                             "k": 0
@@ -1676,10 +1831,17 @@ def _top_managers(card, teams, turn_num, return_records=False):
     # Calculate win percentages and sort
     # IMPORTANT: At this point, rec["cw/cl/ck"] are the PREVIOUS turn's career totals.
     # We need to add this turn's results (rec["w/l/k"]) to get the NEW career totals.
+    print(f"\n[DEBUG] Accumulating career totals for Turn {turn_num}:")
     for mgr_name, rec in manager_records.items():
+        old_cw = rec["cw"]
+        old_cl = rec["cl"]
+        old_ck = rec["ck"]
+
         rec["cw"] += rec["w"]  # New career wins = old career wins + this turn's wins
         rec["cl"] += rec["l"]  # New career losses = old career losses + this turn's losses
         rec["ck"] += rec["k"]  # New career kills = old career kills + this turn's kills
+
+        print(f"  {mgr_name:<35} This Turn: {rec['w']:3d}-{rec['l']:3d}-{rec['k']:3d} | Baseline: {old_cw:3d}-{old_cl:3d}-{old_ck:3d} | New Career: {rec['cw']:3d}-{rec['cl']:3d}-{rec['ck']:3d}")
 
     league_dir = os.path.dirname(os.path.abspath(__file__))
     manager_records_file = os.path.join(league_dir, "manager_records.json")
@@ -1769,7 +1931,24 @@ def generate_newsletter(turn_num, card, teams, deaths, champion_state,
     print(f"DEBUG: _top_managers returned type {type(result)}, is tuple: {isinstance(result, tuple)}")
     if isinstance(result, tuple):
         managers_text, manager_records = result
+
+        # ALWAYS append the newsletter text - newsletter generation is critical
         sections.append("\n\n" + managers_text)
+
+        # Validate and save the records (but don't let validation errors prevent newsletter generation)
+        validation_passed = True
+        try:
+            print(f"\nDEBUG: Validating manager records...")
+            _validate_manager_records_before_save(turn_num, manager_records)
+            print(f"DEBUG: Manager records validation PASSED")
+        except Exception as e:
+            validation_passed = False
+            print(f"\nWARNING: Manager records validation FAILED: {e}")
+            print(f"WARNING: Newsletter was generated anyway, but you must fix the data!")
+            import traceback
+            traceback.print_exc()
+
+        # Save the records (validation may have failed, but we save anyway)
         try:
             _save_manager_records(turn_num, manager_records)
             print(f"DEBUG: Successfully saved manager records for turn {turn_num}")
@@ -1777,6 +1956,16 @@ def generate_newsletter(turn_num, card, teams, deaths, champion_state,
             print(f"ERROR saving manager records: {e}")
             import traceback
             traceback.print_exc()
+
+        if not validation_passed:
+            print(f"\n{'='*80}")
+            print(f"ATTENTION: Manager records validation failed for Turn {turn_num}")
+            print(f"{'='*80}")
+            print(f"The newsletter was generated (see above), but the manager_records.json")
+            print(f"may have incorrect data. Review the warnings above and use:")
+            print(f"  python validate_manager_records.py")
+            print(f"to check the file, then manually correct any issues.")
+
     else:
         # Backwards compatibility: old code path returned just text
         sections.append("\n\n" + result)
