@@ -193,6 +193,20 @@ class BloodspireSimTool:
         self.m1v1_mode = tk.StringVar(value="Single Fight")  # "Single Fight" or "Simulation"
         self.m1v1_fight_count = tk.IntVar(value=100)  # Number of fights for simulation mode
 
+        # Blood Challenge Bullying Mock-Turn Tester (fully in-memory - never
+        # writes champion.json, upload files, or team saves)
+        self.bct_saves_dir = tk.StringVar(value=SV.SAVES_DIR)  # root saves dir; "league" subfolder computed at refresh time
+        self.bct_turn_var = tk.StringVar(value="")
+        self.bct_turn_combo = None  # set in _build_ui
+        self.bct_teams: List[T.Team] = []
+        self.bct_warrior_index = []  # parallel list of (Warrior, Team) for the two comboboxes
+        self.bct_champion_var = tk.StringVar(value="(no test champion set)")
+        self.bct_champion_warrior = None
+        self.bct_champion_team = None
+        self.bct_load_status_var = tk.StringVar(value="(no warriors loaded)")
+        self.bct_champion_pick_combo = None  # set in _build_ui
+        self.bct_target_combo = None         # set in _build_ui
+
         self._build_ui()
 
     def _build_ui(self):
@@ -1264,6 +1278,77 @@ class BloodspireSimTool:
 
             ttk.Button(narr_folder_frame, text="Browse", command=_make_browse_command(turn)).grid(row=turn-1, column=2, sticky=tk.W, pady=4)
 
+        # TAB 8: BLOOD CHALLENGE BULLYING / UNDERDOG / COMMISSION MOCK-TURN TESTER
+        bct_tab = ttk.Frame(self.notebook, padding="10")
+        self.notebook.add(bct_tab, text="Blood Challenge Bullying")
+        _add_tab_header(bct_tab, "Blood Challenge Bullying / Underdog / Commission Tester", "[BULLY]")
+
+        ttk.Label(
+            bct_tab,
+            text="Fully in-memory - this tab never writes champion.json, upload files, or team saves.",
+            foreground="#888", font=("TkDefaultFont", 9, "italic"),
+        ).pack(anchor=tk.W, pady=(0, 8))
+
+        # 1. Load Turn Data
+        bct_load_frame = ttk.LabelFrame(bct_tab, text="1. Load Turn Data (upload files)", padding="10")
+        bct_load_frame.pack(fill=tk.X, pady=(0, 10))
+
+        ttk.Label(bct_load_frame, text="Saves folder:").grid(row=0, column=0, sticky=tk.W)
+        ttk.Label(bct_load_frame, textvariable=self.bct_saves_dir, foreground="#666", width=55).grid(
+            row=0, column=1, columnspan=2, sticky=tk.W, padx=5)
+        ttk.Button(bct_load_frame, text="Browse...", command=self._bct_browse_saves_folder).grid(row=0, column=3, padx=5)
+
+        ttk.Label(bct_load_frame, text="Turn folder:").grid(row=1, column=0, sticky=tk.W, pady=(6, 0))
+        self.bct_turn_combo = ttk.Combobox(bct_load_frame, textvariable=self.bct_turn_var, state="readonly", width=20)
+        self.bct_turn_combo.grid(row=1, column=1, sticky=tk.W, padx=5, pady=(6, 0))
+        ttk.Button(bct_load_frame, text="Refresh Turn List", command=self._bct_refresh_turns).grid(
+            row=1, column=2, padx=5, pady=(6, 0))
+        ttk.Button(bct_load_frame, text="LOAD WARRIORS", command=self._bct_load_warriors).grid(
+            row=1, column=3, padx=5, pady=(6, 0))
+        ttk.Label(bct_load_frame, textvariable=self.bct_load_status_var, foreground="#0a0").grid(
+            row=2, column=0, columnspan=4, sticky=tk.W, pady=(6, 0))
+
+        # 2. Set Test Champion
+        bct_champ_frame = ttk.LabelFrame(bct_tab, text="2. Set Test Champion (in-memory only)", padding="10")
+        bct_champ_frame.pack(fill=tk.X, pady=(0, 10))
+
+        ttk.Button(bct_champ_frame, text="RANDOMLY ASSIGN CHAMPION", command=self._bct_random_champion).grid(
+            row=0, column=0, padx=5)
+        ttk.Label(bct_champ_frame, text="or pick manually:").grid(row=0, column=1, padx=(15, 5))
+        self.bct_champion_pick_combo = ttk.Combobox(bct_champ_frame, state="readonly", width=45)
+        self.bct_champion_pick_combo.grid(row=0, column=2, padx=5)
+        ttk.Button(bct_champ_frame, text="Set as Test Champion", command=self._bct_manual_champion).grid(
+            row=0, column=3, padx=5)
+        ttk.Label(bct_champ_frame, textvariable=self.bct_champion_var, foreground="#c60",
+                 font=("TkDefaultFont", 10, "bold")).grid(row=1, column=0, columnspan=4, sticky=tk.W, pady=(8, 0))
+
+        # 3. Blood Challenge Fight Test (detailed roll log)
+        bct_fight_frame = ttk.LabelFrame(bct_tab, text="3. Blood Challenge Fight Test (detailed roll log)", padding="10")
+        bct_fight_frame.pack(fill=tk.X, pady=(0, 10))
+
+        ttk.Label(bct_fight_frame, text="Target (opponent):").grid(row=0, column=0, sticky=tk.W)
+        self.bct_target_combo = ttk.Combobox(bct_fight_frame, state="readonly", width=45)
+        self.bct_target_combo.grid(row=0, column=1, padx=5)
+        ttk.Button(bct_fight_frame, text="RUN BLOOD CHALLENGE FIGHT", command=self._bct_run_single_fight).grid(
+            row=0, column=2, padx=5)
+        ttk.Label(bct_fight_frame, text="Runs just this one fight with full debug-roll logging "
+                 "(concede, crowd interference, etc). Does not affect the pool used by step 4.",
+                 foreground="#666").grid(row=1, column=0, columnspan=3, sticky=tk.W, pady=(4, 0))
+
+        # 4. Full Mock Turn
+        bct_turn_frame = ttk.LabelFrame(bct_tab, text="4. Run Complete Mock Turn + Newsletter", padding="10")
+        bct_turn_frame.pack(fill=tk.X, pady=(0, 10))
+        ttk.Button(bct_turn_frame, text="RUN FULL MOCK TURN", command=self._bct_run_full_turn).pack(pady=4)
+        ttk.Label(
+            bct_turn_frame,
+            text="Forces the champion-vs-target Blood Challenge above into the fight card; the rest of the "
+                 "loaded roster is auto-matched normally. Applies reputation effects, runs the Commission "
+                 "strip check if applicable, and generates a full newsletter.",
+            foreground="#666", wraplength=900, justify=tk.LEFT,
+        ).pack()
+
+        self._bct_refresh_turns()
+
         # Shared Output Area (at the bottom)
         main_frame = ttk.Frame(self.paned_window, padding="15")
         self.paned_window.add(main_frame, minsize=150)
@@ -1986,6 +2071,400 @@ class BloodspireSimTool:
         except Exception as e:
             import traceback
             messagebox.showerror("Error", f"Failed to run champion fight: {e}\n\n{traceback.format_exc()}")
+
+    # -----------------------------------------------------------------------
+    # BLOOD CHALLENGE BULLYING / UNDERDOG / COMMISSION MOCK-TURN TESTER
+    # (fully in-memory - never touches champion.json, uploads, or team saves)
+    # -----------------------------------------------------------------------
+
+    def _bct_browse_saves_folder(self):
+        path = filedialog.askdirectory(
+            title="Select the saves folder (the one containing a 'league' subfolder)",
+            initialdir=self.bct_saves_dir.get(),
+        )
+        if path:
+            self.bct_saves_dir.set(path)
+            self._bct_refresh_turns()
+
+    def _bct_refresh_turns(self):
+        league_dir = os.path.join(self.bct_saves_dir.get(), "league")
+        turns = []
+        if os.path.isdir(league_dir):
+            for fname in sorted(os.listdir(league_dir), reverse=True):
+                if fname.startswith("turn_") and os.path.isdir(os.path.join(league_dir, fname)):
+                    turns.append(fname)
+        self.bct_turn_combo['values'] = turns
+        if turns and self.bct_turn_var.get() not in turns:
+            self.bct_turn_var.set(turns[0])  # most recent, since reverse-sorted
+        elif not turns:
+            messagebox.showwarning(
+                "No Turns Found",
+                f"No turn_XXXX folders found under:\n{league_dir}\n\n"
+                "Use Browse... to point at the correct saves folder."
+            )
+
+    def _bct_load_warriors(self):
+        turn_folder = self.bct_turn_var.get()
+        if not turn_folder:
+            messagebox.showwarning("No Turn Selected", "Please select a turn folder first.")
+            return
+        path = os.path.join(self.bct_saves_dir.get(), "league", turn_folder)
+        if not os.path.isdir(path):
+            messagebox.showerror("Not Found", f"Turn folder not found:\n{path}")
+            return
+
+        teams = []
+        for fn in sorted(os.listdir(path)):
+            if fn.startswith("upload_") and fn.endswith(".json"):
+                try:
+                    with open(os.path.join(path, fn), 'r') as f:
+                        data = json.load(f)
+                    team = T.Team.from_dict(data["team"])
+                    team.manager_name = data["manager_name"]
+                    teams.append(team)
+                except Exception as e:
+                    print(f"Error loading {fn}: {e}")
+
+        if not teams:
+            messagebox.showerror("No Data", f"No upload files found in:\n{path}")
+            return
+
+        self.bct_teams = teams
+        self.bct_champion_warrior = None
+        self.bct_champion_team = None
+        self.bct_champion_var.set("(no test champion set)")
+
+        names = []
+        self.bct_warrior_index = []
+        for team in teams:
+            for w in team.active_warriors:
+                names.append(f"{w.name}  ({team.manager_name} / {team.team_name})  [rec={w.recognition}]")
+                self.bct_warrior_index.append((w, team))
+        self.bct_champion_pick_combo['values'] = names
+        self.bct_target_combo['values'] = names
+
+        self.bct_load_status_var.set(
+            f"Loaded {len(teams)} teams, {len(self.bct_warrior_index)} warriors from {turn_folder}"
+        )
+
+    def _bct_set_champion(self, warrior, team):
+        self.bct_champion_warrior = warrior
+        self.bct_champion_team = team
+        self.bct_champion_var.set(
+            f"Test Champion: {warrior.name} ({team.team_name} / {team.manager_name}) - recognition={warrior.recognition}"
+        )
+
+    def _bct_random_champion(self):
+        if not self.bct_warrior_index:
+            messagebox.showwarning("No Warriors", "Load warriors first (step 1).")
+            return
+        warrior, team = random.choice(self.bct_warrior_index)
+        self._bct_set_champion(warrior, team)
+
+    def _bct_manual_champion(self):
+        idx = self.bct_champion_pick_combo.current()
+        if idx < 0:
+            messagebox.showwarning("No Selection", "Pick a warrior from the dropdown first.")
+            return
+        warrior, team = self.bct_warrior_index[idx]
+        self._bct_set_champion(warrior, team)
+
+    def _bct_get_target(self):
+        idx = self.bct_target_combo.current()
+        if idx < 0:
+            messagebox.showwarning("No Target Selected", "Pick a target warrior from the dropdown (step 3).")
+            return None, None
+        return self.bct_warrior_index[idx]
+
+    def _bct_validate_matchup(self, champion, champion_team, target, target_team):
+        """Returns (is_valid, note). note is a non-blocking string to prepend
+        to the report output - never pops a dialog for the same-manager case,
+        since that's common in single-manager test data and a blocking
+        messagebox would hang any non-interactive/headless run."""
+        if target is champion:
+            messagebox.showwarning("Invalid Target", "Target must be a different warrior than the champion.")
+            return False, ""
+        note = ""
+        if champion_team.manager_name == target_team.manager_name:
+            note = (
+                "NOTE: Champion and target belong to the same manager - the real game blocks this for "
+                "Blood Challenges. Proceeding anyway since this is a test tool.\n"
+            )
+        return True, note
+
+    def _bct_run_single_fight(self):
+        if not self.bct_champion_warrior:
+            messagebox.showwarning("No Champion", "Set a test champion first (step 2).")
+            return
+        target, target_team = self._bct_get_target()
+        if target is None:
+            return
+        champion, champion_team = self.bct_champion_warrior, self.bct_champion_team
+        is_valid, matchup_note = self._bct_validate_matchup(champion, champion_team, target, target_team)
+        if not is_valid:
+            return
+
+        # Deep-copy for the FIGHT ITSELF only, so repeated single-fight tests
+        # don't cumulatively pile up HP/injury state on the loaded champion
+        # (step 4 uses the live loaded objects for that too). Classification
+        # and reputation effects below deliberately use the REAL champion/
+        # target objects, not the copies - otherwise bully_offense_count and
+        # recognition/popularity would silently reset to a fresh "offense #1"
+        # on every single-fight test, making it impossible to see the
+        # Commission's escalating strip chance across repeated tests.
+        import types
+        champ_copy = copy.deepcopy(champion)
+        target_copy = copy.deepcopy(target)
+
+        bully_info = MM.classify_blood_challenge_gap(champion, target, challenger_is_champion=True)
+
+        dbg = SimDataLogger()
+        dbg.fight_id = 1
+        dbg.turn_num = 9999
+        dbg.debug_team = "MOCK_BULLY_TEST"
+
+        try:
+            result = C.run_fight(
+                champ_copy, target_copy,
+                team_a_name=champion_team.team_name, team_b_name=target_team.team_name,
+                manager_a_name=champion_team.manager_name, manager_b_name=target_team.manager_name,
+                fight_type="blood_challenge", challenger_name=champ_copy.name,
+                debug_logger=dbg, bully_info=bully_info,
+            )
+        except Exception as e:
+            import traceback
+            messagebox.showerror("Error", f"Fight failed: {e}\n\n{traceback.format_exc()}")
+            return
+
+        # Apply reputation effects to the REAL champion/target (see comment
+        # above) so bully_offense_count and recognition/popularity actually
+        # persist and escalate across repeated single-fight tests.
+        fake_fight = types.SimpleNamespace(
+            player_warrior=champion, opponent=target,
+            player_team=champion_team, bully_info=bully_info,
+        )
+        before_rec, before_pop, before_off = champion.recognition, champion.popularity, champion.bully_offense_count
+        event = MM.apply_blood_challenge_bully_effects(fake_fight)
+        self._bct_set_champion(champion, champion_team)  # refresh the status label with new recognition
+
+        lines = []
+        if matchup_note:
+            lines.append(matchup_note)
+        lines.append("=" * 80)
+        lines.append("BLOOD CHALLENGE BULLYING TEST - SINGLE FIGHT (fight itself uses scratch copies; "
+                     "reputation effects apply to your real loaded champion/target)")
+        lines.append("=" * 80)
+        lines.append(f"Champion (challenger): {champion.name}  (recognition={before_rec}, popularity={before_pop}, "
+                     f"prior offenses={before_off})")
+        lines.append(f"Target:                {target.name}  (recognition={target.recognition})")
+        lines.append(f"Classification: {bully_info}")
+        lines.append("")
+        lines.append("--- NORMAL FIGHT LOG (what a player would actually see, incl. flavor lines) ---")
+        lines.append(result.narrative)
+        lines.append("")
+        lines.append("--- ADMIN DEBUG LOG (rolls: concede, crowd interference, etc.) ---")
+        lines.append(dbg.get_text())
+        lines.append("")
+        lines.append(
+            f"RESULT: {result.winner.name} def. {result.loser.name}"
+            f"{' (KILLED)' if result.loser_died else ''} in {result.minutes_elapsed}m"
+        )
+        lines.append("")
+        lines.append("--- REPUTATION EFFECT (Gladiatorial Commission / bullying-penalty system) ---")
+        if event:
+            lines.append(f"Event: {event}")
+            lines.append(f"Recognition: {before_rec} -> {champion.recognition}")
+            lines.append(f"Popularity:  {before_pop} -> {champion.popularity}")
+            lines.append(f"Offense count: {before_off} -> {champion.bully_offense_count}")
+            if "commission_check" in event:
+                cc = event["commission_check"]
+                lines.append(
+                    f"Commission strip roll: roll={cc['roll']:.3f} vs chance={cc['chance']:.3f}  ->  "
+                    f"{'STRIPPED' if event.get('stripped') else 'not stripped'}"
+                )
+                if event.get("stripped"):
+                    lines.append(
+                        "NOTE: this single-fight test only reports the roll - it doesn't recompute the "
+                        "championship or generate a newsletter. Run 'RUN FULL MOCK TURN' (step 4) to see "
+                        "the title change and Commission announcement actually take effect."
+                    )
+        else:
+            lines.append("(no bullying/underdog effect triggered - zone was 'normal')")
+
+        self.report_content = "\n".join(lines)
+        self.text_area.delete(1.0, tk.END)
+        self.text_area.insert(tk.END, self.report_content)
+
+    def _bct_run_full_turn(self):
+        if not self.bct_champion_warrior:
+            messagebox.showwarning("No Champion", "Set a test champion first (step 2).")
+            return
+        target, target_team = self._bct_get_target()
+        if target is None:
+            return
+        champion, champion_team = self.bct_champion_warrior, self.bct_champion_team
+        is_valid, matchup_note = self._bct_validate_matchup(champion, champion_team, target, target_team)
+        if not is_valid:
+            return
+        if not self.bct_teams:
+            messagebox.showwarning("No Data", "Load warriors first (step 1).")
+            return
+
+        bully_info = MM.classify_blood_challenge_gap(champion, target, challenger_is_champion=True)
+
+        forced_fight = MM.ScheduledFight(
+            player_warrior=champion, opponent=target,
+            player_team=champion_team, opponent_team=target_team,
+            opponent_manager=target_team.manager_name,
+            fight_type="blood_challenge", challenger_name=champion.name,
+        )
+        forced_fight.bully_info = bully_info
+        forced_fight._blood_challenge_info = {"target_name": target.name, "dead_warrior_name": "(mock test)"}
+
+        champion_state = {
+            "name": champion.name, "warrior_id": getattr(champion, "warrior_id", None),
+            "team_name": champion_team.team_name, "team_id": champion_team.team_id, "source": "test_set",
+        }
+
+        # Temporarily exclude champion/target from normal matchmaking so
+        # build_global_fight_card doesn't also try to match them.
+        champion.is_dead, target.is_dead = True, True
+        try:
+            rest_card = MM.build_global_fight_card(
+                player_teams=self.bct_teams, opponent_teams=[], champion_state=champion_state,
+            )
+        except Exception as e:
+            champion.is_dead, target.is_dead = False, False
+            import traceback
+            messagebox.showerror("Error", f"Failed to build fight card: {e}\n\n{traceback.format_exc()}")
+            return
+        finally:
+            champion.is_dead, target.is_dead = False, False
+
+        full_card = [forced_fight] + rest_card
+        dbg = SimDataLogger()
+        dbg.fight_id = 1
+        dbg.turn_num = 9999
+        dbg.debug_team = "MOCK_BULLY_TEST"
+
+        bully_events = []
+        stripped_name = None
+        deaths_nl = []
+
+        for fight in full_card:
+            this_dbg = dbg if fight is forced_fight else None
+            try:
+                result = C.run_fight(
+                    fight.player_warrior, fight.opponent,
+                    team_a_name=fight.player_team.team_name, team_b_name=fight.opponent_team.team_name,
+                    manager_a_name=fight.player_team.manager_name, manager_b_name=fight.opponent_manager,
+                    is_monster_fight=(fight.fight_type == "monster"), fight_type=fight.fight_type,
+                    challenger_name=fight.challenger_name, debug_logger=this_dbg,
+                    bully_info=getattr(fight, "bully_info", None),
+                )
+            except Exception as e:
+                print(f"Mock fight error {fight.player_warrior.name} vs {fight.opponent.name}: {e}")
+                continue
+            fight.result = result
+
+            pw_won = result.winner is not None and result.winner.name == fight.player_warrior.name
+            killed = result.loser_died and pw_won
+            fight.player_warrior.update_popularity(won=pw_won)
+            fight.player_warrior.update_recognition(
+                won=pw_won, killed_opponent=killed,
+                self_hp_pct=result.winner_hp_pct if pw_won else result.loser_hp_pct,
+                opp_hp_pct=result.loser_hp_pct if pw_won else result.winner_hp_pct,
+                self_knockdowns=result.winner_knockdowns if pw_won else result.loser_knockdowns,
+                opp_knockdowns=result.loser_knockdowns if pw_won else result.winner_knockdowns,
+                self_near_kills=result.winner_near_kills if pw_won else result.loser_near_kills,
+                opp_near_kills=result.loser_near_kills if pw_won else result.winner_near_kills,
+                minutes_elapsed=result.minutes_elapsed,
+                opponent_total_fights=fight.opponent.total_fights,
+            )
+            opp_won = not pw_won
+            opp_killed = result.loser_died and opp_won
+            fight.opponent.update_popularity(won=opp_won)
+            fight.opponent.update_recognition(
+                won=opp_won, killed_opponent=opp_killed,
+                self_hp_pct=result.winner_hp_pct if opp_won else result.loser_hp_pct,
+                opp_hp_pct=result.loser_hp_pct if opp_won else result.winner_hp_pct,
+                self_knockdowns=result.winner_knockdowns if opp_won else result.loser_knockdowns,
+                opp_knockdowns=result.loser_knockdowns if opp_won else result.winner_knockdowns,
+                self_near_kills=result.winner_near_kills if opp_won else result.loser_near_kills,
+                opp_near_kills=result.loser_near_kills if opp_won else result.winner_near_kills,
+                minutes_elapsed=result.minutes_elapsed,
+                opponent_total_fights=fight.player_warrior.total_fights,
+            )
+
+            if result.loser_died:
+                loser = result.loser
+                loser_team = fight.player_team if loser is fight.player_warrior else fight.opponent_team
+                deaths_nl.append({"name": loser.name, "team_id": loser_team.team_id})
+                loser.is_dead = True
+
+            bully_event = MM.apply_blood_challenge_bully_effects(fight)
+            if bully_event:
+                bully_events.append(bully_event)
+                if bully_event.get("stripped") and not stripped_name:
+                    stripped_name = bully_event["warrior"]
+
+        # Champion recompute - Rule 1 (beaten in combat) takes priority over
+        # the Commission override if the target legitimately won the forced fight.
+        champ_beaten_by = champ_beaten_by_wid = champ_beaten_team = None
+        champ_beaten_team_id = 0
+        if forced_fight.result and forced_fight.result.winner is target:
+            champ_beaten_by = target.name
+            champ_beaten_by_wid = getattr(target, "warrior_id", None)
+            champ_beaten_team = target_team.team_name
+            champ_beaten_team_id = target_team.team_id
+
+        new_champ_state, is_new_champion = NL._update_champion(
+            self.bct_teams, dict(champion_state), deaths_nl,
+            champion_beaten_by=champ_beaten_by, champion_beaten_by_wid=champ_beaten_by_wid,
+            champion_beaten_team=champ_beaten_team, champion_beaten_team_id=champ_beaten_team_id,
+            prev_champion_name=champion.name, card=full_card,
+            ineligible_name=stripped_name,
+        )
+
+        try:
+            newsletter_text = NL.generate_newsletter(
+                turn_num=9999, card=full_card, teams=self.bct_teams, deaths=deaths_nl,
+                champion_state=new_champ_state, is_new_champion=is_new_champion,
+                bully_events=bully_events,
+            )
+        except Exception as e:
+            import traceback
+            newsletter_text = f"(newsletter generation failed: {e}\n{traceback.format_exc()})"
+
+        lines = []
+        if matchup_note:
+            lines.append(matchup_note)
+        lines.append("=" * 80)
+        lines.append("FULL MOCK TURN RESULT")
+        lines.append("=" * 80)
+        lines.append(f"Forced matchup: {champion.name} (challenger) vs {target.name} (target)")
+        lines.append(f"Classification: {bully_info}")
+        lines.append(f"Total fights this mock turn: {len(full_card)}")
+        lines.append(f"Bully/underdog events this turn: {len(bully_events)}")
+        for ev in bully_events:
+            lines.append(f"  - {ev}")
+        lines.append(f"Champion state after turn: {new_champ_state}  (is_new={is_new_champion})")
+        lines.append("")
+        lines.append("--- FORCED FIGHT: NORMAL LOG (what a player would actually see, incl. flavor lines) ---")
+        if forced_fight.result:
+            lines.append(forced_fight.result.narrative)
+        lines.append("")
+        lines.append("--- FORCED FIGHT: ADMIN DEBUG LOG (rolls: concede, crowd interference, etc.) ---")
+        lines.append(dbg.get_text())
+        lines.append("")
+        lines.append("=" * 80)
+        lines.append("GENERATED NEWSLETTER")
+        lines.append("=" * 80)
+        lines.append(newsletter_text)
+
+        self.report_content = "\n".join(lines)
+        self.text_area.delete(1.0, tk.END)
+        self.text_area.insert(tk.END, self.report_content)
 
     def _display_champion_results(self, result, bout, champion_state_before, champion_state_for_fights=None):
         """Display champion fight results in the text area."""

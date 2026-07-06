@@ -27,8 +27,9 @@
 #   Triggered at <=25% HP, or immediately on the blow that drops a warrior to
 #   <=0 HP (guaranteed appeal on the potential finishing blow, before the
 #   death check ever rolls). d100 + PRE_bonus + pop_bonus + luck//2 +
-#   desperation_bonus (+5 per prior failed appeal this fight, cap +15) vs
-#   threshold = max(30, 58 - PRE//3).
+#   desperation_bonus (+5 per prior failed appeal this fight, cap +15) +
+#   underdog_bonus (+20 flat for the outmatched challenger in a bullying
+#   Blood Challenge - the crowd is behind them) vs threshold = max(30, 58 - PRE//3).
 #   Presence determines how often the Pitmaster grants mercy.
 #   Monster fights: no concede, always to the death.
 #
@@ -1670,9 +1671,10 @@ def _calc_damage_verbose(
     return final_damage, weapon.category, steps
 
 
-def _concede_check_verbose(warrior: "Warrior", state: "_CState", is_monster_fight: bool = False):
+def _concede_check_verbose(warrior: "Warrior", state: "_CState", is_monster_fight: bool = False,
+                            underdog_bonus: int = 0):
     if is_monster_fight:
-        return False, {"monster_fight": True, "d100": 0, "PRE_bonus": 0, "popularity_bonus": 0, "luck_half": 0, "desperation_bonus": 0, "total": 0, "threshold": 0}
+        return False, {"monster_fight": True, "d100": 0, "PRE_bonus": 0, "popularity_bonus": 0, "luck_half": 0, "desperation_bonus": 0, "underdog_bonus": 0, "total": 0, "threshold": 0}
     roll      = _d100()
     presence  = warrior.presence
     pre_b     = max(-6, min(10, presence - 10))
@@ -1693,12 +1695,12 @@ def _concede_check_verbose(warrior: "Warrior", state: "_CState", is_monster_figh
     # Probabilistic luck: 25% chance to apply luck//2 bonus to this concede roll
     luck_contribution = _apply_conditional_luck(0, warrior, threshold=25)
     luck_half = luck_contribution // 2
-    total     = roll + pre_b + pop_bonus + luck_half + desperation_bonus
+    total     = roll + pre_b + pop_bonus + luck_half + desperation_bonus + underdog_bonus
     threshold = max(30, 58 - (presence // 3))
     granted   = total >= threshold
     return granted, {
         "d100": roll, "PRE_bonus": pre_b, "popularity_bonus": pop_bonus, "luck_half": luck_half,
-        "desperation_bonus": desperation_bonus, "total": total, "threshold": threshold,
+        "desperation_bonus": desperation_bonus, "underdog_bonus": underdog_bonus, "total": total, "threshold": threshold,
     }
 
 
@@ -1930,15 +1932,19 @@ def _death_check(prev_hp: int, damage: int) -> bool:
 # CONCEDE CHECK
 # ---------------------------------------------------------------------------
 
-def _concede_check(warrior: Warrior, state: _CState, is_monster_fight: bool = False) -> bool:
+def _concede_check(warrior: Warrior, state: _CState, is_monster_fight: bool = False,
+                    underdog_bonus: int = 0) -> bool:
     """
-    d100 + PRE_bonus + popularity_bonus + luck//2 + desperation_bonus vs threshold (max(30, 58 - PRE//3)).
+    d100 + PRE_bonus + popularity_bonus + luck//2 + desperation_bonus + underdog_bonus
+    vs threshold (max(30, 58 - PRE//3)).
     High Presence = lower threshold = easier to get mercy.
     High Popularity = further bonus to roll (star athletes get mercy, capped at +15).
     Popular warriors (71-80): +6 to roll
     Very popular (81-90): +10 to roll
     Legendary (91-100): +15 to roll (capped - death remains possible)
     Desperation bonus: +5 per prior failed appeal this fight, capped at +15.
+    Underdog bonus: +20 flat when this warrior is the outmatched challenger in
+    a bullying blood challenge - the crowd is behind them.
     Luck is probabilistic: 25% chance to apply luck//2 bonus to concede roll.
     """
     if is_monster_fight:
@@ -1962,7 +1968,7 @@ def _concede_check(warrior: Warrior, state: _CState, is_monster_fight: bool = Fa
 
     # Probabilistic luck: 25% chance to apply luck//2 bonus to this concede roll
     luck_contribution = _apply_conditional_luck(0, warrior, threshold=25) // 2
-    total     = roll + pre_b + pop_bonus + luck_contribution + desperation_bonus
+    total     = roll + pre_b + pop_bonus + luck_contribution + desperation_bonus + underdog_bonus
     threshold = max(30, 58 - (presence // 3))
     return total >= threshold
 
@@ -2301,6 +2307,7 @@ class CombatEngine:
         challenger_name : str  = None,
         fight_type      : str  = "standard",
         debug_logger    : Optional[CombatDebugLogger] = None,
+        bully_info      : Optional[dict] = None,
     ):
         self.warrior_a        = warrior_a
         self.warrior_b        = warrior_b
@@ -2314,9 +2321,29 @@ class CombatEngine:
         self.challenger_name  = challenger_name
         self.fight_type       = fight_type
         self.debug_logger     = debug_logger
+        self.bully_info       = bully_info
 
         self.state_a = _CState(warrior=warrior_a, current_hp=warrior_a.max_hp, endurance=float(warrior_a.max_endurance))
         self.state_b = _CState(warrior=warrior_b, current_hp=warrior_b.max_hp, endurance=float(warrior_b.max_endurance))
+
+        # Blood-challenge bullying/underdog crowd-interference setup. The
+        # challenger is always warrior_a/state_a (see run_fight callers), so
+        # the flagged side is determined purely by bully_info["zone"].
+        self._crowd_zone       = None   # "bully" or "underdog", or None
+        self._crowd_chance     = 0.0    # per-action trigger probability
+        self._crowd_roll_delta = 0      # signed roll adjustment when triggered (+/-)
+        self._crowd_procs_this_minute = 0
+        if self.bully_info and not self.is_monster_fight:
+            zone = self.bully_info.get("zone")
+            point_gap = abs(self.bully_info.get("point_gap", 0))
+            if zone in ("mismatch", "severe"):
+                self._crowd_zone       = "bully"
+                self._crowd_chance     = min(0.35, 0.08 + point_gap * 0.003)
+                self._crowd_roll_delta = -min(18, 6 + point_gap * 0.12)
+            elif zone == "underdog":
+                self._crowd_zone       = "underdog"
+                self._crowd_chance     = min(0.30, 0.08 + point_gap * 0.0025)
+                self._crowd_roll_delta = min(14, 5 + point_gap * 0.08)
 
         # Calculate overencumbrance penalties
         for st in (self.state_a, self.state_b):
@@ -2466,7 +2493,8 @@ class CombatEngine:
         # Challenge flavor line - shown under the header but before action starts
         challenge_line = N.get_challenge_flavor_line(
             self.warrior_a.name, self.warrior_b.name,
-            self.challenger_name, self.fight_type
+            self.challenger_name, self.fight_type,
+            bully_zone=(self.bully_info.get("zone") if self.bully_info else None)
         )
         if challenge_line:
             self._emit(challenge_line)
@@ -2713,6 +2741,7 @@ class CombatEngine:
         return None
 
     def _run_minute(self, minute: int) -> Optional[FightResult]:
+        self._crowd_procs_this_minute = 0
         self._emit(f"\nMINUTE {minute}")
         if minute == 1:
             self._emit(random.choice(N.FIGHT_OPENERS))
@@ -3106,6 +3135,82 @@ class CombatEngine:
         return True   # normal attack suppressed; bonus throw was the action
 
     # =========================================================================
+    # BLOOD CHALLENGE BULLYING / UNDERDOG CROWD INTERFERENCE
+    # =========================================================================
+
+    def _apply_crowd_interference(self, att: Warrior, dfr: Warrior, atk_r: int, def_r: int, minute: int) -> Tuple[int, int]:
+        """
+        For a bullying or underdog blood challenge (see __init__), the
+        flagged side (always warrior_a - the challenger) has a per-action
+        chance of crowd interference: a roll penalty for a bully, a roll
+        bonus for an underdog. Capped at 2 procs/minute, tuned so the
+        average lands near 1.5/minute.
+
+        Only applies the roll modifier here - does NOT emit the narrative
+        line, since whether the crowd's interference actually "worked" (a
+        miss for a bully, a hit for an underdog) isn't known until margin
+        is computed. Sets self._crowd_fired_this_action/_role so the caller
+        can emit the correct flavor line once the outcome is known (see
+        _resolve_action, right after margin is computed).
+        """
+        self._crowd_fired_this_action = False
+        self._crowd_fired_role = None
+
+        if self._crowd_zone is None:
+            return atk_r, def_r
+
+        flagged = self.warrior_a
+        if att is not flagged and dfr is not flagged:
+            return atk_r, def_r
+
+        if self._crowd_procs_this_minute >= 2:
+            if self.debug_logger:
+                self.debug_logger.log_crowd_interference(
+                    flagged.name, self._crowd_zone, self._crowd_chance,
+                    None, False, 0, minute, capped=True,
+                )
+            return atk_r, def_r
+
+        roll = random.random()
+        fired = roll < self._crowd_chance
+        if self.debug_logger:
+            self.debug_logger.log_crowd_interference(
+                flagged.name, self._crowd_zone, self._crowd_chance,
+                roll, fired, int(self._crowd_roll_delta) if fired else 0, minute,
+            )
+        if not fired:
+            return atk_r, def_r
+
+        self._crowd_procs_this_minute += 1
+        self._crowd_fired_this_action = True
+        self._crowd_fired_role = "attacker" if att is flagged else "defender"
+        if att is flagged:
+            atk_r = max(1, int(atk_r + self._crowd_roll_delta))
+        else:
+            def_r = max(1, int(def_r + self._crowd_roll_delta))
+        return atk_r, def_r
+
+    def _emit_crowd_interference_result(self, margin: int) -> None:
+        """Emit the deferred crowd-interference flavor line (see
+        _apply_crowd_interference) now that margin is known. margin >= 10 is
+        a solid hit per the game's own hit threshold (see header docstring).
+        "Effective" means the roll modifier actually changed the outcome in
+        the direction it was meant to: worse for a bully, better for an
+        underdog."""
+        if not self._crowd_fired_this_action:
+            return
+        solid_hit = margin >= 10
+        if self._crowd_zone == "bully":
+            # Penalty applied to the flagged warrior - effective if it hurt them:
+            # a miss/graze if they were attacking, a hit taken if they were defending.
+            effective = (not solid_hit) if self._crowd_fired_role == "attacker" else solid_hit
+        else:  # underdog
+            # Bonus applied to the flagged warrior - effective if it helped them:
+            # a solid hit if they were attacking, avoiding one if they were defending.
+            effective = solid_hit if self._crowd_fired_role == "attacker" else (not solid_hit)
+        self._emit(N.crowd_interference_line(self.warrior_a.name, self._crowd_zone, effective))
+
+    # =========================================================================
     # ACTION
     # =========================================================================
 
@@ -3328,7 +3433,10 @@ class CombatEngine:
                 def_r = max(1, def_r - DECOY_FEINT_PENALTY)
             _def_base = def_r; _def_comps = None
 
+        atk_r, def_r = self._apply_crowd_interference(att, dfr, atk_r, def_r, minute)
+
         margin = atk_r - def_r
+        self._emit_crowd_interference_result(margin)
 
         # --- LIZARDFOLK HEAVY ARMOR FLAVOR ---
         # Defensive: fires when the Lizardfolk's defense failed AND the armor
@@ -4062,17 +4170,22 @@ class CombatEngine:
         dw = dying.warrior;  kw = killer.warrior
         self._emit(N.appeal_line(dw.name))
         dying.concede_attempts += 1
+        # Underdog crowd favor: the outmatched challenger in a bullying blood
+        # challenge gets a flat +20 to their own concede rolls - the crowd
+        # wants to see them live to fight another day.
+        underdog_bonus = 20 if (self._crowd_zone == "underdog" and dw is self.warrior_a) else 0
         if self.debug_logger:
-            granted, _cc = _concede_check_verbose(dw, dying, self.is_monster_fight)
+            granted, _cc = _concede_check_verbose(dw, dying, self.is_monster_fight, underdog_bonus=underdog_bonus)
             self.debug_logger.log_concede(
                 dw.name,
                 _cc.get("d100", 0), _cc.get("PRE_bonus", 0),
                 _cc.get("luck_half", 0), _cc.get("total", 0),
                 _cc.get("threshold", 0), granted,
                 _cc.get("desperation_bonus", 0),
+                _cc.get("underdog_bonus", 0),
             )
         else:
-            granted = _concede_check(dw, dying, self.is_monster_fight)
+            granted = _concede_check(dw, dying, self.is_monster_fight, underdog_bonus=underdog_bonus)
         self._emit(N.mercy_result_line(dw.name, granted))
         if granted:
             self._emit(""); self._emit(N.victory_line(kw.name, dw.name))
@@ -4344,6 +4457,7 @@ def run_fight(
     debug_logger    : Optional[CombatDebugLogger] = None,
     pos_a           : int  = 1,
     pos_b           : int  = 1,
+    bully_info      : Optional[dict] = None,
 ) -> FightResult:
     engine = CombatEngine(
         warrior_a, warrior_b,
@@ -4355,6 +4469,7 @@ def run_fight(
         challenger_name=challenger_name,
         fight_type=fight_type,
         debug_logger=debug_logger,
+        bully_info=bully_info,
     )
     result = engine.resolve_fight()
     if result.winner and result.loser:

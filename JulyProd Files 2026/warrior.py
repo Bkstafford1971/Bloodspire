@@ -570,6 +570,11 @@ class Warrior:
         # --- Recognition (0+ rating, determines class ranking tier) ---
         self.recognition: int = 0
 
+        # --- Gladiatorial Commission: tally of qualifying blood-challenge bullying
+        # incidents committed while champion (>40 recognition-point gap). Persists
+        # across title loss/reclaim; drives the escalating title-strip roll odds. ---
+        self.bully_offense_count: int = 0
+
         # --- Win/loss streak (+ve = win streak, -ve = loss streak, 0 = neutral) ---
         self.streak: int = 0
 
@@ -1480,6 +1485,7 @@ class Warrior:
             "attribute_gains":  self.attribute_gains,
             "popularity":      self.popularity,
             "recognition":     self.recognition,
+            "bully_offense_count": self.bully_offense_count,
             "streak":          self.streak,
             "turns_active":    self.turns_active,
             "want_monster_fight": self.want_monster_fight,
@@ -1531,6 +1537,7 @@ class Warrior:
         w.attribute_gains = data.get("attribute_gains", {"strength":0,"dexterity":0,"constitution":0,"intelligence":0,"presence":0})
         w.popularity   = data.get("popularity", 0)
         w.recognition  = data.get("recognition", 0)
+        w.bully_offense_count = data.get("bully_offense_count", 0)
         w.streak            = data.get("streak", 0)
         w.turns_active      = data.get("turns_active", 0)
         w.want_monster_fight= data.get("want_monster_fight", False)

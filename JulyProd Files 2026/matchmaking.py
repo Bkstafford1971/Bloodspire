@@ -15,7 +15,7 @@ import math
 from dataclasses import dataclass, field
 from typing import List, Optional, Tuple, Dict
 
-from warrior   import Warrior, get_warrior_tier, challenge_tier_allowed, TIER_ORDER, TIER_CHAMPION
+from warrior   import Warrior, get_warrior_tier, challenge_tier_allowed, TIER_ORDER, TIER_CHAMPION, TIER_ELITES
 from team      import Team, create_peasant_team, create_monster_team
 from combat    import run_fight, FightResult
 from save      import save_team, save_fight_log, load_all_teams
@@ -48,6 +48,132 @@ def _is_same_manager(team1, team2) -> bool:
     return (team1.manager_name == team2.manager_name and team1.manager_name != "The Arena")
 
 
+# ---------------------------------------------------------------------------
+# BLOOD CHALLENGE BULLYING / UNDERDOG CLASSIFICATION
+# ---------------------------------------------------------------------------
+
+def _tier_index(warrior: Warrior, is_champion: bool = False) -> int:
+    """Lower index = stronger tier. Champion sits one notch above Elites."""
+    if is_champion:
+        return TIER_ORDER.index(TIER_ELITES) - 1
+    return TIER_ORDER.index(get_warrior_tier(warrior))
+
+
+def classify_blood_challenge_gap(challenger: Warrior, target: Warrior,
+                                  challenger_is_champion: bool = False) -> dict:
+    """
+    Classify a blood-challenge matchup by tier/recognition gap for the
+    bullying-penalty / underdog-favor system.
+
+    Both tier_gap and point_gap use the same sign convention: positive means
+    the challenger is the stronger side (a bully picking on someone weaker);
+    negative means the challenger is the weaker side (an underdog avenging a
+    fallen ally against a tougher killer).
+
+    tier_gap is target_index - challenger_index (lower index = stronger tier).
+    point_gap is the raw recognition-point difference (challenger minus
+    target), used to scale effect magnitude continuously once a zone is
+    triggered - it is not adjusted for champion status, only the tier
+    threshold is.
+    """
+    challenger_idx = _tier_index(challenger, is_champion=challenger_is_champion)
+    target_idx     = _tier_index(target)
+    tier_gap  = target_idx - challenger_idx
+    point_gap = challenger.recognition - target.recognition
+
+    mismatch_threshold = 2 if challenger_is_champion else 3
+    severe_threshold    = 4 if challenger_is_champion else 5
+
+    if tier_gap >= severe_threshold:
+        zone = "severe"
+    elif tier_gap >= mismatch_threshold:
+        zone = "mismatch"
+    elif tier_gap <= -3:
+        zone = "underdog"
+    else:
+        zone = "normal"
+
+    return {
+        "zone": zone,
+        "tier_gap": tier_gap,
+        "point_gap": point_gap,
+        "is_champion_bully": bool(challenger_is_champion and zone in ("mismatch", "severe")),
+    }
+
+
+def apply_blood_challenge_bully_effects(fight: "ScheduledFight") -> Optional[dict]:
+    """
+    Apply the blood-challenge bullying penalty / underdog favor to the
+    challenger (fight.player_warrior is always the challenger for blood
+    challenges built in STEP 3 above) based on fight.bully_info. Applies
+    regardless of win/loss. Also handles the Gladiatorial Commission offense
+    tally + title-strip roll for champion incidents (>40 raw recognition-point
+    gap). Mutates the challenger's recognition/popularity/bully_offense_count
+    in place.
+
+    Returns an event dict for the newsletter's bully_events list (with a
+    "commission_check" sub-dict when a strip roll was made, for QA/testing
+    visibility into the roll even when it doesn't hit), or None if this fight
+    doesn't qualify (normal zone, or no bully_info at all).
+    """
+    bully_info = getattr(fight, "bully_info", None)
+    if not bully_info or bully_info.get("zone") not in ("mismatch", "severe", "underdog"):
+        return None
+
+    zone = bully_info["zone"]
+    gap = abs(bully_info.get("point_gap", 0))
+    is_champ_bully = bully_info.get("is_champion_bully", False)
+    challenger = fight.player_warrior
+    target = fight.opponent
+
+    if zone in ("mismatch", "severe"):
+        # Recognition barely moves: a big drop here would let a strong bully
+        # deliberately tank their own tier to gain easier matchups in ALL
+        # future fights, not just blood challenges - exactly backwards from
+        # the point of this system. Popularity carries the real weight of
+        # the punishment instead - it doesn't touch tier/matchmaking at all,
+        # but it does make every future concede roll harder to win
+        # (popularity_bonus in the concede formula), so the consequence
+        # follows them into every fight, not just this one.
+        rec_pen = min(6, 1 + gap * 0.05)
+        pop_pen = min(35, 10 + gap * 0.55)
+        if is_champ_bully:
+            rec_pen *= 1.3
+            pop_pen *= 1.5
+        challenger.recognition = max(0, challenger.recognition - int(round(rec_pen)))
+        challenger.popularity  = max(0, challenger.popularity  - int(round(pop_pen)))
+        event = {
+            "kind": "bully_shamed", "warrior": challenger.name, "opponent": target.name,
+            "team": fight.player_team.team_name, "zone": zone, "stripped": False,
+        }
+
+        # Gladiatorial Commission tracking (champion-only, >40 raw
+        # recognition-point gap this fight is a tallied offense).
+        if is_champ_bully and gap > 40:
+            challenger.bully_offense_count += 1
+            strip_chance = min(0.65, 0.15 + 0.17 * (challenger.bully_offense_count - 1))
+            strip_roll = random.random()
+            event["commission_check"] = {
+                "offense_count": challenger.bully_offense_count,
+                "chance": strip_chance,
+                "roll": strip_roll,
+            }
+            if strip_roll < strip_chance:
+                event["stripped"] = True
+
+        return event
+
+    # underdog
+    rec_bonus = min(10, 3 + gap * 0.15)
+    pop_bonus = min(12, 4 + gap * 0.18)
+    challenger.recognition = min(99, challenger.recognition + int(round(rec_bonus)))
+    challenger.popularity  = min(100, challenger.popularity + int(round(pop_bonus)))
+    return {
+        "kind": "underdog_inspired", "warrior": challenger.name, "opponent": target.name,
+        "team": fight.player_team.team_name, "zone": zone, "stripped": False,
+    }
+
+
 def build_global_fight_card(
     player_teams: List[Team],
     opponent_teams: List[Team],
@@ -62,6 +188,10 @@ def build_global_fight_card(
 
     card = []
     master_pool = []
+
+    # Champion name entering this turn (used by blood-challenge bullying
+    # classification in STEP 3 as well as the champion-challenge gate in STEP 4).
+    current_champion_name = champion_state.get("name", "")
 
     # STEP 1: Combine all teams into a single unique list
     all_teams_map = {t.team_id: t for t in player_teams + opponent_teams}
@@ -141,10 +271,20 @@ def build_global_fight_card(
                         "target_name": bc.get("target_name", ""),
                         "dead_warrior_name": bc.get("dead_warrior_name", ""),
                     }
+                    # Classify the matchup for the bullying-penalty / underdog-favor
+                    # system (tagged without a leading underscore so it proxies
+                    # through newsletter.py's _BoutWrapper.__getattr__ unmodified).
+                    _challenger_is_champ = bool(
+                        current_champion_name
+                        and challenger['warrior'].name.lower() == current_champion_name.lower()
+                    )
+                    card[-1].bully_info = classify_blood_challenge_gap(
+                        challenger['warrior'], target['warrior'], _challenger_is_champ
+                    )
                     break
 
     # STEP 4: CHAMPION CHALLENGES
-    current_champion = champion_state.get("name", "")
+    current_champion = current_champion_name
     if current_champion:
         unmatched = _get_unmatched()
         champ_e = next((e for e in master_pool if e['warrior'].name.lower() == current_champion.lower()), None)
@@ -1180,6 +1320,7 @@ def run_turn(
             pos_a            = bout.pos_a,
             pos_b            = bout.pos_b,
             challenger_name  = bout.challenger_name,
+            bully_info       = getattr(bout, "bully_info", None),
         )
         bout.result = result
 

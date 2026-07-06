@@ -488,20 +488,37 @@ class CombatDebugLogger:
 
     def log_concede(self, warrior_name: str,
                     d100: int, pre_bonus: int, luck_half: int,
-                    total: int, threshold: int, granted: bool):
+                    total: int, threshold: int, granted: bool,
+                    desperation_bonus: int = 0, underdog_bonus: int = 0):
         self._emit(f"  Concede Attempt ({warrior_name.upper()}):")
         self._emit(
             f"    d100[{d100}] + PRE_bonus[{pre_bonus:+d}]"
-            f" + luck//2[{luck_half}] = {total}"
+            f" + luck//2[{luck_half}] + desperation[{desperation_bonus:+d}]"
+            f" + underdog_crowd[{underdog_bonus:+d}] = {total}"
         )
         self._emit(
-            f"    threshold = max(40, 68 − (PRE // 3)) = {threshold}"
+            f"    threshold = max(30, 58 − (PRE // 3)) = {threshold}"
         )
         self._emit(
             f"    {total} {'≥' if granted else '<'} {threshold}"
             f"  →  "
             f"{'▶ CONCEDE GRANTED' if granted else 'mercy denied - fight continues'}"
         )
+
+    def log_crowd_interference(self, warrior_name: str, zone: str, chance: float,
+                                roll: Optional[float], fired: bool, roll_delta: int,
+                                minute: int, capped: bool = False):
+        """Blood-challenge bullying/underdog crowd-interference check (see combat.py
+        _apply_crowd_interference). zone is 'bully' (penalty) or 'underdog' (bonus)."""
+        label = "BULLYING PENALTY" if zone == "bully" else "UNDERDOG FAVOR"
+        self._emit(f"  Crowd Interference Check ({warrior_name.upper()}) - minute {minute} [{label}]:")
+        if capped:
+            self._emit("    per-minute cap (2) already reached - no roll this action")
+            return
+        self._emit(f"    roll[{roll:.3f}] vs chance[{chance:.3f}]  →  "
+                   f"{'▶ FIRED' if fired else 'no interference'}")
+        if fired:
+            self._emit(f"    roll delta applied: {roll_delta:+d}")
 
     def log_fatal_injury_end(self, warrior_name: str, injuries: list):
         self._emit("")

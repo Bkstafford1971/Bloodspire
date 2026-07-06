@@ -667,10 +667,6 @@ def _run_turn(request_password, rerun_turn=None):
                 return {"success": False,
                         "error": f"Only turn {last_completed} (the last completed turn) can be re-run."}
         turn_num = rerun_turn if rerun_turn else cfg["current_turn"]
-
-        # Clear previous turn's training logs before starting new turn
-        clear_turn_logs(turn_num)
-
         uploads = _load_uploads(turn_num)
 
         # Inject AI teams as pseudo-uploads
@@ -724,7 +720,6 @@ def _run_turn(request_password, rerun_turn=None):
 
     from team import Team
     from combat import run_fight, set_show_favorite_weapon, set_show_luck_factor, set_show_max_hp
-    from training_log import clear_turn_logs
 
     # Apply feature flags
     cfg = _load_config()
@@ -820,6 +815,7 @@ def _run_turn(request_password, rerun_turn=None):
     # STEP 2: Build GLOBAL fight card using global pool matchmaking
     # ===================================================================
     from matchmaking import build_global_fight_card
+    import matchmaking as MM
 
     print("  Building global fight card...")
     # IMPORTANT: Only pass player_teams. The function will match them against each other.
@@ -861,6 +857,13 @@ def _run_turn(request_password, rerun_turn=None):
     # For progress tracking
     total_fights = len(global_card)
     fights_completed = 0
+
+    # Blood-challenge bullying / underdog tracking for this turn, consumed
+    # after the fight loop (Commission title-strip check) and by the
+    # newsletter's Arena Happenings section.
+    import random
+    bully_events = []
+    stripped_champion_name = None
 
     for fight in global_card:
         fights_completed += 1
@@ -916,9 +919,7 @@ def _run_turn(request_password, rerun_turn=None):
                 pos_b=fight.pos_b,
                 challenger_name=fight.challenger_name,
                 debug_logger=_dbg_logger,
-                turn_num=turn_num,
-                team_a_id=fight.player_team.manager_id,
-                team_b_id=fight.opponent_team.manager_id,
+                bully_info=getattr(fight, "bully_info", None),
             )
             # CRITICAL: Attach the result to the fight object so it can be used for the newsletter
             fight.result = result
@@ -1003,6 +1004,15 @@ def _run_turn(request_password, rerun_turn=None):
             minutes_elapsed=result.minutes_elapsed,
             opponent_total_fights=fight.player_warrior.total_fights,
         )
+
+        # Blood-challenge bullying penalty / underdog favor (challenger side
+        # only). Applies regardless of win/loss. Shared with simulation_tool.py
+        # so mock-turn testing matches production behavior exactly.
+        _bully_event = MM.apply_blood_challenge_bully_effects(fight)
+        if _bully_event:
+            bully_events.append(_bully_event)
+            if _bully_event.get("stripped") and not stripped_champion_name:
+                stripped_champion_name = _bully_event["warrior"]
 
         # Add fight history for opponent warrior (if not NPC)
         if opponent_manager_id and fight.opponent_team.team_id >= 0:
@@ -1513,7 +1523,8 @@ def _run_turn(request_password, rerun_turn=None):
             champion_beaten_team=_champ_beaten_team,
             champion_beaten_team_id=_champ_beaten_team_id,
             prev_champion_name=prev_champion_name,
-            card=fake_card
+            card=fake_card,
+            ineligible_name=stripped_champion_name,
         )
         save_champion_state(champ_state)
 
@@ -1597,6 +1608,7 @@ def _run_turn(request_password, rerun_turn=None):
             is_new_champion=is_new_champion,
             champion_state_before=champion_state_for_fights,  # Use correct state for fights identification
             prev_champion_state=prev_champion_state,  # For detecting newly-crowned champions
+            bully_events=bully_events,
         )
         nl_path = os.path.join(_turn_dir(turn_num), "newsletter.txt")
         with open(nl_path, "w", encoding="utf-8") as _f:

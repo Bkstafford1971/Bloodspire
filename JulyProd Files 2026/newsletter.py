@@ -98,10 +98,10 @@ def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
                      champion_beaten_by: str = None, champion_beaten_by_wid: int = None,
                      champion_beaten_team: str = None, champion_beaten_team_id: int = 0,
                      prev_champion_name: str = None,
-                     card = None) -> tuple:
+                     card = None, ineligible_name: str = None) -> tuple:
     """
     Update the champion state based on battle outcomes and warrior recognition.
-    
+
     Champion Rules:
     1. If champion is beaten in combat, defeater becomes new champion immediately
     2. If no current champion exists, award to warrior with HIGHEST recognition
@@ -110,7 +110,12 @@ def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
        - Award to warrior with highest recognition (if no tie)
        - If there's a tie, spot becomes vacant
     4. If current champion fought, they keep the title (unless beaten)
-    
+
+    ineligible_name: if set and it matches the sitting champion, the Gladiatorial
+    Commission has stripped their title this turn - Rule 4 is skipped entirely
+    and they are excluded from the recognition-leader scan (Rules 2/3), so they
+    cannot simply re-claim the vacated title on the spot.
+
     Returns:
         (champion_state_dict, is_new_champion) where is_new_champion is True if the
         current champion name differs from prev_champion_name.
@@ -154,7 +159,15 @@ def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
     
     current_champ = champion_state.get("name", "")
     current_champ_tid = champion_state.get("team_id", 0)
-    
+
+    # Gladiatorial Commission title-strip override: force the sitting champion
+    # out of contention entirely, regardless of their current recognition.
+    stripped_by_commission = bool(
+        ineligible_name and current_champ and current_champ.lower() == ineligible_name.lower()
+    )
+    if stripped_by_commission:
+        current_champ = ""
+
     # Check if current champion is dead
     if current_champ and (current_champ_tid, current_champ) in dead_keys:
         current_champ = ""
@@ -213,6 +226,7 @@ def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
                 except: continue
             if getattr(wobj,"is_dead",False): continue
             if (w_tid, wobj.name) in dead_keys: continue
+            if ineligible_name and wobj.name.lower() == ineligible_name.lower(): continue
             all_warriors.append((wobj, tname, w_tid))
     
     if not all_warriors: 
@@ -1019,6 +1033,43 @@ _BLK_WARRIOR_FALLER = [
     "The standings now officially reflect what the fight already told us: {warrior} was not ready for {opponent} this turn.  The gap between tiers is rarely as polite as the schedule implies.",
 ]
 
+_BLK_BULLY_SHAMED = [
+    "{warrior}'s decision to Blood Challenge someone so clearly outmatched didn't go over well with the crowd. Whispers of cowardice followed them out of the arena.",
+    "There was little glory in beating an opponent who never stood a chance, and the fans made sure {warrior} knew it. The jeers followed them long after the final blow.",
+    "Some wins cost more than they're worth. {warrior}'s lopsided Blood Challenge against {opponent} did more damage to their standing than any wound could have.",
+    "The arena has a long memory for this sort of thing. {warrior} won the fight against {opponent}, but lost something harder to win back: the crowd's respect.",
+    "Word of {warrior}'s mismatched Blood Challenge spread fast through {team}'s ranks and beyond. No one called it a fair fight, and no one called {warrior} brave for it.",
+    "{warrior} picked a fight they couldn't lose, and the crowd made sure they knew exactly what that said about them.",
+    "It takes a certain kind of gladiator to hunt down someone so clearly beneath them. {warrior} found that out the hard way when the boos started before the bout even ended.",
+]
+
+_BLK_UNDERDOG_INSPIRED = [
+    "{warrior} had every reason to decline that Blood Challenge. {opponent} was leagues ahead on paper. They stepped up anyway, and the crowd couldn't stop talking about it.",
+    "Nobody expected much from {warrior}'s Blood Challenge against {opponent}. What they got instead was one of the more talked-about bouts of the week.",
+    "It's not about winning or losing. Sometimes it's about showing up. {warrior} showed up against a fighter twice their standing, and the arena took notice.",
+    "{warrior}'s stock had never been higher, and it had nothing to do with a win. Taking that Blood Challenge against {opponent} took nerve most gladiators don't have.",
+    "The odds were never in {warrior}'s favor against {opponent}, and somehow, that was exactly why the crowd couldn't stop talking about them.",
+    "{team}'s {warrior} didn't need to win to make an impression. Just showing up against {opponent} was enough to earn the arena's respect.",
+]
+
+_BLK_CHAMP_STRIPPED_DECISION = [
+    "Due to the nature of {warrior}'s disgraceful acts of cowardice in the persecution of lesser-known gladiators, the Gladiatorial Commission revoked {warrior}'s title.",
+    "Citing a pattern of conduct unbecoming a champion, the Gladiatorial Commission formally stripped {warrior} of the championship.",
+    "In an unprecedented move, the Gladiatorial Commission voted to remove {warrior} from the championship, citing repeated abuse of the Blood Challenge against clearly outmatched opponents.",
+    "The Gladiatorial Commission stripped {warrior} of the championship, ruling that their conduct in the arena no longer reflected the standard expected of a champion.",
+    "By unanimous decision, the Gladiatorial Commission revoked {warrior}'s title, condemning their repeated targeting of lesser gladiators as unworthy of the crown.",
+    "The Gladiatorial Commission announced the removal of {warrior} from the championship, following mounting complaints over their conduct in recent Blood Challenges.",
+]
+
+_BLK_CHAMP_STRIPPED_QUOTE = [
+    "\"The Commission will not stand for this kind of cowardice from its combatants,\" said one member, speaking on condition of anonymity.",
+    "\"A champion is supposed to represent the best of us. This was not that,\" one Commission official remarked.",
+    "\"There's a difference between vengeance and cruelty. We drew that line today,\" said a Commission source.",
+    "\"No one earns a crown by hunting down the weak. We won't pretend otherwise,\" one member stated plainly.",
+    "\"The title means something. It's our job to make sure it stays that way,\" a Commission representative said.",
+    "\"We've heard the crowd, and frankly, we agree with them,\" one official admitted.",
+]
+
 _BLK_CHALLENGE_WIN = [
     "I just want to tip my hat to {warrior}, who took on {opponent} from a lower spot in the rankings and came out ahead.  The smart money wasn't on it.  The smart money was wrong.",
     "Congratulations are in order for {warrior}, who overcame both {opponent} and the recognition gap between them.  That kind of result earns more than points.  It earns a reputation.",
@@ -1127,7 +1178,8 @@ def _pick_block(pool: list, used: set, ctx: dict) -> str:
     return template.format(**ctx)
 
 
-def _block_commentary(card, teams, deaths, turn_num: int, champion_state: dict, is_new_champion: bool = False) -> str:
+def _block_commentary(card, teams, deaths, turn_num: int, champion_state: dict, is_new_champion: bool = False,
+                       bully_events: list = None) -> str:
     """
     Generate a flowing spy-report style narrative for Arena Happenings.
     Pool blocks are used as sentence-level building pieces woven together
@@ -1400,6 +1452,34 @@ def _block_commentary(card, teams, deaths, turn_num: int, champion_state: dict, 
 
     if p3:
         paragraphs.append("  ".join(p3))
+
+    # ==================================================================
+    # PARAGRAPH 3B - BLOOD CHALLENGE BULLYING / UNDERDOG / COMMISSION
+    # ==================================================================
+    p3b = []
+    for ev in (bully_events or []):
+        ctx["warrior"]  = _trunc(ev["warrior"]).upper()
+        ctx["team"]     = _trunc(ev["team"]).upper()
+        ctx["opponent"] = _trunc(ev["opponent"]).upper()
+        if ev["kind"] == "bully_shamed":
+            p3b.append(_pick_block(_BLK_BULLY_SHAMED, used, ctx))
+        elif ev["kind"] == "underdog_inspired":
+            p3b.append(_pick_block(_BLK_UNDERDOG_INSPIRED, used, ctx))
+
+        if ev.get("stripped"):
+            p3b.append(_pick_block(_BLK_CHAMP_STRIPPED_DECISION, used, ctx))
+            p3b.append(_pick_block(_BLK_CHAMP_STRIPPED_QUOTE, used, ctx))
+            new_champ_name = champion_state.get("name", "") if champion_state else ""
+            if new_champ_name:
+                p3b.append(
+                    f"The championship now falls to {_trunc(new_champ_name).upper()}, "
+                    "based on their recognized popularity with the masses."
+                )
+            else:
+                p3b.append("With no clear successor to claim the crown, the championship remains vacant for now.")
+
+    if p3b:
+        paragraphs.append("  ".join(p3b))
 
     # ==================================================================
     # PARAGRAPH 4 - CHALLENGE DRAMA + STREAK WARRIORS
@@ -1919,7 +1999,7 @@ def _top_managers(card, teams, turn_num, return_records=False):
 
 def generate_newsletter(turn_num, card, teams, deaths, champion_state,
                         processed_date=None, is_new_champion=False, champion_state_before=None,
-                        prev_champion_state=None) -> str:
+                        prev_champion_state=None, bully_events=None) -> str:
     # Wrap all bouts to handle both dict and object formats uniformly
     wrapped_card = [_BoutWrapper(bout) for bout in card] if card else []
 
@@ -1971,7 +2051,8 @@ def generate_newsletter(turn_num, card, teams, deaths, champion_state,
         sections.append("\n\n" + result)
         print("DEBUG: _top_managers returned text only (not tuple)")
 
-    sections.append("\n\n" + _block_commentary(wrapped_card, teams, deaths, turn_num, champion_state, is_new_champion))
+    sections.append("\n\n" + _block_commentary(wrapped_card, teams, deaths, turn_num, champion_state, is_new_champion,
+                                                 bully_events=bully_events))
     sections.append("\n\n" + _warrior_tiers(teams, champion_state, wrapped_card, turn_num))
 
     # Add monster kills section if there are any

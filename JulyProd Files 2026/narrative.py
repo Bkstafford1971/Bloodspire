@@ -487,6 +487,28 @@ _CHALLENGE_FLAVOR_BLOOD = [
     "{n1} swears a Blood Challenge vendetta against {n2} this turn!",
 ]
 
+_CHALLENGE_FLAVOR_BLOOD_BULLY = [
+    "{n1} declares a Blood Challenge against {n2}, and the crowd doesn't hide its disgust at the mismatch.",
+    "{n1} sets their sights on {n2} for a Blood Challenge, and a chorus of boos rains down at the sight of it.",
+    "{n1} singles out {n2} for a Blood Challenge, an opponent they could've beaten with one hand tied behind their back. The stands are not impressed.",
+    "{n1} calls out {n2} for a Blood Challenge, and the crowd hisses. Some victories aren't worth the shame that comes with them.",
+    "{n1} targets {n2} with a Blood Challenge, and a wave of jeers washes over the arena. This isn't vengeance, it's a slaughter waiting to happen.",
+    "{n1} hunts down {n2} for a Blood Challenge, and murmurs of contempt ripple through the crowd at such an uneven match.",
+    "{n1} picks {n2} for a Blood Challenge, and somewhere in the stands, someone starts a slow, mocking clap.",
+    "{n1} goes after {n2} in a Blood Challenge, and the crowd grows cold. There's no glory in this kind of vengeance.",
+]
+
+_CHALLENGE_FLAVOR_BLOOD_UNDERDOG = [
+    "{n1} steps up to declare a Blood Challenge against {n2}, hopelessly outmatched, and the crowd roars in support anyway.",
+    "{n1} throws down a Blood Challenge against {n2}, a fighter far stronger on paper. The arena erupts, because everyone loves an underdog.",
+    "{n1} dares to challenge {n2} to a Blood Challenge, and the crowd is already chanting their name before the first blow is struck.",
+    "{n1} answers the call and challenges {n2}, a far more dangerous foe, to a Blood Challenge, and the stands come alive. Heart over odds, and the crowd can't get enough.",
+    "{n1} musters the courage to challenge the clearly superior {n2} to a Blood Challenge, and the arena rises to its feet in respect.",
+    "{n1} declares a Blood Challenge against {n2}, odds be damned, and the crowd is behind them every step of the way.",
+    "{n1} takes the leap and challenges {n2}, a fighter well beyond their standing, to a Blood Challenge. Whatever happens next, the crowd already calls them brave.",
+    "{n1} declares a Blood Challenge against {n2}. Few expect them to survive it, but fewer still will forget the courage it took to accept it.",
+]
+
 _CHALLENGE_FLAVOR_MONSTER = [
     "{n1} dares to challenge the Monster {n2}!!",
     "{n1} steps forward to face the Monster {n2} in Challenge!!",
@@ -505,7 +527,8 @@ _CHALLENGE_FLAVOR_CHAMPION = [
     "{n1} steps into the arena for a Title Challenge against {n2}!!",
 ]
 
-def get_challenge_flavor_line(w1_name: str, w2_name: str, challenger_name: Optional[str], fight_type: str) -> Optional[str]:
+def get_challenge_flavor_line(w1_name: str, w2_name: str, challenger_name: Optional[str], fight_type: str,
+                               bully_zone: Optional[str] = None) -> Optional[str]:
     """Return a randomly selected challenge flavor line if appropriate."""
     if not challenger_name and fight_type not in ("monster", "champion"):
         return None
@@ -524,7 +547,12 @@ def get_challenge_flavor_line(w1_name: str, w2_name: str, challenger_name: Optio
         n1, n2 = w1_name_norm, w2_name_norm
 
     if fight_type == "blood_challenge":
-        pool = _CHALLENGE_FLAVOR_BLOOD
+        if bully_zone in ("mismatch", "severe"):
+            pool = _CHALLENGE_FLAVOR_BLOOD_BULLY
+        elif bully_zone == "underdog":
+            pool = _CHALLENGE_FLAVOR_BLOOD_UNDERDOG
+        else:
+            pool = _CHALLENGE_FLAVOR_BLOOD
     elif fight_type == "monster":
         pool = _CHALLENGE_FLAVOR_MONSTER
     elif fight_type == "champion":
@@ -3156,6 +3184,61 @@ MERCY_DENIED = [
     "{warrior} must fight on, or die trying!",
     "No quarter is given!",
 ]
+
+# Blood-challenge bullying: crowd interference thrown at a warrior fighting
+# far beneath their standing, spoiling the action they were mid-committing to.
+# Used only when the roll penalty actually changed the outcome (see effective
+# param on crowd_interference_line below).
+CROWD_INTERFERENCE_BULLY = [
+    "A hurled bottle clips {warrior}, spoiling the motion!",
+    "Something thrown from the stands catches {warrior} off guard!",
+    "The crowd pelts {warrior} with debris, breaking their concentration!",
+    "A rotten piece of fruit splatters against {warrior}, throwing off the timing!",
+    "Jeers turn to thrown objects as {warrior} is struck from the stands!",
+]
+
+# Same trigger, but the penalty didn't end up changing the outcome this
+# action - the narrative shouldn't claim an effect that didn't materialize.
+CROWD_INTERFERENCE_BULLY_SHRUGGED_OFF = [
+    "A hurled bottle clips {warrior}, but it isn't enough to throw them off!",
+    "Something thrown from the stands catches {warrior} off guard, but they shake it off!",
+    "The crowd pelts {warrior} with debris, though it barely registers!",
+    "A rotten piece of fruit splatters against {warrior}, who doesn't so much as flinch!",
+    "Jeers turn to thrown objects as {warrior} is struck from the stands, but presses on regardless!",
+]
+
+# Blood-challenge underdog: the crowd's support lifts the outmatched
+# challenger at just the right moment. Used only when the roll bonus
+# actually changed the outcome this action.
+CROWD_INTERFERENCE_UNDERDOG = [
+    "The crowd's roar seems to steel {warrior}'s nerve at just the right moment!",
+    "Spurred on by the chanting crowd, {warrior} finds something extra!",
+    "The arena is behind {warrior} completely, and it shows!",
+    "Fueled by the crowd's support, {warrior} presses on with renewed heart!",
+    "The stands erupt for {warrior}, who seems to draw strength from it!",
+]
+
+# Same trigger, but the bonus wasn't enough to change the outcome this action.
+CROWD_INTERFERENCE_UNDERDOG_FELL_SHORT = [
+    "The crowd roars for {warrior}, but the support isn't enough this time!",
+    "Spurred on by the chanting crowd, {warrior} gives everything, but it isn't enough!",
+    "The arena is behind {warrior} completely, but heart alone can't close the gap this time!",
+    "Fueled by the crowd's support, {warrior} presses on, though it doesn't pay off this time!",
+    "The stands erupt for {warrior}, whose effort falls just short despite it!",
+]
+
+
+def crowd_interference_line(warrior_name: str, zone: str, effective: bool = True) -> str:
+    """zone is 'bully' (penalty, jeering) or 'underdog' (bonus, cheering).
+    effective indicates whether the roll modifier actually changed this
+    action's outcome (a miss for a bully, a hit for an underdog) - when it
+    didn't, a different pool is used so the line doesn't claim an effect
+    that didn't happen."""
+    if zone == "bully":
+        pool = CROWD_INTERFERENCE_BULLY if effective else CROWD_INTERFERENCE_BULLY_SHRUGGED_OFF
+    else:
+        pool = CROWD_INTERFERENCE_UNDERDOG if effective else CROWD_INTERFERENCE_UNDERDOG_FELL_SHORT
+    return random.choice(pool).format(warrior=warrior_name.upper())
 
 DEATH_LINES = [
     "{warrior} has perished in the AGONY AMPHITHEATRE!!!",
