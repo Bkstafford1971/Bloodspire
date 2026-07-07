@@ -90,8 +90,11 @@
                 <h3>Announcements</h3>
                 <div class="content-box">
                     <p style="text-align: center; margin: 15px 0;">
-                        <a href="#" id="viewLatestAnnouncement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            🛡️ JUNE 28, 2026 — BALANCE MODIFICATIONS & PROVING GROUNDS UPDATE
+                        <a href="#" id="viewJuly7Announcement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            🛡️ JULY 7, 2026 — BLOOD CHALLENGE SYSTEM OVERHAUL
+                        </a>
+                        <a href="#" id="viewLatestAnnouncement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            JUNE 28, 2026 — BALANCE MODIFICATIONS & PROVING GROUNDS UPDATE
                         </a>
                         <a href="#" id="viewJune10Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
                             JUNE 10, 2026 — CLIENT V2.8 & ARCHIVE UPDATES
@@ -114,6 +117,42 @@
         </main>
     </div>
 
+    <!-- July 7 Modal -->
+    <div id="july7AnnouncementModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>ARENA UPDATE: BLOOD CHALLENGE SYSTEM OVERHAUL — JULY 7, 2026</h2>
+            <div class="modal-scroll-body">
+                <p><strong>Honored Managers,</strong></p>
+                <p>I have updated the Blood Challenge system to better reflect the risks and rewards of challenging opponents in the arena. These changes are designed to encourage fair competition, reward underdog spirit, and ensure that those who repeatedly use their status to crush weaker opponents face lasting consequences.</p>
+                
+                <h3>The Crowd is Watching</h3>
+                <p>The audience in the arena is now much more reactive during Blood Challenges. Their support for an underdog is not just flavor text; it is now mechanically aligned with the fight’s outcome. You will notice the crowd’s influence more clearly in fight logs, as the narrative will accurately reflect whether the crowd helped shift the momentum of the battle.</p>
+                <p>Crowd influence goes well beyond simple support. During a challenge, spectators may begin throwing objects at the "bully" to provide distraction penalties to their attack, parry, dodge, and initiative rolls. While these distractions are limited and do not cause physical damage, they can cause a warrior to swing and miss on an attack or misread a parry attempt.</p>
+
+                <h3>Support for the Underdog</h3>
+                <p>Challengers who take on a significantly stronger opponent (a Blood Challenge in the Underdog zone) now have a much better chance of survival. The crowd is firmly behind these brave souls, providing a meaningful bonus to their chance of securing mercy before a fatal blow is struck. This ensures that a desperate underdog has a realistic path to survive and fight another day, even if they aren't able to claim a direct victory.</p>
+
+                <h3>Consequences for Excessive Elbow Dropping</h3>
+                <p>I have refined how the arena treats established warriors who seek out weak opponents. Previously, the penalties were easily gamed, but now the consequences are persistent:</p>
+                <ul>
+                    <li><strong>Public Shaming:</strong> New flavor text has been added to the newsletter, explicitly calling out the egregious Elbow Drop offenders (Bullies) to the public.</li>
+                    <li><strong>Popularity Hits:</strong> Bullies will suffer a significant, long-term drop in popularity. This penalty follows them into every future fight, making it harder for them to request mercy from the crowd when they find themselves in trouble.</li>
+                    <li><strong>Reputation Stability:</strong> Recognition will no longer be the primary target for bullying penalties, preventing top-tier warriors from artificially "tanking" their tier to secure easier matchups.</li>
+                    <li><strong>Champion-Specific Penalties:</strong> Being the champion brings greater scrutiny. Champion "elbow drop" Blood Challenges are treated with extra harshness, and you will gain a permanent bullying mark for each offense. This is where the potential 65% chance of losing a title due to elbow dropping comes into play. While having your title stripped is significant, it does not mean you are unable to regain it later.</li>
+                    <li><strong>Standard Challenges:</strong> For standard, non-champion Blood Challenges, the crowd interference is still prominent, and the public shaming in the newsletter still occurs. However, the bully tally is not counted against you, though you will still lose popularity points for repeatedly elbow dropping, which could affect your ability to get mercy in future fights.</li>
+                </ul>
+
+                <p>These adjustments ensure that Blood Challenges are a strategic risk-versus-reward mechanic rather than a tool for casual dominance. I want players to play the game the way they want, but just like in life, there should be a consequence to every action and rewards for underdogs. Besides, everyone loves an underdog story, right? This is in no way meant to call out anyone’s preferred style of play. We need villians and hero types in every game. I think it just adds an extra element to the game to try to make it more immersive and fun. Good luck to all challengers in the arena.</p>
+
+                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
+                    — ILNEVAL
+                </p>
+            </div>
+            <button class="close-modal-btn" id="closeJuly7Modal">Dismiss</button>
+        </div>
+    </div>
+
+    <!-- Latest Modal (June 28) -->
     <div id="latestAnnouncementModal" class="modal-overlay">
         <div class="modal-content">
             <h2>BALANCE MODIFICATIONS & PROVING GROUNDS — JUNE 28, 2026</h2>
@@ -157,6 +196,7 @@
         </div>
     </div>
 
+    <!-- Previous Modals remain here -->
     <div id="june10AnnouncementModal" class="modal-overlay">
         <div class="modal-content">
             <h2>CLIENT V2.8 & ARCHIVE UPDATES — JUNE 10, 2026</h2>
@@ -352,106 +392,70 @@
                 localStorage.setItem('last_board_view', new Date().toISOString());
             };
 
-            // Original Modal (May 27)
+            // Modals
             const originalModal = document.getElementById('announcementModal');
             const closeOriginal = document.getElementById('closeModal');
             const viewOriginal = document.getElementById('viewAnnouncement');
 
-            // Mid Modal (May 29)
             const newModal = document.getElementById('newAnnouncementModal');
             const closeNew = document.getElementById('closeNewModal');
             const viewNew = document.getElementById('viewNewAnnouncement');
 
-            // June 1 Modal
             const june1Modal = document.getElementById('june1AnnouncementModal');
             const closeJune1 = document.getElementById('closeJune1Modal');
             const viewJune1 = document.getElementById('viewJune1Announcement');
 
-            // June 5 Modal
             const june5Modal = document.getElementById('june5AnnouncementModal');
             const closeJune5 = document.getElementById('closeJune5Modal');
             const viewJune5 = document.getElementById('viewJune5Announcement');
 
-            // June 10 Modal
             const june10Modal = document.getElementById('june10AnnouncementModal');
             const closeJune10 = document.getElementById('closeJune10Modal');
             const viewJune10 = document.getElementById('viewJune10Announcement');
 
-            // Latest Modal (June 28)
             const latestModal = document.getElementById('latestAnnouncementModal');
             const closeLatest = document.getElementById('closeLatestModal');
             const viewLatest = document.getElementById('viewLatestAnnouncement');
 
+            const july7Modal = document.getElementById('july7AnnouncementModal');
+            const closeJuly7 = document.getElementById('closeJuly7Modal');
+            const viewJuly7 = document.getElementById('viewJuly7Announcement');
+
             // Show latest announcement automatically if not seen
-            if (!localStorage.getItem('bloodspire_update_20260628')) {
-                latestModal.style.display = 'block';
+            if (!localStorage.getItem('bloodspire_update_20260707')) {
+                july7Modal.style.display = 'block';
             }
 
             // Close latest modal
-            closeLatest.onclick = () => { 
-                latestModal.style.display = 'none'; 
-                localStorage.setItem('bloodspire_update_20260628', 'true'); 
+            closeJuly7.onclick = () => { 
+                july7Modal.style.display = 'none'; 
+                localStorage.setItem('bloodspire_update_20260707', 'true'); 
             };
 
             // Open latest modal via link
-            viewLatest.onclick = function(e) {
+            viewJuly7.onclick = function(e) {
                 e.preventDefault();
-                latestModal.style.display = 'block';
+                july7Modal.style.display = 'block';
             };
 
-            // Close June 10 modal
-            closeJune10.onclick = () => { 
-                june10Modal.style.display = 'none'; 
-            };
+            // Other Modals
+            closeLatest.onclick = () => { latestModal.style.display = 'none'; };
+            viewLatest.onclick = function(e) { e.preventDefault(); latestModal.style.display = 'block'; };
 
-            // Open June 10 modal via link
-            viewJune10.onclick = function(e) {
-                e.preventDefault();
-                june10Modal.style.display = 'block';
-            };
+            closeJune10.onclick = () => { june10Modal.style.display = 'none'; };
+            viewJune10.onclick = function(e) { e.preventDefault(); june10Modal.style.display = 'block'; };
 
-            // Close June 5 modal
-            closeJune5.onclick = () => { 
-                june5Modal.style.display = 'none'; 
-            };
+            closeJune5.onclick = () => { june5Modal.style.display = 'none'; };
+            viewJune5.onclick = function(e) { e.preventDefault(); june5Modal.style.display = 'block'; };
 
-            // Open June 5 modal via link
-            viewJune5.onclick = function(e) {
-                e.preventDefault();
-                june5Modal.style.display = 'block';
-            };
+            closeJune1.onclick = () => { june1Modal.style.display = 'none'; };
+            viewJune1.onclick = function(e) { e.preventDefault(); june1Modal.style.display = 'block'; };
 
-            // Close June 1 modal
-            closeJune1.onclick = () => { 
-                june1Modal.style.display = 'none'; 
-            };
+            closeNew.onclick = () => { newModal.style.display = 'none'; };
+            viewNew.onclick = function(e) { e.preventDefault(); newModal.style.display = 'block'; };
 
-            // Open June 1 modal via link
-            viewJune1.onclick = function(e) {
-                e.preventDefault();
-                june1Modal.style.display = 'block';
-            };
-
-            // Close mid modal
-            closeNew.onclick = () => { 
-                newModal.style.display = 'none'; 
-            };
-
-            // Open mid modal via link
-            viewNew.onclick = function(e) {
-                e.preventDefault();
-                newModal.style.display = 'block';
-            };
-
-            // Original modal logic
-            closeOriginal.onclick = () => { 
-                originalModal.style.display = 'none'; 
-            };
-
-            viewOriginal.onclick = function(e) {
-                e.preventDefault();
-                originalModal.style.display = 'block';
-            };
+            closeOriginal.onclick = () => { originalModal.style.display = 'none'; };
+            viewOriginal.onclick = function(e) { e.preventDefault(); originalModal.style.display = 'block'; };
         });
     </script>
 </body>
