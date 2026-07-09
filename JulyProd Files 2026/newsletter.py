@@ -94,6 +94,63 @@ def _warrior_tier(w, is_champion: bool) -> str:
     return TIER_RECRUITS
 
 
+def _apply_tiebreakers(candidates: list) -> Optional[tuple]:
+    """
+    Apply tie-breaker chain to resolve champion selection when multiple warriors
+    are tied at the highest recognition level.
+
+    Tie-breaker order:
+    1. Most Kills
+    2. Most Wins
+    3. Fewest Losses (ascending)
+    4. Highest Popularity
+    5. Alphabetical by Name (final guarantee of single result)
+
+    Args:
+        candidates: list of (warrior_obj, team_name, team_id) tuples, all tied at same recognition
+
+    Returns:
+        (warrior_obj, team_name, team_id) of the champion, or None if no candidates
+    """
+    if not candidates:
+        return None
+    if len(candidates) == 1:
+        return candidates[0]
+
+    # Tie-breaker 1: Most Kills
+    best_kills = max(getattr(c[0], 'kills', 0) for c in candidates)
+    candidates = [c for c in candidates if getattr(c[0], 'kills', 0) == best_kills]
+    if len(candidates) == 1:
+        print(f"[DEBUG TIEBREAK] Resolved by kills: {candidates[0][0].name} with {best_kills} kills")
+        return candidates[0]
+
+    # Tie-breaker 2: Most Wins
+    best_wins = max(getattr(c[0], 'wins', 0) for c in candidates)
+    candidates = [c for c in candidates if getattr(c[0], 'wins', 0) == best_wins]
+    if len(candidates) == 1:
+        print(f"[DEBUG TIEBREAK] Resolved by wins: {candidates[0][0].name} with {best_wins} wins")
+        return candidates[0]
+
+    # Tie-breaker 3: Fewest Losses (ascending order)
+    best_losses = min(getattr(c[0], 'losses', 0) for c in candidates)
+    candidates = [c for c in candidates if getattr(c[0], 'losses', 0) == best_losses]
+    if len(candidates) == 1:
+        print(f"[DEBUG TIEBREAK] Resolved by losses: {candidates[0][0].name} with {best_losses} losses")
+        return candidates[0]
+
+    # Tie-breaker 4: Highest Popularity
+    best_pop = max(getattr(c[0], 'popularity', 0) for c in candidates)
+    candidates = [c for c in candidates if getattr(c[0], 'popularity', 0) == best_pop]
+    if len(candidates) == 1:
+        print(f"[DEBUG TIEBREAK] Resolved by popularity: {candidates[0][0].name} with {best_pop} popularity")
+        return candidates[0]
+
+    # Tie-breaker 5: Alphabetical by Name (final guarantee)
+    candidates.sort(key=lambda c: c[0].name)
+    print(f"[DEBUG TIEBREAK] Resolved by name: {candidates[0][0].name} (alphabetical)")
+    return candidates[0]
+
+
 def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
                      champion_beaten_by: str = None, champion_beaten_by_wid: int = None,
                      champion_beaten_team: str = None, champion_beaten_team_id: int = 0,
@@ -105,11 +162,18 @@ def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
     Champion Rules:
     1. If champion is beaten in combat, defeater becomes new champion immediately
     2. If no current champion exists, award to warrior with HIGHEST recognition
-       - If there's a tie for highest, leave spot VACANT
+       - If tie for highest, apply tie-breaker cascade (kills → wins → losses → popularity → name)
     3. If current champion exists but didn't fight this turn:
-       - Award to warrior with highest recognition (if no tie)
-       - If there's a tie, spot becomes vacant
+       - Award to warrior with highest recognition
+       - If tie for highest, apply tie-breaker cascade
     4. If current champion fought, they keep the title (unless beaten)
+
+    Tie-Breaker Cascade (Rules 2/3 only when warriors tied at highest recognition):
+    1. Most Kills
+    2. Most Wins
+    3. Fewest Losses
+    4. Highest Popularity
+    5. Alphabetical by Name (guarantees single result)
 
     ineligible_name: if set and it matches the sitting champion, the Gladiatorial
     Commission has stripped their title this turn - Rule 4 is skipped entirely
@@ -204,6 +268,23 @@ def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
         print(f"[DEBUG CHAMPION] RULE 4: Champion {current_champ} fought and retains title")
         # Update the source to indicate retention, not original coronation
         champion_state["source"] = "retained"
+
+        # IMPORTANT: Update the warrior_id to the current value in case it changed
+        # This prevents stale warrior_id from blocking newsletter display
+        for team in teams:
+            wlist = team.warriors if hasattr(team,"warriors") else team.get("warriors",[])
+            for w in wlist:
+                if not w: continue
+                wname = w.name if hasattr(w,"name") else w.get("name","")
+                if wname == current_champ:
+                    w_tid = team.team_id if hasattr(team,"team_id") else team.get("team_id",0)
+                    if w_tid == current_champ_tid:
+                        # Found the current champion warrior - update warrior_id
+                        current_wid = getattr(w, "warrior_id", None) if hasattr(w, "warrior_id") else w.get("warrior_id") if isinstance(w, dict) else None
+                        if current_wid:
+                            champion_state["warrior_id"] = current_wid
+                            print(f"[DEBUG CHAMPION] Updated warrior_id from {champion_state.get('warrior_id')} to {current_wid}")
+
         is_new = (current_champ != prev_champ)
         return champion_state, is_new
     elif current_champ:
@@ -228,27 +309,37 @@ def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
             if (w_tid, wobj.name) in dead_keys: continue
             if ineligible_name and wobj.name.lower() == ineligible_name.lower(): continue
             all_warriors.append((wobj, tname, w_tid))
-    
-    if not all_warriors: 
+
+    if not all_warriors:
         return {}, False
-    
+
     # Sort by recognition only
     all_warriors.sort(key=lambda x: (-getattr(x[0],"recognition",0), x[0].name, x[2]))
-    
+
     # Get the highest recognition score
     best_rec = getattr(all_warriors[0][0], "recognition", 0)
-    
+
     # Check if there's a tie for highest recognition
     tied = [x for x in all_warriors if getattr(x[0],"recognition",0) == best_rec]
-    
+
     if len(tied) > 1:
-        # THERE IS A TIE - Leave spot vacant
-        # Only return empty state if this represents a change from having a champion
-        is_new = (prev_champ != "")
-        return {}, is_new
-    
+        # MULTIPLE WARRIORS TIED AT HIGHEST RECOGNITION - Apply tie-breaker chain
+        print(f"[DEBUG CHAMPION] {len(tied)} warriors tied at recognition {best_rec} - applying tie-breakers")
+        result = _apply_tiebreakers(tied)
+        if result:
+            champ_w, champ_t, champ_tid = result
+            new_state = {"name": champ_w.name, "warrior_id": getattr(champ_w, "warrior_id", None),
+                         "team_name": champ_t, "team_id": champ_tid, "source": "recognition_tiebreak"}
+            is_new = (champ_w.name != prev_champ)
+            print(f"[DEBUG CHAMPION] Tie-breaker awarded champion: {champ_w.name} (kills={getattr(champ_w,'kills',0)}, wins={getattr(champ_w,'wins',0)}, losses={getattr(champ_w,'losses',0)})")
+            return new_state, is_new
+        else:
+            # Should never happen with our tie-breaker chain, but handle gracefully
+            is_new = (prev_champ != "")
+            return {}, is_new
+
     # NO TIE - Award championship to the warrior with highest recognition
-    champ_w, champ_t, champ_tid = all_warriors[0]
+    champ_w, champ_t, champ_tid = tied[0]
     new_state = {"name": champ_w.name, "warrior_id": getattr(champ_w, "warrior_id", None),
                  "team_name": champ_t, "team_id": champ_tid, "source": "recognition"}
     is_new = (champ_w.name != prev_champ)

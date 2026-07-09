@@ -952,6 +952,18 @@ class Warrior:
         """
         key = skill.lower().replace(" ", "_")
 
+        # Normalize weapon display names to skill keys (e.g., "heavy_barbed_whip" -> "heavy_whip")
+        # This handles cases where trains list may contain display names instead of skill keys
+        if key not in ALL_SKILLS and key not in ATTRIBUTES:
+            from weapons import WEAPONS
+            # Try to find a weapon that matches this key pattern
+            for weapon_key, weapon_obj in WEAPONS.items():
+                # Check if the key matches the display name (normalized)
+                display_normalized = weapon_obj.display.lower().replace(" ", "_").replace("&", "and")
+                if key == display_normalized or key == weapon_key:
+                    key = weapon_obj.skill_key
+                    break
+
         # Shared helper: base chance from stat band
         def _base_chance(stat: int) -> int:
             if stat <= 8:   return 28
