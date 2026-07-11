@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v3.0.0</title>
+<title>BLOODSPIRE Client - v3.1.0</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&display=swap');
 /* ============================================================
@@ -236,6 +236,7 @@ table.grid tr.sel td input, table.grid tr.sel td select { background: var(--sel)
 .nar-training { color:#00a; font-family:'Courier New',monospace; }
 .nar-hp       { color:#888; font-size:11px; font-family:'Courier New',monospace; }
 .nar-line     { font-family:'Courier New',monospace; font-size:12px; line-height:1.5; color:#000; }
+.nar-damage-indent { font-family:'Courier New',monospace; font-size:12px; line-height:1.5; color:#000; padding-left:1.8em; }
 .nar-damage-light  { font-family:'Courier New',monospace; font-size:12px; line-height:1.5; color:#1a6b1a; padding-left:1.8em; }
 .nar-damage-medium { font-family:'Courier New',monospace; font-size:12px; line-height:1.5; color:#00008b; padding-left:1.8em; }
 .nar-damage-heavy  { font-family:'Courier New',monospace; font-size:12px; line-height:1.5; color:#8b0000; padding-left:1.8em; }
@@ -263,7 +264,7 @@ window.testUpdateCheck = async () => {
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
-const CLIENT_VERSION = "3.0.0";
+const CLIENT_VERSION = "3.1.0";
 
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
@@ -3736,7 +3737,6 @@ function buildStatsTab(team, w, wIdx) {
   ${S.league.flags.show_max_hp ? `<span>Max HP: <b>${w.max_hp || (w.constitution ? Math.floor((w.constitution + 8) * 2.5) : '?')}</b></span>` : ''}
   ${S.league.flags.show_favorite_weapon && w.favorite_weapon ? `<span>Favorite: <b>${esc(w.favorite_weapon)}</b></span>` : ''}
   <span>Popularity: <b>${w.popularity||0}</b>/100</span>
-  <span>Turns active: <b>${w.turns_active||0}</b></span>
   ${(w.monster_kills||0)>0 ? `<span style="color:#c84; font-weight:bold;">⚔ Monsters Slain: <b>${w.monster_kills}</b></span>` : ''}
   ${(w.streak||0)!==0 ? '<span>Streak: ' + streakLabel(w.streak||0) + '</span>' : ''}
 </div>
@@ -3899,8 +3899,6 @@ function buildFightOptionsTab(w) {
       <tr>
         <td style="padding:3px 10px; color:#555; width:120px;">Total Fights</td>
         <td style="padding:3px 8px; font-weight:bold;">${w.total_fights||0}</td>
-        <td style="padding:3px 10px; color:#555; width:120px;">Turns Active</td>
-        <td style="padding:3px 8px; font-weight:bold;">${w.turns_active||0}</td>
       </tr>
       <tr>
         <td style="padding:3px 10px; color:#555;">Popularity</td>
@@ -4070,6 +4068,7 @@ function buildChallengesTab(team, w, wIdx) {
           race: ow.race || '-',
           record: S.hideRecord ? '-' : `${ow.wins||0}-${ow.losses||0}-${ow.kills||0}`,
           fights: ow.total_fights || 0, tier: 'CHAMPION', isChampion: true,
+          recognition: ow.recognition || 0,
         });
       }
     } else if (canChallengeTier(myTier, owTier)) {
@@ -4078,6 +4077,7 @@ function buildChallengesTab(team, w, wIdx) {
         race: ow.race || '-',
         record: S.hideRecord ? '-' : `${ow.wins||0}-${ow.losses||0}-${ow.kills||0}`,
         fights: ow.total_fights || 0, tier: owTier, isChampion: false,
+        recognition: ow.recognition || 0,
       });
     }
   }
@@ -4128,7 +4128,9 @@ function buildChallengesTab(team, w, wIdx) {
   // ── Available opponents rows ─────────────────────────────────────────────
   let oppRows = '';
   if (allOpponents.length) {
-    allOpponents.forEach(op => {
+    // Apply sorting if active for this warrior, otherwise use tier-ordered default
+    const displayOpponents = applyChallengeSort(allOpponents);
+    displayOpponents.forEach(op => {
       const alreadyQueued = myPending.includes(op.name);
       let btn;
       if (alreadyQueued) {
@@ -4148,11 +4150,12 @@ function buildChallengesTab(team, w, wIdx) {
         <td style="padding:3px 8px; color:#555;">${esc(op.race)}</td>
         <td style="padding:3px 8px; text-align:center;">${esc(op.record)}</td>
         <td style="padding:3px 8px; text-align:center; ${tierStyle}">${TIER_LABELS[op.tier] || op.tier}</td>
+        <td style="padding:3px 8px; text-align:center; color:#555;">${op.recognition || 0}</td>
         <td style="padding:3px 8px;">${btn}</td>
       </tr>`;
     });
   } else {
-    oppRows = `<tr><td colspan="7" style="padding:10px; color:#888; text-align:center; font-style:italic;">
+    oppRows = `<tr><td colspan="8" style="padding:10px; color:#888; text-align:center; font-style:italic;">
       No warriors in ${esc(TIER_LABELS[myTier] || myTier)} or the tier above are available to challenge.</td></tr>`;
   }
 
@@ -4310,7 +4313,10 @@ function buildChallengesTab(team, w, wIdx) {
   return `
 <div style="padding:12px;">
   <div class="group" style="margin:0 0 12px;">
-    <span class="group-label">Challenge Range - ${esc(w.name)}</span>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span class="group-label">Challenge Range - ${esc(w.name)}</span>
+      <span style="font-weight:bold; font-size:12px;">Recognition: ${w.recognition || 0}</span>
+    </div>
     <p style="font-size:11px; color:#555; margin:4px 0 0;">
       ${esc(w.name)} is in the <b>${TIER_LABELS[myTier] || myTier}</b> tier.
       Eligible targets: <b>${rangeDesc}</b>.
@@ -4327,12 +4333,13 @@ function buildChallengesTab(team, w, wIdx) {
     <table style="border-collapse:collapse; width:100%; font-size:12px;">
       <thead>
         <tr style="border-bottom:2px solid #ccc; color:#666; font-size:11px;">
-          <th style="padding:4px 8px; text-align:left; font-weight:600;">Name</th>
-          <th style="padding:4px 8px; text-align:left; font-weight:600;">Team</th>
-          <th style="padding:4px 8px; text-align:left; font-weight:600;">Manager</th>
-          <th style="padding:4px 8px; text-align:left; font-weight:600;">Race</th>
-          <th style="padding:4px 8px; text-align:center; font-weight:600;">Record</th>
-          <th style="padding:4px 8px; text-align:center; font-weight:600;">Tier</th>
+          <th style="padding:4px 8px; text-align:left; font-weight:600; cursor:pointer;" onclick="sortChallenges('name')">Name</th>
+          <th style="padding:4px 8px; text-align:left; font-weight:600; cursor:pointer;" onclick="sortChallenges('team')">Team</th>
+          <th style="padding:4px 8px; text-align:left; font-weight:600; cursor:pointer;" onclick="sortChallenges('manager')">Manager</th>
+          <th style="padding:4px 8px; text-align:left; font-weight:600; cursor:pointer;" onclick="sortChallenges('race')">Race</th>
+          <th style="padding:4px 8px; text-align:center; font-weight:600; cursor:pointer;" onclick="sortChallenges('record')">Record</th>
+          <th style="padding:4px 8px; text-align:center; font-weight:600; cursor:pointer;" onclick="sortChallenges('tier')">Tier</th>
+          <th style="padding:4px 8px; text-align:center; font-weight:600; cursor:pointer;" onclick="sortChallenges('recognition')">Recognition</th>
           <th style="padding:4px 8px;"></th>
         </tr>
       </thead>
@@ -4383,6 +4390,124 @@ async function removeChallenge(warriorName, targetName) {
   } else {
     alert('Could not remove challenge: ' + r.error);
   }
+}
+
+// Challenge sorting state - stored per warrior
+let S_challenge_sort = {}; // { "warrior_name": "column_name" }
+
+function sortChallenges(column) {
+  const teamId = S.sel.teamId;
+  const wIdx = S.sel.wIdx;
+  console.log('sortChallenges called with column:', column, 'teamId:', teamId, 'wIdx:', wIdx);
+
+  if (!teamId || wIdx == null) {
+    console.log('No warrior context available');
+    return;
+  }
+
+  const team = S.teams[teamId];
+  if (!team || !team.warriors || !team.warriors[wIdx]) {
+    console.log('Could not find warrior');
+    return;
+  }
+
+  const warrior = team.warriors[wIdx];
+  const wName = warrior.name;
+
+  // Get the current sort state for this warrior
+  const currentSort = S_challenge_sort[wName];
+
+  // If clicking the same column again, reset to default (tier-ordered)
+  // Otherwise, set the new sort column
+  if (currentSort === column) {
+    delete S_challenge_sort[wName];
+    console.log('Clearing sort for warrior:', wName);
+  } else {
+    S_challenge_sort[wName] = column;
+    console.log('Setting sort for warrior:', wName, 'to column:', column);
+  }
+
+  // Re-render to apply the new sort
+  render();
+}
+
+function applyChallengeSort(opponents) {
+  const teamId = S.sel.teamId;
+  const wIdx = S.sel.wIdx;
+
+  if (!teamId || wIdx == null) return opponents;
+
+  const team = S.teams[teamId];
+  if (!team || !team.warriors || !team.warriors[wIdx]) return opponents;
+
+  const warrior = team.warriors[wIdx];
+  const wName = warrior.name;
+  const sortColumn = S_challenge_sort[wName];
+
+  console.log('applyChallengeSort for warrior:', wName, 'sortColumn:', sortColumn, 'opponents count:', opponents.length);
+
+  // If no sort is active, return in original tier-ordered form
+  if (!sortColumn) {
+    console.log('No sort active, returning original order');
+    return opponents;
+  }
+
+  // Clone the array so we don't modify the original
+  const sorted = [...opponents];
+
+  sorted.sort((a, b) => {
+    let aVal, bVal;
+
+    switch(sortColumn) {
+      case 'name':
+        aVal = a.name || '';
+        bVal = b.name || '';
+        break;
+      case 'team':
+        aVal = a.teamName || '';
+        bVal = b.teamName || '';
+        break;
+      case 'manager':
+        aVal = a.managerName || '';
+        bVal = b.managerName || '';
+        break;
+      case 'race':
+        aVal = a.race || '';
+        bVal = b.race || '';
+        break;
+      case 'record':
+        // Parse "W-L-K" format and sort by wins ascending
+        const parseRecord = (rec) => {
+          const parts = (rec || '0-0-0').split('-');
+          return parseInt(parts[0]) || 0;
+        };
+        aVal = parseRecord(a.record);
+        bVal = parseRecord(b.record);
+        // Numeric sort, ascending
+        return aVal - bVal;
+      case 'tier':
+        // Sort by tier level (by TIER_ORDER index)
+        const aTierIdx = TIER_ORDER.indexOf(a.tier) >= 0 ? TIER_ORDER.indexOf(a.tier) : 999;
+        const bTierIdx = TIER_ORDER.indexOf(b.tier) >= 0 ? TIER_ORDER.indexOf(b.tier) : 999;
+        return aTierIdx - bTierIdx;
+      case 'recognition':
+        aVal = a.recognition || 0;
+        bVal = b.recognition || 0;
+        // Numeric sort, ascending
+        return aVal - bVal;
+      default:
+        return 0;
+    }
+
+    // String sort, ascending
+    if (typeof aVal === 'string') {
+      return aVal.localeCompare(bVal);
+    }
+    return 0;
+  });
+
+  console.log('Sorted opponents:', sorted.map(o => o.name));
+  return sorted;
 }
 
 async function selectBloodChallengeChampion(targetName, challengerName) {
@@ -6438,13 +6563,14 @@ function narrativeToHtml(text) {
     if (sepCount >= 3) {
       if (/^\*\*\*.*\*\*\*$/.test(ln))                                         { out.push(`<div class="nar-event">${esc(ln)}</div>`);   continue; }
       if (/^MINUTE\s+\d+/.test(ln.trim()))                                      { out.push(`<div class="nar-minute">${esc(ln)}</div>`);  continue; }
-      if (/SLAIN/.test(ln) || /collapses/i.test(ln)) { out.push(`<div class="nar-death">${esc(ln)}</div>`);   continue; }
+      if (/SLAIN/.test(ln) || /collapses/i.test(ln)) { out.push(`<div class="nar-line">${esc(ln)}</div>`);   continue; }
       if (/wins/i.test(ln) && (/judge/i.test(ln) || /victory/i.test(ln)))      { out.push(`<div class="nar-win">${esc(ln)}</div>`);     continue; }
       if (/trained/i.test(ln) || /observed/i.test(ln))                         { out.push(`<div class="nar-training">${esc(ln)}</div>`); continue; }
-      if (/^\s+HP/.test(ln) || /HP:/.test(ln) || /damage/i.test(ln))           { out.push(`<div class="nar-hp">${esc(ln)}</div>`);      continue; }
+      if (/switches to strategy/i.test(ln))                                     { out.push(`<div style="font-family:'Courier New',monospace; font-size:12px; line-height:1.5; color:#000; font-weight:bold;">${esc(ln)}</div>`); continue; }
+      if (/^\s+HP/.test(ln) || /HP:/.test(ln) || /damage/i.test(ln))           { out.push(`<div class="nar-line">${esc(ln)}</div>`);      continue; }
       if (!ln.trim())                                                            { out.push('<br>');                                       continue; }
       // Damage result lines arrive with 3 leading spaces from narrative.py
-      if (/^   \S/.test(ln))                                                    { out.push(`<div class="${_damageClass(ln)}">${esc(ln.trim())}</div>`); continue; }
+      if (/^   \S/.test(ln))                                                    { out.push(`<div class="nar-damage-indent">${esc(ln.trim())}</div>`); continue; }
       out.push(`<div class="nar-line">${esc(ln)}</div>`);
     }
   }
