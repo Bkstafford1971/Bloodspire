@@ -240,6 +240,17 @@ def _update_champion(teams, champion_state: dict, deaths_this_turn: list,
     champion_fought = False
     if current_champ:
         champion_fought = (current_champ_tid, current_champ) in warriors_who_fought
+
+        # If tuple lookup fails, try fallback: search by name only
+        # This handles cases where team_id might be mismatched in the bout object
+        if not champion_fought:
+            for t_id, w_name in warriors_who_fought:
+                if w_name.lower() == current_champ.lower():
+                    champion_fought = True
+                    print(f"[DEBUG CHAMPION] FALLBACK: Found {current_champ} by name (tuple lookup failed)")
+                    print(f"[DEBUG CHAMPION] Tuple had team_id={t_id}, champion has team_id={current_champ_tid}")
+                    break
+
         if not champion_fought:
             print(f"\n[DEBUG CHAMPION] Current champion {current_champ} (tid={current_champ_tid}) NOT found in warriors_who_fought")
             print(f"[DEBUG CHAMPION] warriors_who_fought set contains: {warriors_who_fought}")
