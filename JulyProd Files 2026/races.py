@@ -228,7 +228,7 @@ RACES: dict[str, Race] = {
             attack_rate_penalty=2,       # Reduced from 3
             dodge_penalty=4,             # Very poor dodge
             preferred_weapons=[
-                "Battle Axe", "Fransisca", "Great Axe", "Morningstar",
+                "Battle Axe", "Hand Axe", "Great Axe", "Morningstar",
                 "War Hammer", "Boar Spear", "Target Shield", "Net", "Trident",
             ],
             weak_weapons=["Halberd", "Pole Axe"],

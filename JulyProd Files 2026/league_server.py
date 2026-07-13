@@ -3623,8 +3623,16 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
             from weapons import WEAPONS
             from armor   import armor_selection_menu, helm_selection_menu
             from races   import list_playable_races
-            self.send_json({
+            import hashlib
+            import json
+
+            # Build the game data response
+            # Create a mapping from skill_key to display name for weapons
+            weapon_skill_map = {key: w.display for key, w in WEAPONS.items()}
+
+            game_data = {
                 "weapons"          : sorted([w.display for w in WEAPONS.values()]),
+                "weapon_skill_map" : weapon_skill_map,  # Maps skill_key -> display name
                 "armor"            : armor_selection_menu() + ["None"],
                 "helms"            : helm_selection_menu() + ["None"],
                 "triggers"         : TRIGGERS,
@@ -3640,7 +3648,14 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                     [s.replace("_"," ").title() for s in NON_WEAPON_SKILLS] +
                     [w.display for w in WEAPONS.values()]
                 ),
-            }); return
+            }
+
+            # Add version hash so client knows when cache needs refresh
+            game_data_str = json.dumps(game_data, sort_keys=True)
+            version_hash = hashlib.md5(game_data_str.encode()).hexdigest()[:8]
+            game_data["version"] = version_hash
+
+            self.send_json(game_data); return
 
         if path == "/api/schedule":
             cfg = _load_config()

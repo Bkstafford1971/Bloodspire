@@ -1304,13 +1304,19 @@ async function _persistAccount(acc) {
 
 const LocalAPI = {
   async get(path, qs) {
-    // ── Game data - cache-first, fetch from server if missing ────────────
+    // ── Game data - cache-first, but refresh if version changed ────────────
     if (path === '/api/game_data') {
       const cached = await Store.readGameData();
-      if (cached) return cached;
       const fresh = await _remoteFetch('GET', '/api/game_data');
-      if (fresh && !fresh.error) await Store.writeGameData(fresh);
-      return fresh;
+      // If we got fresh data from server, update cache if version differs
+      if (fresh && !fresh.error) {
+        if (!cached || cached.version !== fresh.version) {
+          await Store.writeGameData(fresh);
+          return fresh;
+        }
+      }
+      // Use cached if available, otherwise use fresh
+      return cached || fresh;
     }
 
     // ── Session / account info (read-side) ───────────────────────────────
@@ -1887,11 +1893,14 @@ const _INJURY_DESCS = {
 };
 const _INJURY_LOCS = ['head','chest','abdomen','primary_arm','secondary_arm','primary_leg','secondary_leg'];
 
-function formatSkillsText(skills) {
+function formatSkillsText(skills, weaponSkillMap) {
   const lines = [];
+
   for (const [key, level] of Object.entries(skills || {}).sort((a,b) => a[0].localeCompare(b[0]))) {
     if (!level) continue;
-    const name = key.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+    // Use weapon display name from map if available (skill_key -> display_name)
+    // Otherwise use default formatting
+    const name = weaponSkillMap?.[key] || key.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase());
     const tpl  = _SKILL_LABELS[level] || 'Has Skill Level ({n}) in {s}';
     lines.push(tpl.replace('{n}', level).replace('{s}', name));
   }
@@ -2737,7 +2746,7 @@ function buildLegacyTab() {
   function warriorCard(w) {
     const rec  = `${w.wins||0}-${w.losses||0}-${w.kills||0}`;
     const inj  = formatInjuriesText(w.injuries).join('<br>') || '-';
-    const skls = formatSkillsText(w.skills).join('<br>') || '-';
+    const skls = formatSkillsText(w.skills, S.gd?.weapon_skill_map).join('<br>') || '-';
     const isDead      = w.is_dead;
     const isAscended  = w.ascended_to_monster;
     const label = isDead
@@ -3711,7 +3720,7 @@ function buildStatsTab(team, w, wIdx) {
   </tr>`;
 
   // Skills and injuries - built from raw dicts so post-merge data is always current
-  const skillsText = formatSkillsText(w.skills).join('\n') || '(none)';
+  const skillsText = formatSkillsText(w.skills, gd.weapon_skill_map).join('\n') || '(none)';
   const injText    = formatInjuriesText(w.injuries).join('\n') || '(none)';
 
   return `
@@ -4646,7 +4655,7 @@ function buildArchivesTab(team) {
   archived.forEach((a, idx) => {
     const rec  = `${a.wins||0}-${a.losses||0}-${a.kills||0}`;
     const inj  = formatInjuriesText(a.injuries).join('<br>') || '-';
-    const skls = formatSkillsText(a.skills).join('<br>') || '-';
+    const skls = formatSkillsText(a.skills, S.gd?.weapon_skill_map).join('<br>') || '-';
     const expandId = `arch_expand_${idx}`;
     const contentId = `arch_content_${idx}`;
 

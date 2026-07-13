@@ -462,7 +462,7 @@ WEAPONS: dict[str, Weapon] = {
 
     "francisca": Weapon(
         skill_key     = "francisca",
-        display       = "Fransisca",
+        display       = "Hand Axe",
         weight        = 2.5,
         apm           = 6,
         damage_base   = 9,
@@ -1197,12 +1197,12 @@ FAVORITE_WEAPON_LINES = {
         "Short sharp and mean {name}'s hatchet finds its target with ugly efficiency. This is the weapon {name} trusts most.",
         "{name}'s hatchet hacks forward looking to split bone and armor alike. {name}'s true favorite in the pit.",
     ],
-    "Fransisca": [
-        "{name}'s fransisca spins through the air with deadly accuracy. This is clearly {name}'s favored weapon.",
-        "{name}'s fransisca seeks flesh and bone with purpose. A throwing axe that belongs to {name}. {name}'s weapon of choice.",
-        "{name}'s fransisca whistles as it flies a dwarf forged promise of pain. The crowd knows this is {name}'s favorite.",
-        "With a warrior's practiced toss {name}'s fransisca seeks its mark. This axe was made for {name}.",
-        "{name}'s fransisca cuts a deadly path spinning end over end toward its target. {name}'s true favorite.",
+    "Hand Axe": [
+        "{name}'s hand axe spins through the air with deadly accuracy. This is clearly {name}'s favored weapon.",
+        "{name}'s hand axe seeks flesh and bone with purpose. A throwing axe that belongs to {name}. {name}'s weapon of choice.",
+        "{name}'s hand axe whistles as it flies a dwarf forged promise of pain. The crowd knows this is {name}'s favorite.",
+        "With a warrior's practiced toss {name}'s hand axe seeks its mark. This axe was made for {name}.",
+        "{name}'s hand axe cuts a deadly path spinning end over end toward its target. {name}'s true favorite.",
     ],
     "Battle Axe": [
         "{name}'s battle axe descends with crushing force hungry for armor and bone. This is clearly {name}'s favored weapon.",

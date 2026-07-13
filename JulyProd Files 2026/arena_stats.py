@@ -36,7 +36,7 @@ HELM_ORDER = [
 WEAPON_ORDER = [
     "Stiletto", "Knife", "Dagger", "Short Sword", "Epee", "Scimitar",
     "Long Sword", "Broad Sword", "Bastard Sword", "Great Sword",
-    "Hatchet", "Fransisca", "Battle Axe", "Great Axe",
+    "Hatchet", "Hand Axe", "Battle Axe", "Great Axe",
     "Small Pick", "Military Pick", "Pick Axe",
     "Hammer", "Mace", "Morningstar", "War Hammer", "Maul", "Club",
     "Short Spear", "Boar Spear", "Long Spear", "Pole Axe", "Halberd",
@@ -986,14 +986,46 @@ def _get_top_warriors_by_kills(standings, limit=10):
 
 
 def _get_top_warriors_by_popularity(standings, limit=10):
-    """Get top warriors by popularity."""
+    """Get top warriors by popularity from upload files (which have complete warrior data)."""
+    import json
+    from pathlib import Path
+
     warriors = []
-    for team_key, team_data in standings.items():
-        team_name = team_data.get("team_name", "?")
-        for warrior_id, warrior_data in team_data.get("warriors", {}).items():
-            name = warrior_data.get("name", "?")
-            pop = warrior_data.get("popularity", 0)
-            warriors.append({"name": name, "team": team_name, "popularity": pop})
+    seen_warriors = set()  # Track to avoid duplicates
+
+    try:
+        results_dir = Path("C:/BPClone_Claude/saves/league")
+
+        # Find the most recent turn with upload files
+        turn_dirs = sorted([d for d in results_dir.glob("turn_*") if d.is_dir()], reverse=True)
+
+        if turn_dirs:
+            latest_turn = turn_dirs[0]
+            # Scan all upload files in this turn
+            for upload_file in sorted(latest_turn.glob("upload_*.json")):
+                try:
+                    with open(upload_file, 'r') as f:
+                        team_data = json.load(f)
+
+                    team_name = team_data.get('team', {}).get('team_name', '?')
+                    # Extract warriors from this upload
+                    for warrior in team_data.get('team', {}).get('warriors', []):
+                        if warrior:
+                            warrior_name = warrior.get('name', '')
+                            popularity = warrior.get('popularity', 0)
+
+                            # Only add if we haven't seen this warrior yet (avoid duplicates)
+                            if warrior_name and warrior_name not in seen_warriors:
+                                seen_warriors.add(warrior_name)
+                                warriors.append({
+                                    "name": warrior_name,
+                                    "team": team_name,
+                                    "popularity": popularity
+                                })
+                except:
+                    pass
+    except:
+        pass
 
     warriors.sort(key=lambda x: -x["popularity"])
     return warriors[:limit]

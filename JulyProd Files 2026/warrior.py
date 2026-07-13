@@ -1090,16 +1090,41 @@ class Warrior:
 
             _roll = random.randint(1, 100)
             if _roll > chance:
+                # Get the display name for weapon skills (e.g., "francisca" -> "Hand Axe")
+                skill_display = skill.replace('_',' ').title()  # Default formatting
+                if key in WEAPON_SKILLS:
+                    try:
+                        from weapons import WEAPONS
+                        for weapon_key, weapon_obj in WEAPONS.items():
+                            if weapon_key == key:
+                                skill_display = weapon_obj.display
+                                break
+                    except Exception:
+                        pass  # Keep default formatting if lookup fails
+
                 msg = (
-                    f"{skill.replace('_',' ').title()} training: no progress this session "
+                    f"{skill_display} training: no progress this session "
                     f"(INT {stat}, level {current_level}, {chance}% chance)."
                 )
                 return (msg, _roll, chance) if verbose else msg
 
             self.skills[key] = current_level + 1
             new_name = SKILL_LEVEL_NAMES[self.skills[key]]
+
+            # Get the display name for weapon skills (e.g., "francisca" -> "Hand Axe")
+            skill_display = skill.replace('_',' ').title()  # Default formatting
+            if key in WEAPON_SKILLS:
+                try:
+                    from weapons import WEAPONS
+                    for weapon_key, weapon_obj in WEAPONS.items():
+                        if weapon_key == key:
+                            skill_display = weapon_obj.display
+                            break
+                except Exception:
+                    pass  # Keep default formatting if lookup fails
+
             msg = (
-                f"{skill.replace('_',' ').title()} trained: "
+                f"{skill_display} trained: "
                 f"Level {current_level} → Level {self.skills[key]} ({new_name}, {chance}% chance)"
             )
             return (msg, _roll, chance) if verbose else msg
@@ -1453,13 +1478,23 @@ class Warrior:
             8: "Has Incredible Skill ({n}) in {s}",
             9: "Is a Master ({n}) in {s}",
         }
-        skills_text = [
-            _skill_templates.get(level, "Has skill level {n} in {s}").format(
-                n=level, s=skill_name.replace("_", " ").title()
-            )
-            for skill_name, level in sorted(self.skills.items())
-            if level > 0
-        ]
+        skills_text = []
+        for skill_name, level in sorted(self.skills.items()):
+            if level > 0:
+                # Get the display name for weapon skills (e.g., "francisca" -> "Hand Axe")
+                skill_display = skill_name.replace("_", " ").title()  # Default formatting
+                if skill_name in WEAPON_SKILLS:
+                    try:
+                        from weapons import WEAPONS
+                        for weapon_key, weapon_obj in WEAPONS.items():
+                            if weapon_key == skill_name:
+                                skill_display = weapon_obj.display
+                                break
+                    except Exception:
+                        pass  # Keep default formatting if lookup fails
+
+                template = _skill_templates.get(level, "Has skill level {n} in {s}")
+                skills_text.append(template.format(n=level, s=skill_display))
         return {
             "name":            self.name,
             "warrior_id":      self.warrior_id,
@@ -1568,6 +1603,29 @@ class Warrior:
             w.initial_stats = {attr: getattr(w, attr) for attr in ATTRIBUTES}
         w.fight_history  = data.get("fight_history", [])
         w.trains     = data.get("trains",     [])
+
+        # Normalize any display names in trains list to skill keys
+        # (handles changes to weapon display names like Fransisca -> Hand Axe)
+        normalized_trains = []
+        for train_item in w.trains:
+            key = train_item.lower().replace(" ", "_")
+            # Check if it's a display name that needs conversion
+            if key not in ALL_SKILLS and key not in ATTRIBUTES:
+                from weapons import WEAPONS
+                found = False
+                for weapon_key, weapon_obj in WEAPONS.items():
+                    display_normalized = weapon_obj.display.lower().replace(" ", "_").replace("&", "and")
+                    if key == display_normalized or key == weapon_key:
+                        normalized_trains.append(weapon_obj.skill_key)
+                        found = True
+                        break
+                if not found:
+                    # Keep original if not found
+                    normalized_trains.append(train_item)
+            else:
+                normalized_trains.append(key)
+        w.trains = normalized_trains
+
         w.favorite_weapon = data.get("favorite_weapon", "")
         w.slot_index = data.get("slot_index")
         if not w.favorite_weapon:
