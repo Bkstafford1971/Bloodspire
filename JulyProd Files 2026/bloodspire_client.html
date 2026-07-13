@@ -1768,13 +1768,20 @@ const LocalAPI = {
     if (path === '/api/warrior/avoid_warrior') {
       const team = await Store.readTeam(parseInt(body.team_id, 10));
       if (!team) return { success: false, error: 'Team not found.' };
-      const w = team.warriors[parseInt(body.warrior_idx, 10)];
-      if (!w) return { success: false, error: 'Warrior slot empty.' };
+      // Find warrior by name if warrior_idx not provided
+      let w;
+      if (body.warrior_idx != null) {
+        w = team.warriors[parseInt(body.warrior_idx, 10)];
+      } else if (body.warrior_name) {
+        w = team.warriors.find(wr => wr && wr.name === body.warrior_name);
+      }
+      if (!w) return { success: false, error: 'Warrior not found.' };
+      const avoidTargetName = body.avoid_warrior_name || body.target_name;
       w.avoid_warriors = w.avoid_warriors || [];
       if (body.action === 'remove') {
-        w.avoid_warriors = w.avoid_warriors.filter(n => n !== body.target_name);
-      } else if (!w.avoid_warriors.includes(body.target_name)) {
-        w.avoid_warriors.push(body.target_name);
+        w.avoid_warriors = w.avoid_warriors.filter(n => n !== avoidTargetName);
+      } else if (avoidTargetName && !w.avoid_warriors.includes(avoidTargetName)) {
+        w.avoid_warriors.push(avoidTargetName);
       }
       await Store.writeTeam(team);
       return { success: true, team };
@@ -4208,18 +4215,22 @@ function buildChallengesTab(team, w, wIdx) {
   }
 
   // Build avoid managers section (team-level)
-  const avoidMgrs = team.avoid_managers || [];
+  const avoidMgrs = (team.avoid_managers || []).filter(m => m != null && typeof m === 'string');
   const otherManagers = [];
   if (S.challengeTargets) {
     const seen = new Set();
     for (const ow of S.challengeTargets) {
       const mn = ow.manager_name;
-      if (mn && !seen.has(mn.toLowerCase()) && !avoidMgrs.some(am => am.toLowerCase() === mn.toLowerCase())) {
+      if (mn && !seen.has(mn.toLowerCase()) && !avoidMgrs.some(am => am && am.toLowerCase() === mn.toLowerCase())) {
         seen.add(mn.toLowerCase());
         otherManagers.push(mn);
       }
     }
-    otherManagers.sort((a, b) => a.localeCompare(b));
+    otherManagers.sort((a, b) => {
+      const aStr = (a || '').toString();
+      const bStr = (b || '').toString();
+      return aStr.localeCompare(bStr);
+    });
   }
 
   let avoidMgrRows = avoidMgrs.length > 0
@@ -4265,10 +4276,17 @@ function buildChallengesTab(team, w, wIdx) {
   </div>`;
 
   // Build avoid warriors section (per-warrior)
-  const avoidWarriors = w.avoid_warriors || [];
+  const avoidWarriors = (w.avoid_warriors || []).filter(aw => aw != null && typeof aw === 'string');
   const avoidableWarriors = (S.challengeTargets || [])
-    .filter(ow => !avoidWarriors.some(aw => aw.toLowerCase() === ow.name.toLowerCase()))
-    .sort((a, b) => a.name.localeCompare(b.name));
+    .filter(ow => {
+      if (!ow || !ow.name) return true;
+      return !avoidWarriors.some(aw => aw && aw.toLowerCase() === (ow.name || '').toLowerCase());
+    })
+    .sort((a, b) => {
+      const aName = (a && a.name) || '';
+      const bName = (b && b.name) || '';
+      return aName.localeCompare(bName);
+    });
 
   const avoidWRows = avoidWarriors.length > 0
     ? avoidWarriors.map(aw => `
@@ -6763,6 +6781,14 @@ function renderNewsletterText(text) {
       else if (codes.includes('34')) styles.push('color:#06c');
       else if (codes.includes('35')) styles.push('color:#a0a');
       else if (codes.includes('36')) styles.push('color:#088');
+      // Codes 98/99/998/999 are private markers (not real ANSI colors) used
+      // only for newsletter headers, so they render larger (and, for 998/999,
+      // centered as a block) without affecting the same bold-red code used
+      // inline for manager names in tables.
+      if (codes.includes('99')) styles.push('font-size:1.15em');
+      if (codes.includes('98')) styles.push('font-size:calc(1em + 6px)');
+      if (codes.includes('998')) styles.push('font-size:calc(1em + 3px)', 'display:block', 'text-align:center', 'line-height:1.2');
+      if (codes.includes('999')) styles.push('font-size:calc(1em + 12px)', 'display:block', 'text-align:center', 'line-height:1.2');
       if (styles.length) {
         out += `<span style="${styles.join(';')}">`;
         openSpan = true;

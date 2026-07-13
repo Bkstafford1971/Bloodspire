@@ -9,6 +9,17 @@ ARENA_ID    = 1
 _NPC_TEAM_NAMES = {"The Monsters", "The Peasants"}
 _NPC_RACES      = {"Monster", "Peasant"}
 
+# ANSI styling used for section headers throughout the newsletter.
+# Codes 98/99/998/999 are private markers (not real ANSI colors) the client
+# uses to pick a font-size, without affecting the same bold-red code used
+# inline for manager names in the standings tables.
+HDR_RED    = "\033[1;31;99m"   # bold red, +~15% size  - fight sub-headers (Monster Fights, etc.)
+HDR_RED_LG = "\033[1;31;98m"   # bold red, +6px size   - main section headers
+HDR_BOLD   = "\033[1;99m"      # bold only, +~15% size - Top Teams / Top Managers headers
+HDR_TITLE  = "\033[1;999m"     # bold, centered, large - masthead title (arena name)
+HDR_SUBTITLE = "\033[1;998m"   # bold, centered, medium - masthead subtitle (turn number)
+HDR_RESET  = "\033[0m"
+
 TIER_CHAMPION  = "CHAMPION"
 TIER_ELITES    = "ELITES"
 TIER_EXPERTS   = "EXPERTS"
@@ -385,9 +396,12 @@ def _fmt_date() -> str:
 # ---------------------------------------------------------------------------
 
 def _header(turn_num: int, processed_date: str = None) -> str:
+    # No "\n" between the title and subtitle spans: both render as CSS
+    # display:block on the client, which already forces its own line break -
+    # adding a literal newline too would double the gap between them.
     return (f"Date: {processed_date or _fmt_date()}\n"
-            f"{ARENA_NAME} ({ARENA_ID})\n"
-            f"Turn - {turn_num}")
+            f"{HDR_TITLE}{ARENA_NAME.upper()} ({ARENA_ID}){HDR_RESET}"
+            f"{HDR_SUBTITLE}Turn - {turn_num}{HDR_RESET}")
 
 
 # ---------------------------------------------------------------------------
@@ -490,7 +504,7 @@ def _team_standings(teams, turn_num: int, card: list = None) -> str:
     # ANSI codes in name strings add 11 raw chars (invisible), so name field is 66 raw / 55 visible.
     SEP = "="*161
     # Title row: "The Top Teams" left, section labels centered over their columns
-    left_title  = f"{'The Top Teams':<15}{'CAREER STANDINGS':^64}"  # 79 chars
+    left_title  = f"{HDR_BOLD}{'The Top Teams':<15}{HDR_RESET}{'CAREER STANDINGS':^64}"  # 79 chars
     right_title = f"{'LAST 5 TURNS':^79}"                            # 79 chars
     TITLE_ROW   = left_title + "   " + right_title
     # Column header row: name area = 55 visible chars (Team Name left, (MANAGER)(TEAM #) right)
@@ -591,10 +605,10 @@ def _warrior_tiers(teams, champion_state: dict, card: list = None, turn_num: int
         wlist=tiers[tier]
         if not wlist and tier==TIER_CHAMPION:
             print(f"[DEBUG TIERS] CHAMPION tier is empty! champion_state was: {champion_state}")
-            sections.append(f"\n{tier}\n{COL_HDR}\n{SEP}\n  (vacant this turn)"); continue
+            sections.append(f"\n{HDR_RED_LG}{tier}{HDR_RESET}\n{COL_HDR}\n{SEP}\n  (vacant this turn)"); continue
         if not wlist: continue
         wlist.sort(key=lambda x:(-x["rec"],-(x["w"]/max(1,x["w"]+x["l"]))))
-        lines=[f"\n{tier}\n{COL_HDR}",SEP]
+        lines=[f"\n{HDR_RED_LG}{tier}{HDR_RESET}\n{COL_HDR}",SEP]
         for wd in wlist:
             tm=f"{_trunc(wd['team'])} ({wd['tid']})"
             display_name = wd.get('display_name', wd['name'])
@@ -612,7 +626,7 @@ def _warrior_tiers(teams, champion_state: dict, card: list = None, turn_num: int
 def _dead_section(deaths: list, turn_num: int) -> str:
     if not deaths: return ""
     sep="="*109
-    lines=["\nTHE DEAD",
+    lines=[f"\n{HDR_RED_LG}THE DEAD{HDR_RESET}",
            f"{'NAME':<30}{'W':>4}{'L':>4}{'K':>4}  {'TEAM':<30}{'SLAIN BY':<30}{'TURN':>5}",sep]
     for d in deaths:
         name = _trunc(d['name'])
@@ -626,7 +640,10 @@ def _dead_section(deaths: list, turn_num: int) -> str:
 def _fights_section(card, champion_state: Optional[dict] = None,
                    prev_champion_state: Optional[dict] = None) -> str:
     sep="="*85
-    lines=["\nLAST TURN'S FIGHTS",sep]
+    lines=[f"\n{HDR_RED_LG}LAST TURN'S FIGHTS{HDR_RESET}",sep]
+
+    # Fight lines are grouped into these sub-sections and emitted with headers below.
+    categorized = {"monster": [], "champion": [], "blood_challenge": [], "challenge": [], "standard": [], "peasant": []}
 
     champ_name = (champion_state or {}).get("name", "")
     champ_tid  = (champion_state or {}).get("team_id", 0)
@@ -792,7 +809,40 @@ def _fights_section(card, champion_state: Optional[dict] = None,
             else:
                 verb = _fight_outcome_verb(mins, r.winner_hp_pct)
                 line = f"{wname} {verb} {lname} in a {mins} minute {style} {fight_descriptor}."
-        lines.append(line)
+
+        if eff_type == "champion":
+            category = "champion"
+        elif eff_type == "blood_challenge":
+            category = "blood_challenge"
+        elif eff_type == "challenge":
+            category = "challenge"
+        elif eff_type == "peasant":
+            category = "peasant"
+        elif eff_type == "monster":
+            category = "monster"
+        else:
+            category = "standard"
+        categorized[category].append(line)
+
+    section_labels = [
+        ("monster", "MONSTER FIGHTS"),
+        ("champion", "CHAMPION FIGHT"),
+        ("blood_challenge", "BLOOD CHALLENGE FIGHTS"),
+        ("challenge", "CHALLENGE FIGHTS"),
+        ("standard", "RANDOM MATCHUPS"),
+        ("peasant", "PEASANT FIGHTS"),
+    ]
+    first_subsection = True
+    for key, label in section_labels:
+        entries = categorized[key]
+        if not entries:
+            continue
+        if not first_subsection:
+            lines.append("")
+        first_subsection = False
+        lines.append(f"{HDR_RED}{label}{HDR_RESET}")
+        lines.append(sep)
+        lines.extend(entries)
     return "\n".join(lines)
 
 
@@ -945,16 +995,16 @@ def _race_report(teams) -> str:
                              "k":wobj.kills,"team":tname,"tid":tid,"score":score}
     races=sorted(rf.keys(),key=lambda r:-rf[r])
     sep="="*75
-    lines=["\n                      BATTLE REPORT\n",
-           f"    {'MOST POPULAR RACE':<25}  {'RECORD DURING THE LAST 10 TURNS':>38}",sep,
+    lines=[f"\n                      {HDR_RED_LG}BATTLE REPORT{HDR_RESET}\n",
+           f"{'MOST POPULAR RACE':<25}  {'RECORD DURING THE LAST 10 TURNS':>38}",sep,
            f"{'|RACE':<16}{'FIGHTS':>8}  {'RACE':<18}{'W':>5} - {'L':>4} - {'K':>4}  {'PERCENT':>7}|",sep]
     for race in races:
         tw=rw[race]; tl=rl[race]; tk=rk[race]; pct=int(tw/max(1,tw+tl)*100)
         lines.append(f"|{race:<16}{rf[race]:>8}  {race:<18}{tw:>5} - {tl:>4} - {tk:>4}  {pct:>6}%|")
     lines.append(sep)
     if top:
-        lines.append("\n\n                      TOP WARRIOR by RACE\n")
-        lines.append(f"{'RACE':<14}{'WARRIOR':<32}{'W':>4}{'L':>4}{'K':>3}  TEAM NAME"); lines.append(sep)
+        lines.append(f"\n\n                      {HDR_RED_LG}TOP WARRIOR by RACE{HDR_RESET}\n")
+        lines.append(f"{'RACE':<14}{'WARRIOR':<30}{'W':>4}{'L':>4}{'K':>3}  TEAM NAME"); lines.append(sep)
         for race in races:
             if race in top:
                 td=top[race]
@@ -1674,7 +1724,7 @@ def _block_commentary(card, teams, deaths, turn_num: int, champion_state: dict, 
     paragraphs.append(_pick_block(_BLK_OUTRO, used, ctx))
 
     article = "\n\n".join(paragraphs)
-    return "\n\nArena Happenings\n\n" + article
+    return f"\n\n{HDR_RED_LG}Arena Happenings{HDR_RESET}\n\n" + article
 
 # ---------------------------------------------------------------------------
 # TOP MANAGERS SECTION
@@ -2066,7 +2116,7 @@ def _top_managers(card, teams, turn_num, return_records=False):
     right_hdr = left_hdr
     HDR = left_hdr + gap + right_hdr
 
-    lines = [f"\n{left_title:<61}{gap}{right_title}", HDR, SEP]
+    lines = [f"\n{HDR_BOLD}{left_title:<61}{HDR_RESET}{gap}{HDR_BOLD}{right_title}{HDR_RESET}", HDR, SEP]
 
     max_rows = max(len(manager_list_turn), len(manager_list_career))
     for i in range(max_rows):
