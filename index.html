@@ -90,8 +90,11 @@
                 <h3>Announcements</h3>
                 <div class="content-box">
                     <p style="text-align: center; margin: 15px 0;">
-                        <a href="#" id="viewJuly7Announcement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            🛡️ JULY 7, 2026 — BLOOD CHALLENGE SYSTEM OVERHAUL
+                        <a href="#" id="viewJuly14Announcement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            🛡️ JULY 14, 2026 — VERSION 3.1.0 & STABILITY UPDATES
+                        </a>
+                        <a href="#" id="viewJuly7Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            JULY 7, 2026 — BLOOD CHALLENGE SYSTEM OVERHAUL
                         </a>
                         <a href="#" id="viewLatestAnnouncement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
                             JUNE 28, 2026 — BALANCE MODIFICATIONS & PROVING GROUNDS UPDATE
@@ -115,6 +118,37 @@
                 </div>
             </section>
         </main>
+    </div>
+
+    <!-- July 14 Modal -->
+    <div id="july14AnnouncementModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>ARENA UPDATE — JULY 14, 2026</h2>
+            <div class="modal-scroll-body">
+                <p><strong>Honored Managers,</strong></p>
+                <p>Client version 3.1.0 is now available. This update focuses on stability, synchronization, and some nomenclature refinements to enhance gameplay.</p>
+                
+                <h3>Key Updates</h3>
+                <ul>
+                    <li><strong>Weapon Refinement:</strong> The Francisca weapon has been renamed to "Hand Axe" for greater historical clarity. Existing training slots and skills have been automatically migrated to reflect this change.</li>
+                    <li><strong>Game Data Synchronization:</strong> We have implemented an improved auto-distribution system. Your client will now automatically fetch the latest game configuration data upon startup, ensuring all weapon names and game settings are perfectly synced with the server.</li>
+                    <li><strong>Enhanced Stability:</strong> We have updated our file handling processes to use atomic writes. This change resolves previous file-locking conflicts, allowing you to manage your teams even while the server is active without encountering permission errors.</li>
+                    <li><strong>Newsletter Formatting:</strong> The newsletter format has been updated to enhance the overall presentation and readability.</li>
+                </ul>
+
+                <h3>Bug Fixes</h3>
+                <ul>
+                    <li><strong>Goblin Scavenger Ability:</strong> Fixed a loop issue where a fight ending on a scavenge hit would incorrectly generate a second fight ending block.</li>
+                </ul>
+                
+                <p>Please update your client to ensure these improvements are active. As always, thank you for your feedback and continued support of the arena.</p>
+
+                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
+                    — ILNEVAL
+                </p>
+            </div>
+            <button class="close-modal-btn" id="closeJuly14Modal">Dismiss</button>
+        </div>
     </div>
 
     <!-- July 7 Modal -->
@@ -420,25 +454,32 @@
             const july7Modal = document.getElementById('july7AnnouncementModal');
             const closeJuly7 = document.getElementById('closeJuly7Modal');
             const viewJuly7 = document.getElementById('viewJuly7Announcement');
+            
+            const july14Modal = document.getElementById('july14AnnouncementModal');
+            const closeJuly14 = document.getElementById('closeJuly14Modal');
+            const viewJuly14 = document.getElementById('viewJuly14Announcement');
 
             // Show latest announcement automatically if not seen
-            if (!localStorage.getItem('bloodspire_update_20260707')) {
-                july7Modal.style.display = 'block';
+            if (!localStorage.getItem('bloodspire_update_20260714')) {
+                july14Modal.style.display = 'block';
             }
 
             // Close latest modal
-            closeJuly7.onclick = () => { 
-                july7Modal.style.display = 'none'; 
-                localStorage.setItem('bloodspire_update_20260707', 'true'); 
+            closeJuly14.onclick = () => { 
+                july14Modal.style.display = 'none'; 
+                localStorage.setItem('bloodspire_update_20260714', 'true'); 
             };
 
             // Open latest modal via link
-            viewJuly7.onclick = function(e) {
+            viewJuly14.onclick = function(e) {
                 e.preventDefault();
-                july7Modal.style.display = 'block';
+                july14Modal.style.display = 'block';
             };
 
-            // Other Modals
+            // Previous Modals
+            closeJuly7.onclick = () => { july7Modal.style.display = 'none'; };
+            viewJuly7.onclick = function(e) { e.preventDefault(); july7Modal.style.display = 'block'; };
+
             closeLatest.onclick = () => { latestModal.style.display = 'none'; };
             viewLatest.onclick = function(e) { e.preventDefault(); latestModal.style.display = 'block'; };
 
