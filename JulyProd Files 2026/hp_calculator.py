@@ -12,14 +12,14 @@ import math
 RACES = {
     "Human": 0,
     "Half-Orc": 6,
-    "Halfling": -3,
+    "Halfling": -2,
     "Dwarf": 8,
     "Half-Elf": 0,
-    "Elf": -4,
-    "Goblin": -4,
-    "Gnome": 6,
+    "Elf": -2,
+    "Goblin": -3,
+    "Gnome": 5,
     "Lizardfolk": 6,
-    "Tabaxi": -4,
+    "Tabaxi": -2,
 }
 
 STAT_RANGE = list(range(3, 26))  # 3-25
