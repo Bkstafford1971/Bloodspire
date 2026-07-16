@@ -166,10 +166,10 @@ RACES: dict[str, Race] = {
             # DEX 15-17: moderate reduction (competitive baseline)
             # DEX 18-21: full removal (strong without bonuses)
             # DEX 22+: actual bonuses (dominating in speed archetype)
-            dex_attack_rate_tiers={15: 3, 18: 4, 22: -2},      # DEX 15->-1, 18->0, 22->+2
-            dex_initiative_tiers={15: 1, 18: 3, 22: -2},       # DEX 15->-2, 18->0, 22->+2
-            dex_dodge_tiers={15: 2, 18: 3, 22: -2},            # DEX 15->-1, 18->0, 22->+2
-            dex_parry_tiers={15: 1, 18: 3, 22: -2},            # DEX 15->-2, 18->0, 22->+2
+            dex_attack_rate_tiers={15: 3, 18: 4, 22: 5},      # DEX 15->-1, 18->0, 22->+2
+            dex_initiative_tiers={15: 1, 18: 3, 22: 4},       # DEX 15->-2, 18->0, 22->+2
+            dex_dodge_tiers={15: 2, 18: 3, 22: 5},            # DEX 15->-1, 18->0, 22->+2
+            dex_parry_tiers={15: 1, 18: 3, 22: 4},            # DEX 15->-2, 18->0, 22->+2
             preferred_weapons=[
                 "War Flail", "Great Axe", "Great Sword", "War Hammer",
                 "Battle Flail", "Halberd", "Great Pick", "Tower Shield",
