@@ -338,6 +338,13 @@ def build_global_fight_card(
     for mgr in sorted(unmatched_by_mgr.keys()):
         print(f"    {mgr}: {unmatched_by_mgr[mgr]} warriors")
     random.shuffle(unmatched)
+    # Process in experience order (fewest fights -> most), not pure random order.
+    # Warriors with similar total_fights end up adjacent in the list and get
+    # processed back-to-back, so the greedy loop below naturally tends to pair
+    # them together instead of pairing whoever the shuffle happened to place
+    # first. Shuffling before this stable sort still randomizes the order among
+    # warriors tied on fight count, so it isn't deterministic by file order.
+    unmatched.sort(key=lambda e: e['warrior'].total_fights)
     fights_added_in_pvp = 0
     warriors_with_no_match = []
     for idx, entry in enumerate(list(unmatched)):
@@ -351,8 +358,12 @@ def build_global_fight_card(
                     and not _is_same_manager(entry['team'], e['team'])
                     and challenge_tier_allowed(get_warrior_tier(entry['warrior']), get_warrior_tier(e['warrior']))]
         if eligible:
+            self_fights = entry['warrior'].total_fights
             self_rating = _warrior_rating(entry['warrior'])
-            eligible.sort(key=lambda e: abs(_warrior_rating(e['warrior']) - self_rating))
+            # Prefer the closest fight-count match first; break ties on overall
+            # rating closeness (stats/skills), same as before.
+            eligible.sort(key=lambda e: (abs(e['warrior'].total_fights - self_fights),
+                                          abs(_warrior_rating(e['warrior']) - self_rating)))
             _add_fight(entry, eligible[0], "standard")
             fights_added_in_pvp += 1
             # Both warriors are now marked as matched by _add_fight()
@@ -640,7 +651,11 @@ def _find_opponent(
         in_bracket = [w for w in avail
                       if _in_bracket(player_warrior.total_fights, w.total_fights)]
         pool = in_bracket or avail
-        pool.sort(key=lambda w: abs(_warrior_rating(w) - player_rating))
+        # Prefer the closest fight-count match first; break ties on overall
+        # rating closeness (stats/skills), same as build_global_fight_card's
+        # random P-vs-P step.
+        pool.sort(key=lambda w: (abs(w.total_fights - player_warrior.total_fights),
+                                  abs(_warrior_rating(w) - player_rating)))
         selected = pool[0]
         return selected, best_team
 

@@ -1190,7 +1190,7 @@ AIM_POINT_LABELS = {
     "Head"          : ["head", "skull", "helm", "throat", "face"],
     "Chest"         : ["chest", "rib cage", "torso", "sternum", "breast"],
     "Abdomen"       : ["abdomen", "midsection", "gut", "belly", "flank"],
-    "Primary Arm"   : ["weapon arm", "primary arm", "sword arm"],
+    "Primary Arm"   : ["weapon arm", "primary arm", "dominant arm"],
     "Secondary Arm" : ["shield arm", "secondary arm", "off arm", "left forearm"],
     "Primary Leg"   : ["primary leg", "lead leg", "front leg", "main leg"],
     "Secondary Leg" : ["trailing leg", "rear leg", "secondary leg"],
@@ -1367,7 +1367,7 @@ HIT_TARGETS = {
     "Head"    : ["headgear", "helm", "skull", "head", "temple"],
     "Chest"   : ["chest armor", "ribs", "breastplate", "torso", "chest"],
     "Abdomen" : ["midsection", "gut", "belly armor", "flank"],
-    "Primary Arm"  : ["weapon arm", "sword arm", "armor on the arm"],
+    "Primary Arm"  : ["weapon arm", "dominant arm", "armor on the arm"],
     "Secondary Arm": ["shield arm", "off arm", "forearm armor"],
     "Primary Leg"  : ["primary leg", "lead leg", "thigh"],
     "Secondary Leg": ["rear leg", "trailing leg"],
@@ -1698,6 +1698,44 @@ DAMAGE_LINES: dict[str, dict[str, list[str]]] = {
             "   The attack draws only a few drops of blood!",
         ],
     },
+    "Unarmed": {
+        "Heavy": [
+            "   The strike tears across the warrior with brutal force!",
+            "   A terrible laceration opens from the powerful blow!",
+            "   Bloody furrows are torn into the warrior's body!",
+            "   The warrior reels from the savage strike!",
+            "   The attack tears through flesh and draws heavy blood!",
+            "   A horrific wound is opened by the striking blow!",
+            "   Blood streams freely from the deep wound!",
+            "   The warrior staggers from the ferocious attack!",
+            "   Ragged wounds leave the warrior bleeding heavily!",
+            "   The striking blow tears the target with vicious force!",
+        ],
+        "Medium": [
+            "   The strike tears across exposed flesh and draws blood!",
+            "   A painful wound is opened by the attack!",
+            "   The warrior flinches from the solid hit!",
+            "   Blood wells up from the fresh wound!",
+            "   The strike connects with solid impact!",
+            "   The warrior staggers back from the blow!",
+            "   A bleeding wound is left behind!",
+            "   The attack lands hard enough to hurt!",
+            "   The strike opens a painful cut!",
+            "   The warrior feels the impact keenly!",
+        ],
+        "Light": [
+            "   The strike grazes the warrior lightly!",
+            "   Only a superficial wound is left behind!",
+            "   The hit stings more than it harms!",
+            "   A shallow mark appears on the skin!",
+            "   The strike barely breaks the surface!",
+            "   Blood beads from a minor scratch!",
+            "   The blow lands with minimal force!",
+            "   A light graze is all that results!",
+            "   The warrior barely flinches!",
+            "   The attack draws only a few drops of blood!",
+        ],
+    },
 }
 
 # Map weapon categories to damage types
@@ -1713,7 +1751,7 @@ _WEAPON_DAMAGE_TYPE: dict[str, str] = {
 
 
 def damage_line(damage: int, max_hp: int, weapon_category: str = "Oddball",
-                is_claw_attack: bool = False) -> str:
+                is_claw_attack: bool = False, attack_type: Optional[str] = None) -> str:
     """
     Return a damage description line based on damage severity and weapon type.
 
@@ -1721,16 +1759,17 @@ def damage_line(damage: int, max_hp: int, weapon_category: str = "Oddball",
         damage: Damage dealt
         max_hp: Target's max HP
         weapon_category: Weapon category (Oddball, Sword/Knife, etc.)
-        is_claw_attack: True if this is a claw rake/slash (for Lizardfolk/Tabaxi)
+        is_claw_attack: Deprecated; use attack_type instead
+        attack_type: Type of unarmed attack ("claw", "kick", "tail", or None for weapon attacks)
     """
     pct = damage / max(1, max_hp)
     if   pct < 0.19: severity = "Light"
     elif pct < 0.34: severity = "Medium"
     else:            severity = "Heavy"
 
-    # For Lizardfolk/Tabaxi claw attacks, use Slashing descriptions instead of Generic/Bludgeoning
-    if is_claw_attack and weapon_category == "Oddball":
-        dmg_type = "Slashing"
+    # For Open Hand attacks, use Unarmed descriptions based on attack type
+    if weapon_category == "Oddball" and (attack_type or is_claw_attack):
+        dmg_type = "Unarmed"
     else:
         dmg_type = _WEAPON_DAMAGE_TYPE.get(weapon_category, "Generic")
 
