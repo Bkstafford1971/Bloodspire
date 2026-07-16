@@ -246,6 +246,36 @@ def _save_managers(m):   _save_json(_managers_path(), m) # Protected
 def _load_standings():   return _load_json(_standings_path(), {}, allow_tampered=True) # Protected (allow admin edits)
 def _save_standings(s):  _save_json(_standings_path(), s) # Protected
 
+def _build_game_data():
+    """Build the game_data object (races, weapons, armor, skills, etc) for API endpoints.
+    Used by /api/game_data and included in /api/results downloads."""
+    from warrior import (
+        ATTRIBUTES, FIGHTING_STYLES, TRIGGERS, AIM_DEFENSE_POINTS,
+        NON_WEAPON_SKILLS, WEAPON_SKILLS,
+    )
+    from weapons import WEAPONS
+    from armor import armor_selection_menu, helm_selection_menu
+    from races import list_playable_races
+
+    return {
+        "weapons"          : sorted([w.display for w in WEAPONS.values()]),
+        "armor"            : armor_selection_menu() + ["None"],
+        "helms"            : helm_selection_menu() + ["None"],
+        "triggers"         : TRIGGERS,
+        "styles"           : FIGHTING_STYLES,
+        "aim_points"       : AIM_DEFENSE_POINTS,
+        "races"            : list_playable_races(),
+        "genders"          : ["Male","Female"],
+        "attributes"       : ATTRIBUTES,
+        "non_weapon_skills": NON_WEAPON_SKILLS,
+        "weapon_skills"    : sorted(WEAPON_SKILLS),
+        "train_skills"     : sorted(
+            ["Strength","Dexterity","Constitution","Intelligence","Presence"] +
+            [s.replace("_"," ").title() for s in NON_WEAPON_SKILLS] +
+            [w.display for w in WEAPONS.values()]
+        ),
+    }
+
 def _load_uploads(turn_num):
     td = _turn_dir(turn_num) # This directory contains protected files
     if not os.path.exists(td): return {}
@@ -840,6 +870,7 @@ def _run_turn(request_password, rerun_turn=None):
     # STEP 3: Execute all fights and collect results
     # ===================================================================
     all_results = {}  # manager_id -> result dict
+    retirements_this_turn = []  # list of {name, w, l, k, team, manager} for the newsletter
     fight_counter = cfg.get("fight_counter", 0)
 
     # Track team objects for updating
@@ -1072,6 +1103,49 @@ def _run_turn(request_password, rerun_turn=None):
             _absorb_into_monsters(fight.player_warrior, fight.player_team, fight.opponent, fight.opponent_team)
             ascended = True
             print(f"  !!! {fight.player_warrior.name} has SLAIN a monster and joins The Monsters! !!!")
+
+        # Retirement — processed AFTER the warrior's fight this turn (their final bout),
+        # so the warrior always fights before being archived and replaced.
+        if getattr(fight.player_warrior, "want_retire", False) and not slain:
+            if not fight.player_warrior.can_retire:
+                print(f"  RETIRE REJECTED: {fight.player_warrior.name} only has "
+                      f"{fight.player_warrior.total_fights} fights (need 50).")
+                fight.player_warrior.want_retire = False
+            else:
+                retiring_name = fight.player_warrior.name
+                retiring_stats = (fight.player_warrior.wins, fight.player_warrior.losses, fight.player_warrior.kills)
+                retired_ok = fight.player_team.retire_warrior(fight.player_warrior)
+                if retired_ok:
+                    print(f"  RETIREMENT: {retiring_name} retires after their final "
+                          f"fight this turn. Replacement slot open for {fight.player_team.team_name}.")
+                    retirements_this_turn.append({
+                        "name": retiring_name,
+                        "w": retiring_stats[0], "l": retiring_stats[1], "k": retiring_stats[2],
+                        "team": fight.player_team.team_name,
+                        "manager": fight.player_team.manager_name,
+                    })
+                fight.player_warrior.want_retire = False
+
+        if (opponent_manager_id and getattr(fight.opponent, "want_retire", False)
+                and not opp_slain and fight.opponent_team.team_id >= 0):
+            if not fight.opponent.can_retire:
+                print(f"  RETIRE REJECTED: {fight.opponent.name} only has "
+                      f"{fight.opponent.total_fights} fights (need 50).")
+                fight.opponent.want_retire = False
+            else:
+                retiring_name = fight.opponent.name
+                retiring_stats = (fight.opponent.wins, fight.opponent.losses, fight.opponent.kills)
+                retired_ok = fight.opponent_team.retire_warrior(fight.opponent)
+                if retired_ok:
+                    print(f"  RETIREMENT: {retiring_name} retires after their final "
+                          f"fight this turn. Replacement slot open for {fight.opponent_team.team_name}.")
+                    retirements_this_turn.append({
+                        "name": retiring_name,
+                        "w": retiring_stats[0], "l": retiring_stats[1], "k": retiring_stats[2],
+                        "team": fight.opponent_team.team_name,
+                        "manager": fight.opponent_team.manager_name,
+                    })
+                fight.opponent.want_retire = False
 
         # Blood challenge resolution — always consumes the challenge (win or loss)
         if fight.fight_type == "blood_challenge":
@@ -1383,7 +1457,7 @@ def _run_turn(request_password, rerun_turn=None):
             _warriors = _team_dict.get("warriors") or []
             if len(_warriors) != 5:
                 continue
-            if any((w is None) or w.get("is_dead") for w in _warriors):
+            if any((w is None) or w.get("is_dead") or w.get("is_retired") for w in _warriors):
                 continue
             if not _team_dict.get("auto_upload_enabled", True):
                 continue
@@ -1477,6 +1551,10 @@ def _run_turn(request_password, rerun_turn=None):
         # Collect deaths
         # Load deaths from saved result files (authoritative source)
         deaths_nl = _load_deaths_from_results(turn_num)
+
+        # Retirements captured live during the fight loop above (turn-scoped, no persisted
+        # flag needed - avoids re-showing the same retiree in later turns' newsletters)
+        retirements_nl = retirements_this_turn
 
         # Use the actual global_card for the newsletter instead of building a fake one.
         # This ensures each physical fight is listed exactly once and has correct statistics.
@@ -1609,6 +1687,7 @@ def _run_turn(request_password, rerun_turn=None):
             champion_state_before=champion_state_for_fights,  # Use correct state for fights identification
             prev_champion_state=prev_champion_state,  # For detecting newly-crowned champions
             bully_events=bully_events,
+            retirements=retirements_nl,
         )
         nl_path = os.path.join(_turn_dir(turn_num), "newsletter.txt")
         with open(nl_path, "w", encoding="utf-8") as _f:
@@ -3611,51 +3690,14 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 "show_luck_factor"     : cfg.get("show_luck_factor",     False),
                 "show_max_hp"          : cfg.get("show_max_hp",          False),
                 "ai_teams_enabled"     : cfg.get("ai_teams_enabled",     True),
+                "game_data"            : _build_game_data(),  # Include fresh game data with flags
             }); return
 
         if path == "/api/game_data":
             # Static dropdown data the standalone client needs (races, weapons,
-            # armor, triggers, styles, etc.). Cached by the client after first fetch.
-            from warrior import (
-                ATTRIBUTES, FIGHTING_STYLES, TRIGGERS, AIM_DEFENSE_POINTS,
-                NON_WEAPON_SKILLS, WEAPON_SKILLS,
-            )
-            from weapons import WEAPONS
-            from armor   import armor_selection_menu, helm_selection_menu
-            from races   import list_playable_races
-            import hashlib
-            import json
-
-            # Build the game data response
-            # Create a mapping from skill_key to display name for weapons
-            weapon_skill_map = {key: w.display for key, w in WEAPONS.items()}
-
-            game_data = {
-                "weapons"          : sorted([w.display for w in WEAPONS.values()]),
-                "weapon_skill_map" : weapon_skill_map,  # Maps skill_key -> display name
-                "armor"            : armor_selection_menu() + ["None"],
-                "helms"            : helm_selection_menu() + ["None"],
-                "triggers"         : TRIGGERS,
-                "styles"           : FIGHTING_STYLES,
-                "aim_points"       : AIM_DEFENSE_POINTS,
-                "races"            : list_playable_races(),
-                "genders"          : ["Male","Female"],
-                "attributes"       : ATTRIBUTES,
-                "non_weapon_skills": NON_WEAPON_SKILLS,
-                "weapon_skills"    : sorted(WEAPON_SKILLS),
-                "train_skills"     : sorted(
-                    ["Strength","Dexterity","Constitution","Intelligence","Presence"] +
-                    [s.replace("_"," ").title() for s in NON_WEAPON_SKILLS] +
-                    [w.display for w in WEAPONS.values()]
-                ),
-            }
-
-            # Add version hash so client knows when cache needs refresh
-            game_data_str = json.dumps(game_data, sort_keys=True)
-            version_hash = hashlib.md5(game_data_str.encode()).hexdigest()[:8]
-            game_data["version"] = version_hash
-
-            self.send_json(game_data); return
+            # armor, triggers, styles, etc.).
+            # Generate fresh each time to ensure clients always get latest version.
+            self.send_json(_build_game_data()); return
 
         if path == "/api/schedule":
             cfg = _load_config()
@@ -3780,6 +3822,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 "success": True, "results": team_results,
                 "turn": res_turn, "has_newsletter": bool(nl_text),
                 "deleted_teams": deleted_teams_list,
+                "game_data": _build_game_data(),  # Include updated game data with each download
                 "result": None  # Explicit null when no results exist
             }); return
 
@@ -3847,7 +3890,7 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
                 team_name = tdata.get("team_name", "?")
                 manager_name = tdata.get("manager_name", "?")
                 for w in tdata.get("warriors", []):
-                    if not w or w.get("is_dead"): continue
+                    if not w or w.get("is_dead") or w.get("is_retired"): continue
                     wname = w.get("name", "?")
                     warriors.append({
                         "name"        : wname,
@@ -5227,6 +5270,7 @@ Or manually:
                             "kills": warrior.kills,
                             "total_fights": warrior.total_fights,
                             "is_dead": warrior.is_dead,
+                            "is_retired": warrior.is_retired,
                         })
 
                 warriors.sort(key=lambda x: (x["team_id"], x["slot_index"]))
@@ -5365,6 +5409,7 @@ Or manually:
                             "kills": warrior_data.get("kills", 0),
                             "total_fights": warrior_data.get("total_fights", 0),
                             "is_dead": warrior_data.get("is_dead", False),
+                            "is_retired": warrior_data.get("is_retired", False),
                             "uploaded_at": upload_data.get("uploaded_at", "Unknown"),
                         })
 

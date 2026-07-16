@@ -690,6 +690,7 @@ def _absorb_into_monsters(
     src["kills"] = 0
     src["total_fights"] = 0
     src["is_dead"] = False
+    src["is_retired"] = False
     src["killed_by"] = ""
     src["fight_history"] = []
     src["want_monster_fight"] = False
@@ -1019,24 +1020,6 @@ def build_fight_card(
         print(f"  MONSTER FIGHT: {pw.name} vs {monster.name}")
         # Clear the flag so it doesn't persist to next turn
         pw.want_monster_fight = False
-
-    # ------------------------------------------------------------------
-    # STEP 1c: RETIREMENTS (want_retire flag)
-    # ------------------------------------------------------------------
-    for pw in list(active_players):
-        if pw.slot_index in matched_players:
-            continue
-        if not pw.want_retire:
-            continue
-        if not pw.can_retire:
-            print(f"  RETIRE REJECTED: {pw.name} only has {pw.total_fights} fights (need 50).")
-            pw.want_retire = False
-            continue
-        replacement = player_team.retire_warrior(pw)
-        if replacement:
-            print(f"  RETIREMENT: {pw.name} retires. {replacement.name} joins the team.")
-        pw.want_retire = False
-        matched_players.add(pw.slot_index)   # retired warriors don't fight this turn
 
     # ------------------------------------------------------------------
     # STEP 2a: CHAMPION CHALLENGES (highest non-blood priority)
@@ -1675,6 +1658,21 @@ def run_turn(
     )
     save_champion_state(champion_state)
 
+    # Collect retirements from the player team's archived state for its own local newsletter call
+    retirements_this_turn = []
+    for aw in getattr(player_team, 'archived_warriors', []):
+        if (isinstance(aw, dict) and aw.get('archived_retired', False)
+                and not aw.get('ascended_to_monster', False) and not aw.get('_turn_processed')):
+            retirements_this_turn.append({
+                'name': aw.get('name', 'Unknown'),
+                'w': aw.get('wins', 0),
+                'l': aw.get('losses', 0),
+                'k': aw.get('kills', 0),
+                'team': player_team.team_name,
+                'manager': player_team.manager_name,
+            })
+            aw['_turn_processed'] = True
+
     newsletter_text = generate_newsletter(
         turn_num           = turn,
         card               = card,
@@ -1683,6 +1681,7 @@ def run_turn(
         champion_state     = champion_state,
         processed_date     = processed_date,
         is_new_champion    = is_new_champion,
+        retirements        = retirements_this_turn,
     )
     save_newsletter(turn, newsletter_text)
 

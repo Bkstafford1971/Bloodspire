@@ -610,6 +610,7 @@ class _CState:
     dropped_weapon_name: str     = ""
     concede_attempts   : int     = 0
     hp_at_last_concede : int     = 9999
+    death_saves_survived : int    = 0    # Number of times this warrior survived a death check
     knockdowns_dealt   : int     = 0   # knockdowns inflicted on opponent
     near_kills_dealt   : int     = 0   # times this warrior reduced opponent below 20% HP
     used_favorite_weapon_this_fight : bool = False  # Tracks if favorite weapon flavor already shown
@@ -1668,9 +1669,9 @@ def _calc_damage_verbose(
 
 
 def _concede_check_verbose(warrior: "Warrior", state: "_CState", is_monster_fight: bool = False,
-                            underdog_bonus: int = 0):
+                            underdog_bonus: int = 0, death_saves_survived: int = 0):
     if is_monster_fight:
-        return False, {"monster_fight": True, "d100": 0, "PRE_bonus": 0, "popularity_bonus": 0, "luck_half": 0, "desperation_bonus": 0, "underdog_bonus": 0, "total": 0, "threshold": 0}
+        return False, {"monster_fight": True, "d100": 0, "PRE_bonus": 0, "popularity_bonus": 0, "luck_half": 0, "desperation_bonus": 0, "death_save_bonus": 0, "underdog_bonus": 0, "total": 0, "threshold": 0}
     roll      = _d100()
     presence  = warrior.presence
     pre_b     = max(-6, min(10, presence - 10))
@@ -1688,25 +1689,47 @@ def _concede_check_verbose(warrior: "Warrior", state: "_CState", is_monster_figh
     # more inclined to call it, capped at +15 (concede_attempts is 1-indexed at call time).
     desperation_bonus = min(15, max(0, (state.concede_attempts - 1) * 5))
 
+    # Death save bonus: Warriors who survive death checks accumulate trauma and
+    # become progressively more likely to give up.
+    death_save_bonus = 0
+    if death_saves_survived == 1:
+        death_save_bonus = 25
+    elif death_saves_survived == 2:
+        death_save_bonus = 50
+    elif death_saves_survived >= 3:
+        death_save_bonus = 75
+
     # Probabilistic luck: 25% chance to apply luck//2 bonus to this concede roll
     luck_contribution = _apply_conditional_luck(0, warrior, threshold=25)
     luck_half = luck_contribution // 2
-    total     = roll + pre_b + pop_bonus + luck_half + desperation_bonus + underdog_bonus
+    total     = roll + pre_b + pop_bonus + luck_half + desperation_bonus + death_save_bonus + underdog_bonus
     threshold = max(30, 58 - (presence // 3))
     granted   = total >= threshold
     return granted, {
         "d100": roll, "PRE_bonus": pre_b, "popularity_bonus": pop_bonus, "luck_half": luck_half,
-        "desperation_bonus": desperation_bonus, "underdog_bonus": underdog_bonus, "total": total, "threshold": threshold,
+        "desperation_bonus": desperation_bonus, "death_save_bonus": death_save_bonus, "underdog_bonus": underdog_bonus, "total": total, "threshold": threshold,
     }
 
 
-def _death_check_verbose(prev_hp: int, damage: int):
+def _death_check_verbose(prev_hp: int, damage: int, max_hp: int = None):
     new_hp    = prev_hp - damage
     if new_hp > 0:
         return False, {"new_hp": new_hp, "overshoot": 0, "death_chance": 0.0}
     overshoot    = abs(min(new_hp, 0))
-    death_chance = min(50.0, 0.5 + float(overshoot))
-    died         = random.random() * 100 < death_chance
+
+    if max_hp and overshoot >= max_hp:
+        return True, {"new_hp": new_hp, "overshoot": overshoot, "death_chance": 100.0, "catastrophic": True}
+
+    if overshoot <= 10:
+        death_chance = 10.0
+    elif overshoot <= 25:
+        death_chance = 20.0
+    elif overshoot <= 40:
+        death_chance = 30.0
+    else:
+        death_chance = 40.0
+
+    died = random.random() * 100 < death_chance
     return died, {"new_hp": new_hp, "overshoot": overshoot, "death_chance": death_chance}
 
 
@@ -1912,16 +1935,34 @@ def _check_knockdown(warrior: Warrior, state: _CState, damage: int, cat: str) ->
 # DEATH CHECK
 # ---------------------------------------------------------------------------
 
-def _death_check(prev_hp: int, damage: int) -> bool:
+def _death_check(prev_hp: int, damage: int, max_hp: int = None) -> bool:
     """
-    Death probability on reaching 0 HP:
-      base 0.5%, +1% per HP of overshoot, cap 50%.
+    Death probability on reaching 0 HP with damage-scaled chance.
+    If damage overshoot >= max_hp (catastrophic damage), automatic death.
+    Otherwise, death chance scales with overshoot severity:
+      0 to -10 HP: 10%
+      -11 to -25 HP: 20%
+      -26 to -40 HP: 30%
+      -41+ HP: 40%
     """
     new_hp    = prev_hp - damage
     if new_hp > 0:
         return False
     overshoot = abs(min(new_hp, 0))
-    return random.random() * 100 < min(50.0, 0.5 + float(overshoot))
+
+    if max_hp and overshoot >= max_hp:
+        return True
+
+    if overshoot <= 10:
+        death_chance = 10.0
+    elif overshoot <= 25:
+        death_chance = 20.0
+    elif overshoot <= 40:
+        death_chance = 30.0
+    else:
+        death_chance = 40.0
+
+    return random.random() * 100 < death_chance
 
 
 # ---------------------------------------------------------------------------
@@ -1929,9 +1970,9 @@ def _death_check(prev_hp: int, damage: int) -> bool:
 # ---------------------------------------------------------------------------
 
 def _concede_check(warrior: Warrior, state: _CState, is_monster_fight: bool = False,
-                    underdog_bonus: int = 0) -> bool:
+                    underdog_bonus: int = 0, death_saves_survived: int = 0) -> bool:
     """
-    d100 + PRE_bonus + popularity_bonus + luck//2 + desperation_bonus + underdog_bonus
+    d100 + PRE_bonus + popularity_bonus + luck//2 + desperation_bonus + death_save_bonus + underdog_bonus
     vs threshold (max(30, 58 - PRE//3)).
     High Presence = lower threshold = easier to get mercy.
     High Popularity = further bonus to roll (star athletes get mercy, capped at +15).
@@ -1939,6 +1980,10 @@ def _concede_check(warrior: Warrior, state: _CState, is_monster_fight: bool = Fa
     Very popular (81-90): +10 to roll
     Legendary (91-100): +15 to roll (capped - death remains possible)
     Desperation bonus: +5 per prior failed appeal this fight, capped at +15.
+    Death save bonus: Warriors who survive death checks get progressively more desperate:
+      1 death save survived: ~40% concede chance (+25 bonus)
+      2 death saves survived: ~60% concede chance (+50 bonus)
+      3+ death saves survived: ~80% concede chance (+75 bonus)
     Underdog bonus: +20 flat when this warrior is the outmatched challenger in
     a bullying blood challenge - the crowd is behind them.
     Luck is probabilistic: 25% chance to apply luck//2 bonus to concede roll.
@@ -1962,9 +2007,19 @@ def _concede_check(warrior: Warrior, state: _CState, is_monster_fight: bool = Fa
     # more inclined to call it, capped at +15 (concede_attempts is 1-indexed at call time).
     desperation_bonus = min(15, max(0, (state.concede_attempts - 1) * 5))
 
+    # Death save bonus: Warriors who survive death checks accumulate trauma and
+    # become progressively more likely to give up.
+    death_save_bonus = 0
+    if death_saves_survived == 1:
+        death_save_bonus = 25
+    elif death_saves_survived == 2:
+        death_save_bonus = 50
+    elif death_saves_survived >= 3:
+        death_save_bonus = 75
+
     # Probabilistic luck: 25% chance to apply luck//2 bonus to this concede roll
     luck_contribution = _apply_conditional_luck(0, warrior, threshold=25) // 2
-    total     = roll + pre_b + pop_bonus + luck_contribution + desperation_bonus + underdog_bonus
+    total     = roll + pre_b + pop_bonus + luck_contribution + desperation_bonus + death_save_bonus + underdog_bonus
     threshold = max(30, 58 - (presence // 3))
     return total >= threshold
 
@@ -3009,8 +3064,8 @@ class CombatEngine:
         retrieved weapon is thrown immediately as a bonus action (-8 attack) and
         the weapon is added to the thrown_pool — never kept in hand permanently.
 
-        Returns FightResult if the fight ended (weapon throw killed opponent).
-        Returns None when the normal attack should be suppressed (retrieval fired, fight continues).
+        Returns FightResult if the fight ends from the scavenge throw.
+        Returns True when the normal attack should be suppressed (retrieval fired but fight continues).
         Returns False when the normal attack should proceed as usual.
         """
         att = as_.warrior
@@ -3036,7 +3091,7 @@ class CombatEngine:
                 f"   Between strikes, {att.name.upper()} scans the sand for a discarded weapon!",
                 f"   {att.name.upper()} glances across the pit, always watching for something useful!",
             ]))
-            return None  # scan turn consumed action, but fight continues
+            return False
 
         # ── Roll turn ────────────────────────────────────────────────────────
         base_chance = 0.55 + (att.luck - 15) * 0.01   # 41% – 70% by luck
@@ -3117,7 +3172,7 @@ class CombatEngine:
             result = self._handle_zero_hp(ds_, as_, prev_hp, dmg, minute)
             if result:
                 att.primary_weapon = saved_primary
-                return result  # fight ended
+                return result   # fight ended; return the FightResult
         else:
             self._emit(random.choice([
                 f"   The hurried throw flies wide and {ds_.warrior.name.upper()} barely flinches!",
@@ -3129,7 +3184,7 @@ class CombatEngine:
         att.primary_weapon = saved_primary
 
         # Strategy re-evaluates naturally next action — no forced switch
-        return None  # normal attack suppressed; bonus throw was the action
+        return True   # normal attack suppressed; bonus throw was the action
 
     # =========================================================================
     # BLOOD CHALLENGE BULLYING / UNDERDOG CROWD INTERFERENCE
@@ -3299,13 +3354,14 @@ class CombatEngine:
                 ax.style = "Strike"
 
         # Goblin scavenger: attempt to retrieve a throwable weapon.
-        # Fires before the normal attack; returns FightResult if fight ended, None if action consumed, False to continue.
+        # Fires before the normal attack; returns FightResult if fight ended,
+        # True if action was consumed (but fight continues), or False otherwise.
         if as_.warrior.race.modifiers.scavenger:
             scav_result = self._try_goblin_scavenge(as_, ds_, minute)
             if isinstance(scav_result, FightResult):
-                return scav_result  # fight ended
-            elif scav_result is None:
-                return None  # bonus throw already handled; advance to next action
+                return scav_result   # fight ended from scavenge throw
+            if scav_result:
+                return None   # bonus throw already handled; advance to next action
 
         # Track throw state — inventory update is deferred until after the pre-attack
         # strategy re-evaluation so fatigue triggers fire against the old (unmodified)
@@ -4134,29 +4190,31 @@ class CombatEngine:
             self._emit(""); self._emit(N.victory_line(kw.name, dw.name))
             return self._make_result(kw, dw, True, minute)
 
-        # Give the warrior a chance to yield on the very blow that dropped them,
-        # before rolling to see if that blow was fatal. This matters most for a
-        # one-shot: a warrior who was above the 25% HP threshold a moment ago
-        # never otherwise gets an appeal before the finishing roll.
-        dying.hp_at_last_concede = dying.current_hp
-        r = self._attempt_concede(dying, killer, minute)
-        if r:
-            return r
-
-        # Mercy denied - the blow stands; see if it was outright fatal.
+        # MODIFIED: Death check comes first. A warrior who takes a blow that
+        # drops them to 0 HP first faces a mortality check. Only if they survive
+        # that blow do they get a chance to concede.
         if self.debug_logger:
-            died, _dc = _death_check_verbose(prev, dmg)
+            died, _dc = _death_check_verbose(prev, dmg, dw.max_hp)
             _overshoot    = _dc.get("overshoot", 0)
             _death_chance = _dc.get("death_chance", 0.0)
             self.debug_logger.log_death_check(dw.name, prev, dmg, _overshoot, _death_chance, died)
         else:
-            died = _death_check(prev, dmg)
+            died = _death_check(prev, dmg, dw.max_hp)
         if died:
             dw.is_dead = True
             self._emit(N.death_line(dw.name, dw.gender))
             self._emit(N.race_kill_line(kw.name, kw.race.name, kw.gender))
             self._emit(""); self._emit(N.victory_line(kw.name, dw.name))
             return self._make_result(kw, dw, True, minute)
+
+        # Death check passed; warrior survives the blow. Increment death saves and
+        # give them a chance to concede if they want to yield.
+        dying.death_saves_survived += 1
+        dying.hp_at_last_concede = dying.current_hp
+        r = self._attempt_concede(dying, killer, minute)
+        if r:
+            return r
+
         # Survived: outer-loop concede system continues to watch this warrior
         # in case they take further damage before the fight ends.
         return None
@@ -4174,7 +4232,7 @@ class CombatEngine:
         # wants to see them live to fight another day.
         underdog_bonus = 20 if (self._crowd_zone == "underdog" and dw is self.warrior_a) else 0
         if self.debug_logger:
-            granted, _cc = _concede_check_verbose(dw, dying, self.is_monster_fight, underdog_bonus=underdog_bonus)
+            granted, _cc = _concede_check_verbose(dw, dying, self.is_monster_fight, underdog_bonus=underdog_bonus, death_saves_survived=dying.death_saves_survived)
             self.debug_logger.log_concede(
                 dw.name,
                 _cc.get("d100", 0), _cc.get("PRE_bonus", 0),
@@ -4184,7 +4242,7 @@ class CombatEngine:
                 _cc.get("underdog_bonus", 0),
             )
         else:
-            granted = _concede_check(dw, dying, self.is_monster_fight, underdog_bonus=underdog_bonus)
+            granted = _concede_check(dw, dying, self.is_monster_fight, underdog_bonus=underdog_bonus, death_saves_survived=dying.death_saves_survived)
         self._emit(N.mercy_result_line(dw.name, granted))
         if granted:
             self._emit(""); self._emit(N.victory_line(kw.name, dw.name))
@@ -4252,25 +4310,17 @@ class CombatEngine:
                     if s.style in ("Dodge",):
                         candidate_skills.append("dodge")
                 # Always include weapon skill and basic skills as observables
-                # Get opponent's weapon skill_key (not display name)
-                try:
-                    opp_wpn_obj = get_weapon(opponent.primary_weapon or "Short Sword")
-                    opp_wpn_skill = opp_wpn_obj.skill_key
-                except ValueError:
-                    # Fallback: normalize display name as before
-                    opp_wpn_skill = (opponent.primary_weapon or "Short Sword").lower().replace(" ","_").replace("&","and")
-
-                candidate_skills = [opp_wpn_skill, "dodge", "parry", "initiative", "feint"]
+                opp_wpn = (opponent.primary_weapon or "Short Sword").lower().replace(" ","_").replace("&","and")
+                candidate_skills += [opp_wpn, "dodge", "parry", "initiative", "feint"]
                 # Pick one and attempt training (will show "already mastered" if at max)
                 random.shuffle(candidate_skills)
                 for sk in candidate_skills:
-                    # Let train_skill() handle normalization of display names to skill keys
-                    bonus_result = w.train_skill(sk)
-                    # Skip "Unknown skill" errors and empty messages
-                    if bonus_result and "unknown" not in bonus_result.lower():
+                    sk_key = sk.lower().replace(" ","_")
+                    if sk_key in w.skills:
+                        bonus_result = w.train_skill(sk_key)
                         # Only show successful trainings with [OBSERVED] tag (must contain "trained:")
-                        # Skip "no progress" messages
-                        if "trained:" in bonus_result.lower():
+                        # Skip "no progress" messages and empty strings
+                        if bonus_result and "trained:" in bonus_result.lower():
                             res.append(f"[OBSERVED] {bonus_result}")
                         break
 
@@ -4309,31 +4359,23 @@ class CombatEngine:
                         candidate_skills.append("initiative")
                     if s.style in ("Dodge",):
                         candidate_skills.append("dodge")
-                # Get opponent's weapon skill_key (not display name)
-                try:
-                    opp_wpn_obj = get_weapon(opponent.primary_weapon or "Short Sword")
-                    opp_wpn_skill = opp_wpn_obj.skill_key
-                except ValueError:
-                    # Fallback: normalize display name as before
-                    opp_wpn_skill = (opponent.primary_weapon or "Short Sword").lower().replace(" ", "_").replace("&", "and")
-
-                candidate_skills += [opp_wpn_skill, "dodge", "parry", "initiative", "feint"]
+                opp_wpn = (opponent.primary_weapon or "Short Sword").lower().replace(" ", "_").replace("&", "and")
+                candidate_skills += [opp_wpn, "dodge", "parry", "initiative", "feint"]
                 random.shuffle(candidate_skills)
                 for sk in candidate_skills:
-                    # Let train_skill() handle normalization of display names to skill keys
-                    msg, roll, chance = w.train_skill(sk, verbose=True)
-                    success = roll > 0 and roll <= chance
-                    # Skip "Unknown skill" errors
-                    if msg and "unknown" not in msg.lower():
+                    sk_key = sk.lower().replace(" ", "_")
+                    if sk_key in w.skills:
+                        msg, roll, chance = w.train_skill(sk_key, verbose=True)
+                        success = roll > 0 and roll <= chance
                         # Only show [OBSERVED] for successful trainings
-                        if success:
+                        if msg and success:
                             res.append(f"[OBSERVED] {msg}")
                         detail.append({
-                            "skill":         sk,
+                            "skill":         sk_key,
                             "roll":          roll,
                             "chance":        chance,
                             "success":       success,
-                            "msg":           f"[OBSERVED] {msg}" if success else "",
+                            "msg":           f"[OBSERVED] {msg}" if msg and success else "",
                             "source":        "observed",
                             "trigger_roll":  trigger_roll,
                             "trigger_chance": bonus_chance,

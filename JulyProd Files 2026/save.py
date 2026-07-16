@@ -1001,6 +1001,7 @@ def reset_arena_season():
             w.injuries           = PermanentInjuries()
             w.is_dead            = False
             w.killed_by          = ""
+            w.is_retired         = False
             w.ascended_to_monster = False
             w.popularity         = 0
             w.recognition        = 0

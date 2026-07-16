@@ -4,15 +4,17 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 module.exports = {
   packagerConfig: {
     asar: true,
-   // icon: './bloodspireshortcut',
+    icon: './bloodspireshortcut',
   },
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-     //   setupIcon: './bloodspireshortcut.ico',
+        setupIcon: './bloodspireshortcut.ico',
         loadingGif: './assets/Bloodspire.png',
+        // Force icon for all shortcuts
+        iconUrl: 'https://raw.githubusercontent.com/Bkstafford1971/Bloodspire/master/bloodspireshortcut.ico',
       },
     },
     {

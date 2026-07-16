@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v3.1.0</title>
+<title>BLOODSPIRE Client - v3.2.0</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&display=swap');
 /* ============================================================
@@ -264,7 +264,7 @@ window.testUpdateCheck = async () => {
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
-const CLIENT_VERSION = "3.1.0";
+const CLIENT_VERSION = "3.2.0";
 
 // Default league server URL. Overridable via Action → Account Settings,
 // which persists the override to the user's local settings.json.
@@ -828,11 +828,14 @@ const Store = {
   },
 
   // Game Data
-  async readGameData() { 
-    return await fsaReadJSON('game_data.json'); 
+  async readGameData() {
+    return await fsaReadJSON('game_data.json');
   },
-  async writeGameData(obj) { 
-    return await fsaWriteJSON('game_data.json', obj); 
+  async writeGameData(obj) {
+    return await fsaWriteJSON('game_data.json', obj);
+  },
+  async deleteGameData() {
+    return await fsaDeleteFile('game_data.json');
   },
 
   // Teams
@@ -995,11 +998,12 @@ function mergeResults(localTeam, serverResult, opts = {}) {
     lw.streak        = sw.streak        ?? lw.streak;
     lw.turns_active  = sw.turns_active  ?? lw.turns_active;
     lw.injuries      = sw.injuries      ?? lw.injuries;
-    // Only take is_dead/killed_by from server if there was actual turn processing
-    // (i.e., server has fight results). Otherwise preserve local replacement status.
+    // Only take is_dead/is_retired/killed_by from server if there was actual turn
+    // processing (i.e., server has fight results). Otherwise preserve local replacement status.
     if (sw.fight_history && sw.fight_history.length > 0) {
       lw.is_dead = sw.is_dead ?? lw.is_dead;
       lw.killed_by = sw.killed_by ?? lw.killed_by;
+      lw.is_retired = sw.is_retired ?? lw.is_retired;
     }
     lw.ascended_to_monster = sw.ascended_to_monster ?? lw.ascended_to_monster ?? false;
     lw.monster_kills = sw.monster_kills ?? lw.monster_kills ?? 0;
@@ -1304,19 +1308,21 @@ async function _persistAccount(acc) {
 
 const LocalAPI = {
   async get(path, qs) {
-    // ── Game data - cache-first, but refresh if version changed ────────────
+    // ── Game data - server-first (always fetch fresh to get updates) ────────
     if (path === '/api/game_data') {
-      const cached = await Store.readGameData();
-      const fresh = await _remoteFetch('GET', '/api/game_data');
-      // If we got fresh data from server, update cache if version differs
-      if (fresh && !fresh.error) {
-        if (!cached || cached.version !== fresh.version) {
+      try {
+        // Always try to fetch fresh from server first
+        const fresh = await _remoteFetch('GET', '/api/game_data');
+        if (fresh && !fresh.error) {
           await Store.writeGameData(fresh);
           return fresh;
         }
+      } catch (err) {
+        // If server fetch fails, try cache as fallback
       }
-      // Use cached if available, otherwise use fresh
-      return cached || fresh;
+      // Fallback to cache if server unavailable
+      const cached = await Store.readGameData();
+      return cached || {};
     }
 
     // ── Session / account info (read-side) ───────────────────────────────
@@ -1629,10 +1635,17 @@ const LocalAPI = {
       if ('want_retire'        in body) w.want_retire        = !!body.want_retire;
       if ('challenge_strategy_enabled' in body) w.challenge_strategy_enabled = !!body.challenge_strategy_enabled;
       if (Array.isArray(body.trains)) {
-        w.trains = body.trains
+        // Migrate old weapon names (e.g., "Francisca" -> "Hand Axe" / "hand_axe")
+        const trainsNormalized = body.trains
           .filter(t => t && t !== '-')
-          .map(t => t.toLowerCase().replace(/ /g, '_'))
+          .map(t => {
+            const normalized = t.toLowerCase().replace(/ /g, '_');
+            // Migration: old "francisca" display name -> new format
+            if (normalized === 'francisca') return 'hand_axe';
+            return normalized;
+          })
           .slice(0, 3);
+        w.trains = trainsNormalized;
       }
       if (Array.isArray(body.strategies)) {
         w.strategies = [];
@@ -1827,16 +1840,19 @@ const LocalAPI = {
           intelligence: parseInt(body.intelligence, 10),
           presence: parseInt(body.presence, 10),
         },
-        is_dead: false, killed_by: '',
+        is_dead: false, killed_by: '', is_retired: false,
         ascended_to_monster: false,
         want_monster_fight: false, want_retire: false,
         monster_kills: 0,
         avoid_warriors: [],
       };
-      // Archive the old warrior first, if any
+      // Archive the old warrior first, if any. Tag retirees AND ascended warriors
+      // separately from the dead so they land on the Shady Pines tab instead of
+      // The Crypts - neither of them actually died.
       const old = team.warriors[idx];
       if (old) {
         team.archived_warriors = team.archived_warriors || [];
+        if (old.is_retired || old.ascended_to_monster) old.archived_retired = true;
         team.archived_warriors.push(old);
       }
       team.warriors[idx] = w;
@@ -1893,14 +1909,13 @@ const _INJURY_DESCS = {
 };
 const _INJURY_LOCS = ['head','chest','abdomen','primary_arm','secondary_arm','primary_leg','secondary_leg'];
 
-function formatSkillsText(skills, weaponSkillMap) {
+function formatSkillsText(skills) {
   const lines = [];
-
   for (const [key, level] of Object.entries(skills || {}).sort((a,b) => a[0].localeCompare(b[0]))) {
     if (!level) continue;
-    // Use weapon display name from map if available (skill_key -> display_name)
-    // Otherwise use default formatting
-    const name = weaponSkillMap?.[key] || key.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+    let name = key.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+    // Migration: convert old "Francisca" display name to "Hand Axe"
+    if (name === 'Francisca') name = 'Hand Axe';
     const tpl  = _SKILL_LABELS[level] || 'Has Skill Level ({n}) in {s}';
     lines.push(tpl.replace('{n}', level).replace('{s}', name));
   }
@@ -1939,6 +1954,29 @@ function toggleHideRecord(val) {
   S.hideRecord = val;
   localStorage.setItem('bp_hide_record', val ? 'true' : 'false');
   render();
+}
+
+async function refreshGameDataFromServer() {
+  try {
+    // Delete old cached game_data.json
+    await Store.deleteGameData?.();
+
+    // Fetch fresh game_data from server
+    const fresh = await API.get('/api/game_data');
+
+    if (fresh && !fresh.error) {
+      // Cache the fresh data
+      await Store.writeGameData(fresh);
+      alert('✓ Game data refreshed successfully!\n\nThe latest game configuration has been downloaded and cached.');
+      // Optionally reload the page so dropdowns update with latest data
+      setTimeout(() => location.reload(), 500);
+    } else {
+      alert('✗ Error refreshing game data.\n\nServer returned: ' + (fresh?.error || 'Unknown error'));
+    }
+  } catch (err) {
+    alert('✗ Failed to refresh game data.\n\nError: ' + err.message + '\n\nMake sure the server is running and you have internet connection.');
+    console.error('refreshGameDataFromServer error:', err);
+  }
 }
 
 function hasFiveActiveWarriors(team) {
@@ -2273,6 +2311,9 @@ function buildMenuBar() {
       <div class="menu-item" onclick="triggerRestoreFromZip()" style="padding:4px 12px; color:#080;">
         📦 Restore from ZIP...
       </div>
+      <div class="menu-item" onclick="refreshGameDataFromServer()" style="padding:4px 12px; color:#080;">
+        🔄 Refresh Game Data...
+      </div>
       <div style="border-top:1px solid var(--mid); margin:2px 0;"></div>
       <div style="padding:6px 12px; font-size:11px; font-weight:bold; color:var(--mid);">
         Saves Folder
@@ -2370,6 +2411,7 @@ function buildTree() {
         if (!w) return;
         const wSel   = (S.sel.type === 'warrior' && S.sel.teamId == tid && S.sel.wIdx == idx) ? 'sel' : '';
         const isDead = w.is_dead || false;
+        const isRetired = w.is_retired || false;
         const isAscended = w.ascended_to_monster || false;
 
         // Injury indicator: count active permanent injuries
@@ -2396,14 +2438,17 @@ function buildTree() {
           ? `<span title="Retirement pending" style="font-size:10px;margin-left:3px;">🏆</span>`
           : '';
 
-        const deadStyle  = (isDead && !S.hideRecord) ? 'opacity:0.55; font-style:italic;' : '';
-        const deadIcon   = isAscended ? '👹' : (isDead && !S.hideRecord ? '💀' : '👤');
+        const deadStyle  = ((isDead && !S.hideRecord) || isRetired) ? 'opacity:0.55; font-style:italic;' : '';
+        const deadIcon   = isAscended ? '👹' : (isDead && !S.hideRecord ? '💀' : isRetired ? '🏆' : '👤');
         const deadBadge  = isAscended
           ? `<span title="Ascended to Monsterdom on The Monsters roster - replacement needed"
                style="color:#844;font-size:10px;margin-left:4px;">👹 ASCENDED</span>`
           : (isDead && !S.hideRecord)
           ? `<span title="Slain by ${esc(w.killed_by||'unknown')} - replacement needed"
                style="color:#800;font-size:10px;margin-left:4px;">✝</span>`
+          : isRetired
+          ? `<span title="Retired - replacement needed"
+               style="color:#840;font-size:10px;margin-left:4px;">🏆 RETIRED</span>`
           : '';
 
         h += `<div class="tree-row ${wSel}" id="tr-w-${tid}-${idx}"
@@ -2746,7 +2791,7 @@ function buildLegacyTab() {
   function warriorCard(w) {
     const rec  = `${w.wins||0}-${w.losses||0}-${w.kills||0}`;
     const inj  = formatInjuriesText(w.injuries).join('<br>') || '-';
-    const skls = formatSkillsText(w.skills, S.gd?.weapon_skill_map).join('<br>') || '-';
+    const skls = formatSkillsText(w.skills).join('<br>') || '-';
     const isDead      = w.is_dead;
     const isAscended  = w.ascended_to_monster;
     const label = isDead
@@ -3586,10 +3631,11 @@ function buildWarriorPanel(team, w, wIdx) {
   const isDead = w.is_dead || false;
   // Always show all tabs regardless of death status - don't tip off the manager
   // that the warrior died until they read the fight narrative
-  const tabs = ['Stats/Strats', 'Fight Options', 'Fights', 'Challenges', 'Replacement', 'The Crypts'];
+  const tabs = ['Stats/Strats', 'Fight Options', 'Fights', 'Challenges', 'Replacement', 'The Crypts', 'Shady Pines'];
   const tabMap = {
     'Stats/Strats':'stats', 'Fight Options':'fight', 'Fights':'fights',
-    'Challenges':'challenges', 'Replacement':'replacement', 'The Crypts':'archives'
+    'Challenges':'challenges', 'Replacement':'replacement', 'The Crypts':'archives',
+    'Shady Pines':'retired'
   };
   let tabsHtml = `<div class="tabs">`;
   tabs.forEach(t => {
@@ -3605,6 +3651,7 @@ function buildWarriorPanel(team, w, wIdx) {
   else if (S.wTab === 'challenges')  body = buildChallengesTab(team, w, wIdx);
   else if (S.wTab === 'replacement') body = buildReplacementTab(w);
   else if (S.wTab === 'archives')    body = buildArchivesTab(team);
+  else if (S.wTab === 'retired')     body = buildRetiredTab(team);
 
   return tabsHtml + `<div class="tab-body" style="overflow:auto;">${body}</div>`;
 }
@@ -3662,8 +3709,24 @@ function buildStatsTab(team, w, wIdx) {
   function tOpts(val) {
     // Normalise stored key (e.g. "war_flail" → "War Flail") for comparison
     const norm = v => v.replace(/_/g,' ').replace(/\b\w/g, ch => ch.toUpperCase());
-    const valNorm = norm(val);
-    const sel = v => (v === val || norm(v) === valNorm) ? ' selected' : '';
+
+    // Migration: convert old "Francisca" to "Hand Axe" for matching
+    let valNorm = norm(val);
+    if (valNorm === 'Francisca' || val === 'francisca' || val === 'Francisca') {
+      valNorm = 'Hand Axe';
+    }
+
+    const sel = v => {
+      // Direct match
+      if (v === val) return ' selected';
+      // Normalized match
+      const vNorm = norm(v);
+      if (vNorm === valNorm) return ' selected';
+      // Special case: match "Francisca" (old name) to "Hand Axe" (new name)
+      if ((valNorm === 'Hand Axe' || val === 'francisca') && vNorm === 'Hand Axe') return ' selected';
+      return '';
+    };
+
     let h = '<option value="">-</option>';
     h += '<optgroup label="── Attributes ──">';
     attrTrains.forEach(a => { h += `<option value="${a}"${sel(a)}>${a}</option>`; });
@@ -3720,7 +3783,7 @@ function buildStatsTab(team, w, wIdx) {
   </tr>`;
 
   // Skills and injuries - built from raw dicts so post-merge data is always current
-  const skillsText = formatSkillsText(w.skills, gd.weapon_skill_map).join('\n') || '(none)';
+  const skillsText = formatSkillsText(w.skills).join('\n') || '(none)';
   const injText    = formatInjuriesText(w.injuries).join('\n') || '(none)';
 
   return `
@@ -4645,7 +4708,8 @@ async function removeAvoid(warriorName, avoidWarriorName) {
 }
 
 function buildArchivesTab(team) {
-  const archived = (team.archived_warriors || []).slice().reverse();  // newest first
+  // The Crypts = warriors who died. Retired warriors live on the separate Shady Pines tab.
+  const archived = (team.archived_warriors || []).filter(a => !a.archived_retired).slice().reverse();  // newest first
   if (!archived.length) {
     return `<div style="padding:12px; color:#555;">
       <b>Archives</b><br><br>No warriors have fallen for this team yet.
@@ -4655,7 +4719,7 @@ function buildArchivesTab(team) {
   archived.forEach((a, idx) => {
     const rec  = `${a.wins||0}-${a.losses||0}-${a.kills||0}`;
     const inj  = formatInjuriesText(a.injuries).join('<br>') || '-';
-    const skls = formatSkillsText(a.skills, S.gd?.weapon_skill_map).join('<br>') || '-';
+    const skls = formatSkillsText(a.skills).join('<br>') || '-';
     const expandId = `arch_expand_${idx}`;
     const contentId = `arch_content_${idx}`;
 
@@ -4742,6 +4806,111 @@ function buildArchivesTab(team) {
   </div>`;
 }
 
+function buildRetiredTab(team) {
+  // Shady Pines tab = warriors who left the roster without dying - retirees (heroes'
+  // send-off) and warriors who ascended to Monsterdom - separate from The Crypts (the dead).
+  const retired = (team.archived_warriors || []).filter(a => a.archived_retired).slice().reverse();  // newest first
+  if (!retired.length) {
+    return `<div style="padding:12px; color:#555;">
+      <b>Shady Pines</b><br><br>No warriors have retired or ascended for this team yet.
+    </div>`;
+  }
+  let cards = '';
+  retired.forEach((a, idx) => {
+    const rec  = `${a.wins||0}-${a.losses||0}-${a.kills||0}`;
+    const inj  = formatInjuriesText(a.injuries).join('<br>') || '-';
+    const skls = formatSkillsText(a.skills).join('<br>') || '-';
+    const expandId = `leg_expand_${idx}`;
+    const contentId = `leg_content_${idx}`;
+
+    const history = (a.fight_history || []).slice().reverse();
+    let fightRows = '';
+    history.forEach((h, i) => {
+      const res = h.result ? h.result.toUpperCase() : '-';
+      const resColor = res==='WIN' ? '#060' : res==='LOSS' ? '#800' : '#444';
+      const slainNote  = h.warrior_slain  ? ' <b style="color:#800">(SLAIN)</b>'  : '';
+      const killedNote = h.opponent_slain ? ' <b style="color:#060">(KILLED)</b>' : '';
+      const fid = h.fight_id;
+      const viewBtn = fid
+        ? `<button class="sm" onclick="openNarrative(${fid},${h.turn||0})">View Fight</button>`
+        : `<span style="color:#aaa; font-size:10px;">no log</span>`;
+      fightRows += `<tr style="${i%2===0?'background:#f5f4f0;':''}">
+        <td style="padding:2px 6px; text-align:center;">${h.turn||'-'}</td>
+        <td style="padding:2px 6px;">${esc(h.opponent_name||'-')}${killedNote}</td>
+        <td style="padding:2px 6px; color:#555;">${esc(h.opponent_manager_name||'-')}</td>
+        <td style="padding:2px 6px; text-align:center; color:${resColor}; font-weight:bold;">${res}${slainNote}</td>
+        <td style="padding:2px 6px; text-align:center;">${h.minutes||'-'} min</td>
+        <td style="padding:2px 6px;">${viewBtn}</td>
+      </tr>`;
+    });
+    const fightSection = history.length ? `
+      <div style="margin-top:8px;">
+        <div style="color:#666; font-weight:bold; margin-bottom:3px; font-size:11px;">Fight History</div>
+        <div style="overflow-x:auto;">
+        <table class="grid" style="font-size:11px; width:100%;">
+          <thead><tr>
+            <th style="width:40px;">Turn</th>
+            <th style="min-width:130px;">Opponent</th>
+            <th style="width:110px;">Manager</th>
+            <th style="width:60px;">Result</th>
+            <th style="width:60px;">Duration</th>
+            <th style="width:80px;">Narrative</th>
+          </tr></thead>
+          <tbody>${fightRows}</tbody>
+        </table>
+        </div>
+      </div>` : `<div style="margin-top:6px; color:#aaa; font-size:11px;">No fight history recorded.</div>`;
+
+    const sendoffIcon = a.ascended_to_monster ? '👹' : '🏆';
+    const sendoffText = a.ascended_to_monster
+      ? `Ascended to Monsterdom after <b>${a.archived_turns||a.total_fights||0} fights</b> - joined The Monsters.`
+      : `Retired after <b>${a.archived_turns||a.total_fights||0} fights</b> - a hero's send-off.`;
+
+    cards += `
+<div class="group" style="margin:6px 4px; background:#f9f7f4;">
+  <div style="cursor:pointer; user-select:none; padding:6px 4px; display:flex; align-items:center; gap:8px;" onclick="toggleArchiveExpand('${contentId}', '${expandId}')">
+    <span id="${expandId}" style="font-size:12px; color:#666; min-width:12px;">▶</span>
+    <span style="font-size:12px;">${sendoffIcon}</span>
+    <span style="flex:1; font-weight:500; color:#333;">${esc(a.name)}</span>
+    <span style="color:#888; font-size:11px;">${esc(a.race||'')} ${esc(a.gender||'')}</span>
+    <span style="color:#666; font-size:11px; font-weight:500;">${rec}</span>
+    <span style="color:#999; font-size:11px;">(${a.total_fights||0} fights)</span>
+  </div>
+  <div id="${contentId}" style="display:none; padding:8px 4px; border-top:1px solid #ddd; margin-top:4px;">
+    <div style="display:flex; gap:20px; font-size:11px; flex-wrap:wrap;">
+      <div>
+        <div style="color:#666; margin-bottom:3px;">
+          ${sendoffText}
+        </div>
+        <table style="border-collapse:collapse; font-size:11px;">
+          ${['strength','dexterity','constitution','intelligence','presence','size'].map(attr => {
+            const finalVal = a[attr] != null ? a[attr] : '-';
+            const baseVal  = (a.initial_stats && a.initial_stats[attr] != null) ? ` (${a.initial_stats[attr]})` : '';
+            return `<tr><td style="padding:1px 6px; color:#555; width:90px;">${capitalize(attr)}</td>
+                 <td style="padding:1px 6px; font-weight:bold;">${finalVal}${baseVal}</td></tr>`;
+          }).join('')}
+        </table>
+      </div>
+      <div>
+        <div style="color:#666; font-weight:bold; margin-bottom:3px;">Skills</div>
+        <div style="color:#333; line-height:1.5;">${skls}</div>
+      </div>
+      <div>
+        <div style="color:#666; font-weight:bold; margin-bottom:3px;">Permanent Injuries</div>
+        <div style="color:#800; line-height:1.5;">${inj}</div>
+      </div>
+    </div>
+    ${fightSection}
+  </div>
+</div>`;
+  });
+
+  return `<div style="padding:6px;">
+    <div style="font-weight:bold; margin-bottom:6px;">Shady Pines - ${esc(team.team_name)}</div>
+    ${cards}
+  </div>`;
+}
+
 function toggleArchiveExpand(contentId, caretId) {
   const content = document.getElementById(contentId);
   const caret = document.getElementById(caretId);
@@ -4753,11 +4922,11 @@ function toggleArchiveExpand(contentId, caretId) {
 }
 
 function buildReplacementTab(w) {
-  // Living warrior - show placeholder
-  if (!w.is_dead && !w.ascended_to_monster) {
+  // Living, active warrior - show placeholder
+  if (!w.is_dead && !w.is_retired && !w.ascended_to_monster) {
     return `<div style="padding:12px; color:#555;">
       <b>Replacement Warrior</b><br><br>
-      This tab activates when <b>${esc(w.name)}</b> falls in battle.<br>
+      This tab activates when <b>${esc(w.name)}</b> falls in battle or retires.<br>
       A replacement roll-up will appear here so you can build the new recruit.
     </div>`;
   }
@@ -4816,9 +4985,12 @@ function buildReplacementTab(w) {
 
   // No roll-up yet - show the "roll up" button
   if (!hasRs) {
+    const headerHtml = w.is_retired
+      ? `🏆 ${esc(w.name)} has retired after a legendary career.`
+      : `✝ ${esc(w.name)} was slain by ${esc(w.killed_by||'unknown')}.`;
     return `<div style="padding:14px;">
       <div style="font-weight:bold; color:#800; margin-bottom:10px; font-size:12px;">
-        ✝ ${esc(w.name)} was slain by ${esc(w.killed_by||'unknown')}.
+        ${headerHtml}
       </div>
       <p style="color:#555; font-size:11px; margin-bottom:12px;">
         Roll up a replacement warrior for this slot. They start fresh -
@@ -4859,10 +5031,11 @@ function buildReplacementTab(w) {
     </tr>`;
   });
 
+  const buildHeaderIcon = w.is_retired ? '🏆' : '✝';
   return `
 <div style="padding:10px;">
   <div style="font-weight:bold; color:#800; margin-bottom:8px; font-size:12px;">
-    ✝ ${esc(w.name)} - Build Replacement Warrior
+    ${buildHeaderIcon} ${esc(w.name)} - Build Replacement Warrior
   </div>
   <div style="display:flex; gap:20px; flex-wrap:wrap;">
     <table style="border-collapse:collapse;">${spinRows}</table>

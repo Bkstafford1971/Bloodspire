@@ -136,9 +136,10 @@ class Team:
 
     @property
     def active_warriors(self) -> List[Warrior]:
-        """Return living warriors only - excludes None slots and is_dead warriors."""
+        """Return living warriors only - excludes None slots, is_dead, and is_retired warriors."""
         return [w for w in self.warriors if w is not None
-                and w.is_alive and not getattr(w, "is_dead", False)]
+                and w.is_alive and not getattr(w, "is_dead", False)
+                and not getattr(w, "is_retired", False)]
 
     @property
     def has_five_active_warriors(self) -> bool:
@@ -308,32 +309,33 @@ class Team:
         self.last_turn_ran = 0
         self.pending_replacements = {}
 
-    def retire_warrior(self, warrior: Warrior) -> Optional[Warrior]:
+    def retire_warrior(self, warrior: Warrior) -> bool:
         """
-        Retire a warrior who has reached 50 fights.
-        Returns the replacement, or None if the warrior is not eligible.
+        Retire a warrior who has reached 50 fights, after their final fight this turn.
+        Mirrors kill_warrior(): marks the warrior retired but keeps them in their
+        roster slot until the player creates a replacement via the Replacement tab
+        in the GUI. Once the player saves the replacement, the client archives the
+        retired warrior (tagged archived_retired=True) to the Legacy tab.
+        Returns True on success, False if the warrior is not eligible.
         """
         if not warrior.can_retire:
             print(
                 f"  {warrior.name} is not eligible for retirement "
                 f"({warrior.total_fights} fights; need {50})."
             )
-            return None
+            return False
 
         idx = self.warrior_index(warrior.name)
         if idx == -1:
             raise ValueError(f"Warrior '{warrior.name}' not found on this team.")
 
+        warrior.is_retired = True
+
         print(
             f"  {warrior.name} retires after {warrior.total_fights} fights "
-            f"({warrior.record_str}). Immortalized in Shady Pines!"
+            f"({warrior.record_str}). Replacement slot open at position {idx}."
         )
-
-        # Replacement (same as death, per guide)
-        replacement = create_warrior_ai()
-        replacement.name = f"Rookie_{warrior.name[:4]}_{random.randint(10,99)}"
-        self.warriors[idx] = replacement
-        return replacement
+        return True
 
     # =========================================================================
     # CHALLENGES

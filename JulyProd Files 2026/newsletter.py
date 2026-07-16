@@ -637,6 +637,20 @@ def _dead_section(deaths: list, turn_num: int) -> str:
     return "\n".join(lines)
 
 
+def _retired_section(retirements: list) -> str:
+    if not retirements: return ""
+    sep="="*109
+    lines=["\nRETIRED THIS TURN",
+           f"{'NAME':<30}{'W':>4}{'L':>4}{'K':>4}  {'TEAM':<30}{'MANAGER':<30}",sep]
+    for r in retirements:
+        name = _trunc(r['name'])
+        team = _trunc(r.get('team','?'))
+        mgr = _trunc(r.get('manager','?'))
+        lines.append(f"{name:<30}{r.get('w',0):>4}{r.get('l',0):>4}{r.get('k',0):>4}"
+                     f"  {team:<30}{mgr:<30}")
+    return "\n".join(lines)
+
+
 def _fights_section(card, champion_state: Optional[dict] = None,
                    prev_champion_state: Optional[dict] = None) -> str:
     sep="="*85
@@ -1730,45 +1744,30 @@ def _block_commentary(card, teams, deaths, turn_num: int, champion_state: dict, 
 # TOP MANAGERS SECTION
 # ---------------------------------------------------------------------------
 
-def _should_hide_manager(mgr_name, turn_num, manager_records_file):
+def _manager_recently_active(mgr_name, teams, turn_num) -> bool:
     """
     Check if a manager should be hidden from the newsletter.
-    They are hidden if they missed 3+ consecutive turns.
+    They are hidden if none of their teams have played within the last 3 turns.
+
+    Uses each team's own last_turn_ran (the same recency source
+    _team_standings/_warrior_tiers already rely on) rather than scanning
+    manager_records.json for a consecutive-miss streak. That file-based
+    approach broke down whenever the ledger had a gap (e.g. turns that
+    were never persisted for other reasons) - it would then count every
+    missing turn in the gap as a "miss" and permanently hide an actively-
+    playing manager, since the scan never finds a turn it can point to
+    as "not missed" beyond the gap.
     """
-    import os
-    import json
-
-    try:
-        if not os.path.exists(manager_records_file):
-            return False
-
-        with open(manager_records_file, "r", encoding="utf-8") as f:
-            all_records = json.load(f)
-
-        # Check if manager participated this turn
-        if str(turn_num) not in all_records or mgr_name not in all_records[str(turn_num)]:
-            # Manager didn't participate this turn
-            missed_turns = 1
-            # Count consecutive missed turns going backwards
-            for past_turn in range(turn_num - 1, 0, -1):
-                if str(past_turn) in all_records and mgr_name in all_records[str(past_turn)]:
-                    # Manager participated in this past turn, check if they fought
-                    rec = all_records[str(past_turn)][mgr_name]
-                    total_fights = rec.get("w", 0) + rec.get("l", 0)
-                    if total_fights > 0:
-                        # They fought in this turn, so streak ends
-                        break
-                missed_turns += 1
-
-            # Hide if 3+ consecutive turns missed
-            return missed_turns >= 3
-        else:
-            # Manager participated this turn, don't hide
-            return False
-
-    except Exception as e:
-        # On error, don't hide manager
-        return False
+    for team in teams:
+        if _is_npc_team(team) or _is_ai_team(team):
+            continue
+        tmgr = getattr(team, "manager_name", None) if hasattr(team, "manager_name") else team.get("manager_name", "?")
+        if tmgr != mgr_name:
+            continue
+        last_run = getattr(team, "last_turn_ran", 0) if hasattr(team, "last_turn_ran") else team.get("last_turn_ran", 0)
+        if last_run and last_run >= turn_num - 3:
+            return True
+    return False
 
 
 def _validate_manager_records_before_save(turn_num, manager_records):
@@ -2075,13 +2074,10 @@ def _top_managers(card, teams, turn_num, return_records=False):
 
         print(f"  {mgr_name:<35} This Turn: {rec['w']:3d}-{rec['l']:3d}-{rec['k']:3d} | Baseline: {old_cw:3d}-{old_cl:3d}-{old_ck:3d} | New Career: {rec['cw']:3d}-{rec['cl']:3d}-{rec['ck']:3d}")
 
-    league_dir = os.path.dirname(os.path.abspath(__file__))
-    manager_records_file = os.path.join(league_dir, "manager_records.json")
-
     manager_list = []
     for mgr_name, rec in manager_records.items():
-        # Skip managers who missed 3+ consecutive turns
-        if _should_hide_manager(mgr_name, turn_num, manager_records_file):
+        # Skip managers whose teams haven't played within the last 3 turns
+        if not _manager_recently_active(mgr_name, teams, turn_num):
             continue
 
         total_fights = rec["w"] + rec["l"]
@@ -2151,9 +2147,11 @@ def _top_managers(card, teams, turn_num, return_records=False):
 
 def generate_newsletter(turn_num, card, teams, deaths, champion_state,
                         processed_date=None, is_new_champion=False, champion_state_before=None,
-                        prev_champion_state=None, bully_events=None) -> str:
+                        prev_champion_state=None, bully_events=None, retirements=None) -> str:
     # Wrap all bouts to handle both dict and object formats uniformly
     wrapped_card = [_BoutWrapper(bout) for bout in card] if card else []
+    if retirements is None:
+        retirements = []
 
     sections = [_header(turn_num, processed_date)]
     sections.append(_team_standings(teams, turn_num, wrapped_card))
@@ -2215,6 +2213,8 @@ def generate_newsletter(turn_num, card, teams, deaths, champion_state,
     sections.append("\n\n" + _fights_section(wrapped_card, champion_state, prev_champion_state))
     dead = _dead_section(deaths, turn_num)
     if dead: sections.append("\n\n" + dead)
+    retired = _retired_section(retirements)
+    if retired: sections.append("\n\n" + retired)
     sections.append("\n\n" + _race_report(teams))
     return "\n".join(sections)
 
