@@ -150,6 +150,15 @@ FINESSE_DAMAGE_WEAPONS = {
     "cestus", "javelin", "swordbreaker", "bola"
 }
 
+# Styles the Charge skill benefits: "leverage and stability" for committed,
+# weighted strikes. Grants flat damage (leverage) to all seven, plus reduced
+# disarm vulnerability (stability) when the Charge-trained warrior is the one
+# defending/parrying while using one of these styles.
+CHARGE_STYLES = frozenset({
+    "Strike", "Lunge", "Bash", "Slash",
+    "Calculated Attack", "Sure Strike", "Wall of Steel",
+})
+
 
 # ---------------------------------------------------------------------------
 # PROBABILISTIC LUCK SYSTEM
@@ -467,6 +476,31 @@ def _get_martial_combat_parry_bonus(attacker: Warrior) -> int:
     return bonus
 
 
+def _get_brawl_martial_combat_accuracy_bonus(warrior: Warrior) -> int:
+    """
+    Universal (race-agnostic) Martial Combat accuracy bonus from Brawl skill.
+    Scales from +0 (skill 0) to +4 (skill 9). Stacks additively with the
+    Halfling/Lizardfolk racial Martial Combat bonus above rather than
+    replacing it - Brawl gives every race a reason to invest in Martial
+    Combat, while the racial bonus keeps those two races the specialists.
+    """
+    if not _is_using_martial_combat(warrior):
+        return 0
+    brawl_lv = warrior.skills.get("brawl", 0)
+    return int(brawl_lv * 4.0 / 9.0)
+
+
+def _get_brawl_martial_combat_parry_bonus(warrior: Warrior) -> int:
+    """
+    Universal (race-agnostic) Martial Combat parry/dodge bonus from Brawl skill.
+    Scales from +0 (skill 0) to +6 (skill 9).
+    """
+    if not _is_using_martial_combat(warrior):
+        return 0
+    brawl_lv = warrior.skills.get("brawl", 0)
+    return int(brawl_lv * 6.0 / 9.0)
+
+
 def _gnome_cs_line(defender_name: str, attacker_name: str) -> str:
     """Flavor line for a Gnome counterstrike_mastery riposte."""
     return random.choice([
@@ -679,7 +713,7 @@ def _initiative_roll(warrior: Warrior, strategy: Strategy, state: _CState) -> in
     dex_bonus    = max(-10, min(10, (dex - 10) * 2))
     # Skill scaling: higher initiative skill is more impactful
     init_val     = warrior.skills.get("initiative", 0)
-    skill_bonus  = init_val * 4 if init_val >= 5 else init_val * 3
+    skill_bonus  = int(init_val * 3.5)
 
     # Probabilistic luck: 25% chance to apply luck bonus to this roll
     luck_bonus   = _apply_conditional_luck(0, warrior, threshold=25)
@@ -745,7 +779,7 @@ def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState, foe_styl
     props     = get_style_props(strategy.style)
     style_b   = int(props.apm_modifier * 3)
     feint_b   = attacker.skills.get("feint", 0) * 2
-    lunge_b   = attacker.skills.get("lunge", 0) * 3 if strategy.style == "Lunge" else 0
+    lunge_b   = attacker.skills.get("lunge", 0) * 4 if strategy.style == "Lunge" else 0
     _phase2   = state.warrior.max_endurance * 0.25
     end_pen   = 15 if state.endurance < _phase2 and strategy.style in _AGGRESSIVE_STYLES else 0
     hp0_pen   = 30 if state.current_hp <= 0 else 0
@@ -755,15 +789,20 @@ def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState, foe_styl
     if attacker.favorite_weapon and attacker.primary_weapon == attacker.favorite_weapon:
         fav_bonus = 5
 
-    # Martial Combat bonus: scales +2 to +6 accuracy based on skill
+    # Martial Combat bonus: scales +2 to +6 accuracy based on skill (Halfling/Lizardfolk racial)
     martial_bonus = 0
     if _has_martial_combat_bonus(attacker) and _is_using_martial_combat(attacker):
         martial_bonus = _get_martial_combat_accuracy_bonus(attacker)
+    # Brawl skill: universal (all-race) Martial Combat accuracy, +0 to +4, stacks with the above
+    martial_bonus += _get_brawl_martial_combat_accuracy_bonus(attacker)
 
     # Thrown mastery bonus: +10 to hit on Opportunity Throw (Goblin racial)
     thrown_mastery_b = 0
     if strategy.style == "Opportunity Throw" and attacker.race.modifiers.thrown_mastery:
         thrown_mastery_b = 10
+
+    # Throw skill: +2 per level to hit on Opportunity Throw (all races)
+    throw_skill_b = attacker.skills.get("throw", 0) * 2 if strategy.style == "Opportunity Throw" else 0
 
     # Tactician's edge: +4 vs aggressive opponents, -6 vs methodical ones (Gnome racial)
     # Tactician's edge: +8 vs aggressive, -6 vs methodical
@@ -800,7 +839,7 @@ def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState, foe_styl
             pass
 
     total = roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b \
-               - end_pen - hp0_pen + fav_bonus + martial_bonus + thrown_mastery_b \
+               - end_pen - hp0_pen + fav_bonus + martial_bonus + thrown_mastery_b + throw_skill_b \
                + tactician_b - injury_pen - ground_pen - heavy_pen
 
     if attacker.race.name == "Lizardfolk":
@@ -899,11 +938,13 @@ def _defense_roll(
         if elf_bonus > 0:
             total += elf_bonus
 
-    # Martial Combat bonus: scales +4 to +8 parry/dodge based on skill
+    # Martial Combat bonus: scales +4 to +8 parry/dodge based on skill (Halfling/Lizardfolk racial)
     if _has_martial_combat_bonus(defender) and _is_using_martial_combat(defender):
         mc_bonus = _get_martial_combat_parry_bonus(defender)
         if mc_bonus > 0:
             total += mc_bonus
+    # Brawl skill: universal (all-race) Martial Combat parry/dodge, +0 to +6, stacks with the above
+    total += _get_brawl_martial_combat_parry_bonus(defender)
 
     # Decoy baits the defender into committing to the guarded spot, so the
     # defense_point bonus is cancelled when the attacker is using Decoy.
@@ -1189,6 +1230,19 @@ def _calc_damage_hybrid(
     if race_dmg_net != 0:
         raw += race_dmg_net
 
+    # Throw skill: +1 flat damage per level, Opportunity Throw only
+    if _is_ot:
+        raw += attacker.skills.get("throw", 0)
+
+    # Strike skill: +1 flat damage per level, always on (all styles/weapons)
+    raw += attacker.skills.get("strike", 0)
+
+    # Charge skill (leverage): +1 flat damage per level while using a
+    # weighted/committed style (Strike, Lunge, Bash, Slash, Calculated Attack,
+    # Sure Strike, Wall of Steel)
+    if atk_strategy.style in CHARGE_STYLES:
+        raw += attacker.skills.get("charge", 0)
+
     # Calculate armor reduction
     armor_nm = defender.armor or "None"
     helm_nm = defender.helm or "None"
@@ -1243,8 +1297,8 @@ def _initiative_roll_verbose(warrior: "Warrior", strategy: "Strategy", state: "_
         warrior.helm or "None",
         warrior.race.name)
     dex_bonus    = max(-10, min(10, (dex - 10) * 2))
-    skill_bonus  = warrior.skills.get("initiative", 0) * 3
-    luck_bonus   = warrior.luck
+    skill_bonus  = int(warrior.skills.get("initiative", 0) * 3.5)
+    luck_bonus   = _apply_conditional_luck(0, warrior, threshold=25)
     race_init    = warrior.race.modifiers.initiative_bonus
     props        = get_style_props(strategy.style)
     style_mod    = int(props.apm_modifier * 4)
@@ -1258,7 +1312,7 @@ def _initiative_roll_verbose(warrior: "Warrior", strategy: "Strategy", state: "_
     comps = {
         "d100": roll,
         "dex_bonus": dex_bonus,
-        "init_skill_x3": skill_bonus,
+        "init_skill_x3.5": skill_bonus,
         "luck": luck_bonus,
         "race_init": race_init,
         "style_mod": style_mod,
@@ -1289,11 +1343,11 @@ def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CSt
     wpn_key = attacker.primary_weapon.lower().replace(" ", "_").replace("&", "and")
     wpn_sk  = attacker.skills.get(wpn_key, 0)
     wpn_b   = wpn_sk * 5
-    luck_b  = attacker.luck
+    luck_b  = _apply_conditional_luck(0, attacker, threshold=25)
     props   = get_style_props(strategy.style)
     style_b = int(props.apm_modifier * 3)
     feint_b = attacker.skills.get("feint", 0) * 2
-    lunge_b = attacker.skills.get("lunge", 0) * 3 if strategy.style == "Lunge" else 0
+    lunge_b = attacker.skills.get("lunge", 0) * 4 if strategy.style == "Lunge" else 0
     _phase2 = state.warrior.max_endurance * 0.25
     end_pen = 15 if state.endurance < _phase2 and strategy.style in _AGGRESSIVE_STYLES else 0
     hp0_pen = 30 if state.current_hp <= 0 else 0
@@ -1301,7 +1355,9 @@ def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CSt
     martial_b = 0
     if _has_martial_combat_bonus(attacker) and _is_using_martial_combat(attacker):
         martial_b = _get_martial_combat_accuracy_bonus(attacker)
+    martial_b += _get_brawl_martial_combat_accuracy_bonus(attacker)
     thrown_b = 10 if (strategy.style == "Opportunity Throw" and attacker.race.modifiers.thrown_mastery) else 0
+    throw_skill_b = attacker.skills.get("throw", 0) * 2 if strategy.style == "Opportunity Throw" else 0
     tactician_b = 0
     if attacker.race.modifiers.tactician_edge and foe_style:
         if foe_style in _TACTICIAN_FAVORED:
@@ -1323,7 +1379,7 @@ def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CSt
         except ValueError:
             pass
 
-    result  = roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b - end_pen - hp0_pen + fav_b + martial_b + thrown_b + tactician_b - ground_pen - heavy_pen
+    result  = roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b - end_pen - hp0_pen + fav_b + martial_b + thrown_b + throw_skill_b + tactician_b - ground_pen - heavy_pen
     comps = {
         "d100": roll,
         "dex_bonus": dex_b,
@@ -1335,6 +1391,7 @@ def _attack_roll_verbose(attacker: "Warrior", strategy: "Strategy", state: "_CSt
         "fav_bonus": fav_b,
         "martial_combat": martial_b,
         "thrown_mastery": thrown_b,
+        "throw_skill": throw_skill_b,
         "tactician_edge": tactician_b,
         "ground_pen": -ground_pen if ground_pen else 0,
         "end_pen": -end_pen if end_pen else 0,
@@ -1456,8 +1513,11 @@ def _defense_roll_verbose(
         martial_bonus = _get_martial_combat_parry_bonus(defender)
         if martial_bonus > 0:
             total += martial_bonus
-    if martial_bonus:
-        comps["martial_combat"] = martial_bonus
+    brawl_mc_bonus = _get_brawl_martial_combat_parry_bonus(defender)
+    if brawl_mc_bonus > 0:
+        total += brawl_mc_bonus
+    if martial_bonus or brawl_mc_bonus:
+        comps["martial_combat"] = martial_bonus + brawl_mc_bonus
 
     def_pt_bonus = 0
     if strategy.defense_point != "None" and strategy.defense_point == aim_point and atk_style != "Decoy":
@@ -1612,7 +1672,22 @@ def _calc_damage_verbose(
         raw += race_dmg_net
     steps["race_damage"] = race_dmg_net
 
-    steps["raw"] = raw - fav_b - prec_b - nat_b - race_dmg_net
+    # Throw skill: +1 flat damage per level, Opportunity Throw only
+    throw_skill_dmg = attacker.skills.get("throw", 0) if _is_ot else 0
+    raw += throw_skill_dmg
+    steps["throw_skill"] = throw_skill_dmg
+
+    # Strike skill: +1 flat damage per level, always on
+    strike_skill_dmg = attacker.skills.get("strike", 0)
+    raw += strike_skill_dmg
+    steps["strike_skill"] = strike_skill_dmg
+
+    # Charge skill (leverage): +1 flat damage per level on weighted/committed styles
+    charge_skill_dmg = attacker.skills.get("charge", 0) if atk_strategy.style in CHARGE_STYLES else 0
+    raw += charge_skill_dmg
+    steps["charge_skill"] = charge_skill_dmg
+
+    steps["raw"] = raw - fav_b - prec_b - nat_b - race_dmg_net - throw_skill_dmg - strike_skill_dmg - charge_skill_dmg
     steps["raw_with_fav"] = raw
 
     # Armor calculation (percentage-based, mirroring _calc_damage_hybrid)
@@ -1733,7 +1808,8 @@ def _death_check_verbose(prev_hp: int, damage: int, max_hp: int = None):
     return died, {"new_hp": new_hp, "overshoot": overshoot, "death_chance": death_chance}
 
 
-def _check_knockdown_verbose(warrior: "Warrior", state: "_CState", damage: int, cat: str):
+def _check_knockdown_verbose(warrior: "Warrior", state: "_CState", damage: int, cat: str,
+                              attacker: "Warrior" = None, atk_style: str = ""):
     if state.is_on_ground:
         return False, 0, 0
     chance = int((damage / max(1, warrior.max_hp)) * 12)
@@ -1742,6 +1818,9 @@ def _check_knockdown_verbose(warrior: "Warrior", state: "_CState", damage: int, 
     if cat == "Polearm/Spear":
         chance += 3
     chance -= max(0, (warrior.size - 12)) * 2
+    # Sweep skill: Martial Combat attackers add extra knockdown chance
+    if attacker is not None and atk_style == "Martial Combat":
+        chance += attacker.skills.get("sweep", 0) * 2
     if warrior.race.modifiers.acrobatic_advantage:
         chance = chance // 2  # 50% knockdown resistance for Tabaxi
     final  = max(1, chance)
@@ -1914,13 +1993,17 @@ def _check_entangle(warrior: Warrior, state: _CState, weapon: Weapon, was_thrown
     return False, None
 
 
-def _check_knockdown(warrior: Warrior, state: _CState, damage: int, cat: str) -> bool:
+def _check_knockdown(warrior: Warrior, state: _CState, damage: int, cat: str,
+                      attacker: Warrior = None, atk_style: str = "") -> bool:
     if state.is_on_ground:
         return False
     chance  = int((damage / max(1, warrior.max_hp)) * 30)
     if cat in ("Hammer/Mace","Flail"):  chance += 5
     if cat == "Polearm/Spear":          chance += 3
     chance -= max(0, (warrior.size - 12)) * 2
+    # Sweep skill: Martial Combat attackers add extra knockdown chance
+    if attacker is not None and atk_style == "Martial Combat":
+        chance += attacker.skills.get("sweep", 0) * 2
     if warrior.race.modifiers.acrobatic_advantage:
         chance = chance // 2  # 50% knockdown resistance for Tabaxi
     roll = random.randint(1, 100)
@@ -2093,6 +2176,12 @@ def _update_endurance(
     if strategy.style in ("Engage & Withdraw", "Lunge"):
         acro_lv = warrior.skills.get("acrobatics", 0)
         burn += max(1, 10 - acro_lv) * 0.01
+
+    # Brawl efficiency for Martial Combat: base style burn is high (2.2);
+    # each Brawl level shaves up to 15% off that cost (Level 9 -> 15% cheaper).
+    if strategy.style == "Martial Combat":
+        brawl_lv = warrior.skills.get("brawl", 0)
+        burn *= max(0.85, 1.0 - brawl_lv * 0.0167)
 
     # Per-minute passive drain: cumulative fatigue past minute 5
     # +0.5 per minute over 5, spread across actions (÷ apm)
@@ -3661,6 +3750,19 @@ class CombatEngine:
                                 if _weapon_loss_msg: self._emit(_weapon_loss_msg)
                                 if _weapon_thrown_away: self._check_and_switch_strategies(as_, ds_, minute)
                                 return self._counterstrike(ds_, as_, dx, ax, minute)
+
+                        # Sweep skill (defensive): a strong Defend-style parry can be
+                        # turned into a leg sweep, knocking the attacker to the ground.
+                        if dx.style == "Defend":
+                            _sweep_lv = dfr.skills.get("sweep", 0)
+                            if _sweep_lv > 0 and random.randint(1, 100) <= _sweep_lv * 2:
+                                self._emit(
+                                    f"{dfr.name.upper()} turns the parry into a sweeping counter, "
+                                    f"dropping {att.name.upper()} to the ground!"
+                                )
+                                as_.is_on_ground = True
+                                ds_.knockdowns_dealt += 1
+                                self._check_and_switch_strategies(ds_, as_, minute)
                 else:
                     if not _crit_def and not _defensive_narrative_emitted:
                         self._emit(N.dodge_line(dfr.name))
@@ -3695,9 +3797,13 @@ class CombatEngine:
             # Skip if the defense point was actively covering this aim location — a
             # "particularly strong" defense should not result in losing the weapon.
             _dp_shielded = dx.defense_point not in (None, "None") and dx.defense_point == aim
-            if use_p and atk_r > (dfr.strength * 4) and not _dp_shielded:
-                # Reduced base chance (8%) + disarm skill bonus (2% per level)
-                disarm_chance = 8 + (att.skills.get("disarm", 0) * 2)
+            if use_p and atk_r > (dfr.strength * 3.5) and not _dp_shielded:
+                # Base chance (12%) + disarm skill bonus (3% per level)
+                disarm_chance = 12 + (att.skills.get("disarm", 0) * 3)
+                # Charge skill (stability): defender using a weighted/committed
+                # style resists being disarmed, -2% per Charge level
+                if dx.style in CHARGE_STYLES:
+                    disarm_chance = max(0, disarm_chance - dfr.skills.get("charge", 0) * 2)
                 if random.randint(1, 100) <= disarm_chance:
                     _unarmed = dfr.primary_weapon.lower() in ("open hand", "cestus")
                     if _unarmed:
@@ -3965,10 +4071,10 @@ class CombatEngine:
 
         # Knockdown
         if self.debug_logger:
-            _kd, _kd_chance, _kd_roll = _check_knockdown_verbose(dfr, ds_, dmg, wcats)
+            _kd, _kd_chance, _kd_roll = _check_knockdown_verbose(dfr, ds_, dmg, wcats, att, ax.style)
             self.debug_logger.log_knockdown(dfr.name, dmg, dfr.max_hp, wcats, _kd_chance, _kd_roll, _kd)
         else:
-            _kd = _check_knockdown(dfr, ds_, dmg, wcats)
+            _kd = _check_knockdown(dfr, ds_, dmg, wcats, att, ax.style)
         if _kd:
             self._emit(N.knockdown_line(dfr.name, dfr.gender))
             ds_.is_on_ground = True
