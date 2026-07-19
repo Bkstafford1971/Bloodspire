@@ -90,26 +90,29 @@
                 <h3>Announcements</h3>
                 <div class="content-box">
                     <p style="text-align: center; margin: 15px 0;">
-                        <a href="#" id="viewJuly14Announcement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            🛡️ JULY 14, 2026 — VERSION 3.1.0 & STABILITY UPDATES
+                        <a href="#" id="viewJuly19Announcement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            🛡️ JULY 19, 2026 - ENGINE UPDATES, SKILL FIXES & CLIENT V3.3
+                        </a>
+                        <a href="#" id="viewJuly14Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            JULY 14, 2026 - VERSION 3.1.0 & STABILITY UPDATES
                         </a>
                         <a href="#" id="viewJuly7Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            JULY 7, 2026 — BLOOD CHALLENGE SYSTEM OVERHAUL
+                            JULY 7, 2026 - BLOOD CHALLENGE SYSTEM OVERHAUL
                         </a>
                         <a href="#" id="viewLatestAnnouncement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            JUNE 28, 2026 — BALANCE MODIFICATIONS & PROVING GROUNDS UPDATE
+                            JUNE 28, 2026 - BALANCE MODIFICATIONS & PROVING GROUNDS UPDATE
                         </a>
                         <a href="#" id="viewJune10Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            JUNE 10, 2026 — CLIENT V2.8 & ARCHIVE UPDATES
+                            JUNE 10, 2026 - CLIENT V2.8 & ARCHIVE UPDATES
                         </a>
                         <a href="#" id="viewJune5Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            JUNE 5, 2026 — STATE OF THE ARENA & FUTURE TOURNAMENTS
+                            JUNE 5, 2026 - STATE OF THE ARENA & FUTURE TOURNAMENTS
                         </a>
                         <a href="#" id="viewJune1Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            JUNE 1, 2026 — OFFLINE FIGHTS & ARENA STATS
+                            JUNE 1, 2026 - OFFLINE FIGHTS & ARENA STATS
                         </a>
                         <a href="#" id="viewNewAnnouncement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            MAY 29, 2026 — ARENA UPDATE
+                            MAY 29, 2026 - ARENA UPDATE
                         </a>
                         <a href="#" id="viewAnnouncement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif;">
                             VIEW THE OFFICIAL PLAYTEST ANNOUNCEMENT (5/27)
@@ -120,10 +123,49 @@
         </main>
     </div>
 
+    <!-- July 19 Modal -->
+    <div id="july19AnnouncementModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>ENGINE UPDATES, SKILL FIXES & CLIENT V3.3 - JULY 19, 2026</h2>
+            <div class="modal-scroll-body">
+                <p><strong>Honored Managers,</strong></p>
+                <p>Several updates have been made to the game engine and to the client.</p>
+                
+                <h3>Engine & Combat Updates</h3>
+                <ul>
+                    <li><strong>Skills Analysis:</strong> Performed an analysis and found 5-6 secondary skills that were not wired in correctly or were partially working. Disarm, Sweep, Charge, and Strike were all non-functional. The framework was there for them, but nothing was hooked into the combat engine. These have been corrected.</li>
+                    <li><strong>Throw Accuracy:</strong> This skill was partially working. The skills learned were helping to increase the damage from the throw, but did not increase the accuracy as intended. This is now fixed.</li>
+                    <li><strong>Multiplier Adjustments:</strong> Lunge, Slash, and Bash were using an incorrect multiplier (x3 instead of x4). This has been corrected.</li>
+                    <li><strong>Brawl Logic:</strong> Brawl was only effective for helping to get off the ground when knocked down. New logic now helps with Martial Combat tactics more, as it should.</li>
+                    <li><strong>Luck:</strong> Luck has been fixed. Previously it was a permanent bonus on every roll; now it is truly a luck stat and can fire for different rolls randomly. This makes luck feel more natural and not just a huge boost to every roll if your luck score was high or a death sentence if it was low.</li>
+                    <li><strong>HP Formula:</strong> Modified the HP Formula to increase HP for all warriors. As skills become more prominent, there are several stacking bonuses applied. Due to this, damage rolls were getting higher, as they should with skill learns. Too many weaker races and builds were getting "one-shotted" in a fight. This should be gone now and we should actually see some 2-3 minute fights again. (Note: A heavy hitter build against a frail speed build could still result in a one-shot win or kill, but should be less common).</li>
+                </ul>
+
+                <h3>Client Update (v3.3)</h3>
+                <ul>
+                    <li><strong>Challenge Tab:</strong> Added sortable headers so you can sort by any column to find a foe. Added the recognition score and warrior recognition to the challenge table.</li>
+                    <li><strong>Scouting:</strong> Scouting is no longer a real-time event. You will now need to set the scouts you want, upload, and wait. You will get your scouting report after the turn processes. You also have the ability to save the scouting reports. They will save to your saves folder in a folder called "scouting".</li>
+                    <li><strong>Scouting Reports:</strong> Scouting now includes the fight narrative of the warrior you sent your scout to see. It will still show all the other information that it already had, just added info for you to peruse.</li>
+                    <li><strong>Scout Flavor Text:</strong> Added a flavor line to the fight text for scouting letting the manager know that a scout is there to see that fight. It does not specify which warrior they are scouting, but does tell you they are there. If there is one single manager scouting a warrior, it will show the manager that sent the scout to watch. If multiple managers are scouting those warriors, the line will state that there is more than 1 scout in attendance, but will not let you know what managers sent them.</li>
+                    <li><strong>Refresh Game Data:</strong> There is a new "Refresh Game Data" option in the preferences menu. Using this will send a new json file to the user, updating any changes to trigger wording, weapon names, or skill names. This is needed so the client can render the proper items in the dropdowns.</li>
+                </ul>
+
+                <p><strong>Note:</strong> You will DEFINITELY need Client version 3.3 before the next turn runs. Make sure that you update prior to Tuesday evening. I would probably suggest doing a new upload with the new version before the turn runs, just to make sure there are no stale records anywhere.</p>
+
+                <p>Thanks for your continued testing.</p>
+
+                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
+                    - ILNEVAL -
+                </p>
+            </div>
+            <button class="close-modal-btn" id="closeJuly19Modal">Dismiss</button>
+        </div>
+    </div>
+
     <!-- July 14 Modal -->
     <div id="july14AnnouncementModal" class="modal-overlay">
         <div class="modal-content">
-            <h2>ARENA UPDATE — JULY 14, 2026</h2>
+            <h2>ARENA UPDATE - JULY 14, 2026</h2>
             <div class="modal-scroll-body">
                 <p><strong>Honored Managers,</strong></p>
                 <p>Client version 3.1.0 is now available. This update focuses on stability, synchronization, and some nomenclature refinements to enhance gameplay.</p>
@@ -145,7 +187,7 @@
                 <p>Please update your client to ensure these improvements are active. As always, thank you for your feedback and continued support of the arena.</p>
 
                 <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
-                    — ILNEVAL
+                    - ILNEVAL -
                 </p>
             </div>
             <button class="close-modal-btn" id="closeJuly14Modal">Dismiss</button>
@@ -155,7 +197,7 @@
     <!-- July 7 Modal -->
     <div id="july7AnnouncementModal" class="modal-overlay">
         <div class="modal-content">
-            <h2>ARENA UPDATE: BLOOD CHALLENGE SYSTEM OVERHAUL — JULY 7, 2026</h2>
+            <h2>ARENA UPDATE: BLOOD CHALLENGE SYSTEM OVERHAUL - JULY 7, 2026</h2>
             <div class="modal-scroll-body">
                 <p><strong>Honored Managers,</strong></p>
                 <p>I have updated the Blood Challenge system to better reflect the risks and rewards of challenging opponents in the arena. These changes are designed to encourage fair competition, reward underdog spirit, and ensure that those who repeatedly use their status to crush weaker opponents face lasting consequences.</p>
@@ -180,7 +222,7 @@
                 <p>These adjustments ensure that Blood Challenges are a strategic risk-versus-reward mechanic rather than a tool for casual dominance. I want players to play the game the way they want, but just like in life, there should be a consequence to every action and rewards for underdogs. Besides, everyone loves an underdog story, right? This is in no way meant to call out anyone’s preferred style of play. We need villians and hero types in every game. I think it just adds an extra element to the game to try to make it more immersive and fun. Good luck to all challengers in the arena.</p>
 
                 <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
-                    — ILNEVAL
+                    - ILNEVAL -
                 </p>
             </div>
             <button class="close-modal-btn" id="closeJuly7Modal">Dismiss</button>
@@ -190,7 +232,7 @@
     <!-- Latest Modal (June 28) -->
     <div id="latestAnnouncementModal" class="modal-overlay">
         <div class="modal-content">
-            <h2>BALANCE MODIFICATIONS & PROVING GROUNDS — JUNE 28, 2026</h2>
+            <h2>BALANCE MODIFICATIONS & PROVING GROUNDS - JUNE 28, 2026</h2>
             <div class="modal-scroll-body">
                 <p><strong>Honored Managers,</strong></p>
                 <p>New client version 3.0.0 is now available. Please head over to the downloads section to update your version.  Below are some of the enhancements and fixes included in the new version</p>
@@ -224,7 +266,7 @@
                 <p>New peasant names. Please submit your peasant names that you want. Remember, as a thank you from me, I am allowing the playtesters to rename the peasants, so each of you will get at least 1 peasant to rename.</p>
 
                 <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
-                    — ILNEVAL
+                    - ILNEVAL -
                 </p>
             </div>
             <button class="close-modal-btn" id="closeLatestModal">Dismiss</button>
@@ -234,7 +276,7 @@
     <!-- Previous Modals remain here -->
     <div id="june10AnnouncementModal" class="modal-overlay">
         <div class="modal-content">
-            <h2>CLIENT V2.8 & ARCHIVE UPDATES — JUNE 10, 2026</h2>
+            <h2>CLIENT V2.8 & ARCHIVE UPDATES - JUNE 10, 2026</h2>
             <div class="modal-scroll-body">
                 <p><strong>Honored Managers,</strong></p>
                 
@@ -245,7 +287,7 @@
                 <p>There are a couple of other small aesthetic changes I made for visualizations. Most of which you will not even notice.</p>
                 
                 <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
-                    — ILNEVAL
+                    - ILNEVAL -
                 </p>
             </div>
             <button class="close-modal-btn" id="closeJune10Modal">Dismiss</button>
@@ -254,7 +296,7 @@
 
     <div id="june5AnnouncementModal" class="modal-overlay">
         <div class="modal-content">
-            <h2>STATE OF THE ARENA & UPDATES — JUNE 5, 2026</h2>
+            <h2>STATE OF THE ARENA & UPDATES - JUNE 5, 2026</h2>
             <div class="modal-scroll-body">
                 <p><strong>Honored Managers,</strong></p>
                 
@@ -295,7 +337,7 @@
                 <p>Winner of each tier of the tournament would have a choice of one of these prizes. Again, this is still in the planning stages and a ways off for now.</p>
                 
                 <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
-                    — ILNEVAL
+                    - ILNEVAL -
                 </p>
             </div>
             <button class="close-modal-btn" id="closeJune5Modal">Dismiss</button>
@@ -304,7 +346,7 @@
 
     <div id="june1AnnouncementModal" class="modal-overlay">
         <div class="modal-content">
-            <h2>ARENA UPDATE — JUNE 1, 2026</h2>
+            <h2>ARENA UPDATE - JUNE 1, 2026</h2>
             <div class="modal-scroll-body">
                 <p><strong>Honored Managers,</strong></p>
                 
@@ -317,7 +359,7 @@
                 <p>These hubs closely mirror the structure found on the Blood Pit player connection pages. While currently initialized with simulated test metrics, live data will populate these tables automatically upon the conclusion of Turn 2.</p>
                 
                 <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
-                    — ILNEVAL
+                    - ILNEVAL -
                 </p>
             </div>
             <button class="close-modal-btn" id="closeJune1Modal">Dismiss</button>
@@ -326,7 +368,7 @@
 
     <div id="newAnnouncementModal" class="modal-overlay">
         <div class="modal-content">
-            <h2>ARENA UPDATE — MAY 29, 2026</h2>
+            <h2>ARENA UPDATE - MAY 29, 2026</h2>
             <div class="modal-scroll-body">
                 <p><strong>Honored Managers of the Bloodspire Arena,</strong></p>
                 
@@ -335,7 +377,7 @@
                 <ul>
                     <li>Fixed an exploit related to replacements rollups</li>
                     <li>Modified endurance calculations to prevent early exhaustion</li>
-                    <li>Updated permanent injury thresholds — they are now less likely to trigger</li>
+                    <li>Updated permanent injury thresholds - they are now less likely to trigger</li>
                     <li>Cleaned up knockdown logic (warriors were hitting the ground too frequently)</li>
                     <li>Minor verbiage updates and grammar tweaks throughout the client</li>
                     <li>Tweaked the damage formula for all weapons to improve overall balance</li>
@@ -349,12 +391,12 @@
                 
                 <p><strong>Turn 2 will run on Saturday, May 30th at 9:00 PM CST.</strong></p>
                 
-                <p>Regular turns will now follow a <strong>Tuesday — Thursday — Saturday</strong> schedule.</p>
+                <p>Regular turns will now follow a <strong>Tuesday - Thursday - Saturday</strong> schedule.</p>
                 
                 <p>Thank you all again for your patience and valuable feedback. Things are steadily improving and getting much closer to the vision I had when this arena first opened its gates.</p>
                 
                 <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
-                    — ILNEVAL
+                    - ILNEVAL -
                 </p>
             </div>
             <button class="close-modal-btn" id="closeNewModal">Dismiss</button>
@@ -459,25 +501,32 @@
             const july14Modal = document.getElementById('july14AnnouncementModal');
             const closeJuly14 = document.getElementById('closeJuly14Modal');
             const viewJuly14 = document.getElementById('viewJuly14Announcement');
+            
+            const july19Modal = document.getElementById('july19AnnouncementModal');
+            const closeJuly19 = document.getElementById('closeJuly19Modal');
+            const viewJuly19 = document.getElementById('viewJuly19Announcement');
 
             // Show latest announcement automatically if not seen
-            if (!localStorage.getItem('bloodspire_update_20260714')) {
-                july14Modal.style.display = 'block';
+            if (!localStorage.getItem('bloodspire_update_20260719')) {
+                july19Modal.style.display = 'block';
             }
 
             // Close latest modal
-            closeJuly14.onclick = () => { 
-                july14Modal.style.display = 'none'; 
-                localStorage.setItem('bloodspire_update_20260714', 'true'); 
+            closeJuly19.onclick = () => { 
+                july19Modal.style.display = 'none'; 
+                localStorage.setItem('bloodspire_update_20260719', 'true'); 
             };
 
             // Open latest modal via link
-            viewJuly14.onclick = function(e) {
+            viewJuly19.onclick = function(e) {
                 e.preventDefault();
-                july14Modal.style.display = 'block';
+                july19Modal.style.display = 'block';
             };
 
             // Previous Modals
+            closeJuly14.onclick = () => { july14Modal.style.display = 'none'; };
+            viewJuly14.onclick = function(e) { e.preventDefault(); july14Modal.style.display = 'block'; };
+
             closeJuly7.onclick = () => { july7Modal.style.display = 'none'; };
             viewJuly7.onclick = function(e) { e.preventDefault(); july7Modal.style.display = 'block'; };
 
@@ -501,4 +550,4 @@
         });
     </script>
 </body>
-</html>
+</html>```
