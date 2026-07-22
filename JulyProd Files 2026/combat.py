@@ -3243,9 +3243,11 @@ class CombatEngine:
         ]))
 
         atk = _attack_roll(att, strat_ot, as_) - 8   # hurried throw penalty
+        # Check if defender is using Parry or Defend strategy
+        is_parry = ds_.active_strategy.style in ("Parry", "Defend")
         dfs = _defense_roll(ds_.warrior, ds_.active_strategy, ds_,
                             att, aim_point=strat_ot.aim_point,
-                            atk_style="Opportunity Throw", is_parry=False)
+                            atk_style="Opportunity Throw", is_parry=is_parry)
 
         if atk > dfs:
             margin = atk - dfs
@@ -3258,10 +3260,12 @@ class CombatEngine:
             self._emit(N.damage_line(dmg, ds_.warrior.max_hp, cat, is_claw_attack=is_claw))
             prev_hp        = ds_.current_hp
             ds_.current_hp -= dmg
-            result = self._handle_zero_hp(ds_, as_, prev_hp, dmg, minute)
-            if result:
-                att.primary_weapon = saved_primary
-                return result   # fight ended; return the FightResult
+            # Only call _handle_zero_hp if warrior actually died
+            if ds_.current_hp <= 0:
+                result = self._handle_zero_hp(ds_, as_, prev_hp, dmg, minute)
+                if result:
+                    att.primary_weapon = saved_primary
+                    return result   # fight ended; return the FightResult
         else:
             self._emit(random.choice([
                 f"   The hurried throw flies wide and {ds_.warrior.name.upper()} barely flinches!",
@@ -4288,6 +4292,25 @@ class CombatEngine:
 
     def _handle_zero_hp(self, dying: _CState, killer: _CState, prev: int, dmg: int, minute: int) -> Optional[FightResult]:
         dw = dying.warrior;  kw = killer.warrior
+
+        # CRITICAL GUARD: If current_hp > 0, this function should never have been called.
+        # This guards against phantom damage from successful parries/dodges being processed.
+        if dying.current_hp > 0:
+            import sys
+            import inspect
+            print(f"\n!!! PHANTOM DAMAGE GUARD TRIGGERED !!!", file=sys.stderr)
+            print(f"!!! Warrior: {dw.name} | prev_hp: {prev} | dmg: {dmg} | current_hp: {dying.current_hp}", file=sys.stderr)
+            print(f"!!! Calculation: {prev} - {dmg} = {prev - dmg}, but current_hp is {dying.current_hp}", file=sys.stderr)
+            print(f"!!! This indicates damage was applied outside the normal margin check flow", file=sys.stderr)
+
+            # Get call stack to identify which code path triggered this
+            stack = inspect.stack()
+            caller_frame = stack[1] if len(stack) > 1 else None
+            if caller_frame:
+                print(f"!!! Called from: {caller_frame.function}() at line {caller_frame.lineno}", file=sys.stderr)
+
+            return None
+
         if self.is_monster_fight:
             dw.is_dead = True
             self._emit(f"{dw.name.upper()} collapses, the monster shows no mercy!")
