@@ -562,6 +562,49 @@ def get_challenge_flavor_line(w1_name: str, w2_name: str, challenger_name: Optio
 
     return random.choice(pool).format(n1=n1, n2=n2)
 
+
+_SCOUT_FLAVOR_SINGLE = [
+    "There is a scout from {mgr}'s stable in attendance today.",
+    "{mgr} has sent a scout to watch today's duel.",
+    "A scout representing {mgr} has taken a seat in the stands.",
+    "Word has it {mgr} has an eye on this match, watching from the crowd.",
+    "{mgr}'s scout has arrived to observe today's bout.",
+    "A representative from {mgr}'s camp is here to take notes on this fight.",
+    "{mgr} has quietly dispatched a scout to size up today's combatants.",
+    "One of {mgr}'s scouts is watching closely from the stands.",
+    "A scout in {mgr}'s colors can be seen observing the arena today.",
+    "{mgr} wanted eyes on this fight, and a scout has been sent to provide them.",
+]
+
+_SCOUT_FLAVOR_MULTI = [
+    "There are several scouts in attendance for this match today.",
+    "More than one set of watchful eyes has turned out for today's bout.",
+    "Word of this match has drawn a handful of scouts to the stands.",
+    "Several rival camps have sent scouts to observe today's fighters.",
+    "The stands hold more than a few interested observers today.",
+    "This fight has attracted the attention of multiple scouting parties.",
+    "A cluster of scouts can be seen taking notes from the crowd.",
+    "Today's bout has no shortage of watchful strangers in attendance.",
+    "Several scouts have turned out, each keeping their reasons to themselves.",
+    "More than one manager has an interest in how this fight unfolds, and their scouts are here to see it.",
+]
+
+def get_scout_flavor_line(scout_names: list) -> Optional[str]:
+    """
+    Return a randomly selected scout-attendance flavor line, or None if no
+    one is scouting this fight.
+
+    Exactly 1 scout: names the scouting manager. 2+ scouts (whether from
+    the same manager watching both combatants, or different managers):
+    generic line, no names - deliberately never reveals which combatant
+    is the actual target.
+    """
+    if not scout_names:
+        return None
+    if len(scout_names) == 1:
+        return random.choice(_SCOUT_FLAVOR_SINGLE).format(mgr=scout_names[0])
+    return random.choice(_SCOUT_FLAVOR_MULTI)
+
 def presence_hesitation_line(attacker_name: str, defender_name: str) -> str:
     """Return the narrative line for a successful presence-based hesitation."""
     return f"{attacker_name.upper()}'s commanding presence makes {defender_name.upper()} hesitate!"
@@ -1757,15 +1800,14 @@ def damage_line(damage: int, max_hp: int, weapon_category: str = "Oddball",
 
     Args:
         damage: Damage dealt
-        max_hp: Target's max HP
+        max_hp: Target's max HP (used for context, not severity calculation)
         weapon_category: Weapon category (Oddball, Sword/Knife, etc.)
         is_claw_attack: Deprecated; use attack_type instead
         attack_type: Type of unarmed attack ("claw", "kick", "tail", or None for weapon attacks)
     """
-    pct = damage / max(1, max_hp)
-    if   pct < 0.19: severity = "Light"
-    elif pct < 0.34: severity = "Medium"
-    else:            severity = "Heavy"
+    if   damage <= 18: severity = "Light"
+    elif damage <= 33: severity = "Medium"
+    else:             severity = "Heavy"
 
     # For Open Hand attacks, use Unarmed descriptions based on attack type
     if weapon_category == "Oddball" and (attack_type or is_claw_attack):

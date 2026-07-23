@@ -437,6 +437,96 @@ def _get_elf_dual_wield_parry_bonus(attacker: Warrior) -> int:
     return bonus
 
 
+def _is_offhand_weapon_eligible(warrior: Warrior) -> bool:
+    """
+    Check if warrior's secondary weapon is eligible for off-hand attacks.
+    Shields: Always eligible (all shields can bash/rush).
+    Other weapons must be < 3.5 weight and not 2-handed.
+    """
+    if warrior.secondary_weapon == "Open Hand":
+        return False
+
+    try:
+        sec_wpn = get_weapon(warrior.secondary_weapon)
+    except ValueError:
+        return False
+
+    # Shields always eligible
+    if sec_wpn.is_shield:
+        return True
+
+    # Off-hand weapons: must be < 3.5 weight and not 2-handed
+    if sec_wpn.weight < 3.5 and not sec_wpn.two_hand:
+        return True
+
+    return False
+
+
+def _calc_offhand_trigger_chance(margin: int) -> int:
+    """
+    Calculate probability of off-hand attack based on hit margin.
+    Applies to any hit with margin 1-30. Weaker hits have higher probability.
+    Margin >31 is always primary weapon.
+    Scaling: margin 1-9 ~50%, margin 10-20 ~30%, margin 21-30 ~10%
+    """
+    if margin < 1 or margin > 30:
+        return 0  # No off-hand on misses or crushing hits (>31)
+
+    if margin <= 9:
+        return 50  # ~50% on very weak hits (1-9)
+    elif margin <= 20:
+        return 30  # ~30% on weak to moderate hits (10-20)
+    else:  # margin 21-30
+        return 10  # ~10% on strong hits (21-30)
+
+
+def _get_shield_attack_type(warrior: Warrior) -> str:
+    """
+    Determine shield attack type based on Charge skill.
+    Rush if Charge skill >= 3, otherwise bash.
+    """
+    charge_skill = warrior.skills.get("charge", 0)
+    return "rush" if charge_skill >= 3 else "bash"
+
+
+def _get_shield_attack_narrative(warrior: Warrior, defender: Warrior, shield_name: str,
+                                  attack_type: str, aim_point: str = None) -> str:
+    """
+    Generate a specific shield attack narrative based on rush vs bash.
+    Returns a narrative line for the shield attack.
+    """
+    shield_rush_lines = [
+        f"{warrior.name.upper()} charges forward with shield raised high",
+        f"{warrior.name.upper()} launches forward in a powerful shield charge",
+        f"{warrior.name.upper()} rushes ahead with shield held firm",
+        f"{warrior.name.upper()} surges forward, leading with their shield",
+        f"{warrior.name.upper()} propels themselves forward behind their shield",
+        f"{warrior.name.upper()} hurls themselves forward, shield first",
+        f"{warrior.name.upper()} advances aggressively with shield raised",
+        f"{warrior.name.upper()} charges in with shield leading the way",
+        f"{warrior.name.upper()} explodes forward in a shield rush",
+        f"{warrior.name.upper()} bolts forward with shield at the ready",
+    ]
+
+    shield_bash_lines = [
+        f"{warrior.name.upper()} swings their shield in a wide defensive arc",
+        f"{warrior.name.upper()} brings their shield around in a powerful swing",
+        f"{warrior.name.upper()} raises their shield and delivers a sharp bash",
+        f"{warrior.name.upper()} swings their shield at {defender.name.upper()}",
+        f"{warrior.name.upper()} strikes with their shield in a controlled swing",
+        f"{warrior.name.upper()} swings their shield up and outward",
+        f"{warrior.name.upper()} brings their shield to bear with force",
+        f"{warrior.name.upper()} delivers a solid shield bash",
+        f"{warrior.name.upper()} swings their shield with focused intensity",
+        f"{warrior.name.upper()} raises their shield and bashes forward",
+    ]
+
+    if attack_type == "rush":
+        return random.choice(shield_rush_lines)
+    else:
+        return random.choice(shield_bash_lines)
+
+
 def _get_lizardfolk_natural_weapon_bonus(attacker: Warrior) -> int:
     """
     Get Lizardfolk natural weapon damage bonus based on Open Hand skill.
@@ -676,11 +766,11 @@ class _CState:
 
     @property
     def wants_to_concede(self) -> bool:
-        """True when at <=25% HP (or at/below 0) and HP has dropped since last appeal.
+        """True when at <=15% HP (or at/below 0) and HP has dropped since last appeal.
         Note: the blow that first drops a warrior to <=0 HP is handled by an explicit
         appeal inside _handle_zero_hp, which also stamps hp_at_last_concede - so this
         only re-fires here on a *further* drop, not a second time for the same blow."""
-        if self.hp_pct > 0.25 and self.current_hp > 0:
+        if self.hp_pct > 0.15 and self.current_hp > 0:
             return False
         return self.current_hp < self.hp_at_last_concede
 
@@ -1184,8 +1274,12 @@ def _calc_damage_hybrid(
         except ValueError:
             pass
 
-    base_ceiling = weapon.damage_top + bonus + dual_wield_bonus
-    base_floor = weapon.damage_base + max(0, (bonus + dual_wield_bonus) * 0.3)
+    # Elf-specific dual-wielding damage bonus (scales with secondary weapon skill)
+    elf_dual_bonus = _get_elf_dual_wield_damage_bonus(attacker)
+    total_dual_bonus = dual_wield_bonus + elf_dual_bonus
+
+    base_ceiling = weapon.damage_top + bonus + total_dual_bonus
+    base_floor = weapon.damage_base + max(0, (bonus + total_dual_bonus) * 0.3)
 
     # Calculate raw damage based on margin (0 = floor, high margin = ceiling)
     fraction = max(0.0, min(1.00, margin / 55.0))
@@ -1595,6 +1689,10 @@ def _calc_damage_verbose(
         except ValueError:
             pass
 
+    # Elf-specific dual-wielding damage bonus (scales with secondary weapon skill)
+    elf_dual_bonus = _get_elf_dual_wield_damage_bonus(attacker)
+    total_dual_bonus = dual_wield_bonus + elf_dual_bonus
+
     # Mirror _calc_damage_hybrid exactly (OT: halved + STR 14 cap)
     _is_ot       = (atk_strategy.style == "Opportunity Throw")
     _str_for_ot  = min(attacker.strength, 14) if _is_ot else attacker.strength
@@ -1602,8 +1700,8 @@ def _calc_damage_verbose(
     skill_bonus = wpn_skill * 1.0
     bonus = max(-10, str_bonus + skill_bonus)
 
-    base_ceiling = weapon.damage_top + bonus + dual_wield_bonus
-    base_floor = weapon.damage_base + max(0, (bonus + dual_wield_bonus) * 0.3)
+    base_ceiling = weapon.damage_top + bonus + total_dual_bonus
+    base_floor = weapon.damage_base + max(0, (bonus + total_dual_bonus) * 0.3)
 
     steps["damage_base"] = weapon.damage_base
     steps["damage_top"] = weapon.damage_top
@@ -1612,6 +1710,8 @@ def _calc_damage_verbose(
     steps["skill_bonus"] = skill_bonus
     steps["bonus"] = bonus
     steps["dual_wield_bonus"] = dual_wield_bonus
+    if elf_dual_bonus > 0:
+        steps["elf_dual_bonus"] = elf_dual_bonus
     steps["base_floor"] = round(base_floor, 2)
     steps["base_ceiling"] = round(base_ceiling, 2)
 
@@ -2198,8 +2298,8 @@ def _update_endurance(
         w = warrior
         if strategy.style in _AGGRESSIVE_STYLES:
             lines.append(
-                f"{w.name.upper()} is EXHAUSTED - pushing on sheer aggression, "
-                f"{w.gender_subject} attack form is starting to crumble!"
+                f"{w.name.upper()} is EXHAUSTED, pushing on sheer aggression, "
+                f"their attack form is starting to crumble!"
             )
         else:
             lines.append(
@@ -2448,6 +2548,7 @@ class CombatEngine:
         fight_type      : str  = "standard",
         debug_logger    : Optional[CombatDebugLogger] = None,
         bully_info      : Optional[dict] = None,
+        scouting_info   : Optional[dict] = None,
     ):
         self.warrior_a        = warrior_a
         self.warrior_b        = warrior_b
@@ -2462,6 +2563,7 @@ class CombatEngine:
         self.fight_type       = fight_type
         self.debug_logger     = debug_logger
         self.bully_info       = bully_info
+        self.scouting_info    = scouting_info
 
         self.state_a = _CState(warrior=warrior_a, current_hp=warrior_a.max_hp, endurance=float(warrior_a.max_endurance))
         self.state_b = _CState(warrior=warrior_b, current_hp=warrior_b.max_hp, endurance=float(warrior_b.max_endurance))
@@ -3470,15 +3572,15 @@ class CombatEngine:
         # Check weapon/style compatibility
         is_compatible, penalty_factor = _check_weapon_style_compatibility(wpn, ax.style)
 
-        # Use appropriate intent line (normal or awkward)
+        # Defer attack intent narrative until after we determine if off-hand will be used
+        # This way the narrative reflects the actual weapon that will deliver the attack
         _weak_attack_intent = not is_compatible  # awkward flavor was used - suppress "barely" on parry
+        _intent_line = None
+        _attack_line = None
         if is_compatible:
-            intent = N.style_intent_line(att.name, dfr.name, ax.style, wpn, att.gender, foe_armor=dfr.armor)
+            _intent_line = N.style_intent_line(att.name, dfr.name, ax.style, wpn, att.gender, foe_armor=dfr.armor)
         else:
-            intent = N.awkward_style_intent_line(att.name, dfr.name, ax.style, wpn, att.gender)
-
-        if intent:
-            self._emit(intent)
+            _intent_line = N.awkward_style_intent_line(att.name, dfr.name, ax.style, wpn, att.gender)
 
         try:    weapon = get_weapon(wpn);  cat = weapon.category
         except: weapon = OPEN_HAND;        cat = "Oddball"
@@ -3487,7 +3589,7 @@ class CombatEngine:
         # the two lines together are redundant and the second often contradicts the first.
         if not _weak_attack_intent:
             is_fav_wpn = att.favorite_weapon == wpn
-            self._emit(N.attack_line(att.name, dfr.name, wpn, cat, ax.style, aim, att.gender, attacker_race=att.race.name, is_favorite_weapon=is_fav_wpn))
+            _attack_line = N.attack_line(att.name, dfr.name, wpn, cat, ax.style, aim, att.gender, attacker_race=att.race.name, is_favorite_weapon=is_fav_wpn)
 
         # Defense reaction line, defender's posture before the result is known
         # Lower probability for awkward attacks - the setup already signals struggle,
@@ -3585,6 +3687,59 @@ class CombatEngine:
 
         margin = atk_r - def_r
         self._emit_crowd_interference_result(margin)
+
+        # ═══════════════════════════════════════════════════════════════════════════════════
+        # OFF-HAND ATTACK DETERMINATION (before any attack narrative)
+        # ═══════════════════════════════════════════════════════════════════════════════════
+        # Check if off-hand should be used for this attack (margin 1-30 only)
+        _use_offhand = False
+        _original_wpn = wpn
+
+        if margin >= 1 and margin <= 30:
+            # Check if secondary weapon is eligible
+            if _is_offhand_weapon_eligible(att):
+                # Check if off-hand triggers based on probability
+                trigger_chance = _calc_offhand_trigger_chance(margin)
+                if trigger_chance > 0 and random.randint(1, 100) <= trigger_chance:
+                    _use_offhand = True
+                    wpn = att.secondary_weapon
+                    # Recalculate compatibility for the secondary weapon
+                    is_compatible_offhand, _ = _check_weapon_style_compatibility(wpn, ax.style)
+                    _weak_attack_intent_offhand = not is_compatible_offhand
+                    try:
+                        weapon = get_weapon(wpn)
+                        cat = weapon.category
+                        # Regenerate attack intent narratives with off-hand weapon
+                        # For shields, use specific rush/bash flavor narratives
+                        if weapon.is_shield:
+                            attack_type = _get_shield_attack_type(att)
+                            _intent_line = _get_shield_attack_narrative(att, dfr, wpn, attack_type, aim)
+                            _attack_line = None
+                        else:
+                            if is_compatible_offhand:
+                                _intent_line = N.style_intent_line(att.name, dfr.name, ax.style, wpn, att.gender, foe_armor=dfr.armor)
+                            else:
+                                _intent_line = N.awkward_style_intent_line(att.name, dfr.name, ax.style, wpn, att.gender)
+                            if not _weak_attack_intent_offhand:
+                                is_fav_wpn = att.favorite_weapon == wpn
+                                _attack_line = N.attack_line(att.name, dfr.name, wpn, cat, ax.style, aim, att.gender, attacker_race=att.race.name, is_favorite_weapon=is_fav_wpn)
+                    except ValueError:
+                        _use_offhand = False
+                        wpn = _original_wpn
+                        try:
+                            weapon = get_weapon(wpn)
+                            cat = weapon.category
+                        except:
+                            weapon = OPEN_HAND
+                            cat = "Oddball"
+
+        # ═══════════════════════════════════════════════════════════════════════════════════
+        # EMIT DEFERRED ATTACK NARRATIVES (now with correct weapon)
+        # ═══════════════════════════════════════════════════════════════════════════════════
+        if _intent_line:
+            self._emit(_intent_line)
+        if _attack_line:
+            self._emit(_attack_line)
 
         # --- LIZARDFOLK HEAVY ARMOR FLAVOR ---
         # Defensive: fires when the Lizardfolk's defense failed AND the armor
@@ -3896,51 +4051,94 @@ class CombatEngine:
         if _defense_intent_emitted:
             self._emit(N.defense_fail_line(dfr.name, dfr.gender, _defense_intent_is_parry))
 
-        if _crit_hit:
-            _dmg_type = N.get_damage_type(wpn_key_sig)
-            self._emit(N.critical_hit_line(att.name, att.gender, dfr.name, wpn, _dmg_type))
-        elif ca_precision_landed:
-            self._emit(N.calculated_precision_line(att.name, dfr.name, wpn, aim, att.gender))
-        elif sig:
-            self._emit(sig)
+        # ═══════════════════════════════════════════════════════════════════════════════════
+        # Emit appropriate hit narrative based on weapon used
+        # The attack intent line already specified the weapon (primary or off-hand)
+        # so we don't need special off-hand narratives here
+        if not _use_offhand:
+            # Emit primary weapon hit narrative
+            if _crit_hit:
+                _dmg_type = N.get_damage_type(wpn_key_sig)
+                self._emit(N.critical_hit_line(att.name, att.gender, dfr.name, wpn, _dmg_type))
+            elif ca_precision_landed:
+                self._emit(N.calculated_precision_line(att.name, dfr.name, wpn, aim, att.gender))
+            elif sig:
+                self._emit(sig)
+            else:
+                for ln in N.hit_line(att.name, dfr.name, wpn, cat, aim, precision, attacker_race=att.race.name, style=ax.style):
+                    self._emit(ln)
         else:
+            # For off-hand attacks, the attack intent line already showed the weapon
+            # Just emit the generic hit line with the off-hand weapon
             for ln in N.hit_line(att.name, dfr.name, wpn, cat, aim, precision, attacker_race=att.race.name, style=ax.style):
                 self._emit(ln)
 
         _pbypass = CA_PRECISION_ARMOR_BYPASS if (_crit_hit or ca_precision_landed) else 0.0
-        if self.debug_logger:
-            dmg, wcats, _dmg_steps = _calc_damage_verbose(
-                att, ax, wpn, dfr, margin,
-                precision_bypass=_pbypass, style_compat_penalty=penalty_factor,
-            )
+
+        # ───────────────────────────────────────────────────────────────────────────────────
+        # OFF-HAND DAMAGE (base damage only, no bonuses)
+        # ───────────────────────────────────────────────────────────────────────────────────
+        if _use_offhand:
+            try:
+                sec_weapon = get_weapon(wpn)
+                dmg = random.randint(sec_weapon.damage_base, sec_weapon.damage_base + 2)
+                wcats = sec_weapon.category
+                _dmg_steps = None
+            except ValueError:
+                _use_offhand = False
+                wpn = _original_wpn
+                weapon = get_weapon(_original_wpn)
+                cat = weapon.category
+                if self.debug_logger:
+                    dmg, wcats, _dmg_steps = _calc_damage_verbose(
+                        att, ax, wpn, dfr, margin,
+                        precision_bypass=_pbypass, style_compat_penalty=penalty_factor,
+                    )
+                else:
+                    dmg, wcats = _calc_damage_hybrid(
+                        att, ax, wpn, dfr, margin,
+                        precision_bypass=_pbypass, style_compat_penalty=penalty_factor,
+                    )
+                    _dmg_steps = None
         else:
-            dmg, wcats = _calc_damage_hybrid(
-                att, ax, wpn, dfr, margin,
-                precision_bypass=_pbypass, style_compat_penalty=penalty_factor,
-            )
-            _dmg_steps = None
+            # ───────────────────────────────────────────────────────────────────────────────
+            # PRIMARY WEAPON DAMAGE (normal calculation with all bonuses)
+            # ───────────────────────────────────────────────────────────────────────────────
+            if self.debug_logger:
+                dmg, wcats, _dmg_steps = _calc_damage_verbose(
+                    att, ax, wpn, dfr, margin,
+                    precision_bypass=_pbypass, style_compat_penalty=penalty_factor,
+                )
+            else:
+                dmg, wcats = _calc_damage_hybrid(
+                    att, ax, wpn, dfr, margin,
+                    precision_bypass=_pbypass, style_compat_penalty=penalty_factor,
+                )
+                _dmg_steps = None
 
-        _sig_floor = int(dfr.max_hp * 0.12) if (sig and not _crit_hit) else None
-        if _crit_hit:
-            # Critical hit: 2× base damage, minimum 15% of defender's max HP
-            _crit_floor = max(15, int(dfr.max_hp * 0.15))
-            dmg = max(_crit_floor, dmg * 2)
-        elif sig:
-            dmg = max(dmg, int(dfr.max_hp * 0.12))
-        _ca_bonus = CA_PRECISION_DAMAGE_BONUS if ca_precision_landed else 0
-        if ca_precision_landed:
-            dmg += _ca_bonus
+        # Off-hand attacks use base damage only, skip critical/signature multipliers
+        if not _use_offhand:
+            _sig_floor = int(dfr.max_hp * 0.12) if (sig and not _crit_hit) else None
+            if _crit_hit:
+                # Critical hit: 2× base damage, minimum 15% of defender's max HP
+                _crit_floor = max(15, int(dfr.max_hp * 0.15))
+                dmg = max(_crit_floor, dmg * 2)
+            elif sig:
+                dmg = max(dmg, int(dfr.max_hp * 0.12))
+            _ca_bonus = CA_PRECISION_DAMAGE_BONUS if ca_precision_landed else 0
+            if ca_precision_landed:
+                dmg += _ca_bonus
 
-        # Thrown mastery damage bonus: +4 on Opportunity Throw hits (Goblin racial)
-        if ax.style == "Opportunity Throw" and att.race.modifiers.thrown_mastery:
-            dmg += 4
+            # Thrown mastery damage bonus: +4 on Opportunity Throw hits (Goblin racial)
+            if ax.style == "Opportunity Throw" and att.race.modifiers.thrown_mastery:
+                dmg += 4
 
-        # Favorite weapon flavor - emitted after attack line, before damage line
-        # Skip if weapon was thrown away - doesn't make sense to praise a weapon that's already gone
-        if not _weapon_thrown_away:
-            fav_flavor = _get_favorite_weapon_flavor(att, wpn, as_)
-            if fav_flavor:
-                self._emit(fav_flavor)
+            # Favorite weapon flavor - emitted after attack line, before damage line
+            # Skip if weapon was thrown away - doesn't make sense to praise a weapon that's already gone
+            if not _weapon_thrown_away:
+                fav_flavor = _get_favorite_weapon_flavor(att, wpn, as_)
+                if fav_flavor:
+                    self._emit(fav_flavor)
 
         # Determine if this is a claw attack (vs kick or tail which are crushing)
         attack_type = _get_martial_attack_type(att, dfr.name)
@@ -3948,17 +4146,19 @@ class CombatEngine:
         self._emit(N.damage_line(dmg, dfr.max_hp, cat, is_claw_attack=is_claw))
 
         if self.debug_logger:
-            self.debug_logger.log_damage(
-                att.name, dfr.name, margin, _dmg_steps,
-                _sig_floor, _ca_bonus, dmg,
-            )
+            if not _use_offhand:
+                self.debug_logger.log_damage(
+                    att.name, dfr.name, margin, _dmg_steps,
+                    _sig_floor, _ca_bonus, dmg,
+                )
             self.debug_logger.log_hit_severity(dfr.name, dmg, dfr.max_hp)
 
         prev_hp        = ds_.current_hp
         ds_.current_hp -= dmg
 
         if self.debug_logger:
-            self.debug_logger.log_hp_update(dfr.name, prev_hp, dmg, ds_.current_hp, dfr.max_hp)
+            damage_source = "offhand" if _use_offhand else "hit"
+            self.debug_logger.log_hp_update(dfr.name, prev_hp, dmg, ds_.current_hp, dfr.max_hp, damage_source)
 
         # Critical hit endurance shock: the impact disrupts the receiver's reserves
         if _crit_hit:
@@ -4164,6 +4364,11 @@ class CombatEngine:
             if ds_.current_hp <= 0:
                 return self._handle_zero_hp(ds_, as_, _pre_mc if mc_margin >= 10 else ds_.current_hp + 1, mc_dmg if mc_margin >= 10 else 1, minute)
 
+        # Note: OFF-HAND WEAPON ATTACKS are now integrated into the main attack flow
+        # in _resolve_action(), substituting secondary weapon damage for margin 1-30 hits.
+        # This ensures off-hand attacks REPLACE the primary weapon on weak hits
+        # rather than being an additional follow-up attack.
+
         # ── Ground Recovery: Defender on ground (lost this action) ──────────
         # The defender lost the initiative for this action. If they're on the
         # ground, they get a MUCH lower chance to recover (15-25%) because they
@@ -4250,6 +4455,85 @@ class CombatEngine:
         return None
 
     # =========================================================================
+    # OFF-HAND WEAPON ATTACKS (Universal - all warriors)
+    # =========================================================================
+
+    def _try_offhand_attack(self, as_: _CState, ds_: _CState,
+                           ax: Strategy, dx: Strategy,
+                           margin: int, minute: int) -> Optional[FightResult]:
+        """
+        Attempt an off-hand/secondary weapon attack on weak hits.
+        Triggers randomly on hits with margin 10-20 (weak hits, not crushing victories).
+        Available to all warriors with eligible secondary weapons.
+        Base damage only (no bonuses, keeping Elf trait special).
+        """
+        att = as_.warrior
+        dfr = ds_.warrior
+
+        # 1. Check if secondary weapon is eligible
+        if not _is_offhand_weapon_eligible(att):
+            return None
+
+        # 2. Margin must be 10-20 (weak hits, not crushing)
+        if margin < 10 or margin > 20:
+            return None
+
+        # 3. Calculate trigger probability (higher margin = lower chance)
+        trigger_chance = _calc_offhand_trigger_chance(margin)
+        if random.randint(1, 100) > trigger_chance:
+            return None
+
+        # 4. Secondary weapon details
+        secondary_wpn = att.secondary_weapon
+        try:
+            sec_weapon = get_weapon(secondary_wpn)
+            sec_cat = sec_weapon.category
+        except ValueError:
+            return None
+
+        # 5. Emit narrative based on weapon type
+        if sec_weapon.is_shield:
+            attack_type = _get_shield_attack_type(att)
+            if attack_type == "rush":
+                self._emit(f"{att.name.upper()} charges forward with their {secondary_wpn.upper()}!")
+            else:
+                self._emit(f"{att.name.upper()} shields with their {secondary_wpn.upper()}!")
+        else:
+            self._emit(f"{att.name.upper()} follows up with their {secondary_wpn.upper()}!")
+
+        # 6. Roll off-hand attack (no penalty like primary, but it's a separate roll)
+        sec_atk = _attack_roll(att, ax, as_)
+        sec_def = _defense_roll(dfr, dx, ds_, att, ax.aim_point, ax.style,
+                               is_parry=(dfr.primary_weapon != "Open Hand"))
+        sec_margin = sec_atk - sec_def
+
+        # 7. If off-hand attack misses, no follow-up damage
+        if sec_margin <= 0:
+            self._emit(N.miss_line(att.name, secondary_wpn))
+            return None
+
+        # 8. Calculate base damage only (not scaled by margin, no bonuses)
+        # This differentiates off-hand from Elf dual-wield which gets full scaling
+        sec_dmg = random.randint(sec_weapon.damage_base, sec_weapon.damage_base + 2)
+
+        # 9. Emit damage
+        self._emit(N.damage_line(sec_dmg, dfr.max_hp, sec_cat))
+
+        # 10. Apply damage and check effects
+        _pre_oh = ds_.current_hp
+        ds_.current_hp -= sec_dmg
+        if self.debug_logger:
+            self.debug_logger.log_hp_update(dfr.name, _pre_oh, sec_dmg, ds_.current_hp, dfr.max_hp, "offhand")
+
+        self._check_defender_strategy_only(ds_, as_, minute)
+
+        # 11. Check if defender dies from off-hand attack
+        if ds_.current_hp <= 0:
+            return self._handle_zero_hp(ds_, as_, _pre_oh, sec_dmg, minute)
+
+        return None
+
+    # =========================================================================
     # COUNTERSTRIKE
     # =========================================================================
 
@@ -4261,6 +4545,16 @@ class CombatEngine:
 
         try:    cat = get_weapon(wpn).category
         except: cat = "Oddball"
+
+        # Log counterstrike as a separate action
+        if self.debug_logger:
+            self._debug_action_counter += 1
+            self.debug_logger.log_action_start(
+                self._debug_action_counter, att.name, dfr.name, wpn, "Counterstrike (riposte)", ax.aim_point,
+                is_compatible, penalty_factor,
+                None, None, None, None,
+            )
+
         for ln in N.hit_line(att.name, dfr.name, wpn, cat, ax.aim_point, "precise", attacker_race=att.race.name):
             self._emit(ln)
         # Gnome counterstrike mastery: higher margin (50 vs 40) — more decisive hit.
@@ -4644,6 +4938,7 @@ def run_fight(
     pos_a           : int  = 1,
     pos_b           : int  = 1,
     bully_info      : Optional[dict] = None,
+    scouting_info   : Optional[dict] = None,
 ) -> FightResult:
     engine = CombatEngine(
         warrior_a, warrior_b,
@@ -4656,6 +4951,7 @@ def run_fight(
         fight_type=fight_type,
         debug_logger=debug_logger,
         bully_info=bully_info,
+        scouting_info=scouting_info,
     )
     result = engine.resolve_fight()
     if result.winner and result.loser:
