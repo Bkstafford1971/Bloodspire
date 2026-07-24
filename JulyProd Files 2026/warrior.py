@@ -29,6 +29,41 @@ STAT_MAX            = 25   # Absolute ceiling (theoretical; hard to reach in pra
 MAX_FIGHTS          = 50   # Retirement eligibility threshold
 
 # ---------------------------------------------------------------------------
+# TRAINING FORMULAS (used by both train_skill() and calculator tools)
+# ---------------------------------------------------------------------------
+
+def base_training_chance(stat: int) -> int:
+    """
+    Base training success chance from the governing stat (INT for skills, CON for attributes).
+    Accelerating curve: floor 28% at stat 3, ceiling 90% at stat 25, exponent 1.6.
+    Low stats cluster near the floor; high stats pull sharply away.
+    """
+    FLOOR, CEIL, EXP = 28, 90, 1.6
+    t = (stat - STAT_MIN) / (STAT_MAX - STAT_MIN)
+    return round(FLOOR + (CEIL - FLOOR) * (t ** EXP))
+
+def skill_level_multiplier(gains: int) -> float:
+    """
+    Difficulty multiplier for skill training by attempt count.
+    Linear decay from x1.00 (first attempt, gains=0) to x0.25 (ninth attempt, gains=8).
+    Used only for skills (which have a fixed 0-9 level ladder).
+    """
+    step = (1.00 - 0.25) / 8
+    return max(0.25, 1.00 - gains * step)
+
+def attribute_value_multiplier(current_val: int) -> float:
+    """
+    Difficulty multiplier for attribute training by proximity to STAT_MAX (25).
+    Accelerating decay (p=2): difficulty barely rises through the middle, then climbs sharply
+    in the last few points before the cap. A warrior at value 7 (far from cap) trains much
+    easier than one at value 24 (1 point from cap), regardless of how many times each has
+    succeeded before. This matches the intuition that the final points are disproportionately hard.
+    Used only for attributes (which have a variable distance to the fixed 25-point cap).
+    """
+    t = (current_val - STAT_MIN) / (STAT_MAX - STAT_MIN)
+    return max(0.25, 1.00 - (t ** 2) * 0.75)
+
+# ---------------------------------------------------------------------------
 # TIER SYSTEM (shared with matchmaking; mirrors newsletter.py constants)
 # ---------------------------------------------------------------------------
 TIER_CHAMPION  = "CHAMPION"
@@ -73,10 +108,13 @@ def challenge_tier_allowed(challenger_tier: str, target_tier: str) -> bool:
     return ci - 1 <= ti <= ci
 
 
-# HP Multipliers
-HP_MULT_CON  = 2.5
-HP_MULT_STR  = 1.0
-HP_MULT_SIZE = 1.0
+# HP Multipliers (informational only - not read by the actual formula, which
+# lives in Race.calculate_max_hp(); kept here in sync so this isn't misleading.
+# Effective values include the July 2026 1.8x HP revision - see
+# HP_FORMULA_REVISION_PLAN.md)
+HP_MULT_CON  = 2.5 * 1.8   # 4.5
+HP_MULT_STR  = 1.0 * 1.8   # 1.8
+HP_MULT_SIZE = 1.0 * 1.8   # 1.8
 
 # Canonical attribute order (used everywhere for consistency)
 ATTRIBUTES = [
@@ -466,7 +504,7 @@ class Warrior:
       - Racial modifiers are NOT baked into base stats. They are stored in
         self.race.modifiers and applied at combat time. This keeps stats clean.
       - SIZE cannot be trained (per guide). Enforced in train_skill().
-      - HP formula: (CON*2.5) + STR + SIZE, rounded up, capped at 100, + racial bonus.
+      - HP formula: (CON*2.5) + STR + SIZE, rounded up, no upper limit, + racial bonus.
     """
 
     def __init__(
@@ -623,14 +661,14 @@ class Warrior:
 
     def _calc_max_hp(self) -> int:
         """
-        HP Formula:
-            Base HP = (CON * 2.5) + STR + SIZE
+        HP Formula (post July 2026 revision - see HP_FORMULA_REVISION_PLAN.md):
+            Base HP = ((CON * 2.5) + STR + SIZE) * 1.8
             Round up any fraction (e.g. 65.5 → 66).
-            Add racial HP bonus, then cap at 100.
+            Add racial HP bonus (no upper limit).
         """
         # Call the racial calculator to ensure formula consistency
         total = self.race.calculate_max_hp(self.strength, self.constitution, self.size)
-        return max(1, min(total, 100))   # Always at least 1 HP; never more than 100
+        return max(1, total)   # Always at least 1 HP; no upper limit
 
     def _calc_measurements(self) -> tuple:
         """
@@ -939,11 +977,13 @@ class Warrior:
 
         GRADUATED LEARNING CURVE - two-factor formula:
           1. Base chance from governing stat (INT for skills, CON for attributes):
-               stat  3-8  -> 28%    stat  9-14 -> 45%
-               stat 15-20 -> 55%    stat 21-25 -> 72%
-          2. Difficulty multiplier from current level / gains so far:
-               0-3 : x1.00   4-5 : x0.65   6-7 : x0.40   8+ : x0.25
-          3. Mastery bonus (level/gains >= 8, stat >= 15): +(stat-14)*1.5
+               Accelerating curve (base_training_chance): 28% at stat 3, 90% at stat 25, p=1.6.
+               Example: stat 10 → 38%, stat 14 → 48%, stat 20 → 69%, stat 25 → 90%.
+          2. Difficulty multiplier (skill_level_multiplier by gains):
+               Linear decay: x1.000 → x0.250 over 9 attempts.
+               Applies to BOTH skills and attributes equally.
+               Each successful gain makes the next gain slightly harder.
+          3. Mastery bonus (gains >= 8, stat >= 15): +(stat-14)*1.5
           4. Racial bonus (Humans & Gnomes): +7 to chance after multiply, capped 90.
              Applies to BOTH skill and attribute training.
           Final chance clamped 5%-90%.
@@ -952,7 +992,8 @@ class Warrior:
           Governed by Intelligence. gains = current skill level (0-based).
 
         ATTRIBUTE training (STR / DEX / CON / INT / PRE, not SIZE):
-          Governed by Constitution. Gains tracked in self.attribute_gains.
+          Governed by Constitution. Each CON point improves all attribute training chances.
+          Gains tracked in self.attribute_gains[key] (0-8 like skill levels).
         """
         key = skill.lower().replace(" ", "_")
 
@@ -968,19 +1009,6 @@ class Warrior:
                     key = weapon_obj.skill_key
                     break
 
-        # Shared helper: base chance from stat band
-        def _base_chance(stat: int) -> int:
-            if stat <= 8:   return 28
-            if stat <= 14:  return 45
-            if stat <= 20:  return 55
-            return 72
-
-        # Shared helper: difficulty multiplier from gains
-        def _multiplier(gains: int) -> float:
-            if gains < 4:  return 1.00
-            if gains < 6:  return 0.65
-            if gains < 8:  return 0.40
-            return 0.25
 
         # --- Attribute training ---
         if key in ATTRIBUTES:
@@ -1014,9 +1042,9 @@ class Warrior:
             gains = self.attribute_gains.get(key, 0)
             stat  = self.constitution
 
-            chance = int(_base_chance(stat) * _multiplier(gains))
+            chance = int(base_training_chance(stat) * skill_level_multiplier(gains))
 
-            # Mastery bonus: high CON still helps at the very top tier
+            # Mastery bonus: after 8 successful gains with high CON
             if gains >= 8 and stat >= 15:
                 chance += int((stat - 14) * 1.5)
 
@@ -1031,7 +1059,7 @@ class Warrior:
                 tier_label = (
                     "mastery tier" if gains >= 8 else
                     "late tier"    if gains >= 6 else
-                    "mid tier"     if gains >= 4 else
+                    "mid tier"     if gains >= 3 else
                     f"CON {stat}"
                 )
                 msg = (
@@ -1080,7 +1108,7 @@ class Warrior:
             gains = current_level          # skill level == number of increases so far
             stat  = self.intelligence
 
-            chance = int(_base_chance(stat) * _multiplier(gains))
+            chance = int(base_training_chance(stat) * skill_level_multiplier(gains))
 
             # Mastery bonus: high INT still helps at the very top tier
             if gains >= 8 and stat >= 15:

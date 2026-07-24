@@ -2315,13 +2315,10 @@ def _update_endurance(
             if ln:
                 lines.append(ln)
 
-    # Intimidation drain on foe
+    # Intimidation endurance drain on foe (narrative moved to post-attack section to avoid spoiling the action)
     if props.intimidate and strategy.activity >= 5:
         drain = (strategy.activity - 4) * 1.0
         foe.endurance = max(0.0, foe.endurance - drain)
-        ln = N.intimidate_line(warrior.name, foe.warrior.name)
-        if ln:
-            lines.append(ln)
 
     # Fatigue narrative (proportional thresholds)
     phase2 = warrior.max_endurance * 0.25
@@ -3300,9 +3297,9 @@ class CombatEngine:
             wpn_name = random.choice(tier1)
             as_.thrown_pool.remove(wpn_name)   # remove one copy
             self._emit(random.choice([
-                f"   {att.name.upper()} darts to the sand and snatches up {att.gender_possessive} {wpn_name.lower()}!",
-                f"   With a sharp eye, {att.name.upper()} reclaims {att.gender_possessive} thrown {wpn_name.lower()} from the arena floor!",
-                f"   {att.name.upper()} skids to the dirt and comes up with {att.gender_possessive} {wpn_name.lower()}, back in business!",
+                f"   {att.name.upper()} darts to the sand and retrieves the {wpn_name.lower()} {att.gender_subject} threw earlier!",
+                f"   With a sharp eye, {att.name.upper()} spots the {wpn_name.lower()} from the earlier throw and snatches it up!",
+                f"   {att.name.upper()} skids to the dirt and comes up with the {wpn_name.lower()}, back in business!",
             ]))
         elif tier1:
             # Had own weapons but RNG picked tier 2
@@ -3597,17 +3594,7 @@ class CombatEngine:
         _defense_intent_emitted = False
         _defense_intent_is_parry = False
         _defensive_narrative_emitted = False  # Track actual defense RESULTS (parry/dodge/crit), NOT intents
-        if random.random() < (0.20 if _weak_attack_intent else 0.55):
-            props_dx = get_style_props(dx.style)
-            _uses_parry = props_dx.parry_bonus >= props_dx.dodge_bonus
-            # Disarmed warriors can only dodge, never parry
-            if dfr.primary_weapon == "Open Hand":
-                _uses_parry = False
-            # Emit defense intent before attack roll - doesn't count as "defensive narrative emitted"
-            # because the result is unknown. This allows parry/dodge/etc to be shown after the roll.
-            self._emit(N.defense_intent_line(dfr.name, dfr.gender, _uses_parry))
-            _defense_intent_emitted = True
-            _defense_intent_is_parry = _uses_parry
+        # Removed: defense intent emission (speculative narrative before result is known was causing sequence issues)
 
         # --- Update attacker's endurance for this action ---
         # This needs to happen before strategy re-evaluation for fatigue triggers
@@ -4212,9 +4199,9 @@ class CombatEngine:
             as_.active_strategy = new_strat_att
             as_.active_strat_idx = new_idx_att
 
-        # Low-HP status commentary
+        # Low-HP status commentary (only if standing; narratives assume vertical posture)
         hp_pct = ds_.current_hp / max(1, dfr.max_hp)
-        if ds_.current_hp > 0:
+        if ds_.current_hp > 0 and not ds_.is_on_ground:
             status_ln = N.low_hp_line(dfr.name, dfr.gender, hp_pct)
             if status_ln:
                 self._emit(status_ln)
@@ -4387,6 +4374,14 @@ class CombatEngine:
             else:
                 # Failure: still struggling
                 self._emit(N.ground_struggle_line(dfr.name, dfr.gender))
+
+        # Intimidate line: fires after the attack is resolved, to avoid spoiling the action before we know the result.
+        # Only applies if the attacker's style has intimidate=True and activity >= 5.
+        props_ax = get_style_props(ax.style)
+        if props_ax.intimidate and ax.activity >= 5:
+            intim_ln = N.intimidate_line(att.name, dfr.name)
+            if intim_ln:
+                self._emit(intim_ln)
 
         return None
 

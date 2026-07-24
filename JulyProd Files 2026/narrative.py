@@ -1033,6 +1033,10 @@ ARMOR_SPECIFIC_INTENT_POOLS: dict[str, dict[str, list[str]]] = {
             "{name} winds up to pummel the chain links into submission",
             "{name} looks to break bone beneath the metal mesh",
         ],
+        "scale": [
+            "{name} winds up to shatter the overlapping scales",
+            "{name} looks to crack bone through the layered scale armor",
+        ],
         "leather": [
             "{name} looks to cave in the leather and crack ribs",
             "{name} winds up to shatter bone beneath the hardened leather",
@@ -1050,6 +1054,10 @@ ARMOR_SPECIFIC_INTENT_POOLS: dict[str, dict[str, list[str]]] = {
         "chain": [
             "{name} measures the spacing of the chain links for maximum penetration",
             "{name} takes aim at the openings in the mesh",
+        ],
+        "scale": [
+            "{name} measures the spacing between the overlapping scales",
+            "{name} takes aim at the gaps where the scales overlap",
         ],
         "leather": [
             "{name} studies the seams and weak points in the leather",
@@ -1070,6 +1078,11 @@ ARMOR_SPECIFIC_INTENT_POOLS: dict[str, dict[str, list[str]]] = {
             "{name} calculates the spacing of the chain links to find an opening",
             "{name} analyzes gaps in the metal mesh for the perfect strike",
             "{name} studies the pattern of the links to find maximum vulnerability",
+        ],
+        "scale": [
+            "{name} calculates the spacing between overlapping scales for maximum penetration",
+            "{name} analyzes the gaps where the scales interlock for the perfect opening",
+            "{name} studies the scale pattern to find maximum vulnerability",
         ],
         "leather": [
             "{name} analyzes the seams in the leather to maximize impending trauma",
@@ -1096,8 +1109,12 @@ def _get_armor_category(armor_name: Optional[str]) -> str:
         return "plate"
 
     # Chain-based armor
-    if any(x in armor_lower for x in ["chain", "scale"]):
+    if "chain" in armor_lower:
         return "chain"
+
+    # Scale-based armor
+    if "scale" in armor_lower:
+        return "scale"
 
     # Leather-based armor
     if any(x in armor_lower for x in ["leather", "cuir"]):
