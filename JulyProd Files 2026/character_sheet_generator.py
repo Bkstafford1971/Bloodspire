@@ -11,6 +11,60 @@ import sys
 from pathlib import Path
 from datetime import datetime
 
+# Embedded race data for standalone operation
+RACE_DATA = {
+    "Human": {
+        "description": "The adaptable everyman. No extreme strengths or weaknesses, but supremely adaptable. Humans train attributes more easily and suffer fewer permanent injuries.",
+        "bonuses": ["Fast Training: Attributes improve more quickly", "Injury Resistance: Lower chance of permanent injuries"],
+        "penalties": [],
+    },
+    "Half-Orc": {
+        "description": "Pure brute force. Devastating damage and high durability, but slow, clumsy, and easy to outmaneuver.",
+        "bonuses": ["Damage Bonus: +5", "HP Bonus: +6"],
+        "penalties": ["Initiative Penalty: -2", "Dodge Penalty: -3", "Parry Penalty: -2"],
+    },
+    "Halfling": {
+        "description": "Infuriatingly hard to hit. Extremely fast and mobile, but extremely fragile with very light damage output.",
+        "bonuses": ["Dodge Bonus: +7", "Attack Rate Bonus: +4", "Martial Combat Bonus: Extra effectiveness in hand-to-hand"],
+        "penalties": ["Damage Penalty: -2", "Parry Penalty: -3", "HP Penalty: -2"],
+    },
+    "Dwarf": {
+        "description": "The ultimate tank. Absorbs massive punishment and parries masterfully, but very slow and poor at dodging.",
+        "bonuses": ["HP Bonus: +8", "Damage Bonus: +3", "Parry Bonus: +3", "Armor Capacity Bonus: Can wear heavier armor", "Shield Bonus: Extra protection with shields"],
+        "penalties": ["Attack Rate Penalty: -2", "Dodge Penalty: -4"],
+    },
+    "Half-Elf": {
+        "description": "Versatile and capable. Slight edge in weapon handling with no major weaknesses or strengths.",
+        "bonuses": ["Bigger Weapons: Can wield heavier weapons more easily", "Attack Rate Bonus: +1", "Dodge Bonus: +2", "Damage Bonus: +1"],
+        "penalties": [],
+    },
+    "Elf": {
+        "description": "Elusive speed demons. Masters of dual-wielding and evasion, but extremely fragile.",
+        "bonuses": ["Dodge Bonus: +5", "Parry Bonus: +5", "Attack Rate Bonus: +5", "Dual Weapon Bonus: Enhanced dual-wield attacks"],
+        "penalties": ["HP Penalty: -2"],
+    },
+    "Goblin": {
+        "description": "Tiny dirty fighters. Extremely fast and tricky with thrown weapons, but very weak and fragile.",
+        "bonuses": ["Attack Rate Bonus: +5", "Initiative Bonus: +5", "Dodge Bonus: +4", "Thrown Mastery: Bonus to throwing attacks", "Scavenger: Can pick up dropped weapons during combat"],
+        "penalties": ["Damage Penalty: -2", "HP Penalty: -3", "Strength Penalty: -4", "Heavy Weapon Penalty: Heavy weapons incur penalties"],
+    },
+    "Gnome": {
+        "description": "Small, surprisingly tough tacticians. Excel at counterstrikes and turning aggression against opponents.",
+        "bonuses": ["HP Bonus: +5", "Fast Training: Attributes improve more quickly", "Parry Bonus: +5", "Counterstrike Mastery: Strong ripostes after successful parries", "Tactician's Edge: Better vs aggressive foes, worse vs methodical", "Dodge Bonus: +2"],
+        "penalties": ["Damage Penalty: -2", "Attack Rate Penalty: -1"],
+    },
+    "Lizardfolk": {
+        "description": "Savage reptilian predators. Tough, relentless, with natural armor and weapons, but cold-blooded and slower to accelerate.",
+        "bonuses": ["HP Bonus: +6", "Natural Armor: Scales provide innate armor protection", "Natural Weapons: Bonus damage with claws and natural attacks", "Martial Combat Bonus: Extra effectiveness in hand-to-hand", "Dodge Bonus: +2"],
+        "penalties": ["Attack Rate Penalty: -1"],
+    },
+    "Tabaxi": {
+        "description": "Lightning-quick acrobatic felines. Best evasion in the game, but fragile and tire quickly in long fights.",
+        "bonuses": ["Dodge Bonus: +7", "Initiative Bonus: +5", "Acrobatic Advantage: Highly resistant to knockdowns", "Frenzy: Once per fight, gain +3 attack rate burst (3-4 actions)", "Spear Mastery: Spears exempt from heavy weapon penalties"],
+        "penalties": ["HP Penalty: -2", "Heavy Weapon Penalty: Heavy weapons incur penalties"],
+    },
+}
+
 # Try to import PDF libraries
 try:
     from xhtml2pdf import pisa
@@ -244,6 +298,14 @@ def get_injury_description(severity):
 
 def get_race_traits_html(race_name):
     """Get comprehensive racial traits separated into bonuses and penalties."""
+    # First try to use embedded race data
+    if race_name in RACE_DATA:
+        return {
+            "bonuses": RACE_DATA[race_name]["bonuses"],
+            "penalties": RACE_DATA[race_name]["penalties"],
+        }
+
+    # Fallback to importing races module if available
     try:
         from races import get_race
         race = get_race(race_name)
@@ -333,6 +395,8 @@ def get_race_traits_html(race_name):
             penalties.append(f"Difficult Matchups: {mods.disfavored_opponents}")
 
         return {"bonuses": bonuses, "penalties": penalties}
+    except (ImportError, ModuleNotFoundError):
+        return {"bonuses": [], "penalties": []}
     except Exception as e:
         print(f"Warning: Could not load race info for {race_name}: {e}")
         return {"bonuses": [], "penalties": []}
@@ -383,8 +447,10 @@ def get_weapon_analysis(weapon_name, warrior_strength, warrior_size=10):
             analysis.append("Two-handed weapon: Grants +1 to effective strength capacity")
 
         return {"analysis": analysis, "warnings": warnings}
+    except (ImportError, ModuleNotFoundError):
+        return {"analysis": [], "warnings": []}
     except Exception as e:
-        return {"analysis": [f"Could not analyze weapon: {weapon_name}"], "warnings": [str(e)]}
+        return {"analysis": [], "warnings": []}
 
 
 def get_warrior_record(warrior):
