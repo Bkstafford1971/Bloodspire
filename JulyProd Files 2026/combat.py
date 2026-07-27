@@ -125,7 +125,7 @@ BASH_WEAPONS = {
 SLASH_WEAPONS = {
     "short_sword", "long_sword", "broad_sword", "bastard_sword", "battle_axe",
     "great_axe", "hatchet", "francisca", "dagger", "epee", "knife",
-    "scimitar", "scythe", "swordbreaker", "heavy_whip"
+    "scimitar", "scythe", "swordbreaker"
 }
 
 OPEN_HAND_WEAPONS = {
@@ -739,7 +739,6 @@ class _CState:
     near_kills_dealt   : int     = 0   # times this warrior reduced opponent below 20% HP
     used_favorite_weapon_this_fight : bool = False  # Tracks if favorite weapon flavor already shown
     bleeding_wounds    : int     = 0   # Cumulative bleeding damage (tracked each round)
-    arm_wrapped        : int     = 0   # Rounds remaining on heavy whip arm-wrap debuff (-10 attack roll)
     triggered_injuries : dict    = field(default_factory=dict) # {location: level}
     triggered_battle_cries: set  = field(default_factory=set)  # indices of battle cries that have fired
     prev_damage_category: str    = "none"  # track damage state transitions for battle cry triggers
@@ -917,12 +916,6 @@ def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState, foe_styl
     # Ground penalty: attacking from the floor is desperate and inaccurate
     ground_pen = 25 if state.is_on_ground else 0
 
-    # Arm-wrap debuff: heavy whip lash raked the weapon arm last action
-    arm_wrap_pen = 0
-    if state.arm_wrapped > 0:
-        arm_wrap_pen = 10
-        state.arm_wrapped -= 1
-
     # Heavy weapon penalty for Goblins & Tabaxi
     heavy_pen = 0
     if attacker.race.modifiers.heavy_weapon_penalty:
@@ -937,7 +930,7 @@ def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState, foe_styl
 
     total = roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b \
                - end_pen - hp0_pen + fav_bonus + martial_bonus + thrown_mastery_b + throw_skill_b \
-               + tactician_b - injury_pen - ground_pen - heavy_pen - arm_wrap_pen
+               + tactician_b - injury_pen - ground_pen - heavy_pen
 
     if attacker.race.name == "Lizardfolk":
         atk_pct = get_lizardfolk_armor_penalties(attacker.armor or "None")["dodge_parry_pct"]
@@ -2070,41 +2063,34 @@ def _get_favorite_weapon_flavor(warrior: Warrior, weapon_name: str, state: _CSta
 # KNOCKDOWN
 # ---------------------------------------------------------------------------
 
-def _check_entangle(warrior: Warrior, state: _CState, weapon: Weapon, was_thrown: bool,
-                    attacker: "Warrior | None" = None) -> Tuple[bool, bool, Optional[str]]:
+def _check_entangle(warrior: Warrior, state: _CState, weapon: Weapon, was_thrown: bool) -> Tuple[bool, Optional[str]]:
     """
-    Check if a bola or heavy whip entangles the opponent's legs, causing them to trip,
-    or if a heavy whip rakes the weapon arm.
-    Returns (entangled, arm_wrapped, narrative_line).
+    Check if a bola or heavy whip entangles the opponent's legs, causing them to trip.
+    Returns (entangled, narrative_line).
     """
     if state.is_on_ground:
-        return False, False, None
-
+        return False, None
+    
     if weapon.skill_key == "bola":
         if was_thrown:
             # Bola thrown: 70% chance to entangle and trip
             if random.randint(1, 100) <= 70:
                 msg = f"The bola wraps around {warrior.name.upper()}'s legs and trips them to the ground!"
-                return True, False, msg
+                return True, msg
         else:
             # Bola swung in melee: 35% chance to entangle
             if random.randint(1, 100) <= 35:
                 msg = f"The swinging bola tangles {warrior.name.upper()}'s legs!"
-                return True, False, msg
-
+                return True, msg
+    
     elif weapon.skill_key == "heavy_whip":
-        # Entangle: 50% base + 3% per heavy_whip skill level, capped at 75%
-        whip_skill = attacker.skills.get("heavy_whip", 0) if attacker else 0
-        entangle_chance = min(75, 50 + whip_skill * 3)
-        if random.randint(1, 100) <= entangle_chance:
+        # Heavy whip: good chance to entangle on successful hit
+        # Lower chance in melee than thrown, but it's never thrown
+        if random.randint(1, 100) <= 50:
             msg = f"The barbed whip wraps around {warrior.name.upper()}'s legs, dragging them to the ground!"
-            return True, False, msg
-        # Arm wrap: 40% chance on non-entangle hits
-        if random.randint(1, 100) <= 40:
-            msg = f"The barbed whip rakes across {warrior.name.upper()}'s weapon arm!"
-            return False, True, msg
-
-    return False, False, None
+            return True, msg
+    
+    return False, None
 
 
 def _check_knockdown(warrior: Warrior, state: _CState, damage: int, cat: str,
@@ -2325,7 +2311,7 @@ def _update_endurance(
     if props.anxiously_awaits and strategy.activity < 6:
         foe.endurance = max(0.0, foe.endurance - (6 - strategy.activity) * 0.5)
         if random.random() < 0.20:
-            ln = N.anxious_line(warrior.name, foe.warrior.name)
+            ln = N.anxious_line(warrior.name, warrior.gender, foe.warrior.name)
             if ln:
                 lines.append(ln)
 
@@ -2787,7 +2773,7 @@ class CombatEngine:
                 self._emit("")
                 self._emit(f"{dw.name.upper()} collapses from sheer exhaustion, the monster is relentless!")
                 self._emit(N.death_line(dw.name, dw.gender))
-                self._emit(""); self._emit(N.victory_line(kw.name, dw.name))
+                self._emit(""); self._emit(N.victory_line(kw.name, dw.name, winner_gender=kw.gender))
                 result = self._make_result(kw, dw, True, minute, exhaustion_end=True)
                 break
 
@@ -2965,7 +2951,7 @@ class CombatEngine:
             else:
                 for ln in N.hit_line(
                     att.name, dfr.name, att.primary_weapon, _frenzy_cat,
-                    fstrat.aim_point, "normal", attacker_race=att.race.name, style=fstrat.style,
+                    fstrat.aim_point, attacker_gender=att.gender, hit_precision="normal", attacker_race=att.race.name, style=fstrat.style,
                 ):
                     self._emit(ln)
 
@@ -3009,10 +2995,19 @@ class CombatEngine:
                     break
         else:
             tier, winner_name, loser_name = self._calc_minute_advantage()
+            # Determine genders of winner and loser
+            winner_gender = "Male"
+            loser_gender = "Male"
+            if winner_name:
+                winner_gender = self.state_a.warrior.gender if self.state_a.warrior.name == winner_name else self.state_b.warrior.gender
+            if loser_name:
+                loser_gender = self.state_a.warrior.gender if self.state_a.warrior.name == loser_name else self.state_b.warrior.gender
+
             adv_line = N.minute_status_line(
                 winner_name, loser_name,
                 tier, self._last_adv_tier, self._last_adv_winner,
                 self._used_adv_phrases,
+                winner_gender=winner_gender, loser_gender=loser_gender,
             )
             self._emit(adv_line)
             self._emit("")
@@ -3173,7 +3168,7 @@ class CombatEngine:
                     _frenzy_triggered = True
                     _frenzy_end = self._execute_tabaxi_frenzy(fst, ost, fstrat, ostrat, minute)
                 else:
-                    self._emit(N.tabaxi_frenzy_resist_line(fst.warrior.name))
+                    self._emit(N.tabaxi_frenzy_resist_line(fst.warrior.name, gender=fst.warrior.gender))
                 break  # only one frenzy check per slot
             if _frenzy_end:
                 return _frenzy_end
@@ -3637,7 +3632,7 @@ class CombatEngine:
         # --- Phase III: endurance collapse ---
         if as_.endurance <= 0:
             self._emit(f"{att.name.upper()} collapses to the sand, utterly exhausted - unable to fight on!")
-            self._emit(N.victory_line(dfr.name, att.name))
+            self._emit(N.victory_line(dfr.name, att.name, winner_gender=dfr.gender))
             return self._make_result(dfr, att, False, minute, exhaustion_end=True)
 
         # --- ATTACK ROLL ---
@@ -3658,10 +3653,10 @@ class CombatEngine:
         if ax.style == "Decoy":
             if _attempt_feint(att, dfr, dx.style):
                 decoy_feint_landed = True
-                self._emit(N.decoy_feint_line(att.name, dfr.name))
+                self._emit(N.decoy_feint_line(att.name, dfr.name, attacker_gender=att.gender))
             elif dx.style == "Counterstrike":
                 if not _defensive_narrative_emitted:
-                    self._emit(N.decoy_feint_read_line(att.name, dfr.name))
+                    self._emit(N.decoy_feint_read_line(att.name, dfr.name, foe_gender=dfr.gender))
 
         # --- CALCULATED ATTACK PRECISION ---
         ca_precision_landed = False
@@ -3814,7 +3809,7 @@ class CombatEngine:
                         if use_p:
                             self._emit(N.critical_parry_line(dfr.name, att.name))
                         else:
-                            self._emit(N.critical_dodge_line(dfr.name, att.name))
+                            self._emit(N.critical_dodge_line(dfr.name, att.name, defender_gender=dfr.gender))
                         _defensive_narrative_emitted = True
 
             if margin == 0:
@@ -3822,7 +3817,7 @@ class CombatEngine:
                 # probe fails to find a gap in the defender's guard.
                 if (ax.style == "Calculated Attack" and not ca_precision_landed
                         and random.randint(1, 100) <= CA_PROBE_EMIT_CHANCE):
-                    self._emit(N.calculated_probe_line(att.name, dfr.name))
+                    self._emit(N.calculated_probe_line(att.name, att.gender, dfr.name))
                 elif ax.style == "Opportunity Throw":
                     self._emit(N.throw_miss_line(att.name, wpn, dfr.name))
                 else:
@@ -3831,7 +3826,7 @@ class CombatEngine:
                 if use_p:
                     barely = (-margin < 20) and not _weak_attack_intent
                     if not _crit_def and not _defensive_narrative_emitted:
-                        self._emit(N.parry_line(dfr.name, barely=barely, defense_point_active=(dx.defense_point == aim)))
+                        self._emit(N.parry_line(dfr.name, defender_gender=dfr.gender, attacker_name=att.name, barely=barely, defense_point_active=(dx.defense_point == aim)))
                         _defensive_narrative_emitted = True
                     
                     # --- CLEAVE/BASH PARRY PENETRATION ---
@@ -3898,7 +3893,7 @@ class CombatEngine:
                         if riposte_level > 0:
                             _rip_chance = max(5, 40 + (riposte_level * 5) - _cleave_reduce)
                             if random.randint(1, 100) <= _rip_chance:
-                                self._emit(N.counterstrike_line(dfr.name, att.name))
+                                self._emit(N.counterstrike_line(dfr.name, dfr.gender, att.name))
                                 if _weapon_loss_msg: self._emit(_weapon_loss_msg)
                                 if _weapon_thrown_away: self._check_and_switch_strategies(as_, ds_, minute)
                                 return self._counterstrike(ds_, as_, dx, ax, minute)
@@ -3906,7 +3901,7 @@ class CombatEngine:
                         # Counterstrike style path (all races)
                         if dx.style == "Counterstrike":
                             if random.randint(1, 100) <= 30 + dfr.skills.get("parry", 0) * 5:
-                                self._emit(N.counterstrike_line(dfr.name, att.name))
+                                self._emit(N.counterstrike_line(dfr.name, dfr.gender, att.name))
                                 if _weapon_loss_msg: self._emit(_weapon_loss_msg)
                                 if _weapon_thrown_away: self._check_and_switch_strategies(as_, ds_, minute)
                                 return self._counterstrike(ds_, as_, dx, ax, minute)
@@ -3925,13 +3920,13 @@ class CombatEngine:
                                 self._check_and_switch_strategies(ds_, as_, minute)
                 else:
                     if not _crit_def and not _defensive_narrative_emitted:
-                        self._emit(N.dodge_line(dfr.name))
+                        self._emit(N.dodge_line(dfr.name, gender=dfr.gender))
                         _defensive_narrative_emitted = True
             else:
                 # Weak parry (margin -1 to -29) or weak dodge
                 if use_p:
                     if not _crit_def and not _defensive_narrative_emitted:
-                        self._emit(N.parry_line(dfr.name, barely=not _weak_attack_intent, defense_point_active=(dx.defense_point == aim)))
+                        self._emit(N.parry_line(dfr.name, defender_gender=dfr.gender, attacker_name=att.name, barely=not _weak_attack_intent, defense_point_active=(dx.defense_point == aim)))
                         _defensive_narrative_emitted = True
 
                     # Gnome counterstrike mastery: weak parries open a small window.
@@ -3948,7 +3943,7 @@ class CombatEngine:
                             return self._counterstrike(ds_, as_, dx, ax, minute)
                 else:
                     if not _crit_def and not _defensive_narrative_emitted:
-                        self._emit(N.dodge_line(dfr.name))
+                        self._emit(N.dodge_line(dfr.name, gender=dfr.gender))
                         _defensive_narrative_emitted = True
 
             # --- Req 4: Heavy Parry Disarm Check ---
@@ -3984,7 +3979,7 @@ class CombatEngine:
                         _crit_sec_roll = random.random()
                         if _crit_sec_roll < 0.04:
                             # Disarm: 4%
-                            self._emit(N.critical_disarm_line(dfr.name, att.name, att.primary_weapon))
+                            self._emit(N.critical_disarm_line(dfr.name, att.name, att.primary_weapon, attacker_gender=att.gender))
                             as_.is_weapon_dropped = True
                             as_.dropped_weapon_name = att.primary_weapon
                             att.primary_weapon = "Open Hand"
@@ -3993,7 +3988,7 @@ class CombatEngine:
                             # Weapon break: 1.5% - only when defender's weapon ≥ attacker's size
                             def_wpn = dfr.secondary_weapon or dfr.primary_weapon
                             if _weapon_size_class(def_wpn) >= _weapon_size_class(att.primary_weapon):
-                                self._emit(N.critical_break_line(dfr.name, att.name, att.primary_weapon))
+                                self._emit(N.critical_break_line(dfr.name, att.name, att.primary_weapon, attacker_gender=att.gender))
                                 as_.is_weapon_dropped = True
                                 as_.dropped_weapon_name = att.primary_weapon
                                 att.primary_weapon = "Open Hand"
@@ -4001,7 +3996,7 @@ class CombatEngine:
                 else:
                     # Critical dodge: double counterstrike at 1.5%
                     if random.random() < 0.015:
-                        self._emit(N.critical_double_counter_line(dfr.name, att.name))
+                        self._emit(N.critical_double_counter_line(dfr.name, att.name, defender_gender=dfr.gender))
                         result = self._counterstrike(ds_, as_, dx, ax, minute)
                         if result:
                             return result
@@ -4039,7 +4034,7 @@ class CombatEngine:
         wpn_skill_lvl = att.skills.get(wpn_key_sig, 0)
         sig = None
         if wpn_skill_lvl >= 5 and random.random() < 0.25 and not ca_precision_landed:
-            sig = N.signature_line(att.name, wpn)
+            sig = N.signature_line(att.name, wpn, gender=att.gender)
 
         # Critical hit: fortune roll ≥ 95 on attack → skill contest
         _crit_hit = False
@@ -4066,12 +4061,12 @@ class CombatEngine:
             elif sig:
                 self._emit(sig)
             else:
-                for ln in N.hit_line(att.name, dfr.name, wpn, cat, aim, precision, attacker_race=att.race.name, style=ax.style):
+                for ln in N.hit_line(att.name, dfr.name, wpn, cat, aim, attacker_gender=att.gender, hit_precision=precision, attacker_race=att.race.name, style=ax.style):
                     self._emit(ln)
         else:
             # For off-hand attacks, the attack intent line already showed the weapon
             # Just emit the generic hit line with the off-hand weapon
-            for ln in N.hit_line(att.name, dfr.name, wpn, cat, aim, precision, attacker_race=att.race.name, style=ax.style):
+            for ln in N.hit_line(att.name, dfr.name, wpn, cat, aim, attacker_gender=att.gender, hit_precision=precision, attacker_race=att.race.name, style=ax.style):
                 self._emit(ln)
 
         _pbypass = CA_PRECISION_ARMOR_BYPASS if (_crit_hit or ca_precision_landed) else 0.0
@@ -4251,7 +4246,7 @@ class CombatEngine:
         was_thrown = ax.style == "Opportunity Throw"
         try:
             weapon = get_weapon(wpn)
-            entangled, arm_wrapped, entangle_msg = _check_entangle(dfr, ds_, weapon, was_thrown, att)
+            entangled, entangle_msg = _check_entangle(dfr, ds_, weapon, was_thrown)
             if entangled and entangle_msg:
                 self._emit(entangle_msg)
                 ds_.is_on_ground = True
@@ -4266,9 +4261,6 @@ class CombatEngine:
                     )
                 self._check_defender_strategy_only(ds_, as_, minute)  # defender now on ground
                 self._check_defender_strategy_only(as_, ds_, minute)  # attacker: "your foe is on the ground"
-            elif arm_wrapped and entangle_msg:
-                self._emit(entangle_msg)
-                ds_.arm_wrapped = 1
         except ValueError:
             pass
 
@@ -4308,7 +4300,7 @@ class CombatEngine:
                 self._emit(N.death_line(dfr.name, dfr.gender))
                 self._emit(N.race_kill_line(att.name, att.race.name, att.gender))
                 self._emit("")
-                self._emit(N.victory_line(att.name, dfr.name))
+                self._emit(N.victory_line(att.name, dfr.name, winner_gender=att.gender))
                 return self._make_result(att, dfr, True, minute)
 
         if ds_.current_hp <= 0:
@@ -4567,7 +4559,7 @@ class CombatEngine:
                 None, None, None, None,
             )
 
-        for ln in N.hit_line(att.name, dfr.name, wpn, cat, ax.aim_point, "precise", attacker_race=att.race.name):
+        for ln in N.hit_line(att.name, dfr.name, wpn, cat, ax.aim_point, attacker_gender=att.gender, hit_precision="precise", attacker_race=att.race.name, is_counterstrike=True):
             self._emit(ln)
         # Gnome counterstrike mastery: higher margin (50 vs 40) — more decisive hit.
         has_cs_mastery = att.race.modifiers.counterstrike_mastery
@@ -4622,7 +4614,7 @@ class CombatEngine:
             self._emit(f"{dw.name.upper()} collapses, the monster shows no mercy!")
             self._emit(N.death_line(dw.name, dw.gender))
             self._emit(N.race_kill_line(kw.name, kw.race.name, kw.gender))
-            self._emit(""); self._emit(N.victory_line(kw.name, dw.name))
+            self._emit(""); self._emit(N.victory_line(kw.name, dw.name, winner_gender=kw.gender))
             return self._make_result(kw, dw, True, minute)
 
         # MODIFIED: Death check comes first. A warrior who takes a blow that
@@ -4639,7 +4631,7 @@ class CombatEngine:
             dw.is_dead = True
             self._emit(N.death_line(dw.name, dw.gender))
             self._emit(N.race_kill_line(kw.name, kw.race.name, kw.gender))
-            self._emit(""); self._emit(N.victory_line(kw.name, dw.name))
+            self._emit(""); self._emit(N.victory_line(kw.name, dw.name, winner_gender=kw.gender))
             return self._make_result(kw, dw, True, minute)
 
         # Death check passed; warrior survives the blow. Increment death saves and
@@ -4660,7 +4652,7 @@ class CombatEngine:
 
     def _attempt_concede(self, dying: _CState, killer: _CState, minute: int) -> Optional[FightResult]:
         dw = dying.warrior;  kw = killer.warrior
-        self._emit(N.appeal_line(dw.name))
+        self._emit(N.appeal_line(dw.name, gender=dw.gender))
         dying.concede_attempts += 1
         # Underdog crowd favor: the outmatched challenger in a bullying blood
         # challenge gets a flat +20 to their own concede rolls - the crowd
@@ -4678,9 +4670,9 @@ class CombatEngine:
             )
         else:
             granted = _concede_check(dw, dying, self.is_monster_fight, underdog_bonus=underdog_bonus, death_saves_survived=dying.death_saves_survived)
-        self._emit(N.mercy_result_line(dw.name, granted))
+        self._emit(N.mercy_result_line(dw.name, granted, warrior_gender=dw.gender))
         if granted:
-            self._emit(""); self._emit(N.victory_line(kw.name, dw.name))
+            self._emit(""); self._emit(N.victory_line(kw.name, dw.name, winner_gender=kw.gender))
             return self._make_result(kw, dw, False, minute)
         return None
 

@@ -17,6 +17,23 @@ from weapons import get_weapon
 LINE_WIDTH = 76   # Total width of fight output
 
 
+def _safe_format(template: str, **kwargs) -> str:
+    """Safely format a template string, providing defaults for missing pronouns."""
+    # Provide safe defaults for all pronouns
+    defaults = {
+        'his': 'his',
+        'her': 'her',
+        'he': 'he',
+        'she': 'she',
+        'him': 'him',
+        'himself': 'himself',
+        'herself': 'herself',
+    }
+    # Merge provided kwargs with defaults, with kwargs taking precedence
+    format_args = {**defaults, **kwargs}
+    return template.format(**format_args)
+
+
 def _article(word: str) -> str:
     """Return 'an' if word starts with a vowel sound, otherwise 'a'."""
     return "an" if word and word[0].upper() in "AEIOU" else "a"
@@ -1974,6 +1991,7 @@ def hit_line(
     weapon_name   : str,
     weapon_category: str,
     aim_point     : str,
+    attacker_gender: str = "Male",    # For pronoun handling
     hit_precision : str = "normal",  # "precise", "normal", "barely"
     attacker_race : str = None,       # For Lizardfolk special handling
     style         : str = None,       # For Opportunity Throw special handling
@@ -1987,6 +2005,9 @@ def hit_line(
     """
     lines = []
 
+    # Setup pronouns for formatting
+    his_pronoun = "his" if attacker_gender == "Male" else "her"
+
     # Announce the hit if it was a precise, barely-made blow, or a counterstrike
     if is_counterstrike or hit_precision == "precise" or random.random() < 0.25:
         if is_counterstrike:
@@ -1997,6 +2018,7 @@ def hit_line(
                 attacker=attacker_name.upper(),
                 defender=defender_name.upper(),
                 weapon  =weapon_name.lower(),
+                his=his_pronoun,
             )
         lines.append(ann)
 
@@ -4025,7 +4047,7 @@ SIGNATURE_LINES: dict[str, list[str]] = {
 }
 
 
-def signature_line(attacker_name: str, weapon_name: str) -> Optional[str]:
+def signature_line(attacker_name: str, weapon_name: str, gender: str = "Male") -> Optional[str]:
     """
     Return a signature flavor line for a critical hit, or None if no pool exists
     for this weapon. Caller is responsible for the skill >= 5 and chance checks.
@@ -4033,7 +4055,9 @@ def signature_line(attacker_name: str, weapon_name: str) -> Optional[str]:
     pool = SIGNATURE_LINES.get(weapon_name)
     if not pool:
         return None
-    return random.choice(pool).format(name=attacker_name.upper())
+    pronoun = "his" if gender == "Male" else "her"
+    he_pronoun = "he" if gender == "Male" else "she"
+    return random.choice(pool).format(name=attacker_name.upper(), his=pronoun, he=he_pronoun)
 
 
 # ---------------------------------------------------------------------------
@@ -4201,12 +4225,13 @@ DEFENSE_POINT_LINES = [
 ]
 
 
-def parry_line(defender_name: str, barely: bool = False, defense_point_active: bool = False) -> str:
+def parry_line(defender_name: str, defender_gender: str = "Male", attacker_name: str = "", barely: bool = False, defense_point_active: bool = False) -> str:
+    pronoun = "his" if defender_gender == "Male" else "her"
     if defense_point_active and random.random() < 0.5:
-        return random.choice(DEFENSE_POINT_LINES).format(defender=defender_name.upper())
+        return random.choice(DEFENSE_POINT_LINES).format(defender=defender_name.upper(), his=pronoun, attacker=attacker_name.upper() if attacker_name else "")
     if barely:
-        return random.choice(PARRY_LINES_BARELY).format(defender=defender_name.upper())
-    return random.choice(PARRY_LINES_SUCCESS).format(defender=defender_name.upper())
+        return random.choice(PARRY_LINES_BARELY).format(defender=defender_name.upper(), his=pronoun, attacker=attacker_name.upper() if attacker_name else "")
+    return random.choice(PARRY_LINES_SUCCESS).format(defender=defender_name.upper(), his=pronoun, attacker=attacker_name.upper() if attacker_name else "")
 
 
 # ---------------------------------------------------------------------------
@@ -4242,8 +4267,9 @@ DODGE_LINES = [
 ]
 
 
-def dodge_line(defender_name: str) -> str:
-    return random.choice(DODGE_LINES).format(defender=defender_name.upper())
+def dodge_line(defender_name: str, gender: str = "Male") -> str:
+    pronoun = "his" if gender == "Male" else "her"
+    return random.choice(DODGE_LINES).format(defender=defender_name.upper(), his=pronoun)
 
 
 # ---------------------------------------------------------------------------
@@ -4360,8 +4386,10 @@ DEFENSE_FAIL_DODGE = [
 
 
 def defense_fail_line(defender_name: str, gender: str, uses_parry: bool) -> str:
+    pronoun = "his" if gender == "Male" else "her"
+    him_pronoun = "him" if gender == "Male" else "her"
     pool = DEFENSE_FAIL_PARRY if uses_parry else DEFENSE_FAIL_DODGE
-    return random.choice(pool).format(defender=defender_name.upper())
+    return random.choice(pool).format(defender=defender_name.upper(), his=pronoun, him=him_pronoun)
 
 
 # ---------------------------------------------------------------------------
@@ -4447,6 +4475,7 @@ _LOW_HP_TIER3 = [   # below 15% HP remaining
 def low_hp_line(warrior_name: str, gender: str, hp_pct: float) -> Optional[str]:
     """Return a low-HP status line, or None if HP is above threshold / random skip."""
     pronoun  = "he" if gender == "Male" else "she"
+    his_pronoun = "his" if gender == "Male" else "her"
     reflexive = "himself" if gender == "Male" else "herself"
     if hp_pct >= 0.50:
         return None
@@ -4463,7 +4492,7 @@ def low_hp_line(warrior_name: str, gender: str, hp_pct: float) -> Optional[str]:
             return None
         pool = _LOW_HP_TIER3
     return random.choice(pool).format(
-        warrior=warrior_name.upper(), he=pronoun, himself=reflexive
+        warrior=warrior_name.upper(), he=pronoun, his=his_pronoun, himself=reflexive
     )
 
 
@@ -4497,9 +4526,10 @@ COUNTERSTRIKE_LINES = [
 ]
 
 
-def counterstrike_line(attacker_name: str, foe_name: str) -> str:
+def counterstrike_line(attacker_name: str, attacker_gender: str, foe_name: str) -> str:
+    pronoun = "his" if attacker_gender == "Male" else "her"
     return random.choice(COUNTERSTRIKE_LINES).format(
-        attacker=attacker_name.upper(), foe=foe_name.upper()
+        attacker=attacker_name.upper(), foe=foe_name.upper(), his=pronoun
     )
 
 
@@ -4560,15 +4590,18 @@ DECOY_FEINT_READ_LINES = [
 ]
 
 
-def decoy_feint_line(attacker_name: str, foe_name: str) -> str:
+def decoy_feint_line(attacker_name: str, foe_name: str, attacker_gender: str = "Male") -> str:
+    he = "he" if attacker_gender == "Male" else "she"
     return random.choice(DECOY_FEINT_SUCCESS_LINES).format(
-        attacker=attacker_name.upper(), foe=foe_name.upper()
+        attacker=attacker_name.upper(), foe=foe_name.upper(), he=he,
     )
 
 
-def decoy_feint_read_line(attacker_name: str, foe_name: str) -> str:
+def decoy_feint_read_line(attacker_name: str, foe_name: str, foe_gender: str = "Male") -> str:
+    pronoun = "his" if foe_gender == "Male" else "her"
+    him_pronoun = "him" if foe_gender == "Male" else "her"
     return random.choice(DECOY_FEINT_READ_LINES).format(
-        attacker=attacker_name.upper(), foe=foe_name.upper()
+        attacker=attacker_name.upper(), foe=foe_name.upper(), his=pronoun, him=him_pronoun
     )
 
 
@@ -4670,9 +4703,10 @@ def calculated_precision_line(
     )
 
 
-def calculated_probe_line(attacker_name: str, foe_name: str) -> str:
+def calculated_probe_line(attacker_name: str, attacker_gender: str, foe_name: str) -> str:
+    pronoun = "his" if attacker_gender == "Male" else "her"
     return random.choice(CALCULATED_PROBE_LINES).format(
-        attacker=attacker_name.upper(), foe=foe_name.upper()
+        attacker=attacker_name.upper(), foe=foe_name.upper(), his=pronoun
     )
 
 
@@ -4804,8 +4838,10 @@ def getup_line(warrior_name: str, gender: str) -> str:
 def ground_struggle_line(warrior_name: str, gender: str) -> str:
     """Failed recovery attempt - warrior tries to get up but can't."""
     pronoun = "his" if gender == "Male" else "her"
+    him_pronoun = "him" if gender == "Male" else "her"
+    he_pronoun = "he" if gender == "Male" else "she"
     return random.choice(GROUND_STRUGGLE_LINES).format(
-        warrior=warrior_name.upper(), his=pronoun)
+        warrior=warrior_name.upper(), his=pronoun, him=him_pronoun, he=he_pronoun)
 
 
 def ground_attack_line(warrior_name: str, gender: str) -> str:
@@ -5081,12 +5117,15 @@ def fatigue_line(warrior_name: str, gender: str, very_tired: bool = False,
                  is_aggressive: bool = True) -> str:
     pronoun_his = "his" if gender == "Male" else "her"
     pronoun_him = "him" if gender == "Male" else "her"
+    pronoun_he  = "he"  if gender == "Male" else "she"
+    pronoun_himself = "himself" if gender == "Male" else "herself"
     if very_tired:
         pool = EXHAUSTED_LINES if is_aggressive else SECOND_WIND_LINES
     else:
         pool = FATIGUE_LINES
     return random.choice(pool).format(
-        warrior=warrior_name.upper(), his=pronoun_his, him=pronoun_him
+        warrior=warrior_name.upper(), his=pronoun_his, him=pronoun_him,
+        he=pronoun_he, himself=pronoun_himself,
     )
 
 
@@ -5352,29 +5391,35 @@ def critical_parry_line(defender_name: str, attacker_name: str) -> str:
     )
 
 
-def critical_dodge_line(defender_name: str, attacker_name: str) -> str:
+def critical_dodge_line(defender_name: str, attacker_name: str, defender_gender: str = "Male") -> str:
+    he = "he" if defender_gender == "Male" else "she"
     return random.choice(CRITICAL_DODGE_LINES).format(
-        defender=defender_name.upper(), attacker=attacker_name.upper(),
+        defender=defender_name.upper(), attacker=attacker_name.upper(), he=he,
     )
 
 
-def critical_disarm_line(defender_name: str, attacker_name: str, weapon_name: str) -> str:
+def critical_disarm_line(defender_name: str, attacker_name: str, weapon_name: str, attacker_gender: str = "Male") -> str:
+    his = "his" if attacker_gender == "Male" else "her"
+    he  = "he"  if attacker_gender == "Male" else "she"
     return random.choice(CRITICAL_DISARM_LINES).format(
         defender=defender_name.upper(), attacker=attacker_name.upper(),
-        weapon=weapon_name,
+        weapon=weapon_name, his=his, he=he,
     )
 
 
-def critical_break_line(defender_name: str, attacker_name: str, weapon_name: str) -> str:
+def critical_break_line(defender_name: str, attacker_name: str, weapon_name: str, attacker_gender: str = "Male") -> str:
+    his = "his" if attacker_gender == "Male" else "her"
+    him = "him" if attacker_gender == "Male" else "her"
     return random.choice(CRITICAL_BREAK_LINES).format(
         defender=defender_name.upper(), attacker=attacker_name.upper(),
-        weapon=weapon_name,
+        weapon=weapon_name, his=his, him=him,
     )
 
 
-def critical_double_counter_line(defender_name: str, attacker_name: str) -> str:
+def critical_double_counter_line(defender_name: str, attacker_name: str, defender_gender: str = "Male") -> str:
+    he = "he" if defender_gender == "Male" else "she"
     return random.choice(CRITICAL_DOUBLE_COUNTER_LINES).format(
-        defender=defender_name.upper(), attacker=attacker_name.upper(),
+        defender=defender_name.upper(), attacker=attacker_name.upper(), he=he,
     )
 
 
@@ -5697,13 +5742,15 @@ VICTORY_LINES = [
 ]
 
 
-def appeal_line(warrior_name: str) -> str:
-    return random.choice(APPEAL_LINES).format(warrior=warrior_name.upper())
+def appeal_line(warrior_name: str, gender: str = "Male") -> str:
+    pronoun = "his" if gender == "Male" else "her"
+    return random.choice(APPEAL_LINES).format(warrior=warrior_name.upper(), his=pronoun)
 
 
-def mercy_result_line(warrior_name: str, granted: bool) -> str:
+def mercy_result_line(warrior_name: str, granted: bool, warrior_gender: str = "Male") -> str:
+    pronoun = "his" if warrior_gender == "Male" else "her"
     pool = MERCY_GRANTED if granted else MERCY_DENIED
-    return random.choice(pool).format(warrior=warrior_name.upper())
+    return random.choice(pool).format(warrior=warrior_name.upper(), his=pronoun)
 
 
 def death_line(warrior_name: str, gender: str) -> str:
@@ -5731,9 +5778,12 @@ def race_kill_line(killer_name: str, race_name: str, gender: str) -> str:
     )
 
 
-def victory_line(winner_name: str, loser_name: str) -> str:
+def victory_line(winner_name: str, loser_name: str, winner_gender: str = "Male") -> str:
+    pronoun = "his" if winner_gender == "Male" else "her"
+    he_pronoun = "he" if winner_gender == "Male" else "she"
+    himself = "himself" if winner_gender == "Male" else "herself"
     return random.choice(VICTORY_LINES).format(
-        winner=winner_name.upper(), loser=loser_name.upper()
+        winner=winner_name.upper(), loser=loser_name.upper(), his=pronoun, he=he_pronoun, himself=himself
     )
 
 
@@ -5808,9 +5858,12 @@ TABAXI_FRENZY_RESIST_LINES = [
 def tabaxi_frenzy_intro_line(attacker_name: str, gender: str = "Male") -> str:
     """Generate narrative for the opening of a Tabaxi frenzy ability."""
     he = "he" if gender == "Male" else "she"
+    his = "his" if gender == "Male" else "her"
     return random.choice(TABAXI_FRENZY_INTRO_LINES).format(
         attacker=attacker_name.upper(),
         he=he,
+        his=his,
+        him="him" if gender == "Male" else "her",
     )
 
 
@@ -5820,10 +5873,17 @@ def tabaxi_frenzy_strike_line(attacker_name: str, attack_num: int) -> str:
     return random.choice(pool).format(attacker=attacker_name.upper())
 
 
-def tabaxi_frenzy_resist_line(attacker_name: str) -> str:
+def tabaxi_frenzy_resist_line(attacker_name: str, gender: str = "Male") -> str:
     """Generate narrative for a failed Tabaxi frenzy trigger roll."""
+    he = "he" if gender == "Male" else "she"
+    his = "his" if gender == "Male" else "her"
+    himself = "himself" if gender == "Male" else "herself"
     return random.choice(TABAXI_FRENZY_RESIST_LINES).format(
         attacker=attacker_name.upper(),
+        he=he,
+        his=his,
+        him="him" if gender == "Male" else "her",
+        himself=himself,
     )
 
 
@@ -6074,6 +6134,8 @@ def minute_status_line(
     prev_tier: str,
     prev_winner: str,
     used: set,
+    winner_gender: str = "Male",
+    loser_gender: str = "Male",
 ) -> str:
     """
     Return a fight-status line for the start of a minute.
@@ -6082,6 +6144,7 @@ def minute_status_line(
     winner_name / loser_name: the leading fighter (empty strings when tier == "even")
     prev_winner: the name of the winner last minute (empty string if none)
     used: mutable set of already-used lines this fight (updated in-place)
+    winner_gender / loser_gender: gender for pronouns
     """
     # Detect momentum swing: tier changed OR same tier but winner flipped
     swung = (tier != "even" and prev_tier != "even" and
@@ -6119,7 +6182,12 @@ def minute_status_line(
     line = random.choice(available)
     used.add(line)
 
-    return line.format(winner=winner_name.upper(), loser=loser_name.upper())
+    winner_his = "his" if winner_gender == "Male" else "her"
+    loser_his = "his" if loser_gender == "Male" else "her"
+    loser_himself = "himself" if loser_gender == "Male" else "herself"
+
+    return line.format(winner=winner_name.upper(), loser=loser_name.upper(),
+                      his=winner_his, loser_his=loser_his, himself=loser_himself)
 
 
 def crowd_line(warrior_a_race: str = "", warrior_b_race: str = "") -> str:
@@ -6160,11 +6228,12 @@ ANXIOUS_LINES = [
 ]
 
 
-def anxious_line(warrior_name: str, foe_name: str) -> Optional[str]:
+def anxious_line(warrior_name: str, warrior_gender: str, foe_name: str) -> Optional[str]:
     """Only fires for styles with anxiously_awaits=True, ~20% chance."""
     if random.random() < 0.20:
+        pronoun = "his" if warrior_gender == "Male" else "her"
         t = random.choice(ANXIOUS_LINES)
-        return t.format(warrior=warrior_name.upper(), foe=foe_name.upper())
+        return t.format(warrior=warrior_name.upper(), foe=foe_name.upper(), his=pronoun)
     return None
 
 
