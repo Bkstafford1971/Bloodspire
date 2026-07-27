@@ -125,7 +125,7 @@ BASH_WEAPONS = {
 SLASH_WEAPONS = {
     "short_sword", "long_sword", "broad_sword", "bastard_sword", "battle_axe",
     "great_axe", "hatchet", "francisca", "dagger", "epee", "knife",
-    "scimitar", "scythe", "swordbreaker"
+    "scimitar", "scythe", "swordbreaker", "heavy_whip"
 }
 
 OPEN_HAND_WEAPONS = {
@@ -739,6 +739,7 @@ class _CState:
     near_kills_dealt   : int     = 0   # times this warrior reduced opponent below 20% HP
     used_favorite_weapon_this_fight : bool = False  # Tracks if favorite weapon flavor already shown
     bleeding_wounds    : int     = 0   # Cumulative bleeding damage (tracked each round)
+    arm_wrapped        : int     = 0   # Rounds remaining on heavy whip arm-wrap debuff (-10 attack roll)
     triggered_injuries : dict    = field(default_factory=dict) # {location: level}
     triggered_battle_cries: set  = field(default_factory=set)  # indices of battle cries that have fired
     prev_damage_category: str    = "none"  # track damage state transitions for battle cry triggers
@@ -916,6 +917,12 @@ def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState, foe_styl
     # Ground penalty: attacking from the floor is desperate and inaccurate
     ground_pen = 25 if state.is_on_ground else 0
 
+    # Arm-wrap debuff: heavy whip lash raked the weapon arm last action
+    arm_wrap_pen = 0
+    if state.arm_wrapped > 0:
+        arm_wrap_pen = 10
+        state.arm_wrapped -= 1
+
     # Heavy weapon penalty for Goblins & Tabaxi
     heavy_pen = 0
     if attacker.race.modifiers.heavy_weapon_penalty:
@@ -930,7 +937,7 @@ def _attack_roll(attacker: Warrior, strategy: Strategy, state: _CState, foe_styl
 
     total = roll + dex_b + wpn_b + luck_b + style_b + feint_b + lunge_b \
                - end_pen - hp0_pen + fav_bonus + martial_bonus + thrown_mastery_b + throw_skill_b \
-               + tactician_b - injury_pen - ground_pen - heavy_pen
+               + tactician_b - injury_pen - ground_pen - heavy_pen - arm_wrap_pen
 
     if attacker.race.name == "Lizardfolk":
         atk_pct = get_lizardfolk_armor_penalties(attacker.armor or "None")["dodge_parry_pct"]
@@ -2063,34 +2070,41 @@ def _get_favorite_weapon_flavor(warrior: Warrior, weapon_name: str, state: _CSta
 # KNOCKDOWN
 # ---------------------------------------------------------------------------
 
-def _check_entangle(warrior: Warrior, state: _CState, weapon: Weapon, was_thrown: bool) -> Tuple[bool, Optional[str]]:
+def _check_entangle(warrior: Warrior, state: _CState, weapon: Weapon, was_thrown: bool,
+                    attacker: "Warrior | None" = None) -> Tuple[bool, bool, Optional[str]]:
     """
-    Check if a bola or heavy whip entangles the opponent's legs, causing them to trip.
-    Returns (entangled, narrative_line).
+    Check if a bola or heavy whip entangles the opponent's legs, causing them to trip,
+    or if a heavy whip rakes the weapon arm.
+    Returns (entangled, arm_wrapped, narrative_line).
     """
     if state.is_on_ground:
-        return False, None
-    
+        return False, False, None
+
     if weapon.skill_key == "bola":
         if was_thrown:
             # Bola thrown: 70% chance to entangle and trip
             if random.randint(1, 100) <= 70:
                 msg = f"The bola wraps around {warrior.name.upper()}'s legs and trips them to the ground!"
-                return True, msg
+                return True, False, msg
         else:
             # Bola swung in melee: 35% chance to entangle
             if random.randint(1, 100) <= 35:
                 msg = f"The swinging bola tangles {warrior.name.upper()}'s legs!"
-                return True, msg
-    
+                return True, False, msg
+
     elif weapon.skill_key == "heavy_whip":
-        # Heavy whip: good chance to entangle on successful hit
-        # Lower chance in melee than thrown, but it's never thrown
-        if random.randint(1, 100) <= 50:
+        # Entangle: 50% base + 3% per heavy_whip skill level, capped at 75%
+        whip_skill = attacker.skills.get("heavy_whip", 0) if attacker else 0
+        entangle_chance = min(75, 50 + whip_skill * 3)
+        if random.randint(1, 100) <= entangle_chance:
             msg = f"The barbed whip wraps around {warrior.name.upper()}'s legs, dragging them to the ground!"
-            return True, msg
-    
-    return False, None
+            return True, False, msg
+        # Arm wrap: 40% chance on non-entangle hits
+        if random.randint(1, 100) <= 40:
+            msg = f"The barbed whip rakes across {warrior.name.upper()}'s weapon arm!"
+            return False, True, msg
+
+    return False, False, None
 
 
 def _check_knockdown(warrior: Warrior, state: _CState, damage: int, cat: str,
@@ -4237,7 +4251,7 @@ class CombatEngine:
         was_thrown = ax.style == "Opportunity Throw"
         try:
             weapon = get_weapon(wpn)
-            entangled, entangle_msg = _check_entangle(dfr, ds_, weapon, was_thrown)
+            entangled, arm_wrapped, entangle_msg = _check_entangle(dfr, ds_, weapon, was_thrown, att)
             if entangled and entangle_msg:
                 self._emit(entangle_msg)
                 ds_.is_on_ground = True
@@ -4252,6 +4266,9 @@ class CombatEngine:
                     )
                 self._check_defender_strategy_only(ds_, as_, minute)  # defender now on ground
                 self._check_defender_strategy_only(as_, ds_, minute)  # attacker: "your foe is on the ground"
+            elif arm_wrapped and entangle_msg:
+                self._emit(entangle_msg)
+                ds_.arm_wrapped = 1
         except ValueError:
             pass
 

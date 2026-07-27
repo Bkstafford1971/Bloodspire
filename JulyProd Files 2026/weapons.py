@@ -1077,15 +1077,17 @@ WEAPONS: dict[str, Weapon] = {
         weight        = 2.5,
         apm           = 6,
         damage_base   = 10,
-        damage_top    = 13,
+        damage_top    = 14,
         throwable     = False,
         two_hand      = False,
+        can_disarm    = True,
         category      = ODDBALL,
         notes=(
             "A long, heavy whip with barbs or hooks. Can lash to slash or wrap around limbs "
-            "to trip an opponent. Deals a mix of blunt and slashing damage."
+            "to trip an opponent, rake a weapon arm, or yank a weapon free. Deals a mix of "
+            "blunt and slashing damage. Entangle chance scales with heavy_whip skill level."
         ),
-        preferred_styles=["Slash", "Engage & Withdraw"],
+        preferred_styles=["Slash", "Engage & Withdraw", "Feint"],
     ),
 
     "swordbreaker": Weapon(

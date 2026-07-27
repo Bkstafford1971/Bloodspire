@@ -1057,6 +1057,16 @@ _BLK_BYLINES = [
     "Bryndis Coldquill, Arena Correspondent",
     "Magistra Pellwood, Official Chronicle",
     "Aldric Fenworth, Agony Gazette",
+    "Kess Thorne, The Daily Report",
+    "Valter Grim, Dispatch Correspondent",
+    "Nore Blackson, Arena Press",
+    "Tessa Wynter, Truth and Record",
+    "Mordak the Keen-Eyed, Scribe",
+    "Lyssa Vex, Record Keeper",
+    "Garrett Stonewell, Public Chronicle",
+    "Sylvain Darkwood, Accounts of War",
+    "Camilla Frost, The Arena Voice",
+    "Toren Sharpquill, Correspondent",
 ]
 
 _BLK_INTRO = [
@@ -1070,6 +1080,16 @@ _BLK_INTRO = [
     "Managers entered this turn with plans.  Warriors entered with steel.  Only one of those things survived contact with reality in {arena}.",
     "{arena} woke hungry this turn, and it was fed without restraint.  What follows are the names of those who satisfied it, and those who regretted trying.",
     "I have seen many turns in many places, and {arena} remains uniquely honest.  It rewards preparation, punishes pride, and forgets quickly.",
+    "The {arena} was alive with activity this turn, as it always is when warriors gather to test themselves against one another.",
+    "In a place as relentless as the {arena}, a single turn contains multitudes—victories and defeats, hopes and despairs, all compressed into one span of combat.",
+    "The narrative of the {arena} continues to write itself, turn after turn, fight after fight, and this week's chapter is no exception.",
+    "The sand of the {arena} tells many stories, and this turn it told all of them at once.",
+    "Warriors came to the {arena} with ambitions this turn.  Not all of them left with the same ambitions intact.",
+    "The {arena} is never quiet for long, and this turn proved no exception to that rule.",
+    "The {arena} waits for no one and shows mercy to no one, and this turn demonstrated both truths with clarity.",
+    "Another turn in the endless cycle of the {arena}—another chance for warriors to make their mark or fade into obscurity.",
+    "The {arena} demands constant attention, and this turn has no shortage of stories worth examining.",
+    "What unfolds in the {arena} shapes the city, the standings, and the futures of everyone who dares to fight in it.",
 ]
 
 _BLK_TEAM_PERF = [
@@ -1083,6 +1103,16 @@ _BLK_TEAM_PERF = [
     "{team} closed this turn with a {record} result that moved them {rank_change}.  Preparation showed.  Rivals who scheduled around them may want to revise that decision before the next bracket.",
     "A {record} turn for {team} and movement in the standings.  Not every performance needs to be memorable to be effective.  In {arena}, outcomes do the talking that style cannot always manage.",
     "Something changed for {team} this turn.  Whether the {record} marks the beginning of a sustained rise or an early signal remains to be seen, but the standings took notice.",
+    "{team}'s {record} turn this week demonstrates that consistency pays off.  Moving {rank_change}, they are building something that looks sustainable.",
+    "The {record} performance from {team} has pushed them {rank_change}, and the improvements are visible across the roster, not just in isolated warriors.",
+    "{team} is {rank_change} this turn with a {record} showing that suggests they have found a winning formula.  Whether they can sustain it remains to be seen.",
+    "A {record} turn for {team} moves them {rank_change} and puts them in conversation with teams that were previously considered their superiors.",
+    "{team}'s {record} result this turn has them climbing {rank_change}.  The trajectory matters more than the single turn, and the trajectory looks positive.",
+    "The momentum building for {team} is visible in their {record} showing and their {rank_change} movement.  This is the kind of progress that compounds.",
+    "{team} turned in work this turn that justified their {record} record and pushed them {rank_change}.  For every warrior on that roster, execution mattered.",
+    "{team} is now {rank_change} after a {record} performance that suggests they are hitting their stride.",
+    "The {record} result for {team} this turn positions them {rank_change} and demonstrates that they are more than a one-off success.",
+    "What {team} accomplished this turn—a {record} showing—earned them {rank_change} movement and validation that their approach is working.",
 ]
 
 _BLK_WARRIOR_HI = [
@@ -1096,6 +1126,16 @@ _BLK_WARRIOR_HI = [
     "The fight wasn't clean, fast, or elegant, but {warrior} endured.  Against {opponent}, persistence carried the day and the record followed.",
     "{opponent} learned more than they expected when facing {warrior} this turn.  Some lessons cost pride; others cost position.",
     "Word spreads quickly after performances like {warrior} delivered this turn.  {arena} takes note, and so do managers with memory.  {points} recognition and rising.",
+    "{warrior} produced a masterclass in controlled, effective combat against {opponent}.  The kind of performance that earns lasting recognition and respect.",
+    "Against {opponent}, {warrior} displayed the kind of technical precision that separates masters from merely competent warriors.  {Points} recognition well earned.",
+    "{warrior} moved through {opponent} with the efficiency of someone who knows exactly what {he} is doing.  The result was never in doubt.",
+    "The performance {warrior} delivered this turn was the kind that reminds {arena} why some warriors rise and others plateau.  {Opponent} had no answer for {warrior}'s skill.",
+    "{warrior} proved {himself} decisively against {opponent}.  The manner of victory suggested preparation that far exceeded {opponent}'s preparation.",
+    "There was beauty in the brutality of {warrior}'s victory over {opponent}.  Controlled, purposeful, and absolutely dominant.",
+    "{warrior} made {opponent} look like they were fighting in a different tier.  The gap in skill was that pronounced.",
+    "Against {opponent}, {warrior} displayed every quality that makes {him} dangerous: skill, timing, and an apparent calm in the chaos of combat.",
+    "{warrior}'s handling of {opponent} this turn will be studied by warriors looking to understand what mastery looks like.",
+    "The performance {warrior} delivered was a statement—{points} recognition and a declaration that {he} is among the most dangerous warriors in {arena}.",
 ]
 
 _BLK_META_WARRIOR = [
@@ -1104,6 +1144,21 @@ _BLK_META_WARRIOR = [
     "Several challengers tested {warrior} this turn with varying degrees of confidence.  The results told the story the records already suggested.",
     "As the turn progressed, the challenges aimed at {warrior} felt less strategic and more desperate.  In {arena}, that kind of urgency often exposes more weakness than courage.",
     "{warrior} became a focal point this turn, drawing repeated challenges from hopeful rivals.  Popularity in this arena is rarely comfortable.",
+    "{warrior} continues to sharpen {his} edge.  Where {he} once fought reactively, {he} now fights with clear intent, and the results speak for themselves.",
+    "Observers have noticed {warrior} making deliberate choices in recent turns.  {His} evolution as a fighter is becoming impossible to ignore.",
+    "{warrior} is building something. Each fight seems part of a larger strategy, and it is working.",
+    "The rise of {warrior} is not accidental.  {His} training decisions and tactical awareness are setting {him} apart from {his} peers.",
+    "{warrior} seems to understand something about {his} fighting style that others do not.  It shows in every turn.",
+    "{warrior} is adapting faster than most warriors adapt.  The record shows growth, but the potential shows far more.",
+    "There is a confidence to {warrior} that was not visible in earlier turns.  It translates directly into improved results.",
+    "{warrior} is making {his} mark.  The whispers around {arena} are growing louder: this one is going somewhere.",
+    "It is becoming clear that {warrior} is more than a competent fighter.  {He} is a strategist, learning {his} strengths with each bout.",
+    "{warrior} carries an intensity that few can match.  {His} recent performances have earned more attention than {his} record alone would suggest.",
+    "{warrior} is playing at a level that seems to be improving every turn.  Whatever {he} is doing in training is working.",
+    "The development of {warrior} over recent turns has not gone unnoticed.  {His} approach is becoming more refined, more dangerous.",
+    "{warrior} seems to be hitting {his} stride.  Each turn brings fresh evidence of {his} upward trajectory.",
+    "{warrior} is building a reputation beyond mere records.  {His} name is becoming one that other managers watch carefully.",
+    "There is something relentless about {warrior}'s advancement.  {His} focus and execution suggest {he} has a clear vision for where {he} wants to go.",
 ]
 
 _BLK_META_TEAM = [
@@ -1112,6 +1167,21 @@ _BLK_META_TEAM = [
     "Schedules don't lie, and this turn revealed growing hesitation around {team}.  Challenges that once came freely are now reconsidered, delayed, or quietly withdrawn.  Reputation is finally catching up.",
     "Once the first manager avoided {team}, others followed.  Fear spreads efficiently under the guise of scheduling logic.",
     "Beneath the noise of the arena, careful managers adjusted pairings with intent.  Not all victories this turn required combat.  {team} benefited from the arithmetic.",
+    "Schedules reveal strategy, and {team}'s schedule this turn was a carefully crafted response to market conditions.  Clear thinking and clearer goals.",
+    "{team} is building momentum with every turn.  The way the roster is being managed suggests leadership has a clear plan.",
+    "There is a pattern to {team}'s decisions this turn that speaks to organized thinking.  Not luck—strategy.",
+    "{team} is taking calculated risks on the schedule.  So far, they are paying off.",
+    "The competitive positioning of {team} continues to tighten.  Leadership is making smart calls about which fights to accept and which to decline.",
+    "{team}'s management is not flashy, but it is effective.  Quiet competence is often the most dangerous kind.",
+    "Observers are noticing how {team} manages {their} roster.  Careful placement, deliberate matchups, a clear sense of direction.",
+    "{team} is not relying on chance.  Each placement seems designed, each fight scheduled with purpose.",
+    "The discipline of {team}'s approach is becoming more evident with each turn.  This is not improvisation—this is planning.",
+    "{team} is building warriors and building momentum simultaneously.  The investment in development is showing returns.",
+    "How {team} schedules fights tells you everything about how {they} think.  This turn, {they} were thinking clearly.",
+    "{team} is managing for long-term success while competing for short-term results.  That balance is harder to strike than it looks.",
+    "The reputation {team} is building is not accidental.  Every scheduling decision seems to reinforce a larger strategy.",
+    "{team}'s approach to team composition and fight selection suggests leadership with experience and vision.",
+    "There is a quiet confidence to {team}'s management this turn.  The record suggests it is not misplaced.",
 ]
 
 
@@ -1119,6 +1189,23 @@ _BLK_CHAMP_NEW = [
     "The crowds were amazed this turn, as {champion} of {champ_team} dethroned the reigning Champion in a fight that will be talked about for turns to come.  A new name atop the throne.",
     "{champion} of {champ_team} has done what countless rivals only dreamed of: claimed the Championship in direct combat.  The arena has a new ruler, and the pretenders must recalculate.",
     "Stop the histories and note the date: {champion} of {champ_team} is the new Champion of {arena}.  The old order ends.  The new one has precisely one member.",
+    "History rewrites itself in moments. {champion} of {champ_team} has defeated {prev_champion} and claimed the throne.",
+    "The throne has changed hands tonight. {champion} of {champ_team} has taken the Championship from {prev_champion} in spectacular fashion.",
+    "The crowds erupted as {champion} of {champ_team} seized the Championship from {prev_champion} in a bout that will echo through the arena.",
+    "{champion} of {champ_team} did what countless rivals attempted and failed: dethroned {prev_champion} and claimed the title for themselves.",
+    "The changing of the guard is complete. {champion} of {champ_team} has vanquished {prev_champion} and claimed the throne.",
+    "In a stunning upset, {champion} of {champ_team} knocked {prev_champion} from the throne and claimed the title themselves.",
+    "The Championship was not gifted. {champion} of {champ_team} earned it by defeating {prev_champion} in direct combat.",
+    "The old order falls away. {prev_champion} is no longer the Champion—{champion} of {champ_team} stands atop the arena now.",
+    "What the crowds feared has come to pass: {prev_champion} is dethroned. {champion} of {champ_team} is the new Champion.",
+    "A coronation of sorts occurred this turn: {champion} of {champ_team} became the new Champion by vanquishing {prev_champion}.",
+    "The throne was not undefeated, and {prev_champion} has learned that hard lesson. {champion} of {champ_team} is the new Champion.",
+    "Years of anticipation end tonight. {champion} of {champ_team} is finally the Champion, having defeated {prev_champion} in combat.",
+    "The transition is official. {prev_champion}'s reign has ended, and {champion} of {champ_team} claims the throne.",
+    "Against all odds and despite {prev_champion}'s dominance, {champion} of {champ_team} has seized the Championship.",
+    "{prev_champion} held the crown, but all crowns can be taken. {champion} of {champ_team} now rules the arena.",
+    "The new Champion stands where the old one fell. {champion} of {champ_team} has defeated {prev_champion} and claimed their destiny.",
+    "{champion} of {champ_team} has done the impossible: dethroned {prev_champion} and claimed the Championship for themselves.",
 ]
 
 _BLK_CHAMP_INCUMBENT = [
@@ -1127,12 +1214,44 @@ _BLK_CHAMP_INCUMBENT = [
     "The arena is defined by presence, and {champion} of {champ_team} continues to provide it.  The Championship throne remains occupied, another turn's triumph for the incumbent.",
     "While others plotted advancement, {champion} of {champ_team} simply endured.  The Championship waits for challengers bold enough to contest it.",
     "{champion} of {champ_team} holds the throne without fanfare.  In {arena}, consistency on the title is worth more than any grand gesture.",
+    "{champion} of {champ_team} held the crown again this turn by defeating {opponent}.  The Championship stays with the right warrior.",
+    "The reigning Champion proved why they wear the crown: {champion} of {champ_team} overcame {opponent} and remains untouched.",
+    "{champion} of {champ_team} faced {opponent} this turn and answered decisively.  The throne remains secure on the right shoulders.",
+    "Another challenger, another defeat—{opponent} tested {champion} of {champ_team}'s throne and found it unshakeable.",
+    "{champion} of {champ_team} remains the Champion after besting {opponent}.  The title shows no signs of changing hands.",
+    "The Championship continues under {champion} of {champ_team}'s rule, who saw off {opponent}'s challenge with ease.",
+    "{opponent} stepped forward to challenge the throne and {champion} of {champ_team} reminded {him} why that was a mistake.",
+    "The crown sits secure on {champion} of {champ_team}'s head, proven once more by the defeat of {opponent}.",
+    "{champion} of {champ_team} held off {opponent} this turn and in doing so, defended the Championship once more.  The title remains theirs.",
+    "Another challenger falls before the throne.  {champion} of {champ_team} prevailed over {opponent} and proves the Championship's true holder.",
+    "The Championship is held by the right warrior.  {champion} of {champ_team} faced {opponent} and retained the title with authority.",
+    "{champion} of {champ_team} faced down {opponent} and the result was never in doubt.  The throne belongs to the strong.",
+    "As {opponent} learned this turn, challenging {champion} of {champ_team} is a lesson in futility.  The throne remains secure.",
+    "{champion} of {champ_team} overcame {opponent} this turn and continues to hold the Championship.  No one is ready to take it.",
+    "The Champion's grip remains firm.  {champion} of {champ_team} bested {opponent} this turn and showed once more why they wear the crown.",
 ]
 
 _BLK_CHAMP_VACANT = [
     "The Championship throne remains empty this turn.  No warrior has yet met the criteria to claim it.  Every manager with ambition should be watching their most recognised fighter closely.",
     "No Champion walks the arena floor this turn.  The vacancy is an open invitation, and somewhere in {arena}, someone is already planning to answer it.",
     "The title sits unclaimed in {arena}, which means every warrior with enough recognition and enough nerve has cause to press forward.  The throne waits.",
+    "The throne sits vacant this turn, waiting for a warrior bold enough or skilled enough to claim it. Every ambitious fighter in {arena} is watching.",
+    "Without a Champion, the arena holds its breath. The title is there for the taking, and the contenders circle like wolves around prey.",
+    "No one wears the crown today. The Championship is unclaimed, and every manager with a strong warrior is calculating their odds.",
+    "The Championship is without a holder this turn. An open position of power awaits the warrior with the recognition to claim it.",
+    "A vacancy at the top of the standings. The throne awaits a warrior with enough reputation and skill to occupy it.",
+    "The arena has no master this turn. Somewhere in the crowd, ambitious fighters are sizing each other up, wondering if this is their moment.",
+    "The Champion's seat remains empty. The opportunity is there for any warrior with the standing to challenge for the title.",
+    "No crown sits atop any warrior's head this turn. The path to the Championship is wide open for those with the recognition to walk it.",
+    "The throne is vacant and waiting. What ambitious warrior will step forward to claim what no one currently holds?",
+    "Without a sitting Champion, the arena feels different this turn. The title is there, unclaimed, waiting for the right warrior.",
+    "A Champion-less arena is a curious thing. The power and prestige of the title remain, but no warrior has yet claimed them.",
+    "The Championship title goes unclaimed this turn. Every fighter with sufficient standing is watching and wondering if destiny is calling.",
+    "No one has yet reached the pinnacle of recognition needed to wear the crown. The throne sits vacant, a throne waiting to be filled.",
+    "In the absence of a Champion, the arena feels like it's holding its breath. The title is there for the warrior bold enough to reach for it.",
+    "The throne is empty, and the opportunity is immense. Which warrior will rise above the rest and claim the vacant Championship?",
+    "No Champion rules {arena} this turn. The position stands open, and the competition to fill it will be fierce.",
+    "The Championship remains in abeyance. The title is waiting for a warrior with the reputation and resolve to claim it.",
 ]
 
 _BLK_CHAMP_RECOGNITION = [
@@ -1141,6 +1260,21 @@ _BLK_CHAMP_RECOGNITION = [
     "{champion} of {champ_team} did not take the title from anyone.  The title came to them.  With the highest recognition score on the roster, the Championship has found its rightful occupant by right of standing.",
     "The Championship throne has a new occupant by recognition: {champion} of {champ_team}.  No duel, no drama.  Simply the reward for being the best-regarded warrior in {arena}.  The arena's verdict is rarely delivered so quietly.",
     "When no one earns the title by force, the records decide.  {champion} of {champ_team} sits atop those records this turn, and the Championship follows.  Whether they can hold it in combat is a question for future turns.",
+    "The standings speak louder than steel.  {champion} of {champ_team} has climbed higher than any warrior in the arena and claims the Championship by virtue of reputation alone.",
+    "{champion} of {champ_team} needed no victory in the ring to claim the crown—the record was enough.  The highest recognition in {arena} has earned the highest title.",
+    "A coronation without combat.  {champion} of {champ_team} ascends to the Championship on the strength of their standing alone.",
+    "The ledger has spoken and the result is clear: {champion} of {champ_team} carries the most recognition in {arena} and with it, the Championship.",
+    "{champion} of {champ_team} claims the title not through force but through consistent excellence.  The standings affirm what the arena already knew.",
+    "No blade needed to change this crown.  {champion} of {champ_team}'s reputation has grown so great that the Championship follows naturally.",
+    "{champion} of {champ_team} rises to the Championship by the only measure that truly counts: the respect and recognition of all who have watched them fight.",
+    "The title changes hands not in battle but in the records.  {champion} of {champ_team} has earned the highest recognition and with it, the crown.",
+    "{champion} of {champ_team} did not need to defeat anyone to become Champion—the weight of their accomplishments was enough.",
+    "When the records are tallied and the standings are clear, {champion} of {champ_team} sits at the top.  The Championship follows that truth.",
+    "{champion} of {champ_team} ascends through excellence, not through conflict.  The recognition {he} has earned has granted {him} the title.",
+    "The Championship is not always claimed in blood.  {champion} of {champ_team}'s recognition has made {him} the obvious choice for the crown.",
+    "By right of reputation, {champion} of {champ_team} claims the Championship.  The arena's regard has settled the matter without a trial by combat.",
+    "{champion} of {champ_team} earns the crown not by defeating another, but by standing highest in the eyes of {arena}.",
+    "The throne seeks the worthy, and {champion} of {champ_team}'s recognition marks {him} as the most worthy warrior in the arena.",
 ]
 
 _BLK_DEATH = [
@@ -1154,6 +1288,16 @@ _BLK_DEATH = [
     "Gone.  {warrior} of {team}, career record {record}, was put down by {killer} this turn and will not return to any schedule.  Another name moves from the active ledger to the permanent one.",
     "{warrior} is dead.  {killer} handled the business of it, and now {team} has a vacancy and a memory.  Not always in that order, but always in that combination.",
     "Nobody told {warrior} it was going to end this turn.  {killer} understood what was happening before the crowd did.  Final record: {record}.",
+    "{warrior}'s time in the arena is finished.  {killer} delivered the final blow, and now {warrior} is part of {arena}'s history rather than its present.  Record: {record}.",
+    "The mortality of {warrior} became very real when {killer} crossed swords with {him} this turn.  The arena does not forgive, and it did not forgive this time.",
+    "{warrior} came to the arena seeking glory or coin or both.  What {he} received instead was {killer}'s blade and a permanent exit.  Record: {record}.",
+    "Death came to {warrior} this turn in the form of {killer}.  It is the kind of end that the arena reserves for those who step through its gates.",
+    "{killer} wrote the final chapter of {warrior}'s story today.  It was not the ending anyone writes hoping for, but it is the one {warrior} received.  Record: {record}.",
+    "The lights dimmed for {warrior} when {killer} struck.  They will not brighten again.  The arena has claimed another.",
+    "{warrior} fought {killer} and lost in the way that matters most in the arena.  There is no recovery from this kind of loss.",
+    "By {killer}'s hand, {warrior} passes from the living to the remembered.  The arena continues its work.  Record: {record}.",
+    "{warrior} was cut down in {his} prime or {his} decline, depending on which record you trust.  Either way, {killer} ensured the debate is now academic.",
+    "Another warrior added to the {arena}'s toll.  {killer} and {warrior} met, and only {killer} left.  That is how the arena settles its accounts.",
 ]
 
 _BLK_OUTRO = [
@@ -1167,6 +1311,16 @@ _BLK_OUTRO = [
     "I've written worse turns, but not many.  See you in Turn {next_turn}.  - {byline}",
     "I'll raise a glass to the survivors.  The rest are beyond complaint.  Until next time - {byline}",
     "Until the brackets change again, this is what happened.  - {byline}",
+    "That sums it up for this turn.  {arena} has spoken through steel and strategy, and the message is encoded in the standings.  - {byline}",
+    "The chapter closes here.  The next one opens with the same uncertainty that always precedes it.  - {byline}",
+    "What {arena} has rendered this turn cannot be undone.  The standings are written.  The records are kept.  The future awaits.  - {byline}",
+    "The implications of this turn will echo through scheduling decisions for weeks to come.  That is how {arena} works.  - {byline}",
+    "What {arena} has rendered this turn cannot be undone.  The standings are written.  The records are kept.  - {byline}",
+    "The turn has run its course.  What matters now is how the managers respond and how the warriors adapt.  - {byline}",
+    "The standings tell the story that the crowd could not quite articulate.  Read them carefully.  They rarely lie.  - {byline}",
+    "Until the next turn brings fresh competition and fresh outcomes, that is what the {arena} delivered this week.  - {byline}",
+    "The records stand as witnesses to what transpired.  Some will be satisfied with those records.  Others will spend the off-turn plotting.  - {byline}",
+    "That is the turn.  The implications ripple outward from here, reshaping strategies and challenging assumptions.  - {byline}",
 ]
 
 # ---------------------------------------------------------------------------
@@ -1184,6 +1338,16 @@ _BLK_WARRIOR_RISER = [
     "No debate after {warrior} of {team} handled {opponent} this turn.  Sitting at {points} recognition, this one is simple math and bad news for whoever faces them next.",
     "Quietly and efficiently, {warrior} of {team} put {opponent} down and climbed to {points} recognition.  The quiet ones are always the ones you didn't adjust for in time.",
     "Someone's going to challenge {warrior} of {team} soon and discover they've made a bad decision.  After handling {opponent} this turn and reaching {points} recognition, the gap between reputation and reality has officially closed.",
+    "{warrior} is collecting victories and recognition with equal consistency.  The rise in the standings reflects preparation that appears to have no end in sight.",
+    "The trajectory of {warrior}'s career is pointing upward, and nothing is changing that direction.  {Points} recognition this turn keeps the momentum rolling.",
+    "{warrior} has found a gear that most warriors never locate.  The consistent rise in standing and recognition suggests {he} is here to stay at the top.",
+    "What {warrior} is building through sustained performance is a reputation that will outlast individual turns.  The {points} recognition earned this turn is just the latest evidence.",
+    "{warrior}'s climb through the standings has attracted admirers and rivals in equal measure.  Both groups are watching to see how far this one goes.",
+    "The numbers tell {warrior}'s story: rising standing, accumulating recognition, building reputation.  The trend is undeniable and shows no signs of reversing.",
+    "{warrior} is in the midst of an ascent that reflects both skill and determination.  The {points} recognition to {his} name this turn validates both.",
+    "Few warriors manage to rise this steadily without hitting a plateau.  {warrior} has yet to find one, and {his} {points} recognition this turn suggests the climb continues.",
+    "The rise of {warrior} is the kind of story that {arena} loves: a warrior who earns everything through consistent performance and unmistakable skill.",
+    "{warrior}'s standing in {arena} continues to improve, turn after turn, with {points} recognition this turn adding to a growing list of achievements.",
 ]
 
 _BLK_WARRIOR_FALLER = [
@@ -1197,6 +1361,16 @@ _BLK_WARRIOR_FALLER = [
     "Somewhere between planning and execution, {warrior}'s turn fell apart against {opponent}.  It happens.  In {arena}, it tends to happen loudly.",
     "It wasn't {warrior}'s turn.  Or their fight.  Or their afternoon.  {opponent} took care of all of that efficiently and without apparent difficulty.",
     "The standings now officially reflect what the fight already told us: {warrior} was not ready for {opponent} this turn.  The gap between tiers is rarely as polite as the schedule implies.",
+    "{warrior}'s slide through the standings shows no sign of stopping.  What was once a promising trajectory has become a concerning downward trend.",
+    "The losses have added up for {warrior}, and the recognition count reflects it.  The question now is whether this is a temporary slump or the beginning of the end.",
+    "{warrior} is facing the kind of losing streak that defines careers—not always ending them, but reshaping them fundamentally.",
+    "The recognition {warrior} has lost over recent turns is the visible symptom of a deeper problem.  {His} standing continues to fall.",
+    "Once a name to watch, {warrior} is now a name to worry about—if you manage {him}.  The fall in recognition is steep and accelerating.",
+    "{warrior}'s recent record is a far cry from what the arena expected when {his} career was climbing.  The descent has been swift.",
+    "The margin between where {warrior} was and where {warrior} is now keeps growing.  Each turn seems to take another notch of standing away.",
+    "{warrior} is in the kind of hole where digging out becomes harder with each additional loss.  The recognition numbers reflect that reality.",
+    "Comebacks are possible, but {warrior} will need to move quickly.  The rate of decline suggests that every turn matters now.",
+    "The story of {warrior}'s fall is becoming harder to reverse with each passing turn.  Recognition continues to slip away.",
 ]
 
 _BLK_BULLY_SHAMED = [
@@ -1207,6 +1381,19 @@ _BLK_BULLY_SHAMED = [
     "Word of {warrior}'s mismatched Blood Challenge spread fast through {team}'s ranks and beyond. No one called it a fair fight, and no one called {warrior} brave for it.",
     "{warrior} picked a fight they couldn't lose, and the crowd made sure they knew exactly what that said about them.",
     "It takes a certain kind of gladiator to hunt down someone so clearly beneath them. {warrior} found that out the hard way when the boos started before the bout even ended.",
+    "{warrior} thought {he} could bully {opponent} without consequences. The Commission proved {him} wrong in the most public way possible.",
+    "Official rebuke is a heavy thing to carry in {arena}. {warrior} now carries it after {his} display against {opponent}.",
+    "The Commission does not intervene lightly. When they stepped forward to condemn {warrior}'s actions against {opponent}, everyone took notice.",
+    "{warrior}'s treatment of {opponent} was indefensible. The Commission said so explicitly, and now it is recorded for all {arena} to see.",
+    "There is shame and then there is official shame. {warrior} now understands the difference after the Commission's public censure.",
+    "{warrior} sought to dominate {opponent}, but instead found {himself} dominated by the weight of official disapproval.",
+    "The Commission's judgment against {warrior} for {his} conduct toward {opponent} is final. {His} reputation carries that judgment now.",
+    "{warrior} will not easily escape the stigma of the Commission's rebuke. The record is permanent, and {his} name is tied to it.",
+    "What {warrior} did to {opponent} crossed from sport into something uglier. The Commission saw it clearly and said so without hesitation.",
+    "{warrior}'s moment of dominance over {opponent} will be forever bracketed by official censure and public shame.",
+    "The Commission sent a message with {its} rebuke of {warrior}. The message was clear: {this} is not who we are.",
+    "{warrior} will carry the weight of that public condemnation for a long time. It is meant to.",
+    "When the institutions of {arena} turn their judgment against you, it is time to reconsider {your} choices. {warrior} is learning that now.",
 ]
 
 _BLK_UNDERDOG_INSPIRED = [
@@ -1216,6 +1403,20 @@ _BLK_UNDERDOG_INSPIRED = [
     "{warrior}'s stock had never been higher, and it had nothing to do with a win. Taking that Blood Challenge against {opponent} took nerve most gladiators don't have.",
     "The odds were never in {warrior}'s favor against {opponent}, and somehow, that was exactly why the crowd couldn't stop talking about them.",
     "{team}'s {warrior} didn't need to win to make an impression. Just showing up against {opponent} was enough to earn the arena's respect.",
+    "Every warrior watching {warrior}'s upset victory just got reminded why they keep fighting. The impossible is not quite as impossible as it looks.",
+    "{warrior} has become a symbol this turn—proof that the record does not define the warrior.",
+    "The story of {warrior} is spreading through {arena} faster than rumors usually travel. Underdog victories have a way of doing that.",
+    "There is something magnetic about a warrior who defies expectations. {warrior} just provided the whole arena with a masterclass in how it is done.",
+    "{warrior} gave warriors with nothing to lose a reason to believe they might win everything. That is a powerful gift.",
+    "The crowd will remember {warrior}'s performance this turn. So will every warrior lower in the standings.",
+    "{warrior}'s victory is the kind that transcends mere points and records. It is the kind that changes how warriors see themselves.",
+    "When a warrior like {warrior} succeeds against the odds, {his} teammates take notice. {His} rivals take notice. The entire landscape shifts, just a little.",
+    "{warrior} has become someone to watch, not because of {his} record, but because of {his} refusal to accept what that record says about {him}.",
+    "The potential awakened by {warrior}'s upset is immeasurable. Belief is contagious, and {warrior} just spread an epidemic of it.",
+    "{warrior} proved this turn that being underestimated can be an advantage if you refuse to accept the label.",
+    "Stories like {warrior}'s do not come from the rankings. They come from something deeper—a refusal to accept limits.",
+    "{warrior}'s journey from overlooked to impossible to remember is exactly what keeps {arena} compelling.",
+    "When underdog becomes victor, the entire arena takes a breath and reconsiders. {warrior} just forced that reconsideration.",
 ]
 
 _BLK_CHAMP_STRIPPED_DECISION = [
@@ -1225,6 +1426,20 @@ _BLK_CHAMP_STRIPPED_DECISION = [
     "The Gladiatorial Commission stripped {warrior} of the championship, ruling that their conduct in the arena no longer reflected the standard expected of a champion.",
     "By unanimous decision, the Gladiatorial Commission revoked {warrior}'s title, condemning their repeated targeting of lesser gladiators as unworthy of the crown.",
     "The Gladiatorial Commission announced the removal of {warrior} from the championship, following mounting complaints over their conduct in recent Blood Challenges.",
+    "{champion}'s tenure as titleholder came to an abrupt end courtesy of the Commission. No fight, no loss in combat—just an official judgment that {he} no longer qualified.",
+    "The Commission's decision to strip {champion} of the Championship carries the weight of institutional authority. {His} reign is over, regardless of {his} record in combat.",
+    "{champion} can no longer claim the title. The Commission saw something in {his} conduct or circumstances that made continued possession of the crown impossible.",
+    "It is a different kind of fall when the throne is taken by bureaucratic verdict rather than by a rival's blade. {champion} now knows both kinds of displacement.",
+    "The Commission does not often act so decisively, but when it does, there is no appeal. {champion} learned that this turn.",
+    "{champion}'s reign was ended not by an opponent but by an institution. The result is the same—{he} is no longer Champion.",
+    "Official judgment moves faster than most people expect. {champion} learned that when the Commission stripped {him} of the Championship.",
+    "The grounds for the Commission's action may vary, but the result is always certain: {champion} is no longer the titleholder.",
+    "There is a finality to Commission decisions that exceeds even the finality of combat. {champion} is now learning that.",
+    "{champion} sits outside the title picture this turn, removed not by defeat but by official decree.",
+    "The path to the Championship just changed. {champion} was removed from {his} place at the top through Commission action.",
+    "When the Commission speaks on a matter of Championship, the arena listens and obeys. {champion} no longer holds the title as a result.",
+    "{champion} was deemed unsuitable by forces larger than any single warrior. {His} Championship is now history.",
+    "The title that once belonged to {champion} is now being contested by other warriors. {He} was stripped of it by official action—a form of loss with no honor in defeat.",
 ]
 
 _BLK_CHAMP_STRIPPED_QUOTE = [
@@ -1234,6 +1449,20 @@ _BLK_CHAMP_STRIPPED_QUOTE = [
     "\"No one earns a crown by hunting down the weak. We won't pretend otherwise,\" one member stated plainly.",
     "\"The title means something. It's our job to make sure it stays that way,\" a Commission representative said.",
     "\"We've heard the crowd, and frankly, we agree with them,\" one official admitted.",
+    "\"A champion holds the highest standard,\" one Commission member said. \"When that standard is violated, the consequence is clear.\"",
+    "\"This decision was not made lightly,\" said the Commission's public statement. \"It reflects a consensus that the championship cannot continue under these circumstances.\"",
+    "\"The conduct we reviewed was inconsistent with what we require of our champions,\" an official commented, declining further elaboration.",
+    "\"We act when the arena itself demands it,\" one Commission source noted. \"Today, the arena's judgment and ours aligned.\"",
+    "\"The championship represents something sacred to this arena,\" a Commission representative explained. \"It cannot be held by someone who disrespects that sacred trust.\"",
+    "\"Some patterns of conduct cannot be overlooked or forgiven,\" said one official, referring to the documented evidence presented to the Commission.",
+    "\"If we allow this, what does the championship become?\" asked one member during the deliberations, a question that apparently swayed the final vote.",
+    "\"The integrity of the title is what matters most,\" the Commission announced. \"Everything else is secondary to that.\"",
+    "\"We do not make decisions about individuals lightly,\" an official said, \"but the championship is bigger than any one warrior.\"",
+    "\"This reflects the will of the Commission,\" stated a spokesperson. \"It is both unanimous and final.\"",
+    "\"The standards exist for a reason,\" one member remarked. \"When someone violates them so egregiously, action is required.\"",
+    "\"We look at the totality of conduct, not just isolated incidents,\" explained an official when pressed on the decision.",
+    "\"The championship is a trust, not a prize to be hoarded,\" said one Commission representative. \"When that trust is broken, the crown must be reclaimed.\"",
+    "\"Future champions will see this decision and understand what is expected of them,\" predicted one Commission official, suggesting the action was partly pedagogical.",
 ]
 
 _BLK_CHALLENGE_WIN = [
@@ -1242,6 +1471,21 @@ _BLK_CHALLENGE_WIN = [
     "Not everyone challenges up and survives to tell it.  {warrior} did, putting {opponent} down in a result that surprised most of {arena}.  Well earned.",
     "They said {warrior} was overmatched against {opponent}.  {warrior} apparently didn't hear that part.  The result speaks clearly enough.",
     "Challenging up is brave.  Winning is better.  {warrior} managed both this turn against {opponent}, and the recognition that followed was entirely deserved.",
+    "{warrior} answered {opponent}'s call with finality.  Whatever narrative {opponent} was building got rewritten in the sand of the arena floor.",
+    "{opponent} approached this turn with clear intent: to test {warrior}.  Intent is not the same as ability.  {warrior} made that difference plain.",
+    "The confrontation between {warrior} and {opponent} resolved itself this turn, and not in the way {opponent} had anticipated.",
+    "{warrior} did not flinch when {opponent} demanded a trial.  The trial proceeded, and the result was beyond dispute.",
+    "{opponent} brought a challenge; {warrior} brought a victory.  The exchange, though brief, settled matters with authority.",
+    "Some rivalries fade naturally over time.  Others end abruptly on the arena floor.  {warrior} and {opponent}'s ended this turn—decisively and without question.",
+    "{opponent} had the courage to face {warrior} head-on.  Courage, it turned out, was not quite enough.",
+    "The pairing of {warrior} and {opponent} was not random—it was the culmination of turns of tension.  Turns of tension can only end in resolution.  Today it did.",
+    "{warrior}'s victory over {opponent} carries particular weight because {opponent} came prepared and still fell short.",
+    "{opponent} faced {warrior} with everything {he} had.  {warrior} faced {opponent} with something more.",
+    "When rivals meet and only one walks away with victory, the verdict is final.  {warrior} has that verdict.",
+    "{opponent} challenged {warrior} knowing the risks.  The risks, as it turned out, were real.",
+    "The contest between {warrior} and {opponent} was fierce, but it had only one true outcome.  {warrior} saw it through to its end.",
+    "{warrior} proved {himself} the better warrior when it mattered most—when {opponent} was watching.",
+    "{opponent} wanted to prove something against {warrior}.  Instead, {warrior} proved something about {opponent}.",
 ]
 
 _BLK_CHALLENGE_LOSS = [
@@ -1250,6 +1494,21 @@ _BLK_CHALLENGE_LOSS = [
     "The most charitable reading of {warrior}'s challenge against {opponent} is that they underestimated the competition.  The least charitable reading is also probably correct.",
     "I've seen bad challenges before, but {warrior} going after {opponent}, a lower-ranked opponent, and still losing is a special kind of expensive.  The recognition gap made it look safe.  It wasn't.",
     "Some lessons cost coin.  Some cost pride.  {warrior}'s loss to {opponent} in what should have been a comfortable challenge cost both.  Thoroughly.",
+    "{warrior} brought a challenge to {opponent} expecting a different outcome.  {opponent} had other plans and executed them flawlessly.",
+    "It is not hard to understand why {warrior} wanted to face {opponent}—ambition is always understandable.  Success, however, proved more elusive.",
+    "{opponent} was ready when {warrior} came calling this turn.  More than ready.  Prepared.",
+    "{warrior}'s attempt to prove something against {opponent} backfired spectacularly.  {Opponent} proved something instead—and did it thoroughly.",
+    "The matchup between {warrior} and {opponent} was supposed to be competitive.  It was not.  {Opponent} made that clear early and often.",
+    "{warrior} stepped up to challenge {opponent} with high hopes.  Hope and reality parted ways quickly.",
+    "You have to respect {warrior}'s willingness to test {opponent}.  You also have to acknowledge the gap that {opponent} revealed.",
+    "{opponent} was not in the mood for {warrior}'s challenge and made that sentiment very clear on the arena floor.",
+    "{warrior} came ready for battle.  {Opponent} came ready for war.  The difference was immediately apparent.",
+    "Challenging {opponent} showed either courage or poor judgment on {warrior}'s part.  The result suggests the latter.",
+    "{opponent} answered {warrior}'s challenge with an emphatic statement.  The conversation, from {opponent}'s perspective, was over early.",
+    "{warrior} had the courage to face {opponent}.  Courage alone was not enough to secure victory.",
+    "The contest between {warrior} and {opponent} unfolded in {opponent}'s favor from start to finish.  No heroics, no comeback.  Just domination.",
+    "{warrior} thought {he} was ready for {opponent}.  {Opponent} proved otherwise with convincing finality.",
+    "When {opponent} stepped into the arena with {warrior}, the outcome seemed predetermined.  It was.  {Opponent} controlled every moment.",
 ]
 
 _BLK_DIG_DEEPER = [
@@ -1263,6 +1522,16 @@ _BLK_DIG_DEEPER = [
     "Pull up a chair.  There's more to unpack from this turn in {arena}.",
     "The ledger tells you who won.  I'll tell you what it means.",
     "Now that we've got the scores, let's talk about what's actually happening in {arena}.",
+    "The standings suggest one story, but the actual performance data suggests another.  Worth investigating which one is true.",
+    "There are patterns in how certain managers schedule that reward careful study.  Understanding those patterns is half the battle.",
+    "Every warrior has a breaking point.  The question is whether we're seeing theirs or just a bad turn.",
+    "The real story is often hidden beneath the surface.  Looking deeper at {team}'s decisions reveals what the standings alone cannot.",
+    "Worth examining closely: whether {warrior}'s recent performance trends represent skill development or statistical noise.",
+    "The schedules tell stories that the records alone cannot capture.  For those paying attention, those stories are invaluable.",
+    "Behind every surprising result is usually a logical explanation.  Finding that explanation is the work of serious students of {arena}.",
+    "What appears random often has patterns if you look long enough.  The managers who see those patterns are the ones who prosper.",
+    "The gap between what managers say they are doing and what they are actually doing is often quite large.  Watch closely.",
+    "Statistical variance or genuine shift?  That is the question that determines whether this turn matters next season.",
 ]
 
 _BLK_WORST_TEAM = [
@@ -1289,6 +1558,16 @@ _BLK_PHILOSOPHICAL = [
     "Time for my medication.  Or another drink.  In this profession, the distinction rarely matters.",
     "All work and no play makes for a dull career.  All play and no training makes for a short one.  Somewhere in the middle is the winning formula.  Most warriors are still looking for it.",
     "Someone once asked me if I ever feel bad writing about losses.  I told them no.  They stopped asking me things after that, which I consider a personal victory.",
+    "Ambition is the fuel that drives warriors into the arena.  Whether it also drives them out alive is a question only time answers.",
+    "The arena teaches hard lessons to those foolish enough to step into it.  Some warriors learn.  Others just accumulate scars.",
+    "In the end, the record is all that matters.  Not the hopes that preceded the fights, but the results that followed them.",
+    "Every warrior believes they are the exception.  The arena proves, with perfect regularity, that they are not.",
+    "Courage and foolishness are separated by only the slimmest of margins.  In the arena, that margin is usually measured in blood.",
+    "The strongest warriors are not always the ones with the biggest muscles.  Sometimes they are simply the ones who refused to accept defeat as inevitable.",
+    "What the arena takes, it does not return.  Warriors learn this early or they learn it late, but they all learn it eventually.",
+    "Fate is what happens when preparation meets opportunity.  In the arena, the unprepared call it fate.  The prepared call it victory.",
+    "The arena is honest in a way that the rest of the world rarely manages.  That honesty is brutal, but it is real.",
+    "Every warrior enters the arena thinking they understand what they are walking into.  Almost none of them do, at first.",
 ]
 
 
@@ -1301,6 +1580,18 @@ _BLK_STREAK = [
     "When a warrior keeps winning, {arena} eventually takes formal notice.  {warrior} of {team} is at that point.  The bookmakers have updated their lines.  The cautious managers have updated their schedules.",
     "{warrior} of {team} has a streak worth watching, and worth worrying about if you're the manager who has to face them next.  Momentum in {arena} is real, and this fighter has it.",
     "Not everyone survives long enough to build a streak in {arena}.  {warrior} of {team} is building one, and the length of it has become a topic of conversation in corners where scheduling decisions are made.",
+    "The streak continues to grow for {warrior}.  {Streak} consecutive victories is the kind of run that changes how people see a warrior.",
+    "{warrior} has won {streak} in a row—a milestone that few warriors in {arena} reach or maintain for long.",
+    "When a warrior gets hot, the rest of {arena} tends to notice.  {warrior}'s {streak}-win streak has certainly earned the attention it deserves.",
+    "{warrior}'s losing streak has reached {streak} consecutive defeats.  The pattern is now undeniable, and {his} teammates must be concerned.",
+    "Success breeds confidence, and {warrior} is riding high on {streak} straight victories.  The question is whether {he} can keep it going.",
+    "A {streak}-game losing streak is the kind of thing that tests a warrior's mental resolve.  {warrior} will need to find {his} form quickly.",
+    "{warrior}'s hot streak of {streak} victories puts {him} among the most dangerous warriors in {arena} right now.",
+    "The losses for {warrior} have now reached {streak} consecutive.  Each loss makes the next one harder to recover from.",
+    "When {warrior} wins, the margin tends to be clear.  {He}'s now done it {streak} times in a row, establishing a pattern of dominance.",
+    "Streaks are fascinating things—they define a moment in a warrior's career.  For {warrior}, the {streak}-loss streak is defining {his} moment right now.",
+    "{warrior}'s recent form has been exceptional: {streak} consecutive victories in the toughest arena in the world.",
+    "No one would have predicted this level of struggle for {warrior}.  Yet here {he} is, caught in {streak} consecutive losses.",
 ]
 
 _BLK_STANDINGS_LOOK = [
@@ -1312,6 +1603,18 @@ _BLK_STANDINGS_LOOK = [
     "After this turn, the standings have sorted themselves into a picture that will define scheduling decisions for what comes next.  Some fighters are becoming commodities.  Others are becoming problems.  The ledger knows the difference.",
     "If you look at the trend lines rather than just this turn's results, {arena} is quietly separating into tiers that won't shift easily.  Managers in the top half have reason for optimism.  The rest have reason for urgency.",
     "It's worth remembering that every fight this turn had context: recognition gaps, grudges, avoidance patterns that the final W-L record doesn't capture.  The standings are accurate.  They are also incomplete.",
+    "The standings shifted this turn in ways both predictable and strange.  The predictable moves will be forgotten by next week.  The strange ones will echo for months.",
+    "Each position in the standings represents a choice—a series of fights accepted or declined, won or lost.  This turn's standings reflect those choices accumulated.",
+    "The standing are only a summary.  The real story is in the gaps—the warriors climbing faster than expected and those falling further.",
+    "A warrior can spend years building a standing, and seasons can change it in moments.  The standings this turn reflect both kinds of warriors.",
+    "The recognition scores that drive the standings are unforgiving.  A single decision can ripple across multiple turns, reshaping where a warrior sits.",
+    "Looking at the standings is like looking at a still photograph of a battle in progress.  It captures a moment but not the momentum.",
+    "The standings have shifted enough this turn to make the next few weeks of scheduling a puzzle for every manager in {arena}.",
+    "Careful students of the standings watch not just movement but the rate of movement.  This turn, several warriors accelerated or decelerated notably.",
+    "The standings are the product of individual choice cascading across the arena.  This turn's results reflect thousands of small decisions crystallized into positions.",
+    "Some warriors climb the standings steadily.  Others leap suddenly.  This turn brought examples of both, and the implications will play out for weeks.",
+    "The standings represent the arena's collective judgment on warrior capability.  This turn, that judgment shifted for several warriors in ways that surprised even {arena}'s most careful observers.",
+    "Each entry in the standings tells a story about a warrior's choices, abilities, and fortune.  This turn, several of those stories took unexpected turns.",
 ]
 
 _BLK_SECOND_TEAM = [
@@ -1320,6 +1623,21 @@ _BLK_SECOND_TEAM = [
     "While the top and bottom of the standings absorb attention, {team} turned in a {record} showing that deserves a mention.  Consistency in the middle is how teams eventually reach the top, or stop pretending they won't.",
     "The {record} posted by {team} this turn is the kind of result that makes observers revise their estimates.  Neither the best nor the worst showing, but one that suggested more than it confirmed.",
     "In a turn with bigger headlines elsewhere, {team} quietly posted a {record} record that says something about their direction.  {arena} tends to reward the teams that don't need the biggest story to keep moving forward.",
+    "{team} is not making headlines, but they are making progress.  A {record} turn like this one is exactly how dark horses build their case.",
+    "Attention has been elsewhere this turn, but {team}'s {record} showing deserves its own footnote.  Consistency wins in {arena} eventually.",
+    "{team} turned in a solid {record} turn without fanfare.  That is the kind of performance that builds foundations rather than celebrates summits.",
+    "The quiet victory belongs to {team}, whose {record} turn positions them better than most observers realize.",
+    "{team} is the kind of team that builds value without demanding attention.  This turn's {record} result is a perfect example of that approach.",
+    "While others chase headlines, {team} chases victories.  Their {record} turn this week suggests the strategy is working.",
+    "{team}'s {record} showing this turn is a gentle reminder that not all progress comes with celebration.",
+    "Careful observers are noticing {team}'s consistency.  A {record} turn like this adds another data point to a growing narrative.",
+    "{team} is content to excel without the spotlight.  This turn's {record} result is proof they do not need validation to perform.",
+    "The understated performance from {team} this turn—a {record} showing—may prove more valuable than any number of flashy victories.",
+    "{team} continues to build momentum in the shadows.  A {record} turn keeps them on the upward trajectory where they belong.",
+    "Not every strong performance needs to make the headlines.  {team}'s {record} turn this week is exactly what steady progress looks like.",
+    "{team} has learned the art of performing well without demanding recognition.  This turn's {record} result is a masterclass in that approach.",
+    "The story of {team} is not one of dramatic rises and falls—it is one of sustained, quiet excellence.  This {record} turn fits that pattern perfectly.",
+    "{team} remains focused on what matters: consistent, solid performance.  Their {record} turn this week demonstrates that focus is paying dividends.",
 ]
 
 _BLK_MULTIPLE_DEATHS = [
@@ -1331,6 +1649,18 @@ _BLK_MULTIPLE_DEATHS = [
     "The stands emptied more quietly than usual after this turn.  Multiple kills have a way of doing that.  {arena} earned its name today.",
     "A reminder from {arena}: this is not sport.  Multiple deaths in a single turn communicate that clearly enough.  The survivors continue.  The others have concluded their participation permanently.",
     "Some turns are for standings.  Some are for lesson-learning.  This one was for the record books.  Multiple kills in a single turn is the arena's way of ensuring no one mistakes enthusiasm for preparation.",
+    "The turn brought more than one funeral to the families of {arena}'s warriors.  That is the kind of turn that echoes longer than most.",
+    "When several warriors fall in the same turn, the arena's rhythm changes.  Everyone takes a breath and remembers what they are really watching.",
+    "The death toll this turn exceeds what most turns produce.  It is a sobering reminder that the arena does not discriminate in its cruelty.",
+    "Multiple warriors crossed the line from living to dead this turn.  The next turn will have empty spaces on the schedule that were not expected.",
+    "Some turns are just heavier than others.  This is one of them.  The casualty count makes that clear.",
+    "The arena demanded a higher price this turn than it usually does.  Several warriors paid that price, and they will not be coming back.",
+    "Deaths cluster sometimes in {arena}—not by design, but by the accidents of scheduling and chance.  This turn was one of those clustering turns.",
+    "When the death column of the ledger grows longer, it changes the calculus of everything.  Warriors think twice.  Managers reconsider.  The crowd feels heavier.",
+    "The multiple deaths this turn are the kind of thing that shapes narratives for the whole season.  They will be remembered far longer than victories.",
+    "The turn brought an unusual toll in lives lost.  That is the price of the arena, and this turn paid more than most.",
+    "Turns like this one—turns with high death tolls—tend to refocus everything on what really matters in {arena}.  For a while after, warriors think more carefully about accepting challenges.",
+    "The arena took several warriors this turn.  That level of loss reshapes how everyone views what happens here.",
 ]
 
 
@@ -1345,7 +1675,7 @@ def _pick_block(pool: list, used: set, ctx: dict) -> str:
 
 
 def _block_commentary(card, teams, deaths, turn_num: int, champion_state: dict, is_new_champion: bool = False,
-                       bully_events: list = None) -> str:
+                       bully_events: list = None, prev_champion_state: dict = None) -> str:
     """
     Generate a flowing spy-report style narrative for Arena Happenings.
     Pool blocks are used as sentence-level building pieces woven together
@@ -1509,6 +1839,9 @@ def _block_commentary(card, teams, deaths, turn_num: int, champion_state: dict, 
     champ_t   = champion_state.get("team_name", "")
     champ_src = champion_state.get("source", "")
 
+    # Extract previous champion if available
+    prev_champ = prev_champion_state.get("name", "") if prev_champion_state else ""
+
     # Base context - always keep every key present so format() never raises
     ctx = dict(
         arena=arena, venue=venue, byline=byline,
@@ -1517,6 +1850,7 @@ def _block_commentary(card, teams, deaths, turn_num: int, champion_state: dict, 
         rank_change="", warrior="", opponent="",
         points="", champion=_trunc(champ).upper() if champ else "",
         champ_team=_trunc(champ_t).upper() if champ_t else "",
+        prev_champion=_trunc(prev_champ).upper() if prev_champ else "",
     )
 
     paragraphs = []
@@ -1541,6 +1875,11 @@ def _block_commentary(card, teams, deaths, turn_num: int, champion_state: dict, 
     elif champ and not is_new_champion:
         ctx["champion"]   = _trunc(champ).upper()
         ctx["champ_team"] = _trunc(champ_t).upper()
+        # Extract opponent if the champion fought this turn
+        for w_data in winners_list:
+            if w_data["warrior"].lower() == champ.lower():
+                ctx["opponent"] = _trunc(w_data["opponent"]).upper()
+                break
         p1.append(_pick_block(_BLK_CHAMP_INCUMBENT, used, ctx))
     elif not champ:
         p1.append(_pick_block(_BLK_CHAMP_VACANT, used, ctx))
@@ -1746,8 +2085,10 @@ def _block_commentary(card, teams, deaths, turn_num: int, champion_state: dict, 
 
 def _manager_recently_active(mgr_name, teams, turn_num) -> bool:
     """
-    Check if a manager should be hidden from the newsletter.
-    They are hidden if none of their teams have played within the last 3 turns.
+    Check if a manager should be included in the newsletter.
+    They are included if:
+    1. None of their teams have played within the last 3 turns, OR
+    2. They are a new manager (last_turn_ran == 0 AND they have fights this turn)
 
     Uses each team's own last_turn_ran (the same recency source
     _team_standings/_warrior_tiers already rely on) rather than scanning
@@ -1765,8 +2106,21 @@ def _manager_recently_active(mgr_name, teams, turn_num) -> bool:
         if tmgr != mgr_name:
             continue
         last_run = getattr(team, "last_turn_ran", 0) if hasattr(team, "last_turn_ran") else team.get("last_turn_ran", 0)
+
+        # Include if they've played within last 3 turns (established manager)
         if last_run and last_run >= turn_num - 3:
             return True
+
+        # Include if they're new (last_turn_ran == 0) and they have fights this turn
+        if last_run == 0:
+            # Check if this team has turn_history entry for current turn (means they fought)
+            hist = getattr(team, "turn_history", None)
+            if hist is None:
+                hist = team.get("turn_history", []) if isinstance(team, dict) else []
+            for entry in hist:
+                if entry.get("turn") == turn_num:
+                    # New team with fights this turn - include them
+                    return True
     return False
 
 
@@ -2202,7 +2556,7 @@ def generate_newsletter(turn_num, card, teams, deaths, champion_state,
         print("DEBUG: _top_managers returned text only (not tuple)")
 
     sections.append("\n\n" + _block_commentary(wrapped_card, teams, deaths, turn_num, champion_state, is_new_champion,
-                                                 bully_events=bully_events))
+                                                 bully_events=bully_events, prev_champion_state=prev_champion_state))
     sections.append("\n\n" + _warrior_tiers(teams, champion_state, wrapped_card, turn_num))
 
     # Add monster kills section if there are any
