@@ -1671,7 +1671,25 @@ def _pick_block(pool: list, used: set, ctx: dict) -> str:
         available = list(pool)
     template = random.choice(available)
     used.add(template)
-    return template.format(**ctx)
+    # Safe defaults for keys that may be missing from ctx — pronouns, title-case
+    # variants, and neutral fallbacks. ctx values always win via the update below.
+    safe = {
+        'he': 'he', 'He': 'He',
+        'his': 'his', 'His': 'His',
+        'him': 'him', 'Him': 'Him',
+        'himself': 'himself', 'Himself': 'Himself',
+        'she': 'she', 'She': 'She',
+        'her': 'her', 'Her': 'Her',
+        'herself': 'herself', 'Herself': 'Herself',
+        'they': 'they', 'their': 'their',
+        'its': 'its', 'this': 'this', 'your': 'your',
+        # Title-case variants of data fields templates sometimes capitalise mid-sentence
+        'Opponent': ctx.get('opponent', ''),
+        'Points': ctx.get('points', ''),
+        'Streak': str(ctx.get('streak', '')),
+    }
+    safe.update(ctx)
+    return template.format(**safe)
 
 
 def _block_commentary(card, teams, deaths, turn_num: int, champion_state: dict, is_new_champion: bool = False,
@@ -2017,6 +2035,7 @@ def _block_commentary(card, teams, deaths, turn_num: int, champion_state: dict, 
         sw = streak_warriors[0]
         ctx["warrior"] = _trunc(sw["warrior"]).upper()
         ctx["team"]    = _trunc(sw["team"]).upper()
+        ctx["streak"]  = str(sw["streak"])
         p4.append(_pick_block(_BLK_STREAK, used, ctx))
 
     if p4:
