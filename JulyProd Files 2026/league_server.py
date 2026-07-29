@@ -637,6 +637,59 @@ def _make_mirror_narrative(
     return result
 
 
+def _strip_strategy_table(narrative: str) -> str:
+    """
+    Remove the strategy table section from a fight narrative entirely.
+
+    Used for scout reports: a scout observes the fight itself, not either
+    combatant's printed strategy table. Reuses the exact same header anchor
+    and blank-line boundary search as _make_mirror_narrative() (which swaps
+    the table for the opponent's manager) but deletes the section instead
+    of substituting a different one.
+    """
+    hdr = f"{'TRIGGER':<42}{'FIGHTING STYLE':<20}{'LEVEL':>5}  {'AIMING POINT':<16}{'DEFENSE POINT'}"
+    if hdr not in narrative:
+        return narrative
+    hdr_idx = narrative.find(hdr)
+
+    sep_start = narrative.rfind("\n\n", 0, hdr_idx)
+    if sep_start < 0:
+        sep_start = narrative.rfind("\n", 0, hdr_idx)
+        sep_start = 0 if sep_start < 0 else sep_start + 1
+    else:
+        sep_start += 2
+
+    strat_end = narrative.find("\n\n", hdr_idx)
+    if strat_end < 0:
+        strat_end = len(narrative)
+
+    return narrative[:sep_start] + narrative[strat_end:]
+
+
+def _strip_training_block(narrative: str) -> str:
+    """
+    Remove the trailing per-warrior training summary from a fight narrative.
+
+    Training lines ("<NAME> has trained in ...") are always the last thing
+    appended to a fight's narrative (see CombatEngine._make_result in
+    combat.py), one per surviving warrior, with nothing after them. A scout
+    observes the fight itself, not either warrior's private training results,
+    so this is a plain truncation rather than a swap like the strategy table.
+    """
+    marker = " has trained in"
+    idx = narrative.find(marker)
+    if idx < 0:
+        return narrative
+
+    line_start = narrative.rfind("\n", 0, idx)
+    line_start = 0 if line_start < 0 else line_start + 1
+
+    sep_start = narrative.rfind("\n\n", 0, line_start)
+    cut = sep_start if sep_start >= 0 else line_start
+
+    return narrative[:cut].rstrip("\n")
+
+
 def _store_scout_narrative(team_id: int, warrior_name: str, narrative: str, turn_num: int) -> None:
     """
     Persist the fight narrative for a scouted warrior so the client can
@@ -820,7 +873,41 @@ def _run_turn(request_password, rerun_turn=None):
     for mid, upload in uploads.items():
         try:
             team = Team.from_dict(upload["team"])
+            from save import reconcile_warrior_ids
+            reconcile_warrior_ids(team, team.team_id)
             team.manager_name = upload["manager_name"]
+
+            # CRITICAL FIX: Ensure warriors marked as dead in recent turn results stay dead
+            # This prevents a bug where dead warriors reactivate when loaded from old uploads
+            import glob as _glob_mod
+            _real_mid = mid.split("_team")[0] if "_team" in mid else mid
+            _dead_in_results = {}  # warrior_name -> {is_dead: true, killed_by: ...}
+
+            # Check current turn AND recent previous turns for dead warriors
+            for _check_turn in range(max(1, turn_num - 3), turn_num + 1):
+                _res_file_pattern = os.path.join(_turn_dir(_check_turn), f"result_{_real_mid}_*.json")
+                for _res_path in _glob_mod.glob(_res_file_pattern):
+                    try:
+                        _res_data = _load_json(_res_path, None)
+                        if _res_data and _res_data.get("team"):
+                            _res_warriors = _res_data["team"].get("warriors", []) or []
+                            for _res_warrior in _res_warriors:
+                                if _res_warrior and _res_warrior.get("is_dead"):
+                                    _warrior_name = _res_warrior.get("name")
+                                    _dead_in_results[_warrior_name] = {
+                                        "is_dead": True,
+                                        "killed_by": _res_warrior.get("killed_by", "")
+                                    }
+                    except Exception:
+                        pass
+
+            # Apply dead status from results
+            for _w in team.warriors:
+                if _w and _w.name in _dead_in_results:
+                    _w.is_dead = True
+                    _w.killed_by = _dead_in_results[_w.name]["killed_by"]
+                    print(f"    [INTEGRITY CHECK] Warrior {_w.name} was dead in recent results - enforced is_dead=True")
+
             team_map[mid] = team
             manager_info[mid] = {
                 "manager_name": upload["manager_name"],
@@ -865,6 +952,16 @@ def _run_turn(request_password, rerun_turn=None):
     print(f"  Expected fights: {total_warriors}")
     if len(global_card) != total_warriors:
         print(f"  WARNING: Fight count mismatch! {len(global_card)} fights vs {total_warriors} warriors")
+
+    # Precompute who's being scouted this turn, keyed by (team_id, warrior_name)
+    # -> [scouting manager_name, ...]. Use turn_num explicitly (not cfg["current_turn"],
+    # which doesn't get bumped until STEP 5) so the lookup matches the turn the
+    # selections were confirmed against.
+    from save import get_all_scouted_warriors
+    scouted_this_turn = get_all_scouted_warriors(turn_num)
+    # Fight narrative captured per scouted warrior for their scouting managers'
+    # reports, built in STEP 3 and consumed in STEP 4. Keyed by (team_id, name).
+    scout_fight_narratives = {}
 
     # ===================================================================
     # STEP 3: Execute all fights and collect results
@@ -936,6 +1033,14 @@ def _run_turn(request_password, rerun_turn=None):
             # Also check if player warrior is a BC target (for symmetry)
             team.record_killer_participation(fight.player_warrior.name)
 
+        # Who's watching this fight? Union of scouts on either combatant -
+        # the attendance line never reveals which one is the actual target.
+        _player_key   = (fight.player_team.team_id, fight.player_warrior.name)
+        _opponent_key = (fight.opponent_team.team_id, fight.opponent.name)
+        _attending_scouts = list(dict.fromkeys(
+            scouted_this_turn.get(_player_key, []) + scouted_this_turn.get(_opponent_key, [])
+        ))
+
         # Run the fight
         try:
             result = run_fight(
@@ -951,9 +1056,20 @@ def _run_turn(request_password, rerun_turn=None):
                 challenger_name=fight.challenger_name,
                 debug_logger=_dbg_logger,
                 bully_info=getattr(fight, "bully_info", None),
+                scouting_info={"scouts": _attending_scouts} if _attending_scouts else None,
             )
             # CRITICAL: Attach the result to the fight object so it can be used for the newsletter
             fight.result = result
+            # Capture the raw (non-mirrored) narrative for any scouted combatant,
+            # for use building that scouting manager's report in STEP 4. Strip
+            # both the strategy table and the training summary - a scout watches
+            # the fight, not either warrior's tactics or private training results.
+            if _player_key in scouted_this_turn or _opponent_key in scouted_this_turn:
+                _scout_narrative = _strip_training_block(_strip_strategy_table(result.narrative))
+                if _player_key in scouted_this_turn:
+                    scout_fight_narratives[_player_key] = _scout_narrative
+                if _opponent_key in scouted_this_turn:
+                    scout_fight_narratives[_opponent_key] = _scout_narrative
         except Exception as e:
             import traceback
             print(f"  *** ERROR running fight {fight.player_warrior.name} vs {fight.opponent.name}: {e}")
@@ -1270,7 +1386,10 @@ def _run_turn(request_password, rerun_turn=None):
     # STEP 4: Save all results and update standings
     # ===================================================================
     print(f"\n  Saving results for {len(all_results)} managers...")
-    from save import save_team
+    from save import save_team, get_manager_scouting
+    from scout_report import generate_scout_report
+    _scout_mgrs = _load_managers()
+    _scout_reports_done = {}  # real manager_id -> scout_reports, computed once per manager even if they have multiple teams
 
     for manager_id, res in all_results.items():
         # REFRESH TEAM STATE: The res["team"] dict captured during the execution loop
@@ -1341,6 +1460,73 @@ def _run_turn(request_password, rerun_turn=None):
             team_slim["warriors"].append(ws)
         team_slim["archived_warriors"] = team_for_client.get("archived_warriors", [])
 
+        # Resolve this manager's scout reports for the turn that just processed.
+        # Confirmed selections were locked in before the turn ran; the report
+        # reflects each target's state AFTER this turn's fights/training, per
+        # the scouting rework - see docs in the scouting plan. manager_id here may
+        # be a composite "{mid}_team{team_id}" key (see _load_uploads(), which keys
+        # uploads that way so a manager with multiple teams gets separate entries) -
+        # scouting selections are keyed by the plain manager_id, so strip it back off.
+        real_manager_id = manager_id.split("_team")[0] if "_team" in manager_id else manager_id
+        if real_manager_id in _scout_reports_done:
+            scout_reports = _scout_reports_done[real_manager_id]
+        else:
+            scout_reports = []
+        for sel in ([] if real_manager_id in _scout_reports_done else get_manager_scouting(real_manager_id, turn_num)):
+            if not sel.get("confirmed"):
+                continue
+            t_name      = sel.get("warrior_name", "")
+            t_team_id   = sel.get("team_id", 0)
+            t_team_name = sel.get("team_name", "")
+            scout_name, scout_type = _get_or_assign_scout_persona(real_manager_id, _scout_mgrs)
+
+            target_team = team_by_id.get(t_team_id)
+            target_w    = target_team.warrior_by_name(t_name) if target_team else None
+            fh          = (target_w.fight_history or []) if target_w else []
+            last_entry  = fh[-1] if fh else None
+            fought_this_turn = bool(target_w and last_entry and last_entry.get("turn") == turn_num)
+
+            if not fought_this_turn:
+                # Target died/retired/was swapped off the roster, or their team
+                # didn't upload this turn - nothing for the scout to report.
+                from scout_report import _sat_out_message
+                report_text = _sat_out_message(t_name, scout_type)
+                scout_reports.append({
+                    "warrior_name": t_name, "team_name": t_team_name,
+                    "scout_name": scout_name, "scout_type": scout_type,
+                    "scout_report": report_text,
+                })
+                continue
+
+            fight_narrative = scout_fight_narratives.get((t_team_id, t_name), "")
+            report_text = generate_scout_report(
+                target_w, last_entry, t_team_name,
+                scout_name=scout_name, scout_type=scout_type,
+                fight_narrative=fight_narrative,
+                is_debut_fight=(len(fh) == 1),
+            )
+            scout_reports.append({
+                "warrior_name"    : target_w.name,
+                "team_name"       : t_team_name,
+                "wins"            : target_w.wins,
+                "losses"          : target_w.losses,
+                "kills"           : target_w.kills,
+                "max_hp"          : target_w.max_hp,
+                "height_in"       : target_w.height_in,
+                "weight_lbs"      : target_w.weight_lbs,
+                "total_fights"    : target_w.total_fights,
+                "armor"           : target_w.armor or "None",
+                "helm"            : target_w.helm or "None",
+                "primary_weapon"  : target_w.primary_weapon or "Open Hand",
+                "secondary_weapon": target_w.secondary_weapon or "Open Hand",
+                "backup_weapon"   : target_w.backup_weapon,
+                "scout_name"      : scout_name,
+                "scout_type"      : scout_type,
+                "scout_report"    : report_text,
+            })
+
+        _scout_reports_done[real_manager_id] = scout_reports
+
         mgr_res = {
             "turn": turn_num,
             "manager_name": res["manager_name"],
@@ -1349,6 +1535,7 @@ def _run_turn(request_password, rerun_turn=None):
             "bouts": res["bouts"],
             "team": team_for_client,
             "fight_logs": res["fight_logs"],
+            "scout_reports": scout_reports,
         }
         _save_result(turn_num, manager_id, mgr_res)
 
@@ -1576,11 +1763,12 @@ def _run_turn(request_password, rerun_turn=None):
                 _loser  = _bout.opponent if _pw_won else _bout.player_warrior
                 _loser_team = _bout.opponent_team if _pw_won else _bout.player_team
                 _loser_wid = getattr(_loser, "warrior_id", None)
-                # Prefer warrior_id match; fall back to name+team_id for old saves
-                _loser_is_champ = (
-                    (_cur_champ_wid and _loser_wid and _cur_champ_wid == _loser_wid) or
-                    (not _cur_champ_wid and _loser.name == _cur_champ and _loser_team.team_id == _cur_champ_tid)
-                )
+                # Prefer warrior_id match; always also try name+team_id as a
+                # fallback (not just when the id is totally absent) so a
+                # stale/mismatched id can't silently hide a real title loss
+                _id_match   = bool(_cur_champ_wid and _loser_wid and _cur_champ_wid == _loser_wid)
+                _name_match = (_loser.name == _cur_champ and _loser_team.team_id == _cur_champ_tid)
+                _loser_is_champ = _id_match or _name_match
                 if _loser_is_champ:
                     # Only allow player warriors to claim the championship, not NPCs/peasants
                     _winner_team = _bout.player_team if _pw_won else _bout.opponent_team
@@ -2165,6 +2353,17 @@ function openTab(evt, tabId) {{
    <div style="padding:8px;color:#999;">Ready to scan...</div>
   </div>
  </div>
+ <div class="panel" style="min-width:400px;max-width:800px">
+  <h3>🆔 Warrior ID Validation</h3>
+  <p style="font-size:11px;margin:0 0 8px;color:#555">
+   Checks every team file (active roster and archived) for warriors missing
+   a warrior_id, or a warrior_id shared by more than one warrior.
+  </p>
+  <button onclick="validateWarriorIds()">🆔 Scan Warrior IDs</button>
+  <div id="warrior-id-validation-results" style="margin-top:10px;border:1px solid #ccc;height:350px;overflow-y:auto;background:#f9f9f9;font-size:11px;font-family:monospace;">
+   <div style="padding:8px;color:#999;">Ready to scan...</div>
+  </div>
+ </div>
 </div>
 
 <!-- ====================== MAINTENANCE TAB ====================== -->
@@ -2219,6 +2418,10 @@ function openTab(evt, tabId) {{
    Regenerate and push team roster report to GitHub Pages with current data.
   </p>
   <button onclick="regenerateRoster()" style="background-color:#4a7c59;border-color:#4a7c59">📈 Regenerate Rosters</button>
+  <p style="font-size:11px;color:#666;margin:8px 0">
+   Regenerate and push arena stats (Top Teams, Top Warriors, etc.) to GitHub Pages with current data.
+  </p>
+  <button onclick="regenerateArenaStats()" style="background-color:#4a7c59;border-color:#4a7c59">📊 Regenerate Arena Stats</button>
  </div>
 
  <div class="panel" style="min-width:220px;max-width:280px">
@@ -2288,6 +2491,19 @@ async function regenerateRoster(){{
  show('Regenerating roster...','ok');
  try{{
   const r=await fetch('/api/admin/regenerate_roster',{{method:'POST',
+   headers:{{'Content-Type':'application/json'}},
+   body:JSON.stringify({{host_password:pw}})}});
+  const d=await r.json();
+  if(d.success){{show(d.message,'ok');}}
+  else show('Error: '+d.error,'err');
+ }}catch(e){{show('Connection error: '+e.message,'err');}}
+}}
+async function regenerateArenaStats(){{
+ const pw=pw_val();
+ if(!pw){{show('Enter the host password first.','err');return;}}
+ show('Regenerating arena stats...','ok');
+ try{{
+  const r=await fetch('/api/admin/regenerate_arena_stats',{{method:'POST',
    headers:{{'Content-Type':'application/json'}},
    body:JSON.stringify({{host_password:pw}})}});
   const d=await r.json();
@@ -2797,6 +3013,70 @@ async function validateTeams() {{
    container.innerHTML = `<div style="padding:8px;color:#c00;">Error: ${{d.error}}</div>`;
   }}
  }} catch(e) {{ container.innerHTML = `<div style="padding:8px;color:#c00;">Error: ${{e.message}}</div>`; }}
+}}
+
+async function validateWarriorIds() {{
+ const pw = pw_val();
+ if (!pw) {{ show('Enter the host password first.', 'err'); return; }}
+ const container = document.getElementById('warrior-id-validation-results');
+ container.innerHTML = '<div style="padding:8px;color:#999;">Scanning...</div>';
+ try {{
+  const r = await fetch('/api/admin/validate_warrior_ids', {{
+   method: 'POST',
+   headers: {{'Content-Type': 'application/json'}},
+   body: JSON.stringify({{host_password: pw}})
+  }});
+  const d = await r.json();
+  if (!d.success) {{
+   container.innerHTML = `<div style="padding:8px;color:#c00;">Error: ${{d.error}}</div>`;
+   return;
+  }}
+  _warriorIdData = d.warriors || [];
+  const summaryOk = d.missing_count === 0 && d.duplicate_count === 0;
+  const summary = summaryOk
+   ? `<div style="padding:4px;color:#060;font-weight:bold">✅ All ${{d.total_warriors}} warriors across ${{d.total_teams}} teams have a valid, unique warrior_id.</div>`
+   : `<div style="padding:4px;color:#c00;font-weight:bold">⚠ ${{d.missing_count}} missing, ${{d.duplicate_count}} duplicate warrior_id(s) out of ${{d.total_warriors}} warriors</div>`;
+
+  let html = summary;
+  html += '<div style="margin:4px 0"><input type="text" id="wid-filter" placeholder="Filter by name/team/manager..." '
+   + 'style="width:100%;padding:3px;font-size:11px;box-sizing:border-box" oninput="renderWarriorIdTable()"></div>';
+  html += '<div id="wid-table-wrap"></div>';
+  container.innerHTML = html;
+  renderWarriorIdTable();
+ }} catch(e) {{ container.innerHTML = `<div style="padding:8px;color:#c00;">Error: ${{e.message}}</div>`; }}
+}}
+
+let _warriorIdData = [];
+
+function renderWarriorIdTable() {{
+ const wrap = document.getElementById('wid-table-wrap');
+ if (!wrap) return;
+ const filterEl = document.getElementById('wid-filter');
+ const q = (filterEl ? filterEl.value : '').toLowerCase().trim();
+ const rows = _warriorIdData.filter(w => !q ||
+  w.warrior_name.toLowerCase().includes(q) ||
+  w.team_name.toLowerCase().includes(q) ||
+  w.manager_name.toLowerCase().includes(q) ||
+  String(w.warrior_id).includes(q));
+
+ const statusColor = {{missing: '#c00', duplicate: '#a60', ok: '#060'}};
+ const rowBg = {{missing: 'background:#fee', duplicate: 'background:#ffe8cc', ok: ''}};
+
+ let html = '<table style="width:100%;border-collapse:collapse">';
+ html += '<tr style="background:#eee;position:sticky;top:0"><th>Warrior</th><th>ID</th><th>Team</th><th>Manager</th><th>Slot</th><th>Status</th></tr>';
+ rows.forEach(w => {{
+  html += `<tr style="${{rowBg[w.status]}};border-bottom:1px solid #ddd">
+   <td>${{w.warrior_name}}</td>
+   <td>${{w.warrior_id ?? '—'}}</td>
+   <td>${{w.team_name}} (${{w.team_id}})</td>
+   <td>${{w.manager_name}}</td>
+   <td>${{w.slot}}</td>
+   <td style="color:${{statusColor[w.status]}};font-weight:bold">${{w.status.toUpperCase()}}</td>
+  </tr>`;
+ }});
+ html += '</table>';
+ if (rows.length === 0) html = '<div style="padding:8px;color:#999;">No matching warriors.</div>';
+ wrap.innerHTML = html;
 }}
 
 let _warriorsData = null;
@@ -5099,6 +5379,68 @@ class LeagueHandler(http.server.BaseHTTPRequestHandler):
 
             self.send_json({"success": True, "teams": teams_data}); return
 
+        if path == "/api/admin/validate_warrior_ids":
+            cfg = _load_config()
+            if not _check_host_pw(cfg, b.get("host_password", "")):
+                self.send_json({"success": False, "error": "Not authorised."}, 401); return
+
+            from save import TEAMS_DIR
+            from collections import defaultdict
+            all_warriors = []
+            id_owners = defaultdict(list)
+            total_teams = 0
+            try:
+                if os.path.exists(TEAMS_DIR):
+                    for fn in sorted(os.listdir(TEAMS_DIR)):
+                        if not (fn.startswith("team_") and fn.endswith(".json")):
+                            continue
+                        fpath = os.path.join(TEAMS_DIR, fn)
+                        tdata = load_json_protected(fpath)
+                        team_id = tdata.get("team_id", "?")
+                        team_name = tdata.get("team_name", "Unknown")
+                        manager_name = tdata.get("manager_name", "Unknown")
+                        total_teams += 1
+
+                        for slot, wlist in (("active", tdata.get("warriors", [])),
+                                            ("archived", tdata.get("archived_warriors", []))):
+                            for w in (wlist or []):
+                                if not w or not isinstance(w, dict):
+                                    continue
+                                wname = w.get("name", "Unnamed")
+                                wid = w.get("warrior_id")
+                                entry = {
+                                    "team_id": team_id, "team_name": team_name,
+                                    "manager_name": manager_name,
+                                    "warrior_name": wname, "slot": slot,
+                                    "warrior_id": wid
+                                }
+                                all_warriors.append(entry)
+                                if wid:
+                                    id_owners[wid].append(entry)
+            except Exception as e:
+                self.send_json({"success": False, "error": str(e)}); return
+
+            duplicate_ids = {wid for wid, owners in id_owners.items() if len(owners) > 1}
+            for entry in all_warriors:
+                if not entry["warrior_id"]:
+                    entry["status"] = "missing"
+                elif entry["warrior_id"] in duplicate_ids:
+                    entry["status"] = "duplicate"
+                else:
+                    entry["status"] = "ok"
+
+            all_warriors.sort(key=lambda e: (e["team_id"] if isinstance(e["team_id"], int) else 0, e["slot"], e["warrior_name"]))
+            missing_count = sum(1 for e in all_warriors if e["status"] == "missing")
+
+            self.send_json({
+                "success": True,
+                "total_teams": total_teams,
+                "total_warriors": len(all_warriors),
+                "warriors": all_warriors,
+                "missing_count": missing_count,
+                "duplicate_count": len(duplicate_ids)
+            }); return
+
         if path == "/api/admin/download_manager_files":
             import zipfile
             cfg = _load_config()
@@ -5450,6 +5792,33 @@ Or manually:
                 write_team_roster(roster_html, reports_dir)
 
                 self.send_json({"success": True, "message": f"Team roster regenerated and pushed for Turn {turn_num}"}); return
+            except Exception as e:
+                import traceback; traceback.print_exc()
+                self.send_json({"success": False, "error": str(e)}); return
+
+        if path == "/api/admin/regenerate_arena_stats":
+            cfg = _load_config()
+            if not _check_host_pw(cfg, b.get("host_password", "")):
+                self.send_json({"success": False, "error": "Not authorised."}, 401); return
+
+            try:
+                from arena_stats import generate_arena_stats
+                from save import load_all_teams
+
+                # Load all teams and build team_map keyed by manager+team combo
+                teams = load_all_teams()
+                team_map = {}
+                for team in teams:
+                    key = f"{team.manager_name}_{team.team_id}"
+                    team_map[key] = team
+
+                turn_num = cfg.get("current_turn", 1)
+                uploads = _load_uploads(turn_num)
+
+                reports_dir = os.path.join(LEAGUE_DIR, "reports")
+                generate_arena_stats(uploads, team_map, turn_num, reports_dir)
+
+                self.send_json({"success": True, "message": f"Arena stats regenerated and pushed for Turn {turn_num}"}); return
             except Exception as e:
                 import traceback; traceback.print_exc()
                 self.send_json({"success": False, "error": str(e)}); return
