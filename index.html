@@ -90,8 +90,11 @@
                 <h3>Announcements</h3>
                 <div class="content-box">
                     <p style="text-align: center; margin: 15px 0;">
-                        <a href="#" id="viewJuly19Announcement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            🛡️ JULY 19, 2026 - ENGINE UPDATES, SKILL FIXES & CLIENT V3.3
+                        <a href="#" id="viewJuly30Announcement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            🛡️ JULY 30, 2026 - TURN 28 BUG FIX & PLAYTEST REMINDER
+                        </a>
+                        <a href="#" id="viewJuly19Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            JULY 19, 2026 - ENGINE UPDATES, SKILL FIXES & CLIENT V3.3
                         </a>
                         <a href="#" id="viewJuly14Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
                             JULY 14, 2026 - VERSION 3.1.0 & STABILITY UPDATES
@@ -121,6 +124,35 @@
                 </div>
             </section>
         </main>
+    </div>
+
+    <!-- July 30 Modal -->
+    <div id="july30AnnouncementModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>TURN 28 BUG FIX & PLAYTEST REMINDER - JULY 30, 2026</h2>
+            <div class="modal-scroll-body">
+                <p><strong>Honored Managers,</strong></p>
+                <p>During the processing of Turn 28, an unexpected bug occurred where certain warriors were incorrectly marked as deceased prior to the turn processing. Consequently, these warriors did not participate in their scheduled bouts and remained marked as dead.</p>
+
+                <h3>What Caused This Issue</h3>
+                <p>This bug was inadvertently created by a fix put in place to address an earlier exploit where a stale file upload resurrected slain gladiators. Because logs are automatically purged after three turns, tracking down the root cause of an issue that went unreported for five turns required a significant portion of a day to isolate and fix.</p>
+
+                <h3>Action Required for Affected Warriors</h3>
+                <p><strong>If you have a warrior still showing as dead who should not be, please let me know right away and DO NOT create a replacement warrior.</strong> I can manually reactivate any warrior that was incorrectly marked as deceased on my end.</p>
+
+                <h3>A Friendly Playtest Reminder</h3>
+                <p>I would like to gently reiterate that we are currently running an active <strong>playtest arena</strong>. Once this playtest phase concludes, all warrior stats, win/loss records, kill counts, and arena standings will be completely wiped. None of these records will be preserved for production.</p>
+                
+                <p>Because all of this test data will be erased anyway, individual records right now carry no long-term weight. What <em>does</em> matter is identifying and resolving bugs so we can bring Bloodspire Arena to full production smoothly. If you ever notice an anomaly or bug, please report it immediately, even if it happens to be something your team temporarily benefits from.</p>
+
+                <p>Thank you all again for sticking with me throughout this process, for your understanding, and for your help in making this game the best it can be!</p>
+
+                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
+                    - ILNEVAL -
+                </p>
+            </div>
+            <button class="close-modal-btn" id="closeJuly30Modal">Dismiss</button>
+        </div>
     </div>
 
     <!-- July 19 Modal -->
@@ -235,7 +267,7 @@
             <h2>BALANCE MODIFICATIONS & PROVING GROUNDS - JUNE 28, 2026</h2>
             <div class="modal-scroll-body">
                 <p><strong>Honored Managers,</strong></p>
-                <p>New client version 3.0.0 is now available. Please head over to the downloads section to update your version.  Below are some of the enhancements and fixes included in the new version</p>
+                <p>New client version 3.0.0 is now available. Please head over to the downloads section to update your version. Below are some of the enhancements and fixes included in the new version</p>
                 
                 <h3>Racial Balancing</h3>
                 <p>Six races received targeted balance corrections based on a comprehensive win-rate audit. Dwarf was significantly overperforming; Halfling and Goblin were significantly underperforming.</p>
@@ -506,24 +538,31 @@
             const closeJuly19 = document.getElementById('closeJuly19Modal');
             const viewJuly19 = document.getElementById('viewJuly19Announcement');
 
+            const july30Modal = document.getElementById('july30AnnouncementModal');
+            const closeJuly30 = document.getElementById('closeJuly30Modal');
+            const viewJuly30 = document.getElementById('viewJuly30Announcement');
+
             // Show latest announcement automatically if not seen
-            if (!localStorage.getItem('bloodspire_update_20260719')) {
-                july19Modal.style.display = 'block';
+            if (!localStorage.getItem('bloodspire_update_20260730')) {
+                july30Modal.style.display = 'block';
             }
 
             // Close latest modal
-            closeJuly19.onclick = () => { 
-                july19Modal.style.display = 'none'; 
-                localStorage.setItem('bloodspire_update_20260719', 'true'); 
+            closeJuly30.onclick = () => { 
+                july30Modal.style.display = 'none'; 
+                localStorage.setItem('bloodspire_update_20260730', 'true'); 
             };
 
             // Open latest modal via link
-            viewJuly19.onclick = function(e) {
+            viewJuly30.onclick = function(e) {
                 e.preventDefault();
-                july19Modal.style.display = 'block';
+                july30Modal.style.display = 'block';
             };
 
             // Previous Modals
+            closeJuly19.onclick = () => { july19Modal.style.display = 'none'; };
+            viewJuly19.onclick = function(e) { e.preventDefault(); july19Modal.style.display = 'block'; };
+
             closeJuly14.onclick = () => { july14Modal.style.display = 'none'; };
             viewJuly14.onclick = function(e) { e.preventDefault(); july14Modal.style.display = 'block'; };
 
@@ -550,4 +589,4 @@
         });
     </script>
 </body>
-</html>```
+</html>
