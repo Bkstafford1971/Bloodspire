@@ -28,6 +28,7 @@
         
         /* Fantasy Scroll Styling */
         .modal-content { background-color: #e6d5b3; background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png"); color: #1a1a1a; margin: 3% auto; padding: 40px; border-left: 12px solid #5a0f0f; border-right: 12px solid #5a0f0f; border-top: 4px solid #8b1a1a; border-bottom: 4px solid #8b1a1a; border-radius: 4px; width: 85%; max-width: 750px; text-align: left; box-shadow: 0 15px 40px rgba(0,0,0,0.9); font-family: 'Open Sans', sans-serif; box-sizing: border-box; }
+        .modal-content.modal-large { width: 92%; max-width: 950px; padding: 50px; }
         .modal-content h2 { font-family: 'Cinzel', serif; color: #a31616; text-align: center; border-bottom: 2px double #8b1a1a; padding-bottom: 15px; margin-top: 0; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
         .modal-scroll-body { max-height: 60vh; overflow-y: auto; padding-right: 15px; margin-top: 20px; line-height: 1.5; font-size: 0.95rem; }
         
@@ -90,8 +91,11 @@
                 <h3>Announcements</h3>
                 <div class="content-box">
                     <p style="text-align: center; margin: 15px 0;">
-                        <a href="#" id="viewJuly30Announcement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            🛡️ JULY 30, 2026 - TURN 28 BUG FIX & PLAYTEST REMINDER
+                        <a href="#" id="viewBoardAnnouncement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            🏛️ AUGUST 5, 2026 - DEDICATED MESSAGE BOARD NOW LIVE!
+                        </a>
+                        <a href="#" id="viewJuly30Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            JULY 30, 2026 - TURN 28 BUG FIX & PLAYTEST REMINDER
                         </a>
                         <a href="#" id="viewJuly19Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
                             JULY 19, 2026 - ENGINE UPDATES, SKILL FIXES & CLIENT V3.3
@@ -124,6 +128,36 @@
                 </div>
             </section>
         </main>
+    </div>
+
+    <!-- August 5 Message Board Modal (Large) -->
+    <div id="boardAnnouncementModal" class="modal-overlay">
+        <div class="modal-content modal-large">
+            <h2>NEW DEDICATED MESSAGE BOARD NOW LIVE! - AUGUST 5, 2026</h2>
+            <div class="modal-scroll-body">
+                <p><strong>Honored Managers of Bloodspire Arena,</strong></p>
+                <p>We are excited to officially announce the launch of our brand new dedicated message board! This will serve as our primary home for tavern discussions, combat tactical talk, guild formation, tournament announcements, and direct feedback for ongoing arena updates.</p>
+
+                <h3>Help Us Build the Community</h3>
+                <p>An arena is only as legendary as the managers who clash within its gates. We invite each and every one of you to step over to the new forum, create your profile, and start contributing to the community! Introduce your stable, share your fiercest battle stories, discuss race and weapon balance, or publicly call out your arena rivals before the next turn processes.</p>
+
+                <h3>Accessing the Board</h3>
+                <p>You can head straight over to the new message board by clicking the banner link below:</p>
+                
+                <p style="text-align: center; margin: 30px 0;">
+                    <a href="https://bloodspire-arena.forumotion.com/" target="_blank" style="font-size: 1.35rem; color: #a31616; font-weight: bold; font-family: 'Cinzel', serif; border: 2px solid #8b1a1a; padding: 12px 25px; background: rgba(139, 26, 26, 0.1); border-radius: 6px; display: inline-block; text-decoration: none;">
+                        🏛️ VISIT THE BLOODSPIRE ARENA MESSAGE BOARD 🏛️
+                    </a>
+                </p>
+
+                <p>Thank you all for your passionate playtesting and continued dedication to Bloodspire Arena. Let's build a vibrant community together!</p>
+
+                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
+                    - ILNEVAL -
+                </p>
+            </div>
+            <button class="close-modal-btn" id="closeBoardModal">Enter The Arena</button>
+        </div>
     </div>
 
     <!-- July 30 Modal -->
@@ -426,7 +460,7 @@
                 <p>Regular turns will now follow a <strong>Tuesday - Thursday - Saturday</strong> schedule.</p>
                 
                 <p>Thank you all again for your patience and valuable feedback. Things are steadily improving and getting much closer to the vision I had when this arena first opened its gates.</p>
-                
+
                 <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
                     - ILNEVAL -
                 </p>
@@ -542,24 +576,31 @@
             const closeJuly30 = document.getElementById('closeJuly30Modal');
             const viewJuly30 = document.getElementById('viewJuly30Announcement');
 
-            // Show latest announcement automatically if not seen
-            if (!localStorage.getItem('bloodspire_update_20260730')) {
-                july30Modal.style.display = 'block';
+            const boardModal = document.getElementById('boardAnnouncementModal');
+            const closeBoard = document.getElementById('closeBoardModal');
+            const viewBoard = document.getElementById('viewBoardAnnouncement');
+
+            // Show latest announcement (Message Board) automatically if not seen
+            if (!localStorage.getItem('bloodspire_update_20260805')) {
+                boardModal.style.display = 'block';
             }
 
-            // Close latest modal
-            closeJuly30.onclick = () => { 
-                july30Modal.style.display = 'none'; 
-                localStorage.setItem('bloodspire_update_20260730', 'true'); 
+            // Close board modal
+            closeBoard.onclick = () => { 
+                boardModal.style.display = 'none'; 
+                localStorage.setItem('bloodspire_update_20260805', 'true'); 
             };
 
-            // Open latest modal via link
-            viewJuly30.onclick = function(e) {
+            // Open board modal via link
+            viewBoard.onclick = function(e) {
                 e.preventDefault();
-                july30Modal.style.display = 'block';
+                boardModal.style.display = 'block';
             };
 
             // Previous Modals
+            closeJuly30.onclick = () => { july30Modal.style.display = 'none'; };
+            viewJuly30.onclick = function(e) { e.preventDefault(); july30Modal.style.display = 'block'; };
+
             closeJuly19.onclick = () => { july19Modal.style.display = 'none'; };
             viewJuly19.onclick = function(e) { e.preventDefault(); july19Modal.style.display = 'block'; };
 
