@@ -91,8 +91,11 @@
                 <h3>Announcements</h3>
                 <div class="content-box">
                     <p style="text-align: center; margin: 15px 0;">
-                        <a href="#" id="viewBoardAnnouncement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            🏛️ AUGUST 5, 2026 - DEDICATED MESSAGE BOARD NOW LIVE!
+                        <a href="#" id="viewAugust7Announcement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            🏛️ AUGUST 7, 2026 - TURNS PAUSED UNTIL AUG 15 & MESSAGE BOARD
+                        </a>
+                        <a href="#" id="viewBoardAnnouncement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            AUGUST 5, 2026 - DEDICATED MESSAGE BOARD NOW LIVE!
                         </a>
                         <a href="#" id="viewJuly30Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
                             JULY 30, 2026 - TURN 28 BUG FIX & PLAYTEST REMINDER
@@ -128,6 +131,41 @@
                 </div>
             </section>
         </main>
+    </div>
+
+    <!-- August 7 Turns Paused & Message Board Modal (Large) -->
+    <div id="august7AnnouncementModal" class="modal-overlay">
+        <div class="modal-content modal-large">
+            <h2>TURNS PAUSED UNTIL AUG 15 & MESSAGE BOARD - AUGUST 7, 2026</h2>
+            <div class="modal-scroll-body">
+                <p style="font-size: 1.25rem; color: #5a0f0f;"><strong>Just a quick heads up to everyone:</strong></p>
+                <p>I am out of the country for a week, and decided that I was going to pause turns while I am away. I would not have the ability to fix an issue on the server if something were to pop up while I am gone, so we will not have another turn until Saturday, August 15th at 9:00 pm. We will be back to our regularly scheduled carnage at that point. Thanks for your understanding and for your help in play testing this game with me.</p>
+
+                <hr style="border: 0; border-top: 1px dashed #8b1a1a; margin: 25px 0;">
+
+                <p><strong>Honored Managers of Bloodspire Arena,</strong></p>
+                <p>We are excited to officially announce the launch of our brand new dedicated message board! This will serve as our primary home for tavern discussions, combat tactical talk, guild formation, tournament announcements, and direct feedback for ongoing arena updates.</p>
+
+                <h3>Help Us Build the Community</h3>
+                <p>An arena is only as legendary as the managers who clash within its gates. We invite each and every one of you to step over to the new forum, create your profile, and start contributing to the community! Introduce your stable, share your fiercest battle stories, discuss race and weapon balance, or publicly call out your arena rivals before the next turn processes.</p>
+
+                <h3>Accessing the Board</h3>
+                <p>You can head straight over to the new message board by clicking the banner link below:</p>
+                
+                <p style="text-align: center; margin: 30px 0;">
+                    <a href="https://bloodspire-arena.forumotion.com/" target="_blank" style="font-size: 1.35rem; color: #a31616; font-weight: bold; font-family: 'Cinzel', serif; border: 2px solid #8b1a1a; padding: 12px 25px; background: rgba(139, 26, 26, 0.1); border-radius: 6px; display: inline-block; text-decoration: none;">
+                        🏛️ VISIT THE BLOODSPIRE ARENA MESSAGE BOARD 🏛️
+                    </a>
+                </p>
+
+                <p>Thank you all for your passionate playtesting and continued dedication to Bloodspire Arena. Let's build a vibrant community together!</p>
+
+                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
+                    - ILNEVAL -
+                </p>
+            </div>
+            <button class="close-modal-btn" id="closeAugust7Modal">Enter The Arena</button>
+        </div>
     </div>
 
     <!-- August 5 Message Board Modal (Large) -->
@@ -536,68 +574,75 @@
             };
 
             // Modals
-            const originalModal = document.getElementById('announcementModal');
-            const closeOriginal = document.getElementById('closeModal');
-            const viewOriginal = document.getElementById('viewAnnouncement');
-
-            const newModal = document.getElementById('newAnnouncementModal');
-            const closeNew = document.getElementById('closeNewModal');
-            const viewNew = document.getElementById('viewNewAnnouncement');
-
-            const june1Modal = document.getElementById('june1AnnouncementModal');
-            const closeJune1 = document.getElementById('closeJune1Modal');
-            const viewJune1 = document.getElementById('viewJune1Announcement');
-
-            const june5Modal = document.getElementById('june5AnnouncementModal');
-            const closeJune5 = document.getElementById('closeJune5Modal');
-            const viewJune5 = document.getElementById('viewJune5Announcement');
-
-            const june10Modal = document.getElementById('june10AnnouncementModal');
-            const closeJune10 = document.getElementById('closeJune10Modal');
-            const viewJune10 = document.getElementById('viewJune10Announcement');
-
-            const latestModal = document.getElementById('latestAnnouncementModal');
-            const closeLatest = document.getElementById('closeLatestModal');
-            const viewLatest = document.getElementById('viewLatestAnnouncement');
-
-            const july7Modal = document.getElementById('july7AnnouncementModal');
-            const closeJuly7 = document.getElementById('closeJuly7Modal');
-            const viewJuly7 = document.getElementById('viewJuly7Announcement');
-            
-            const july14Modal = document.getElementById('july14AnnouncementModal');
-            const closeJuly14 = document.getElementById('closeJuly14Modal');
-            const viewJuly14 = document.getElementById('viewJuly14Announcement');
-            
-            const july19Modal = document.getElementById('july19AnnouncementModal');
-            const closeJuly19 = document.getElementById('closeJuly19Modal');
-            const viewJuly19 = document.getElementById('viewJuly19Announcement');
-
-            const july30Modal = document.getElementById('july30AnnouncementModal');
-            const closeJuly30 = document.getElementById('closeJuly30Modal');
-            const viewJuly30 = document.getElementById('viewJuly30Announcement');
+            const august7Modal = document.getElementById('august7AnnouncementModal');
+            const closeAugust7 = document.getElementById('closeAugust7Modal');
+            const viewAugust7 = document.getElementById('viewAugust7Announcement');
 
             const boardModal = document.getElementById('boardAnnouncementModal');
             const closeBoard = document.getElementById('closeBoardModal');
             const viewBoard = document.getElementById('viewBoardAnnouncement');
 
-            // Show latest announcement (Message Board) automatically if not seen
-            if (!localStorage.getItem('bloodspire_update_20260805')) {
-                boardModal.style.display = 'block';
+            const july30Modal = document.getElementById('july30AnnouncementModal');
+            const closeJuly30 = document.getElementById('closeJuly30Modal');
+            const viewJuly30 = document.getElementById('viewJuly30Announcement');
+
+            const july19Modal = document.getElementById('july19AnnouncementModal');
+            const closeJuly19 = document.getElementById('closeJuly19Modal');
+            const viewJuly19 = document.getElementById('viewJuly19Announcement');
+
+            const july14Modal = document.getElementById('july14AnnouncementModal');
+            const closeJuly14 = document.getElementById('closeJuly14Modal');
+            const viewJuly14 = document.getElementById('viewJuly14Announcement');
+
+            const july7Modal = document.getElementById('july7AnnouncementModal');
+            const closeJuly7 = document.getElementById('closeJuly7Modal');
+            const viewJuly7 = document.getElementById('viewJuly7Announcement');
+
+            const latestModal = document.getElementById('latestAnnouncementModal');
+            const closeLatest = document.getElementById('closeLatestModal');
+            const viewLatest = document.getElementById('viewLatestAnnouncement');
+
+            const june10Modal = document.getElementById('june10AnnouncementModal');
+            const closeJune10 = document.getElementById('closeJune10Modal');
+            const viewJune10 = document.getElementById('viewJune10Announcement');
+
+            const june5Modal = document.getElementById('june5AnnouncementModal');
+            const closeJune5 = document.getElementById('closeJune5Modal');
+            const viewJune5 = document.getElementById('viewJune5Announcement');
+
+            const june1Modal = document.getElementById('june1AnnouncementModal');
+            const closeJune1 = document.getElementById('closeJune1Modal');
+            const viewJune1 = document.getElementById('viewJune1Announcement');
+
+            const newModal = document.getElementById('newAnnouncementModal');
+            const closeNew = document.getElementById('closeNewModal');
+            const viewNew = document.getElementById('viewNewAnnouncement');
+
+            const originalModal = document.getElementById('announcementModal');
+            const closeOriginal = document.getElementById('closeModal');
+            const viewOriginal = document.getElementById('viewAnnouncement');
+
+            // Show latest announcement (August 7) automatically if not seen
+            if (!localStorage.getItem('bloodspire_update_20260807')) {
+                august7Modal.style.display = 'block';
             }
 
-            // Close board modal
-            closeBoard.onclick = () => { 
-                boardModal.style.display = 'none'; 
-                localStorage.setItem('bloodspire_update_20260805', 'true'); 
+            // Close August 7 modal
+            closeAugust7.onclick = () => { 
+                august7Modal.style.display = 'none'; 
+                localStorage.setItem('bloodspire_update_20260807', 'true'); 
             };
 
-            // Open board modal via link
-            viewBoard.onclick = function(e) {
+            // Open August 7 modal via link
+            viewAugust7.onclick = function(e) {
                 e.preventDefault();
-                boardModal.style.display = 'block';
+                august7Modal.style.display = 'block';
             };
 
             // Previous Modals
+            closeBoard.onclick = () => { boardModal.style.display = 'none'; };
+            viewBoard.onclick = function(e) { e.preventDefault(); boardModal.style.display = 'block'; };
+
             closeJuly30.onclick = () => { july30Modal.style.display = 'none'; };
             viewJuly30.onclick = function(e) { e.preventDefault(); july30Modal.style.display = 'block'; };
 
