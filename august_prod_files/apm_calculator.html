@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLOODSPIRE Arena -- APM Calculator</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #000; color: #ddd;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+  }
+  .site-header {
+    background: #000; border-bottom: 2px solid #880000;
+    padding: 18px 32px 14px;
+  }
+  .site-name {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 2.0em; font-weight: bold;
+    color: #cc0000; letter-spacing: 2px;
+    text-shadow: 0 0 12px #880000;
+  }
+  .site-subtitle { color: #888; font-size: 0.78em; letter-spacing: 2px; margin-top: 2px; }
+  .content { padding: 28px 32px 60px; max-width: 640px; margin: 0 auto; }
+  h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #fff; font-size: 1.4em; text-align: center;
+    letter-spacing: 1px; margin-bottom: 4px;
+  }
+  .meta { color: #555; font-size: 0.8em; text-align: center; margin-bottom: 24px; }
+  .group {
+    border: 1px solid #660000; background: #0d0000;
+    padding: 16px 18px; margin-bottom: 16px; border-radius: 3px;
+  }
+  .group-label {
+    color: #cc6600; font-weight: bold; font-size: 0.85em;
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 12px; border-bottom: 1px solid #330000; padding-bottom: 6px;
+  }
+  .field-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px; gap: 12px;
+  }
+  .field-row label { color: #aaa; flex: 0 0 160px; }
+  .field-row select, .field-row input {
+    flex: 1; background: #1a1a1a; color: #eee;
+    border: 1px solid #444; padding: 5px 8px;
+    font-family: inherit; font-size: 0.95em; border-radius: 2px;
+  }
+  .field-row select:focus, .field-row input:focus {
+    outline: none; border-color: #cc0000;
+  }
+  .hint {
+    font-size: 0.78em; color: #a06000; margin: -4px 0 10px 172px;
+    font-style: italic; display: none;
+  }
+  .hint.visible { display: block; }
+  .result-box {
+    text-align: center; padding: 20px;
+  }
+  .result-apm {
+    font-size: 3em; font-weight: bold; color: #4caf50;
+    text-shadow: 0 0 10px rgba(76,175,80,0.4);
+  }
+  .result-fraction {
+    font-size: 0.9em; color: #999; margin-top: 6px; min-height: 1.2em;
+  }
+  .footer {
+    border-top: 1px solid #1a0000; padding: 14px 32px;
+    color: #444; font-size: 0.72em; text-align: center;
+  }
+</style>
+</head>
+<body>
+  <div class="site-header">
+    <div class="site-name">BLOODSPIRE ARENA</div>
+    <div class="site-subtitle">THE AGONY AMPHITHEATRE</div>
+  </div>
+  <div class="content">
+    <h1>APM Calculator</h1>
+    <div class="meta">Starting Actions-Per-Minute for a fresh, standing warrior loadout</div>
+
+    <div class="group">
+      <div class="group-label">Warrior</div>
+      <div class="field-row">
+        <label for="race">Race</label>
+        <select id="race"></select>
+      </div>
+      <div class="field-row">
+        <label for="strength">Strength</label>
+        <input type="number" id="strength" min="3" max="25" value="12">
+      </div>
+      <div class="field-row">
+        <label for="dexterity">Dexterity</label>
+        <input type="number" id="dexterity" min="3" max="25" value="12">
+      </div>
+      <div class="field-row">
+        <label for="intelligence">Intelligence</label>
+        <input type="number" id="intelligence" min="3" max="25" value="12">
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Equipment</div>
+      <div class="field-row">
+        <label for="primaryWeapon">Primary Weapon</label>
+        <select id="primaryWeapon"></select>
+      </div>
+      <div class="hint" id="skillMismatchHint">
+        Note: due to a naming mismatch in the game engine, weapon skill currently
+        has no effect on APM for this specific weapon.
+      </div>
+      <div class="field-row">
+        <label for="secondaryWeapon">Secondary Weapon</label>
+        <select id="secondaryWeapon"></select>
+      </div>
+      <div class="field-row">
+        <label for="weaponSkill">Weapon Skill (0-9)</label>
+        <input type="number" id="weaponSkill" min="0" max="9" value="0">
+      </div>
+      <div class="hint" id="skillMismatchHint" style="display:none;">
+        Note: due to a naming mismatch in the game engine, weapon skill currently
+        has no effect on APM for this specific weapon.
+      </div>
+      <div class="field-row">
+        <label for="armor">Armor</label>
+        <select id="armor"></select>
+      </div>
+      <div class="field-row">
+        <label for="helm">Helm</label>
+        <select id="helm"></select>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Strategy</div>
+      <div class="field-row">
+        <label for="style">Fighting Style</label>
+        <select id="style"></select>
+      </div>
+      <div class="field-row">
+        <label for="activity">Activity (0-9)</label>
+        <input type="number" id="activity" min="0" max="9" value="5">
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Formula</div>
+      <div class="field-row">
+        <label for="formulaMode">Mode</label>
+        <select id="formulaMode">
+          <option value="today">Today's Formula (real game)</option>
+          <option value="deadzone">Dead-Zone Design (experimental)</option>
+          <option value="deadzone_nodexint">Dead-Zone, no DEX/INT (experimental)</option>
+          <option value="deadzone_noweaponapm">Dead-Zone, no weapon speed (experimental)</option>
+        </select>
+      </div>
+      <div class="hint" id="deadZoneHint">
+        Experimental balance idea, not live in the game. Weapon's own speed sets
+        the starting APM instead of a flat 3.0; STR/DEX/INT each have a "normal"
+        range with no bonus, and only reward/penalize outside it; activity is
+        neutral at 5 instead of always being a bonus.
+      </div>
+      <div class="hint" id="noDexIntHint">
+        Same as Dead-Zone Design, but DEX and INT contribute nothing to APM at
+        all - the idea being they'd instead feed a separate accuracy mechanic
+        (not modeled here). STR dead zone, weapon base, activity, race, and
+        style still apply exactly as in Dead-Zone Design.
+      </div>
+      <div class="hint" id="noWeaponApmHint">
+        Same as Dead-Zone Design, but every weapon starts from the same flat
+        baseline instead of its own speed rating - weapon choice only matters
+        through whether the warrior can wield it well (the STR dead zone and
+        the existing under-strength penalty), not any inherent weapon speed.
+      </div>
+    </div>
+
+    <div class="group result-box">
+      <div class="group-label" style="text-align:center;border-bottom:none;">Base APM</div>
+      <div class="result-apm" id="resultApm">--</div>
+      <div class="result-fraction" id="resultFraction"></div>
+      <div class="result-fraction" id="resultDetail"></div>
+    </div>
+  </div>
+  <div class="footer">
+    Reports "fresh, standing" APM (full endurance, not on the ground) - the starting<br>
+    APM for a loadout, ported from the real combat engine's _calc_apm_with_fraction().<br>
+    Standalone tool - does not read from or write to any live game data.
+  </div>
+
+<script>
+/* =============================================================================
+   BLOODSPIRE APM Calculator - standalone port of combat.py's
+   _calc_apm_with_fraction(), plus its dependency chain (armor.py, weapons.py,
+   races.py, strategy.py). No network calls, no game-file access - all data
+   tables below are static snapshots ported by hand from the real game source.
+   ============================================================================= */
+
+// ---------------------------------------------------------------------------
+// RACE DATA (10 playable races) - only the fields _calc_apm_with_fraction reads
+// ---------------------------------------------------------------------------
+const RACES = {
+  "Human":      { attackRateBonus: 0, attackRatePenalty: 0, dexAttackRateTiers: {}, heavyWeaponPenalty: false, spearException: false },
+  "Half-Orc":   { attackRateBonus: 0, attackRatePenalty: 0, dexAttackRateTiers: {15: 3, 18: 4, 22: 5}, heavyWeaponPenalty: false, spearException: false },
+  "Halfling":   { attackRateBonus: 4, attackRatePenalty: 0, dexAttackRateTiers: {}, heavyWeaponPenalty: false, spearException: false },
+  "Dwarf":      { attackRateBonus: 0, attackRatePenalty: 2, dexAttackRateTiers: {}, heavyWeaponPenalty: false, spearException: false },
+  "Half-Elf":   { attackRateBonus: 1, attackRatePenalty: 0, dexAttackRateTiers: {}, heavyWeaponPenalty: false, spearException: false },
+  "Elf":        { attackRateBonus: 5, attackRatePenalty: 0, dexAttackRateTiers: {}, heavyWeaponPenalty: false, spearException: false },
+  "Goblin":     { attackRateBonus: 5, attackRatePenalty: 0, dexAttackRateTiers: {}, heavyWeaponPenalty: true,  spearException: false },
+  "Gnome":      { attackRateBonus: 0, attackRatePenalty: 1, dexAttackRateTiers: {}, heavyWeaponPenalty: false, spearException: false },
+  "Lizardfolk": { attackRateBonus: 0, attackRatePenalty: 1, dexAttackRateTiers: {}, heavyWeaponPenalty: false, spearException: false },
+  "Tabaxi":     { attackRateBonus: 0, attackRatePenalty: 0, dexAttackRateTiers: {}, heavyWeaponPenalty: true,  spearException: true  },
+};
+const RACE_NAMES = Object.keys(RACES).sort();
+
+// ---------------------------------------------------------------------------
+// WEAPON DATA (48 weapons) - keyed by real skill_key.
+// isPolearmSpear marks the 6 weapons in the "Polearm/Spear" category
+// (needed for the Tabaxi spear-exception rule).
+// ---------------------------------------------------------------------------
+const WEAPONS = {
+  stiletto:       { display: "Stiletto",           weight: 1.0, apm: 7,   twoHand: false, isPolearmSpear: false },
+  knife:          { display: "Knife",               weight: 1.5, apm: 7,   twoHand: false, isPolearmSpear: false },
+  dagger:         { display: "Dagger",               weight: 2.0, apm: 6,   twoHand: false, isPolearmSpear: false },
+  short_sword:    { display: "Short Sword",          weight: 3.0, apm: 6,   twoHand: false, isPolearmSpear: false },
+  epee:           { display: "Epee",                 weight: 3.0, apm: 6,   twoHand: false, isPolearmSpear: false },
+  scimitar:       { display: "Scimitar",             weight: 3.5, apm: 5,   twoHand: false, isPolearmSpear: false },
+  long_sword:     { display: "Long Sword",           weight: 3.2, apm: 6,   twoHand: false, isPolearmSpear: false },
+  broad_sword:    { display: "Broad Sword",          weight: 3.8, apm: 5,   twoHand: false, isPolearmSpear: false },
+  bastard_sword:  { display: "Bastard Sword",        weight: 4.8, apm: 4,   twoHand: true,  isPolearmSpear: false },
+  great_sword:    { display: "Great Sword",          weight: 6.8, apm: 3.5, twoHand: true,  isPolearmSpear: false },
+  hatchet:        { display: "Hatchet",              weight: 1.8, apm: 7,   twoHand: false, isPolearmSpear: false },
+  francisca:      { display: "Hand Axe",             weight: 2.5, apm: 6,   twoHand: false, isPolearmSpear: false },
+  battle_axe:     { display: "Battle Axe",           weight: 4.5, apm: 4,   twoHand: false, isPolearmSpear: false },
+  great_axe:      { display: "Great Axe",            weight: 6.0, apm: 3.5, twoHand: true,  isPolearmSpear: false },
+  small_pick:     { display: "Small Pick",           weight: 2.8, apm: 6,   twoHand: false, isPolearmSpear: false },
+  military_pick:  { display: "Military Pick",        weight: 3.5, apm: 5,   twoHand: false, isPolearmSpear: false },
+  pick_axe:       { display: "Pick Axe",             weight: 4.8, apm: 4,   twoHand: true,  isPolearmSpear: false },
+  great_pick:     { display: "Great Pick",            weight: 7.5, apm: 3,   twoHand: true,  isPolearmSpear: false },
+  hammer:         { display: "Hammer",               weight: 2.0, apm: 6,   twoHand: false, isPolearmSpear: false },
+  mace:           { display: "Mace",                 weight: 3.8, apm: 5,   twoHand: false, isPolearmSpear: false },
+  morningstar:    { display: "Morningstar",          weight: 4.0, apm: 4,   twoHand: false, isPolearmSpear: false },
+  war_hammer:     { display: "War Hammer",           weight: 4.5, apm: 4,   twoHand: false, isPolearmSpear: false },
+  maul:           { display: "Maul",                 weight: 7.5, apm: 3,   twoHand: true,  isPolearmSpear: false },
+  club:           { display: "Club",                 weight: 2.7, apm: 6,   twoHand: false, isPolearmSpear: false },
+  short_spear:    { display: "Short Spear",          weight: 3.0, apm: 6,   twoHand: false, isPolearmSpear: true  },
+  boar_spear:     { display: "Boar Spear",           weight: 3.8, apm: 5,   twoHand: false, isPolearmSpear: true  },
+  long_spear:     { display: "Long Spear",           weight: 4.2, apm: 4,   twoHand: true,  isPolearmSpear: true  },
+  pole_axe:       { display: "Pole Axe",             weight: 5.5, apm: 4,   twoHand: true,  isPolearmSpear: true  },
+  halberd:        { display: "Halberd",              weight: 7.5, apm: 3,   twoHand: true,  isPolearmSpear: true  },
+  javelin:        { display: "Javelin",               weight: 2.5, apm: 6,   twoHand: false, isPolearmSpear: true  },
+  flail:          { display: "Flail",                 weight: 2.6, apm: 6,   twoHand: false, isPolearmSpear: false },
+  bladed_flail:   { display: "Bladed Flail",          weight: 4.0, apm: 4,   twoHand: false, isPolearmSpear: false },
+  war_flail:      { display: "War Flail",             weight: 5.0, apm: 4,   twoHand: false, isPolearmSpear: false },
+  battle_flail:   { display: "Battle Flail",          weight: 6.5, apm: 3.5, twoHand: true,  isPolearmSpear: false },
+  ball_and_chain: { display: "Ball & Chain",          weight: 7.5, apm: 3,   twoHand: true,  isPolearmSpear: false },
+  quarterstaff:   { display: "Quarterstaff",          weight: 3.0, apm: 6,   twoHand: true,  isPolearmSpear: false },
+  great_staff:    { display: "Great Staff",           weight: 5.5, apm: 4,   twoHand: true,  isPolearmSpear: false },
+  buckler:        { display: "Buckler",               weight: 2.2, apm: 6,   twoHand: false, isPolearmSpear: false },
+  target_shield:  { display: "Target Shield",         weight: 4.2, apm: 4,   twoHand: false, isPolearmSpear: false },
+  tower_shield:   { display: "Tower Shield",          weight: 5.5, apm: 4,   twoHand: false, isPolearmSpear: false },
+  cestus:         { display: "Cestus",                weight: 1.0, apm: 7,   twoHand: false, isPolearmSpear: false },
+  trident:        { display: "Trident",               weight: 4.3, apm: 4,   twoHand: false, isPolearmSpear: false },
+  net:            { display: "Net",                   weight: 2.5, apm: 6,   twoHand: false, isPolearmSpear: false },
+  scythe:         { display: "Scythe",                weight: 3.5, apm: 5,   twoHand: false, isPolearmSpear: false },
+  bola:           { display: "Bola",                  weight: 3.1, apm: 6,   twoHand: false, isPolearmSpear: false },
+  heavy_whip:     { display: "Heavy Barbed Whip",     weight: 2.5, apm: 6,   twoHand: false, isPolearmSpear: false },
+  swordbreaker:   { display: "Swordbreaker",          weight: 2.6, apm: 6,   twoHand: false, isPolearmSpear: false },
+  open_hand:      { display: "Open Hand",             weight: 0.0, apm: 7,   twoHand: false, isPolearmSpear: false },
+};
+const WEAPON_KEYS_BY_DISPLAY = Object.keys(WEAPONS).sort((a, b) => WEAPONS[a].display.localeCompare(WEAPONS[b].display));
+
+// ---------------------------------------------------------------------------
+// ARMOR DATA (8 body + 5 helm + None) - only weight/dexPenalty needed
+// ---------------------------------------------------------------------------
+const ARMOR_PIECES = {
+  "None":        { weight: 0.0,  dexPenalty: 0, isHelm: false },
+  "Cloth":       { weight: 8.0,  dexPenalty: 0, isHelm: false },
+  "Leather":     { weight: 12.0, dexPenalty: 0, isHelm: false },
+  "Cuir Boulli": { weight: 17.0, dexPenalty: 0, isHelm: false },
+  "Brigandine":  { weight: 24.0, dexPenalty: 1, isHelm: false },
+  "Scale":       { weight: 35.0, dexPenalty: 2, isHelm: false },
+  "Chain":       { weight: 44.0, dexPenalty: 2, isHelm: false },
+  "Half-Plate":  { weight: 63.0, dexPenalty: 3, isHelm: false },
+  "Full Plate":  { weight: 80.0, dexPenalty: 5, isHelm: false },
+  "Leather Cap": { weight: 1.0,  dexPenalty: 0, isHelm: true },
+  "Steel Cap":   { weight: 3.0,  dexPenalty: 0, isHelm: true },
+  "Helm":        { weight: 5.0,  dexPenalty: 1, isHelm: true },
+  "Camail":      { weight: 7.0,  dexPenalty: 1, isHelm: true },
+  "Full Helm":   { weight: 9.0,  dexPenalty: 2, isHelm: true },
+};
+const ARMOR_TIERS = ["Cloth", "Leather", "Cuir Boulli", "Brigandine", "Scale", "Chain", "Half-Plate", "Full Plate"];
+const HELM_TIERS = ["Leather Cap", "Steel Cap", "Helm", "Camail", "Full Helm"];
+const ARMOR_NAMES = ["None", ...ARMOR_TIERS];
+const HELM_NAMES = ["None", ...HELM_TIERS];
+
+// ---------------------------------------------------------------------------
+// LIZARDFOLK ARMOR PENALTY TABLE - only dexPen/attackPct needed for APM
+// ---------------------------------------------------------------------------
+const LIZARD_PENALTIES = {
+  "None":        { dexPen: 0, attackPct: 0.00 },
+  "Cloth":       { dexPen: 1, attackPct: 0.00 },
+  "Leather":     { dexPen: 2, attackPct: 0.00 },
+  "Cuir Boulli": { dexPen: 0, attackPct: 0.05 },
+  "Brigandine":  { dexPen: 0, attackPct: 0.00 },
+  "Scale":       { dexPen: 0, attackPct: 0.10 },
+  "Chain":       { dexPen: 0, attackPct: 0.15 },
+  "Half-Plate":  { dexPen: 0, attackPct: 0.20 },
+  "Full Plate":  { dexPen: 0, attackPct: 0.25 },
+};
+
+// ---------------------------------------------------------------------------
+// FIGHTING STYLES (15) - apm_modifier only
+// ---------------------------------------------------------------------------
+const STYLE_PROPERTIES = {
+  "Total Kill":        { apmModifier: 1.5 },
+  "Bash":              { apmModifier: -0.5 },
+  "Martial Combat":    { apmModifier: 0.3 },
+  "Lunge":             { apmModifier: 0.5 },
+  "Strike":            { apmModifier: 0.0 },
+  "Slash":             { apmModifier: -1.5 },
+  "Wall of Steel":     { apmModifier: 1.5 },
+  "Engage & Withdraw": { apmModifier: -0.3 },
+  "Decoy":             { apmModifier: -0.5 },
+  "Opportunity Throw": { apmModifier: 0.0 },
+  "Counterstrike":     { apmModifier: -1.5 },
+  "Sure Strike":       { apmModifier: -1.0 },
+  "Calculated Attack": { apmModifier: -1.0 },
+  "Parry":             { apmModifier: -2.5 },
+  "Defend":            { apmModifier: -2.0 },
+};
+const STYLE_NAMES = Object.keys(STYLE_PROPERTIES).sort();
+
+// ---------------------------------------------------------------------------
+// STRENGTH -> WEAPON CARRY WEIGHT TABLE
+// ---------------------------------------------------------------------------
+const STRENGTH_CARRY_TABLE = [
+  [3, 3, 0.0], [4, 4, 1.0], [5, 5, 1.5], [6, 6, 1.8], [7, 7, 2.0],
+  [8, 8, 2.4], [9, 9, 2.7], [10, 10, 3.1], [11, 11, 3.2], [12, 12, 3.9],
+  [13, 13, 4.3], [14, 14, 4.7], [15, 15, 5.7], [16, 16, 6.4], [17, 25, 7.5],
+];
+
+// ---------------------------------------------------------------------------
+// STRENGTH -> ARMOR CARRY WEIGHT TABLE (str 3-25)
+// ---------------------------------------------------------------------------
+const ARMOR_STR_CAPACITY = {
+  3: 0.0, 4: 10.0, 5: 11.5, 6: 13.0, 7: 15.0, 8: 18.0, 9: 21.0, 10: 23.5,
+  11: 26.0, 12: 29.0, 13: 33.0, 14: 38.0, 15: 41.5, 16: 45.0, 17: 50.0,
+  18: 56.0, 19: 65.0, 20: 68.5, 21: 72.0, 22: 76.0, 23: 80.0, 24: 84.0, 25: 88.0,
+};
+
+// ---------------------------------------------------------------------------
+// HELPER FUNCTIONS (ported 1:1 from weapons.py / armor.py / combat.py)
+// ---------------------------------------------------------------------------
+
+function maxWeaponWeight(strength) {
+  for (const [lo, hi, capacity] of STRENGTH_CARRY_TABLE) {
+    if (strength >= lo && strength <= hi) return capacity;
+  }
+  return 0.0;
+}
+
+// weapons.py: strength_penalty()
+function strengthPenalty(weaponWeight, strength, twoHanded) {
+  const capacity = maxWeaponWeight(strength) + (twoHanded ? 1.0 : 0.0);
+  if (weaponWeight <= capacity) return 0.0;
+  if (capacity <= 0) return 1.0;
+  const overage = weaponWeight - capacity;
+  return Math.min(1.0, overage / capacity);
+}
+
+// weapons.py: min_str_for_weight() - used only by the Dead-Zone Design mode
+function minStrForWeight(weight, twoHanded) {
+  for (let str = 3; str <= 25; str++) {
+    const cap = maxWeaponWeight(str) + (twoHanded ? 1.0 : 0.0);
+    if (cap >= weight) return str;
+  }
+  return 25;
+}
+
+// weapons.py: get_effective_strength_for_weapons() - Half-Elf bigger_weapons_bonus
+function getEffectiveStrengthForWeapons(raceName, strength) {
+  if (raceName === "Half-Elf") return strength + 1;
+  return strength;
+}
+
+// armor.py: max_armor_weight()
+function maxArmorWeight(strength) {
+  const s = Math.max(3, Math.min(25, strength));
+  return ARMOR_STR_CAPACITY[s] !== undefined ? ARMOR_STR_CAPACITY[s] : 0.0;
+}
+
+// armor.py: armor_penalty_factor()
+function armorPenaltyFactor(weight, strength, isDwarf, pieceIsHelm) {
+  const capacity = maxArmorWeight(strength);
+  if (weight <= capacity) return 0.0;
+  if (isDwarf && !pieceIsHelm) {
+    let maxTierIdx = -1;
+    for (let i = 0; i < ARMOR_TIERS.length; i++) {
+      if (ARMOR_PIECES[ARMOR_TIERS[i]].weight <= capacity) maxTierIdx = i;
+    }
+    const targetTierIdx = Math.min(ARMOR_TIERS.length - 1, maxTierIdx + 1);
+    if (weight <= ARMOR_PIECES[ARMOR_TIERS[targetTierIdx]].weight) return 0.0;
+  }
+  if (capacity <= 0) return 1.0;
+  const overage = weight - capacity;
+  return Math.min(1.0, overage / capacity);
+}
+
+// armor.py: effective_dex()
+function effectiveDexBasic(baseDex, armorName, helmName) {
+  const armor = ARMOR_PIECES[armorName || "None"];
+  const helm = ARMOR_PIECES[helmName || "None"];
+  return Math.max(1, baseDex - (armor.dexPenalty + helm.dexPenalty));
+}
+
+// armor.py: get_effective_dex_for_race()
+function getEffectiveDexForRace(baseDex, armorName, helmName, raceName) {
+  if (raceName !== "Lizardfolk") {
+    return effectiveDexBasic(baseDex, armorName, helmName);
+  }
+  const helm = ARMOR_PIECES[helmName || "None"];
+  const pens = LIZARD_PENALTIES[armorName || "None"];
+  return Math.max(1, baseDex - (pens.dexPen + helm.dexPenalty));
+}
+
+// combat.py: _get_dex_penalty_reduction()
+function getDexPenaltyReduction(dexterity, tierDict) {
+  if (!tierDict) return 0;
+  let best = 0;
+  let any = false;
+  for (const threshold in tierDict) {
+    if (dexterity >= Number(threshold)) {
+      any = true;
+      best = Math.max(best, tierDict[threshold]);
+    }
+  }
+  return any ? best : 0;
+}
+
+// The real formula derives the skill-lookup key from the weapon's DISPLAY
+// name (not its internal skill_key) - warrior.primary_weapon.lower()
+// .replace(" ","_").replace("&","and"). For 46 of 48 weapons these match.
+// Two don't ("Hand Axe" -> "hand_axe" vs real skill_key "francisca";
+// "Heavy Barbed Whip" -> "heavy_barbed_whip" vs real skill_key "heavy_whip"),
+// so weapon skill has no effect on APM for those two - faithfully replicated
+// here rather than "fixed", since this calculator must match what the real
+// game actually does, not what it was probably meant to do.
+function skillLookupKeyFromDisplay(display) {
+  return display.toLowerCase().replace(/ /g, "_").replace(/&/g, "and");
+}
+
+// ---------------------------------------------------------------------------
+// MAIN CALCULATION - ported 1:1 from combat.py: _calc_apm_with_fraction()
+// Assumes a fresh, standing warrior (full endurance, not on the ground) -
+// those are live-combat states, not loadout properties, and the endurance
+// fatigue penalty mathematically cannot trigger at full endurance anyway.
+// Returns [baseApm, fraction] where fraction (0.0-0.99) is the percentage
+// chance of one bonus action that minute.
+// ---------------------------------------------------------------------------
+function calculateApm(params) {
+  const {
+    raceName, strength, dexterity, intelligence,
+    primaryWeaponKey, secondaryWeaponKey, weaponSkillLevel,
+    armorName, helmName, styleName, activity,
+  } = params;
+
+  const race = RACES[raceName];
+  const weapon = WEAPONS[primaryWeaponKey];
+
+  const dex = getEffectiveDexForRace(dexterity, armorName, helmName, raceName);
+  const skillLookupKey = skillLookupKeyFromDisplay(weapon.display);
+  const weaponSkillForFormula = (skillLookupKey === primaryWeaponKey) ? weaponSkillLevel : 0;
+
+  let base = 3.0;
+  base += Math.max(0.0, dex - 10) * 0.20;
+  base += Math.max(0.0, intelligence - 10) * 0.10;
+  base += activity * 0.25;
+  base += weaponSkillForFormula * 0.20;
+
+  const dexReduction = getDexPenaltyReduction(dexterity, race.dexAttackRateTiers);
+  const effectiveAttackRatePenalty = race.attackRatePenalty - dexReduction;
+  base += race.attackRateBonus * 0.25 - effectiveAttackRatePenalty * 0.25;
+  base += STYLE_PROPERTIES[styleName].apmModifier;
+
+  // Lizardfolk heavy armor attack rate penalty (percentage-based)
+  if (raceName === "Lizardfolk") {
+    const attackPct = LIZARD_PENALTIES[armorName || "None"].attackPct;
+    if (attackPct > 0) base *= (1.0 - attackPct);
+  }
+
+  // Heavy weapon APM bonus based on weapon skill
+  const twoHandedGrip = (secondaryWeaponKey === "open_hand" && weapon.twoHand);
+  const isHeavy = weapon.weight >= 4.0 || (weapon.twoHand && twoHandedGrip);
+  if (isHeavy && weaponSkillForFormula > 0) {
+    if (weaponSkillForFormula === 9) base += 3.0;
+    else if (weaponSkillForFormula >= 7) base += 2.0;
+    else if (weaponSkillForFormula >= 5) base += 1.5;
+    else if (weaponSkillForFormula >= 3) base += 1.0;
+    else base += 0.5;
+  }
+
+  // Under-strength weapon weight penalty (all races except Tabaxi+spear)
+  const effectiveStr = getEffectiveStrengthForWeapons(raceName, strength);
+  if (!(race.spearException && weapon.isPolearmSpear)) {
+    const weightPenalty = strengthPenalty(weapon.weight, effectiveStr, twoHandedGrip);
+    if (weightPenalty > 0) base *= (1.0 - weightPenalty);
+  }
+
+  // Heavy weapon penalty for Goblin/Tabaxi (additional, on top of weight penalty)
+  if (race.heavyWeaponPenalty) {
+    if (isHeavy && !(race.spearException && weapon.isPolearmSpear)) {
+      base -= 3 * 0.25;
+    }
+  }
+
+  // (fresh/standing: endurance-fatigue penalty and ground penalty never trigger)
+
+  // Under-strength armor penalty (worse of body/helm), Dwarf gets a tier of leeway
+  const isDwarf = (raceName === "Dwarf");
+  const armorPiece = ARMOR_PIECES[armorName || "None"];
+  const helmPiece = ARMOR_PIECES[helmName || "None"];
+  const pBody = armorPenaltyFactor(armorPiece.weight, strength, isDwarf, false);
+  const pHelm = armorPenaltyFactor(helmPiece.weight, strength, isDwarf, true);
+  const armorPenalty = Math.max(pBody, pHelm);
+  if (armorPenalty > 0) base *= (1.0 - armorPenalty);
+
+  // Heavy armor (Chain and heavier) flat APM penalty
+  const heavyArmorApmPenalties = { "Chain": 0.03, "Half-Plate": 0.05, "Full Plate": 0.08 };
+  if (heavyArmorApmPenalties[armorName]) {
+    base *= (1.0 - heavyArmorApmPenalties[armorName]);
+  }
+
+  base = Math.max(1.0, Math.min(10.0, base));
+  const baseApm = Math.floor(base);
+  const fraction = base - baseApm;
+  return [baseApm, fraction];
+}
+
+// ---------------------------------------------------------------------------
+// EXPERIMENTAL: DEAD-ZONE DESIGN
+// ---------------------------------------------------------------------------
+// Not the real game formula - a standalone balance experiment for this
+// calculator only. combat.py is untouched; nothing here affects live fights.
+//
+// Differences from Today's Formula:
+//   1. Starting base is the weapon's own `apm` rating (3-7) instead of a
+//      flat 3.0 for every weapon - so weapon choice directly affects speed.
+//   2. STR/DEX/INT each have a "dead zone" - a normal/expected range with
+//      no bonus AND no bonus-side penalty. Outside the dead zone, each
+//      point away from it adds/subtracts that stat's own rate constant.
+//        - STR: dead zone is [weapon's min STR, min STR + STR_DEAD_ZONE_WIDTH],
+//          rate STR_DEAD_ZONE_RATE per point above it. Below min STR, the
+//          EXISTING under-strength weight penalty still applies unchanged
+//          (that mechanism is not touched by this mode).
+//        - DEX / INT: fixed dead zone [DEX_INT_DEAD_ZONE_LO, DEX_INT_DEAD_ZONE_HI],
+//          rate DEX_INT_DEAD_ZONE_RATE per point outside it (same rate used
+//          for both the above-zone bonus and the below-zone penalty).
+//   3. Activity is recentered: ACTIVITY_MIDPOINT is "neutral" (0 contribution).
+//      Points above it add, points below it subtract, at ACTIVITY_RATE per point.
+//      (Today's Formula has no midpoint - every point of activity is a bonus.)
+//
+// Two independent on/off toggles (see calculateApmDeadZone's parameters):
+//   - includeDexInt: when false, DEX/INT contribute nothing to APM at all
+//     (points 2's DEX/INT dead zone is skipped entirely).
+//   - useWeaponApm: when false, ignores each weapon's own apm rating and
+//     starts every weapon from the same NO_WEAPON_APM_BASELINE instead -
+//     weapon choice then only matters via the STR dead zone (can the warrior
+//     wield it well) and the existing under-strength weight penalty, not any
+//     inherent weapon speed.
+//
+// All the tunable numbers are named constants right here - change them and
+// refresh to experiment. Everything else (race modifiers, style modifiers,
+// heavy-weapon skill bonus, armor penalties, weapon skill, the 1-10 clamp)
+// is identical to Today's Formula.
+// ---------------------------------------------------------------------------
+const STR_DEAD_ZONE_RATE      = 0.05; // APM gained per point of STR above its dead zone
+const STR_DEAD_ZONE_WIDTH     = 5;    // points above a weapon's min STR with no bonus
+const DEX_INT_DEAD_ZONE_RATE  = 0.05; // APM gained/lost per point of DEX/INT outside its dead zone
+const DEX_INT_DEAD_ZONE_LO    = 9;    // DEX/INT at or above this: no penalty
+const DEX_INT_DEAD_ZONE_HI    = 14;   // DEX/INT at or below this: no bonus
+const ACTIVITY_MIDPOINT       = 5;    // activity level treated as "neutral" (0 contribution)
+const ACTIVITY_RATE           = 0.25; // APM gained/lost per point away from the midpoint
+const NO_WEAPON_APM_BASELINE  = 5.0;  // starting base for "no weapon APM" mode - the
+                                       // midpoint of the real 3-7 weapon apm range, so
+                                       // this mode is comparable in scale to the others
+                                       // instead of uniformly lower/higher
+
+// Bonus above hi, penalty below lo, nothing in between.
+function deadZoneBonus(value, lo, hi, rate) {
+  if (value > hi) return (value - hi) * rate;
+  if (value < lo) return (value - lo) * rate; // negative
+  return 0.0;
+}
+
+function calculateApmDeadZone(params, includeDexInt = true, useWeaponApm = true) {
+  const {
+    raceName, strength, dexterity, intelligence,
+    primaryWeaponKey, secondaryWeaponKey, weaponSkillLevel,
+    armorName, helmName, styleName, activity,
+  } = params;
+
+  const race = RACES[raceName];
+  const weapon = WEAPONS[primaryWeaponKey];
+
+  // NOTE: this "dex" is the effective DEX after armor/race adjustments - it
+  // still feeds race-specific mechanics below (e.g. Half-Orc's dexAttackRateTiers,
+  // Lizardfolk armor DEX handling) even when includeDexInt is false. Only the
+  // general dead-zone bonus/penalty term is removed by that flag, not every
+  // place DEX appears in the formula.
+  const dex = getEffectiveDexForRace(dexterity, armorName, helmName, raceName);
+  const skillLookupKey = skillLookupKeyFromDisplay(weapon.display);
+  const weaponSkillForFormula = (skillLookupKey === primaryWeaponKey) ? weaponSkillLevel : 0;
+
+  // --- 1. Starting base: weapon's own apm rating, OR a flat baseline if
+  //        useWeaponApm is false - weapon choice then only matters through
+  //        whether the warrior can wield it well (the STR dead zone / the
+  //        existing under-strength penalty below), not any inherent speed. ---
+  let base = useWeaponApm ? weapon.apm : NO_WEAPON_APM_BASELINE;
+
+  // --- 2. STR dead zone, relative to this weapon's min STR requirement ---
+  const twoHandedGrip = (secondaryWeaponKey === "open_hand" && weapon.twoHand);
+  const minStr = minStrForWeight(weapon.weight, twoHandedGrip);
+  if (strength > minStr + STR_DEAD_ZONE_WIDTH) {
+    base += (strength - (minStr + STR_DEAD_ZONE_WIDTH)) * STR_DEAD_ZONE_RATE;
+  }
+  // (Below-minimum STR is handled entirely by the existing weight penalty below -
+  // no separate dead-zone penalty is applied here, to avoid double-penalizing.)
+
+  // --- 2b. DEX / INT dead zones (fixed range, not weapon-dependent) ---
+  // Skipped entirely when includeDexInt is false - DEX/INT contribute nothing
+  // to APM in that mode (the idea being they'd feed an accuracy mechanic instead).
+  if (includeDexInt) {
+    base += deadZoneBonus(dex, DEX_INT_DEAD_ZONE_LO, DEX_INT_DEAD_ZONE_HI, DEX_INT_DEAD_ZONE_RATE);
+    base += deadZoneBonus(intelligence, DEX_INT_DEAD_ZONE_LO, DEX_INT_DEAD_ZONE_HI, DEX_INT_DEAD_ZONE_RATE);
+  }
+
+  // --- 3. Activity recentered around a neutral midpoint ---
+  base += (activity - ACTIVITY_MIDPOINT) * ACTIVITY_RATE;
+
+  base += weaponSkillForFormula * 0.20;
+
+  const dexReduction = getDexPenaltyReduction(dexterity, race.dexAttackRateTiers);
+  const effectiveAttackRatePenalty = race.attackRatePenalty - dexReduction;
+  base += race.attackRateBonus * 0.25 - effectiveAttackRatePenalty * 0.25;
+  base += STYLE_PROPERTIES[styleName].apmModifier;
+
+  // Lizardfolk heavy armor attack rate penalty (percentage-based)
+  if (raceName === "Lizardfolk") {
+    const attackPct = LIZARD_PENALTIES[armorName || "None"].attackPct;
+    if (attackPct > 0) base *= (1.0 - attackPct);
+  }
+
+  // Heavy weapon APM bonus based on weapon skill (unchanged from Today's Formula)
+  const isHeavy = weapon.weight >= 4.0 || (weapon.twoHand && twoHandedGrip);
+  if (isHeavy && weaponSkillForFormula > 0) {
+    if (weaponSkillForFormula === 9) base += 3.0;
+    else if (weaponSkillForFormula >= 7) base += 2.0;
+    else if (weaponSkillForFormula >= 5) base += 1.5;
+    else if (weaponSkillForFormula >= 3) base += 1.0;
+    else base += 0.5;
+  }
+
+  // Under-strength weapon weight penalty - EXISTING mechanism, unchanged
+  const effectiveStr = getEffectiveStrengthForWeapons(raceName, strength);
+  if (!(race.spearException && weapon.isPolearmSpear)) {
+    const weightPenalty = strengthPenalty(weapon.weight, effectiveStr, twoHandedGrip);
+    if (weightPenalty > 0) base *= (1.0 - weightPenalty);
+  }
+
+  // Heavy weapon penalty for Goblin/Tabaxi (additional, on top of weight penalty)
+  if (race.heavyWeaponPenalty) {
+    if (isHeavy && !(race.spearException && weapon.isPolearmSpear)) {
+      base -= 3 * 0.25;
+    }
+  }
+
+  // Under-strength armor penalty (worse of body/helm), Dwarf gets a tier of leeway
+  const isDwarf = (raceName === "Dwarf");
+  const armorPiece = ARMOR_PIECES[armorName || "None"];
+  const helmPiece = ARMOR_PIECES[helmName || "None"];
+  const pBody = armorPenaltyFactor(armorPiece.weight, strength, isDwarf, false);
+  const pHelm = armorPenaltyFactor(helmPiece.weight, strength, isDwarf, true);
+  const armorPenalty = Math.max(pBody, pHelm);
+  if (armorPenalty > 0) base *= (1.0 - armorPenalty);
+
+  // Heavy armor (Chain and heavier) flat APM penalty
+  const heavyArmorApmPenalties = { "Chain": 0.03, "Half-Plate": 0.05, "Full Plate": 0.08 };
+  if (heavyArmorApmPenalties[armorName]) {
+    base *= (1.0 - heavyArmorApmPenalties[armorName]);
+  }
+
+  base = Math.max(1.0, Math.min(10.0, base));
+  const baseApm = Math.floor(base);
+  const fraction = base - baseApm;
+  return [baseApm, fraction, minStr];
+}
+
+// ---------------------------------------------------------------------------
+// UI WIRING
+// ---------------------------------------------------------------------------
+
+function ordinal(n) {
+  if (n % 100 >= 10 && n % 100 <= 20) return n + "th";
+  return n + ({1: "st", 2: "nd", 3: "rd"}[n % 10] || "th");
+}
+
+// Track weapon skill per weapon (so switching weapons preserves skill per-weapon)
+const weaponSkills = {};
+function getWeaponSkill(weaponKey) {
+  return weaponSkills[weaponKey] !== undefined ? weaponSkills[weaponKey] : 0;
+}
+function setWeaponSkill(weaponKey, level) {
+  weaponSkills[weaponKey] = level;
+}
+
+function populateSelect(id, values, selected) {
+  const el = document.getElementById(id);
+  el.innerHTML = "";
+  for (const v of values) {
+    const opt = document.createElement("option");
+    opt.value = v;
+    opt.textContent = v;
+    if (v === selected) opt.selected = true;
+    el.appendChild(opt);
+  }
+}
+
+function populateWeaponSelect(id, selectedKey) {
+  const el = document.getElementById(id);
+  el.innerHTML = "";
+  for (const key of WEAPON_KEYS_BY_DISPLAY) {
+    const opt = document.createElement("option");
+    opt.value = key;
+    opt.textContent = WEAPONS[key].display;
+    if (key === selectedKey) opt.selected = true;
+    el.appendChild(opt);
+  }
+}
+
+function update() {
+  const primaryWeaponKey = document.getElementById("primaryWeapon").value;
+  const skillInput = document.getElementById("weaponSkill");
+  const currentSkillInput = parseInt(skillInput.value, 10);
+
+  // If the weapon changed, save the old skill level and load the new weapon's skill
+  if (window.lastWeaponKey && window.lastWeaponKey !== primaryWeaponKey) {
+    setWeaponSkill(window.lastWeaponKey, currentSkillInput);
+    const newSkill = getWeaponSkill(primaryWeaponKey);
+    skillInput.value = newSkill;
+  }
+  window.lastWeaponKey = primaryWeaponKey;
+
+  // Save the current skill for this weapon (in case the user adjusts it)
+  setWeaponSkill(primaryWeaponKey, currentSkillInput);
+
+  const weapon = WEAPONS[primaryWeaponKey];
+  const mode = document.getElementById("formulaMode").value;
+
+  const skillLookupKey = skillLookupKeyFromDisplay(weapon.display);
+  document.getElementById("skillMismatchHint").classList.toggle(
+    "visible", mode === "today" && skillLookupKey !== primaryWeaponKey
+  );
+  document.getElementById("deadZoneHint").classList.toggle("visible", mode === "deadzone");
+  document.getElementById("noDexIntHint").classList.toggle("visible", mode === "deadzone_nodexint");
+  document.getElementById("noWeaponApmHint").classList.toggle("visible", mode === "deadzone_noweaponapm");
+
+  const params = {
+    raceName: document.getElementById("race").value,
+    strength: parseInt(document.getElementById("strength").value, 10),
+    dexterity: parseInt(document.getElementById("dexterity").value, 10),
+    intelligence: parseInt(document.getElementById("intelligence").value, 10),
+    primaryWeaponKey: primaryWeaponKey,
+    secondaryWeaponKey: document.getElementById("secondaryWeapon").value,
+    weaponSkillLevel: currentSkillInput,
+    armorName: document.getElementById("armor").value,
+    helmName: document.getElementById("helm").value,
+    styleName: document.getElementById("style").value,
+    activity: parseInt(document.getElementById("activity").value, 10),
+  };
+
+  if (Object.values(params).some(v => v === "" || (typeof v === "number" && isNaN(v)))) {
+    document.getElementById("resultApm").textContent = "--";
+    document.getElementById("resultFraction").textContent = "";
+    document.getElementById("resultDetail").textContent = "";
+    return;
+  }
+
+  let baseApm, fraction, minStr;
+  if (mode === "deadzone") {
+    [baseApm, fraction, minStr] = calculateApmDeadZone(params, true, true);
+  } else if (mode === "deadzone_nodexint") {
+    [baseApm, fraction, minStr] = calculateApmDeadZone(params, false, true);
+  } else if (mode === "deadzone_noweaponapm") {
+    [baseApm, fraction, minStr] = calculateApmDeadZone(params, true, false);
+  } else {
+    [baseApm, fraction] = calculateApm(params);
+  }
+
+  document.getElementById("resultApm").textContent = baseApm;
+  if (fraction > 0.0) {
+    const pct = Math.floor(fraction * 100);
+    document.getElementById("resultFraction").textContent =
+      `+${pct}% chance of a ${ordinal(baseApm + 1)} action this minute`;
+  } else {
+    document.getElementById("resultFraction").textContent = "";
+  }
+
+  if (mode === "deadzone" || mode === "deadzone_nodexint" || mode === "deadzone_noweaponapm") {
+    const baseLabel = (mode === "deadzone_noweaponapm")
+      ? `flat baseline ${NO_WEAPON_APM_BASELINE} (weapon speed ignored)`
+      : `base apm ${weapon.apm}`;
+    document.getElementById("resultDetail").textContent =
+      `${weapon.display}: ${baseLabel}, min STR ${minStr} ` +
+      `(no STR bonus until STR ${minStr + STR_DEAD_ZONE_WIDTH + 1}+)`;
+  } else {
+    document.getElementById("resultDetail").textContent = "";
+  }
+}
+
+populateSelect("race", RACE_NAMES, "Human");
+populateWeaponSelect("primaryWeapon", "short_sword");
+populateWeaponSelect("secondaryWeapon", "open_hand");
+populateSelect("armor", ARMOR_NAMES, "None");
+populateSelect("helm", HELM_NAMES, "None");
+populateSelect("style", STYLE_NAMES, "Strike");
+
+document.querySelectorAll("select, input").forEach(el => {
+  el.addEventListener("input", update);
+  el.addEventListener("change", update);
+});
+
+update();
+</script>
+</body>
+</html>
