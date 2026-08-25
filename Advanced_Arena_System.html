@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloodspire · Advanced Arenas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700;900&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: #0a0503;
+            background-image: radial-gradient(circle at 30% 20%, #1e0b07 0%, #0a0503 90%);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            color: #bfb0a0;
+            display: flex;
+            justify-content: center;
+        }
+        .codex {
+            max-width: 1200px;
+            width: 100%;
+            background: #140d09;
+            background-image: 
+                linear-gradient(0deg, rgba(60, 20, 10, 0.3) 0%, transparent 100%),
+                repeating-linear-gradient(45deg, rgba(120, 50, 30, 0.03) 0px, rgba(120, 50, 30, 0.03) 2px, transparent 2px, transparent 8px);
+            border: 2px solid #6b3a28;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.95), 0 0 0 1px #4f2a1a inset;
+            border-radius: 32px;
+            padding: 2.8rem 2.8rem;
+            position: relative;
+            transition: all 0.2s;
+        }
+        .codex::before {
+            content: '';
+            position: absolute;
+            inset: 12px;
+            border: 1px solid #6b3a2850;
+            border-radius: 20px;
+            pointer-events: none;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            color: #dac5b0;
+            text-shadow: 0 0 8px #a0402080, 0 2px 0 #1f0e08;
+        }
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 0.2rem;
+            color: #f0d4c0;
+            letter-spacing: 0.12em;
+            text-shadow: 0 0 30px #b84a2a, 0 4px 0 #2f130a;
+            word-break: break-word;
+        }
+        .subhead {
+            text-align: center;
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.4rem;
+            color: #b07a5a;
+            border-top: 1px solid #4f2a1a;
+            border-bottom: 1px solid #4f2a1a;
+            padding: 0.8rem 0;
+            margin: 0.5rem 0 2.2rem 0;
+            letter-spacing: 0.3rem;
+            background: #1a0d08;
+            border-radius: 40px;
+        }
+        .three-arena {
+            background: #1f100b;
+            border-left: 6px solid #b84a2a;
+            padding: 1.2rem 1.8rem;
+            border-radius: 40px 8px 8px 40px;
+            margin-bottom: 2.5rem;
+            box-shadow: inset 0 0 20px #080302;
+        }
+        .three-arena p { font-size: 1.05rem; line-height: 1.6; }
+        .arena-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 2rem 0 2.8rem 0;
+        }
+        .arena-card {
+            flex: 1 1 200px;
+            background: #1a0d09;
+            border: 1px solid #4f2a1a;
+            border-radius: 30px;
+            padding: 1.5rem 1.2rem;
+            box-shadow: 0 8px 0 #0a0503;
+            transition: 0.2s;
+            text-align: center;
+        }
+        .arena-card h3 {
+            font-size: 1.5rem;
+            border-bottom: 1px solid #6b3a28;
+            padding-bottom: 0.4rem;
+            margin-bottom: 0.7rem;
+            color: #eccfc0;
+        }
+        .arena-card .badge {
+            display: inline-block;
+            background: #26130c;
+            padding: 0.2rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            letter-spacing: 0.1rem;
+            border: 1px solid #6b3a28;
+            color: #bf8a70;
+        }
+        .elite-glow { border-color: #b8733a; box-shadow: 0 0 25px #b84a2a40; }
+        .soul-glow { border-color: #6b3f5a; box-shadow: 0 0 25px #6b3f5a40; }
+        .section-title {
+            font-size: 2rem;
+            margin: 2rem 0 1rem 0;
+            padding-left: 0.8rem;
+            border-left: 6px solid #b84a2a;
+            color: #eccfc0;
+        }
+        .section-sub {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #d4a888;
+            margin: 1.8rem 0 0.6rem 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-sub span {
+            background: #26130c;
+            padding: 0.1rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            color: #b07a5a;
+        }
+        p { line-height: 1.7; margin: 0.8rem 0; color: #c9b8a8; }
+        .highlight-box {
+            background: #1a0d09;
+            border: 1px solid #4f2a1a;
+            border-radius: 24px;
+            padding: 1.2rem 1.8rem;
+            margin: 1.5rem 0;
+            box-shadow: inset 0 0 30px #080302;
+        }
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        @media (max-width: 700px) {
+            .two-col { grid-template-columns: 1fr; gap: 1rem; }
+            .codex { padding: 1.5rem; }
+            h1 { font-size: 2.2rem; }
+        }
+        .rule-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.4rem;
+            margin: 1.2rem 0;
+            font-size: 0.95rem;
+        }
+        .rule-table td {
+            background: #1a0d09;
+            padding: 0.9rem 1.2rem;
+            border: 1px solid #3d1f13;
+            border-radius: 12px;
+        }
+        .rule-table td:first-child {
+            font-weight: 600;
+            color: #eccfc0;
+            width: 38%;
+            background: #23130d;
+            border-right: 2px solid #b84a2a;
+        }
+        .rule-table td:last-child { background: #160b07; }
+        .monster-note {
+            background: #24100a;
+            border-left: 8px solid #b84a2a;
+            padding: 1rem 1.8rem;
+            border-radius: 30px 8px 8px 30px;
+            margin: 1.8rem 0;
+            font-style: italic;
+        }
+        .signature {
+            margin-top: 2.5rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid #3d1f13;
+            text-align: right;
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.1rem;
+            color: #8f6a50;
+        }
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #6b3a28, #b84a2a, #6b3a28, transparent);
+            margin: 2rem 0;
+        }
+        .blood-text { color: #c95a3a; }
+        .metal-text { color: #a09080; }
+        .inline-code {
+            background: #0f0805;
+            padding: 0.1rem 0.6rem;
+            border-radius: 6px;
+            font-family: 'Inter', monospace;
+            font-size: 0.9rem;
+            color: #d4a888;
+            border: 1px solid #3d1f13;
+        }
+        .note-block {
+            background: #1f100b;
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            margin: 1.2rem 0;
+            border-left: 4px solid #b8733a;
+        }
+        .icon-lg { font-size: 1.6rem; vertical-align: middle; margin-right: 0.3rem; }
+        ul, ol { padding-left: 1.8rem; margin: 0.6rem 0; }
+        li { margin: 0.3rem 0; }
+    </style>
+</head>
+<body>
+<div class="codex">
+    <h1>⚔ BLOODSPIRE ⚔</h1>
+    <div class="subhead">THE ADVANCED ARENAS  ·  MANAGER'S CODEX</div>
+
+    <!-- THE THREE-ARENA SYSTEM -->
+    <div class="three-arena">
+        <p><span style="font-size:1.8rem; margin-right:10px;">🏛️</span> <strong style="font-family:'Cinzel',serif; font-size:1.3rem;">The Three‑Arena System</strong>  —  <em>Agony Amphitheatre · Elite Spire · Soul Spire</em><br>
+        The Bloodspire league is not a single arena. It is a hierarchy, three distinct tiers of combat, each more legendary than the last. Every warrior begins their career in the normal arena, <strong>The Agony Amphitheatre</strong>. But for the greatest among them, the Amphitheatre is only the beginning.</p>
+        <p>Beyond the normal arena lie two advanced arenas reserved for warriors who have proven themselves extraordinary:</p>
+        <ul style="list-style:none; padding-left:0.5rem; margin:0.6rem 0;">
+            <li><strong style="color:#d4a888;">The Elite Spire</strong> — The pinnacle of living glory. Warriors promoted here are still breathing, still training, still hungry. They have earned the right to compete at the highest level of mortal combat in the league.</li>
+            <li style="margin-top:0.4rem;"><strong style="color:#c9a8b0;">The Soul Spire</strong> — Where legends are reborn from death. Warriors who fall in battle but who have built a record worthy of immortality are not lost. They transcend. Their bodies are gone, but their fighting spirit is summoned to a higher plane to battle forever among the greatest souls the arena has ever seen.</li>
+        </ul>
+        <p style="font-style:italic; margin-top:0.6rem;">These are not alternative paths. They are destinations. A warrior either earns one of them or they do not.</p>
+    </div>
+
+    <!-- PART ONE: THE ELITE SPIRE -->
+    <h2 class="section-title">✦ THE ELITE SPIRE</h2>
+    
+    <h3 style="font-family:'Cinzel',serif; font-size:1.3rem; color:#d4a888; margin-top:0.2rem;">What Is the Elite Spire?</h3>
+    <p>The Elite Spire is a completely separate arena operating alongside the normal Amphitheatre. It runs on its own turn schedule, produces its own newsletter, and maintains its own standings. Warriors promoted to the Elite Spire do not fight in the normal arena again. They fight exclusively among other Elite Spire warriors, the best of the best.</p>
+
+    <h3 style="font-family:'Cinzel',serif; font-size:1.2rem; color:#d4a888; margin-top:1.2rem;">How Warriors Earn Promotion</h3>
+    <p>Promotion to the Elite Spire is not requested and it is not purchased. It is recognized.</p>
+    <p>After each turn, the league reviews every warrior still competing in the normal arena. Warriors who have demonstrated exceptional accomplishment across fights, victories, and dedication to their craft will be identified as candidates. The criteria are known only to the Gladiatorial Commission. There is no formula you can plug numbers into. You will know your warrior is exceptional when the Commission tells you so.</p>
+
+    <div class="highlight-box">
+        <h4 style="font-family:'Cinzel',serif; color:#eccfc0;">The Promotion Process — Two Turns</h4>
+        <p>Promotion does not happen instantly. It follows a two-turn process:</p>
+        <ul style="list-style:none; padding-left:0;">
+            <li style="padding:0.3rem 0;"><strong>Turn 1 — The Call:</strong> A warrior who meets the Commission's criteria is formally recognized in the newsletter. They are described as having been <em>called to the Elite Spire</em>. At this point, a <span class="inline-code">pending_promotion</span> flag is placed on the warrior. They are still scheduled to fight next turn in the normal arena, their final mortal fight.</li>
+            <li style="padding:0.3rem 0;"><strong>Turn 2 — The Final Fight and Promotion:</strong> The warrior fights their last battle in the Agony Amphitheatre. Whatever happens in that fight, they will not die. The Immortality Shield activates automatically for any warrior who has been called to the Spire. If they are struck down in that final fight, the shield absorbs the killing blow. They rise, unbowed, and are promoted.</li>
+        </ul>
+        <p style="margin-top:0.5rem;">After that turn completes, the warrior's status changes:</p>
+        <ul style="list-style:none; padding-left:0; font-size:0.95rem;">
+            <li>• <span class="inline-code">current_arena</span> is set to <span class="inline-code">elite</span></li>
+            <li>• <span class="inline-code">is_promoted</span> is set to <span class="inline-code">True</span></li>
+            <li>• Their recognition score resets to zero (a fresh start in a new arena)</li>
+            <li>• They are seeded into the Elite Spire roster</li>
+        </ul>
+    </div>
+
+    <h3 style="font-family:'Cinzel',serif; font-size:1.2rem; color:#d4a888; margin-top:1.2rem;">What This Means for You as a Manager</h3>
+    <p>When your warrior is called to the Elite Spire, two things happen immediately:</p>
+    <ol style="padding-left:1.8rem; margin:0.6rem 0;">
+        <li><strong>Your warrior slot in the normal arena opens up.</strong> A warrior heading to the Elite Spire will appear in your roster as <strong>"✦ PROMOTED"</strong>, greyed out with a gold diamond icon. You need to upload a replacement warrior for the normal arena.</li>
+        <li><strong>Your warrior gains a new arena to manage.</strong> The Elite Spire tab will appear in the client interface for your team. Your Elite Spire warrior is now under your management in that arena.</li>
+    </ol>
+
+    <h3 style="font-family:'Cinzel',serif; font-size:1.2rem; color:#d4a888; margin-top:1.2rem;">Managing Your Elite Spire Warriors</h3>
+    <ul style="padding-left:1.8rem; margin:0.6rem 0;">
+        <li><strong>Turns:</strong> The Elite Spire runs on its own schedule, separate from the normal arena. When the league commissioner runs an Elite Spire turn, only Elite Spire warriors fight. You do not need to upload anything special, your warrior is already registered in the system.</li>
+        <li><strong>Run This Turn:</strong> Each Elite Spire warrior has a <strong>"Run This Turn"</strong> checkbox in the client. By default, all warriors are active each turn. If you want to sit a warrior out for any given turn, strategic rest, personal preference, or any other reason, simply uncheck the box. They will not fight that turn. The flag stays set until you change it, so you only need to act when you want something different.</li>
+        <li><strong style="color:#c95a3a;">Note:</strong> Warriors in the Elite Spire do not accumulate new permanent injuries. They carry any injuries they had at the time of their promotion, but the Elite Spire does not add to that burden.</li>
+        <li><strong>Challenge Strategies:</strong> The Elite Spire supports Challenge fights between warriors. If you are setting up a challenge fight and want to use a different strategy than your normal fight strategies, you can build a dedicated <strong>Challenge Strategy</strong> for your warrior. Enable the Challenge Mode checkbox on your warrior's strategy page and fill in the challenge strategy table. This strategy will only activate for challenge fight types, your regular strategy remains unchanged for normal Elite Spire bouts.</li>
+        <li><strong>Newsletter:</strong> After each Elite Spire turn, a separate newsletter is generated covering only Elite Spire fights. It has its own champion tracking and standings.</li>
+    </ul>
+
+    <div class="note-block">
+        <h4 style="font-family:'Cinzel',serif; color:#eccfc0;">🐉 The Monster Exception</h4>
+        <p>A warrior pending Elite Spire promotion has the option to queue for a monster fight on their final turn. Two outcomes are possible:</p>
+        <ul style="list-style:none; padding-left:0;">
+            <li><strong>• They die fighting the monster.</strong> The Immortality Shield activates as normal. The monster does not get to keep them. They are promoted to the Elite Spire as planned.</li>
+            <li><strong>• They kill the monster.</strong> A warrior who slays a monster on their final mortal turn ascends to the Monster roster AND proceeds with their Elite Spire promotion. They will appear on both rosters. <strong style="color:#c95a3a;">However, the Monster roster copy is no longer under your control</strong> — it has become a creature of the arena, run by the combat engine like all other monsters. Your manageable warrior is the one in the Elite Spire. This is an extraordinary achievement, but understand the distinction: you gain an Elite Spire warrior, not a monster you can command.</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <!-- PART TWO: THE SOUL SPIRE -->
+    <h2 class="section-title">☠ THE SOUL SPIRE</h2>
+
+    <h3 style="font-family:'Cinzel',serif; font-size:1.3rem; color:#c9a8b0; margin-top:0.2rem;">What Is the Soul Spire?</h3>
+    <p>The Soul Spire is a realm beyond death. Warriors who fall in the normal arena under the right circumstances are not truly gone, they are <em>transcended</em>. Their mortal form is destroyed, but their fighting spirit is summoned by forces beyond the Commission's understanding and deposited in the Soul Spire, where they fight on as something more than human.</p>
+    <p>The Soul Spire operates exactly like the Elite Spire in terms of structure: its own turn schedule, its own newsletter, its own standings. But the warriors who inhabit it arrived through death, not promotion.</p>
+
+    <h3 style="font-family:'Cinzel',serif; font-size:1.2rem; color:#c9a8b0; margin-top:1.2rem;">How Transcendence Works</h3>
+    <p>Transcendence is automatic and instant. There is no "call" or waiting period.</p>
+    <p>When a warrior is slain in combat in the normal arena, the system immediately evaluates them. If they have compiled a record that the Soul Spire deems worthy, enough fights, enough victories, they do not die permanently. Instead:</p>
+    <ul style="list-style:none; padding-left:0; margin:0.6rem 0;">
+        <li>• <span class="inline-code">is_dead</span> is set to <span class="inline-code">False</span> (they are not dead, they have transcended)</li>
+        <li>• <span class="inline-code">current_arena</span> is set to <span class="inline-code">veteran</span></li>
+        <li>• <span class="inline-code">is_promoted</span> is set to <span class="inline-code">True</span></li>
+        <li>• Their HP is fully restored</li>
+        <li>• Their recognition score resets to zero</li>
+    </ul>
+    <p>The newsletter will announce which warriors transcended that turn under the heading <strong>"SOULS SUMMONED TO THE SOUL SPIRE."</strong></p>
+    <p>Like the Elite Spire criteria, the exact record required for transcendence is not published. Some warriors fall short. Others cross the threshold without their managers even realizing how close they were. The Soul Spire does not explain itself.</p>
+
+    <h3 style="font-family:'Cinzel',serif; font-size:1.2rem; color:#c9a8b0; margin-top:1.2rem;">What This Means for You as a Manager</h3>
+    <p>A transcended warrior appears in your normal arena roster as <strong>"☠ TRANSCENDED"</strong>, greyed out with a skull icon. You still need to upload a replacement warrior for the normal arena slot. The transcended warrior is no longer competing there.</p>
+    <p>In the Soul Spire tab of the client, your warrior will appear among the other souls and can be managed like any other advanced arena warrior — Run This Turn checkbox, challenge strategies, all the same tools apply.</p>
+
+    <div class="note-block" style="border-left-color:#7a3f4a;">
+        <h4 style="font-family:'Cinzel',serif; color:#c9a8b0;">🐉 The Monster Exception — Soul Spire</h4>
+        <p>This one works differently than the Elite Spire.</p>
+        <p>A warrior who queues for a monster fight and is killed by the monster has <strong>chosen a different path</strong>. Monster fights are a gamble of supreme personal ambition, kill the monster and join its ranks, or die trying. Warriors who accept that gamble and lose are not claimed by the Soul Spire. They went to the arena seeking glory through a monster's death, not through a career record. The Soul Spire does not collect warriors who fell chasing a different legend.</p>
+        <p><strong style="color:#c95a3a;">In plain terms: if your warrior is killed in a monster fight, they do not transcend to the Soul Spire regardless of their record. They are gone. The monster wins.</strong></p>
+        <p>This also applies to warriors who technically meet the Soul Spire criteria at the time they choose to monster. The moment they enter a monster fight, their transcendence eligibility is suspended for that fight. They either kill the monster and ascend to the Monster roster, or they die permanently.</p>
+    </div>
+
+    <hr>
+
+    <!-- PART THREE: MANAGING ACROSS ARENAS -->
+    <h2 class="section-title">📋 MANAGING ACROSS ARENAS</h2>
+
+    <h3 style="font-family:'Cinzel',serif; font-size:1.2rem; color:#d4a888; margin-top:0.2rem;">Your Roster Across All Arenas</h3>
+    <p>As a manager, you may eventually have warriors spread across multiple arenas simultaneously:</p>
+    <ul style="padding-left:1.8rem; margin:0.6rem 0;">
+        <li>Active warriors in the <strong>Agony Amphitheatre</strong> (normal arena)</li>
+        <li>A warrior in the <strong>Elite Spire</strong></li>
+        <li>A warrior in the <strong>Soul Spire</strong></li>
+    </ul>
+    <p><strong style="color:#c95a3a;">Note:</strong> Warriors who ascend to the Monster roster after slaying a monster are no longer under your management. They have become part of the arena's creature roster, controlled entirely by the combat engine. They are no longer your warriors in any functional sense.</p>
+    <p>Each arena is tracked separately. Records are preserved when warriors move, a warrior promoted to the Elite Spire carries their full fight history with them. Their recognition resets (they start fresh in the new arena's standings), but their record does not disappear.</p>
+
+    <h3 style="font-family:'Cinzel',serif; font-size:1.2rem; color:#d4a888; margin-top:1.2rem;">The "Run This Turn" Checkbox</h3>
+    <p>Both advanced arenas support per-warrior participation control. In the client, each warrior listed under the Elite Spire or Soul Spire tab has a small checkbox labeled <strong>"Run This Turn."</strong> It defaults to checked (active). Unchecking it tells the system to skip that warrior when the next immortal turn runs, they sit out without penalty. Re-check it when you want them fighting again.</p>
+    <p>This is useful for coordinating your advanced arena schedule or simply keeping a warrior on the roster without forcing them to fight every single turn.</p>
+
+    <h3 style="font-family:'Cinzel',serif; font-size:1.2rem; color:#d4a888; margin-top:1.2rem;">Challenge Fights in Advanced Arenas</h3>
+    <p>Challenge fights between managers can be arranged in the advanced arenas. <strong style="color:#c95a3a;">Blood Challenges are not available in the Elite Spire or Soul Spire</strong> — only standard challenges apply.</p>
+    <p>If you want a dedicated strategy for challenge fights, different from your warrior's normal fighting strategy, enable the Challenge Mode flag and fill in the challenge strategy table in the client. That strategy will only activate for challenge fights. Your normal strategy continues to govern all regular bouts.</p>
+
+    <hr>
+
+    <!-- PART FOUR: KEY RULES AT A GLANCE -->
+    <h2 class="section-title">📜 KEY RULES  ·  AT A GLANCE</h2>
+    <table class="rule-table">
+        <tr><td>Warrior meets Elite Spire criteria</td><td>Called to Spire in newsletter; promoted next turn</td></tr>
+        <tr><td>Pending‑promotion warrior is killed in normal arena</td><td>Immortality Shield activates; still promoted</td></tr>
+        <tr><td>Pending‑promotion warrior kills a monster</td><td>Ascends to Monster roster; Elite Spire promotion also proceeds</td></tr>
+        <tr><td>Pending‑promotion warrior dies to a monster</td><td>Immortality Shield activates; still promoted</td></tr>
+        <tr><td>Warrior dies in normal arena with worthy record</td><td>Transcends to Soul Spire; manager needs replacement</td></tr>
+        <tr><td>Warrior dies in monster fight (any record)</td><td>Permanently dead; Soul Spire does not claim them</td></tr>
+        <tr><td>Advanced arena warrior — Run This Turn unchecked</td><td>Sits out next turn; no penalty; flag stays until changed</td></tr>
+        <tr><td>Challenge fight with Challenge Strategy enabled</td><td>Challenge strategy table activates instead of normal strategy</td></tr>
+    </table>
+
+    <!-- A NOTE ON TIMING -->
+    <div class="monster-note">
+        <p><span style="font-size:1.6rem; margin-right:10px;">⏳</span> <strong>A Note on Timing</strong>  —  The advanced arenas do not run on the same schedule as the Agony Amphitheatre. The league commissioner controls when Elite Spire and Soul Spire turns are processed. Do not expect them to sync with normal arena turns. The advanced arenas may run more or less frequently depending on the commissioner's schedule and the number of warriors populating those rosters.</p>
+        <p style="margin-top:0.5rem;">You will be notified through the newsletter when an advanced arena turn has been run.</p>
+    </div>
+
+    <!-- signature / footer -->
+    <div class="signature">
+        <span style="display:inline-block; background:#1f0e09; padding:0.2rem 1.8rem; border-radius:40px; border:1px solid #6b3a28;">
+            ✦ The Gladiatorial Commission · current version ✦
+        </span>
+        <p style="margin-top:1rem; font-size:0.8rem; color:#7a5a4a;"><em>This document covers the advanced arena system as implemented in the current version of Bloodspire. Rules and criteria are subject to commissioner adjustment. The Gladiatorial Commission reserves the right to modify promotion thresholds, transcendence criteria, and scheduling at any time.</em></p>
+    </div>
+
+</div>
+</body>
+</html>
