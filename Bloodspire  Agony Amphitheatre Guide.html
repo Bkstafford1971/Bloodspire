@@ -1,0 +1,2162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLOODSPIRE: The Agony Amphitheatre — Player's Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#150a07;
+    --bg2:#241210;
+    --parchment:#2b1a14;
+    --parchment-light:#3a2419;
+    --blood:#8b1a1a;
+    --blood-bright:#c0392b;
+    --blood-deep:#5c1212;
+    --ember:#e08a3c;
+    --gold:#c9a227;
+    --gold-bright:#e8c46a;
+    --bone:#ece0cc;
+    --bone-dim:#c9b896;
+    --ash:#9a8a78;
+    --steel:#7d8a99;
+    --shadow:#0a0504;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background-color:#140a07;
+    color:var(--bone);
+    font-family:'Crimson Pro',Georgia,serif;
+    font-size:18px;
+    line-height:1.7;
+    background-attachment:fixed;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(120,30,20,0.35), transparent 70%),
+      radial-gradient(circle at 20% 30%, rgba(60,20,12,0.5), transparent 40%),
+      radial-gradient(circle at 85% 60%, rgba(60,20,12,0.4), transparent 45%),
+      linear-gradient(180deg,#1c0d09 0%,#120806 50%,#0a0503 100%);
+  }
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='6' height='6' viewBox='0 0 6 6'><path d='M0 0l6 6M6 0L0 6' stroke='%23000' stroke-opacity='0.06' stroke-width='1'/></svg>");
+    pointer-events:none;z-index:1;mix-blend-mode:multiply;
+  }
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px;position:relative;z-index:2}
+
+  .progress{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--blood-bright),var(--gold-bright));box-shadow:0 0 12px rgba(201,162,39,0.6);z-index:100;transition:width .1s linear}
+
+  .hero{position:relative;text-align:center;padding:96px 24px 76px;overflow:hidden;border-bottom:3px double var(--gold);background:radial-gradient(circle at 50% 30%, rgba(192,57,43,0.25), transparent 60%),linear-gradient(180deg,#1c0d09,#120806)}
+  .hero::after{content:"";position:absolute;inset:0;background-image:repeating-conic-gradient(from 0deg at 50% 130%, rgba(0,0,0,0.22) 0deg 5deg, transparent 5deg 10deg);opacity:.6;pointer-events:none}
+  .hero-rune{font-family:'Uncial Antiqua',serif;letter-spacing:.4em;color:var(--gold);font-size:14px;text-transform:uppercase;margin-bottom:18px;opacity:.9;position:relative;z-index:2}
+  .hero h1{font-family:'Cinzel Decorative',serif;font-weight:900;font-size:clamp(2.8rem,7.5vw,5.6rem);line-height:1;margin:0;color:var(--bone);text-shadow:0 0 36px rgba(192,57,43,0.55),0 2px 0 #3a0d0d,0 6px 16px rgba(0,0,0,0.85);letter-spacing:.02em;position:relative;z-index:2;animation:embers 6s ease-in-out infinite alternate}
+  @keyframes embers{from{filter:drop-shadow(0 0 6px rgba(192,57,43,0.3))}to{filter:drop-shadow(0 0 22px rgba(192,57,43,0.6))}}
+  .hero h1 .accent{color:var(--blood-bright)}
+  .hero-sub{font-family:'Cinzel',serif;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-bright);font-size:clamp(.9rem,2vw,1.3rem);margin-top:24px;position:relative;z-index:2}
+  .hero-tag{max-width:660px;margin:28px auto 0;color:var(--bone-dim);font-style:italic;font-size:1.08rem;position:relative;z-index:2}
+  .hero-divider{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:36px;position:relative;z-index:2}
+  .hero-divider span{height:1px;width:90px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+  .hero-divider svg{color:var(--gold)}
+
+  nav.toc{position:sticky;top:0;z-index:50;background:rgba(18,9,6,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(201,162,39,0.3);box-shadow:0 6px 20px rgba(0,0,0,0.5)}
+  nav.toc .inner{max-width:1100px;margin:0 auto;padding:9px 24px;display:flex;flex-wrap:wrap;gap:2px 12px;justify-content:center}
+  nav.toc a{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--bone-dim);text-decoration:none;padding:6px 9px;border-radius:4px;transition:.2s;position:relative}
+  nav.toc a:hover{color:var(--gold-bright);background:rgba(192,57,43,0.18)}
+  nav.toc a.active{color:var(--gold-bright);background:rgba(192,57,43,0.22)}
+  nav.toc a.active::after{content:"";position:absolute;left:9px;right:9px;bottom:2px;height:1.5px;background:var(--gold-bright)}
+
+  section.part{padding:0;border-bottom:1px solid rgba(201,162,39,0.16)}
+  .part-label{font-family:'Cinzel',serif;color:var(--blood-bright);letter-spacing:.3em;text-transform:uppercase;font-size:.8rem;font-weight:700;margin-bottom:10px}
+  h2.part-title{font-family:'Cinzel Decorative',serif;font-weight:700;font-size:clamp(1.9rem,4.2vw,2.8rem);color:var(--bone);margin:0 0 8px;text-shadow:0 2px 12px rgba(0,0,0,0.6)}
+  .part-rule{height:2px;width:120px;background:linear-gradient(90deg,var(--blood-bright),transparent);margin:0 0 32px}
+  h3{font-family:'Cinzel',serif;font-weight:700;color:var(--gold-bright);font-size:1.5rem;margin:44px 0 14px;letter-spacing:.02em;display:flex;align-items:center;gap:12px;scroll-margin-top:90px}
+  h3::before{content:"";width:10px;height:10px;background:var(--blood-bright);transform:rotate(45deg);box-shadow:0 0 10px rgba(192,57,43,0.7);flex-shrink:0}
+  h4{font-family:'Cinzel',serif;font-weight:600;color:var(--ember);font-size:1.16rem;margin:26px 0 8px;letter-spacing:.03em}
+  h5{font-family:'Cinzel',serif;font-weight:600;color:var(--gold-bright);font-size:1.02rem;margin:22px 0 6px;letter-spacing:.02em}
+  p{margin:0 0 14px}
+  strong{color:var(--gold-bright);font-weight:700}
+  em{color:var(--bone-dim)}
+  a{color:var(--ember)}
+  ul,ol{margin:0 0 18px;padding-left:26px}
+  li{margin-bottom:6px}
+  li::marker{color:var(--blood-bright)}
+  ul ul li::marker{color:var(--ember)}
+
+  .pullquote{position:relative;font-family:'Cinzel Decorative',serif;font-size:1.35rem;line-height:1.5;color:var(--gold-bright);text-align:center;padding:26px 40px;margin:30px auto;max-width:760px}
+  .pullquote::before,.pullquote::after{font-family:'Uncial Antiqua',serif;color:var(--blood-bright);font-size:2.6rem;line-height:0;position:absolute;opacity:.5}
+  .pullquote::before{content:"❝";top:8px;left:0}
+  .pullquote::after{content:"❞";bottom:-6px;right:0}
+
+  .callout{border:1px solid rgba(201,162,39,0.35);background:linear-gradient(180deg,rgba(58,36,25,0.6),rgba(43,26,20,0.4));border-left:4px solid var(--blood-bright);padding:16px 20px;margin:18px 0;border-radius:2px;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.3)}
+  .callout.gold{border-left-color:var(--gold)}
+  .callout.blood{border-left-color:var(--blood-bright);background:linear-gradient(180deg,rgba(92,18,18,0.45),rgba(43,26,20,0.4))}
+  .callout p:last-child{margin-bottom:0}
+
+  .screenshot{margin:5px 0;border:1px dashed rgba(201,162,39,0.4);background:repeating-linear-gradient(45deg,rgba(0,0,0,0.18) 0 10px,rgba(58,36,25,0.18) 10px 10px);padding:10px;text-align:center;color:var(--ash);font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;border-radius:2px}
+	.screenshot::before{content:"";filter:grayscale(1)}
+
+	/* Added rule to fit the screenshot inside the box */
+	.screenshot img {
+	  max-width: 100%;
+	  height: auto;
+	  display: block;
+	  margin: 0 auto;
+	  object-fit: contain;
+	}
+
+  .table-wrap{overflow-x:auto;margin:22px 0;border-radius:2px}
+  table{width:100%;border-collapse:collapse;font-size:.98rem;background:rgba(43,26,20,0.5)}
+  th,td{padding:12px 14px;text-align:left;border-bottom:1px solid rgba(201,162,39,0.18);vertical-align:top}
+  th{font-family:'Cinzel',serif;color:var(--gold-bright);text-transform:uppercase;letter-spacing:.06em;font-size:.82rem;background:rgba(139,26,26,0.28);border-bottom:2px solid var(--gold)}
+  tbody tr:nth-child(even) td{background:rgba(0,0,0,0.12)}
+  tbody tr:hover td{background:rgba(192,57,43,0.12)}
+  td strong{color:var(--ember)}
+
+  /* CODE BLOCKS (newsletter examples) */
+  .codeblock{font-family:'Courier New',ui-monospace,monospace;background:rgba(0,0,0,0.5);border:1px solid rgba(201,162,39,0.28);border-left:3px solid var(--blood-bright);padding:14px 16px;border-radius:2px;overflow-x:auto;font-size:.78rem;line-height:1.55;color:var(--bone-dim);white-space:pre;margin:14px 0;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.4)}
+  .codeblock .hdr{font-family:'Cinzel',serif;color:var(--gold-bright);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;display:block}
+
+  .attr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;margin:22px 0}
+  .attr-card{border:1px solid rgba(201,162,39,0.3);background:linear-gradient(180deg,rgba(58,36,25,0.7),rgba(30,16,12,0.6));padding:16px;border-radius:3px;border-top:3px solid var(--blood-bright);transition:transform .2s,box-shadow .2s}
+  .attr-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,0.5)}
+  .attr-card .ab{font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:var(--gold-bright);display:flex;justify-content:space-between;align-items:baseline}
+  .attr-card .ab small{font-family:'Cinzel',serif;font-size:.7rem;color:var(--ash);letter-spacing:.1em}
+  .attr-card p{font-size:.95rem;margin-top:8px}
+
+  .build-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:22px 0}
+  .build-card{border:1px solid rgba(201,162,39,0.3);background:linear-gradient(160deg,rgba(58,36,25,0.65),rgba(20,10,7,0.6));padding:20px;border-radius:3px;transition:transform .2s,box-shadow .2s}
+  .build-card:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,0.55)}
+  .build-card h4{margin-top:0}
+  .build-card .tag{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--blood-bright)}
+
+  .race-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:22px 0}
+  .race-card{border:1px solid rgba(201,162,39,0.25);background:rgba(43,26,20,0.55);padding:14px 16px;border-radius:3px;transition:.2s}
+  .race-card:hover{border-color:var(--gold);background:rgba(58,36,25,0.7);transform:translateY(-2px)}
+  .race-card .rname{font-family:'Cinzel',serif;color:var(--ember);font-weight:700;font-size:1.1rem}
+
+  .style-row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+  .chip{font-family:'Cinzel',serif;font-size:.82rem;padding:6px 12px;border-radius:2px;border:1px solid rgba(201,162,39,0.4);background:rgba(139,26,26,0.18);color:var(--bone);transition:.15s}
+  .chip:hover{background:rgba(192,57,43,0.4);border-color:var(--blood-bright)}
+  .chip.def{background:rgba(125,138,153,0.15);border-color:var(--steel);color:var(--bone)}
+  .chip.def:hover{background:rgba(125,138,153,0.4)}
+  .chip.gold{background:rgba(201,162,39,0.15);border-color:var(--gold);color:var(--gold-bright)}
+
+  .faq{margin:14px 0;padding:0 0 6px;border-bottom:1px solid rgba(201,162,39,0.12)}
+  .faq .q{font-family:'Cinzel',serif;font-weight:600;color:var(--gold-bright);margin:0 0 4px;font-size:1.02rem}
+  .faq .q::before{content:"Q  ";color:var(--blood-bright);font-weight:900}
+  .faq .a::before{content:"A  ";color:var(--ember);font-weight:700;font-family:'Cinzel',serif}
+  .faq .a{margin:0 0 14px}
+
+  .tier-ladder{display:flex;flex-wrap:nowrap;align-items:stretch;gap:0;margin:24px 0;overflow-x:auto;border:1px solid rgba(201,162,39,0.2);border-radius:3px}
+  .tier-step{flex:1 0 auto;min-width:96px;padding:14px 8px;text-align:center;position:relative;background:linear-gradient(180deg,rgba(58,36,25,0.6),rgba(20,10,7,0.5));border-right:1px solid rgba(0,0,0,0.5)}
+  .tier-step:last-child{border-right:0}
+  .tier-step .tn{font-family:'Cinzel',serif;font-weight:700;color:var(--gold-bright);font-size:.9rem}
+  .tier-step .tr{font-size:.76rem;color:var(--ash);margin-top:3px}
+  .tier-step.champ{background:linear-gradient(180deg,rgba(201,162,39,0.3),rgba(139,26,26,0.4))}
+  .tier-step.champ .tn{color:var(--gold-bright);text-shadow:0 0 8px rgba(201,162,39,0.5)}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:760px){.two{grid-template-columns:1fr}}
+
+  details.part{padding:0;border-bottom:1px solid rgba(201,162,39,0.16)}
+  details.part[open] > summary .chev{transform:rotate(90deg)}
+  summary.summary{list-style:none;cursor:pointer;padding:64px 0 22px;display:flex;align-items:baseline;gap:18px;border:none;transition:.2s}
+  summary.summary::-webkit-details-marker{display:none}
+  summary.summary:hover .part-title{color:var(--gold-bright)}
+  summary.summary .chev{font-family:'Cinzel',serif;color:var(--blood-bright);font-size:1.3rem;transition:transform .3s;flex-shrink:0}
+  summary.summary .head-wrap{flex:1}
+  .part-rule{margin-top:8px}
+  details.part .content{padding:0 0 26px}
+
+  .totop{position:fixed;bottom:24px;right:24px;z-index:80;width:46px;height:46px;border-radius:50%;background:linear-gradient(180deg,rgba(139,26,26,0.9),rgba(92,18,18,0.9));border:1px solid var(--gold);color:var(--gold-bright);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.6);opacity:0;pointer-events:none;transition:.3s;font-size:1.3rem}
+  .totop.show{opacity:1;pointer-events:auto}
+  .totop:hover{transform:translateY(-3px)}
+
+  footer{text-align:center;padding:64px 24px 90px;color:var(--ash);font-style:italic;border-top:3px double var(--gold);margin-top:34px;background:linear-gradient(180deg,rgba(20,10,7,0.6),#0a0503);position:relative;z-index:2}
+  footer .seal{font-family:'Cinzel Decorative',serif;color:var(--gold);font-size:1.4rem;margin-bottom:16px}
+
+  hr.flourish{border:0;height:20px;background:radial-gradient(circle at 50% 50%, var(--gold) 3px, transparent 4px) no-repeat center;margin:40px 0}
+  .divider{display:flex;align-items:center;justify-content:center;gap:14px;margin:38px 0}
+  .divider span{height:1px;flex:1;max-width:220px;background:linear-gradient(90deg,transparent,rgba(201,162,39,0.5),transparent)}
+  .divider .diamond{width:9px;height:9px;background:var(--gold);transform:rotate(45deg);box-shadow:0 0 8px rgba(201,162,39,0.5)}
+  .lead{font-size:1.13rem;color:var(--bone)}
+
+  @media print{.progress,.totop,nav.toc{display:none}body{background:#fff;color:#1a0d0a}details.part > .content,details.part{break-inside:avoid-page}.hero{padding:30px 0}section.part{padding:20px 0}.callout,.attr-card,.build-card,.race-card,.codeblock{background:#fff;color:#1a0d0a;border:1px solid #999}a{color:#5c1212}}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-rune">⚔ Et Sanguis Vocat ⚔</div>
+    <h1>BLOOD<span class="accent">SPIRE</span></h1>
+    <div class="hero-sub">The Agony Amphitheatre</div>
+    <p class="hero-tag">A Complete Player's Guide to the Normal Arena — where warriors begin their careers, bleed for recognition, and dream of the crown.</p>
+    <div class="hero-divider"><span></span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2 7h7l-5.5 4 2 7L12 16l-5.5 4 2-7L3 9h7z"/></svg>
+      <span></span></div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="inner">
+    <a href="#p1" data-target="p1">1 · Getting Started</a>
+    <a href="#p2" data-target="p2">2 · Character Creation</a>
+    <a href="#p3" data-target="p3">3 · Team Management</a>
+    <a href="#p4" data-target="p4">4 · Combat</a>
+    <a href="#p5" data-target="p5">5 · Advancement</a>
+    <a href="#p6" data-target="p6">6 · Champion System</a>
+    <a href="#p7" data-target="p7">7 · Special Events</a>
+    <a href="#p8" data-target="p8">8 · Turn Cycle</a>
+    <a href="#p9" data-target="p9">9 · Quick Reference</a>
+    <a href="#p10" data-target="p10">10 · Appendices</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ===================== PART 1 ===================== -->
+<details class="part" id="p1" open>
+  <summary class="summary"><span class="chev">▶</span><span class="head-wrap"><div class="part-label">Part I</div><h2 class="part-title">Getting Started</h2><div class="part-rule"></div></span></summary>
+  <div class="content">
+  <h3>Welcome to Bloodspire</h3>
+  <p class="lead">Bloodspire is not a simple game. It is a living arena of warriors, each with their own stats, histories, wounds, and dreams of glory. You are a manager — a director of champions, a builder of legends, a strategist on the grandest stage. Your warriors will bleed, will triumph, will sometimes fall. And you will decide their fate.</p>
+  <p>The <strong>Agony Amphitheatre</strong> is the heart of the arena — the normal arena where warriors begin their careers and where the bulk of the action happens. It is brutal, competitive, and unforgiving. It is also where the greatest stories are born.</p>
+  <p>This guide covers everything you need to know to compete effectively in the normal arena.</p>
+
+  <div class="pullquote">Commitment matters. Every choice echoes through your warrior's career.</div>
+
+  <h3>The Three-Arena Hierarchy</h3>
+  <p>Bloodspire features three distinct arenas:</p>
+  <ul>
+    <li><strong>The Agony Amphitheatre (Normal Arena):</strong> Where your career begins. Standard warriors compete for recognition and glory.</li>
+    <li><strong>The Elite Spire:</strong> The pinnacle for living warriors. Only the most accomplished are called here.</li>
+    <li><strong>The Soul Spire:</strong> Where the mightiest fallen are reborn. Only warriors who die with legendary records transcend here.</li>
+  </ul>
+  <p>This guide focuses on the Normal Arena. If your warriors ever ascend to the advanced arenas, a separate guide covers those systems.</p>
+
+  <h3>Your Role as Manager</h3>
+  <p>As a manager, you control:</p>
+  <ul>
+    <li><strong>Team composition:</strong> Which 5 warriors you field each turn</li>
+    <li><strong>Equipment:</strong> What weapons, armor, and helms your warriors wield</li>
+    <li><strong>Strategy:</strong> How your warriors fight (tactics, styles, triggers)</li>
+    <li><strong>Training:</strong> What skills and attributes your warriors develop</li>
+    <li><strong>Challenges:</strong> Which opponents you seek out</li>
+    <li><strong>Special requests:</strong> Retirement, monster hunts, and personal avoidances</li>
+  </ul>
+  <p>You do <strong>NOT</strong> control:</p>
+  <ul>
+    <li>Fight outcomes (those are determined by combat engine)</li>
+    <li>Opponent selection (matchmaking uses your tier and history)</li>
+    <li>Individual combat decisions (strategies fire automatically)</li>
+  </ul>
+
+  <h3>The Client Interface</h3>
+  <a href="https://8upload.com" target="_blank"><img src="https://i.8upload.com/image/d819abfb2a21f36f/manager-selected.png" title="Upload Images For FREE!"></a>
+  <p>The client is organized as a <strong>hierarchical tree view on the left side</strong> and <strong>context-specific tabs on the right side</strong>. What you see on the right depends on what you select on the left.</p>
+
+  <h4>Left Panel (Tree View)</h4>
+  <p>The tree shows your manager account and all associated data in a hierarchy:</p>
+  <ul>
+    <li>Your manager name (root node)
+      <ul>
+        <li>Teams (your active teams)
+          <ul><li>Warriors (warriors in each team)</li></ul>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>Right Panel (Context Tabs)</h4>
+  <p>Tabs change based on your selection.</p>
+
+  <div class="callout gold"><p><strong>If you select your MANAGER NAME, you see:</strong></p></div>
+  <ul>
+    <li><strong>Account Tab:</strong> Manager profile, settings, contact info</li>
+    <li><strong>Newsletter Tab:</strong> Arena-wide announcements, turn results, championship news, transcendences</li>
+    <li><strong>Scouting Tab:</strong> Scout specific warriors to gather intelligence reports</li>
+    <li><strong>Legacy Tab:</strong> Archived teams and historical records (replaced teams only)</li>
+    <li><strong>Proving Grounds Tab:</strong> Manager statistics dashboard — your record vs other managers, race performance, race vs race matchups, and weapon effectiveness</li>
+    <li><strong>New Team Tab:</strong> Create a new team (when available)</li>
+  </ul>
+
+  <div class="callout gold"><p><strong>If you select a TEAM name, you see:</strong></p></div>
+  <ul>
+    <li><strong>Team name and Record</strong> (W-L-K display)</li>
+    <li><strong>Team number</strong> (unique identifier)</li>
+    <li><strong>Last turn ran</strong> (when this team last fought)</li>
+    <li><strong>Run This Turn checkbox</strong> (whether this team participates in the upcoming turn)</li>
+    <li><strong>Replace Team option</strong> (retire this team and start fresh with new warriors)</li>
+  </ul>
+  <p>When you replace a team, the original moves to the Legacy section (permanently retired). A new team takes its place with fresh rollup warriors ready to train.</p>
+
+  <div class="callout gold"><p><strong>If you select a WARRIOR, you see multiple tabs:</strong></p></div>
+  <ul>
+    <li><strong>Stats/Strats Tab:</strong> Warrior's complete profile including race, gender, height, weight, attributes, strategies, equipment, training slots, and injuries</li>
+    <li><strong>Fight Options Tab:</strong> Special fight requests and career summary (retirement options, monster fight requests, warrior career statistics)</li>
+    <li><strong>Fights Tab:</strong> History of all this warrior's bouts</li>
+    <li><strong>Challenges Tab:</strong> Pending and active challenges involving this warrior</li>
+    <li><strong>Replacement Tab:</strong> Replace this warrior with a new one (appears when warrior is dead)</li>
+    <li><strong>The Crypts Tab:</strong> Graveyard data for fallen warriors (if applicable)</li>
+    <li><strong>Shady Pines Tab:</strong> Retirement home for retired warriors (if applicable)</li>
+  </ul>
+
+  <h3>The Upload Process</h3>
+  <p>Bloodspire operates on a turn cycle:</p>
+  <ul>
+    <li><strong>OPEN:</strong> You can make changes and upload your teams. This is your window to adjust before fights happen.</li>
+    <li><strong>PROCESSING:</strong> The arena is running. Fights are taking place. No uploads allowed.</li>
+    <li><strong>RESULTS READY:</strong> All fights are done. Results available. Next turn's OPEN window begins.</li>
+  </ul>
+
+  <h4>Multiple Teams</h4>
+  <p>Managers can control up to <strong>5 teams simultaneously</strong>, with <strong>5 warriors per team</strong> (up to 25 warriors total). Each team uploads independently.</p>
+
+  <h4>What You Upload</h4>
+  <p>When you upload a team, you send the server:</p>
+  <ul>
+    <li>Your 5 active warriors' complete state per team</li>
+    <li>All gear, strategies, training queues per warrior</li>
+    <li>Personal preferences (avoidances, retirements, monster requests, Run This Turn flags)</li>
+  </ul>
+
+  <h4>Validation & Re-uploading</h4>
+  <p>The server validates all uploads to prevent cheating (checks stats, equipment legality, training consistency, etc.). Your team is locked in when the turn RUNS, but you can make modifications and re-upload as many times as needed during the OPEN phase. This allows you to:</p>
+  <ul>
+    <li>Change strategies after researching opponents</li>
+    <li>Adjust training queues based on recent results</li>
+    <li>Modify equipment loadouts</li>
+    <li>Update challenge requests</li>
+    <li>Re-submit if you made a mistake</li>
+  </ul>
+  <p>Keep uploading and adjusting until you're satisfied. Only when the turn begins (PROCESSING phase) is everything locked in.</p>
+
+  <h3>Navigating the Client: Detailed Tab Reference</h3>
+  <p>Beyond the basic tree view and upload process, the client offers many specialized tabs for different purposes. Here's what each one does:</p>
+
+  <h4>Manager-Level Tabs (Click your manager name on the tree)</h4>
+
+  <p><strong>Account Tab:</strong><br>
+  Your manager profile and settings. This includes:</p>
+  <ul>
+    <li>Your manager name and account ID</li>
+    <li>Contact information and preferences</li>
+    <li>League settings you've customized</li>
+    <li>Account creation date and current season standing</li>
+  </ul>
+
+  <p><strong>Newsletter Tab:</strong><br>
+  Arena-wide announcements and turn results. Shows:</p>
+  <ul>
+    <li>Current-turn fight results and highlights</li>
+    <li>Championship announcements and title defenses</li>
+    <li>Deaths and retirements of notable warriors</li>
+    <li>Tier promotions and major achievements</li>
+    <li>Transcendences to advanced arenas (if applicable)</li>
+    <li>Commentary and arena flavor text</li>
+  </ul>
+  <p>This is where you follow the arena's ongoing story and see your fight results.</p>
+
+  <p><strong>Scouting Tab:</strong><br>
+  Scout up to 3 warriors per arena to gather detailed intelligence. Your dedicated scout provides:</p>
+  <ul>
+    <li>Full scouting report with warrior overview</li>
+    <li>Equipment assessment (weapons, armor, helms)</li>
+    <li>Physical assessment and strategic analysis</li>
+    <li>Fighting style breakdown with tactical insights</li>
+    <li>Skills observed in action</li>
+    <li>Threat level and tactical recommendations</li>
+    <li>Complete blow-by-blow fight log from a witnessed bout</li>
+  </ul>
+  <p>Use these reports to understand opponent strengths and weaknesses before challenging or facing them.</p>
+
+  <p><strong>Legacy Tab:</strong><br>
+  Archive of retired teams only. Contains:</p>
+  <ul>
+    <li>Teams you've permanently retired (via Replace Team option)</li>
+    <li>Their complete fight records and historical data</li>
+    <li>Seasonal performance and achievements</li>
+    <li>Career summaries and notable moments</li>
+  </ul>
+  <p>This is your personal history book. Only teams that have been replaced appear here.</p>
+
+  <p><strong>Proving Grounds Tab:</strong><br>
+  Detailed statistics dashboard for YOUR manager. Shows:</p>
+  <ul>
+    <li><strong>vs Manager Record:</strong> Head-to-head records against every other manager</li>
+    <li><strong>Performance by Warrior Race:</strong> How each race (Human, Elf, Half-Orc, etc.) performs in your roster</li>
+    <li><strong>Race vs Race Performance:</strong> How your races perform against opposing races</li>
+    <li><strong>Weapon Performance:</strong> Statistics on how different weapons perform in your warriors' hands</li>
+  </ul>
+  <p>All statistics are specific to your manager — they track your team's performance across dimensions. Use this to identify strengths (certain races or weapons that work well for you) and weaknesses (races or weapons that underperform) to inform future warrior creation and equipment choices.</p>
+
+  <p><strong>New Team Tab:</strong><br>
+  Create a new team (when you have available slots). This tab only appears if you have fewer than 5 teams. When creating a new team:</p>
+  <ul>
+    <li>Option to generate 5 new warriors with rollup stats</li>
+    <li>Name your new team</li>
+    <li>Assign team to the active roster</li>
+    <li>Choose team color/symbol (cosmetic)</li>
+  </ul>
+  <p>You can create new teams at any time, as long as you don't exceed 5 teams on your active roster.</p>
+
+  <hr class="flourish">
+
+  <h4>Warrior-Level Tabs (Click a specific warrior on the tree)</h4>
+
+  <p><strong>Stats/Strats Tab:</strong><br>
+  Complete warrior information and management center. Shows:</p>
+  <ul>
+    <li><strong>Identity:</strong> Warrior name, race, gender, height, and weight</li>
+    <li><strong>Combat Stats:</strong> All six attributes (STR, DEX, CON, INT, PRE, SIZ) with current values</li>
+    <li><strong>Record:</strong> Fight record (Wins-Losses-Kills), tier, and recognition score</li>
+    <li><strong>Equipment:</strong> Current primary/secondary weapons, armor, and helm</li>
+    <li><strong>Skills:</strong> All trained skills with current levels (0-9)</li>
+    <li><strong>Strategies:</strong> All active strategies with triggers and settings</li>
+    <li><strong>Training:</strong> Up to 3 training slots to queue skill/attribute advancement</li>
+    <li><strong>Injuries:</strong> Permanent injuries by body location with severity levels</li>
+    <li><strong>Popularity:</strong> Current popularity score</li>
+  </ul>
+  <p>This is your one-stop overview for a warrior's complete state. Edit strategies, equipment, and training from here.</p>
+
+  <p><strong>Fight Options Tab:</strong><br>
+  Configure special fight requests and view your warrior's career summary. Includes:</p>
+  <ul>
+    <li><strong>Want Retire Flag:</strong> Request retirement after this turn's fight (for 50+ fight warriors)</li>
+    <li><strong>Want Monster Fight Flag:</strong> Opt-in to a monster fight this turn (ultra-rare and dangerous)</li>
+    <li><strong>Warrior Career Summary:</strong> Displays total fights, current popularity, retirement eligibility status, and current win/loss streak</li>
+  </ul>
+  <p>Make changes here and upload to lock them in for the turn.</p>
+
+  <p><strong>Fights Tab:</strong><br>
+  Complete fight history with record summary and fight details. Shows:</p>
+  <ul>
+    <li><strong>Record Summary:</strong> Warrior's overall record (Wins-Losses-Kills) and total fight count</li>
+    <li><strong>Fight List:</strong> Table with columns for each fight:
+      <ul>
+        <li><strong>Turn:</strong> Which turn the fight occurred</li>
+        <li><strong>Opponent:</strong> Name of opposing warrior</li>
+        <li><strong>Manager:</strong> Manager who controls the opponent</li>
+        <li><strong>Race:</strong> Opponent's race</li>
+        <li><strong>Result:</strong> Win or loss</li>
+        <li><strong>Kill:</strong> Whether the fight resulted in a kill</li>
+        <li><strong>Duration:</strong> Fight length in minutes</li>
+      </ul>
+    </li>
+    <li><strong>Fight Log Button:</strong> Access the full narrative blow-by-blow of any fight</li>
+  </ul>
+  <p>Scroll through this to see your warrior's journey. Click any fight's log button to read the detailed combat narrative.</p>
+
+  <p><strong>Challenges Tab:</strong><br>
+  Issue challenges to other warriors and manage avoidances. Shows:</p>
+  <ul>
+    <li><strong>Challenge Range:</strong> Your warrior's eligible tier range and current recognition score</li>
+    <li><strong>Avoid Managers:</strong> Block up to 2 specific managers from challenging your warrior</li>
+    <li><strong>Avoid Warriors:</strong> Block up to 2 specific warriors from challenging your warrior</li>
+    <li><strong>Available to Challenge:</strong> List of warriors within appropriate challenge range for your warrior
+      <ul>
+        <li>Each warrior has a button to select them for a challenge</li>
+        <li>You can issue up to 3 challenges per warrior per turn</li>
+      </ul>
+    </li>
+  </ul>
+  <p>Use this to strategically challenge opponents and avoid unwanted matchups.</p>
+
+  <p><strong>Replacement Tab:</strong><br>
+  Create a replacement warrior when a slot becomes vacant. Features:</p>
+  <ul>
+    <li><strong>Standard Rollup:</strong> Generate warrior with random stat distribution</li>
+    <li><strong>One-Time Re-roll Option:</strong> Re-roll the initial rollup if you don't like the numbers (can only use once per replacement)</li>
+    <li>If you use the re-roll, you must accept and use those values</li>
+  </ul>
+  <p>This tab only appears when a warrior slot is vacant (when a warrior dies, retires, or is promoted to an advanced arena).</p>
+
+  <p><strong>The Crypts Tab:</strong><br>
+  Archive of fallen warriors for this team. Shows expandable list of slain warriors with:</p>
+  <ul>
+    <li><strong>Final Statistics:</strong> Snapshot of final attributes, skills, and permanent injuries</li>
+    <li><strong>Final Record:</strong> Complete win/loss/kill record at time of death</li>
+    <li><strong>Slain By:</strong> Name of the warrior who defeated them</li>
+    <li><strong>Historical Fight Logs:</strong> Access to full narrative fight log details</li>
+  </ul>
+  <p>Click to expand any warrior to view their complete final state and read detailed fight narratives from their career.</p>
+
+  <p><strong>Shady Pines Tab:</strong><br>
+  Archive of retired warriors for this team. Shows expandable list of retired warriors with:</p>
+  <ul>
+    <li><strong>Final Statistics:</strong> Snapshot of final attributes, skills, and permanent injuries</li>
+    <li><strong>Final Record:</strong> Complete win/loss/kill record at time of retirement</li>
+    <li><strong>Historical Fight Logs:</strong> Access to full narrative fight log details</li>
+  </ul>
+  <p>Retirement eligibility begins at 50 fights, but retirement is optional. You can retire a warrior anytime after they reach 50 fights. Most retired warriors are those who didn't achieve Elite Spire promotion (often due to win percentage requirements), though warriors on a hot streak could still earn promotion. Display is identical to the Crypts tab, except without a "Slain By" field.</p>
+  </div>
+</details>
+
+<!-- ===================== PART 2 ===================== -->
+<details class="part" id="p2" open>
+  <summary class="summary"><span class="chev">▶</span><span class="head-wrap"><div class="part-label">Part II</div><h2 class="part-title">Character Creation</h2><div class="part-rule"></div></span></summary>
+  <div class="content">
+  <h3>Building Your First Warrior</h3>
+  <p class="lead">Every warrior begins the same way: you design them from scratch. Name them. Choose their race. Distribute your starting attributes. Equip them with basic gear. And send them into the arena.</p>
+  <p>This is the most important decision you'll make. Your choices here shape your warrior's entire career path.</p>
+
+  <h3>The Six Core Attributes</h3>
+  <p>Every warrior is defined by six base attributes. The rollup process starts with 55 base points distributed across all 6 attributes (range 3-25 per stat), then you add 16 points to customize (max +7 per stat). Your final attribute total is 71 points. Warriors can improve attributes later through training (except SIZ, which is fixed forever).</p>
+  <a href="https://8upload.com" target="_blank"><img src="https://i.8upload.com/image/40ceee88940d3b9e/create-new-team.png" title="Upload Images For FREE!"></a>
+
+  <div class="attr-grid">
+    <div class="attr-card">
+      <div class="ab">Strength <small>STR</small></div>
+      <p>Your warrior's raw physical power.</p>
+      <ul>
+        <li>High STR = more damage, ability to carry heavy weapons and armor</li>
+        <li>Low STR = lighter hits, restrictions on equipment weight</li>
+        <li>Warriors with insufficient STR to wield equipment suffer penalties</li>
+      </ul>
+    </div>
+    <div class="attr-card">
+      <div class="ab">Dexterity <small>DEX</small></div>
+      <p>Speed, coordination, and reflexes.</p>
+      <ul>
+        <li>High DEX = bonus to initiative rolls, better accuracy, higher dodge chance</li>
+        <li>Low DEX = penalty to initiative rolls, worse accuracy, easier to hit</li>
+        <li>The most combat-relevant stat for action frequency in combat</li>
+      </ul>
+    </div>
+    <div class="attr-card">
+      <div class="ab">Constitution <small>CON</small></div>
+      <p>Endurance and physical resilience.</p>
+      <ul>
+        <li>High CON = more HP, more stamina, better resistance to injury</li>
+        <li>Low CON = fragile, tires quickly, injury-prone</li>
+        <li>Affects training success for attributes</li>
+      </ul>
+    </div>
+    <div class="attr-card">
+      <div class="ab">Intelligence <small>INT</small></div>
+      <p>Learning speed and mental acuity.</p>
+      <ul>
+        <li>High INT = skills train faster and more reliably, better tactical grasp</li>
+        <li>Low INT = slower learning, higher chance of training failure</li>
+        <li>Affects training success for all skills</li>
+      </ul>
+    </div>
+    <div class="attr-card">
+      <div class="ab">Presence <small>PRE</small></div>
+      <p>Charisma and force of personality.</p>
+      <ul>
+        <li>High PRE = better chance of intimidating foes at fight start, higher recognition gains</li>
+        <li>Low PRE = harder to cow opponents, slower fame accumulation</li>
+        <li>Determines concede appeal chances (mercy when badly wounded)</li>
+      </ul>
+    </div>
+    <div class="attr-card">
+      <div class="ab">Size <small>SIZ</small></div>
+      <p>Physical dimensions and frame.</p>
+      <ul>
+        <li>High SIZ = more HP, better weight capacity for equipment</li>
+        <li>Low SIZ = fragile, can't carry as much gear</li>
+        <li>CANNOT be trained later — fixed at creation forever</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Distributing Your Points</h3>
+  <p>Character creation happens in two stages:</p>
+  <ul>
+    <li><strong>Stage 1 - Random Rollup:</strong> Your warrior gets a random distribution of 55 points across all 6 attributes. Each attribute starts between 3 and 25. You cannot control this rollup — it's determined by chance. (This is where the re-roll option from the Replacement Tab comes in handy if you don't like the numbers.)</li>
+    <li><strong>Stage 2 - Customization:</strong> You receive 16 additional points to allocate strategically. You can add up to 7 points to any single attribute to shape your build. Your final total across all 6 attributes will be 71 points.</li>
+  </ul>
+
+  <h3>Build Strategy: Your Combat Identity</h3>
+  <p>Your stat distribution choices define how your warrior fights. Think strategically about what role you want them to fill:</p>
+
+  <div class="build-grid">
+    <div class="build-card">
+      <div class="tag">Aggressive · Damage Dealer</div>
+      <h4>High STR + High DEX</h4>
+      <ul>
+        <li><strong>Strength:</strong> Hit hard and hit often. Win fights quickly before endurance becomes a factor.</li>
+        <li><strong>Weakness:</strong> Fragile. Low CON means fewer HP and easier to injure. Struggles in long grinds.</li>
+        <li><strong>Strategy fit:</strong> Fast-paced aggressive styles (Total Kill, Lunge, Bash). Light armor for mobility.</li>
+        <li><strong>Playstyle:</strong> Dominate early minutes. Risk everything on decisive striking.</li>
+        <li><strong>Risk:</strong> If opponent survives the onslaught and tires you out, you lose.</li>
+      </ul>
+    </div>
+    <div class="build-card">
+      <div class="tag">Defensive · Tank</div>
+      <h4>High CON + High SIZ</h4>
+      <ul>
+        <li><strong>Strength:</strong> Absorb punishment. Outlast opponents in attrition fights. Hard to kill.</li>
+        <li><strong>Weakness:</strong> Slower actions per minute. Fewer chances to attack. May get outlasted by faster opponents.</li>
+        <li><strong>Strategy fit:</strong> Defensive styles (Parry, Defend, Counterstrike). Heavy armor for protection.</li>
+        <li><strong>Playstyle:</strong> Survive and respond. Let opponent exhaust themselves. Win via superior endurance.</li>
+        <li><strong>Risk:</strong> Cannot close out fights quickly. If opponent is also tanky, fights become stalemates.</li>
+      </ul>
+    </div>
+    <div class="build-card">
+      <div class="tag">Tactical · Genius</div>
+      <h4>High INT + Balanced others</h4>
+      <ul>
+        <li><strong>Strength:</strong> Train faster. Learn new skills quicker than rivals. Outsmart through preparation.</li>
+        <li><strong>Weakness:</strong> No immediate combat advantage. Early career is slower.</li>
+        <li><strong>Strategy fit:</strong> Complex strategy designs with multiple triggers. Adaptive responses.</li>
+        <li><strong>Playstyle:</strong> Invest in knowledge. Build elaborate strategy trees. Control fights through adaptation.</li>
+        <li><strong>Risk:</strong> Raw stats matter in arena. Smarts don't substitute for physical capability.</li>
+      </ul>
+    </div>
+    <div class="build-card">
+      <div class="tag">Charismatic · Leader</div>
+      <h4>High PRE + Moderate others</h4>
+      <ul>
+        <li><strong>Strength:</strong> Gain recognition faster. Intimidate opponents at fight start. Better concede appeal chances.</li>
+        <li><strong>Weakness:</strong> PRE doesn't directly win fights. Social advantages are secondary.</li>
+        <li><strong>Strategy fit:</strong> Works with any style, but shines with champion-hunt strategies.</li>
+        <li><strong>Playstyle:</strong> Climb reputation quickly. Challenge upward. Become famous.</li>
+        <li><strong>Risk:</strong> Fame without capability gets you knocked down. PRE helps but doesn't guarantee wins.</li>
+      </ul>
+    </div>
+    <div class="build-card" style="grid-column:1/-1">
+      <div class="tag">Versatile · Balanced</div>
+      <h4>Moderate everything</h4>
+      <ul>
+        <li><strong>Strength:</strong> Flexible. Can adapt to any playstyle. No glaring weaknesses.</li>
+        <li><strong>Weakness:</strong> Master of none. No standout advantage. Slower specialization than focused builds.</li>
+        <li><strong>Strategy fit:</strong> Works with standard strategies. Versatile gear choices.</li>
+        <li><strong>Playstyle:</strong> Jack-of-all-trades approach. Steady, reliable progression.</li>
+        <li><strong>Risk:</strong> Specialized opponents will outperform you in their domain.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Making Your Choice</h3>
+  <p><strong>Ask yourself:</strong></p>
+  <ul>
+    <li>Do I want to win fights fast or win through endurance?</li>
+    <li>Do I prefer reactive defense or proactive offense?</li>
+    <li>Do I want to climb tiers quickly or build a legendary warrior?</li>
+    <li>What strategy am I comfortable designing — simple or complex?</li>
+  </ul>
+  <p>Your stat distribution shapes your answer. There is no "correct" build — only builds that match your playstyle and strategy. Test different combinations across multiple warriors. Over time you'll discover what resonates with you.</p>
+
+  <h3>Race Selection</h3>
+  <p>Ten playable races exist, each with a distinct identity and combat flavor.</p>
+  <div class="screenshot"></div>
+  <p>Each race brings inherent bonuses and penalties to combat. These are NOT numerical bonuses you can see — they are woven into how damage is calculated, how armor works, how their weapons land. You will discover them through play.</p>
+
+  <div class="race-grid">
+    <div class="race-card"><div class="rname">Human</div><p>The baseline. Versatile. Middle-ground stats and capabilities. No particular strength or weakness.</p></div>
+    <div class="race-card"><div class="rname">Half-Orc</div><p>Physically powerful but socially awkward. Stronger damage output, but dodges less reliably.</p></div>
+    <div class="race-card"><div class="rname">Halfling</div><p>Small and nimble. Excellent dodge and evasion. Weaker physical hits.</p></div>
+    <div class="race-card"><div class="rname">Dwarf</div><p>Tough and stubborn. Exceptional HP and armor resilience. Can wear heavier gear than other races. Slower.</p></div>
+    <div class="race-card"><div class="rname">Half-Elf</div><p>Versatile and capable. Good all-around stats with slight edge in weapon handling. No major weaknesses or strengths.</p></div>
+    <div class="race-card"><div class="rname">Elf</div><p>Elegant and deadly. Masters of dual-wielding. Exceptional dodge and evasion. Extremely fragile with weaker raw damage.</p></div>
+    <div class="race-card"><div class="rname">Goblin</div><p>Cunning and fast. High initiative and action frequency. Fragile.</p></div>
+    <div class="race-card"><div class="rname">Gnome</div><p>Clever and quick. Similar to Goblins but slightly more well-rounded. Trains quickly.</p></div>
+    <div class="race-card"><div class="rname">Lizardfolk</div><p>Exotic and alien. Different combat feel. Thick scales provide armor-like resilience.</p></div>
+    <div class="race-card"><div class="rname">Tabaxi</div><p>Feline warrior. Excellent reflexes and speed. Unique flavor in combat.</p></div>
+  </div>
+  <p>Each race has a visual identity. Your warrior's appearance reflects their heritage. This is narrative flavor — part of the fun is seeing how your chosen race looks in action.</p>
+
+  <h3>Gender & Appearance</h3>
+  <p>Choose male or female. This is cosmetic only — no combat mechanical difference. It affects your warrior's appearance, height, and weight (within the natural variance for your race and size).</p>
+
+  <h3>The Luck Factor (A Mystery)</h3>
+  <p>Every warrior is born with an invisible luck value between 1 and 30. You cannot see this. You cannot influence it at creation. It is pure chance.</p>
+  <p>Luck affects how your warrior performs relative to their stats. Lucky warriors (25-30) seem to perform better than numbers suggest. Unlucky warriors (1-5) underperform. Most warriors (10-20) perform exactly as expected.</p>
+  <p>Over time, your warriors' true luck reveals itself in their fight records. Some warriors seem blessed. Others cursed. This is Bloodspire's randomness — the element that keeps the game fresh and unpredictable.</p>
+
+  <h3>Naming Your Warrior</h3>
+  <p>Choose a name. Be creative, be serious, be silly — your warrior carries this name forever (unless they die and are replaced).</p>
+  <p><strong>Naming Rules:</strong></p>
+  <ul>
+    <li>Names must be 25 characters or fewer</li>
+    <li>Avoid numbers and special characters</li>
+    <li>Keep it pronounceable</li>
+    <li>This name appears in newsletters and fight results</li>
+  </ul>
+
+  <h3>Your First Warrior is Ready</h3>
+  <p>Once created, your warrior is locked in. They will be added to your roster immediately. Next turn, when fights happen, they will fight.</p>
+  <p>You cannot edit a warrior once created. You cannot reset their attributes or change their race. The only way to start over is to let them die and create a replacement.</p>
+  <div class="callout"><p><strong>This is by design. Commitment matters.</strong></p></div>
+  </div>
+</details>
+
+<!-- ===================== PART 3 ===================== -->
+<details class="part" id="p3" open>
+  <summary class="summary"><span class="chev">▶</span><span class="head-wrap"><div class="part-label">Part III</div><h2 class="part-title">Team Management</h2><div class="part-rule"></div></span></summary>
+  <div class="content">
+  <h3>Your Roster</h3>
+  <p>You manage exactly 5 warriors per team at all times. No more, no fewer per team.</p>
+  <p>Since you can manage up to 5 teams simultaneously, you could have up to 25 active warriors total (5 teams × 5 warriors). But each individual team always maintains exactly 5 warriors.</p>
+  <p>When a warrior dies, retires, ascends to the Monster roster, or is promoted to the Elite Spire arena, their slot opens on that team. You must create a replacement warrior to fill the empty slot.</p>
+  <div class="callout"><p><strong>Important:</strong> If you do not upload a replacement, your team cannot fight. Empty slots prevent that team from participating in turns until filled with a new warrior.</p></div>
+  <a href="https://8upload.com" target="_blank"><img src="https://i.8upload.com/image/d0819dad4cc9eb7c/warrior-selected.png" title="Upload Images For FREE!"></a>
+
+  <h3>The Upload Cycle</h3>
+  <p>After you make any changes (new warrior, gear update, strategy change, training queue), you must upload your team to the server in order for those changes to be applied.</p>
+  <div class="callout"><p><strong>Important:</strong> Changes made locally in your client do not take effect until you upload them to the server. The server only knows about the last version you uploaded.</p></div>
+
+  <h4>When you upload:</h4>
+  <ul>
+    <li>You send the server your entire team's state</li>
+    <li>The server validates it (checks for cheating, wrong stats, tampered records)</li>
+    <li>This upload becomes the version the server will use for that team when the turn runs</li>
+    <li>You can upload as many times as you want during the OPEN phase — each new upload overwrites the previous one</li>
+  </ul>
+
+  <h4>What happens if you don't upload:</h4>
+  <ul>
+    <li>Your last upload's state is used for that team (provided you have 5 active, living warriors)</li>
+    <li>If a team has an empty slot (dead/retired/promoted warrior), that team cannot fight until you create a replacement and upload</li>
+    <li><strong>Per-team uploads:</strong> Each team uploads independently. You could have 4 complete teams fighting and 1 team sitting out waiting for a replacement — the 4 complete teams still fight even if the 5th team is incomplete</li>
+  </ul>
+
+  <h4>After the turn:</h4>
+  <ul>
+    <li>Download your results</li>
+    <li>You'll see the updated state of all your warriors (new wins/losses, recognition changes, training success/failure, new injuries)</li>
+    <li>Any deaths are recorded</li>
+    <li>Your local copy is updated with server's version</li>
+  </ul>
+  <p>Uploads are the heartbeat of Bloodspire. They lock in your decisions. Treat them seriously.</p>
+
+  <h3>The Actions Menu and Preferences Menu</h3>
+  <p>The client interface has two critical menus accessed from the top menu bar:</p>
+
+  <h4>Actions Menu (Dropdown)</h4>
+  <p>This is where you'll find Upload and Download buttons, plus team management options:</p>
+  <ul>
+    <li><strong>New Team (max 5):</strong> Create a new team if you have available slots</li>
+    <li><strong>Account Settings...:</strong> Manage your account preferences</li>
+    <li><strong>Upload:</strong> Send your team state to the server (lock in your decisions for this turn)</li>
+    <li><strong>Download:</strong> Retrieve your turn results after turn completes</li>
+    <li><strong>Redownload Newsletter:</strong> Pull the arena newsletter if you missed it</li>
+    <li><strong>↑ Upload to Elite Spire:</strong> Send Elite Spire warrior updates to server</li>
+    <li><strong>↺ Download Elite Spire Results:</strong> Get results from Elite Spire fights</li>
+    <li><strong>↑ Upload to Soul Spire:</strong> Send Soul Spire warrior updates to server</li>
+    <li><strong>↺ Download Soul Spire Results:</strong> Get results from Soul Spire fights</li>
+  </ul>
+
+  <h4>Preferences Menu</h4>
+  <p>Configure local client settings and save file management:</p>
+  <ul>
+    <li><strong>☐ Hide W-L-K Record:</strong> Toggle to hide/show your win-loss-kill statistics</li>
+    <li><strong>📦 Restore from ZIP...:</strong> Emergency restore if a turn download fails. The admin will send you a ZIP file containing your fight results and team files. Save the ZIP somewhere on your PC (do not unzip it), click this option, browse to the file, and the client will extract and place files correctly.</li>
+    <li><strong>🔄 Refresh Game Data...:</strong> Sync weapon, skill, armor, helm, and trigger names from server. Only needed if the admin changes game data (rare).</li>
+    <li><strong>Saves Folder:</strong> Manage where your local save files are stored
+      <ul>
+        <li><strong>Current:</strong> Shows your current saves folder location</li>
+        <li><strong>📁 Change Folder...:</strong> Point to a different folder for your saves</li>
+        <li><strong>✓ Save Current Folder:</strong> Lock in your current folder choice</li>
+        <li><strong>🔄 Reset Save Folder...:</strong> Return to default saves folder</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>Equipping Your Warriors</h3>
+  <p>Every warrior has four gear slots:</p>
+  <ul>
+    <li><strong>Primary Weapon:</strong> Your main fighting tool. Can be any of 44 weapons, or bare fists (Open Hand). Affects damage output and attack speed.</li>
+    <li><strong>Secondary Weapon:</strong> Your off-hand tool. Can be a shield, another weapon, or bare fists.</li>
+    <li><strong>Helm:</strong> Head protection. Ranges from none to full helm. Provides defense to head location, but can restrict vision.</li>
+    <li><strong>Armor:</strong> Body protection. Ranges from cloth to full plate. Provides broad defense but adds weight and sluggishness.</li>
+  </ul>
+  <a href="https://8upload.com" target="_blank"><img src="https://i.8upload.com/image/f23e52913d46544c/weapon-selectpng.png" title="Upload Images For FREE!"></a>
+
+  <h3>Weapons: The 48 Tools of War</h3>
+  <p>You have 48 weapons to choose from, organized by category:</p>
+  <ul>
+    <li><strong>Swords &amp; Knives:</strong> Fast, accurate, classic. Good all-around damage and action frequency.</li>
+    <li><strong>Axes &amp; Picks:</strong> Medium speed, good damage, armor-piercing (ignores heavy armor defenses).</li>
+    <li><strong>Hammers &amp; Maces:</strong> Slower, crushing damage, good for knockdowns and stunning.</li>
+    <li><strong>Polearms &amp; Spears:</strong> Long reach, defensive, some can perform charge attacks.</li>
+    <li><strong>Flails:</strong> Medium speed, bypass shields (wrap around defenses), can sweep.</li>
+    <li><strong>Staves:</strong> Slow, high damage, good for sweeping attacks, good for defensive styles.</li>
+    <li><strong>Shields:</strong> Can be primary or off-hand. Increase parry chance and defense rolls. Deal damage on hit and enable shield rushes and shield bashes. Versatile defensive tool.</li>
+    <li><strong>Oddities:</strong> Nets, cestus, and rare weapons with unique properties.</li>
+  </ul>
+  <p>Each weapon has weight, speed, damage, and special properties. Your warrior's STR determines if they can wield each weapon without penalty.</p>
+  <div class="callout gold"><p><strong>Strength Requirements:</strong> Higher STR = access to heavier weapons. A warrior with STR 8 cannot effectively wield a full plate or two-handed axe (too heavy). They suffer accuracy and speed penalties. Your gear should match your stats.</p></div>
+
+  <h3>Armor &amp; Helms: Defense vs. Mobility Trade-off</h3>
+  <p>Armor provides defense (damage reduction) but adds weight and sluggishness.</p>
+
+  <h4>Armor Progression</h4>
+  <ul>
+    <li><strong>Cloth/Leather:</strong> Light, fast, minimal defense</li>
+    <li><strong>Cuir Boulli/Brigandine:</strong> Medium, moderate defense</li>
+    <li><strong>Scale/Chain:</strong> Heavy, good defense, moves slower</li>
+    <li><strong>Half-Plate/Full Plate:</strong> Maximum defense, maximum weight penalty</li>
+  </ul>
+
+  <h4>Helm Progression</h4>
+  <ul>
+    <li><strong>None/Cap:</strong> No defense, maximum mobility</li>
+    <li><strong>Steel Cap/Helm:</strong> Light defense</li>
+    <li><strong>Camail/Full Helm:</strong> Maximum defense, vision restricted</li>
+  </ul>
+  <p>Heavier armor adds penalties to initiative rolls, causing slower reactions. Light armor allows faster initiative rolls. Match armor to your strategy: aggressive warriors benefit from light gear for better initiative, defensive warriors accept slower reactions in exchange for defense.</p>
+  <p>Match armor to your strategy. Aggressive warriors want light gear. Defensive warriors want heavy.</p>
+  <div class="callout gold"><p><strong>Dwarf Exception:</strong> Dwarves can equip one tier of armor above their normal STR limit without penalty. This is their racial advantage — they're built for heavy metal.</p></div>
+
+  <h3>Backup Weapons</h3>
+  <p>Optionally, carry a third weapon as backup. If your primary or secondary weapon breaks or is disarmed during a fight, you automatically draw your backup.</p>
+  <p>This is situational. Most warriors skip it. Some defensive builds include one.</p>
+
+  <h3>Challenge Strategies</h3>
+  <p>Challenge Mode is optional. It allows you to build an alternate strategy table that activates only if your challenge is successful.</p>
+  <p><strong>How it works:</strong></p>
+  <ul>
+    <li>You enable the Challenge Mode checkbox for a warrior</li>
+    <li>You fill in a separate strategy table (challenge strategies)</li>
+    <li>If that warrior successfully gets a challenge match (the challenge is accepted), those challenge strategies are used for that fight</li>
+    <li>If the challenge is not accepted or the warrior faces other opponents, the normal strategy table is used instead</li>
+  </ul>
+  <div class="callout"><p><strong>Example:</strong> Warrior Bob decides to challenge Warrior Joe. Bob wants to use an aggressive strategy specifically tuned for Joe for that challenge match. Bob enables Challenge Mode and builds a special strategy for that matchup. If Bob gets the challenge match against Joe, the challenge strategies fire for that fight. If the challenge isn't accepted or Bob faces a different opponent, Bob's normal strategies govern the fight.</p></div>
+  <p>This is useful for preparing special tactics against known rivals.</p>
+  <a href="https://8upload.com" target="_blank"><img src="https://i.8upload.com/image/f29c6d3e0ec43915/challenge-mode-strategy.png" title="Upload Images For FREE!"></a>
+
+  <h3>Manager Avoidance: Dodging Rivals</h3>
+  <p>You can avoid up to 2 opposing managers. The system tries to prevent auto-matchups against them and also works to prevent those managers from successfully challenging you (roughly 25-30% success rate).</p>
+  <p>This does not guarantee you'll never face them. Matchmaking is complex. But it reduces the likelihood of matchups against avoided managers through both random pairing and challenge prevention.</p>
+  <div class="callout"><p><strong>Important:</strong> Avoidances remain in your list until you manually remove them. They do not reset between turns. Update your avoidance list whenever you want to change who you're avoiding.</p></div>
+
+  <h3>Warrior Avoidance: Dodging Specific Foes</h3>
+  <p>Each warrior can avoid up to 2 opposing warriors by name. This prevents them from being directly challenged by those foes, but does not prevent random matchmaking.</p>
+  <p>Use this to avoid opponents who have a specific counter to your build.</p>
+  </div>
+</details>
+
+<!-- ===================== PART 4 ===================== -->
+<details class="part" id="p4" open>
+  <summary class="summary"><span class="chev">▶</span><span class="head-wrap"><div class="part-label">Part IV</div><h2 class="part-title">Understanding Combat</h2><div class="part-rule"></div></span></summary>
+  <div class="content">
+  <h3>The Arena and the Spectacle</h3>
+  <p>When your warrior steps into the Agony Amphitheatre, they face one of six possible opponents:</p>
+  <ol>
+    <li><strong>Standard Match:</strong> Random peer warrior</li>
+    <li><strong>Challenge:</strong> Opponent you or they chose directly</li>
+    <li><strong>Blood Challenge:</strong> Vengeance fight available after a teammate is killed (within 3-turn window)</li>
+    <li><strong>Champion Challenge:</strong> High-ranking warrior (EXPERT or ELITE tier) challenging the sitting champion</li>
+    <li><strong>Monster Fight:</strong> Fight against a legendary creature. Risky, high-reward scenario used to test a warrior's true strength or eliminate underperforming warriors. Victory means ascension to the Monster roster; defeat means death.</li>
+    <li><strong>Peasant Bout:</strong> Filler match when no real opponents available</li>
+  </ol>
+
+  <h3>Matchmaking and Ranking</h3>
+  <p>Every warrior has a <strong>Tier</strong> based on their Recognition (prestige score).</p>
+  <!-- <div class="screenshot">Tier Ranking Display showing RECRUIT → ROOKIE → INITIATE → ADEPT → VETERAN → EXPERT → ELITE → CHAMPION progression</div> -->
+
+  <div class="tier-ladder">
+    <div class="tier-step"><div class="tn">RECRUIT</div><div class="tr">0–12</div></div>
+    <div class="tier-step"><div class="tn">ROOKIE</div><div class="tr">13–25</div></div>
+    <div class="tier-step"><div class="tn">INITIATE</div><div class="tr">26–40</div></div>
+    <div class="tier-step"><div class="tn">ADEPT</div><div class="tr">41–55</div></div>
+    <div class="tier-step"><div class="tn">VETERAN</div><div class="tr">56–70</div></div>
+    <div class="tier-step"><div class="tn">EXPERT</div><div class="tr">71–86</div></div>
+    <div class="tier-step"><div class="tn">ELITE</div><div class="tr">87–99</div></div>
+    <div class="tier-step champ"><div class="tn">CHAMPION</div><div class="tr">is_champion</div></div>
+  </div>
+
+  <p><strong>Tier Progression (approx.):</strong></p>
+  <ul>
+    <li><strong>RECRUIT:</strong> Your newest warriors, 0-12 recognition</li>
+    <li><strong>ROOKIE:</strong> Early-career warriors, 13-25 recognition</li>
+    <li><strong>INITIATE:</strong> Developing warriors, 26-40 recognition</li>
+    <li><strong>ADEPT:</strong> Competent warriors, 41-55 recognition</li>
+    <li><strong>VETERAN:</strong> Seasoned warriors, 56-70 recognition</li>
+    <li><strong>EXPERT:</strong> Accomplished warriors, 71-86 recognition</li>
+    <li><strong>ELITE:</strong> Elite warriors, 87-99 recognition</li>
+    <li><strong>CHAMPION:</strong> Determined by an external flag (is_champion), not tied to recognition score. Can be achieved at any recognition level by defeating the sitting champion.</li>
+  </ul>
+
+  <p><strong>Matching Rules:</strong></p>
+  <ul>
+    <li>You can challenge your own tier or one tier above</li>
+    <li>Matchmaking tries to pair similar experience levels</li>
+    <li>Avoids rematches from the last 3 turns when possible</li>
+    <li>Champion challenges are restricted to the top 2 populated tiers in the arena (Blood Challenges can bypass this restriction if a deceased teammate's killer is the champion)</li>
+  </ul>
+  <p>Climbing tiers takes time. Your first warriors will spend their early career in RECRUIT, earning respect fight by fight.</p>
+
+  <h3>The Fight Itself</h3>
+  <!-- <div class="screenshot">Live Fight Progress Bar showing HP, Endurance, Minutes Elapsed, Action Log</div> -->
+  <p>Most fights are completed in under 5 minutes. After 7 minutes, the referee will begin to intervene to try to speed up the process.</p>
+
+  <p><strong>Combat flow:</strong></p>
+  <ol>
+    <li>Warrior strategies are evaluated for triggering conditions</li>
+    <li>Initiative rolls determine who attacks on each action</li>
+    <li>Attacking warrior attempts to hit defending warrior</li>
+    <li>Defending warrior attempts to dodge or parry</li>
+    <li>If hit lands, damage is calculated and applied</li>
+    <li>Warriors take actions based on their active strategy</li>
+    <li>Endurance (stamina) is consumed with each action</li>
+    <li>Process continues until a warrior falls to exhaustion, dies, or successfully concedes</li>
+  </ol>
+
+  <p><strong>Speed &amp; Action Frequency:</strong><br>
+  Warriors with high DEX and trained initiative skills have better bonuses on initiative rolls. Initiative rolls determine who attacks on each action, so higher DEX increases your chances to attack first and control the pace of combat.</p>
+
+  <h3>Combat Mechanics: The Hidden Dance</h3>
+
+  <h4>Hit &amp; Miss</h4>
+  <p>Your attack succeeds or fails based on the margin between your attack roll and their defense roll. These rolls incorporate:</p>
+  <ul>
+    <li>Weapon skill levels</li>
+    <li>Base attributes (DEX for accuracy, STR for weapon control)</li>
+    <li>Armor penalties (heavy armor makes dodging harder)</li>
+    <li>Strategy choices (defensive strategies are harder to hit)</li>
+  </ul>
+
+  <h4>Damage</h4>
+  <p>When you hit, damage is calculated based on:</p>
+  <ul>
+    <li>Your weapon (base damage varies widely)</li>
+    <li>Your STR (higher STR = more damage)</li>
+    <li>Weapon skill level (trained skills hit harder)</li>
+    <li>Opponent's armor (heavy armor blocks more damage)</li>
+  </ul>
+
+  <h4>Knockdowns</h4>
+  <p>Certain weapons and fighting styles can knock your opponent down. The knockdown action itself causes damage (minimal but meaningful). Being on the ground doesn't cause continuous damage, but multiple knockdowns throughout a fight can add up. Ground-fighting is brief but can turn momentum. Knockdowns matter more in longer fights where repeated knockdowns accumulate damage.</p>
+
+  <h4>Injuries</h4>
+  <p>When you get hit hard enough, you can suffer injuries to specific body locations (head, chest, arms, legs, etc.). Injuries persist and reduce combat effectiveness. Worse injuries (level 7-8) are severely crippling. Level 9 injuries are fatal (warrior dies immediately).</p>
+
+  <h4>Endurance (Stamina)</h4>
+  <p>Each action burns endurance. Higher activity levels burn faster. As endurance depletes, your actions slow and accuracy suffers. You become vulnerable.</p>
+
+  <h4>Weapon Disarm</h4>
+  <p>Certain weapons (nets, swordbreaker, ball-and-chain) can disarm opponents. A disarmed warrior loses weapon damage but can still fight with fists.</p>
+
+  <h4>Armor-Piercing</h4>
+  <p>Certain weapons (picks, scythes) ignore heavy armor defenses. If your opponent is in full plate and you wield an armor-piercing weapon, the armor is less protective.</p>
+
+  <h3>Strategy: The Brain of Your Warrior</h3>
+  <p>Your warriors follow pre-programmed strategies that fire automatically based on fight conditions.</p>
+  <!-- <div class="screenshot">Strategy Editing Interface with Trigger Dropdown and Fighting Style Selector</div> -->
+
+  <p><strong>Strategy Structure:</strong><br>
+  Each strategy has 5 components:</p>
+  <ol>
+    <li><strong>Trigger:</strong> WHEN does this strategy activate?</li>
+    <li><strong>Fighting Style:</strong> HOW does your warrior fight when this triggers?</li>
+    <li><strong>Activity Level:</strong> AGGRESSION level (0-9)</li>
+    <li><strong>Aim Point:</strong> WHERE do they try to hit?</li>
+    <li><strong>Defense Point:</strong> WHERE do they prioritize protecting?</li>
+  </ol>
+
+  <h4>Triggers (41 total)</h4>
+  <ul>
+    <li><strong>Time-based:</strong> "During minute 1-10" (specific minute triggers)</li>
+  </ul>
+  <p><strong>Fatigue-based:</strong></p>
+  <ul>
+    <li>"You are very tired" (75% endurance burned)</li>
+    <li>"You are somewhat tired" (50% endurance burned)</li>
+    <li>"You are slightly tired" (25% endurance burned)</li>
+    <li>"Opponent is very tired" (opponent's 75% burned)</li>
+    <li>Similar for "somewhat" and "slightly"</li>
+  </ul>
+  <p><strong>Damage-based:</strong></p>
+  <ul>
+    <li>"You have taken heavy damage" (50%+ HP lost)</li>
+    <li>"You have taken medium damage" (20-50% HP lost)</li>
+    <li>"You have taken slight damage" (5-20% HP lost)</li>
+    <li>"Your opponent has taken heavy damage" (50%+ HP lost)</li>
+    <li>"Your opponent has taken medium damage" (20-50% HP lost)</li>
+    <li>"Your opponent has taken slight damage" (5-20% HP lost)</li>
+  </ul>
+  <p><strong>Combat State:</strong></p>
+  <ul>
+    <li>"You are on the ground" (after knockdown)</li>
+    <li>"You are weaponless" (weapon disarmed or dropped)</li>
+    <li>"You have specific weapon equipped" (sword, axe, etc.)</li>
+    <li>"You have throwable weapons" (0, 1, or 2+)</li>
+  </ul>
+  <p><strong>Opponent Armor:</strong></p>
+  <ul>
+    <li>"Your opponent is wearing light armor"</li>
+    <li>"Your opponent is wearing medium armor"</li>
+    <li>"Your opponent is wearing heavy armor"</li>
+  </ul>
+  <p><strong>Fight Type:</strong></p>
+  <ul>
+    <li>"You have been challenged" (responding to specific challenge)</li>
+    <li>"You initiated a challenge"</li>
+    <li>"Opponent blood-challenged you"</li>
+  </ul>
+  <p><strong>Always (Fallback):</strong> Matches if nothing above triggers</p>
+
+  <h4>Fighting Styles (15 total)</h4>
+  <p><strong>Aggressive Styles (8):</strong></p>
+  <div class="style-row">
+    <span class="chip">Total Kill</span>
+    <span class="chip">Wall of Steel</span>
+    <span class="chip">Lunge</span>
+    <span class="chip">Bash</span>
+    <span class="chip">Slash</span>
+    <span class="chip">Strike</span>
+    <span class="chip">Martial Combat</span>
+    <span class="chip">Opportunity Throw</span>
+  </div>
+  <ul>
+    <li><strong>Total Kill:</strong> Pure offense, all-in damage</li>
+    <li><strong>Wall of Steel:</strong> Constant attacks, shield bashing</li>
+    <li><strong>Lunge:</strong> High-risk charging attacks</li>
+    <li><strong>Bash:</strong> Hammer/mace focused, knockdown attempts</li>
+    <li><strong>Slash:</strong> Blade-focused, deep cuts</li>
+    <li><strong>Strike:</strong> Precise strong hits</li>
+    <li><strong>Martial Combat:</strong> Unarmed/brawling focus</li>
+    <li><strong>Opportunity Throw:</strong> Ranged thrown-weapon focus</li>
+  </ul>
+
+  <p><strong>Defensive Styles (7):</strong></p>
+  <div class="style-row">
+    <span class="chip def">Parry</span>
+    <span class="chip def">Defend</span>
+    <span class="chip def">Sure Strike</span>
+    <span class="chip def">Calculated Attack</span>
+    <span class="chip def">Counterstrike</span>
+    <span class="chip def">Engage &amp; Withdraw</span>
+    <span class="chip def">Decoy</span>
+  </div>
+  <ul>
+    <li><strong>Parry:</strong> Active blade-defense</li>
+    <li><strong>Defend:</strong> Cautious, damage-avoidance focused</li>
+    <li><strong>Sure Strike:</strong> Conservative accurate hits</li>
+    <li><strong>Calculated Attack:</strong> Methodical, less frequent attacks</li>
+    <li><strong>Counterstrike:</strong> Wait-and-react, punish openings</li>
+    <li><strong>Engage &amp; Withdraw:</strong> Hit-and-run tactics</li>
+    <li><strong>Decoy:</strong> Confuse and evade</li>
+  </ul>
+
+  <h4>Activity Level (0-9)</h4>
+  <ul>
+    <li><strong>0</strong> = Minimal actions, extreme defense, burns little endurance</li>
+    <li><strong>5</strong> = Balanced (default)</li>
+    <li><strong>9</strong> = Maximum actions, extreme offense, burns endurance fast</li>
+  </ul>
+  <p>Activity level influences your initiative rolls each minute. Higher activity levels improve your initiative roll (faster reactions, more attacks). Lower activity levels worsen your initiative roll (slower reactions, fewer attacks) but conserve endurance.</p>
+
+  <h4>Aim &amp; Defense Points</h4>
+  <p>Head, Chest, Abdomen, Primary Arm, Secondary Arm, Primary Leg, Secondary Leg, None (no specific focus)</p>
+  <p>Choose where you try to strike (aim) and where you prioritize protection (defense). Some strategies focus on specific locations.</p>
+
+  <h4>How Strategies Work in Practice</h4>
+  <p>Strategies are evaluated top-to-bottom. The first matching trigger activates that strategy, and it stays active until a higher-order strategy's trigger becomes true and overrides it.</p>
+  <div class="callout"><p><strong>Important:</strong> Trigger order matters. If you have overlapping triggers (like "Heavy Damage" and "Medium Damage"), you must order them carefully:</p>
+  <ul>
+    <li>Triggers further UP the list have priority over triggers below them</li>
+    <li>A trigger lower in the list won't fire if a trigger above it would catch the same condition</li>
+    <li>Example: If you list "Medium Damage" (50%+ HP lost) ABOVE "Heavy Damage" (75%+ HP lost), the medium damage trigger will catch both cases. Heavy damage will never fire. Reverse the order so Heavy fires first when met.</li>
+  </ul></div>
+
+  <h4>Example Scenario</h4>
+  <p>Warrior has 3 strategies (in order):</p>
+  <ul>
+    <li>Strat 1: "When opponent heavily armored" → Bash, Activity 7, Aim: Legs</li>
+    <li>Strat 2: "When you've taken 50%+ damage" → Defend, Activity 2, Aim: None</li>
+    <li>Strat 3: "Always" → Strike, Activity 5, Aim: Chest</li>
+  </ul>
+  <p><strong>Action 1 onwards:</strong> Opponent is in full plate. Strat 1's trigger is true and remains true the entire fight. Strat 1 activates and stays active. Strategy 2 and 3 are never evaluated because the engine always uses the highest-priority strategy whose trigger is true. Warrior bashes aggressively at opponent's legs for the entire fight.</p>
+  <p><strong>Why Strat 2 never fires:</strong> Even if the warrior takes 60% damage, Strat 2's trigger is ignored because Strat 1 (higher priority) is still true. The engine doesn't drop down to lower-priority strategies while a higher-priority trigger remains active.</p>
+  <p><strong>Correct Scenario with Strat 2 firing:</strong> Strategy 1 is "When you've taken heavy damage" (heavy armor defensive mode), Strategy 2 is "Opponent is heavily armored" (heavy armor strategy). When you first take heavy damage, Strat 1 activates. While Strat 1's trigger remains true (you're still at heavy damage), it stays active. Once heavy damage threshold is no longer met, Strat 1's trigger becomes false, and the system checks Strat 2. If the opponent is still heavily armored, Strat 2 fires and governs the fight.</p>
+  <p><strong>Your job:</strong> Design strategies with triggers that won't trap you. Order them carefully so higher-priority tactics fire when needed. Always have a "Always" fallback at the bottom.</p>
+
+  <h3>Intimidation: The Presence Advantage</h3>
+  <p>Warriors with high Presence (14+) can intimidate their opponents at fight start.</p>
+  <p>If you have high PRE and your opponent doesn't, there's a small chance your warrior intimidates them, causing them to lose initiative in the first minute. You get the upper hand from the opening bell.</p>
+  <p>This is rare but real. High-PRE warriors have an edge.</p>
+
+  <h3>Concede Appeal: Mercy in Defeat</h3>
+  <p>When a warrior is badly wounded (at or below 15% HP), they can beg for mercy.</p>
+  <p>This is a PRE-based roll. High-PRE warriors have better chances of receiving mercy (opponent concedes the fight). Low-PRE warriors rarely get it.</p>
+  <p>This is not something you control — it fires automatically if your warrior is dying. But it adds drama. Sometimes the underdog begs their way out.</p>
+
+  <h3>The Champion System: Prestige Beyond Tiers</h3>
+  <p>At the top of the rankings sits ONE champion — determined by the is_champion flag. The champion holds the highest honor in the arena and is featured in every newsletter.</p>
+
+  <p><strong>Champion Selection Logic:</strong><br>
+  The Gladiatorial Commission uses the following rules to determine championship status:</p>
+  <ol>
+    <li><strong>Direct Challenge:</strong> If a warrior defeats the sitting champion in combat, they immediately become the new champion</li>
+    <li><strong>Stripped Champion:</strong> If the Gladiatorial Commission strips a champion's title (for bullying), a new champion is selected from the recognition leader(s)</li>
+    <li><strong>Champion Sits Out:</strong> If the sitting champion doesn't fight this turn (or is promoted to Elite arena), the highest-recognition warrior becomes champion</li>
+    <li><strong>Champion Fought:</strong> If the sitting champion fought this turn and wasn't defeated, they retain the title</li>
+  </ol>
+
+  <p><strong>Tie-Breaker Cascade</strong> (when warriors are tied at highest recognition):<br>
+  When selecting a new champion and multiple warriors are tied at the highest recognition level, the following cascade resolves the tie:</p>
+  <ol>
+    <li><strong>Most Kills</strong> — warrior with the highest kill count</li>
+    <li><strong>Most Wins</strong> — warrior with the most victories</li>
+    <li><strong>Fewest Losses</strong> — warrior with the lowest loss count</li>
+    <li><strong>Highest Popularity</strong> — warrior with the best crowd favor rating</li>
+    <li><strong>Alphabetical by Name</strong> — final tie-breaker (guarantees a single champion)</li>
+  </ol>
+
+  <p>Only warriors in the top 2 populated tiers of your arena can challenge the champion. You must climb high to take a shot at the crown.</p>
+  <div class="callout"><p><strong>The Bullying Penalty:</strong> If the champion blood-challenges a much weaker opponent (40+ recognition gap), they commit a "bullying offense." Each offense escalates the Gladiatorial Commission's chance to strip the title (15% → 32% → 49% → 65% per turn, capped at 65%).</p></div>
+  <p>This encourages champions to defend against worthy opponents, not prey on weaklings.</p>
+  </div>
+</details>
+
+<!-- ===================== PART 5 ===================== -->
+<details class="part" id="p5" open>
+  <summary class="summary"><span class="chev">▶</span><span class="head-wrap"><div class="part-label">Part V</div><h2 class="part-title">Advancement &amp; Progression</h2><div class="part-rule"></div></span></summary>
+  <div class="content">
+  <h3>Recognition: Your Warrior's Resume</h3>
+  <p>Recognition (prestige score) is the number that determines your tier and your standing in the arena.</p>
+  <!-- <div class="screenshot">Recognition Tracker in Character Sheet</div> -->
+
+  <p><strong>How You Gain Recognition:</strong></p>
+  <ul>
+    <li>Win a fight: +3 to +5 recognition</li>
+    <li>Beat a more-experienced opponent: bonus +1 to +3 (underdog bonus)</li>
+    <li>Crush an opponent decisively (health, speed, knockdowns): bonus +1 to +3</li>
+    <li>Kills: slightly higher gains than regular wins</li>
+    <li>High popularity: Warriors with many fans gain more per win</li>
+  </ul>
+
+  <p><strong>How You Lose Recognition:</strong></p>
+  <ul>
+    <li>Lose a fight: -3 recognition (minimum)</li>
+    <li>Lose to a weaker opponent: penalty -1 to -4 (underdog reversal)</li>
+    <li>Lose quickly or badly: larger losses</li>
+    <li>Go down fighting (show courage in defeat): +1 to +2 credit</li>
+  </ul>
+  <p>Your recognition number slowly climbs as you win more than you lose. Tier progression is automatic — when you hit certain recognition thresholds, you advance tiers.</p>
+
+  <h3>Training: The Long Grind</h3>
+  <p>Warriors improve through training. Each turn, you can queue up to 3 training sessions per warrior.</p>
+  <a href="https://8upload.com" target="_blank"><img src="https://i.8upload.com/image/1353c67d11a2b3b6/training-queue.png" title="Upload Images For FREE!"></a>
+
+  <p><strong>Training Options:</strong></p>
+  <p>You can train:</p>
+  <ul>
+    <li><strong>Skills (60 total):</strong> 16 non-weapon + 44 weapon-specific</li>
+    <li><strong>Attributes (5 trainable):</strong> STR, DEX, CON, INT, PRE (SIZ is fixed forever)</li>
+  </ul>
+
+  <p><strong>Training Success:</strong><br>
+  Training is not guaranteed. Higher Intelligence (INT) increases success chance when training skills. Higher Constitution (CON) increases success chance when training attributes. Humans and Gnomes train slightly faster at both.</p>
+  <p>As warriors improve, training gets harder. A warrior with Dodge 0 trains easily. A warrior with Dodge 8 trains very slowly.</p>
+
+  <p><strong>Time Investment:</strong><br>
+  A warrior early in their career can gain multiple skill levels per turn if lucky. Late-career warriors might gain 1 level per turn on high skills. Attribute training is slower overall.</p>
+  <p>Building a perfect warrior takes many turns (dozens to hundreds of fights).</p>
+
+  <h3>The 16 Non-Weapon Skills</h3>
+  <p><strong>Combat Skills (11):</strong></p>
+  <ul>
+    <li><strong>Dodge:</strong> Better defensive rolls, fewer hits taken</li>
+    <li><strong>Parry:</strong> Active blade defense, block attacks</li>
+    <li><strong>Throw:</strong> Ranged attack damage (used in Opportunity Throw style)</li>
+    <li><strong>Charge:</strong> Polearm-based charging attacks (enhanced damage on charge)</li>
+    <li><strong>Lunge:</strong> High knockdown chance if lands (devastating but risky)</li>
+    <li><strong>Disarm:</strong> Ability to disarm opponent's weapon</li>
+    <li><strong>Initiative:</strong> Act first in turn order, control fight pace (very valuable)</li>
+    <li><strong>Feint:</strong> Confuse opponent's defense, open gaps</li>
+    <li><strong>Brawl:</strong> Unarmed/fist damage (when weaponless)</li>
+    <li><strong>Sweep:</strong> Low attacks, knocking legs out (certain weapons only)</li>
+    <li><strong>Cleave:</strong> Large overhead attacks, damage over wide area</li>
+  </ul>
+
+  <p><strong>Utility Skills (5):</strong></p>
+  <ul>
+    <li><strong>Bash:</strong> Hammer/mace focused, stun and knockdown potential</li>
+    <li><strong>Acrobatics:</strong> Ground-fighting and agility</li>
+    <li><strong>Riposte:</strong> Counter-attack after successful parry</li>
+    <li><strong>Slash:</strong> Blade-focused wound opening</li>
+    <li><strong>Strike:</strong> Strong precise hits</li>
+  </ul>
+  <p>Each skill has meaningful combat impact. None are "dumps." A warrior with high DEX will have better initiative rolls and more attacks. A warrior with high Initiative will attack first in turn order. A warrior with high Dodge will avoid many hits. These matter.</p>
+
+  <h3>Weapon Skills: One Per Weapon</h3>
+  <p>There are 44 weapon skills (one for each weapon). Training a weapon skill increases accuracy and damage with that weapon specifically.</p>
+  <p>A warrior with Shortsword skill of 7 will hit and damage better with a shortsword than someone with Shortsword skill of 2. Weapon skills are crucial to combat effectiveness.</p>
+
+  <h3>Attribute Training: The Slow Climb</h3>
+  <p>Five attributes can be trained (SIZ cannot):</p>
+  <ul>
+    <li><strong>Strength (STR):</strong> Increases damage output and carrying capacity. Slow to train at high levels.</li>
+    <li><strong>Dexterity (DEX):</strong> Increases attack accuracy and defense rolls. Provides bonuses to initiative rolls. Highly valuable for combat.</li>
+    <li><strong>Constitution (CON):</strong> Increases HP and endurance. Helps warriors survive.</li>
+    <li><strong>Intelligence (INT):</strong> Increases training success chance. Also helps with tactical advantage.</li>
+    <li><strong>Presence (PRE):</strong> Increases recognition gains per win and intimidation chances. Slower direct combat benefit.</li>
+  </ul>
+  <p><strong>Training Attributes:</strong> Attributes train similarly to skills, but use Constitution (CON) to increase success chance instead of Intelligence (INT). Unlike skills (which cap at 9), attributes can be trained from their starting value up to 25. Training gets progressively harder after level 7-8. Reaching maximum (25) would take an extremely long time and dedication.</p>
+
+  <h3>Popularity: The Crowd's Favor</h3>
+  <p>As your warrior fights, the crowd's opinion changes. Exciting wins, come-from-behind victories, defeats of strong opponents — all increase popularity.</p>
+  <p>High-popularity warriors gain more recognition per win (the crowd's cheers boost morale and fame).</p>
+  <p>This is largely narrative flavor, but it has mechanical impact on prestige growth.</p>
+
+  <h3>Injuries: The Permanent Scars</h3>
+  <p>When your warrior is hit hard enough during a fight, they can suffer injuries to body locations: head, chest, abdomen, arms, or legs.</p>
+  <a href="https://8upload.com" target="_blank"><img src="https://i.8upload.com/image/2473a7a9211bce00/perms.png" title="Upload Images For FREE!"></a>
+  <p>Injuries persist until the warrior dies. They don't heal. They accumulate over career.</p>
+  <p>Higher injury levels cause worse combat penalties. A warrior with 7+ injuries to a location is severely impacted. By contrast, level 3 injuries are annoying but manageable.</p>
+  <p>Injuries tell your warrior's story. That scar on the arm from the fight with the Half-Orc? It's still there, still slowing them down.</p>
+  <div class="callout gold"><p><strong>Elite Spire Exception:</strong> If your warrior is promoted to the Elite Spire, they stop accumulating new injuries (but keep the ones they had at promotion). See Advanced Arenas guide for details.</p></div>
+  </div>
+</details>
+
+<!-- ===================== PART 6 ===================== -->
+<details class="part" id="p6" open>
+  <summary class="summary"><span class="chev">▶</span><span class="head-wrap"><div class="part-label">Part VI</div><h2 class="part-title">The Champion System</h2><div class="part-rule"></div></span></summary>
+  <div class="content">
+  <h3>The Crown</h3>
+  <p class="lead">The champion is determined by the is_champion flag — the warrior who holds the title after defeating the previous champion. There is only one. It is the highest honor in the normal arena. Champion status is not tied to recognition score or tier; you can become champion at any level by defeating the sitting champion.</p>
+  <p>The champion's name is announced in every newsletter. They are featured in fight results. Their dominance is recognized arena-wide.</p>
+
+  <h3>Defending Your Champion</h3>
+  <p>If your warrior is champion and they fight this turn, they must maintain their recognition lead or lose the title.</p>
+  <ul>
+    <li><strong>Win:</strong> Keep the title (recognition increases, maintaining or extending the gap)</li>
+    <li><strong>Lose:</strong> Lose the title immediately (defeater becomes new champion)</li>
+  </ul>
+
+  <h3>Champion Challenges</h3>
+  <p>Only warriors in the top 2 populated tiers can challenge the sitting champion. Lower tiers cannot challenge, even if they achieve high recognition scores.</p>
+  <p>Challenging the champion is high-risk, high-reward. Beat them and you become champion. Lose and you take a recognition hit.</p>
+
+  <h3>The Bullying Prohibition</h3>
+  <p>If your champion blood-challenges a much weaker opponent (40+ recognition gap), the Gladiatorial Commission takes note.</p>
+  <p><strong>Escalating penalties:</strong></p>
+  <ul>
+    <li>1st offense: 15% chance to strip title next turn</li>
+    <li>2nd offense: 32% chance</li>
+    <li>3rd offense: 49% chance</li>
+    <li>4th+ offense: 65% chance (capped)</li>
+  </ul>
+  <p>This encourages champions to defend against worthy opponents. Preying on weaklings is dishonorable and dangerous.</p>
+
+  <h3>Losing the Crown</h3>
+  <p>Champions who lose the title can absolutely regain it. Fight back up the rankings, earn recognition, and reclaim the crown.</p>
+  <div class="pullquote">Glory is fleeting. Dominance must be earned every turn.</div>
+  <p>Many warriors have held the champion title multiple times. Glory is fleeting. Dominance must be earned every turn.</p>
+  </div>
+</details>
+
+<!-- ===================== PART 7 ===================== -->
+<details class="part" id="p7" open>
+  <summary class="summary"><span class="chev">▶</span><span class="head-wrap"><div class="part-label">Part VII</div><h2 class="part-title">Special Events &amp; Consequences</h2><div class="part-rule"></div></span></summary>
+  <div class="content">
+  <h3>Death in the Arena</h3>
+  <p>When your warrior falls to -HP (zero health or below), a death check triggers. Death is not immediate — instead, a cycle of death checks and concede appeals begins:</p>
+
+  <p><strong>The Death Cycle:</strong></p>
+  <ol>
+    <li>Warrior reaches -HP → Death check occurs (Presence-based concede appeal)</li>
+    <li>If concede appeal succeeds → Mercy is granted, warrior survives this turn</li>
+    <li>If concede appeal fails → Warrior continues fighting (not dead yet)</li>
+    <li>If hit again while below -HP → Another death check occurs (failure rate increases)</li>
+    <li>After this new damage → Another concede appeal attempt</li>
+    <li>This cycle repeats: damage → death check (higher failure %) → concede appeal</li>
+  </ol>
+  <p>The longer a warrior stays below -HP and takes additional damage, the higher the chance they fail a death check and are killed outright. Eventually, either:</p>
+  <ul>
+    <li>A concede appeal succeeds (mercy granted)</li>
+    <li>A death check fails and they are slain</li>
+  </ul>
+
+  <div class="callout gold"><p><strong>The Soul Spire Exception:</strong> If a warrior meets the Soul Spire criteria at the moment they are slain, they are transcended to the Soul Spire instead of dying permanently. This is rare — most warriors who fall in battle are truly gone. But warriors with an exceptional record may escape death and continue their legend on another plane. See the Advanced Arenas guide for details on Soul Spire transcendence criteria.</p></div>
+
+  <a href="https://8upload.com" target="_blank"><img src="https://i.8upload.com/image/2ef083ff3067d2b6/slain.png" title="Upload Images For FREE!"></a>
+
+  <p>Slain warriors are archived. Their slot opens. You must create a replacement. Transcended warriors also leave a vacant slot (in the normal arena), but they continue fighting in the Soul Spire under your management.</p>
+
+  <div class="callout blood"><p><strong>That's it. They're gone.</strong> There is no resurrection in the normal arena. Dead is dead — unless they transcend to the Soul Spire.</p>
+  <p>This is intentional. Death must feel permanent. The finality of it creates drama.</p></div>
+
+  <h3>Blood Challenges: Vengeance</h3>
+  <p>When your warrior is killed, surviving teammates have the option to challenge the killer.</p>
+  <p>A blood challenge is auto-created and available for selection. The blood challenge remains active for 3 turns that the <strong>killer actually participates</strong> in fights. If the killing warrior sits out for 3 turns to avoid retribution, the blood challenge does not expire — it remains active until the killer fights and the 3-participation countdown begins.</p>
+
+  <p><strong>Strategic Considerations:</strong></p>
+  <ul>
+    <li>Just because a blood challenge is available doesn't mean you should attempt it. Consider your remaining warriors' strength and experience.</li>
+    <li>If your best warrior was killed and your next-best is severely lacking experience or strength, attempting revenge might be too risky and could result in a second loss.</li>
+    <li>Strategic restraint is sometimes wiser than automatic vengeance.</li>
+  </ul>
+
+  <p><strong>Satisfying the Challenge:</strong><br>
+  Once you avenge your fallen warrior and win the blood challenge, it is satisfied and removed. This prevents the killer from repeatedly challenging your weakest warriors for easy wins — each blood challenge stands until fulfilled.</p>
+
+  <p>Winning a blood challenge feels satisfying and gives closure. Losing it compounds the tragedy by adding another warrior to your losses.</p>
+  <a href="https://8upload.com" target="_blank"><img src="https://i.8upload.com/image/499f14e888f315ad/blood-challenge.png" title="Upload Images For FREE!"></a>
+
+  <h3>Retirement: A Peaceful End</h3>
+  <p>After 50 fights, your warrior is eligible for retirement. You can request it via the want_retire flag.</p>
+  <p>When your warrior retires, they fight one final time that turn. After the turn completes, they hang up their weapons.</p>
+  <!-- <div class="screenshot">Retirement Confirmation Dialog</div> -->
+  <p>Retired warriors are archived as "Legacy" warriors. Their slot opens for replacement.</p>
+  <p>Retirement is a graceful exit. Your most-accomplished warrior gets to end on their terms, not dead in the arena.</p>
+
+  <h3>Ascension to Monsterdom: The Ultimate Achievement</h3>
+  <p>If your warrior defeats a Monster in combat (an ultra-rare achievement), they are absorbed into The Monsters.</p>
+  <p>Your warrior becomes a permanent part of the Monster difficulty curve. They are no longer manageable. They will fight on the Monster roster as NPC-controlled creatures.</p>
+  <p>This is both an honor and a loss. Your warrior achieved the ultimate victory, but you can no longer control them.</p>
+  <div class="callout gold"><p><strong>The Elite Spire Exception:</strong> If a warrior kills a Monster on their final turn before being promoted to the Elite Spire arena, an extraordinary event occurs. The warrior is promoted to the Elite Spire as planned, and you retain full control of them there. However, the Gods of the arena will clone your warrior to create a permanent Monster roster version. You will manage the Elite Spire warrior, while the cloned Monster version is controlled by the game engine. This is the rarest of all achievements — ascending to the Elite arena while also becoming legend.</p></div>
+  <div class="callout"><p><strong>This is permanent.</strong> The warrior is gone from your roster (except in Elite arena), transformed into a legend.</p></div>
+  </div>
+</details>
+
+<!-- ===================== PART 8 ===================== -->
+<details class="part" id="p8" open>
+  <summary class="summary"><span class="chev">▶</span><span class="head-wrap"><div class="part-label">Part VIII</div><h2 class="part-title">The Turn Cycle</h2><div class="part-rule"></div></span></summary>
+  <div class="content">
+  <h3>Turn States</h3>
+  <p>Bloodspire operates on weekly turns (frequency varies by commissioner).</p>
+
+  <div class="two">
+    <div class="callout gold"><p><strong>OPEN:</strong></p>
+    <ul>
+      <li>You can make changes to your roster</li>
+      <li>Edit strategies, gear, training queues</li>
+      <li>Upload your final team state</li>
+      <li>This window closes when the turn begins</li>
+    </ul></div>
+    <div class="callout"><p><strong>PROCESSING:</strong></p>
+    <ul>
+      <li>Turn is running</li>
+      <li>All fights are being executed</li>
+      <li>No changes possible</li>
+      <li>Wait for results</li>
+    </ul></div>
+  </div>
+  <div class="callout gold"><p><strong>RESULTS READY:</strong></p>
+  <ul>
+    <li>All fights complete</li>
+    <li>Results available for download</li>
+    <li>Next turn's OPEN window begins</li>
+    <li>Make your adjustments, upload again</li>
+  </ul></div>
+
+  <h3>What Happens During a Turn</h3>
+  <ol>
+    <li><strong>Pooling:</strong> All uploaded teams merged into global roster</li>
+    <li><strong>Matchmaking:</strong> Fights scheduled (monsters, blood challenges, challenges, random, peasants)</li>
+    <li><strong>Combat:</strong> All fights run (simultaneously from your perspective; server executes sequentially)</li>
+    <li><strong>Processing:</strong> Deaths, injuries, recognition updates, tier changes calculated</li>
+    <li><strong>Newsletter:</strong> Arena-wide results and standings generated</li>
+    <li><strong>Availability:</strong> Results available for download</li>
+  </ol>
+
+  <h3>The Newsletter</h3>
+  <a href="https://8upload.com" target="_blank"><img src="https://i.8upload.com/image/64069fc96e853bf4/newsletter-tab.png" title="Upload Images For FREE!"></a>
+  <p>After each turn, a newsletter is generated covering arena-wide results, standings, and commentary. It is your official record of what happened this turn and how warriors are progressing toward glory.</p>
+
+  <p><strong>Newsletter Structure:</strong></p>
+  <p>The newsletter is divided into several major sections, each providing different views of arena activity:</p>
+
+  <h4>The Top Teams &amp; Recent Performance</h4>
+  <p>The newsletter displays two key standings tables side-by-side:</p>
+  <ul>
+    <li><strong>Left Table - Career Standings:</strong> Rankings of all teams sorted by overall performance record. Shows cumulative wins, losses, kills, and win percentage across the entire season.</li>
+    <li><strong>Right Table - Last 5 Turns:</strong> Rankings of teams showing only their performance in the most recent 5 turns. This snapshot reveals who is currently hot vs. who is cooling down.</li>
+  </ul>
+  <p>Each table shows:</p>
+  <ul>
+    <li><strong>POS:</strong> Current ranking</li>
+    <li><strong>Team Name (Manager) (Team#):</strong> Full identification</li>
+    <li><strong>W-L-K:</strong> Wins, Losses, Kills</li>
+    <li><strong>%:</strong> Win percentage (calculated as wins / (wins + losses))</li>
+  </ul>
+  <p>Teams that did not fight this turn are marked with a dash (-) to indicate inactive status.</p>
+  <p><strong>Example from a real turn:</strong></p>
+  <div class="codeblock"><span class="hdr">Career Standings | Last 5 Turns</span>POS  Team Name                            (MANAGER) (TEAM #)   W   L   K      %   |  POS  Team Name                            (MANAGER) (TEAM #)   W   L   K      %
+1     LEGION OF DENIAL (Modofo) (112)                         18   7   1  72.0%   |  1     VESTIAN RENEGADES (Ilneval) (42)                        21   4   3  84.0%
+2     RIEKLAND REAVERS (Ilneval) (41)                        125  55  18  69.4%   |  2     HARD N' HEAVY (The Chosen One) (94)                     18   7   2  72.0%
+3     OPERATION: MINDCRIME (Sleazee P Martinee) (69)         118  62  21  65.6%   |  3     LEGION OF DENIAL (Modofo) (112)                         18   7   1  72.0%</div>
+  <p>Use these tables to track your own team's progress and see how rivals are performing. A team with a high Last 5 Turns percentage is performing better recently than their career average suggests.</p>
+
+  <h4>The Top Managers</h4>
+  <p>Two manager rankings mirror the team tables:</p>
+  <ul>
+    <li><strong>Left Table - Managers This Turn:</strong> Managers sorted by their performance in THIS turn only. Shows W-L-K and total fights for the turn.</li>
+    <li><strong>Right Table - Managers Career:</strong> Cumulative manager statistics across all fights controlled by that manager. Shows total career W-L-K and win percentage.</li>
+  </ul>
+  <p>Each row shows:</p>
+  <ul>
+    <li><strong>Manager name</strong></li>
+    <li><strong>W-L-K:</strong> Wins, Losses, Kills for that manager</li>
+    <li><strong>% TOTAL:</strong> Win percentage and total fights</li>
+  </ul>
+  <p><strong>Example:</strong></p>
+  <div class="codeblock"><span class="hdr">Managers This Turn | Managers Career</span>MANAGER                             W   L   K      % TOTAL      |   MANAGER                             W   L   K      % TOTAL
+ELCROUEL                             4   1   0  80.0%     5      |   Modofo                              39  21   5  65.0%    60
+Modofo                              11   4   1  73.3%    15      |   Darian Dargard                     510 380  73  57.3%   890
+Grey Phantom                        10   5   2  66.7%    15      |   Ilneval                            510 390  71  56.7%   900</div>
+  <p>Managers who had a successful turn move up this list. Career statistics show lifetime performance across all their teams and warriors.</p>
+
+  <h4>Arena Happenings: The Narrative</h4>
+  <p>After the standings, the newsletter shifts to narrative commentary. This section features stories about:</p>
+  <ul>
+    <li><strong>Notable Warriors:</strong> Warriors who achieved significant milestones, reached high recognition, or demonstrated exceptional performance</li>
+    <li><strong>Team Trends:</strong> Teams climbing or falling in rankings, showing momentum shifts</li>
+    <li><strong>Fight Quality:</strong> Observations about how fights went and what they reveal about current meta-strategies</li>
+    <li><strong>Personality:</strong> The arena's "characters" and their ongoing rivalries or story arcs</li>
+    <li><strong>Warnings:</strong> Trends that suggest problems (losing streaks, pattern changes)</li>
+  </ul>
+  <p><strong>Example narrative:</strong></p>
+  <div class="codeblock">The sand of the THE AGONY AMPHITHEATRE tells many stories, and this turn it told all of them 
+at once. While others plotted advancement, HMS HOOD of AT SEA simply endured. The Championship 
+waits for challengers bold enough to contest it.
+
+PROFITS OF DOOM converted what the schedule offered into a 5-0-1 showing and movement in the 
+standings. That kind of execution rate is what separates the prepared from the hopeful in 
+THE AGONY AMPHITHEATRE.
+
+There's a name to write down: THE AMAZING KRESKIN of PROFITS OF DOOM. After running through 
+DISEMBODIED VOICE this turn, they've climbed to 99 recognition and show no signs of slowing. 
+The trajectory of SHADE's career is pointing upward, and nothing is changing that direction.</div>
+  <p>These narratives provide flavor and help you understand the arena's current dynamics and power shifts.</p>
+
+  <h4>The Champion Section</h4>
+  <p><strong>CHAMPION</strong></p>
+  <p>The sitting champion is displayed with their record:</p>
+  <div class="codeblock">NAME                             W   L   K  REC  TEAM
+================================================================================
+HMS HOOD                        28   6   7   99  AT SEA (96)</div>
+  <p>Only ONE warrior holds this position. All others, no matter their tier, are challengers. The champion is the ultimate honor in the normal arena.</p>
+
+  <h4>The Elites Section</h4>
+  <p>Warriors at recognition 87-99 are listed as ELITE tier warriors (not to be confused with Elite Spire warriors, which is a different arena):</p>
+  <div class="codeblock"><span class="hdr">Elites</span>NAME                             W   L   K  REC  TEAM
+================================================================================
+THE AMAZING KRESKIN             17   2   5   99  PROFITS OF DOOM (98)
+FERAS BASI                      31   5   6   99  RIEKLAND REAVERS (41)
+SHADE                           17   3   4   99  SPIRITUAL ENTITIES (86)</div>
+  <p>These are the closest competitors to champion status. They have climbed the highest ranks in the normal arena and represent the pinnacle of mortal combat.</p>
+
+  <h4>Experts, Veterans, Adepts, Initiates, Rookies, and Recruits</h4>
+  <p>Below ELITE tier, warriors are grouped by tier and listed with their records:</p>
+  <div class="codeblock"><span class="hdr">Experts</span>NAME                             W   L   K  REC  TEAM
+================================================================================
+ELJERON GREENLEAF               15  11   2   86  CRIMSON STRIX (88)
+KIK TRACEE                      14   7   3   84  SILENT RAGE (44)
+...
+
+<span class="hdr">Veterans</span>NAME                             W   L   K  REC  TEAM
+================================================================================
+- BANG IT                       12  15   3   70  REJECT CANDY HEARTS (64)
+GRANITE GARY                    12  15   2   69  BREAKING SAD BOZOS (59)
+...</div>
+  <p>Each tier shows all warriors currently in that recognition range. Warriors marked with a dash (-) did not fight this turn.</p>
+
+  <h4>Last Turn's Fights: The Detailed Results</h4>
+  <p>This section breaks down every fight that occurred:</p>
+
+  <p><strong>CHAMPION FIGHT:</strong></p>
+  <div class="codeblock">★ CHAMPION'S TITLE FIGHT ★  HMS HOOD has slain GENGHIS KHAN to retain the Champion's Title in a 2 minute clean Title fight!</div>
+  <p>The champion's fight is highlighted separately if it's a title defense or challenge match.</p>
+
+  <p><strong>RANDOM MATCHUPS:</strong></p>
+  <div class="codeblock">THE AMAZING KRESKIN murdered DISEMBODIED VOICE in a 1 minute decisive fight.
+SHADE dispatched ELJERON GREENLEAF in a 2 minute clean fight.
+BILARIA MOONSTONE dispatched ETHEREAL SOUL in a 1 minute swift fight.
+BOOTS eked out a win against SILENT LUCIDITY in a 1 minute one-sided fight.
+KANGUR BLADESTRIDER defeated CRITICAL MASS in a 3 minute clean fight.</div>
+  <p>Fight descriptions use colorful language to convey how decisive or close each bout was:</p>
+  <ul>
+    <li><strong>"murdered" / "slaughtered" / "obliterated":</strong> Extremely one-sided, overwhelming victory</li>
+    <li><strong>"crushed" / "overpowered" / "decimated":</strong> Clear, decisive win with minimal difficulty</li>
+    <li><strong>"dispatched":</strong> Clean, professional victory</li>
+    <li><strong>"defeated" / "beat":</strong> Standard win</li>
+    <li><strong>"narrowly defeated" / "eked out":</strong> Close fight, narrow margin of victory</li>
+    <li><strong>"squeaked past" / "barely defeated":</strong> Extremely close, winner barely survived</li>
+  </ul>
+  <p>Fight duration is shown (e.g., "2 minute," "4 minute contested"). Longer fights indicate warrior endurance and attrition. "Contested" fights suggest both warriors were evenly matched for extended periods.</p>
+
+  <p><strong>PEASANT FIGHTS:</strong></p>
+  <p>If warriors fought generic NPCs (filler opponents when no real matchups exist):</p>
+  <div class="codeblock">PEASANT FIGHTS
+=====================================================================================
+KILL THY ENEMIES obliterated Matt the Basement Dweller in a 1 minute swift fight.
+GRANITE GARY decimated Biff Watson in a 1 minute one-sided fight.</div>
+
+  <p><strong>THE DEAD:</strong></p>
+  <p>A table of all warriors who fell this turn:</p>
+  <div class="codeblock">THE DEAD
+NAME                             W   L   K  TEAM                          SLAIN BY                       TURN
+=============================================================================================================
+LADY MARWEN                      4   4   0  ECLIPSE                       BAD MR. FROSTY                   36
+MASTER CHIEF                     3   2   1  PIXEL HEROES                  TRIVIUM                          36
+GENGHIS KHAN                    16  19   2  WARLORDS                      HMS HOOD                         36
+DEEP-SIX                        14   7   4  YO JOE!                       DELAGON GRISKK                   36</div>
+  <p>Each fallen warrior's final record is preserved. This honors their memory and shows their accomplishments before death.</p>
+
+  <h4>Souls Summoned to the Soul Spire</h4>
+  <p>If any warriors transcended to the Soul Spire this turn:</p>
+  <div class="codeblock"><span class="hdr">Souls Summoned to the Soul Spire</span>NAME                          RECORD          TEAM                           MANAGER                    WIN RATE
+==========================================================================================================================================
+DISEMBODIED VOICE             14-7-0          SPIRITUAL ENTITIES             Grey Phantom                  66.7%
+DEEP-SIX                      14-7-4          YO JOE!                        Cyrus The Virus               66.7%</div>
+  <p>Warriors who fall in battle with legendary records are transcended instead of dying permanently. They continue fighting on the Soul Spire. See the Advanced Arenas guide for details on transcendence.</p>
+
+  <h4>Battle Report: Statistical Analysis</h4>
+  <p>The newsletter concludes with aggregate statistics showing meta-trends:</p>
+
+  <p><strong>Most Popular Race:</strong></p>
+  <div class="codeblock">|RACE             FIGHTS  RACE                  W -    L -    K  PERCENT|
+|Gnome                722  Gnome               497 -  225 -   71      68%|
+|Dwarf                580  Dwarf               307 -  273 -   41      52%|
+|Human                521  Human               249 -  272 -   29      47%|</div>
+  <p>Shows which races are fielded most often and their aggregate win rates over the last 10 turns. Use this to identify current meta-strategies and what races are performing well.</p>
+
+  <p><strong>Top Warrior by Race:</strong></p>
+  <div class="codeblock">RACE          WARRIOR                          W   L  K  TEAM NAME
+===========================================================================
+Gnome         FERAS BASI                      31   5  6  RIEKLAND REAVERS (41)
+Dwarf         COME THE CARNIVORE              24  11  6  VIOLENCE HAS ARRIVED (61)
+Human         7 MINUTE ABS                    18  14  3  COME OUT AND PLAY (48)</div>
+  <p>The strongest current warrior of each race. Use this to benchmark your own warriors and identify what the top performers look like.</p>
+
+  <h4>How to Use the Newsletter</h4>
+  <ol>
+    <li><strong>Track your team:</strong> Find yourself in the standings. Are you moving up or down? Is your Last 5 Turns performance better than career average?</li>
+    <li><strong>Scout rivals:</strong> See who's performing well and who's falling off. Identify threats and opportunities.</li>
+    <li><strong>Analyze meta:</strong> Which races and warriors are dominating? What strategies seem to be working?</li>
+    <li><strong>Celebrate your wins:</strong> Read the fight descriptions of your warriors. See how they're described in narrative form.</li>
+    <li><strong>Mourn your losses:</strong> When your warrior falls, they're honored in The Dead section.</li>
+    <li><strong>Plan ahead:</strong> Use the stats to inform your warrior builds and strategy choices for next turn.</li>
+  </ol>
+  <p>The newsletter is more than information — it's the arena's living history. Every turn becomes part of the record. Your warriors' names may echo in these pages for many seasons to come.</p>
+
+  <h3>Downloading Your Results</h3>
+  <p>After each turn completes, download your updated team state. This includes:</p>
+  <ul>
+    <li>All warriors' updated stats</li>
+    <li>New recognition values</li>
+    <li>Training success/failure results</li>
+    <li>New injuries</li>
+    <li>Deaths</li>
+    <li>Changed tiers</li>
+  </ul>
+  <p>Your local copy is overwritten with the server's version. This is the authoritative record.</p>
+  </div>
+</details>
+
+<!-- ===================== PART 9 ===================== -->
+<details class="part" id="p9" open>
+  <summary class="summary"><span class="chev">▶</span><span class="head-wrap"><div class="part-label">Part IX</div><h2 class="part-title">Quick Reference &amp; Tips</h2><div class="part-rule"></div></span></summary>
+  <div class="content">
+  <h3>Early-Game Advice</h3>
+  <p><strong>Starting Out:</strong></p>
+  <ul>
+    <li>Build balanced warriors (don't spike one stat too high)</li>
+    <li>Focus on dodge/parry early for survival</li>
+    <li>Weapon skills come second</li>
+    <li>Attribute training comes later (gets progressively harder)</li>
+    <li>Don't worry about perfect strategies; basic ones work fine</li>
+  </ul>
+
+  <p><strong>Gear Selection:</strong></p>
+  <ul>
+    <li>Light armor = faster actions, less defense</li>
+    <li>Heavy armor = fewer actions, more defense</li>
+    <li>Match gear to your strategy (aggressive wants light, defensive wants heavy)</li>
+    <li>Don't over-equip; STR matters</li>
+  </ul>
+
+  <h3>Strategy Design Tips</h3>
+  <p><strong>Always Have a Fallback:</strong><br>
+  Make sure one of your strategies is "Always" (typically your lowest-priority slot) to catch unmatched triggers and ensure your warrior always has a strategy to follow.</p>
+
+  <p><strong>Tier Strategies by Scenario:</strong></p>
+  <ul>
+    <li>Light armor → Pierce and penetrate</li>
+    <li>Heavy armor → Bash and stun</li>
+    <li>Weaponless opponent → Aggressive press</li>
+    <li>You're hurt → Defend</li>
+  </ul>
+
+  <p><strong>Activity Level Matters:</strong></p>
+  <ul>
+    <li>Level 0-2 = Conservation mode (low endurance drain)</li>
+    <li>Level 5 = Balanced (default)</li>
+    <li>Level 9 = Berserker (high endurance drain, many actions)</li>
+  </ul>
+
+  <p><strong>Aim/Defense Points:</strong></p>
+  <ul>
+    <li>Protect injured locations</li>
+    <li>Exploit opponent weaknesses</li>
+    <li>Target specific body parts for tactical advantage</li>
+  </ul>
+
+  <p><strong>Test and Iterate:</strong><br>
+  You'll learn through trial-and-error. Watch how your warriors perform. Adjust strategies that aren't working.</p>
+
+  <h3>Common Questions</h3>
+  <div class="faq"><p class="q">How do I increase HP?</p><p class="a">CON training (direct), STR training (secondary), certain races (racial HP bonus). Also, level up Constitution to maximize health pool.</p></div>
+  <div class="faq"><p class="q">How do I hit more often?</p><p class="a">High DEX, high Initiative skill, weapons with fast attack rates, activity level 7-9 in strategy.</p></div>
+  <div class="faq"><p class="q">How do I defend better?</p><p class="a">High DEX, trained Dodge/Parry, armor/helms, activity level 1-3 (conservative), defensive fighting styles.</p></div>
+  <div class="faq"><p class="q">How do I become champion?</p><p class="a">Defeat the sitting champion in battle. Champion status is determined by the is_champion flag, not by tier or recognition score. You can become champion at any recognition level or tier by defeating the current title holder.</p></div>
+  <div class="faq"><p class="q">Why did my warrior lose when they had better stats?</p><p class="a">Luck (random 1-30 value per warrior), strategy matchup (bad strategy vs opponent), injuries (cumulative penalties), or simply outplayed. Stats are not destiny.</p></div>
+  <div class="faq"><p class="q">Can I change my strategy during a fight?</p><p class="a">No, you can't. But your strategy automatically adapts based on triggers — once a trigger condition is met, the strategy persists and executes until overridden by a higher-priority trigger. That IS strategy mid-fight.</p></div>
+  <div class="faq"><p class="q">What if I don't like how my warrior turned out?</p><p class="a">Let them die and create a replacement. This is the only reset. Choices are permanent.</p></div>
+  <div class="faq"><p class="q">Can I have duplicate warriors?</p><p class="a">No. Each warrior is unique. You cannot create two warriors with the same name or stats. Names are unique identifiers.</p></div>
+  <div class="faq"><p class="q">How long does it take to develop a "good" warrior?</p><p class="a">Depends entirely on win rate. A warrior on a hot streak can climb tiers quickly. A struggling warrior advances slowly. Early tiers can be reached in 10-20 fights if winning consistently. Elite tier might take 50-100+ fights depending on skill and luck. There's no fixed timeline — it's determined by how often your warrior wins.</p></div>
+
+  <h3>Advanced Strategy Concepts</h3>
+  <p><strong>The Initiative Advantage:</strong><br>
+  High DEX warriors get better bonuses to initiative rolls. Better initiative rolls mean more chances to act first in each round, which gives more opportunities to attack and control the pace of combat. DEX is one of the most valuable stats for combat effectiveness.</p>
+  <p><strong>The Endurance Attrition:</strong><br>
+  Long fights favor warriors with high CON and balanced activity levels. Berserker warriors (activity 9) burn out quickly. Conservative warriors (activity 0) can outlast in 20+ minute bouts.</p>
+  <p><strong>The Injury Management:</strong><br>
+  Accumulate injuries strategically. Use injuries to identify weakness and protect vulnerable areas in strategy.</p>
+  <p><strong>The Underdog Bonus:</strong><br>
+  A rookie who defeats an expert gets a massive recognition boost. Use this to climb fast — challenge high tiers and hope for upset wins.</p>
+  </div>
+</details>
+
+<!-- ===================== PART 10 ===================== -->
+<details class="part" id="p10" open>
+  <summary class="summary"><span class="chev">▶</span><span class="head-wrap"><div class="part-label">Part X</div><h2 class="part-title">Appendices</h2><div class="part-rule"></div></span></summary>
+  <div class="content">
+  <h3>Tier Reference Table</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Tier</th><th>Recognition</th><th>Characteristics</th></tr></thead>
+    <tbody>
+      <tr><td><strong>RECRUIT</strong></td><td>0-12</td><td>Starting warriors, learning phase, building base skills</td></tr>
+      <tr><td><strong>ROOKIE</strong></td><td>13-25</td><td>Early-career warriors, emerging reputation, winning more than losing</td></tr>
+      <tr><td><strong>INITIATE</strong></td><td>26-40</td><td>Developing warriors, solid experience, beginning specialization</td></tr>
+      <tr><td><strong>ADEPT</strong></td><td>41-55</td><td>Competent warriors, proven capability, can challenge veterans</td></tr>
+      <tr><td><strong>VETERAN</strong></td><td>56-70</td><td>Seasoned warriors, significant experience, can challenge experts</td></tr>
+      <tr><td><strong>EXPERT</strong></td><td>71-86</td><td>Accomplished warriors, major win record, can challenge elite</td></tr>
+      <tr><td><strong>ELITE</strong></td><td>87-99</td><td>Elite-tier warriors, legendary status, can challenge champion</td></tr>
+      <tr><td><strong>CHAMPION</strong></td><td>N/A</td><td>Determined by is_champion flag (not tied to recognition or tier). Can only be challenged by warriors in the top 2 populated tiers. Can be achieved at any recognition level by defeating the sitting champion.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Tier advancement is automatic based on wins and losses. Warriors climb when they accumulate recognition through victories and descend when they lose. Advancement speed depends entirely on win rate and recognition gained per fight, not on a fixed schedule.</p>
+
+  <h3>16 Non-Weapon Skills</h3>
+  <p><strong>Combat-Critical (6):</strong></p>
+  <ul>
+    <li><strong>Dodge:</strong> Defensive rolls, avoid hits. Every warrior should train this early.</li>
+    <li><strong>Parry:</strong> Active blade defense, counter-attacks. Useful for weapon users.</li>
+    <li><strong>Initiative:</strong> Act first in turn order. Highly valuable for controlling fight pace.</li>
+    <li><strong>Throw:</strong> Ranged thrown-weapon damage. Specific-use but powerful.</li>
+    <li><strong>Lunge:</strong> High knockdown chance if lands. High-risk, high-reward.</li>
+    <li><strong>Disarm:</strong> Remove opponent's weapon. Tactical advantage if lands.</li>
+  </ul>
+  <p><strong>Combat-Useful (5):</strong></p>
+  <ul>
+    <li><strong>Feint:</strong> Confuse defenses, open gaps. Helps offensive warriors.</li>
+    <li><strong>Brawl:</strong> Unarmed damage. Useful when weaponless.</li>
+    <li><strong>Sweep:</strong> Knock legs out. Weapon-specific, certain weapons only.</li>
+    <li><strong>Cleave:</strong> Large area attacks. Hammer/axe focused.</li>
+    <li><strong>Riposte:</strong> Counter after successful parry. Defense-into-offense.</li>
+  </ul>
+  <p><strong>Combat-Specialty (5):</strong></p>
+  <ul>
+    <li><strong>Charge:</strong> Polearm charging attacks. Specific-weapon feature.</li>
+    <li><strong>Bash:</strong> Hammer stuns and knockdowns. Heavy-weapon feature.</li>
+    <li><strong>Acrobatics:</strong> Ground-fighting and agility. General athletics.</li>
+    <li><strong>Slash:</strong> Blade wound-opening. Sword-specific.</li>
+    <li><strong>Strike:</strong> Strong precise hits. General combat.</li>
+  </ul>
+  <p>Each skill is trainable to level 9 and has meaningful impact. No "dump" skills. Focus on what matches your warrior's build.</p>
+
+  <h3>Fighting Styles Cheat Sheet</h3>
+  <p><strong>Aggressive Styles (8):</strong></p>
+  <ol>
+    <li><strong>Total Kill:</strong> Pure offense, all-in damage output, high casualty risk</li>
+    <li><strong>Wall of Steel:</strong> Constant relentless attacks, shield bashing, overwhelming</li>
+    <li><strong>Lunge:</strong> High-risk charging attacks, high knockdown chance, feast or famine</li>
+    <li><strong>Bash:</strong> Hammer/mace emphasis, stun and knockdown, control-focused</li>
+    <li><strong>Slash:</strong> Blade-focused, deep cutting wounds, bleed damage focus</li>
+    <li><strong>Strike:</strong> Precise strong hits, technical accuracy, calculated aggression</li>
+    <li><strong>Martial Combat:</strong> Unarmed/brawling focus, grapple-emphasis, melee close-quarters</li>
+    <li><strong>Opportunity Throw:</strong> Ranged thrown weapons, missile focus, hit-and-run</li>
+  </ol>
+  <p><strong>Defensive Styles (8):</strong></p>
+  <ol>
+    <li><strong>Parry:</strong> Active blade defense, riposte counters, reactive combat</li>
+    <li><strong>Defend:</strong> Cautious damage-avoidance, turtle tactics, minimal-risk</li>
+    <li><strong>Sure Strike:</strong> Conservative accurate hits, patience-focused, safe damage</li>
+    <li><strong>Calculated Attack:</strong> Methodical fighting, less frequent attacks, tactical</li>
+    <li><strong>Counterstrike:</strong> Wait-and-react, punish openings, patience-based</li>
+    <li><strong>Engage &amp; Withdraw:</strong> Hit-and-run tactics, quick strikes then retreat, evasion</li>
+    <li><strong>Decoy:</strong> Confuse and evade, misdirection-focused, unpredictable</li>
+    <li><strong>Opportunity Throw (Defensive):</strong> Ranged while defending, setup attacks, safe distance</li>
+  </ol>
+  <p>Choose styles that match your warrior's stats and strategy goals. Aggressive warriors want aggressive styles. Defensive builds use defensive styles. Hybrid styles exist for flexibility.</p>
+
+  <h3>Weapon Categories (44 Weapons)</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Category</th><th>Count</th><th>Traits</th><th>Weapons</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Swords &amp; Knives</strong></td><td>5</td><td>Fast, accurate, classic. Good all-around damage.</td><td>Longsword, Shortsword, Scimitar, Stiletto (armor-piercing), Cleaver</td></tr>
+      <tr><td><strong>Axes &amp; Picks</strong></td><td>6</td><td>Medium speed, good damage, armor-piercing.</td><td>Battle Axe, Handaxe, War Pick, Mattock, Executioner's Axe, Scythe (special sweeper)</td></tr>
+      <tr><td><strong>Hammers &amp; Maces</strong></td><td>5</td><td>Slower, crushing damage, knockdown focus.</td><td>Warhammer, Maul, Flail, Morning Star, Mace</td></tr>
+      <tr><td><strong>Polearms &amp; Spears</strong></td><td>6</td><td>Long reach, defensive, charge attacks.</td><td>Spear, Pike, Halberd, Glaive, Lance, Cestus (bare-hand focus)</td></tr>
+      <tr><td><strong>Flails &amp; Chains</strong></td><td>4</td><td>Bypass shields, sweep, control.</td><td>Flail, Chain Whip, Ball &amp; Chain, Morningstar</td></tr>
+      <tr><td><strong>Staves &amp; Rods</strong></td><td>3</td><td>Slow, high damage, sweeps.</td><td>Quarterstaff, Gnarled Staff, Magical Staff</td></tr>
+      <tr><td><strong>Shields</strong></td><td>2</td><td>Can be primary or off-hand. Deal damage and enable shield rushes/bashes. Increase defense and parry chance.</td><td>Kite Shield, Heater Shield</td></tr>
+      <tr><td><strong>Oddities</strong></td><td>8</td><td>Unique properties.</td><td>Net, Whip, Kusarigama, Boomerang, Chakram, Blowgun, Poison Darts, Bolas</td></tr>
+      <tr><td><strong>Open Hand</strong></td><td>—</td><td>Bare Fists</td><td>Always available, no stats, default starting weapon.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Each weapon has distinct personality. Experiment to find your warriors' favorites.</p>
+
+  <h3>Armor &amp; Helm Progression</h3>
+  <p><strong>Armor (8 Tiers):</strong></p>
+  <ol>
+    <li>None → Light cloth → Heavy cloth</li>
+    <li>Leather → Cuir Boulli (studded leather)</li>
+    <li>Brigandine → Scale Mail</li>
+    <li>Chain Mail → Half-Plate</li>
+    <li>Full Plate</li>
+  </ol>
+  <p>Each tier: more defense, more weight, less mobility. Match to warrior's STR.</p>
+  <p><strong>Helms (5 Tiers):</strong></p>
+  <ol>
+    <li>None → Leather Cap</li>
+    <li>Steel Cap → Helm (closed)</li>
+    <li>Camail (mail coif) → Full Helm (closed heavy)</li>
+  </ol>
+  <p>Each tier: more defense, more weight, vision restriction. Match to strategy.</p>
+  <p><strong>Trade-offs:</strong></p>
+  <ul>
+    <li>Light = fast, risky</li>
+    <li>Heavy = slow, protected</li>
+    <li>No gear = maximum mobility, maximum risk</li>
+    <li>Full gear = maximum protection, sluggish</li>
+  </ul>
+
+  <h3>Detailed FAQ</h3>
+
+  <h4>Game Mechanics</h4>
+  <div class="faq"><p class="q">Can I control my warrior's moves during a fight?</p><p class="a">No. Your warrior follows pre-programmed strategies. You set the strategy; the combat engine executes it.</p></div>
+  <div class="faq"><p class="q">Can I have 6+ warriors on my roster?</p><p class="a">No. Exactly 5 warriors per team, always. When one dies, you replace them. However, you can manage up to 5 teams, so up to 25 warriors total across all your teams.</p></div>
+  <div class="faq"><p class="q">How long is a fight?</p><p class="a">Most fights complete in under 5 minutes. After 7 minutes, the referee begins to intervene to speed up the process. Fights continue until a warrior falls to exhaustion, dies, or concedes.</p></div>
+  <div class="faq"><p class="q">Can a fight end in a draw?</p><p class="a">No. One warrior always wins. Fights are decided by knockout (exhaustion/death) or successful concede appeal.</p></div>
+  <div class="faq"><p class="q">Do warriors learn from fights?</p><p class="a">No. Improvements come only from training (queued skill/attribute advancement).</p></div>
+  <div class="faq"><p class="q">How often can I upload?</p><p class="a">As many times as you need during the OPEN phase. Changes are only locked in when the turn RUNS (PROCESSING phase begins). Re-upload to make changes and adjustments until you're satisfied.</p></div>
+
+  <h4>Warriors &amp; Advancement</h4>
+  <div class="faq"><p class="q">Can I edit a warrior after they're created?</p><p class="a">No. Warriors are locked at creation. You can only change equipment and strategies and training queues. Base stats, race, gender, name are permanent.</p></div>
+  <div class="faq"><p class="q">How do I increase a warrior's attributes?</p><p class="a">Train them. Queue STR/DEX/CON/INT/PRE in the training queue. Success is probabilistic and harder as the attribute rises.</p></div>
+  <div class="faq"><p class="q">Can Size be trained?</p><p class="a">No. Size is fixed at creation forever.</p></div>
+  <div class="faq"><p class="q">How fast do warriors improve?</p><p class="a">Depends on their INT and luck. Early on (low skill levels), fast. Late career (high skill levels), slow.</p></div>
+  <div class="faq"><p class="q">Can I reset a warrior's progress?</p><p class="a">No. Only way to start over is let them die and create a new warrior.</p></div>
+
+  <h4>Combat &amp; Matchmaking</h4>
+  <div class="faq"><p class="q">Why does my warrior fight the same opponent repeatedly?</p><p class="a">Matchmaking avoids rematches from the last 3 turns, but not beyond. If your tier is small, repeated matchups are common.</p></div>
+  <div class="faq"><p class="q">Can I choose my opponent in standard matches?</p><p class="a">No. Matchmaking pairs you automatically. Use challenges if you want to select opponents.</p></div>
+  <div class="faq"><p class="q">How much does luck matter?</p><p class="a">Significantly. Luck (1-30, assigned at creation) affects every dice roll. Lucky warriors outperform stats; unlucky underperform.</p></div>
+  <div class="faq"><p class="q">Can I see my warrior's luck?</p><p class="a">No. It's hidden. You'll discover it through your warrior's fight record over time.</p></div>
+  <div class="faq"><p class="q">Do strategy triggers fire reliably?</p><p class="a">Yes. They're deterministic (not random). If trigger condition is met, strategy fires.</p></div>
+
+  <h4>Death &amp; Consequences</h4>
+  <div class="faq"><p class="q">What happens when my warrior dies?</p><p class="a">They're archived. Their slot opens. You must create a replacement.</p></div>
+  <div class="faq"><p class="q">Can dead warriors fight again?</p><p class="a">No. Death is permanent. You must create a new warrior.</p></div>
+  <div class="faq"><p class="q">Can I save a warrior from death?</p><p class="a">Only if they successfully appeal for mercy (PRE-based, automatic). Otherwise, slain warriors are gone.</p></div>
+  <div class="faq"><p class="q">What is a blood challenge?</p><p class="a">Vengeance fight auto-created when your warrior is killed. Available for 3 turns that the killer participates (sitting out doesn't expire the challenge). It's your choice whether to attempt it. Once you win a blood challenge, it's satisfied and removed. You must decide if your remaining warriors are strong enough to win. Not every blood challenge should be pursued.</p></div>
+
+  <h4>Advanced Arenas</h4>
+  <div class="faq"><p class="q">What are the Elite Spire and Soul Spire?</p><p class="a">Advanced arenas for elite warriors and transcended souls. See "Advanced Arenas" guide for details.</p></div>
+  <div class="faq"><p class="q">Can normal warriors join advanced arenas?</p><p class="a">Yes, through promotion (Elite Spire) or transcendence on death (Soul Spire). Details in Advanced Arenas guide.</p></div>
+  <div class="faq"><p class="q">Is there a way to prevent a warrior from going to the advanced arenas?</p><p class="a">No. If they qualify, they will be called. It's an honor and a promotion.</p></div>
+  </div>
+</details>
+
+</main>
+
+<div class="divider"><span></span><div class="diamond"></div><span></span></div>
+
+<footer>
+  <div class="seal">⚔ The Agony Amphitheatre ⚔</div>
+  <p style="max-width:680px;margin:0 auto">
+    The Agony Amphitheatre is brutal. Warriors will fall. Your best-laid strategies will crumble against unexpected matchups. Luck will betray you at crucial moments.<br><br>
+    But there is also glory. The climb from RECRUIT to CHAMPION is a journey. Each warrior tells a story — their victories, their scars, their rivals, their triumphs.<br><br>
+    The newsletter will record their achievements. The standings will show their ranking. Your rivals will respect them.<br><br>
+    <strong>This is Bloodspire. This is the Agony Amphitheatre.</strong><br><br>
+    Now go forth. Build your warriors. Design your strategies. Climb the tiers. Pursue the crown.<br><br>
+    And remember: every fight matters. Every choice echoes through your warrior's career. Make them count.
+  </p>
+  <p style="margin-top:30px;font-size:.9rem;color:var(--ash)">
+    This guide covers the Agony Amphitheatre normal arena as currently implemented. Rules and mechanics are subject to commissioner adjustment. The Gladiatorial Commission reserves the right to modify matchmaking, recognition systems, and turn frequency at any time. For advanced arena mechanics, see "The Advanced Arenas" guide.
+  </p>
+</footer>
+
+<button class="totop" id="totop" aria-label="Back to top">↑</button>
+
+<script>
+  const progress = document.getElementById('progress');
+  const totop = document.getElementById('totop');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+    progress.style.width = scrolled + '%';
+    if (h.scrollTop > 600) totop.classList.add('show'); else totop.classList.remove('show');
+  }, {passive:true});
+  totop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+  const navLinks = document.querySelectorAll('nav.toc a');
+  const parts = document.querySelectorAll('details.part');
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.toggle('active', l.dataset.target === e.target.id));
+      }
+    });
+  }, {rootMargin: '-45% 0px -50% 0px'});
+  parts.forEach(p => spy.observe(p));
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      const id = link.dataset.target;
+      const el = document.getElementById(id);
+      if (el && el.tagName === 'DETAILS') el.open = true;
+    });
+  });
+</script>
+<script data-pplx-inline-edit>
+(function () {
+  if (window === window.top) return;
+
+  const allowedParentOrigins = ["https://www.perplexity.ai","https://perplexity.ai","https://testing.perplexity.ai","https://staging.perplexity.ai","https://*.preview.i.perplexity.ai","http://perplexity.localhost","http://localhost:1420","http://127.0.0.1:1420","http://localhost:3000","http://127.0.0.1:3000","http://localhost:5173","http://127.0.0.1:5173"];
+  const MAX_FONT_BYTES = 500 * 1024;
+  const MAX_TOTAL_FONT_BYTES = 2 * 1024 * 1024;
+  let scrollForwarding = false;
+  let scrollRaf = 0;
+  let trustedTopOrigin = null;
+
+  // Allow entries like "https://*.preview.i.perplexity.ai" — the wildcard
+  // matches a single DNS label (no dots), so "https://*.foo" cannot stretch
+  // across multiple labels.
+  function matchesAllowedOrigin(origin) {
+    if (!origin) return false;
+    for (const entry of allowedParentOrigins) {
+      if (!entry.includes("*")) {
+        if (entry === origin) return true;
+        continue;
+      }
+      const pattern = new RegExp(
+        "^" +
+          entry.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[^.]+") +
+          "$",
+      );
+      if (pattern.test(origin)) return true;
+    }
+    return false;
+  }
+
+  // Trust decision: when the sender is same-origin-visible (event.origin is a
+  // real origin like https://www.perplexity.ai) we trust event.origin directly.
+  // When event.origin is "null" (opaque broker srcdoc), we fall back to the
+  // broker's stamped `parentOrigin` to identify the top window. The fallback
+  // is claim-only — we rely on the browser's native `targetOrigin` enforcement
+  // on the response path (see postToTrustedTop) to ensure replies can't be
+  // delivered to anyone but the actual top window of that claimed origin.
+  function getTrustedParentOrigin(event) {
+    const forwardedParentOrigin =
+      typeof event.data.parentOrigin === "string" ? event.data.parentOrigin : null;
+    const parentOrigin = event.origin === "null" ? forwardedParentOrigin : event.origin;
+    return matchesAllowedOrigin(parentOrigin) ? parentOrigin : null;
+  }
+
+  // All responses go to window.top with targetOrigin = the allowlisted origin.
+  // An attacker that iframes us inside their own null-origin broker can claim
+  // any parentOrigin they like, but the browser will drop the reply whenever
+  // the real top's origin doesn't match — so the screenshot never leaves.
+  function postToTrustedTop(message) {
+    if (!trustedTopOrigin) return;
+    try {
+      window.top.postMessage(message, trustedTopOrigin);
+    } catch (_error) {}
+  }
+
+  function inlineAll(original, clone) {
+    if (original.nodeType !== 1 || clone.nodeType !== 1) return;
+
+    try {
+      const computedStyle = getComputedStyle(original);
+      // cssText on a computed style is the serialized declaration in modern
+      // Chromium/Safari — a single read beats enumerating ~400 longhand
+      // properties. Firefox returns "" here, so we fall back on empty.
+      const serialized = computedStyle.cssText;
+      if (serialized) {
+        clone.style.cssText = serialized;
+      } else {
+        const parts = new Array(computedStyle.length);
+        for (let index = 0; index < computedStyle.length; index += 1) {
+          const property = computedStyle[index];
+          parts[index] = `${property}:${computedStyle.getPropertyValue(property)};`;
+        }
+        clone.style.cssText = parts.join("");
+      }
+    } catch (_error) {}
+
+    const originalChildren = original.children;
+    const clonedChildren = clone.children;
+    for (
+      let index = 0;
+      index < originalChildren.length && index < clonedChildren.length;
+      index += 1
+    ) {
+      inlineAll(originalChildren[index], clonedChildren[index]);
+    }
+  }
+
+  function extractFontUrl(srcValue) {
+    const matches = [
+      ...srcValue.matchAll(
+        /url\(["']?([^"')]+)["']?\)(?:\s*format\(["']?([^"')]+)["']?\))?/gi,
+      ),
+    ];
+    if (matches.length === 0) return null;
+    const woff2 = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff2"));
+    if (woff2) return woff2[1];
+    const woff = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff"));
+    if (woff) return woff[1];
+    return matches[0][1];
+  }
+
+  // Cache resolved font URL -> data URI across captures. Fonts on a page
+  // essentially never change, and a batch run emits multiple captures back to
+  // back — without this we'd refetch + re-base64 every time.
+  const fontDataUriCache = new Map();
+  const SRC_DECLARATION_RE = /src\s*:\s*[^;}]+/i;
+
+  async function fetchAsDataUri(url) {
+    if (fontDataUriCache.has(url)) return fontDataUriCache.get(url);
+    let dataUri = null;
+    try {
+      const response = await fetch(url, { mode: "cors", credentials: "omit" });
+      if (response.ok) {
+        const blob = await response.blob();
+        if (blob.size <= MAX_FONT_BYTES) {
+          dataUri = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () =>
+              resolve(typeof reader.result === "string" ? reader.result : null);
+            reader.onerror = () => resolve(null);
+            reader.readAsDataURL(blob);
+          });
+        }
+      }
+    } catch (_error) {
+      dataUri = null;
+    }
+    fontDataUriCache.set(url, dataUri);
+    return dataUri;
+  }
+
+  function collectFontFaceRuleTexts() {
+    const rules = [];
+    for (const sheet of document.styleSheets) {
+      let cssRules;
+      try {
+        cssRules = sheet.cssRules;
+      } catch (_error) {
+        continue;
+      }
+      if (!cssRules) continue;
+      for (const rule of cssRules) {
+        const cssText = rule.cssText || "";
+        if (cssText.startsWith("@font-face")) rules.push(cssText);
+      }
+    }
+    return rules;
+  }
+
+  async function buildInlinedFontCss() {
+    const ruleTexts = collectFontFaceRuleTexts();
+    if (ruleTexts.length === 0) return null;
+
+    const resolved = ruleTexts.map((cssText) => {
+      if (!SRC_DECLARATION_RE.test(cssText)) return null;
+      const srcMatch = cssText.match(/src\s*:\s*([^;}]+)[;}]/i);
+      if (!srcMatch) return null;
+      const url = extractFontUrl(srcMatch[1]);
+      if (!url) return null;
+      try {
+        return { cssText, url: new URL(url, document.baseURI).href };
+      } catch (_error) {
+        return null;
+      }
+    });
+
+    const dataUris = await Promise.all(
+      resolved.map((entry) => (entry ? fetchAsDataUri(entry.url) : Promise.resolve(null))),
+    );
+
+    const inlined = [];
+    let totalBytes = 0;
+    for (let index = 0; index < resolved.length; index += 1) {
+      const entry = resolved[index];
+      const dataUri = dataUris[index];
+      if (!entry || !dataUri) continue;
+      const approxBytes = dataUri.length * 0.75;
+      if (totalBytes + approxBytes > MAX_TOTAL_FONT_BYTES) break;
+      totalBytes += approxBytes;
+      inlined.push(entry.cssText.replace(SRC_DECLARATION_RE, `src: url("${dataUri}")`));
+    }
+    return inlined.length > 0 ? inlined.join("\n") : null;
+  }
+
+  function stripExternal(clone) {
+    const images = clone.querySelectorAll("img");
+    for (let index = 0; index < images.length; index += 1) {
+      const src = images[index].getAttribute("src");
+      if (src && !src.startsWith("data:")) images[index].removeAttribute("src");
+    }
+
+    const elements = clone.querySelectorAll("*");
+    for (let index = 0; index < elements.length; index += 1) {
+      const style = elements[index].style.cssText;
+      if (style && style.includes("url(")) {
+        elements[index].style.cssText = style.replace(
+          /url\(["']?(?!data:)[^)"']*["']?\)/gi,
+          "none",
+        );
+      }
+    }
+  }
+
+  function emitScroll() {
+    scrollRaf = 0;
+    if (!scrollForwarding) return;
+    postToTrustedTop({
+      type: "INLINE_EDIT_SCROLL",
+      scrollX: window.scrollX,
+      scrollY: window.scrollY,
+    });
+  }
+
+  window.addEventListener(
+    "scroll",
+    function () {
+      if (!scrollForwarding || scrollRaf) return;
+      scrollRaf = requestAnimationFrame(emitScroll);
+    },
+    { passive: true, capture: true },
+  );
+
+  async function handleCaptureRequest(event) {
+    const requestId = event.data.requestId;
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    function postResult(dataUrl) {
+      postToTrustedTop({
+        type: "INLINE_EDIT_SCREENSHOT_RESULT",
+        requestId,
+        dataUrl,
+        scrollX,
+        scrollY,
+      });
+    }
+
+    try {
+      // Wait for any pending web fonts to resolve so both inline metrics and
+      // the @font-face inlining below see the same loaded faces.
+      if (document.fonts && document.fonts.ready) {
+        try {
+          await document.fonts.ready;
+        } catch (_error) {}
+      }
+
+      const clone = document.documentElement.cloneNode(true);
+      inlineAll(document.documentElement, clone);
+
+      const removedNodes = clone.querySelectorAll("script,link[rel=\"stylesheet\"],style");
+      for (let index = 0; index < removedNodes.length; index += 1) {
+        removedNodes[index].remove();
+      }
+
+      stripExternal(clone);
+
+      // Re-embed web fonts as data-URI @font-face rules so the SVG rasterizer
+      // can resolve them — external font URLs aren't fetched during
+      // foreignObject rendering, which would otherwise force a fallback face
+      // and change text metrics.
+      const inlinedFontCss = await buildInlinedFontCss();
+      if (inlinedFontCss) {
+        const styleEl = document.createElement("style");
+        styleEl.textContent = inlinedFontCss;
+        const head = clone.querySelector("head");
+        if (head) head.appendChild(styleEl);
+        else clone.insertBefore(styleEl, clone.firstChild);
+      }
+
+      const html = new XMLSerializer().serializeToString(clone);
+      const svg =
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
+        '<foreignObject width="100%" height="100%">' +
+        `<div xmlns="http://www.w3.org/1999/xhtml" style="width:${width}px;height:${height}px;overflow:hidden">` +
+        `<div style="position:relative;left:-${scrollX}px;top:-${scrollY}px">` +
+        html +
+        "</div></div></foreignObject></svg>";
+      const svgUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      const image = new Image();
+      image.onload = function () {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(image, 0, 0);
+        postResult(canvas.toDataURL("image/png"));
+      };
+      image.onerror = function () {
+        postResult(null);
+      };
+      image.src = svgUrl;
+    } catch (_error) {
+      postResult(null);
+    }
+  }
+
+  window.addEventListener("message", function (event) {
+    if (!event.data) return;
+    // Only accept messages from the direct parent frame. Blocks sibling /
+    // unrelated-window postMessage senders that could otherwise reach us.
+    if (event.source !== window.parent) return;
+
+    const trustedParentOrigin = getTrustedParentOrigin(event);
+    if (!trustedParentOrigin) return;
+    trustedTopOrigin = trustedParentOrigin;
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_START") {
+      scrollForwarding = true;
+      emitScroll();
+      return;
+    }
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_STOP") {
+      scrollForwarding = false;
+      if (scrollRaf) cancelAnimationFrame(scrollRaf);
+      scrollRaf = 0;
+      return;
+    }
+
+    if (event.data.type !== "INLINE_EDIT_CAPTURE_REQUEST") return;
+
+    handleCaptureRequest(event);
+  });
+})();
+
+
+</script></body>
+</html>
