@@ -91,8 +91,11 @@
                 <h3>Announcements</h3>
                 <div class="content-box">
                     <p style="text-align: center; margin: 15px 0;">
-                        <a href="#" id="viewAugust7Announcement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            🏛️ AUGUST 7, 2026 - TURNS PAUSED UNTIL AUG 15 & MESSAGE BOARD
+                        <a href="#" id="viewSeptember5Announcement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            🏛️ SEPTEMBER 5, 2026 - CLIENT VERSION 3.5 & ENHANCEMENT UPDATE
+                        </a>
+                        <a href="#" id="viewAugust7Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
+                            AUGUST 7, 2026 - TURNS PAUSED UNTIL AUG 15 & MESSAGE BOARD
                         </a>
                         <a href="#" id="viewBoardAnnouncement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
                             AUGUST 5, 2026 - DEDICATED MESSAGE BOARD NOW LIVE!
@@ -131,6 +134,45 @@
                 </div>
             </section>
         </main>
+    </div>
+
+    <!-- September 5 Client Version 3.5 Modal (Large) -->
+    <div id="september5AnnouncementModal" class="modal-overlay">
+        <div class="modal-content modal-large">
+            <h2>CLIENT VERSION 3.5 & ENHANCEMENT UPDATE - SEPTEMBER 5, 2026</h2>
+            <div class="modal-scroll-body">
+                <p><strong>Honored Managers of Bloodspire Arena,</strong></p>
+                <p>A new client version is now available for download! Version 3.5 arrives with a massive slate of improvements, visual overhauls, and arena balance adjustments compiled over the past month.</p>
+
+                <h3>Client Version 3.5 Highlights</h3>
+                <ul>
+                    <li><strong>Dark Mode:</strong> A sleek dark theme option is now integrated into the client UI.</li>
+                    <li><strong>Advanced Bloodspire Arena Tabs:</strong> New specialized tabs are available to help navigate advanced arena features.</li>
+                    <li><strong>Updated Newsletter Formats:</strong> Includes new dropdown options tailored for advanced arenas.</li>
+                    <li><strong>Resizable Fight Logs:</strong> Fight log windows can now be dynamically resized for easier reading.</li>
+                    <li><strong>In-Client Announcement & Version Popups:</strong> The client will now display a popup notification whenever an important announcement or a new client version is released. When an update is detected, a direct download link will be provided within the popup window.</li>
+                    <li>...and much more!</li>
+                </ul>
+
+                <h3>Arena Balance & Engine Adjustments</h3>
+                <ul>
+                    <li><strong>Fight Narrative Overhaul:</strong> Revised and polished numerous fight narrative lines that were awkward or unnatural.</li>
+                    <li><strong>Recognition Rankings:</strong> Updated recognition rankings so that progression aligns more naturally with warrior experience.</li>
+                    <li><strong>Halfling Rebalance:</strong> Tweaked Halfling racial statistics to bring them up to a competitive level in combat.</li>
+                    <li><strong>Newsletter Fight Priority:</strong> Formatted fight listings in the newsletter so that bouts featuring more experienced warriors appear first in the fights section.</li>
+                    <li><strong>Elite Spire & Soul Spire Sections:</strong> Added new headers and dedicated sections in the newsletter for promotions to the Elite Spire, as well as a section honoring those unfortunate souls slain in battle who enter the Soul Spire.</li>
+                </ul>
+
+                <p><em>Note on Spire Promotions: Automated promotions to the Elite Spire and Soul Spire are currently inactive. These automated promotions will officially be enabled after I return from New York the week of September 14th.</em></p>
+
+                <p>To grab the latest update, head over to the <a href="download.html">Download Section</a>. Numerous other minor enhancements and fixes have been added throughout the month as well. Hope you all enjoy the new update, and as always, please let me know if you run into any issues!</p>
+
+                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
+                    - ILNEVAL -
+                </p>
+            </div>
+            <button class="close-modal-btn" id="closeSeptember5Modal">Enter The Arena</button>
+        </div>
     </div>
 
     <!-- August 7 Turns Paused & Message Board Modal (Large) -->
@@ -532,7 +574,7 @@
                 <p>Many other updates, fixes and enhancements as well!</p>
                 
                 <p>I also want to add that I have created a newsletter endpoint as well. In the event that you do not get a newsletter on a download (which sometimes happens if you do not download every turn), you should always receive the fight results, but may only receive the most current newsletter. You can now download any archived newsletter and manually add it to the newsletter directory in your saves folder.</p>
-                
+
                 <p>You can access the newsletters at the following link:<br>
                 <a href="http://bloodspirearena.dpdns.org/newsletter" target="_blank">http://bloodspirearena.dpdns.org/newsletter</a><br>
                 When you access the newsletters from this link, you will have a download button available for any newsletter you need.</p>
@@ -574,6 +616,10 @@
             };
 
             // Modals
+            const september5Modal = document.getElementById('september5AnnouncementModal');
+            const closeSeptember5 = document.getElementById('closeSeptember5Modal');
+            const viewSeptember5 = document.getElementById('viewSeptember5Announcement');
+
             const august7Modal = document.getElementById('august7AnnouncementModal');
             const closeAugust7 = document.getElementById('closeAugust7Modal');
             const viewAugust7 = document.getElementById('viewAugust7Announcement');
@@ -622,24 +668,27 @@
             const closeOriginal = document.getElementById('closeModal');
             const viewOriginal = document.getElementById('viewAnnouncement');
 
-            // Show latest announcement (August 7) automatically if not seen
-            if (!localStorage.getItem('bloodspire_update_20260807')) {
-                august7Modal.style.display = 'block';
+            // Show latest announcement (September 5) automatically if not seen
+            if (!localStorage.getItem('bloodspire_update_20260905')) {
+                september5Modal.style.display = 'block';
             }
 
-            // Close August 7 modal
-            closeAugust7.onclick = () => { 
-                august7Modal.style.display = 'none'; 
-                localStorage.setItem('bloodspire_update_20260807', 'true'); 
+            // Close September 5 modal
+            closeSeptember5.onclick = () => { 
+                september5Modal.style.display = 'none'; 
+                localStorage.setItem('bloodspire_update_20260905', 'true'); 
             };
 
-            // Open August 7 modal via link
-            viewAugust7.onclick = function(e) {
+            // Open September 5 modal via link
+            viewSeptember5.onclick = function(e) {
                 e.preventDefault();
-                august7Modal.style.display = 'block';
+                september5Modal.style.display = 'block';
             };
 
             // Previous Modals
+            closeAugust7.onclick = () => { august7Modal.style.display = 'none'; };
+            viewAugust7.onclick = function(e) { e.preventDefault(); august7Modal.style.display = 'block'; };
+
             closeBoard.onclick = () => { boardModal.style.display = 'none'; };
             viewBoard.onclick = function(e) { e.preventDefault(); boardModal.style.display = 'block'; };
 
