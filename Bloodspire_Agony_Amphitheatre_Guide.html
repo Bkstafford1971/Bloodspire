@@ -856,6 +856,38 @@
     <li><strong>AP:</strong> Armor-piercing (extra damage vs Scale, Chain, Half-Plate, Full Plate armor)</li>
   </ul>
 
+  <h4>Strength Carry Capacity</h4>
+  <p>This table is shared between weapons and armor. Two-handed weapons gain <strong>+1.0 lb</strong> to effective carry capacity.</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Strength</th><th>Carry Capacity (lbs)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>3</td><td>0.0</td></tr>
+        <tr><td>4</td><td>1.0</td></tr>
+        <tr><td>5</td><td>1.5</td></tr>
+        <tr><td>6</td><td>1.8</td></tr>
+        <tr><td>7</td><td>2.0</td></tr>
+        <tr><td>8</td><td>2.4</td></tr>
+        <tr><td>9</td><td>2.7</td></tr>
+        <tr><td>10</td><td>3.1</td></tr>
+        <tr><td>11</td><td>3.2</td></tr>
+        <tr><td>12</td><td>3.9</td></tr>
+        <tr><td>13</td><td>4.3</td></tr>
+        <tr><td>14</td><td>4.7</td></tr>
+        <tr><td>15</td><td>5.7</td></tr>
+        <tr><td>16</td><td>6.4</td></tr>
+        <tr><td>17+</td><td>7.5</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">
+    <strong>Under-Strength Penalty:</strong> <code>penalty_fraction = min(1.0, (weight − capacity) / capacity)</code><br>
+    <strong>Half-Elf:</strong> Gets +1 effective STR for weapon weight calculation.<br>
+    <strong>Dwarf:</strong> Can equip armor one tier above their STR limit without penalty.
+  </div>
+
   <h4>Swords &amp; Knives</h4>
   <div class="table-wrap">
   <table>
