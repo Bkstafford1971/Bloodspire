@@ -17,7 +17,15 @@
         .arena-header { text-align: center; margin-top: 2px; margin-bottom: 8px; }
         .arena-header h1 { font-family: 'Metal Mania', cursive; font-size: 70px; margin: 0; letter-spacing: 3px; text-transform: uppercase; background: linear-gradient(to bottom, #3a0000 0%, #8b1a1a 40%, #a31616 60%, #2a0000 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.8)); }
         .arena-header h2 { font-family: 'Cinzel', serif; font-size: 1.35rem; color: #e0e0e0; margin: 10px 0; margin-bottom: 5px; letter-spacing: 1px; }
-        .status-yellow { color: #ffcc00; font-style: italic; font-size: 1.1rem; margin-top: 5px !important; margin-bottom: 2px !important; }
+
+        /* === Updated Turn Schedule Alert Banner === */
+        .status-alert { display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 18px auto 0; padding: 14px 22px; max-width: 680px; background: linear-gradient(180deg, rgba(163,22,22,0.25) 0%, rgba(42,0,0,0.35) 100%); border: 2px solid #a31616; border-left: 6px solid #ffcc00; border-radius: 6px; box-shadow: 0 0 18px rgba(163,22,22,0.45), inset 0 0 20px rgba(0,0,0,0.5); color: #ffe066; font-style: normal; animation: schedule-glow 3s ease-in-out infinite; }
+        .status-badge { font-family: 'Cinzel', serif; font-weight: 700; letter-spacing: 2px; font-size: 0.95rem; color: #ffcc00; text-shadow: 0 0 8px rgba(255,204,0,0.7); }
+        .status-body { font-family: 'Open Sans', sans-serif; font-size: 0.92rem; line-height: 1.45; color: #f0d878; text-align: center; }
+        .status-body strong { color: #fff2cc; }
+        @keyframes schedule-glow { 0%, 100% { border-left-color: #ffcc00; box-shadow: 0 0 18px rgba(163,22,22,0.45), inset 0 0 20px rgba(0,0,0,0.5); } 50% { border-left-color: #fff2cc; box-shadow: 0 0 30px rgba(255,204,0,0.55), inset 0 0 20px rgba(0,0,0,0.5); } }
+        @media (prefers-reduced-motion: reduce) { .status-alert { animation: none; } }
+
         #introduction { text-align: center; margin-bottom: 35px; }
         .intro-text { font-style: italic; line-height: 1.0; font-size: .9rem; color: #b0b0b0; max-width: 90%; margin: 0 auto; }
         .intro-text p:first-of-type::first-letter { font-family: 'Cinzel', serif; font-size: 3.5rem; float: left; margin-right: 10px; line-height: 0.8; color: #a31616; font-weight: bold; }
@@ -49,6 +57,17 @@
         
         .content-box { background: #080808; font-style: italic; line-height: 1.0; font-size: .85rem; margin-bottom: 30px; padding: 10px 0; }
         .notification-badge { color: #ffcc00; background: #a31616; padding: 2px 6px; border-radius: 50%; font-size: 0.7rem; margin-left: 4px; }
+
+        /* === Announcement link hierarchy === */
+        /* Older announcements are quieter so current items stand out */
+        .content-box a[id$="Announcement"] { color: #8a7a5c !important; opacity: 0.8; }
+        /* The current/top items keep full weight */
+        #viewSeptember5Announcement { color: #d4af37 !important; opacity: 1; }
+        #viewAugust7Announcement,
+        #viewBoardAnnouncement   { color: #b38b5d !important; opacity: 1; }
+        /* NEW tag for the latest announcement */
+        .new-tag { background: #a31616; color: #fff2cc; font-family: 'Cinzel', serif; font-size: 0.65rem; padding: 2px 6px; border-radius: 3px; margin-right: 6px; vertical-align: middle; letter-spacing: 1px; }
+
         @media (max-width: 1100px) { .page-wrapper { flex-direction: column; } .sidebar, .main-content { flex: 0 0 100%; width: 100%; padding: 20px; } }
     </style>
 </head>
@@ -76,7 +95,13 @@
             <section class="arena-header">
                 <h1>BLOODSPIRE ARENA</h1>
                 <h2>A Game of Gladiatorial Combat</h2>
-                <p class="status-yellow"><small>UPDATED TURN SCHEDULE: The Agony Amphitheater Arena, Tuesday and Saturday at 9:00pm cst.  Elite Spire and Soul Spire Arenas, Wednesday and Sunday at 9:00pm cst.</small></p>
+                <div class="status-alert" role="status" aria-live="polite">
+                    <span class="status-badge">⚔ UPDATED TURN SCHEDULE ⚔</span>
+                    <span class="status-body">
+                        <strong>Agony Amphitheater Arena:</strong> Tuesday &amp; Saturday at 9:00pm CST.<br>
+                        <strong>Elite Spire &amp; Soul Spire Arenas:</strong> Wednesday &amp; Sunday at 9:00pm CST.
+                    </span>
+                </div>
                 <!--<p><small>Submit your orders by Friday at 9:00 PM cst to ensure your teams fight</small></p> -->
             </section>
 
@@ -92,7 +117,7 @@
                 <div class="content-box">
                     <p style="text-align: center; margin: 15px 0;">
                         <a href="#" id="viewSeptember5Announcement" style="color: #d4af37; font-size: 1.15rem; font-weight: bold; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
-                            🏛️ SEPTEMBER 5, 2026 - CLIENT VERSION 3.5 & ENHANCEMENT UPDATE
+                            <span class="new-tag">NEW</span> 🏛️ SEPTEMBER 5, 2026 - CLIENT VERSION 3.5 & ENHANCEMENT UPDATE
                         </a>
                         <a href="#" id="viewAugust7Announcement" style="color: #b38b5d; font-size: 1rem; text-decoration: underline; font-family: 'Cinzel', serif; display: block; margin-bottom: 12px;">
                             AUGUST 7, 2026 - TURNS PAUSED UNTIL AUG 15 & MESSAGE BOARD
@@ -320,408 +345,4 @@
                 <ul>
                     <li><strong>Weapon Refinement:</strong> The Francisca weapon has been renamed to "Hand Axe" for greater historical clarity. Existing training slots and skills have been automatically migrated to reflect this change.</li>
                     <li><strong>Game Data Synchronization:</strong> We have implemented an improved auto-distribution system. Your client will now automatically fetch the latest game configuration data upon startup, ensuring all weapon names and game settings are perfectly synced with the server.</li>
-                    <li><strong>Enhanced Stability:</strong> We have updated our file handling processes to use atomic writes. This change resolves previous file-locking conflicts, allowing you to manage your teams even while the server is active without encountering permission errors.</li>
-                    <li><strong>Newsletter Formatting:</strong> The newsletter format has been updated to enhance the overall presentation and readability.</li>
-                    <li><strong>Challenge Tab Improvements:</strong> The column headers on the challenge tab are now sortable. Clicking on any column header will sort the column in ascending order from A-Z and 0-9. We have also added a recognition column to this tab, and the warrior in focus recognition score is now displayed within the warriors challenge range section.</li>
-                </ul>
-
-                <h3>Bug Fixes</h3>
-                <ul>
-                    <li><strong>Goblin Scavenger Ability:</strong> Fixed a loop issue where a fight ending on a scavenge hit would incorrectly generate a second fight ending block.</li>
-                </ul>
-                
-                <p>Please update your client to ensure these improvements are active. As always, thank you for your feedback and continued support of the arena.</p>
-
-                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
-                    - ILNEVAL -
-                </p>
-            </div>
-            <button class="close-modal-btn" id="closeJuly14Modal">Dismiss</button>
-        </div>
-    </div>
-
-    <!-- July 7 Modal -->
-    <div id="july7AnnouncementModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2>ARENA UPDATE: BLOOD CHALLENGE SYSTEM OVERHAUL - JULY 7, 2026</h2>
-            <div class="modal-scroll-body">
-                <p><strong>Honored Managers,</strong></p>
-                <p>I have updated the Blood Challenge system to better reflect the risks and rewards of challenging opponents in the arena. These changes are designed to encourage fair competition, reward underdog spirit, and ensure that those who repeatedly use their status to crush weaker opponents face lasting consequences.</p>
-                
-                <h3>The Crowd is Watching</h3>
-                <p>The audience in the arena is now much more reactive during Blood Challenges. Their support for an underdog is not just flavor text; it is now mechanically aligned with the fight’s outcome. You will notice the crowd’s influence more clearly in fight logs, as the narrative will accurately reflect whether the crowd helped shift the momentum of the battle.</p>
-                <p>Crowd influence goes well beyond simple support. During a challenge, spectators may begin throwing objects at the "bully" to provide distraction penalties to their attack, parry, dodge, and initiative rolls. While these distractions are limited and do not cause physical damage, they can cause a warrior to swing and miss on an attack or misread a parry attempt.</p>
-
-                <h3>Support for the Underdog</h3>
-                <p>Challengers who take on a significantly stronger opponent (a Blood Challenge in the Underdog zone) now have a much better chance of survival. The crowd is firmly behind these brave souls, providing a meaningful bonus to their chance of securing mercy before a fatal blow is struck. This ensures that a desperate underdog has a realistic path to survive and fight another day, even if they aren't able to claim a direct victory.</p>
-
-                <h3>Consequences for Excessive Elbow Dropping</h3>
-                <p>I have refined how the arena treats established warriors who seek out weak opponents. Previously, the penalties were easily gamed, but now the consequences are persistent:</p>
-                <ul>
-                    <li><strong>Public Shaming:</strong> New flavor text has been added to the newsletter, explicitly calling out the egregious Elbow Drop offenders (Bullies) to the public.</li>
-                    <li><strong>Popularity Hits:</strong> Bullies will suffer a significant, long-term drop in popularity. This penalty follows them into every future fight, making it harder for them to request mercy from the crowd when they find themselves in trouble.</li>
-                    <li><strong>Reputation Stability:</strong> Recognition will no longer be the primary target for bullying penalties, preventing top-tier warriors from artificially "tanking" their tier to secure easier matchups.</li>
-                    <li><strong>Champion-Specific Penalties:</strong> Being the champion brings greater scrutiny. Champion "elbow drop" Blood Challenges are treated with extra harshness, and you will gain a permanent bullying mark for each offense. This is where the potential 65% chance of losing a title due to elbow dropping comes into play. While having your title stripped is significant, it does not mean you are unable to regain it later.</li>
-                    <li><strong>Standard Challenges:</strong> For standard, non-champion Blood Challenges, the crowd interference is still prominent, and the public shaming in the newsletter still occurs. However, the bully tally is not counted against you, though you will still lose popularity points for repeatedly elbow dropping, which could affect your ability to get mercy in future fights.</li>
-                </ul>
-
-                <p>These adjustments ensure that Blood Challenges are a strategic risk-versus-reward mechanic rather than a tool for casual dominance. I want players to play the game the way they want, but just like in life, there should be a consequence to every action and rewards for underdogs. Besides, everyone loves an underdog story, right? This is in no way meant to call out anyone’s preferred style of play. We need villians and hero types in every game. I think it just adds an extra element to the game to try to make it more immersive and fun. Good luck to all challengers in the arena.</p>
-
-                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
-                    - ILNEVAL -
-                </p>
-            </div>
-            <button class="close-modal-btn" id="closeJuly7Modal">Dismiss</button>
-        </div>
-    </div>
-
-    <!-- Latest Modal (June 28) -->
-    <div id="latestAnnouncementModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2>BALANCE MODIFICATIONS & PROVING GROUNDS - JUNE 28, 2026</h2>
-            <div class="modal-scroll-body">
-                <p><strong>Honored Managers,</strong></p>
-                <p>New client version 3.0.0 is now available. Please head over to the downloads section to update your version. Below are some of the enhancements and fixes included in the new version</p>
-                
-                <h3>Racial Balancing</h3>
-                <p>Six races received targeted balance corrections based on a comprehensive win-rate audit. Dwarf was significantly overperforming; Halfling and Goblin were significantly underperforming.</p>
-
-                <h3>Weapon Adjustments</h3>
-                <p>Adjustments made to a few weapons. Longsword and Scimitar were given a slight base damage bump to be consistent with other weapons of the same weight. Large weapons in the 6.0 - 7.0 weight range were bumped to 3.5 APM average. These include the Great Sword, Great Axe and Battle Flail to name a few.</p>
-
-                <h3>Armor Dexterity Penalties</h3>
-                <p>Armor dexterity penalties rebalanced. Wearing armor that is too heavy for your build is penalized more naturally against Init, Dodge and Parry rolls. These will also affect your endurance scores more. Over armoring will have a drawback now.</p>
-
-                <h3>New Features</h3>
-                <ul>
-                    <li><strong>Proving Grounds tab:</strong> This is a managers ledger for important stats to track. This will track a managers record versus other managers, what the cumulative record for each race is, what the record for race vs race is, and a weapon performance chart that tracks the effectiveness of each weapon and what race and warrior wields them the best.</li>
-                    <li><strong>The Crypts:</strong> Renamed the Archives tab to The Crypts to be more immersive with the game theme. No changes were made to the tab contents here.</li>
-                    <li><strong>Challenge Mode Strategy Option:</strong> This will allow a warrior to have a completely separate strategy loadout for challenges if they choose. No longer just a single trigger option, you can set up a completely new strategy for a challenge to a warrior. If the challenge is successful and the Challenge Mode option is selected, then you will use that strategy for the fight. If the challenge is unsuccessful, your gladiator will default to the standard strategy. If the checkbox is selected, but a challenge is not made, the standard strategy will be used. This new "alternate" strategy will only be used if you initiate a successful challenge or Blood challenge and have the option selected.</li>
-                    <li><strong>Fight Headers:</strong> Modified the fight headers to increase the font size to make the matchup names stand out a little more, and added the current popularity score into the warrior description.</li>
-                </ul>
-
-                <h3>Minor Bugs and Fixes</h3>
-                <ul>
-                    <li><strong>Tab Focus:</strong> Fixed tab focus issues. Now when you switch warriors, you will stay on the current tab you were on. For example, if you are on the Fights tab, and switch to a new warrior, you will be taken to the fights tab for the warrior you switched to.</li>
-                    <li><strong>Activity Level:</strong> Fixed an Activity level bug where you were not allowed to set an activity level of 0.</li>
-                    <li><strong>Ranking Tiers:</strong> Updated the ranking tiers and removed the 5 fight requirement needed to leave the recruit tier. Now recruits are set to 10 recognition or less. Along with this, updated the challenge range to be the current tier that your warrior is in and one tier above. Hoping this will balance the random matchups more.</li>
-                    <li><strong>Champion Challenges:</strong> Champion can be challenged only by warriors in the top 2 active tiers, or by anyone on a Blood Challenge.</li>
-                </ul>
-
-                <h3>Coming Soon</h3>
-                <p>New peasant names. Please submit your peasant names that you want. Remember, as a thank you from me, I am allowing the playtesters to rename the peasants, so each of you will get at least 1 peasant to rename.</p>
-
-                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
-                    - ILNEVAL -
-                </p>
-            </div>
-            <button class="close-modal-btn" id="closeLatestModal">Dismiss</button>
-        </div>
-    </div>
-
-    <!-- Previous Modals remain here -->
-    <div id="june10AnnouncementModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2>CLIENT V2.8 & ARCHIVE UPDATES - JUNE 10, 2026</h2>
-            <div class="modal-scroll-body">
-                <p><strong>Honored Managers,</strong></p>
-                
-                <p>Client version 2.8 is available. This version adds in a templates option. Any strategy loadout can now be made into a template and can then be imported at any time into any warrior to speed up the strategy process. This load out does include an option to include the equipment on the import, but can be unselected if you just want the strategy only.</p>
-                
-                <p>Also, I updated the Archive tab to have each warrior be expandable. Now you will see the Deceased warrior name, race/gender and final record in a list format. Select the warrior to expand and have the warrior view with fight history. As more warriors die I wanted to make this less cluttered.</p>
-                
-                <p>There are a couple of other small aesthetic changes I made for visualizations. Most of which you will not even notice.</p>
-                
-                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
-                    - ILNEVAL -
-                </p>
-            </div>
-            <button class="close-modal-btn" id="closeJune10Modal">Dismiss</button>
-        </div>
-    </div>
-
-    <div id="june5AnnouncementModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2>STATE OF THE ARENA & UPDATES - JUNE 5, 2026</h2>
-            <div class="modal-scroll-body">
-                <p><strong>Honored Managers,</strong></p>
-                
-                <p style="color: #a31616; font-weight: bold; border: 1px solid #8b1a1a; padding: 10px; background: rgba(139, 26, 26, 0.05); text-align: center;">
-                    ⚠️ ATTENTION: You will need to download and install client version 2.7.4 before downloading the next turn!
-                </p>
-
-                <p>The first 4 turns seem to have run fairly smoothly. There have been some minor issues along the way that I have been working on addressing. The most concerning has been the corruption of the files for a couple of Bloodied Entrails teams. I believe that I have that cleaned up and I think it was a version issue that popped up. Along with that, I have addressed a few other minor issues as well as adding a few enhancements.</p>
-                
-                <h3>Resolved Issues & Logic Tweaks</h3>
-                <ul>
-                    <li><strong>Trigger Positioning & Logic:</strong> Fixed an issue where if a warrior went from medium damage to heavy damage, but only had a medium damage trigger, it was defaulting back to their always strategy. Now, the logic will read it as medium or heavier and stay on that trigger if there is not a Heavy damage trigger set. Also, this is a good time to remind you that trigger positioning is very important in how they are used.</li>
-                    <li><strong>Tab Navigation Memory:</strong> Resolved a problem where if you had multiple replacements on a turn and switched between tabs while working with a replacement before saving it, you would lose all the changes to that replacement. Now, you can go as far as to log off and come back later and your previous changes are remembered.</li>
-                    <li><strong>Turn Challenge Clears:</strong> Corrected an oversight where we were not clearing challenges after each turn. Teams or managers on "auto-pilot" were issuing the same challenges each turn. This is remedied with a simple challenge removal after the turn is processed.</li>
-                </ul>
-
-                <h3>New Enhancements</h3>
-                <ul>
-                    <li><strong>Re-download Newsletter:</strong> Added a Re-download newsletter feature in the Actions menu. If you fail to receive a newsletter, you can simply use that feature and it will download the latest newsletter from the server (effective after turn 5 runs).</li>
-                    <li><strong>Blood Challenge Windows:</strong> Modified the Blood Challenge logic. Now, the 3 turn BC window will last even if a manager tries to sit a team out. The 3 turns are counted when the killer fights. No more trying to avoid retribution; the longer you sit out, the more powerful the opponent gets.</li>
-                    <li><strong>Race Traits & Combat Flavor:</strong> Added a few more individual race special traits. We have also modified some narrative lines to be more grammatically correct, specifically around martial combat. If you kick an opponent, it properly registers the "hit" line as a kick instead of an open hand attack or a generic line.</li>
-                    <li><strong>Claw Attacks:</strong> Added new flavor around claw attacks from Lizardfolk and Tabaxi for Martial Combat. These made sense due to the nature of the race.</li>
-                    <li><strong>Knockdown Formula Tweak:</strong> Modified Knockdown logic so we don't have as many knockdowns in fights. Also added in some logic to reward the knockdown for the sweep skill.</li>
-                    <li><strong>Newsletter Text Fixes:</strong> Corrected the newsletter fight descriptions to show the proper verbiage for a challenge, Blood Challenge, Monster fight, and random matchup.</li>
-                    <li>Several other minor enhancements have been made as well.</li>
-                </ul>
-
-                <h3>Looking to the Future</h3>
-                <p>My next big project for this will be to incorporate a tournament engine. I have been working through the planning stages at this point and I think I have a good outline of how I would want it to look.</p>
-                <p>The prize pool I am thinking of at this time is as follows:</p>
-                <ul>
-                    <li>Removal of 3 levels of Permanent injuries</li>
-                    <li>3 points permanently added to size</li>
-                    <li>Auto max 1 skill to 9</li>
-                    <li>Change and select a new Favorite weapon</li>
-                    <li>+10 permanent HP increase</li>
-                </ul>
-                <p>Winner of each tier of the tournament would have a choice of one of these prizes. Again, this is still in the planning stages and a ways off for now.</p>
-                
-                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
-                    - ILNEVAL -
-                </p>
-            </div>
-            <button class="close-modal-btn" id="closeJune5Modal">Dismiss</button>
-        </div>
-    </div>
-
-    <div id="june1AnnouncementModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2>ARENA UPDATE - JUNE 1, 2026</h2>
-            <div class="modal-scroll-body">
-                <p><strong>Honored Managers,</strong></p>
-                
-                <p>A new client version (<strong>v2.7.3</strong>) is now available. This version introduces an offline viewing feature, allowing you to review your combat logs and fights without relying on a live server connection.</p>
-                
-                <p>Please note that <strong>this update is not mandatory at this stage</strong>. You will still be completely capable of viewing your fight logs using older client versions, provided you have an active internet connection and the game server remains online. While numerous fail-safes are in place to preserve server stability, brief periods of downtime may occur. Upgrading to v2.7.3 completely removes this online requirement during log review. Installation is highly recommended at your earliest convenience.</p>
-                
-                <p>Additionally, progress is underway on an automated <strong>Arena Statistics</strong> section directly on the website. Once a turn executes, navigating to the Arena Statistics hub will reveal a fresh landing page containing two pathways: <strong>Arena Statistics</strong> and <strong>Team Rosters</strong>.</p>
-                
-                <p>These hubs closely mirror the structure found on the Blood Pit player connection pages. While currently initialized with simulated test metrics, live data will populate these tables automatically upon the conclusion of Turn 2.</p>
-                
-                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
-                    - ILNEVAL -
-                </p>
-            </div>
-            <button class="close-modal-btn" id="closeJune1Modal">Dismiss</button>
-        </div>
-    </div>
-
-    <div id="newAnnouncementModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2>ARENA UPDATE - MAY 29, 2026</h2>
-            <div class="modal-scroll-body">
-                <p><strong>Honored Managers of the Bloodspire Arena,</strong></p>
-                
-                <p>I have implemented several important balance and quality-of-life improvements based on feedback from the first turn. The following changes are now live:</p>
-                
-                <ul>
-                    <li>Fixed an exploit related to replacements rollups</li>
-                    <li>Modified endurance calculations to prevent early exhaustion</li>
-                    <li>Updated permanent injury thresholds - they are now less likely to trigger</li>
-                    <li>Cleaned up knockdown logic (warriors were hitting the ground too frequently)</li>
-                    <li>Minor verbiage updates and grammar tweaks throughout the client</li>
-                    <li>Tweaked the damage formula for all weapons to improve overall balance</li>
-                    <li>Adjusted thresholds for light, medium, and heavy damage descriptions</li>
-                    <li>Many additional minor cosmetic additions and modifications</li>
-                </ul>
-                
-                <p><strong>You will need to install Client version 2.7.2</strong> for these updates to take full effect.</p>
-                
-                <p>Going forward, unless a major issue or exploit is discovered, the plan is to release new client versions no more than once per week.</p>
-                
-                <p><strong>Turn 2 will run on Saturday, May 30th at 9:00 PM CST.</strong></p>
-                
-                <p>Regular turns will now follow a <strong>Tuesday - Thursday - Saturday</strong> schedule.</p>
-                
-                <p>Thank you all again for your patience and valuable feedback. Things are steadily improving and getting much closer to the vision I had when this arena first opened its gates.</p>
-
-                <p style="text-align: right; margin-top: 25px; font-style: italic; color: #5a0f0f;">
-                    - ILNEVAL -
-                </p>
-            </div>
-            <button class="close-modal-btn" id="closeNewModal">Dismiss</button>
-        </div>
-    </div>
-
-    <div id="announcementModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 id="modalTitle">Official Playtest Proclamation</h2>
-            <div id="modalBody" class="modal-scroll-body">
-                <p>After many tests and live backend playtesting, I am confident that I am ready to roll Bloodspire Arena out for official playtest. I understand that the first attempts to get this project off the ground were not successful, but I was able to take a step back and work on things more focused. I have run 100's of simulations of the game play mechanics and through some focused live playtesting, I feel very good about the stability and overall game mechanics.</p>
-                
-                <p>I would like to announce that we will <strong>officially start playtest on Wednesday 5/27/2026 at 9:00 PM</strong>. I have the upload information that you all gave me a few days ago, and it is cleaned up and ready for the first turn. You do not need to re-upload. If you choose to re-upload with new strategies, you may do so starting at <strong>7:00 PM on Tuesday 5/26/2026</strong>. I will be rolling the arena back to turn 0 just prior to that timeframe.</p>
-                
-                <p>You will need to have the most current Client version prior to any new uploads or first turn download. This new client has numerous bug fixes and enhancements included in it. Please make sure that you install and use <strong>Client version 2.7.1</strong>.</p>
-                
-                <p>Some major fixes include:</p>
-                <ul>
-                    <li>Static stats for new teams. No more canceling and getting a new set of roll-ups</li>
-                    <li>No more dead replacements prior to their first turn in the arena</li>
-                    <li>Corrected newsletter Arena Happenings report</li>
-                    <li>Enhanced fight dialogue lines</li>
-                    <li>Special race related abilities</li>
-                    <li>Enhanced Scouting report. Each manager will have a dedicated scout now</li>
-                    <li>Better archive warrior visibility, including fight visibility for archived warriors</li>
-                    <li>Improved error handling for purged files. Files are no longer archived after downloading</li>
-                </ul>
-                
-                <p>Many other updates, fixes and enhancements as well!</p>
-                
-                <p>I also want to add that I have created a newsletter endpoint as well. In the event that you do not get a newsletter on a download (which sometimes happens if you do not download every turn), you should always receive the fight results, but may only receive the most current newsletter. You can now download any archived newsletter and manually add it to the newsletter directory in your saves folder.</p>
-
-                <p>You can access the newsletters at the following link:<br>
-                <a href="http://bloodspirearena.dpdns.org/newsletter" target="_blank">http://bloodspirearena.dpdns.org/newsletter</a><br>
-                When you access the newsletters from this link, you will have a download button available for any newsletter you need.</p>
-                
-                <p>Thank you all for sticking with me on this while I ironed out some of the issues that have popped up thus far. For any issues or enhancements, you can utilize the Report an Issue link or post it on the message board.</p>
-            </div>
-            <button class="close-modal-btn" id="closeModal">Dismiss</button>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const SUPABASE_URL = 'https://ngjjnlpmisgwhktdfveq.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nampubHBtaXNnd2hrdGRmdmVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTU3MjQsImV4cCI6MjA5NDA5MTcyNH0.mjqx_G_asJUPOTQAJodxbh4VMTgNpsfYsgYQ8_FrGrc';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        async function checkNewMessages() {
-            setTimeout(async () => {
-                const lastViewed = localStorage.getItem('last_board_view') || new Date(0).toISOString();
-                const { count, error } = await _supabase
-                    .from('messages')
-                    .select('*', { count: 'exact', head: true })
-                    .gt('created_at', lastViewed);
-
-                const navLink = document.getElementById('nav-board');
-                if (!error && count > 0) {
-                    navLink.innerHTML = `Message Board <span class="notification-badge">${count}</span>`;
-                } else {
-                    navLink.innerHTML = `Message Board`;
-                }
-            }, 100);
-        }
-
-        window.addEventListener('DOMContentLoaded', (event) => {
-            checkNewMessages();
-
-            document.getElementById('nav-board').onclick = function() {
-                localStorage.setItem('last_board_view', new Date().toISOString());
-            };
-
-            // Modals
-            const september5Modal = document.getElementById('september5AnnouncementModal');
-            const closeSeptember5 = document.getElementById('closeSeptember5Modal');
-            const viewSeptember5 = document.getElementById('viewSeptember5Announcement');
-
-            const august7Modal = document.getElementById('august7AnnouncementModal');
-            const closeAugust7 = document.getElementById('closeAugust7Modal');
-            const viewAugust7 = document.getElementById('viewAugust7Announcement');
-
-            const boardModal = document.getElementById('boardAnnouncementModal');
-            const closeBoard = document.getElementById('closeBoardModal');
-            const viewBoard = document.getElementById('viewBoardAnnouncement');
-
-            const july30Modal = document.getElementById('july30AnnouncementModal');
-            const closeJuly30 = document.getElementById('closeJuly30Modal');
-            const viewJuly30 = document.getElementById('viewJuly30Announcement');
-
-            const july19Modal = document.getElementById('july19AnnouncementModal');
-            const closeJuly19 = document.getElementById('closeJuly19Modal');
-            const viewJuly19 = document.getElementById('viewJuly19Announcement');
-
-            const july14Modal = document.getElementById('july14AnnouncementModal');
-            const closeJuly14 = document.getElementById('closeJuly14Modal');
-            const viewJuly14 = document.getElementById('viewJuly14Announcement');
-
-            const july7Modal = document.getElementById('july7AnnouncementModal');
-            const closeJuly7 = document.getElementById('closeJuly7Modal');
-            const viewJuly7 = document.getElementById('viewJuly7Announcement');
-
-            const latestModal = document.getElementById('latestAnnouncementModal');
-            const closeLatest = document.getElementById('closeLatestModal');
-            const viewLatest = document.getElementById('viewLatestAnnouncement');
-
-            const june10Modal = document.getElementById('june10AnnouncementModal');
-            const closeJune10 = document.getElementById('closeJune10Modal');
-            const viewJune10 = document.getElementById('viewJune10Announcement');
-
-            const june5Modal = document.getElementById('june5AnnouncementModal');
-            const closeJune5 = document.getElementById('closeJune5Modal');
-            const viewJune5 = document.getElementById('viewJune5Announcement');
-
-            const june1Modal = document.getElementById('june1AnnouncementModal');
-            const closeJune1 = document.getElementById('closeJune1Modal');
-            const viewJune1 = document.getElementById('viewJune1Announcement');
-
-            const newModal = document.getElementById('newAnnouncementModal');
-            const closeNew = document.getElementById('closeNewModal');
-            const viewNew = document.getElementById('viewNewAnnouncement');
-
-            const originalModal = document.getElementById('announcementModal');
-            const closeOriginal = document.getElementById('closeModal');
-            const viewOriginal = document.getElementById('viewAnnouncement');
-
-            // Show latest announcement (September 5) automatically if not seen
-            if (!localStorage.getItem('bloodspire_update_20260905')) {
-                september5Modal.style.display = 'block';
-            }
-
-            // Close September 5 modal
-            closeSeptember5.onclick = () => { 
-                september5Modal.style.display = 'none'; 
-                localStorage.setItem('bloodspire_update_20260905', 'true'); 
-            };
-
-            // Open September 5 modal via link
-            viewSeptember5.onclick = function(e) {
-                e.preventDefault();
-                september5Modal.style.display = 'block';
-            };
-
-            // Previous Modals
-            closeAugust7.onclick = () => { august7Modal.style.display = 'none'; };
-            viewAugust7.onclick = function(e) { e.preventDefault(); august7Modal.style.display = 'block'; };
-
-            closeBoard.onclick = () => { boardModal.style.display = 'none'; };
-            viewBoard.onclick = function(e) { e.preventDefault(); boardModal.style.display = 'block'; };
-
-            closeJuly30.onclick = () => { july30Modal.style.display = 'none'; };
-            viewJuly30.onclick = function(e) { e.preventDefault(); july30Modal.style.display = 'block'; };
-
-            closeJuly19.onclick = () => { july19Modal.style.display = 'none'; };
-            viewJuly19.onclick = function(e) { e.preventDefault(); july19Modal.style.display = 'block'; };
-
-            closeJuly14.onclick = () => { july14Modal.style.display = 'none'; };
-            viewJuly14.onclick = function(e) { e.preventDefault(); july14Modal.style.display = 'block'; };
-
-            closeJuly7.onclick = () => { july7Modal.style.display = 'none'; };
-            viewJuly7.onclick = function(e) { e.preventDefault(); july7Modal.style.display = 'block'; };
-
-            closeLatest.onclick = () => { latestModal.style.display = 'none'; };
-            viewLatest.onclick = function(e) { e.preventDefault(); latestModal.style.display = 'block'; };
-
-            closeJune10.onclick = () => { june10Modal.style.display = 'none'; };
-            viewJune10.onclick = function(e) { e.preventDefault(); june10Modal.style.display = 'block'; };
-
-            closeJune5.onclick = () => { june5Modal.style.display = 'none'; };
-            viewJune5.onclick = function(e) { e.preventDefault(); june5Modal.style.display = 'block'; };
-
-            closeJune1.onclick = () => { june1Modal.style.display = 'none'; };
-            viewJune1.onclick = function(e) { e.preventDefault(); june1Modal.style.display = 'block'; };
-
-            closeNew.onclick = () => { newModal.style.display = 'none'; };
-            viewNew.onclick = function(e) { e.preventDefault(); newModal.style.display = 'block'; };
-
-            closeOriginal.onclick = () => { originalModal.style.display = 'none'; };
-            viewOriginal.onclick = function(e) { e.preventDefault(); originalModal.style.display = 'block'; };
-        });
-    </script>
-</body>
-</html>
+                    <li><strong>Enhanced Stability:</strong> We have updated our file handling processes
