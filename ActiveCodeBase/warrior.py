@@ -1539,6 +1539,8 @@ class Warrior:
             for t in raw_trains
         ]
         w.favorite_weapon = data.get("favorite_weapon", "")
+        # Older saves hold two favorite names that match no weapon; rename them on load (2026-11-26).
+        w.favorite_weapon = {"Morning Star": "Morningstar", "Longsword": "Long Sword"}.get(w.favorite_weapon, w.favorite_weapon)
         w.slot_index = data.get("slot_index")
         w.current_arena     = data.get("current_arena", "normal")
         w.pending_promotion = data.get("pending_promotion")
@@ -1603,10 +1605,10 @@ def assign_favorite_weapon(warrior: "Warrior") -> None:
              Epee, Scimitar)
       - Halfling: small/light weapons, martial-friendly (Dagger, Short Sword, Hatchet, 
                   Buckler, Open Hand, Knife)
-      - Human: broad balanced weapons (Short Sword, Military Pick, Morning Star, 
+      - Human: broad balanced weapons (Short Sword, Military Pick, Morningstar, 
                Boar Spear, War Hammer)
       - Goblin: light/dirty fighting (Dagger, Short Sword, Hatchet, Javelin, Bola)
-      - Gnome: swords & hammers (Short Sword, Longsword, Hammer, War Hammer, Mace)
+      - Gnome: swords & hammers (Short Sword, Long Sword, Hammer, War Hammer, Mace)
       - Lizardfolk: martial + light/medium (Short Spear, Long Spear, Trident, War Hammer, 
                     Battle Axe, Martial Combat via Open Hand)
       
@@ -1626,9 +1628,9 @@ def assign_favorite_weapon(warrior: "Warrior") -> None:
                   "Target Shield", "Halberd"],
         "Elf": ["Dagger", "Short Sword", "Stiletto", "Javelin", "Epee", "Scimitar"],
         "Halfling": ["Dagger", "Short Sword", "Stiletto", "Quarterstaff", "Bladed Flail", "Javelin", "Hammer"],
-        "Human": ["Short Sword", "Military Pick", "Morning Star", "Boar Spear", "War Hammer"],
+        "Human": ["Short Sword", "Military Pick", "Morningstar", "Boar Spear", "War Hammer"],
         "Goblin": ["Dagger", "Short Sword", "Hatchet", "Javelin", "Bola"],
-        "Gnome": ["Short Sword", "Longsword", "Hammer", "War Hammer", "Mace"],
+        "Gnome": ["Short Sword", "Long Sword", "Hammer", "War Hammer", "Mace"],
         "Half-Elf": ["Pole Axe", "Bastard Sword", "Long Sword", "Scimitar", "Battle Flail",
                      "Javelin", "Broad Sword"],
         "Lizardfolk": ["Short Spear", "Long Spear", "Trident", "War Hammer", 
