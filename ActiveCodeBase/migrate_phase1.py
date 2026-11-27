@@ -122,7 +122,8 @@ ELITE_CONFIG = {
         "allow_resurrection": True,
         "training_difficulty_multiplier": 1.33,
         "peasant_scaling": 2.5,
-        "injury_accumulation": False
+        "injury_accumulation": False,
+        "death_chance_multiplier": 0.5
     },
     "created_at": time.strftime("%Y-%m-%d %H:%M:%S")
 }
@@ -147,7 +148,8 @@ VETERAN_CONFIG = {
         "peasant_scaling": 1.0,
         "injury_accumulation": False,
         "max_soul_deaths": 2,
-        "min_soul_fights_for_elite": 10
+        "min_soul_fights_for_elite": 10,
+        "death_chance_multiplier": 0.5
     },
     "created_at": time.strftime("%Y-%m-%d %H:%M:%S")
 }

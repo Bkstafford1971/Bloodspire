@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from warrior import (
     ATTRIBUTES, FIGHTING_STYLES, TRIGGERS, AIM_DEFENSE_POINTS,
-    NON_WEAPON_SKILLS, WEAPON_SKILLS,
+    NON_WEAPON_SKILLS, WEAPON_SKILLS, stat_descriptions_for_client,
 )
 from weapons import WEAPONS
 from armor import armor_selection_menu, helm_selection_menu
@@ -37,6 +37,7 @@ def generate_game_data():
             [s.replace("_", " ").title() for s in NON_WEAPON_SKILLS] +
             [w.display for w in WEAPONS.values()]
         ),
+        "stat_descriptions": stat_descriptions_for_client(),
     }
     return game_data
 

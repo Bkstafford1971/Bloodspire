@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BLOODSPIRE Client - v3.7.0</title>
+<title>BLOODSPIRE Client - v4.1.0</title>
 <style id="skin-modern">
 /* ============================================================
    WINDOWS CLASSIC - REFINED
@@ -1095,7 +1095,7 @@ window.testUpdateCheck = async () => {
 /* ============================================================
    STANDALONE CLIENT CONFIG
    ============================================================ */
-const CLIENT_VERSION = "4.0.1";
+const CLIENT_VERSION = "4.1.0";
 // Tell the league server which client version this is on every API call (login, upload,
 // download, rolls...). The server refuses clients older than its minimum version and
 // replies with an update message and download link. Done once here so no call site is missed.
@@ -5850,6 +5850,15 @@ const RACE_COLORS = {
 };
 function raceColor(race) { return RACE_COLORS[race] || 'var(--sel)'; }
 
+// Attribute flavor text ("Is of hefty strength"). The tables are a server rule,
+// delivered with the game data; an older cached copy without them shows nothing.
+function statDesc(attr, value) {
+  const rows = S.gd && S.gd.stat_descriptions && S.gd.stat_descriptions[attr];
+  if (!rows) return '';
+  const hit = rows.find(([lo, hi]) => value >= lo && value <= hi);
+  return hit ? hit[2] : '';
+}
+
 function buildStatsTab(team, w, wIdx) {
   // Guard: if game data hasn't loaded yet return a placeholder.
   // This prevents empty selects from firing scheduleAutoSave() on render
@@ -5880,6 +5889,7 @@ function buildStatsTab(team, w, wIdx) {
     statRows += `<tr>
       <td style="text-align:right; padding:1px 6px; min-width:90px;">${capitalize(a)}</td>
       <td style="padding:1px 4px;"><span class="stat-val" style="--pct:${Math.max(4, Math.min(100, Math.round(cur / 25 * 100)))}%">${esc(dv)}</span></td>
+      <td style="padding:1px 4px 1px 8px; color:var(--text-dim); font-style:italic; font-size:11px; white-space:nowrap;">${esc(statDesc(a, cur))}</td>
     </tr>`;
   });
 

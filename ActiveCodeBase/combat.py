@@ -46,6 +46,7 @@
 #   appeal; a warrior who survives it then makes the concede appeal.
 #   overshoot = max(0, -new_hp); automatic death if overshoot >= max HP.
 #   death_chance = 10% (overshoot <= 10), 20% (<= 25), 30% (<= 40), else 40%.
+#   Halved in the Elite Spire and Soul Spire (SPIRE_DEATH_CHANCE_MULT).
 #
 # NO DRAWS: 30-minute limit -> judge awards decision to higher HP% warrior.
 # =============================================================================
@@ -2349,7 +2350,7 @@ def _concede_check_verbose(warrior: "Warrior", state: "_CState", is_monster_figh
     }
 
 
-def _death_check_verbose(prev_hp: int, damage: int, max_hp: int = None):
+def _death_check_verbose(prev_hp: int, damage: int, max_hp: int = None, arena: str = None):
     new_hp    = prev_hp - damage
     if new_hp > 0:
         return False, {"new_hp": new_hp, "overshoot": 0, "death_chance": 0.0}
@@ -2358,15 +2359,7 @@ def _death_check_verbose(prev_hp: int, damage: int, max_hp: int = None):
     if max_hp and overshoot >= max_hp:
         return True, {"new_hp": new_hp, "overshoot": overshoot, "death_chance": 100.0, "catastrophic": True}
 
-    if overshoot <= 10:
-        death_chance = 10.0
-    elif overshoot <= 25:
-        death_chance = 20.0
-    elif overshoot <= 40:
-        death_chance = 30.0
-    else:
-        death_chance = 40.0
-
+    death_chance = _overshoot_death_chance(overshoot, arena)
     died = random.random() * 100 < death_chance
     return died, {"new_hp": new_hp, "overshoot": overshoot, "death_chance": death_chance}
 
@@ -2617,7 +2610,30 @@ def _check_knockdown(warrior: Warrior, state: _CState, damage: int, cat: str) ->
 # DEATH CHECK
 # ---------------------------------------------------------------------------
 
-def _death_check(prev_hp: int, damage: int, max_hp: int = None) -> bool:
+# Spire death-chance multipliers, keyed by arena ("elite" = Elite Spire,
+# "veteran" = Soul Spire). Applied to the overshoot-based chance only; a
+# catastrophic blow (overshoot >= max HP) is still an automatic death.
+# league_server overwrites the live values each turn from
+# saves/<arena>/config.json -> arena_rules.death_chance_multiplier;
+# the defaults are used when that key is missing or invalid.
+SPIRE_DEATH_CHANCE_MULT_DEFAULTS = {"elite": 0.5, "veteran": 0.5}
+SPIRE_DEATH_CHANCE_MULT = dict(SPIRE_DEATH_CHANCE_MULT_DEFAULTS)
+
+
+def _overshoot_death_chance(overshoot: int, arena: str = None) -> float:
+    """Base death chance for a given overshoot, scaled for the Spires."""
+    if overshoot <= 10:
+        death_chance = 10.0
+    elif overshoot <= 25:
+        death_chance = 20.0
+    elif overshoot <= 40:
+        death_chance = 30.0
+    else:
+        death_chance = 40.0
+    return death_chance * SPIRE_DEATH_CHANCE_MULT.get(arena, 1.0)
+
+
+def _death_check(prev_hp: int, damage: int, max_hp: int = None, arena: str = None) -> bool:
     """
     Death probability on reaching 0 HP with damage-scaled chance.
     If damage overshoot >= max_hp (catastrophic damage), automatic death.
@@ -2626,6 +2642,7 @@ def _death_check(prev_hp: int, damage: int, max_hp: int = None) -> bool:
       -11 to -25 HP: 20%
       -26 to -40 HP: 30%
       -41+ HP: 40%
+    Halved in the Elite Spire and Soul Spire (see SPIRE_DEATH_CHANCE_MULT).
     """
     new_hp    = prev_hp - damage
     if new_hp > 0:
@@ -2635,16 +2652,7 @@ def _death_check(prev_hp: int, damage: int, max_hp: int = None) -> bool:
     if max_hp and overshoot >= max_hp:
         return True
 
-    if overshoot <= 10:
-        death_chance = 10.0
-    elif overshoot <= 25:
-        death_chance = 20.0
-    elif overshoot <= 40:
-        death_chance = 30.0
-    else:
-        death_chance = 40.0
-
-    return random.random() * 100 < death_chance
+    return random.random() * 100 < _overshoot_death_chance(overshoot, arena)
 
 
 # ---------------------------------------------------------------------------
@@ -5202,12 +5210,12 @@ class CombatEngine:
         # drops them to 0 HP first faces a mortality check. Only if they survive
         # that blow do they get a chance to concede.
         if self.debug_logger:
-            died, _dc = _death_check_verbose(prev, dmg, dw.max_hp)
+            died, _dc = _death_check_verbose(prev, dmg, dw.max_hp, arena=self.arena)
             _overshoot    = _dc.get("overshoot", 0)
             _death_chance = _dc.get("death_chance", 0.0)
             self.debug_logger.log_death_check(dw.name, prev, dmg, _overshoot, _death_chance, died)
         else:
-            died = _death_check(prev, dmg, dw.max_hp)
+            died = _death_check(prev, dmg, dw.max_hp, arena=self.arena)
         if died:
             dw.is_dead = True
             self._emit(N.death_line(dw.name, dw.gender))

@@ -602,6 +602,7 @@ def _build_game_data():
         NON_WEAPON_SKILLS, WEAPON_SKILLS,
     )
     from warrior import TIER_ORDER, TIER_THRESHOLDS, TIER_RECRUITS, MAX_FIGHTS
+    from warrior import stat_descriptions_for_client
     from weapons import WEAPONS
     from armor import armor_selection_menu, helm_selection_menu
     from races import list_playable_races
@@ -611,6 +612,7 @@ def _build_game_data():
         "tiers"            : {"order": TIER_ORDER, "thresholds": [list(t) for t in TIER_THRESHOLDS],
                               "lowest": TIER_RECRUITS},
         "rules"            : {"retire_min_fights": MAX_FIGHTS},
+        "stat_descriptions": stat_descriptions_for_client(),
         "weapons"          : sorted([w.display for w in WEAPONS.values()]),
         "armor"            : armor_selection_menu() + ["None"],
         "helms"            : helm_selection_menu() + ["None"],
@@ -3873,8 +3875,18 @@ def _run_immortal_turn_inner(arena: str, request_password: str) -> dict:
         with open(arena_cfg_path, "w", encoding="utf-8") as _f:
             json.dump(arena_cfg, _f, indent=2)
 
-    # Load arena-specific death chance multiplier (default 1.0 for normal death rates)
-    death_chance_multiplier = arena_cfg.get("arena_rules", {}).get("death_chance_multiplier", 1.0)
+    # Arena-specific death chance multiplier (arena_rules.death_chance_multiplier).
+    # Missing or invalid -> the combat.py default for this Spire (0.5 = half the normal chance).
+    import combat as _combat_mod
+    _dcm_default = _combat_mod.SPIRE_DEATH_CHANCE_MULT_DEFAULTS.get(arena, 1.0)
+    try:
+        death_chance_multiplier = max(0.0, float(
+            (arena_cfg.get("arena_rules", {}) or {}).get("death_chance_multiplier", _dcm_default)))
+    except (TypeError, ValueError):
+        print(f"  WARNING: invalid death_chance_multiplier in {arena} config; using {_dcm_default}.")
+        death_chance_multiplier = _dcm_default
+    _combat_mod.SPIRE_DEATH_CHANCE_MULT[arena] = death_chance_multiplier
+    print(f"  [{arena.upper()}] Death chance multiplier: {death_chance_multiplier}")
 
     turn_num = arena_cfg.get("turn_counter", 0) + 1
     turn_dir = os.path.join(arena_dir, f"turn_{turn_num:04d}")

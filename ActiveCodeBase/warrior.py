@@ -120,63 +120,61 @@ ATTRIBUTES = [
 # STAT DESCRIPTION TABLES
 # ---------------------------------------------------------------------------
 # Each table maps (low, high) ranges to display strings.
-# These appear in the fight header comparison block.
-# Source: directly from the player's guide.
+# Shown on character sheets. Original Bloodspire wording.
 
 STRENGTH_DESCRIPTIONS = {
-    (3,  3):  "Jelly-fish like",
-    (4,  6):  "Is of feeble strength",
+    (3,  3):  "Child-like",
+    (4,  6):  "Is of slight strength",
     (7,  8):  "Is of weak strength",
-    (9,  11): "Is of ordinary strength",
-    (12, 13): "Is of sturdy strength",
-    (14, 16): "Is of muscular strength",
-    (17, 18): "Is of formidable strength",
-    (19, 21): "Is of powerful strength",
-    (22, 23): "Is of Mighty strength",
-    (24, 25): "Possesses Beastly strength",
+    (9,  11): "Is of average strength",
+    (12, 13): "Is of solid strength",
+    (14, 16): "Is of hefty strength",
+    (17, 18): "Is of impressive strength",
+    (19, 21): "Is of tremendous strength",
+    (22, 23): "Is of colossal strength",
+    (24, 25): "Possesses monstrous strength",
 }
 
 DEXTERITY_DESCRIPTIONS = {
-    (3,  3):  "Has inert movements",
-    (4,  6):  "Has sluggish movements",
+    (3,  3):  "Has stiff movements",
+    (4,  6):  "Has clumsy movements",
     (7,  8):  "Has slow movements",
-    (9,  11): "Has stable movements",
-    (12, 13): "Has quick movements",
-    (14, 16): "Has agile movements",
-    (17, 18): "Has nimble movements",
-    (19, 21): "Has swift movements",
+    (9,  11): "Has balanced movements",
+    (12, 13): "Has sharp movements",
+    (14, 16): "Has graceful movements",
+    (17, 18): "Has spry movements",
+    (19, 21): "Has speedy movements",
     (22, 23): "Has blur-like movements",
     (24, 25): "Has lightning quick movements",
 }
 
 CONSTITUTION_DESCRIPTIONS = {
-    (3,  3):  "Has a Flimsy constitution",
-    (4,  6):  "Has a puny constitution",
-    (7,  8):  "Has a frail constitution",
-    (9,  11): "Has a delicate constitution",
-    (12, 13): "Has a healthy constitution",
-    (14, 16): "Has a tough constitution",
-    (17, 18): "Has a brawny constitution",
+    (3,  3):  "Has a fragile constitution",
+    (4,  6):  "Has a meager constitution",
+    (7,  8):  "Has a slight constitution",
+    (9,  11): "Has an average constitution",
+    (12, 13): "Has a hearty constitution",
+    (14, 16): "Has a solid constitution",
+    (17, 18): "Has a stout constitution",
     (19, 21): "Has a resilient constitution",
-    (22, 23): "Has a rugged constitution",
-    (24, 25): "Has iron-like constitution",
+    (22, 23): "Has a battle-hardened constitution",
+    (24, 25): "Has a steel-like constitution",
 }
 
 INTELLIGENCE_DESCRIPTIONS = {
-    (3,  3):  "Is as Dumb as a bedpost",
-    (4,  6):  "Sometimes forgets to breathe",
-    (7,  8):  "Is just plain dumb",
-    (9,  11): "Depends on muscle over mind",
-    (12, 13): "Has average intelligence",
-    (14, 16): "Is fairly bright",
-    (17, 18): "Is a quick thinker",
-    (19, 21): "Is a gifted strategist",
-    (22, 23): "Possesses great intellect",
-    (24, 25): "Is a genius",
+    (3,  3):  "Is as dumb as a rock",
+    (4,  6):  "Forgets which way is up",
+    (7,  8):  "Is downright dumb",
+    (9,  11): "Relies on brawn over brains",
+    (12, 13): "Has ordinary intelligence",
+    (14, 16): "Is quite clever",
+    (17, 18): "Thinks on their feet",
+    (19, 21): "Is a skilled tactician",
+    (22, 23): "Possesses a superior mind",
+    (24, 25): "Is a mastermind",
 }
 
-# PRESENCE has no description table in the guide - custom table created.
-# APPROX: Scaled to feel thematically appropriate based on guide descriptions.
+# PRESENCE: custom table, original wording.
 PRESENCE_DESCRIPTIONS = {
     (3,  3):  "Has no presence whatsoever",
     (4,  6):  "Is easily overlooked",
@@ -191,16 +189,16 @@ PRESENCE_DESCRIPTIONS = {
 }
 
 SIZE_DESCRIPTIONS = {
-    (3,  3):  "Is grossly thin",
-    (4,  6):  "Could blow away in the wind",
-    (7,  8):  "Has a slight build",
-    (9,  11): "Has a wiry frame",
-    (12, 13): "Is of average build",
-    (14, 16): "Is somewhat large",
-    (17, 18): "Has a large frame",
-    (19, 21): "Is a huge and imposing figure",
-    (22, 23): "Is built like a gorilla",
-    (24, 25): "Is bigger than a barn",
+    (3,  3):  "Is rail thin",
+    (4,  6):  "Could be knocked over by a breeze",
+    (7,  8):  "Has a slender build",
+    (9,  11): "Has a lean frame",
+    (12, 13): "Is of typical build",
+    (14, 16): "Is rather big",
+    (17, 18): "Has a broad frame",
+    (19, 21): "Is a vast and intimidating figure",
+    (22, 23): "Is built like an ox",
+    (24, 25): "Is the size of a mountain",
 }
 
 STAT_DESCRIPTION_TABLES = {
@@ -211,6 +209,13 @@ STAT_DESCRIPTION_TABLES = {
     "presence":     PRESENCE_DESCRIPTIONS,
     "size":         SIZE_DESCRIPTIONS,
 }
+
+
+def stat_descriptions_for_client() -> dict:
+    """The description tables in JSON form for the client's game data:
+    {"strength": [[lo, hi, text], ...], ...}."""
+    return {stat: [[lo, hi, text] for (lo, hi), text in table.items()]
+            for stat, table in STAT_DESCRIPTION_TABLES.items()}
 
 
 def get_stat_description(stat_name: str, value: int) -> str:
